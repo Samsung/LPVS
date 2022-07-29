@@ -1,0 +1,33 @@
+[
+	{
+		"id": 0,
+		"licenseName": "Apache License 2.0",
+		"spdxId": "Apache-2.0",
+		"access": "PERMITTED"
+	},
+	{
+		"id": 1,
+		"licenseName": "GNU General Public License v3.0 only",
+		"spdxId": "GPL-3.0-only",
+		"access": "PROHIBITED"
+	},
+	{
+		"id": 2,
+		"licenseName": "OpenSSL License",
+		"spdxId": "OpenSSL",
+		"access": "PERMITTED"
+	},
+	{
+		"id": 3,
+		"licenseName": "GNU Lesser General Public License v2.1 or later",
+		"spdxId": "GPL-2.0-or-later",
+		"incompatibleWith": ["Apache-1.0", "Apache-1.1", "Apache-2.0", "BSD-4-Clause", "BSD-4-Clause-UC", "FTL", "IJG", "MIT","OpenSSL", "Python-2.0", "zlib-acknowledgement", "XFree86-1.1", "GPL-1.0-or-later"],
+		"access": "RESTRICTED"
+	},
+	{
+		"id": 4,
+		"licenseName": "MIT License",
+		"spdxId": "MIT",
+		"access": "PERMITTED"
+	}
+]
