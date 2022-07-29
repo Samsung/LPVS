@@ -1,6 +1,6 @@
 
 ![License Pre-Validation Service (LPVS)](lpvslogo.png)
-[![Build](https://github.sec.samsung.net/SRK-PSL/LPVS-open-source/workflows/Build/badge.svg)](https://github.sec.samsung.net/SRK-PSL/LPVS-open-source/actions?query=workflow%3ABuild)
+[![Build](https://github.com/samsung/lpvs/workflows/Build/badge.svg)](https://github.com/samsung/lpvs/actions?query=workflow%3ABuild)
 
 ## Introduction
 OpenSource code [refers](https://en.wikipedia.org/wiki/Open-source_software) to software available for use, study, change, and distribution by anyone and for any purpose provided that the corresponding license conditions are met. License violation may end up with litigations, damage compensation, obligation to disclose intellectual property as well as reputational losses. 
