@@ -45,6 +45,7 @@ public class GitHubService {
                     webhookConfig.getRepositoryName() + "/pulls/" + webhookConfig.getPullRequestId());
         }
         try {
+            if (GITHUB_AUTH_TOKEN.isEmpty()) setGithubTokenFromEnv();
             if (GITHUB_API_URL.isEmpty()) gitHub = GitHub.connect(GITHUB_LOGIN, GITHUB_AUTH_TOKEN);
             else gitHub = GitHub.connectToEnterpriseWithOAuth(GITHUB_API_URL, GITHUB_LOGIN, GITHUB_AUTH_TOKEN);
             GHRepository repository = gitHub.getRepository(webhookConfig.getRepositoryOrganization()+"/"
@@ -82,6 +83,7 @@ public class GitHubService {
 
     public void setPendingCheck(WebhookConfig webhookConfig) {
         try {
+            if (GITHUB_AUTH_TOKEN.isEmpty()) setGithubTokenFromEnv();
             if (GITHUB_API_URL.isEmpty()) gitHub = GitHub.connect(GITHUB_LOGIN, GITHUB_AUTH_TOKEN);
             else gitHub = GitHub.connectToEnterpriseWithOAuth(GITHUB_API_URL, GITHUB_LOGIN, GITHUB_AUTH_TOKEN);
             GHRepository repository = gitHub.getRepository(webhookConfig.getRepositoryOrganization() + "/"
@@ -95,6 +97,7 @@ public class GitHubService {
 
     public void setErrorCheck(WebhookConfig webhookConfig) {
         try {
+            if (GITHUB_AUTH_TOKEN.isEmpty()) setGithubTokenFromEnv();
             if (GITHUB_API_URL.isEmpty()) gitHub = GitHub.connect(GITHUB_LOGIN, GITHUB_AUTH_TOKEN);
             else gitHub = GitHub.connectToEnterpriseWithOAuth(GITHUB_API_URL, GITHUB_LOGIN, GITHUB_AUTH_TOKEN);
             GHRepository repository = gitHub.getRepository(webhookConfig.getRepositoryOrganization() + "/"
@@ -173,6 +176,7 @@ public class GitHubService {
         try {
             String repositoryName = webhookConfig.getRepositoryName();
             String repositoryOrganization = webhookConfig.getRepositoryOrganization();
+            if (GITHUB_AUTH_TOKEN.isEmpty()) setGithubTokenFromEnv();
             if (GITHUB_API_URL.isEmpty()) gitHub = GitHub.connect(GITHUB_LOGIN, GITHUB_AUTH_TOKEN);
             else gitHub = GitHub.connectToEnterpriseWithOAuth(GITHUB_API_URL, GITHUB_LOGIN, GITHUB_AUTH_TOKEN);
             GHRepository repository = gitHub.getRepository(repositoryOrganization + "/" + repositoryName);
@@ -201,6 +205,10 @@ public class GitHubService {
         }
         LOG.debug("MatchedLines: " + matchedLines);
         return matchedLines;
+    }
+
+    public void setGithubTokenFromEnv() {
+            if (System.getenv("LPVS_GITHUB_TOKEN") != null) GITHUB_AUTH_TOKEN = System.getenv("LPVS_GITHUB_TOKEN");
     }
 
 }
