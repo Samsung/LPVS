@@ -60,7 +60,7 @@ LPVS will start scanning automatically, then provide comments about the licenses
    Or alternatively build and run the Docker container with LPVS:
    ```bash
     docker build -t lpvs .
-    docker run -p 7896:7896 --name lpvs lpvs:latest
+    docker run -p 7896:7896 --name lpvs -e LPVS_GITHUB_TOKEN=<`github.token`> lpvs:latest
     ```
     For additional information about using Docker and tips, please check file [Docker_Usage](.github/Docker_Usage.md).
     
