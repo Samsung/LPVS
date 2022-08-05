@@ -81,6 +81,6 @@ The LPVS source code is distributed under the [MIT](https://opensource.org/licen
 ## Contributing
 
 You are welcome to contribute to LPVS project. 
-Contributing is also a great way to practice social coding at Github, study new technologies and enrich your public portfolio.
+Contributing is also a great way to practice social coding at Github, study new technologies and enrich your public portfolio.  
 [How to contribute code](.github/CONTRIBUTING.md)  
-[How to report a security vulnerability](.github/SECURITY.md)
+[How to report a security vulnerability](.github/SECURITY.md)  
