@@ -1,0 +1,4 @@
+# These owners will be the default owners for everything in
+# the repo.
+*              @t25kim @MoonkiHong @o-kopysov
+.github/       @t25kim @MoonkiHong @o-kopysov @tdrozdovsky

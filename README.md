@@ -1,6 +1,10 @@
 
 ![License Pre-Validation Service (LPVS)](lpvslogo.png)
 [![Build](https://github.com/samsung/lpvs/workflows/Build/badge.svg)](https://github.com/samsung/lpvs/actions?query=workflow%3ABuild)
+[![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/6309/badge)](https://bestpractices.coreinfrastructure.org/projects/6309)
+[![RepoSize](https://img.shields.io/github/repo-size/samsung/lpvs.svg)](https://github.com/Samsung/LPVS)
+[![Release](https://img.shields.io/github/v/release/samsung/lpvs.svg)](https://github.com/Samsung/LPVS/releases)
+[![LICENSE](https://img.shields.io/github/license/samsung/lpvs.svg)](https://github.com/Samsung/LPVS/blob/main/LICENSE)
 
 ## Introduction
 OpenSource code [refers](https://en.wikipedia.org/wiki/Open-source_software) to software available for use, study, change, and distribution by anyone and for any purpose provided that the corresponding license conditions are met. License violation may end up with litigations, damage compensation, obligation to disclose intellectual property as well as reputational losses. 
@@ -78,3 +82,5 @@ The LPVS source code is distributed under the [MIT](https://opensource.org/licen
 
 You are welcome to contribute to LPVS project. 
 Contributing is also a great way to practice social coding at Github, study new technologies and enrich your public portfolio.
+[How to contribute code](.github/CONTRIBUTING.md)  
+[How to report a security vulnerability](.github/SECURITY.md)
