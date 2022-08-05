@@ -1,0 +1,18 @@
+version: 2
+updates:
+# Enable version updates for maven
+  - package-ecosystem: "maven"
+    directory: "/"
+    # Check for updates once a month
+    schedule:
+      interval: "monthly"
+    open-pull-requests-limit: 15
+# Enable version updates for Actions
+  - package-ecosystem: "github-actions"
+    # Look for `.github/workflows` in the `root` directory
+    directory: ".github/workflows/"
+    # Check for updates once a month
+    schedule:
+      interval: "monthly"
+    # Allow up to 15 open pull requests for github-actions dependencies
+    open-pull-requests-limit: 15
