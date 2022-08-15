@@ -10,6 +10,7 @@ package com.lpvs.entity.config;
 import com.lpvs.entity.enums.PullRequestAction;
 
 import java.util.Date;
+import java.util.Objects;
 
 public class WebhookConfig {
     Long webhookId;
@@ -215,5 +216,38 @@ public class WebhookConfig {
         return "WebhookConfig [action = " + getAction() + "; organization name = " + getRepositoryOrganization() +
                 "; repository name = " + getRepositoryName() + "; PR URL = " + getPullRequestUrl() +
                 "; commit = " + getHeadCommitSHA() + "]";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        WebhookConfig that = (WebhookConfig) o;
+        return attempts == that.attempts &&
+                action == that.action &&
+                Objects.equals(repositoryId, that.repositoryId) &&
+                Objects.equals(repositoryName, that.repositoryName) &&
+                Objects.equals(repositoryOrganization, that.repositoryOrganization) &&
+                Objects.equals(repositoryUrl, that.repositoryUrl) &&
+                Objects.equals(repositoryLicense, that.repositoryLicense) &&
+                Objects.equals(headCommitSHA, that.headCommitSHA) &&
+                Objects.equals(pullRequestUrl, that.pullRequestUrl) &&
+                Objects.equals(pullRequestFilesUrl, that.pullRequestFilesUrl) &&
+                Objects.equals(pullRequestAPIUrl, that.pullRequestAPIUrl) &&
+                Objects.equals(pullRequestId, that.pullRequestId) &&
+                Objects.equals(pullRequestName, that.pullRequestName) &&
+                Objects.equals(userId, that.userId) &&
+                Objects.equals(hubLink, that.hubLink) &&
+                Objects.equals(branch, that.branch) &&
+                Objects.equals(pullRequestBranch, that.pullRequestBranch) &&
+                Objects.equals(date, that.date) &&
+                Objects.equals(reviewSystemType, that.reviewSystemType) &&
+                Objects.equals(reviewSystemName, that.reviewSystemName) &&
+                Objects.equals(statusCallbackUrl, that.statusCallbackUrl);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(action, repositoryId, repositoryName, repositoryOrganization, repositoryUrl, repositoryLicense, headCommitSHA, pullRequestUrl, pullRequestFilesUrl, pullRequestAPIUrl, pullRequestId, pullRequestName, userId, hubLink, branch, pullRequestBranch, attempts, date, reviewSystemType, reviewSystemName, statusCallbackUrl);
     }
 }
