@@ -62,6 +62,7 @@ public class GitHubServiceTest {
 
         @Test
         public void testGetRepositoryLicense__ApiUrlAbsentLisencePresent() {
+
             try (MockedStatic<GitHub> mocked_static_gh = mockStatic(GitHub.class)) {
                 mocked_static_gh.when(() -> GitHub.connect(GH_LOGIN, GH_AUTH_TOKEN)).thenReturn(mocked_instance_gh);
 
@@ -130,6 +131,7 @@ public class GitHubServiceTest {
 
         @Test
         public void testGetRepositoryLicense__ApiUrlAbsentLisenceAbsent() {
+
             try (MockedStatic<GitHub> mocked_static_gh = mockStatic(GitHub.class)) {
                 mocked_static_gh.when(() -> GitHub.connect(GH_LOGIN, GH_AUTH_TOKEN)).thenReturn(mocked_instance_gh);
 
@@ -198,9 +200,7 @@ public class GitHubServiceTest {
 
         @Test
         public void testGetRepositoryLicense__ApiUrlPresentLisencePresent() {
-            // No specific settings before current test
 
-            // beginning of the test
             try (MockedStatic<GitHub> mocked_static_gh = mockStatic(GitHub.class)) {
                 mocked_static_gh.when(() -> GitHub.connectToEnterpriseWithOAuth(GH_API_URL, GH_LOGIN, GH_AUTH_TOKEN)).thenReturn(mocked_instance_gh);
 
@@ -270,9 +270,7 @@ public class GitHubServiceTest {
 
         @Test
         public void testGetRepositoryLicense__ApiUrlPresentLisenceAbsent() {
-            // No specific settings before current test
 
-            // beginning of the test
             try (MockedStatic<GitHub> mocked_static_gh = mockStatic(GitHub.class)) {
                 mocked_static_gh.when(() -> GitHub.connectToEnterpriseWithOAuth(GH_API_URL, GH_LOGIN, GH_AUTH_TOKEN)).thenReturn(mocked_instance_gh);
 
@@ -326,6 +324,7 @@ public class GitHubServiceTest {
 
         @Test
         public void testGetRepositoryLicense__ApiUrlAbsentCantAuthorize() {
+
             try (MockedStatic<GitHub> mocked_static_gh = mockStatic(GitHub.class)) {
                 mocked_static_gh.when(() -> GitHub.connect(GH_LOGIN, GH_AUTH_TOKEN)).thenThrow(new IOException("test cant authorize"));
 
@@ -359,9 +358,7 @@ public class GitHubServiceTest {
 
         @Test
         public void testGetRepositoryLicense__ApiUrlPresentCantAuthorize() {
-            // No specific settings before current test
 
-            // beginning of the test
             try (MockedStatic<GitHub> mocked_static_gh = mockStatic(GitHub.class)) {
                 mocked_static_gh.when(() -> GitHub.connectToEnterpriseWithOAuth(GH_API_URL, GH_LOGIN, GH_AUTH_TOKEN)).thenThrow(new IOException("test cant authorize"));
 
