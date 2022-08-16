@@ -37,32 +37,17 @@ public class LPVSLicenseTest {
         assertEquals(lpvsLicenseBase.getLicenseName(), baseLicenseName);
         assertEquals(lpvsLicenseBase.getSpdxId(), baseSpdxId);
         assertEquals(lpvsLicenseBase.getAccess(), baseAccess);
+        assertEquals(lpvsLicenseBase.getChecklistUrl(), baseChecklistUrl);
 //        assertIterableEquals(lpvsLicenseBase.getIncompatibleWith(), baseIncompatibleWith);
     }
 
     @Test
-    public void getLicenseIdTest() {
+    public void getterTest() {
         assertEquals(lpvsLicense.getLicenseId(), baseLicenseId);
-    }
-
-    @Test
-    public void getLicenseNameTest() {
         assertEquals(lpvsLicense.getLicenseName(), baseLicenseName);
-    }
-    @Test
-    public void getSpdxIdTest() {
         assertEquals(lpvsLicense.getSpdxId(), baseSpdxId);
-    }
-    @Test
-    public void getAccessTest() {
         assertEquals(lpvsLicense.getAccess(), baseAccess);
-    }
-    @Test
-    public void getChecklistUrlTest() {
         assertEquals(lpvsLicense.getChecklistUrl(), baseChecklistUrl);
-    }
-    @Test
-    public void getIncompatibleWithTest() {
         assertIterableEquals(lpvsLicense.getIncompatibleWith(), baseIncompatibleWith);
     }
 
