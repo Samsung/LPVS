@@ -21,7 +21,7 @@ public class LPVSLicenseTest {
 
 
     @BeforeEach
-    void setUp(){
+    void setUp() {
         lpvsLicense = new LPVSLicense(baseLicenseId,
                 baseLicenseName,
                 baseSpdxId,
@@ -31,7 +31,7 @@ public class LPVSLicenseTest {
     }
 
     @Test
-    public void constructorTest(){
+    public void constructorTest() {
         LPVSLicense lpvsLicenseBase = new LPVSLicense(lpvsLicense);
         assertEquals(lpvsLicenseBase.getLicenseId(), baseLicenseId);
         assertEquals(lpvsLicenseBase.getLicenseName(), baseLicenseName);
@@ -101,8 +101,8 @@ public class LPVSLicenseTest {
         List<String> newIncompatibleWith = Arrays.asList("newIncompatibleWith1", "newIncompatibleWith2", "newIncompatibleWith3");
         assertIterableEquals(lpvsLicense.getIncompatibleWith(), baseIncompatibleWith);
         lpvsLicense.setIncompatibleWith(newIncompatibleWith);
-        for (String base: baseIncompatibleWith) {
-            for (String actual: lpvsLicense.getIncompatibleWith()){
+        for (String base : baseIncompatibleWith) {
+            for (String actual : lpvsLicense.getIncompatibleWith()) {
                 assertNotEquals(base, actual);
             }
         }
