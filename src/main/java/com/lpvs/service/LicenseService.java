@@ -25,6 +25,9 @@ import java.util.*;
 @Service
 public class LicenseService {
 
+    @Value("${license_filepath:classes/licenses.json}")
+    public String licenseFilePath;
+
     @Value("${license_conflict:json}")
     public String licenseConflictsSource;
 
@@ -41,7 +44,7 @@ public class LicenseService {
             // create Gson instance
             Gson gson = new Gson();
             // create a reader
-            Reader reader = Files.newBufferedReader(Paths.get("classes/licenses.json"));
+            Reader reader = Files.newBufferedReader(Paths.get(licenseFilePath));
             // convert JSON array to list of licenses
             licenses = new Gson().fromJson(reader, new TypeToken<List<LPVSLicense>>() {}.getType());
             // print info
@@ -170,6 +173,11 @@ public class LicenseService {
             Conflict<?, ?> conflict = (Conflict<?, ?>) o;
             return (l1.equals(conflict.l1) && l2.equals(conflict.l2)) ||
                     (l1.equals(conflict.l2) && l2.equals(conflict.l1));
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(l1, l2);
         }
     }
 }

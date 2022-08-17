@@ -46,17 +46,26 @@ LPVS will start scanning automatically, then provide comments about the licenses
 
 1. Install SCANOSS Python package by following the [guideline](https://github.com/scanoss/scanoss.py#installation).
 
-2. Fill in the lines of the `src/main/resources/application.properties` file:
+2. Fill in `licenses.json` file with the information about permitted, restricted, and prohibited licenses (mandatory) as well as their compatibility specifics (optional). 
+A template of the `licenses.json` file can be found in the repository at `src/main/resources/licenses.json`.
+
+3. Fill in the lines of the `src/main/resources/application.properties` file:
     ```text
-   # Used license scanner
+   # Used license scanner: scanoss (at the moment, only this scanner is supported)
     scanner=scanoss
-   # Used license conflicts source (take from 'licenses.json' ("json") 
-   # or from scanner response("scanner"))
+
+   # Path to the 'licenses.json' file which contains information about permitted,
+   # restricted and prohibited licenses. This file should be filled according to
+   # the template which could be found at 'src/main/resources/licenses.json'
+    license_filepath=
+
+   # Used license conflicts source:
+   # > option "json": take conflicts from 'licenses.json' (should be filled manually
+   # according to the template at 'src/main/resources/licenses.json')
+   # > option "scanner": take conflicts from the scanner response
     license_conflict=json
     ```
 
-3. Fill in `src/main/resources/licenses.json` file with the information about permitted, restricted, and prohibited licenses as well as their compatibility specifics. An example of the `licenses.json` file can be found in the repository.
-   
 4. Build LPVS application with Maven, then run it:
     ```bash
     mvn clean install
