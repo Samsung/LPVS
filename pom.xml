@@ -52,6 +52,15 @@
             <version>5.8.2</version>
             <scope>test</scope>
         </dependency>
+
+        <!-- Support of static mocks present only in mockito-inline, not mockito-core -->
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-inline</artifactId>
+            <version>4.7.0</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <build>

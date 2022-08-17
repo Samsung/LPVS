@@ -28,12 +28,17 @@ import java.util.List;
 @Service
 public class GitHubService {
 
-    @Value("${github.login}")
     private String GITHUB_LOGIN;
-    @Value("${github.token}")
     private String GITHUB_AUTH_TOKEN;
-    @Value("${github.api.url:}")
     private String GITHUB_API_URL;
+
+    public GitHubService(@Value("${github.login}") String GITHUB_LOGIN,
+                         @Value("${github.token}") String GITHUB_AUTH_TOKEN,
+                         @Value("${github.api.url:}") String GITHUB_API_URL) {
+        this.GITHUB_LOGIN = GITHUB_LOGIN;
+        this.GITHUB_AUTH_TOKEN = GITHUB_AUTH_TOKEN;
+        this.GITHUB_API_URL = GITHUB_API_URL;
+    }
 
     private static Logger LOG = LoggerFactory.getLogger(GitHubService.class);
 
