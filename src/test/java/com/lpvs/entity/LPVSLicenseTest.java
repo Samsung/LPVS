@@ -37,18 +37,7 @@ public class LPVSLicenseTest {
     }
 
     @Test
-    public void constructorTest() {
-        LPVSLicense lpvsLicenseBase = new LPVSLicense(lpvsLicense);
-        assertEquals(lpvsLicenseBase.getLicenseId(), baseLicenseId);
-        assertEquals(lpvsLicenseBase.getLicenseName(), baseLicenseName);
-        assertEquals(lpvsLicenseBase.getSpdxId(), baseSpdxId);
-        assertEquals(lpvsLicenseBase.getAccess(), baseAccess);
-        assertEquals(lpvsLicenseBase.getChecklistUrl(), baseChecklistUrl);
-//        assertIterableEquals(lpvsLicenseBase.getIncompatibleWith(), baseIncompatibleWith);
-    }
-
-    @Test
-    public void getterTest() {
+    public void constructorAndGettersTest() {
         assertEquals(lpvsLicense.getLicenseId(), baseLicenseId);
         assertEquals(lpvsLicense.getLicenseName(), baseLicenseName);
         assertEquals(lpvsLicense.getSpdxId(), baseSpdxId);
