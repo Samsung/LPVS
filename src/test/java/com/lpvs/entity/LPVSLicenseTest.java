@@ -11,12 +11,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class LPVSLicenseTest {
     LPVSLicense lpvsLicense;
-    Long baseLicenseId = 1234567890L;
-    String baseLicenseName = "licenseName";
-    String baseSpdxId = "spdxId";
-    String baseAccess = "access";
-    String baseChecklistUrl = "checklistUrl";
-
+    final Long baseLicenseId = 1234567890L;
+    final String baseLicenseName = "licenseName";
+    final String baseSpdxId = "spdxId";
+    final String baseAccess = "access";
+    final String baseChecklistUrl = "checklistUrl";
     List<String> baseIncompatibleWith = Arrays.asList("incompatibleWith1", "incompatibleWith2", "incompatibleWith3");
 
 
