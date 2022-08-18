@@ -54,9 +54,16 @@ public class ScanossDetectService {
 
             if (status == 1) {
                 LOG.error("Scanoss scanner terminated with none-zero code. Terminating.");
-                BufferedReader output = new BufferedReader(new InputStreamReader(process.getErrorStream()));
-                LOG.error(output.readLine());
-                throw new Exception("Scanoss scanner terminated with none-zero code. Terminating.");
+                BufferedReader output = null;
+                try {
+                    output = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+                    LOG.error(output.readLine());
+                    throw new Exception("Scanoss scanner terminated with none-zero code. Terminating.");
+                }
+                finally {
+                    if(output != null)
+                        output.close();
+                }
             }
         } catch (IOException | InterruptedException ex) {
             LOG.error("Scanoss scanner terminated with none-zero code. Terminating.");
@@ -75,7 +82,7 @@ public class ScanossDetectService {
             Map<ArrayList, String> map = gson.fromJson(reader, Map.class);
 
             // parse map entries
-            Long ind = 0L;
+            long ind = 0L;
             for (Map.Entry entry : map.entrySet()) {
                 LPVSFile file = new LPVSFile();
                 file.setId(ind++);
