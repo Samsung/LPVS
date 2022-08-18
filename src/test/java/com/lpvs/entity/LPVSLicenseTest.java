@@ -15,7 +15,6 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-
 public class LPVSLicenseTest {
     LPVSLicense lpvsLicense;
     final Long baseLicenseId = 1234567890L;
