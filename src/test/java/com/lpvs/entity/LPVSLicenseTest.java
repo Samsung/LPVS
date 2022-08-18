@@ -24,7 +24,6 @@ public class LPVSLicenseTest {
     final String baseChecklistUrl = "checklistUrl";
     List<String> baseIncompatibleWith = Arrays.asList("incompatibleWith1", "incompatibleWith2", "incompatibleWith3");
 
-
     @BeforeEach
     void setUp() {
         lpvsLicense = new LPVSLicense(baseLicenseId,
