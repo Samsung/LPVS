@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class LPVSLicenseTest {
     LPVSLicense lpvsLicense;
-    final Long baseLicenseId = 1234567890L;
+    final long baseLicenseId = 1234567890L;
     final String baseLicenseName = "licenseName";
     final String baseSpdxId = "spdxId";
     final String baseAccess = "access";
@@ -46,7 +46,7 @@ public class LPVSLicenseTest {
 
     @Test
     public void setLicenseIdTest() {
-        Long newActualValue = 0L;
+        final long newActualValue = 0L;
         assertEquals(lpvsLicense.getLicenseId(), baseLicenseId);
         lpvsLicense.setLicenseId(newActualValue);
         assertNotEquals(lpvsLicense.getLicenseId(), baseLicenseId);
@@ -55,7 +55,7 @@ public class LPVSLicenseTest {
 
     @Test
     public void setLicenseNameTest() {
-        String newActualName = "NewName";
+        final String newActualName = "NewName";
         assertEquals(lpvsLicense.getLicenseName(), baseLicenseName);
         lpvsLicense.setLicenseName(newActualName);
         assertNotEquals(lpvsLicense.getLicenseName(), baseLicenseName);
@@ -64,7 +64,7 @@ public class LPVSLicenseTest {
 
     @Test
     public void setSpdxIdTest() {
-        String newActualSpdxId = "NewSpdxId";
+        final String newActualSpdxId = "NewSpdxId";
         assertEquals(lpvsLicense.getSpdxId(), baseSpdxId);
         lpvsLicense.setSpdxId(newActualSpdxId);
         assertNotEquals(lpvsLicense.getSpdxId(), baseSpdxId);
@@ -73,7 +73,7 @@ public class LPVSLicenseTest {
 
     @Test
     public void setAccessTest() {
-        String newActualAccess = "newAccess";
+        final String newActualAccess = "newAccess";
         assertEquals(lpvsLicense.getAccess(), baseAccess);
         lpvsLicense.setAccess(newActualAccess);
         assertNotEquals(lpvsLicense.getAccess(), baseAccess);
@@ -82,7 +82,7 @@ public class LPVSLicenseTest {
 
     @Test
     public void setChecklistUrlTest() {
-        String newActualCheckUrl = "NewCheckUrl";
+        final String newActualCheckUrl = "NewCheckUrl";
         assertEquals(lpvsLicense.getChecklistUrl(), baseChecklistUrl);
         lpvsLicense.setChecklistUrl(newActualCheckUrl);
         assertNotEquals(lpvsLicense.getChecklistUrl(), baseChecklistUrl);
