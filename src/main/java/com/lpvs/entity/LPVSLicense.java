@@ -35,14 +35,6 @@ public class LPVSLicense {
         this.incompatibleWith = incompatibleWith;
     }
 
-    public LPVSLicense(LPVSLicense license) {
-        this.licenseId = license.licenseId;
-        this.licenseName = license.licenseName;
-        this.spdxId = license.spdxId;
-        this.access = license.access;
-        this.checklistUrl = license.checklistUrl;
-    }
-
     public Long getLicenseId() {
         return licenseId;
     }
