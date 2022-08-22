@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 public class LicensePreValidationSystemTest {
-    int testNumCores = 42;
+    final int testNumCores = 42;
     LicensePreValidationSystem licensePreValidationSystem;
 
     @BeforeEach
