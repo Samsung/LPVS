@@ -1,9 +1,15 @@
+/**
+ * Copyright (c) 2022, Samsung Electronics Co., Ltd. All rights reserved.
+ * <p>
+ * Use of this source code is governed by a MIT license that can be
+ * found in the LICENSE file.
+ */
+
 package com.lpvs.entity.enums;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class PullRequestActionTest {
 
