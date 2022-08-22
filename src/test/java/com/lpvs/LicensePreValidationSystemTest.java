@@ -27,7 +27,7 @@ public class LicensePreValidationSystemTest {
     }
 
     @Test
-    void testGetAsyncExecutor() {
+    public void testGetAsyncExecutor() {
         try (MockedConstruction<ThreadPoolTaskExecutor> mocked = mockConstruction(ThreadPoolTaskExecutor.class)) {
             TaskExecutor executor = licensePreValidationSystem.getAsyncExecutor();
 
@@ -44,7 +44,7 @@ public class LicensePreValidationSystemTest {
     }
 
     @Test
-    void testMain() {
+    public void testMain() {
         try (MockedConstruction<SpringApplication> mocked = mockConstruction(SpringApplication.class)) {
             String[] args_to_main = new String[]{"arg1", "arg2", "arg3" };
 
