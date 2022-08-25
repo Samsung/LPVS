@@ -42,7 +42,7 @@ public class GitHubWebhooksController {
     private static final String ERROR = "Error";
 
     @RequestMapping(value = "/webhooks", method = RequestMethod.POST)
-    public ResponseEntity<ResponseWrapper> gitHubWebhooks(@RequestHeader(SIGNATURE) String signature, @RequestBody String payload) throws InterruptedException {
+    public ResponseEntity<ResponseWrapper> gitHubWebhooks(@RequestHeader(SIGNATURE) String signature, @RequestBody String payload) throws Exception {
         LOG.info("New webhook request received");
 
         // if signature is empty return 401

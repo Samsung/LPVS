@@ -22,7 +22,7 @@ import java.util.List;
 @Service
 public class DetectService {
 
-    @Value("${scanner:scanoss}")
+    @Value("${lpvs.scanner:scanoss}")
     private String scannerType;
 
     @Autowired

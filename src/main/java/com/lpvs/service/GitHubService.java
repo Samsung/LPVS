@@ -22,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -29,15 +30,27 @@ import java.util.List;
 public class GitHubService {
 
     private String GITHUB_LOGIN;
-    private String GITHUB_AUTH_TOKEN;
-    private String GITHUB_API_URL;
+    private String GITHUB_TOKEN;
+    private String GITHUB_API_URL = "";
 
-    public GitHubService(@Value("${github.login}") String GITHUB_LOGIN,
-                         @Value("${github.token}") String GITHUB_AUTH_TOKEN,
-                         @Value("${github.api.url:}") String GITHUB_API_URL) {
-        this.GITHUB_LOGIN = GITHUB_LOGIN;
-        this.GITHUB_AUTH_TOKEN = GITHUB_AUTH_TOKEN;
-        this.GITHUB_API_URL = GITHUB_API_URL;
+    public GitHubService(@Value("${GITHUB_LOGIN:}") String GITHUB_LOGIN,
+                         @Value("${GITHUB_TOKEN:}") String GITHUB_TOKEN,
+                         @Value("${GITHUB_API_URL:}") String GITHUB_API_URL) {
+        if (GITHUB_LOGIN.isEmpty()) {
+            setGithubLoginFromEnv();
+        } else {
+            this.GITHUB_LOGIN = GITHUB_LOGIN;
+        }
+        if (GITHUB_TOKEN.isEmpty()) {
+            setGithubTokenFromEnv();
+        } else {
+            this.GITHUB_TOKEN = GITHUB_TOKEN;
+        }
+        if (GITHUB_API_URL.isEmpty()) {
+            setGithubApiUrlFromEnv();
+        } else {
+            this.GITHUB_API_URL = GITHUB_API_URL;
+        }
     }
 
     private static Logger LOG = LoggerFactory.getLogger(GitHubService.class);
@@ -50,9 +63,8 @@ public class GitHubService {
                     webhookConfig.getRepositoryName() + "/pulls/" + webhookConfig.getPullRequestId());
         }
         try {
-            if (GITHUB_AUTH_TOKEN.isEmpty()) setGithubTokenFromEnv();
-            if (GITHUB_API_URL.isEmpty()) gitHub = GitHub.connect(GITHUB_LOGIN, GITHUB_AUTH_TOKEN);
-            else gitHub = GitHub.connectToEnterpriseWithOAuth(GITHUB_API_URL, GITHUB_LOGIN, GITHUB_AUTH_TOKEN);
+            if (GITHUB_API_URL.isEmpty()) gitHub = GitHub.connect(GITHUB_LOGIN, GITHUB_TOKEN);
+            else gitHub = GitHub.connectToEnterpriseWithOAuth(GITHUB_API_URL, GITHUB_LOGIN, GITHUB_TOKEN);
             GHRepository repository = gitHub.getRepository(webhookConfig.getRepositoryOrganization()+"/"
                                                                             +webhookConfig.getRepositoryName());
             GHPullRequest pullRequest = getPullRequest(webhookConfig, repository);
@@ -72,7 +84,7 @@ public class GitHubService {
         return null;
     }
 
-    private GHPullRequest getPullRequest(WebhookConfig webhookConfig, GHRepository repository){
+    private GHPullRequest getPullRequest(WebhookConfig webhookConfig, GHRepository repository) {
         try {
             List<GHPullRequest> pullRequests = repository.getPullRequests(GHIssueState.OPEN);
             for (GHPullRequest pullRequest : pullRequests) {
@@ -88,9 +100,8 @@ public class GitHubService {
 
     public void setPendingCheck(WebhookConfig webhookConfig) {
         try {
-            if (GITHUB_AUTH_TOKEN.isEmpty()) setGithubTokenFromEnv();
-            if (GITHUB_API_URL.isEmpty()) gitHub = GitHub.connect(GITHUB_LOGIN, GITHUB_AUTH_TOKEN);
-            else gitHub = GitHub.connectToEnterpriseWithOAuth(GITHUB_API_URL, GITHUB_LOGIN, GITHUB_AUTH_TOKEN);
+            if (GITHUB_API_URL.isEmpty()) gitHub = GitHub.connect(GITHUB_LOGIN, GITHUB_TOKEN);
+            else gitHub = GitHub.connectToEnterpriseWithOAuth(GITHUB_API_URL, GITHUB_LOGIN, GITHUB_TOKEN);
             GHRepository repository = gitHub.getRepository(webhookConfig.getRepositoryOrganization() + "/"
                                                                                 + webhookConfig.getRepositoryName());
             repository.createCommitStatus(webhookConfig.getHeadCommitSHA(), GHCommitState.PENDING, null,
@@ -102,9 +113,8 @@ public class GitHubService {
 
     public void setErrorCheck(WebhookConfig webhookConfig) {
         try {
-            if (GITHUB_AUTH_TOKEN.isEmpty()) setGithubTokenFromEnv();
-            if (GITHUB_API_URL.isEmpty()) gitHub = GitHub.connect(GITHUB_LOGIN, GITHUB_AUTH_TOKEN);
-            else gitHub = GitHub.connectToEnterpriseWithOAuth(GITHUB_API_URL, GITHUB_LOGIN, GITHUB_AUTH_TOKEN);
+            if (GITHUB_API_URL.isEmpty()) gitHub = GitHub.connect(GITHUB_LOGIN, GITHUB_TOKEN);
+            else gitHub = GitHub.connectToEnterpriseWithOAuth(GITHUB_API_URL, GITHUB_LOGIN, GITHUB_TOKEN);
             GHRepository repository = gitHub.getRepository(webhookConfig.getRepositoryOrganization() + "/"
                     + webhookConfig.getRepositoryName());
             repository.createCommitStatus(webhookConfig.getHeadCommitSHA(), GHCommitState.ERROR, null,
@@ -181,9 +191,8 @@ public class GitHubService {
         try {
             String repositoryName = webhookConfig.getRepositoryName();
             String repositoryOrganization = webhookConfig.getRepositoryOrganization();
-            if (GITHUB_AUTH_TOKEN.isEmpty()) setGithubTokenFromEnv();
-            if (GITHUB_API_URL.isEmpty()) gitHub = GitHub.connect(GITHUB_LOGIN, GITHUB_AUTH_TOKEN);
-            else gitHub = GitHub.connectToEnterpriseWithOAuth(GITHUB_API_URL, GITHUB_LOGIN, GITHUB_AUTH_TOKEN);
+            if (GITHUB_API_URL.isEmpty()) gitHub = GitHub.connect(GITHUB_LOGIN, GITHUB_TOKEN);
+            else gitHub = GitHub.connectToEnterpriseWithOAuth(GITHUB_API_URL, GITHUB_LOGIN, GITHUB_TOKEN);
             GHRepository repository = gitHub.getRepository(repositoryOrganization + "/" + repositoryName);
             GHLicense license = repository.getLicense();
             if (license == null) {
@@ -213,7 +222,28 @@ public class GitHubService {
     }
 
     public void setGithubTokenFromEnv() {
-            if (System.getenv("LPVS_GITHUB_TOKEN") != null) GITHUB_AUTH_TOKEN = System.getenv("LPVS_GITHUB_TOKEN");
+        if (System.getenv("LPVS_GITHUB_TOKEN") != null) {
+            GITHUB_TOKEN = System.getenv("LPVS_GITHUB_TOKEN");
+        } else {
+            LOG.error("GITHUB_TOKEN is not set");
+            System.exit(-1);
+        }
+    }
+
+
+    public void setGithubLoginFromEnv() {
+        if (System.getenv("GITHUB_LOGIN") != null) {
+            GITHUB_LOGIN = System.getenv("GITHUB_LOGIN");
+        } else {
+            LOG.error("GITHUB_LOGIN is not set");
+            System.exit(-1);
+        }
+    }
+
+    public void setGithubApiUrlFromEnv() {
+        if (System.getenv("LPVS_GITHUB_API") != null) {
+            GITHUB_API_URL = System.getenv("LPVS_GITHUB_API");
+        }
     }
 
 }

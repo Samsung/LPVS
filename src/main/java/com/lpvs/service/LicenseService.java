@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
 import javax.annotation.PostConstruct;
 import java.io.Reader;
 import java.nio.file.Files;
@@ -25,11 +26,11 @@ import java.util.*;
 @Service
 public class LicenseService {
 
-    @Value("${license_filepath:classes/licenses.json}")
-    public String licenseFilePath;
+    @Value("${LICENSE_FILE_PATH:}")
+    public String LICENSE_FILE_PATH;
 
-    @Value("${license_conflict:json}")
-    public String licenseConflictsSource;
+    @Value("${LICENSE_FILE_PATH:}")
+    public String LICENSE_CONFLICT_SOURCE;
 
     private static Logger LOG = LoggerFactory.getLogger(LicenseService.class);
 
@@ -39,12 +40,17 @@ public class LicenseService {
 
     @PostConstruct
     private void init() {
+        // If LICENSE_FILE_PATH is not set from the command line, take it from environment
+        if (LICENSE_FILE_PATH.isEmpty()) setLicenseFilePathFromEnv();
+        // If LICENSE_CONFLICT_SOURCE is not set from the command line, take it from environment
+        if (LICENSE_CONFLICT_SOURCE.isEmpty()) setLicenseConflictSourceFromEnv();
+
         try {
             // 1. Load licenses
             // create Gson instance
             Gson gson = new Gson();
             // create a reader
-            Reader reader = Files.newBufferedReader(Paths.get(licenseFilePath));
+            Reader reader = Files.newBufferedReader(Paths.get(LICENSE_FILE_PATH));
             // convert JSON array to list of licenses
             licenses = new Gson().fromJson(reader, new TypeToken<List<LPVSLicense>>() {}.getType());
             // print info
@@ -55,7 +61,7 @@ public class LicenseService {
             // 2. Load license conflicts
             licenseConflicts = new ArrayList<>();
 
-            if (licenseConflictsSource.equalsIgnoreCase("json")) {
+            if (LICENSE_CONFLICT_SOURCE.equalsIgnoreCase("json")) {
                 for (LPVSLicense license : licenses) {
                     if (license.getIncompatibleWith() != null && !license.getIncompatibleWith().isEmpty()) {
                         for (String lic : license.getIncompatibleWith()) {
@@ -156,6 +162,24 @@ public class LicenseService {
         }
 
         return foundConflicts;
+    }
+
+    public void setLicenseFilePathFromEnv() {
+        if (System.getenv("LICENSE_FILE_PATH") != null) {
+            LICENSE_FILE_PATH = System.getenv("LICENSE_FILE_PATH");
+        } else {
+            LOG.error("LICENSE_FILE_PATH is not set");
+            System.exit(-1);
+        }
+    }
+
+    public void setLicenseConflictSourceFromEnv() {
+        if (System.getenv("LICENSE_CONFLICT_SOURCE") != null) {
+            LICENSE_CONFLICT_SOURCE = System.getenv("LICENSE_CONFLICT_SOURCE");
+        } else {
+            LOG.error("LICENSE_CONFLICT_SOURCE is not set");
+            System.exit(-1);
+        }
     }
 
     public class Conflict<License1, License2> {

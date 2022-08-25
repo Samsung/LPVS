@@ -52,7 +52,7 @@ A template of the `licenses.json` file can be found in the repository at `src/ma
 3. Fill in the lines of the `src/main/resources/application.properties` file:
     ```text
    # Used license scanner: scanoss (at the moment, only this scanner is supported)
-    scanner=scanoss
+    lpvs.scanner=scanoss
 
    # Path to the 'licenses.json' file which contains information about permitted,
    # restricted and prohibited licenses. This file should be filled according to

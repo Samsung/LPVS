@@ -128,7 +128,7 @@ public class ScanossDetectService {
                         }
 
                         // Check for the license conflicts if the property "license_conflict=scanner"
-                        if (licenseService.licenseConflictsSource.equalsIgnoreCase("scanner")) {
+                        if (licenseService.LICENSE_CONFLICT_SOURCE.equalsIgnoreCase("scanner")) {
                             if (license.incompatible_with != null) {
                                 for (String incompatibleLicense : license.incompatible_with) {
                                     licenseService.addLicenseConflict(incompatibleLicense, license.name);
