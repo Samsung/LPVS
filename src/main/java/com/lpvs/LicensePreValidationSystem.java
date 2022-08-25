@@ -24,8 +24,11 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 @EnableAsync
 public class LicensePreValidationSystem {
 
-    @Value("${lpvs.cores:8}")
     private int corePoolSize;
+
+    public LicensePreValidationSystem(@Value("${lpvs.cores:8}") int corePoolSize) {
+        this.corePoolSize = corePoolSize;
+    }
 
     public static void main(String[] args) {
         SpringApplication app = new SpringApplication(LicensePreValidationSystem.class);
