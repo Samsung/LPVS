@@ -21,10 +21,14 @@ import java.util.*;
 @Service
 public class QueueProcessorService {
 
-    @Autowired
     private QueueService queueService;
 
     private static Logger LOG = LoggerFactory.getLogger(QueueProcessorService.class);
+
+    @Autowired
+    QueueProcessorService(QueueService queueService) {
+        this.queueService = queueService;
+    }
 
     @EventListener(ApplicationReadyEvent.class)
     private void queueProcessor() throws Exception {
@@ -33,7 +37,6 @@ public class QueueProcessorService {
             LOG.info("PROCESS Webhook id = " + webhookConfig.getWebhookId());
             webhookConfig.setDate(new Date());
             queueService.processWebHook(webhookConfig);
-
         }
     }
 }
