@@ -31,7 +31,7 @@ public class LicensePreValidationSystemTest {
         try (MockedConstruction<ThreadPoolTaskExecutor> mocked = mockConstruction(ThreadPoolTaskExecutor.class)) {
             TaskExecutor executor = licensePreValidationSystem.getAsyncExecutor();
 
-            assertEquals(1, mocked.constructed().size());
+            assertEquals(10, mocked.constructed().size());
             ThreadPoolTaskExecutor mocked_constructed_executor = mocked.constructed().get(0);
 
             // main assert
