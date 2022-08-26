@@ -47,7 +47,7 @@ public class QueueService {
     }
 
     @Async("threadPoolTaskExecutor")
-    public void processWebHook(WebhookConfig webhookConfig) throws Exception {
+    public void processWebHook(WebhookConfig webhookConfig) {
         try {
                 LOG.info(webhookConfig.toString());
 
