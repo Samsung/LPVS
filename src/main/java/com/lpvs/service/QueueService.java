@@ -21,14 +21,20 @@ import java.util.concurrent.LinkedBlockingDeque;
 @Service
 public class QueueService {
 
-    @Autowired
     private GitHubService gitHubService;
 
-    @Autowired
     private DetectService detectService;
 
-    @Autowired
     private LicenseService licenseService;
+
+    @Autowired
+    public QueueService(GitHubService gitHubService,
+                        DetectService detectService,
+                        LicenseService licenseService) {
+        this.gitHubService = gitHubService;
+        this.detectService = detectService;
+        this.licenseService = licenseService;
+    }
 
     private static Logger LOG = LoggerFactory.getLogger(QueueService.class);
 
@@ -52,9 +58,10 @@ public class QueueService {
                 LOG.info(webhookConfig.toString());
 
                 String filePath = gitHubService.getPullRequestFiles(webhookConfig);
-                LOG.info("Successfully downloaded files from GitHub");
 
                 if (filePath != null) {
+                    LOG.info("Successfully downloaded files from GitHub");
+
                     if (filePath.contains(":::::")) {
                         filePath = filePath.split(":::::")[0];
                     }

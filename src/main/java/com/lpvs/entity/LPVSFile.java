@@ -22,6 +22,16 @@ public class LPVSFile {
     public LPVSFile() {
     }
 
+    public LPVSFile(Long id, String fileUrl, String filePath, String snippetMatch, String matchedLines, Set<LPVSLicense> licenses, String component) {
+        this.id = id;
+        this.fileUrl = fileUrl;
+        this.filePath = filePath;
+        this.snippetMatch = snippetMatch;
+        this.matchedLines = matchedLines;
+        this.licenses = licenses;
+        this.component = component;
+    }
+
     public Set<LPVSLicense> getLicenses() {
         return licenses;
     }
