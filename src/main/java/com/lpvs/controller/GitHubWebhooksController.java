@@ -28,11 +28,8 @@ import java.util.Date;
 
 @RestController
 public class GitHubWebhooksController {
-
-    @Autowired
     private QueueService queueService;
 
-    @Autowired
     private GitHubService gitHubService;
 
     private static Logger LOG = LoggerFactory.getLogger(GitHubWebhooksController.class);
@@ -40,6 +37,12 @@ public class GitHubWebhooksController {
     private static final String SIGNATURE = "X-Hub-Signature";
     private static final String SUCCESS = "Success";
     private static final String ERROR = "Error";
+
+    public GitHubWebhooksController(QueueService queueService, GitHubService gitHubService) {
+        this.queueService = queueService;
+        this.gitHubService = gitHubService;
+    }
+
 
     @RequestMapping(value = "/webhooks", method = RequestMethod.POST)
     public ResponseEntity<ResponseWrapper> gitHubWebhooks(@RequestHeader(SIGNATURE) String signature, @RequestBody String payload) throws InterruptedException {
