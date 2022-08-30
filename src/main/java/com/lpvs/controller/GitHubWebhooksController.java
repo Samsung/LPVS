@@ -43,7 +43,6 @@ public class GitHubWebhooksController {
         this.gitHubService = gitHubService;
     }
 
-
     @RequestMapping(value = "/webhooks", method = RequestMethod.POST)
     public ResponseEntity<ResponseWrapper> gitHubWebhooks(@RequestHeader(SIGNATURE) String signature, @RequestBody String payload) throws InterruptedException {
         LOG.info("New webhook request received");

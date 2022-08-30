@@ -6,65 +6,24 @@
  */
 package com.lpvs.controller;
 
-import java.util.*;
-
-//import com.google.gson.Gson;
-//import com.google.gson.JsonObject;
-//import com.google.gson.JsonParser;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.lpvs.entity.ResponseWrapper;
-import com.lpvs.entity.enums.PullRequestAction;
-import com.lpvs.controller.GitHubWebhooksController;
 import com.lpvs.service.GitHubService;
 import com.lpvs.service.QueueService;
-import org.hibernate.tool.schema.internal.exec.ScriptTargetOutputToFile;
-import org.junit.jupiter.api.BeforeEach;
+
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMethod;
 
-
-//package com.lpvs.controller;
-//
-//import com.lpvs.entity.config.WebhookConfig;
-//import com.lpvs.service.GitHubService;
-//import com.lpvs.service.QueueService;
-//import com.lpvs.util.WebhookUtil;
-//import com.lpvs.entity.ResponseWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.http.HttpStatus;
-//import org.springframework.http.ResponseEntity;
-//import org.springframework.util.StringUtils;
-//import org.springframework.web.bind.annotation.RestController;
-//import org.springframework.web.bind.annotation.RequestMapping;
-//import org.springframework.web.bind.annotation.RequestMethod;
-//import org.springframework.web.bind.annotation.RequestHeader;
-//import org.springframework.web.bind.annotation.RequestBody;
-//import java.util.Date;
-//
-
 
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.mockito.Mockito.mock;
 
 public class GitHubWebhooksControllerTest {
 
-//    @Autowired
-//    private QueueService queueService;
-
-//    @Autowired
-//    private GitHubService gitHubService;
-
-    private static Logger LOG = LoggerFactory.getLogger(GitHubWebhooksController.class);
-    //
     private static final String SIGNATURE = "X-Hub-Signature";
     private static final String SUCCESS = "Success";
     private static final String ERROR = "Error";
@@ -89,7 +48,7 @@ public class GitHubWebhooksControllerTest {
     public void noPayloadTest() {
         ResponseEntity actual;
         try {
-            actual = gitHubWebhooksController.gitHubWebhooks("signature", null);
+            actual = gitHubWebhooksController.gitHubWebhooks(SIGNATURE, null);
         } catch( InterruptedException e) {
             actual = null;
         }
@@ -124,7 +83,7 @@ public class GitHubWebhooksControllerTest {
             "}";
 
         try {
-            actual = gitHubWebhooksController.gitHubWebhooks("signature", json_to_test);
+            actual = gitHubWebhooksController.gitHubWebhooks(SIGNATURE, json_to_test);
         } catch( InterruptedException e) {
             actual = null;
         }
