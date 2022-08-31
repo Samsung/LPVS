@@ -14,7 +14,10 @@ import com.lpvs.entity.LPVSLicense;
 import com.lpvs.entity.config.WebhookConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.SpringApplication;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.io.Reader;
@@ -25,10 +28,13 @@ import java.util.*;
 @Service
 public class LicenseService {
 
-    @Value("${license_filepath:classes/licenses.json}")
+    private final static String LICENSE_FILE_PATH_DEFAULT = "classes/licenses.json";
+    private final static String LICENSE_CONFLICTS_SOURCE_DEFAULT = "json";
+
+    @Value("${license_filepath:" + LICENSE_FILE_PATH_DEFAULT + "}")
     public String licenseFilePath;
 
-    @Value("${license_conflict:json}")
+    @Value("${license_conflict:" + LICENSE_CONFLICTS_SOURCE_DEFAULT + "}")
     public String licenseConflictsSource;
 
     private static Logger LOG = LoggerFactory.getLogger(LicenseService.class);
@@ -37,8 +43,27 @@ public class LicenseService {
 
     private List<Conflict<String, String>> licenseConflicts;
 
+    @Autowired
+    ApplicationContext applicationContext;
+
     @PostConstruct
     private void init() {
+        licenseFilePath = (licenseFilePath == null || licenseFilePath.equals(LICENSE_FILE_PATH_DEFAULT))
+        && System.getenv("LICENSE_FILEPATH") != null && !System.getenv("LICENSE_FILEPATH").isEmpty() ?
+                System.getenv("LICENSE_FILEPATH") : licenseFilePath;
+        licenseConflictsSource = (licenseConflictsSource == null || licenseConflictsSource.equals(
+                LICENSE_CONFLICTS_SOURCE_DEFAULT
+        ))
+        && System.getenv("LICENSE_CONFLICT") != null && !System.getenv("LICENSE_CONFLICT").isEmpty() ?
+                System.getenv("LICENSE_CONFLICT") : licenseConflictsSource;
+        if (licenseFilePath == null || licenseFilePath.isEmpty()) {
+            LOG.error("LICENSE_FILEPATH is not set");
+            System.exit(SpringApplication.exit(applicationContext, () -> -1));
+        }
+        if (licenseConflictsSource == null || licenseConflictsSource.isEmpty()) {
+            LOG.error("LICENSE_CONFLICT is not set");
+            System.exit(SpringApplication.exit(applicationContext, () -> -1));
+        }
         try {
             // 1. Load licenses
             // create Gson instance

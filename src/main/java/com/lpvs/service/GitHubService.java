@@ -20,10 +20,17 @@ import org.kohsuke.github.GHIssueState;
 import org.kohsuke.github.GHCommitState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.SpringApplication;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class GitHubService {
@@ -32,12 +39,32 @@ public class GitHubService {
     private String GITHUB_AUTH_TOKEN;
     private String GITHUB_API_URL;
 
+    @Autowired
+    ApplicationContext applicationContext;
+
     public GitHubService(@Value("${github.login}") String GITHUB_LOGIN,
                          @Value("${github.token}") String GITHUB_AUTH_TOKEN,
-                         @Value("${github.api.url:}") String GITHUB_API_URL) {
-        this.GITHUB_LOGIN = GITHUB_LOGIN;
-        this.GITHUB_AUTH_TOKEN = GITHUB_AUTH_TOKEN;
-        this.GITHUB_API_URL = GITHUB_API_URL;
+                         @Value("${github.api.url}") String GITHUB_API_URL) {
+        this.GITHUB_LOGIN = Optional.of(GITHUB_LOGIN).orElse(System.getenv("GITHUB_LOGIN"));
+        this.GITHUB_AUTH_TOKEN = Optional.of(GITHUB_AUTH_TOKEN).orElse(System.getenv("GITHUB_TOKEN"));
+        this.GITHUB_API_URL = Optional.of(GITHUB_API_URL).orElse(System.getenv("GITHUB_API_URL"));
+    }
+
+    @PostConstruct
+    @Profile("!test")
+    private void checks() throws Exception {
+        if (this.GITHUB_LOGIN == null || this.GITHUB_LOGIN.isEmpty()) {
+            LOG.error("GITHUB_LOGIN is not set.");
+            System.exit(SpringApplication.exit(applicationContext, () -> -1));
+        }
+        if (this.GITHUB_AUTH_TOKEN == null || this.GITHUB_AUTH_TOKEN.isEmpty()) {
+            LOG.error("GITHUB_AUTH_TOKEN is not set.");
+            System.exit(SpringApplication.exit(applicationContext, () -> -1));
+        }
+        if (this.GITHUB_API_URL == null || this.GITHUB_API_URL.isEmpty()) {
+            LOG.error("GITHUB_API_URL is not set.");
+            System.exit(SpringApplication.exit(applicationContext, () -> -1));
+        }
     }
 
     private static Logger LOG = LoggerFactory.getLogger(GitHubService.class);
