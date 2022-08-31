@@ -28,13 +28,19 @@ import java.util.*;
 @Service
 public class LicenseService {
 
-    private final static String LICENSE_FILE_PATH_DEFAULT = "classes/licenses.json";
-    private final static String LICENSE_CONFLICTS_SOURCE_DEFAULT = "json";
+    private final static String LICENSE_FILE_PATH_PROP_NAME = "license_filepath";
+    private final static String LICENSE_CONFLICT_SOURCE_PROP_NAME = "license_conflict";
 
-    @Value("${license_filepath:" + LICENSE_FILE_PATH_DEFAULT + "}")
+    private final static String LICENSE_FILE_PATH_ENV_VAR_NAME = "LICENSE_FILEPATH";
+    private final static String LICENSE_CONFLICT_SOURCE_ENV_VAR_NAME = "LICENSE_CONFLICT";
+
+    private final static String LICENSE_FILE_PATH_DEFAULT = "classes/licenses.json";
+    private final static String LICENSE_CONFLICT_SOURCE_DEFAULT = "json";
+
+    @Value("${" + LICENSE_FILE_PATH_PROP_NAME + ":" + LICENSE_FILE_PATH_DEFAULT + "}")
     public String licenseFilePath;
 
-    @Value("${license_conflict:" + LICENSE_CONFLICTS_SOURCE_DEFAULT + "}")
+    @Value("${" + LICENSE_CONFLICT_SOURCE_PROP_NAME + ":" + LICENSE_CONFLICT_SOURCE_DEFAULT + "}")
     public String licenseConflictsSource;
 
     private static Logger LOG = LoggerFactory.getLogger(LicenseService.class);
@@ -49,19 +55,21 @@ public class LicenseService {
     @PostConstruct
     private void init() {
         licenseFilePath = (licenseFilePath == null || licenseFilePath.equals(LICENSE_FILE_PATH_DEFAULT))
-        && System.getenv("LICENSE_FILEPATH") != null && !System.getenv("LICENSE_FILEPATH").isEmpty() ?
-                System.getenv("LICENSE_FILEPATH") : licenseFilePath;
+        && System.getenv(LICENSE_FILE_PATH_ENV_VAR_NAME) != null
+                && !System.getenv(LICENSE_FILE_PATH_ENV_VAR_NAME).isEmpty() ?
+                System.getenv(LICENSE_FILE_PATH_ENV_VAR_NAME) : licenseFilePath;
         licenseConflictsSource = (licenseConflictsSource == null || licenseConflictsSource.equals(
-                LICENSE_CONFLICTS_SOURCE_DEFAULT
+                LICENSE_CONFLICT_SOURCE_DEFAULT
         ))
-        && System.getenv("LICENSE_CONFLICT") != null && !System.getenv("LICENSE_CONFLICT").isEmpty() ?
-                System.getenv("LICENSE_CONFLICT") : licenseConflictsSource;
+        && System.getenv(LICENSE_CONFLICT_SOURCE_ENV_VAR_NAME) != null
+                && !System.getenv(LICENSE_CONFLICT_SOURCE_ENV_VAR_NAME).isEmpty() ?
+                System.getenv(LICENSE_CONFLICT_SOURCE_ENV_VAR_NAME) : licenseConflictsSource;
         if (licenseFilePath == null || licenseFilePath.isEmpty()) {
-            LOG.error("LICENSE_FILEPATH is not set");
+            LOG.error(LICENSE_FILE_PATH_ENV_VAR_NAME + "(" + LICENSE_FILE_PATH_PROP_NAME + ") is not set");
             System.exit(SpringApplication.exit(applicationContext, () -> -1));
         }
         if (licenseConflictsSource == null || licenseConflictsSource.isEmpty()) {
-            LOG.error("LICENSE_CONFLICT is not set");
+            LOG.error(LICENSE_CONFLICT_SOURCE_ENV_VAR_NAME + "(" + LICENSE_CONFLICT_SOURCE_PROP_NAME + ") is not set");
             System.exit(SpringApplication.exit(applicationContext, () -> -1));
         }
         try {
