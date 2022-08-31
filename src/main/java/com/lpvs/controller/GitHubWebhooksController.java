@@ -44,10 +44,10 @@ public class GitHubWebhooksController {
 
     private static Logger LOG = LoggerFactory.getLogger(GitHubWebhooksController.class);
 
-    private static final String SIGNATURE = "X-Hub-Signature";
+    private static final String SIGNATURE = "X-Hub-Signature-256";
     private static final String SUCCESS = "Success";
     private static final String ERROR = "Error";
-    private static final String ALGORITHM = "HmacSHA1";
+    private static final String ALGORITHM = "HmacSHA256";
 
     @RequestMapping(value = "/webhooks", method = RequestMethod.POST)
     public ResponseEntity<ResponseWrapper> gitHubWebhooks(@RequestHeader(SIGNATURE) String signature, @RequestBody String payload) throws Exception {
