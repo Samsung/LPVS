@@ -35,6 +35,7 @@ LPVS license scan shall be enabled on a project via GitHub Hooks:
 - fill in Payload URL with: `http://<IP where LPVS is running>:7896/webhooks`
 - specify content type: `application/json`
 - fill in `Secret` field with the passphrase: `LPVS`
+  - the same passphrase must be saved in `github.secret` of LPVS backend `application.properties` file
 - select `Let me select individual events` -> `Pull requests` (make sure that only `Pull requests` is selected)
 - make it `Active`
 - press `Add Webhook`
@@ -51,6 +52,10 @@ A template of the `licenses.json` file can be found in the repository at `src/ma
 
 3. Fill in the lines of the `src/main/resources/application.properties` file:
     ```text
+   # Fill in the properties associated with github (github.token and github.secret required).
+   github.token=
+   github.secret=LPVS
+
    # Used license scanner: scanoss (at the moment, only this scanner is supported)
     scanner=scanoss
 
