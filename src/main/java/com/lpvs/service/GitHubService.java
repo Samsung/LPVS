@@ -68,13 +68,15 @@ public class GitHubService {
                 webhookConfig.setHeadCommitSHA(pullRequest.getHead().getSha());
             }
             LOG.info("AAAAAAAAAAAAA");
-            LOG.info("" + pullRequest.listFiles().toString() + webhookConfig.getRepositoryOrganization()+"/"+webhookConfig.getRepositoryName() +
-                    webhookConfig.getHeadCommitSHA() + pullRequest.getDeletions());
+            LOG.info("" + pullRequest.listFiles().toString()  + " " +  webhookConfig.getRepositoryOrganization()+"/"+webhookConfig.getRepositoryName()  + " " +
+                    webhookConfig.getHeadCommitSHA()  + " " +  pullRequest.getDeletions());
 
 
 
-            return FileUtil.saveFiles(pullRequest.listFiles(),webhookConfig.getRepositoryOrganization()+"/"+webhookConfig.getRepositoryName(),
+            String result = FileUtil.saveFiles(pullRequest.listFiles(),webhookConfig.getRepositoryOrganization()+"/"+webhookConfig.getRepositoryName(),
                                         webhookConfig.getHeadCommitSHA(), pullRequest.getDeletions());
+            LOG.info(result);
+            return result;
         } catch (IOException e){
             LOG.error("Can't authorize getPullRequestFiles() " + e);
         }
