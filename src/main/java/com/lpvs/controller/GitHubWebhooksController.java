@@ -36,8 +36,6 @@ import javax.crypto.spec.SecretKeySpec;
 
 @RestController
 public class GitHubWebhooksController {
-
-    @Value("${github.secret}")
     private String GITHUB_SECRET;
 
     @Autowired
@@ -55,7 +53,6 @@ public class GitHubWebhooksController {
     @Autowired
     private QueueService queueService;
 
-    @Autowired
     private GitHubService gitHubService;
 
     private static Logger LOG = LoggerFactory.getLogger(GitHubWebhooksController.class);
@@ -65,6 +62,12 @@ public class GitHubWebhooksController {
     private static final String ERROR = "Error";
     private static final String ALGORITHM = "HmacSHA256";
 
+    public GitHubWebhooksController(QueueService queueService, GitHubService gitHubService, @Value("${github.secret:}") String GITHUB_SECRET) {
+        this.queueService = queueService;
+        this.gitHubService = gitHubService;
+        this.GITHUB_SECRET = GITHUB_SECRET;
+    }
+
     @RequestMapping(value = "/webhooks", method = RequestMethod.POST)
     public ResponseEntity<ResponseWrapper> gitHubWebhooks(@RequestHeader(SIGNATURE) String signature, @RequestBody String payload) throws Exception {
         LOG.info("New webhook request received");
@@ -72,7 +75,7 @@ public class GitHubWebhooksController {
         // if signature is empty return 401
         if (!StringUtils.hasText(signature)) {
             return new ResponseEntity<>(new ResponseWrapper(ERROR), HttpStatus.FORBIDDEN);
-        } else if (!GITHUB_SECRET.isBlank() && wrongSecret(signature, payload)) {
+        } else if (!GITHUB_SECRET.trim().isEmpty() && wrongSecret(signature, payload)) {
             return new ResponseEntity<>(new ResponseWrapper(ERROR), HttpStatus.FORBIDDEN);
         }
 
