@@ -58,7 +58,7 @@ public class GitHubWebhooksController {
         // if signature is empty return 401
         if (!StringUtils.hasText(signature)) {
             return new ResponseEntity<>(new ResponseWrapper(ERROR), HttpStatus.FORBIDDEN);
-        } else if (!GITHUB_SECRET.isBlank() && wrongSecret(signature, payload)) {
+        } else if (!GITHUB_SECRET.trim().isEmpty() && wrongSecret(signature, payload)) {
             return new ResponseEntity<>(new ResponseWrapper(ERROR), HttpStatus.FORBIDDEN);
         }
 
