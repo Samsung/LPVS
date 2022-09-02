@@ -46,9 +46,10 @@ public class GitHubWebhooksController {
     private static final String ERROR = "Error";
     private static final String ALGORITHM = "HmacSHA256";
 
-    public GitHubWebhooksController(QueueService queueService, GitHubService gitHubService) {
+    public GitHubWebhooksController(QueueService queueService, GitHubService gitHubService, @Value("${github.secret:}") String GITHUB_SECRET) {
         this.queueService = queueService;
         this.gitHubService = gitHubService;
+        this.GITHUB_SECRET = GITHUB_SECRET;
     }
 
     @RequestMapping(value = "/webhooks", method = RequestMethod.POST)

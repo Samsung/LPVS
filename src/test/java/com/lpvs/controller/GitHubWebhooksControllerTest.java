@@ -20,20 +20,20 @@ import static org.mockito.Mockito.mock;
 
 public class GitHubWebhooksControllerTest {
 
-    private static final String SIGNATURE = "X-Hub-Signature";
+    private static final String SIGNATURE = "X-Hub-Signature-256";
     private static final String SUCCESS = "Success";
     private static final String ERROR = "Error";
 
     QueueService mocked_instance_queueServ = mock(QueueService.class);
     GitHubService mocked_instance_ghServ = mock(GitHubService.class);
-    GitHubWebhooksController gitHubWebhooksController = new GitHubWebhooksController(mocked_instance_queueServ, mocked_instance_ghServ);
+    GitHubWebhooksController gitHubWebhooksController = new GitHubWebhooksController(mocked_instance_queueServ, mocked_instance_ghServ, "");
 
     @Test
     public void noSignatureTest() {
         ResponseEntity actual;
         try {
             actual = gitHubWebhooksController.gitHubWebhooks(null, null);
-        } catch( InterruptedException e) {
+        } catch( Exception e) {
             actual = null;
         }
         ResponseEntity expected = new ResponseEntity<>(new ResponseWrapper(ERROR), HttpStatus.FORBIDDEN);
@@ -45,7 +45,7 @@ public class GitHubWebhooksControllerTest {
         ResponseEntity actual;
         try {
             actual = gitHubWebhooksController.gitHubWebhooks(SIGNATURE, null);
-        } catch( InterruptedException e) {
+        } catch( Exception e) {
             actual = null;
         }
         ResponseEntity expected = new ResponseEntity<>(new ResponseWrapper(SUCCESS), HttpStatus.OK);
@@ -80,7 +80,7 @@ public class GitHubWebhooksControllerTest {
 
         try {
             actual = gitHubWebhooksController.gitHubWebhooks(SIGNATURE, json_to_test);
-        } catch( InterruptedException e) {
+        } catch( Exception e) {
             actual = null;
         }
         ResponseEntity expected = new ResponseEntity<>(new ResponseWrapper(SUCCESS), HttpStatus.OK);
