@@ -73,7 +73,7 @@ A template of the `licenses.json` file can be found in the repository at `src/ma
     license_conflict=json
    
    # Alternatively, you can supply all the necessary values associated with github and license using these env variables:
-   # GITHUB_LOGIN, GITHUB_TOKEN, GITHUB_API_URL, GITHUB_SECRET, LICENSE_FILEPATH and LICENSE_CONFLICT.
+   # LPVS_GITHUB_LOGIN, LPVS_GITHUB_TOKEN, LPVS_GITHUB_API_URL, LPVS_GITHUB_SECRET, LPVS_LICENSE_FILEPATH and LPVS_LICENSE_CONFLICT.
     ```
 
 4. Build LPVS application with Maven, then run it:
@@ -91,7 +91,7 @@ A template of the `licenses.json` file can be found in the repository at `src/ma
    Or alternatively build and run the Docker container with LPVS:
    ```bash
     docker build -t lpvs .
-    docker run -p 7896:7896 --name lpvs -e GITHUB_TOKEN=<`github.token`> lpvs:latest
+    docker run -p 7896:7896 --name lpvs -e LPVS_GITHUB_TOKEN=<`github.token`> lpvs:latest
     ```
     For additional information about using Docker and tips, please check file [Docker_Usage](.github/Docker_Usage.md).
     

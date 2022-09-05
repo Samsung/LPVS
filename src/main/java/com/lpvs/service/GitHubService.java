@@ -43,9 +43,9 @@ public class GitHubService {
     private final static String GITHUB_AUTH_TOKEN_PROP_NAME = "github.token";
     private final static String GITHUB_API_URL_PROP_NAME = "github.api.url";
 
-    private final static String GITHUB_LOGIN_ENV_VAR_NAME = "GITHUB_LOGIN";
-    private final static String GITHUB_AUTH_TOKEN_ENV_VAR_NAME = "GITHUB_TOKEN";
-    private final static String GITHUB_API_URL_ENV_VAR_NAME = "GITHUB_API_URL";
+    private final static String GITHUB_LOGIN_ENV_VAR_NAME = "LPVS_GITHUB_LOGIN";
+    private final static String GITHUB_AUTH_TOKEN_ENV_VAR_NAME = "LPVS_GITHUB_TOKEN";
+    private final static String GITHUB_API_URL_ENV_VAR_NAME = "LPVS_GITHUB_API_URL";
 
     @Autowired
     ApplicationContext applicationContext;
@@ -61,16 +61,8 @@ public class GitHubService {
     @PostConstruct
     @Profile("!test")
     private void checks() throws Exception {
-        if (this.GITHUB_LOGIN == null || this.GITHUB_LOGIN.isEmpty()) {
-            LOG.error(GITHUB_LOGIN_ENV_VAR_NAME + "(" + GITHUB_LOGIN_PROP_NAME + ") is not set.");
-            System.exit(SpringApplication.exit(applicationContext, () -> -1));
-        }
         if (this.GITHUB_AUTH_TOKEN == null || this.GITHUB_AUTH_TOKEN.isEmpty()) {
             LOG.error(GITHUB_AUTH_TOKEN_ENV_VAR_NAME + "(" + GITHUB_AUTH_TOKEN_PROP_NAME + ") is not set.");
-            System.exit(SpringApplication.exit(applicationContext, () -> -1));
-        }
-        if (this.GITHUB_API_URL == null || this.GITHUB_API_URL.isEmpty()) {
-            LOG.error(GITHUB_API_URL_ENV_VAR_NAME + "(" + GITHUB_API_URL_PROP_NAME + ") is not set.");
             System.exit(SpringApplication.exit(applicationContext, () -> -1));
         }
     }

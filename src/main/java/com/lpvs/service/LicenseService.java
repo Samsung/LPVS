@@ -31,8 +31,8 @@ public class LicenseService {
     private final static String LICENSE_FILE_PATH_PROP_NAME = "license_filepath";
     private final static String LICENSE_CONFLICT_SOURCE_PROP_NAME = "license_conflict";
 
-    private final static String LICENSE_FILE_PATH_ENV_VAR_NAME = "LICENSE_FILEPATH";
-    private final static String LICENSE_CONFLICT_SOURCE_ENV_VAR_NAME = "LICENSE_CONFLICT";
+    private final static String LICENSE_FILE_PATH_ENV_VAR_NAME = "LPVS_LICENSE_FILEPATH";
+    private final static String LICENSE_CONFLICT_SOURCE_ENV_VAR_NAME = "LPVS_LICENSE_CONFLICT";
 
     private final static String LICENSE_FILE_PATH_DEFAULT = "classes/licenses.json";
     private final static String LICENSE_CONFLICT_SOURCE_DEFAULT = "json";
