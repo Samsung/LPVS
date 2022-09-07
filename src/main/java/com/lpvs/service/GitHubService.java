@@ -56,27 +56,16 @@ public class GitHubService {
             GHRepository repository = gitHub.getRepository(webhookConfig.getRepositoryOrganization()+"/"
                                                                             +webhookConfig.getRepositoryName());
             GHPullRequest pullRequest = getPullRequest(webhookConfig, repository);
-            LOG.info("AAAAAAAAAAAAA");
             if (pullRequest == null){
                 LOG.error("Can't find pull request " + webhookConfig.getPullRequestAPIUrl());
                 return null;
             }
-            LOG.info("AAAAAAAAAAAAA");
-
             webhookConfig.setPullRequestName(pullRequest.getTitle());
             if (webhookConfig.getAction().equals(PullRequestAction.RESCAN)) {
                 webhookConfig.setHeadCommitSHA(pullRequest.getHead().getSha());
             }
-            LOG.info("AAAAAAAAAAAAA");
-            LOG.info("" + pullRequest.listFiles().toString()  + " " +  webhookConfig.getRepositoryOrganization()+"/"+webhookConfig.getRepositoryName()  + " " +
-                    webhookConfig.getHeadCommitSHA()  + " " +  pullRequest.getDeletions());
-
-
-
-            String result = FileUtil.saveFiles(pullRequest.listFiles(),webhookConfig.getRepositoryOrganization()+"/"+webhookConfig.getRepositoryName(),
+            return FileUtil.saveFiles(pullRequest.listFiles(),webhookConfig.getRepositoryOrganization()+"/"+webhookConfig.getRepositoryName(),
                                         webhookConfig.getHeadCommitSHA(), pullRequest.getDeletions());
-            LOG.info(result);
-            return result;
         } catch (IOException e){
             LOG.error("Can't authorize getPullRequestFiles() " + e);
         }

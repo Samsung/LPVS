@@ -27,17 +27,58 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.*;
 
-
+/**
+ * todo: decide if we need extra-dependency Junit-pioneer to mock System.getenv(),
+ *  and then possibly add test case for
+ *  `if (GITHUB_AUTH_TOKEN.isEmpty()) setGithubTokenFromEnv();`
+ *  https://stackoverflow.com/a/59635733/8463690
+ */
 public class GitHubServiceTest {
-    /**
-     * todo: decide if we need extra-dependency Junit-pioneer to mock System.getenv(),
-     *  and then possibly add test case for
-     *  `if (GITHUB_AUTH_TOKEN.isEmpty()) setGithubTokenFromEnv();`
-     *  https://stackoverflow.com/a/59635733/8463690
-     */
-
-
     private static Logger LOG = LoggerFactory.getLogger(GitHubServiceTest.class);
+
+    /**
+     * Helper class to mock `GHPullRequest`, because we cannot mock it via Mockito.
+     * There is exception when we try to mock `getUrl()` method:
+     *
+     *    org.mockito.exceptions.misusing.WrongTypeOfReturnValue:
+     *    URL cannot be returned by getUrl()
+     *    getUrl() should return String
+     */
+    static class GHPullRequestOurMock extends GHPullRequest {
+        private final URL mockedGetUrl;
+        private final String mockedGetTitle;
+        private final PagedIterable<GHPullRequestFileDetail> mockedListFiles;
+        private final int mockedGetDeletions;
+        private final GHCommitPointer mockedGetHead;
+
+        public GHPullRequestOurMock(URL mockedGetUrl,
+                                    String mockedGetTitle,
+                                    PagedIterable<GHPullRequestFileDetail> mockedListFiles,
+                                    int mockedGetDeletions,
+                                    GHCommitPointer mockedGetHead) {
+            this.mockedGetUrl = mockedGetUrl;
+            this.mockedGetTitle = mockedGetTitle;
+            this.mockedListFiles = mockedListFiles;
+            this.mockedGetDeletions = mockedGetDeletions;
+            this.mockedGetHead = mockedGetHead;
+        }
+
+        @Override
+        public URL getUrl() { return mockedGetUrl; }
+
+        @Override
+        public String getTitle() { return mockedGetTitle; }
+
+        @Override
+        public PagedIterable<GHPullRequestFileDetail> listFiles() { return mockedListFiles; }
+
+        @Override
+        public int getDeletions() { return mockedGetDeletions; }
+
+        @Override
+        public GHCommitPointer getHead() { return mockedGetHead; }
+
+    }
 
     @Nested
     class TestGetPullRequestFiles__ApiUrlAbsentPullPresentNoRescan {
@@ -49,35 +90,31 @@ public class GitHubServiceTest {
         WebhookConfig webhookConfig;
         GitHub mocked_instance_gh = mock(GitHub.class);
         GHRepository mocked_repo = mock(GHRepository.class);
-//        GHPullRequest mocked_pr_1 = mock(GHPullRequest.class);
-//        GHPullRequest mocked_pr_2 = mock(GHPullRequest.class);
-        GHPullRequest pr_1_to_spy = new GHPullRequest();
-        GHPullRequest pr_2_to_spy = new GHPullRequest();
-        GHPullRequest mocked_pr_1 = spy(pr_1_to_spy);
-        GHPullRequest mocked_pr_2 = spy(pr_2_to_spy);
-        // GHCommitPointer mocked_commit_pointer = mock(GHCommitPointer.class);
         PagedIterable<GHPullRequestFileDetail> mocked_list_files = new PagedIterable<GHPullRequestFileDetail>() {
             @Override
             public PagedIterator<GHPullRequestFileDetail> _iterator(int i) {
                 return null;
             }
         };
+        GHPullRequest mocked_pr_1;
+        GHPullRequest mocked_pr_2;
+        String url_pr_1 = "https://api.github.com/repos/Samsung/LPVS/pulls/18";
+        String url_pr_2 = "https://api.github.com/repos/Samsung/LPVS/pulls/19";
+        String repo_org = "Samsung";
+        String repo_name = "LPVS";
 
-        String commit_sha = "895337e89ae103ff2d18c9e0d93709f743226afa";
         String githubFiles = "Projects/Samsung/LPVS/895337e89ae103ff2d18c9e0d93709f743226afa";
+        String commit_sha = "895337e89ae103ff2d18c9e0d93709f743226afa";
 
+        // GHCommitPointer mocked_commit_pointer = mock(GHCommitPointer.class);
         @BeforeEach
         void setUp() {
-            try {
-                new URL("https://api.github.com/repos/Samsung/LPVS/pulls/18");
-            } catch (MalformedURLException e) {
-                throw new RuntimeException(e);
-            }
             webhookConfig = new WebhookConfig();
-            webhookConfig.setRepositoryName("LPVS");
-            webhookConfig.setRepositoryOrganization("Samsung");
+            webhookConfig.setRepositoryName(repo_name);
+            webhookConfig.setRepositoryOrganization(repo_org);
             webhookConfig.setAction(PullRequestAction.OPEN);
-            webhookConfig.setPullRequestAPIUrl("https://api.github.com/repos/Samsung/LPVS/pulls/19");
+            webhookConfig.setPullRequestAPIUrl(url_pr_2);
+            webhookConfig.setHeadCommitSHA(commit_sha);
 
             try {
                 when(mocked_instance_gh.getRepository(webhookConfig.getRepositoryOrganization() + "/" + webhookConfig.getRepositoryName())).thenReturn(mocked_repo);
@@ -85,32 +122,18 @@ public class GitHubServiceTest {
                 LOG.error("mocked_repo.getRepository error " + e);
             }
             try {
-                when(mocked_repo.getPullRequests(GHIssueState.OPEN)).thenReturn(Arrays.asList(mocked_pr_1, mocked_pr_2));
-            } catch (IOException e) {
-                LOG.error("mocked_repo.getPullRequests error " + e);
-            }
-            try {
-                doReturn(new URL("https://api.github.com/repos/Samsung/LPVS/pulls/18")).when(mocked_pr_1).getUrl();
-                doReturn(new URL("https://api.github.com/repos/Samsung/LPVS/pulls/19")).when(mocked_pr_2).getUrl();
-
-                LOG.info("AAAAAAAAAAAAA");
-//                when(mocked_pr_1.getUrl()).thenReturn(new URL("https://api.github.com/repos/Samsung/LPVS/pulls/18"));
-//                when(mocked_pr_2.getUrl()).thenReturn(new URL("https://api.github.com/repos/Samsung/LPVS/pulls/19"));
+                mocked_pr_1 = new GHPullRequestOurMock(
+                        new URL(url_pr_1), null, null, -1, null);
+                mocked_pr_2 = new GHPullRequestOurMock(
+                        new URL(url_pr_2), "GithubService::getRepositoryLicense tests", mocked_list_files, 0, null);
             } catch (MalformedURLException e) {
                 LOG.error("TestGetPullRequestFiles__ApiUrlAbsentPullPresentNoRescan.setUp() error " + e);
                 fail();
             }
-//            when(mocked_pr_2.getTitle()).thenReturn("GithubService::getRepositoryLicense tests");
-            doReturn("GithubService::getRepositoryLicense tests").when(mocked_pr_2).getTitle();
-//            //noinspection unchecked
-//            when(mocked_pr_2.listFiles()).thenReturn(mocked_list_files);
-            doReturn(mocked_list_files).when(mocked_pr_2).listFiles();
             try {
-//                when(mocked_pr_2.getDeletions()).thenReturn(0);
-                doReturn(0).when(mocked_pr_2).getDeletions();
+                when(mocked_repo.getPullRequests(GHIssueState.OPEN)).thenReturn(Arrays.asList(mocked_pr_1, mocked_pr_2));
             } catch (IOException e) {
-                LOG.error("TestGetPullRequestFiles__ApiUrlAbsentPullPresentNoRescan.setUp() error " + e);
-                fail();
+                LOG.error("mocked_repo.getPullRequests error " + e);
             }
 
 //            when(mocked_pr_2.getHead()).thenReturn(mocked_commit_pointer);
@@ -122,11 +145,7 @@ public class GitHubServiceTest {
 
             try (MockedStatic<GitHub> mocked_static_gh = mockStatic(GitHub.class); MockedStatic<FileUtil> mocked_static_file_util = mockStatic(FileUtil.class)) {
                 mocked_static_gh.when(() -> GitHub.connect(GH_LOGIN, GH_AUTH_TOKEN)).thenReturn(mocked_instance_gh);
-                LOG.info("" + mocked_list_files + " " + "LPVS/Samsung" + " " + commit_sha + " " + 0);
-                //noinspection unchecked
-                mocked_static_file_util.when(() -> FileUtil.saveFiles(
-                        mocked_list_files,
-                        "LPVS/Samsung", commit_sha, 0))
+                mocked_static_file_util.when(() -> FileUtil.saveFiles(mocked_list_files, repo_org + "/" + repo_name, commit_sha, 0))
                         .thenReturn(githubFiles);
 
                 // main test
@@ -154,6 +173,12 @@ public class GitHubServiceTest {
                     fail();
                 }
                 verifyNoMoreInteractions(mocked_repo);
+
+                // `mocked_static_file_util` verify
+                mocked_static_file_util.verify(
+                        () -> FileUtil.saveFiles(mocked_list_files, repo_org + "/" + repo_name, commit_sha, 0),
+                        times(1));
+                mocked_static_file_util.verifyNoMoreInteractions();
             }
         }
     }
