@@ -65,6 +65,18 @@
             <version>4.7.0</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>annotations</artifactId>
+            <version>3.0.1</version>
+        </dependency>
+
+        <!-- https://mavenlibs.com/maven/dependency/com.infradna.tool/bridge-method-injector -->
+        <dependency>
+            <groupId>com.infradna.tool</groupId>
+            <artifactId>bridge-method-injector</artifactId>
+            <version>1.23</version>
+        </dependency>
 
     </dependencies>
 
@@ -107,7 +119,7 @@
                     <showWarnings>true</showWarnings>
                     <showDeprecation>true</showDeprecation>
                     <compilerArgs>
-                        <arg>-Xlint:all</arg>
+                        <arg>-Xlint:all,-serial,-processing</arg>
                     </compilerArgs>
                 </configuration>
             </plugin>

@@ -83,7 +83,7 @@ public class ScanossDetectService {
 
             // parse map entries
             long ind = 0L;
-            for (Map.Entry entry : map.entrySet()) {
+            for (Map.Entry<ArrayList, String> entry : map.entrySet()) {
                 LPVSFile file = new LPVSFile();
                 file.setId(ind++);
                 file.setFilePath(entry.getKey().toString());
