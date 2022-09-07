@@ -7,6 +7,8 @@
 
 package com.lpvs;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -26,19 +28,29 @@ public class LicensePreValidationSystem {
 
     private int corePoolSize;
 
-    public LicensePreValidationSystem(@Value("${lpvs.cores:8}") int corePoolSize) {
+    private String lpvsVersion;
+
+    private static Logger LOG = LoggerFactory.getLogger(LicensePreValidationSystem.class);
+
+    public LicensePreValidationSystem(@Value("${lpvs.cores:8}") int corePoolSize,
+                                      @Value("${lpvs.version:}") String lpvsVersion) {
         this.corePoolSize = corePoolSize;
+        this.lpvsVersion = lpvsVersion;
     }
 
     public static void main(String[] args) {
         SpringApplication app = new SpringApplication(LicensePreValidationSystem.class);
+
+
         app.run(args);
     }
 
     @Bean("threadPoolTaskExecutor")
     public TaskExecutor getAsyncExecutor(){
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        LOG.info("License Pre-Validation Service (LPVS) version " + lpvsVersion + " is running.");
         executor.setCorePoolSize(corePoolSize);
+        LOG.info("Used core pool size is " + corePoolSize);
         executor.setThreadNamePrefix("LPVS-ASYNC::");
         return executor;
     }

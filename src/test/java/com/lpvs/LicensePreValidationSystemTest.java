@@ -23,7 +23,7 @@ public class LicensePreValidationSystemTest {
 
     @BeforeEach
     void setUp() {
-        licensePreValidationSystem = new LicensePreValidationSystem(42);
+        licensePreValidationSystem = new LicensePreValidationSystem(42, "1.0.0");
     }
 
     @Test
