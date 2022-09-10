@@ -8,6 +8,7 @@
 package com.lpvs.service.scanner.scanoss;
 
 import com.google.gson.*;
+import com.google.gson.reflect.TypeToken;
 import com.lpvs.entity.LPVSFile;
 import com.lpvs.entity.LPVSLicense;
 import com.lpvs.entity.config.WebhookConfig;
@@ -18,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.io.*;
+import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
@@ -79,7 +81,8 @@ public class ScanossDetectService {
             Gson gson = new Gson();
             Reader reader = Files.newBufferedReader(Paths.get("RESULTS/" + webhookConfig.getRepositoryName() + "_" + webhookConfig.getHeadCommitSHA() + ".json"));
             // convert JSON file to map
-            Map<ArrayList<String>, String> map = gson.fromJson(reader, Map.class);
+            Type mapType = new TypeToken<Map<ArrayList<String>, String>>() {}.getType();
+            Map<ArrayList<String>, String> map = gson.fromJson(reader, mapType);
 
             // parse map entries
             long ind = 0L;
