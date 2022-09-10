@@ -147,7 +147,8 @@ public class LicenseService {
         for (int i = 0; i < detectedLicensesUnique.size(); i++) {
             for (int j = i + 1; j < detectedLicensesUnique.size() - 1; j++) {
                 for (Conflict<String, String> licenseConflict : licenseConflicts) {
-                    Conflict possibleConflict = new Conflict(detectedLicensesUnique.toArray()[i], detectedLicensesUnique.toArray()[j]);
+                    Conflict<String, String> possibleConflict = new Conflict<>(detectedLicensesUnique.toArray()[i].toString(),
+                            detectedLicensesUnique.toArray()[j].toString());
                     if (licenseConflict.equals(possibleConflict)) {
                         foundConflicts.add(possibleConflict);
                     }

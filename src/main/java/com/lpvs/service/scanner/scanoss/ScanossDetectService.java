@@ -79,11 +79,11 @@ public class ScanossDetectService {
             Gson gson = new Gson();
             Reader reader = Files.newBufferedReader(Paths.get("RESULTS/" + webhookConfig.getRepositoryName() + "_" + webhookConfig.getHeadCommitSHA() + ".json"));
             // convert JSON file to map
-            Map<ArrayList, String> map = gson.fromJson(reader, Map.class);
+            Map<ArrayList<String>, String> map = gson.fromJson(reader, Map.class);
 
             // parse map entries
             long ind = 0L;
-            for (Map.Entry<ArrayList, String> entry : map.entrySet()) {
+            for (Map.Entry<ArrayList<String>, String> entry : map.entrySet()) {
                 LPVSFile file = new LPVSFile();
                 file.setId(ind++);
                 file.setFilePath(entry.getKey().toString());
