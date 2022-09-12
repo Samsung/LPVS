@@ -43,8 +43,9 @@ public class GitHubWebhooksController {
 
     @PostConstruct
     private void setProps() {
-        this.GITHUB_SECRET = Optional.of(this.GITHUB_SECRET).orElse(System.getenv("LPVS_GITHUB_SECRET"));
-        if (this.GITHUB_SECRET == null || this.GITHUB_SECRET.isEmpty()) {
+        this.GITHUB_SECRET = Optional.ofNullable(this.GITHUB_SECRET).filter(s -> !s.isEmpty())
+                .orElse(Optional.ofNullable(System.getenv("LPVS_GITHUB_SECRET")).orElse(""));
+        if (this.GITHUB_SECRET.isEmpty()) {
             LOG.error("LPVS_GITHUB_SECRET(github.secret) is not set.");
             System.exit(SpringApplication.exit(applicationContext, () -> -1));
         }

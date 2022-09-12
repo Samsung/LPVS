@@ -53,15 +53,20 @@ public class GitHubService {
     public GitHubService(@Value("${" + GITHUB_LOGIN_PROP_NAME + "}") String GITHUB_LOGIN,
                          @Value("${" + GITHUB_AUTH_TOKEN_PROP_NAME + "}") String GITHUB_AUTH_TOKEN,
                          @Value("${" + GITHUB_API_URL_PROP_NAME + "}") String GITHUB_API_URL) {
-        this.GITHUB_LOGIN = Optional.of(GITHUB_LOGIN).orElse(System.getenv(GITHUB_LOGIN_ENV_VAR_NAME));
-        this.GITHUB_AUTH_TOKEN = Optional.of(GITHUB_AUTH_TOKEN).orElse(System.getenv(GITHUB_AUTH_TOKEN_ENV_VAR_NAME));
-        this.GITHUB_API_URL = Optional.of(GITHUB_API_URL).orElse(System.getenv(GITHUB_API_URL_ENV_VAR_NAME));
+        System.out.println(System.getenv());
+        System.out.println(System.getenv(GITHUB_AUTH_TOKEN_ENV_VAR_NAME));
+        this.GITHUB_LOGIN = Optional.ofNullable(GITHUB_LOGIN).filter(s -> !s.isEmpty())
+                .orElse(Optional.ofNullable(System.getenv(GITHUB_LOGIN_ENV_VAR_NAME)).orElse(""));
+        this.GITHUB_AUTH_TOKEN = Optional.ofNullable(GITHUB_AUTH_TOKEN).filter(s -> !s.isEmpty())
+                .orElse(Optional.ofNullable(System.getenv(GITHUB_AUTH_TOKEN_ENV_VAR_NAME)).orElse(""));
+        this.GITHUB_API_URL = Optional.ofNullable(GITHUB_API_URL).filter(s -> !s.isEmpty())
+                .orElse(Optional.ofNullable(System.getenv(GITHUB_API_URL_ENV_VAR_NAME)).orElse(""));
     }
 
     @PostConstruct
     @Profile("!test")
     private void checks() throws Exception {
-        if (this.GITHUB_AUTH_TOKEN == null || this.GITHUB_AUTH_TOKEN.isEmpty()) {
+        if (this.GITHUB_AUTH_TOKEN.isEmpty()) {
             LOG.error(GITHUB_AUTH_TOKEN_ENV_VAR_NAME + "(" + GITHUB_AUTH_TOKEN_PROP_NAME + ") is not set.");
             System.exit(SpringApplication.exit(applicationContext, () -> -1));
         }
