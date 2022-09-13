@@ -1,0 +1,88 @@
+openapi: 3.0.0
+info:
+  title: LPVS API
+  version: v1-20220802
+  description: >-
+  
+    License Pre-Validation Service (LPVS) helps to mitigate license-related risks for OpenSource code. The tool analyzes the project, identifies its components and their respective licenses at every commit.
+    
+  contact:
+    email: o.kopysov@samsung.com
+  license:
+    name: MIT
+    url: 'https://opensource.org/licenses/MIT'
+
+paths:
+  '/webhooks':
+    post:
+      tags:
+        - Webhooks
+      summary: "GitHub Webhooks"
+      parameters:
+        - in: header
+          name: X-Hub-Signature-256
+          schema:
+            type: string
+          required: true
+          example:
+           sha256: "ca1a168a680cc02e3bb273e5083c7207c69210c1daaf815c08cd57cd65a1ee04"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebhookRequest'
+      responses:
+        '200':
+          description: 200 OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookResponseOK'
+        '403':
+          description: 403 Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookResponseForbidden'
+
+components:
+  schemas:
+    WebhookRequest:
+      type: object
+      properties:
+        action:
+          type: string
+          example: 'opened'
+        repository:
+          example: {
+            "name": "LPVS",
+            "full_name": "Samsung/LPVS",
+            "html_url": "https://github.com/Samsung/LPVS"
+          }
+        pull_request:
+          example: {
+            "html_url": "https://github.com/Samsung/LPVS/pull/18",
+            "head": {
+              "repo": {
+                "fork": "true",
+                "html_url": "https://github.com/o-kopysov/LPVS/tree/utests"
+              },
+              "sha": "edde69ecb8e8a88dde09fa9789e2c9cab7cf7cf9",
+              "ref": "o-kopysov:utests"
+            },
+            "url": "https://api.github.com/repos/Samsung/LPVS/pulls/18"
+          }            
+    WebhookResponseOK:
+      type: object
+      properties:
+        message:
+          type: string
+          format: uuid
+          example: 'Success'
+    WebhookResponseForbidden:
+      type: object
+      properties:
+        message:
+          type: string
+          format: uuid
+          example: 'Error'
