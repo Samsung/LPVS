@@ -53,8 +53,6 @@ public class GitHubService {
     public GitHubService(@Value("${" + GITHUB_LOGIN_PROP_NAME + "}") String GITHUB_LOGIN,
                          @Value("${" + GITHUB_AUTH_TOKEN_PROP_NAME + "}") String GITHUB_AUTH_TOKEN,
                          @Value("${" + GITHUB_API_URL_PROP_NAME + "}") String GITHUB_API_URL) {
-        System.out.println(System.getenv());
-        System.out.println(System.getenv(GITHUB_AUTH_TOKEN_ENV_VAR_NAME));
         this.GITHUB_LOGIN = Optional.ofNullable(GITHUB_LOGIN).filter(s -> !s.isEmpty())
                 .orElse(Optional.ofNullable(System.getenv(GITHUB_LOGIN_ENV_VAR_NAME)).orElse(""));
         this.GITHUB_AUTH_TOKEN = Optional.ofNullable(GITHUB_AUTH_TOKEN).filter(s -> !s.isEmpty())
