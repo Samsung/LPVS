@@ -70,8 +70,6 @@
             <artifactId>annotations</artifactId>
             <version>3.0.1</version>
         </dependency>
-
-        <!-- https://mavenlibs.com/maven/dependency/com.infradna.tool/bridge-method-injector -->
         <dependency>
             <groupId>com.infradna.tool</groupId>
             <artifactId>bridge-method-injector</artifactId>
