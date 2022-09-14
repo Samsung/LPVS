@@ -221,7 +221,7 @@ public class GitHubServiceTest {
                 mocked_pr_2 = new GHPullRequestOurMock(
                         new URL(url_pr_2), "GithubService::getRepositoryLicense tests", mocked_list_files, 0, null);
             } catch (MalformedURLException e) {
-                LOG.error("TestGetPullRequestFiles__ApiUrlAbsentPullPresentNoRescan.setUp() error " + e);
+                LOG.error("TestGetPullRequestFiles__ApiUrlPresentPullPresentNoRescan.setUp() error " + e);
                 fail();
             }
             try {
@@ -251,7 +251,7 @@ public class GitHubServiceTest {
                 try {
                     verify(mocked_instance_gh, times(1)).getRepository(webhookConfig.getRepositoryOrganization() + "/" + webhookConfig.getRepositoryName());
                 } catch (IOException e) {
-                    LOG.error("TestGetPullRequestFiles__ApiUrlAbsentPullPresentNoRescan.testGetPullRequestFiles__ApiUrlAbsentPullPresentNoRescan() error " + e);
+                    LOG.error("TestGetPullRequestFiles__ApiUrlPresentPullPresentNoRescan.testGetPullRequestFiles__ApiUrlPresentPullPresentNoRescan() error " + e);
                     fail();
                 }
                 verifyNoMoreInteractions(mocked_instance_gh);
@@ -260,7 +260,7 @@ public class GitHubServiceTest {
                 try {
                     verify(mocked_repo, times(1)).getPullRequests(GHIssueState.OPEN);
                 } catch (IOException e) {
-                    LOG.error("TestGetPullRequestFiles__ApiUrlAbsentPullPresentNoRescan.testGetPullRequestFiles__ApiUrlAbsentPullPresentNoRescan() error " + e);
+                    LOG.error("TestGetPullRequestFiles__ApiUrlPresentPullPresentNoRescan.testGetPullRequestFiles__ApiUrlPresentPullPresentNoRescan() error " + e);
                     fail();
                 }
                 verifyNoMoreInteractions(mocked_repo);
@@ -309,7 +309,7 @@ public class GitHubServiceTest {
                 mocked_pr_1 = new GHPullRequestOurMock(new URL(url_pr_1), null, null, -1, null);
                 mocked_pr_2 = new GHPullRequestOurMock(new URL(url_pr_2), null, null, -1, null);
             } catch (MalformedURLException e) {
-                LOG.error("TestGetPullRequestFiles__ApiUrlAbsentPullPresentNoRescan.setUp() error " + e);
+                LOG.error("TestGetPullRequestFiles__ApiUrlAbsentPullAbsentNoRescan.setUp() error " + e);
                 fail();
             }
             try {
@@ -337,7 +337,7 @@ public class GitHubServiceTest {
                 try {
                     verify(mocked_instance_gh, times(1)).getRepository(webhookConfig.getRepositoryOrganization() + "/" + webhookConfig.getRepositoryName());
                 } catch (IOException e) {
-                    LOG.error("TestGetPullRequestFiles__ApiUrlAbsentPullPresentNoRescan.testGetPullRequestFiles__ApiUrlAbsentPullPresentNoRescan() error " + e);
+                    LOG.error("TestGetPullRequestFiles__ApiUrlAbsentPullAbsentNoRescan.testGetPullRequestFiles__ApiUrlAbsentPullAbsentNoRescan() error " + e);
                     fail();
                 }
                 verifyNoMoreInteractions(mocked_instance_gh);
@@ -346,7 +346,7 @@ public class GitHubServiceTest {
                 try {
                     verify(mocked_repo, times(1)).getPullRequests(GHIssueState.OPEN);
                 } catch (IOException e) {
-                    LOG.error("TestGetPullRequestFiles__ApiUrlAbsentPullPresentNoRescan.testGetPullRequestFiles__ApiUrlAbsentPullPresentNoRescan() error " + e);
+                    LOG.error("TestGetPullRequestFiles__ApiUrlAbsentPullAbsentNoRescan.testGetPullRequestFiles__ApiUrlAbsentPullAbsentNoRescan() error " + e);
                     fail();
                 }
                 verifyNoMoreInteractions(mocked_repo);
@@ -389,7 +389,7 @@ public class GitHubServiceTest {
                 mocked_pr_1 = new GHPullRequestOurMock(new URL(url_pr_1), null, null, -1, null);
                 mocked_pr_2 = new GHPullRequestOurMock(new URL(url_pr_2), null, null, -1, null);
             } catch (MalformedURLException e) {
-                LOG.error("TestGetPullRequestFiles__ApiUrlAbsentPullPresentNoRescan.setUp() error " + e);
+                LOG.error("TestGetPullRequestFiles__ApiUrlPresentPullAbsentNoRescan.setUp() error " + e);
                 fail();
             }
             try {
@@ -417,7 +417,7 @@ public class GitHubServiceTest {
                 try {
                     verify(mocked_instance_gh, times(1)).getRepository(webhookConfig.getRepositoryOrganization() + "/" + webhookConfig.getRepositoryName());
                 } catch (IOException e) {
-                    LOG.error("TestGetPullRequestFiles__ApiUrlAbsentPullPresentNoRescan.testGetPullRequestFiles__ApiUrlAbsentPullPresentNoRescan() error " + e);
+                    LOG.error("TestGetPullRequestFiles__ApiUrlPresentPullAbsentNoRescan.testGetPullRequestFiles__ApiUrlPresentPullAbsentNoRescan() error " + e);
                     fail();
                 }
                 verifyNoMoreInteractions(mocked_instance_gh);
@@ -426,7 +426,7 @@ public class GitHubServiceTest {
                 try {
                     verify(mocked_repo, times(1)).getPullRequests(GHIssueState.OPEN);
                 } catch (IOException e) {
-                    LOG.error("TestGetPullRequestFiles__ApiUrlAbsentPullPresentNoRescan.testGetPullRequestFiles__ApiUrlAbsentPullPresentNoRescan() error " + e);
+                    LOG.error("TestGetPullRequestFiles__ApiUrlPresentPullAbsentNoRescan.testGetPullRequestFiles__ApiUrlPresentPullAbsentNoRescan() error " + e);
                     fail();
                 }
                 verifyNoMoreInteractions(mocked_repo);
@@ -462,7 +462,7 @@ public class GitHubServiceTest {
             }
 
             try {
-                when(mocked_repo.getPullRequests(GHIssueState.OPEN)).thenThrow(new IOException("Test exception for TestGetPullRequestFiles__ApiUrlAbsentPullExceptionNoRescan"));
+                when(mocked_repo.getPullRequests(GHIssueState.OPEN)).thenThrow(new IOException("Test exception for TestGetPullRequestFiles__ApiUrlAbsentPullExceptionNoRescan. Normal behavior."));
             } catch (IOException e) {
                 LOG.error("mocked_repo.getPullRequests error " + e);
             }
@@ -486,7 +486,7 @@ public class GitHubServiceTest {
                 try {
                     verify(mocked_instance_gh, times(1)).getRepository(webhookConfig.getRepositoryOrganization() + "/" + webhookConfig.getRepositoryName());
                 } catch (IOException e) {
-                    LOG.error("TestGetPullRequestFiles__ApiUrlAbsentPullPresentNoRescan.testGetPullRequestFiles__ApiUrlAbsentPullPresentNoRescan() error " + e);
+                    LOG.error("TestGetPullRequestFiles__ApiUrlAbsentPullExceptionNoRescan.testGetPullRequestFiles__ApiUrlAbsentPullExceptionNoRescan() error " + e);
                     fail();
                 }
                 verifyNoMoreInteractions(mocked_instance_gh);
@@ -495,7 +495,7 @@ public class GitHubServiceTest {
                 try {
                     verify(mocked_repo, times(1)).getPullRequests(GHIssueState.OPEN);
                 } catch (IOException e) {
-                    LOG.error("TestGetPullRequestFiles__ApiUrlAbsentPullPresentNoRescan.testGetPullRequestFiles__ApiUrlAbsentPullPresentNoRescan() error " + e);
+                    LOG.error("TestGetPullRequestFiles__ApiUrlAbsentPullExceptionNoRescan.testGetPullRequestFiles__ApiUrlAbsentPullExceptionNoRescan() error " + e);
                     fail();
                 }
                 verifyNoMoreInteractions(mocked_repo);
@@ -530,7 +530,7 @@ public class GitHubServiceTest {
                 LOG.error("mocked_repo.getRepository error " + e);
             }
             try {
-                when(mocked_repo.getPullRequests(GHIssueState.OPEN)).thenThrow(new IOException("Test exception for TestGetPullRequestFiles__ApiUrlPresentPullExceptionNoRescan"));
+                when(mocked_repo.getPullRequests(GHIssueState.OPEN)).thenThrow(new IOException("Test exception for TestGetPullRequestFiles__ApiUrlPresentPullExceptionNoRescan. Normal behavior."));
             } catch (IOException e) {
                 LOG.error("mocked_repo.getPullRequests error " + e);
             }
@@ -554,7 +554,7 @@ public class GitHubServiceTest {
                 try {
                     verify(mocked_instance_gh, times(1)).getRepository(webhookConfig.getRepositoryOrganization() + "/" + webhookConfig.getRepositoryName());
                 } catch (IOException e) {
-                    LOG.error("TestGetPullRequestFiles__ApiUrlAbsentPullPresentNoRescan.testGetPullRequestFiles__ApiUrlAbsentPullPresentNoRescan() error " + e);
+                    LOG.error("TestGetPullRequestFiles__ApiUrlPresentPullExceptionNoRescan.testGetPullRequestFiles__ApiUrlPresentPullExceptionNoRescan() error " + e);
                     fail();
                 }
                 verifyNoMoreInteractions(mocked_instance_gh);
@@ -563,7 +563,7 @@ public class GitHubServiceTest {
                 try {
                     verify(mocked_repo, times(1)).getPullRequests(GHIssueState.OPEN);
                 } catch (IOException e) {
-                    LOG.error("TestGetPullRequestFiles__ApiUrlAbsentPullPresentNoRescan.testGetPullRequestFiles__ApiUrlAbsentPullPresentNoRescan() error " + e);
+                    LOG.error("TestGetPullRequestFiles__ApiUrlPresentPullExceptionNoRescan.testGetPullRequestFiles__ApiUrlPresentPullExceptionNoRescan() error " + e);
                     fail();
                 }
                 verifyNoMoreInteractions(mocked_repo);
@@ -617,7 +617,7 @@ public class GitHubServiceTest {
                 mocked_pr_2 = new GHPullRequestOurMock(
                         new URL(url_pr_2), "GithubService::getRepositoryLicense tests", mocked_list_files, 0, mocked_commit_pointer);
             } catch (MalformedURLException e) {
-                LOG.error("TestGetPullRequestFiles__ApiUrlAbsentPullPresentNoRescan.setUp() error " + e);
+                LOG.error("TestGetPullRequestFiles__ApiUrlPresentPullPresentRescanPresent.setUp() error " + e);
                 fail();
             }
             try {
@@ -649,7 +649,7 @@ public class GitHubServiceTest {
                 try {
                     verify(mocked_instance_gh, times(1)).getRepository(webhookConfig.getRepositoryOrganization() + "/" + webhookConfig.getRepositoryName());
                 } catch (IOException e) {
-                    LOG.error("TestGetPullRequestFiles__ApiUrlAbsentPullPresentNoRescan.testGetPullRequestFiles__ApiUrlAbsentPullPresentNoRescan() error " + e);
+                    LOG.error("TestGetPullRequestFiles__ApiUrlPresentPullPresentRescanPresent.testGetPullRequestFiles__ApiUrlPresentPullPresentRescanPresent() error " + e);
                     fail();
                 }
                 verifyNoMoreInteractions(mocked_instance_gh);
@@ -658,7 +658,7 @@ public class GitHubServiceTest {
                 try {
                     verify(mocked_repo, times(1)).getPullRequests(GHIssueState.OPEN);
                 } catch (IOException e) {
-                    LOG.error("TestGetPullRequestFiles__ApiUrlAbsentPullPresentNoRescan.testGetPullRequestFiles__ApiUrlAbsentPullPresentNoRescan() error " + e);
+                    LOG.error("TestGetPullRequestFiles__ApiUrlPresentPullPresentRescanPresent.testGetPullRequestFiles__ApiUrlPresentPullPresentRescanPresent() error " + e);
                     fail();
                 }
                 verifyNoMoreInteractions(mocked_repo);
@@ -675,11 +675,410 @@ public class GitHubServiceTest {
         }
     }
 
+    @Nested
+    class TestSetPendingCheck__ApiUrlAbsentNormalExecution {
+        final String GH_LOGIN = "test_login";
+        final String GH_AUTH_TOKEN = "test_auth_token";
+        final String GH_API_URL = "";
+        final GitHubService gh_service = new GitHubService(GH_LOGIN, GH_AUTH_TOKEN, GH_API_URL);
+        GitHub mocked_instance_gh = mock(GitHub.class);
+        GHRepository mocked_repo = mock(GHRepository.class);
+        WebhookConfig webhookConfig;
+        final String repo_org = "Samsung";
+        final String repo_name = "LPVS";
+        final String head_commit_sha = "895337e89ae103ff2d18c9e0d93709f743226afa";
 
-// GHCommitPointer mocked_commit_pointer = mock(GHCommitPointer.class);
+        @BeforeEach
+        void setUp() {
+            webhookConfig = new WebhookConfig();
+            webhookConfig.setRepositoryName(repo_name);
+            webhookConfig.setRepositoryOrganization(repo_org);
+            webhookConfig.setHeadCommitSHA(head_commit_sha);
 
-//            when(mocked_pr_2.getHead()).thenReturn(mocked_commit_pointer);
-//            when(mocked_commit_pointer.getSha()).thenReturn("895337e89ae103ff2d18c9e0d93709f743226afa");
+            try {
+                when(mocked_instance_gh.getRepository(webhookConfig.getRepositoryOrganization() + "/" + webhookConfig.getRepositoryName())).thenReturn(mocked_repo);
+            } catch (IOException e) {
+                LOG.error("mocked_repo.getRepository error " + e);
+            }
+
+            try {
+                // default behavior, it is written here just for clarity
+                when(mocked_repo.createCommitStatus(head_commit_sha, GHCommitState.PENDING, null,
+                        "Scanning opensource licenses", "[Open Source License Validation]")).thenReturn(null);
+            } catch (IOException e) {
+                LOG.error("mocked_repo.getPullRequests error " + e);
+            }
+        }
+
+        @Test
+        public void testSetPendingCheck__ApiUrlAbsentNormalExecution() {
+
+            try (MockedStatic<GitHub> mocked_static_gh = mockStatic(GitHub.class)) {
+                mocked_static_gh.when(() -> GitHub.connect(GH_LOGIN, GH_AUTH_TOKEN)).thenReturn(mocked_instance_gh);
+
+                // main test
+                gh_service.setPendingCheck(webhookConfig);
+
+                // verification of calling methods on `Mock`s
+                // `mocked_static_gh` verify
+                mocked_static_gh.verify(() -> GitHub.connect(GH_LOGIN, GH_AUTH_TOKEN), times(1));
+                mocked_static_gh.verifyNoMoreInteractions();
+
+                // `mocked_instance_gh` verify
+                try {
+                    verify(mocked_instance_gh, times(1)).getRepository(webhookConfig.getRepositoryOrganization() + "/" + webhookConfig.getRepositoryName());
+                } catch (IOException e) {
+                    LOG.error("TestSetPendingCheck__ApiUrlAbsentNormalExecution.testSetPendingCheck__ApiUrlAbsentNormalExecution() error " + e);
+                    fail();
+                }
+                verifyNoMoreInteractions(mocked_instance_gh);
+
+                // `mocked_repo` verify
+                try {
+                    verify(mocked_repo, times(1)).createCommitStatus(
+                            head_commit_sha, GHCommitState.PENDING, null,
+                            "Scanning opensource licenses", "[Open Source License Validation]");
+                } catch (IOException e) {
+                    LOG.error("TestSetPendingCheck__ApiUrlAbsentNormalExecution.testSetPendingCheck__ApiUrlAbsentNormalExecution() error " + e);
+                    fail();
+                }
+                verifyNoMoreInteractions(mocked_repo);
+            }
+        }
+    }
+
+    @Nested
+    class TestSetPendingCheck__ApiUrlPresentNormalExecution {
+        final String GH_LOGIN = "test_login";
+        final String GH_AUTH_TOKEN = "test_auth_token";
+        final String GH_API_URL = "test_api_url";
+        final GitHubService gh_service = new GitHubService(GH_LOGIN, GH_AUTH_TOKEN, GH_API_URL);
+        GitHub mocked_instance_gh = mock(GitHub.class);
+        GHRepository mocked_repo = mock(GHRepository.class);
+        WebhookConfig webhookConfig;
+        final String repo_org = "Samsung";
+        final String repo_name = "LPVS";
+        final String head_commit_sha = "895337e89ae103ff2d18c9e0d93709f743226afa";
+
+        @BeforeEach
+        void setUp() {
+            webhookConfig = new WebhookConfig();
+            webhookConfig.setRepositoryName(repo_name);
+            webhookConfig.setRepositoryOrganization(repo_org);
+            webhookConfig.setHeadCommitSHA(head_commit_sha);
+
+            try {
+                when(mocked_instance_gh.getRepository(webhookConfig.getRepositoryOrganization() + "/" + webhookConfig.getRepositoryName())).thenReturn(mocked_repo);
+            } catch (IOException e) {
+                LOG.error("mocked_repo.getRepository error " + e);
+            }
+
+            try {
+                // default behavior, it is written here just for clarity
+                when(mocked_repo.createCommitStatus(head_commit_sha, GHCommitState.PENDING, null,
+                        "Scanning opensource licenses", "[Open Source License Validation]")).thenReturn(null);
+            } catch (IOException e) {
+                LOG.error("mocked_repo.getPullRequests error " + e);
+            }
+        }
+
+        @Test
+        public void testSetPendingCheck__ApiUrlPresentNormalExecution() {
+
+            try (MockedStatic<GitHub> mocked_static_gh = mockStatic(GitHub.class)) {
+                mocked_static_gh.when(() -> GitHub.connectToEnterpriseWithOAuth(GH_API_URL, GH_LOGIN, GH_AUTH_TOKEN)).thenReturn(mocked_instance_gh);
+
+                // main test
+                gh_service.setPendingCheck(webhookConfig);
+
+                // verification of calling methods on `Mock`s
+                // `mocked_static_gh` verify
+                mocked_static_gh.verify(() -> GitHub.connectToEnterpriseWithOAuth(GH_API_URL, GH_LOGIN, GH_AUTH_TOKEN), times(1));
+                mocked_static_gh.verifyNoMoreInteractions();
+
+                // `mocked_instance_gh` verify
+                try {
+                    verify(mocked_instance_gh, times(1)).getRepository(webhookConfig.getRepositoryOrganization() + "/" + webhookConfig.getRepositoryName());
+                } catch (IOException e) {
+                    LOG.error("TestSetPendingCheck__ApiUrlPresentNormalExecution.testSetPendingCheck__ApiUrlPresentNormalExecution() error " + e);
+                    fail();
+                }
+                verifyNoMoreInteractions(mocked_instance_gh);
+
+                // `mocked_repo` verify
+                try {
+                    verify(mocked_repo, times(1)).createCommitStatus(
+                            head_commit_sha, GHCommitState.PENDING, null,
+                            "Scanning opensource licenses", "[Open Source License Validation]");
+                } catch (IOException e) {
+                    LOG.error("TestSetPendingCheck__ApiUrlPresentNormalExecution.testSetPendingCheck__ApiUrlPresentNormalExecution() error " + e);
+                    fail();
+                }
+                verifyNoMoreInteractions(mocked_repo);
+            }
+        }
+    }
+
+    @Nested
+    class TestSetPendingCheck__ApiUrlAbsentCantAuthorize {
+        final String GH_LOGIN = "test_login";
+        final String GH_AUTH_TOKEN = "test_auth_token";
+        final String GH_API_URL = "";
+        final GitHubService gh_service = new GitHubService(GH_LOGIN, GH_AUTH_TOKEN, GH_API_URL);
+        WebhookConfig webhookConfig;
+
+        @BeforeEach
+        void setUp() {
+            webhookConfig = new WebhookConfig();
+        }
+
+        @Test
+        public void testSetPendingCheck__ApiUrlAbsentCantAuthorize() {
+            try (MockedStatic<GitHub> mocked_static_gh = mockStatic(GitHub.class)) {
+                mocked_static_gh.when(() -> GitHub.connect(GH_LOGIN, GH_AUTH_TOKEN)).thenThrow(new IOException("Test exception for TestSetPendingCheck__ApiUrlAbsentCantAuthorize. Normal behavior."));
+
+                // main test
+                gh_service.setPendingCheck(webhookConfig);
+
+                // verification of calling methods on `Mock`s
+                // `mocked_static_gh` verify
+                mocked_static_gh.verify(() -> GitHub.connect(GH_LOGIN, GH_AUTH_TOKEN), times(1));
+                mocked_static_gh.verifyNoMoreInteractions();
+            }
+        }
+    }
+
+    @Nested
+    class TestSetPendingCheck__ApiUrlPresentCantAuthorize {
+        final String GH_LOGIN = "test_login";
+        final String GH_AUTH_TOKEN = "test_auth_token";
+        final String GH_API_URL = "test_api_url";
+        final GitHubService gh_service = new GitHubService(GH_LOGIN, GH_AUTH_TOKEN, GH_API_URL);
+        WebhookConfig webhookConfig;
+
+        @BeforeEach
+        void setUp() {
+            webhookConfig = new WebhookConfig();
+        }
+
+        @Test
+        public void testSetPendingCheck__ApiUrlPresentCantAuthorize() {
+            try (MockedStatic<GitHub> mocked_static_gh = mockStatic(GitHub.class)) {
+                mocked_static_gh.when(() -> GitHub.connectToEnterpriseWithOAuth(GH_API_URL, GH_LOGIN, GH_AUTH_TOKEN)).thenThrow(new IOException("Test exception for TestSetPendingCheck__ApiUrlPresentCantAuthorize. Normal behavior."));
+
+                // main test
+                gh_service.setPendingCheck(webhookConfig);
+
+                // verification of calling methods on `Mock`s
+                // `mocked_static_gh` verify
+                mocked_static_gh.verify(() -> GitHub.connectToEnterpriseWithOAuth(GH_API_URL, GH_LOGIN, GH_AUTH_TOKEN), times(1));
+                mocked_static_gh.verifyNoMoreInteractions();
+            }
+        }
+    }
+
+    @Nested
+    class TestSetErrorCheck__ApiUrlAbsentNormalExecution {
+        final String GH_LOGIN = "test_login";
+        final String GH_AUTH_TOKEN = "test_auth_token";
+        final String GH_API_URL = "";
+        final GitHubService gh_service = new GitHubService(GH_LOGIN, GH_AUTH_TOKEN, GH_API_URL);
+        GitHub mocked_instance_gh = mock(GitHub.class);
+        GHRepository mocked_repo = mock(GHRepository.class);
+        WebhookConfig webhookConfig;
+        final String repo_org = "Samsung";
+        final String repo_name = "LPVS";
+        final String head_commit_sha = "895337e89ae103ff2d18c9e0d93709f743226afa";
+
+        @BeforeEach
+        void setUp() {
+            webhookConfig = new WebhookConfig();
+            webhookConfig.setRepositoryName(repo_name);
+            webhookConfig.setRepositoryOrganization(repo_org);
+            webhookConfig.setHeadCommitSHA(head_commit_sha);
+
+            try {
+                when(mocked_instance_gh.getRepository(webhookConfig.getRepositoryOrganization() + "/" + webhookConfig.getRepositoryName())).thenReturn(mocked_repo);
+            } catch (IOException e) {
+                LOG.error("mocked_repo.getRepository error " + e);
+            }
+
+            try {
+                // default behavior, it is written here just for clarity
+                when(mocked_repo.createCommitStatus(head_commit_sha, GHCommitState.ERROR, null,
+                        "Scanning process failed", "[Open Source License Validation]")).thenReturn(null);
+            } catch (IOException e) {
+                LOG.error("mocked_repo.getPullRequests error " + e);
+            }
+        }
+
+        @Test
+        public void testSetErrorCheck__ApiUrlAbsentNormalExecution() {
+
+            try (MockedStatic<GitHub> mocked_static_gh = mockStatic(GitHub.class)) {
+                mocked_static_gh.when(() -> GitHub.connect(GH_LOGIN, GH_AUTH_TOKEN)).thenReturn(mocked_instance_gh);
+
+                // main test
+                gh_service.setErrorCheck(webhookConfig);
+
+                // verification of calling methods on `Mock`s
+                // `mocked_static_gh` verify
+                mocked_static_gh.verify(() -> GitHub.connect(GH_LOGIN, GH_AUTH_TOKEN), times(1));
+                mocked_static_gh.verifyNoMoreInteractions();
+
+                // `mocked_instance_gh` verify
+                try {
+                    verify(mocked_instance_gh, times(1)).getRepository(webhookConfig.getRepositoryOrganization() + "/" + webhookConfig.getRepositoryName());
+                } catch (IOException e) {
+                    LOG.error("TestSetErrorCheck__ApiUrlAbsentNormalExecution.testSetErrorCheck__ApiUrlAbsentNormalExecution() error " + e);
+                    fail();
+                }
+                verifyNoMoreInteractions(mocked_instance_gh);
+
+                // `mocked_repo` verify
+                try {
+                    verify(mocked_repo, times(1)).createCommitStatus(
+                            head_commit_sha, GHCommitState.ERROR, null,
+                            "Scanning process failed", "[Open Source License Validation]");
+                } catch (IOException e) {
+                    LOG.error("TestSetErrorCheck__ApiUrlAbsentNormalExecution.testSetErrorCheck__ApiUrlAbsentNormalExecution() error " + e);
+                    fail();
+                }
+                verifyNoMoreInteractions(mocked_repo);
+            }
+        }
+    }
+
+    @Nested
+    class TestSetErrorCheck__ApiUrlPresentNormalExecution {
+        final String GH_LOGIN = "test_login";
+        final String GH_AUTH_TOKEN = "test_auth_token";
+        final String GH_API_URL = "test_api_url";
+        final GitHubService gh_service = new GitHubService(GH_LOGIN, GH_AUTH_TOKEN, GH_API_URL);
+        GitHub mocked_instance_gh = mock(GitHub.class);
+        GHRepository mocked_repo = mock(GHRepository.class);
+        WebhookConfig webhookConfig;
+        final String repo_org = "Samsung";
+        final String repo_name = "LPVS";
+        final String head_commit_sha = "895337e89ae103ff2d18c9e0d93709f743226afa";
+
+        @BeforeEach
+        void setUp() {
+            webhookConfig = new WebhookConfig();
+            webhookConfig.setRepositoryName(repo_name);
+            webhookConfig.setRepositoryOrganization(repo_org);
+            webhookConfig.setHeadCommitSHA(head_commit_sha);
+
+            try {
+                when(mocked_instance_gh.getRepository(webhookConfig.getRepositoryOrganization() + "/" + webhookConfig.getRepositoryName())).thenReturn(mocked_repo);
+            } catch (IOException e) {
+                LOG.error("mocked_repo.getRepository error " + e);
+            }
+
+            try {
+                // default behavior, it is written here just for clarity
+                when(mocked_repo.createCommitStatus(head_commit_sha, GHCommitState.ERROR, null,
+                        "Scanning process failed", "[Open Source License Validation]")).thenReturn(null);
+            } catch (IOException e) {
+                LOG.error("mocked_repo.getPullRequests error " + e);
+            }
+        }
+
+        @Test
+        public void testSetErrorCheck__ApiUrlPresentNormalExecution() {
+
+            try (MockedStatic<GitHub> mocked_static_gh = mockStatic(GitHub.class)) {
+                mocked_static_gh.when(() -> GitHub.connectToEnterpriseWithOAuth(GH_API_URL, GH_LOGIN, GH_AUTH_TOKEN)).thenReturn(mocked_instance_gh);
+
+                // main test
+                gh_service.setErrorCheck(webhookConfig);
+
+                // verification of calling methods on `Mock`s
+                // `mocked_static_gh` verify
+                mocked_static_gh.verify(() -> GitHub.connectToEnterpriseWithOAuth(GH_API_URL, GH_LOGIN, GH_AUTH_TOKEN), times(1));
+                mocked_static_gh.verifyNoMoreInteractions();
+
+                // `mocked_instance_gh` verify
+                try {
+                    verify(mocked_instance_gh, times(1)).getRepository(webhookConfig.getRepositoryOrganization() + "/" + webhookConfig.getRepositoryName());
+                } catch (IOException e) {
+                    LOG.error("TestSetErrorCheck__ApiUrlPresentNormalExecution.testSetErrorCheck__ApiUrlPresentNormalExecution() error " + e);
+                    fail();
+                }
+                verifyNoMoreInteractions(mocked_instance_gh);
+
+                // `mocked_repo` verify
+                try {
+                    verify(mocked_repo, times(1)).createCommitStatus(
+                            head_commit_sha, GHCommitState.ERROR, null,
+                            "Scanning process failed", "[Open Source License Validation]");
+                } catch (IOException e) {
+                    LOG.error("TestSetErrorCheck__ApiUrlPresentNormalExecution.testSetErrorCheck__ApiUrlPresentNormalExecution() error " + e);
+                    fail();
+                }
+                verifyNoMoreInteractions(mocked_repo);
+            }
+        }
+    }
+
+    @Nested
+    class TestSetErrorCheck__ApiUrlAbsentCantAuthorize {
+        final String GH_LOGIN = "test_login";
+        final String GH_AUTH_TOKEN = "test_auth_token";
+        final String GH_API_URL = "";
+        final GitHubService gh_service = new GitHubService(GH_LOGIN, GH_AUTH_TOKEN, GH_API_URL);
+        WebhookConfig webhookConfig;
+
+        @BeforeEach
+        void setUp() {
+            webhookConfig = new WebhookConfig();
+        }
+
+        @Test
+        public void testSetErrorCheck__ApiUrlAbsentCantAuthorize() {
+            try (MockedStatic<GitHub> mocked_static_gh = mockStatic(GitHub.class)) {
+                mocked_static_gh.when(() -> GitHub.connect(GH_LOGIN, GH_AUTH_TOKEN)).thenThrow(new IOException("Test exception for TestSetErrorCheck__ApiUrlAbsentCantAuthorize. Normal behavior."));
+
+                // main test
+                gh_service.setErrorCheck(webhookConfig);
+
+                // verification of calling methods on `Mock`s
+                // `mocked_static_gh` verify
+                mocked_static_gh.verify(() -> GitHub.connect(GH_LOGIN, GH_AUTH_TOKEN), times(1));
+                mocked_static_gh.verifyNoMoreInteractions();
+            }
+        }
+    }
+
+    @Nested
+    class TestSetErrorCheck__ApiUrlPresentCantAuthorize {
+        final String GH_LOGIN = "test_login";
+        final String GH_AUTH_TOKEN = "test_auth_token";
+        final String GH_API_URL = "test_api_url";
+        final GitHubService gh_service = new GitHubService(GH_LOGIN, GH_AUTH_TOKEN, GH_API_URL);
+        WebhookConfig webhookConfig;
+
+        @BeforeEach
+        void setUp() {
+            webhookConfig = new WebhookConfig();
+        }
+
+        @Test
+        public void testSetErrorCheck__ApiUrlPresentCantAuthorize() {
+            try (MockedStatic<GitHub> mocked_static_gh = mockStatic(GitHub.class)) {
+                mocked_static_gh.when(() -> GitHub.connectToEnterpriseWithOAuth(GH_API_URL, GH_LOGIN, GH_AUTH_TOKEN)).thenThrow(new IOException("Test exception for TestSetErrorCheck__ApiUrlPresentCantAuthorize. Normal behavior."));
+
+                // main test
+                gh_service.setErrorCheck(webhookConfig);
+
+                // verification of calling methods on `Mock`s
+                // `mocked_static_gh` verify
+                mocked_static_gh.verify(() -> GitHub.connectToEnterpriseWithOAuth(GH_API_URL, GH_LOGIN, GH_AUTH_TOKEN), times(1));
+                mocked_static_gh.verifyNoMoreInteractions();
+            }
+        }
+    }
+
     @Nested
     class TestGetRepositoryLicense__ApiUrlAbsentLisencePresent {
 
