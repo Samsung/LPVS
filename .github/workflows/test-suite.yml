@@ -12,7 +12,7 @@ permissions:  # added using https://github.com/step-security/secure-workflows
 
 jobs:
   test-suite:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
 
     steps:
     - uses: actions/checkout@d0651293c4a5a52e711f25b41b05b2212f385d28
