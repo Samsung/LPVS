@@ -37,10 +37,7 @@ public class LicenseService {
     private final static String LICENSE_FILE_PATH_DEFAULT = "classes/licenses.json";
     private final static String LICENSE_CONFLICT_SOURCE_DEFAULT = "json";
 
-    @Value("${" + LICENSE_FILE_PATH_PROP_NAME + ":" + LICENSE_FILE_PATH_DEFAULT + "}")
     public String licenseFilePath;
-
-    @Value("${" + LICENSE_CONFLICT_SOURCE_PROP_NAME + ":" + LICENSE_CONFLICT_SOURCE_DEFAULT + "}")
     public String licenseConflictsSource;
 
     private static Logger LOG = LoggerFactory.getLogger(LicenseService.class);
@@ -48,6 +45,13 @@ public class LicenseService {
     private List<LPVSLicense> licenses;
 
     private List<Conflict<String, String>> licenseConflicts;
+    
+    @Autowired
+    public LicenseService(@Value("${" + LICENSE_FILE_PATH_PROP_NAME + ":" + LICENSE_FILE_PATH_DEFAULT + "}") String licenseFilePath,
+                          @Value("${" + LICENSE_CONFLICT_SOURCE_PROP_NAME + ":" + LICENSE_CONFLICT_SOURCE_DEFAULT + "}") String licenseConflictsSource) {
+        this.licenseFilePath = licenseFilePath;
+        this.licenseConflictsSource = licenseConflictsSource;
+    }
 
     @Autowired
     ApplicationContext applicationContext;
