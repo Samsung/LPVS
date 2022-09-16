@@ -50,6 +50,7 @@ public class GitHubService {
     @Autowired
     ApplicationContext applicationContext;
 
+    @Autowired
     public GitHubService(@Value("${" + GITHUB_LOGIN_PROP_NAME + "}") String GITHUB_LOGIN,
                          @Value("${" + GITHUB_AUTH_TOKEN_PROP_NAME + "}") String GITHUB_AUTH_TOKEN,
                          @Value("${" + GITHUB_API_URL_PROP_NAME + "}") String GITHUB_API_URL) {
