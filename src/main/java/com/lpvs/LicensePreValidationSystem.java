@@ -19,7 +19,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = { "com.lpvs" })
 @EnableAutoConfiguration(exclude={DataSourceAutoConfiguration.class, HibernateJpaAutoConfiguration.class})
 @EnableAsync
 public class LicensePreValidationSystem {

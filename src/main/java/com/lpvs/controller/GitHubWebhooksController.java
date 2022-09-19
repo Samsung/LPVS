@@ -16,7 +16,10 @@ import com.lpvs.entity.ResponseWrapper;
 import org.apache.commons.codec.binary.Hex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.SpringApplication;
+import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
@@ -26,14 +29,29 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestBody;
 import java.util.Date;
+import java.util.Optional;
+import javax.annotation.PostConstruct;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
 @RestController
 public class GitHubWebhooksController {
-    @Value("${github.secret:}")
     private String GITHUB_SECRET;
 
+    @Autowired
+    ApplicationContext applicationContext;
+
+    @PostConstruct
+    private void setProps() {
+        this.GITHUB_SECRET = Optional.ofNullable(this.GITHUB_SECRET).filter(s -> !s.isEmpty())
+                .orElse(Optional.ofNullable(System.getenv("LPVS_GITHUB_SECRET")).orElse(""));
+        if (this.GITHUB_SECRET.isEmpty()) {
+            LOG.error("LPVS_GITHUB_SECRET(github.secret) is not set.");
+            System.exit(SpringApplication.exit(applicationContext, () -> -1));
+        }
+    }
+
+    @Autowired
     private QueueService queueService;
 
     private GitHubService gitHubService;
