@@ -206,7 +206,7 @@ public class GitHubService {
         prefix = prefix.concat("#L");
         for (String lineInfo : file.getMatchedLines().split(",")){
             String link = prefix+lineInfo.replace('-','L');
-            matchedLines = matchedLines.concat("<a target=\"_blank\" href=\"" + link + "\">" + lineInfo + "</a> ");
+            matchedLines = matchedLines.concat("<a target=\"_blank\" href=\"" + link + "\">" + lineInfo + "</a>");
         }
         LOG.debug("MatchedLines: " + matchedLines);
         return matchedLines;
