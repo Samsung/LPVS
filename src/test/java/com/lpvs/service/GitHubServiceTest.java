@@ -92,7 +92,7 @@ public class GitHubServiceTest {
                 this.arg = arg;
             }
         }
-        
+
         private final List<CommentCall> comment_calls = new ArrayList<>();
 
         @Override
@@ -122,7 +122,6 @@ public class GitHubServiceTest {
                 }
             }
         }
-
     }
 
     @Nested
@@ -1451,8 +1450,8 @@ public class GitHubServiceTest {
             verifyNoMoreInteractions(mocked_repo);
 
             // `mocked_pr_2` verify
-            ((GHPullRequestOurMock)mocked_pr_2).verifyCommentCall(expected_comment);
-            ((GHPullRequestOurMock)mocked_pr_2).verifyNoMoreCommentCalls();
+            ((GHPullRequestOurMock) mocked_pr_2).verifyCommentCall(expected_comment);
+            ((GHPullRequestOurMock) mocked_pr_2).verifyNoMoreCommentCalls();
         }
     }
 
@@ -1573,8 +1572,8 @@ public class GitHubServiceTest {
             verifyNoMoreInteractions(mocked_repo);
 
             // `mocked_pr_2` verify
-            ((GHPullRequestOurMock)mocked_pr_2).verifyCommentCall(expected_comment);
-            ((GHPullRequestOurMock)mocked_pr_2).verifyNoMoreCommentCalls();
+            ((GHPullRequestOurMock) mocked_pr_2).verifyCommentCall(expected_comment);
+            ((GHPullRequestOurMock) mocked_pr_2).verifyNoMoreCommentCalls();
         }
     }
 
