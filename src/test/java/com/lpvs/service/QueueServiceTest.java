@@ -9,6 +9,7 @@ package com.lpvs.service;
 
 import com.lpvs.entity.LPVSFile;
 import com.lpvs.entity.LPVSLicense;
+import com.lpvs.entity.LPVSLicenseTest;
 import com.lpvs.entity.config.WebhookConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -112,7 +113,7 @@ public class QueueServiceTest {
             queueService.processWebHook(webhookConfig);
 
             verify(mockGitHubService, times(1)).getPullRequestFiles(webhookConfig);
-            verify(mockGitHubService, times(1)).commentResults(eq(webhookConfig), anyList(), anyList());
+            verify(mockGitHubService, times(1)).commentResults(eq(webhookConfig), any(ArrayList.class), any(ArrayList.class));
             verify(mockGitHubService, times(1)).setErrorCheck(webhookConfig);
 
             verifyNoMoreInteractions(mockGitHubService);
