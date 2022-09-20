@@ -108,8 +108,8 @@ public class GitHubServiceTest {
                     return;
                 }
             }
-            LOG.debug(expected_arg.replace("\n", "\\n"));
-            LOG.debug(comment_calls.get(0).arg.replace("\n", "\\n"));
+            LOG.error(expected_arg.replace("\n", "\\n"));
+            LOG.error(comment_calls.get(0).arg.replace("\n", "\\n"));
 
             // if not found
             fail("Call with arg " + expected_arg + " haven't passed verification");
