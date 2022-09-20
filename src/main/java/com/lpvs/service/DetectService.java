@@ -22,11 +22,16 @@ import java.util.List;
 @Service
 public class DetectService {
 
-    @Value("${scanner:scanoss}")
     private String scannerType;
 
-    @Autowired
     private ScanossDetectService scanossDetectService;
+
+    @Autowired
+    public DetectService(@Value("${scanner:scanoss}") String scannerType,
+                         ScanossDetectService scanossDetectService) {
+        this.scannerType = scannerType;
+        this.scanossDetectService = scanossDetectService;
+    }
 
     private static Logger LOG = LoggerFactory.getLogger(DetectService.class);
 
