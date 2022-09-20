@@ -65,7 +65,6 @@
             <version>4.7.0</version>
             <scope>test</scope>
         </dependency>
-<<<<<<< HEAD
         <dependency>
             <groupId>com.google.code.findbugs</groupId>
             <artifactId>annotations</artifactId>
@@ -81,8 +80,6 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-=======
->>>>>>> parent of f92b77e (Reduce the number of warnings according to the test policy (#43))
 
     </dependencies>
 

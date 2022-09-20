@@ -30,31 +30,31 @@ public class GitHubWebhooksControllerTest {
 
     @Test
     public void noSignatureTest() {
-        ResponseEntity actual;
+        ResponseEntity<ResponseWrapper> actual;
         try {
             actual = gitHubWebhooksController.gitHubWebhooks(null, null);
         } catch( Exception e) {
             actual = null;
         }
-        ResponseEntity expected = new ResponseEntity<>(new ResponseWrapper(ERROR), HttpStatus.FORBIDDEN);
+        ResponseEntity<ResponseWrapper> expected = new ResponseEntity<>(new ResponseWrapper(ERROR), HttpStatus.FORBIDDEN);
         assertEquals(expected.toString().substring(0, 56), actual.toString().substring(0, 56));
     }
 
     @Test
     public void noPayloadTest() {
-        ResponseEntity actual;
+        ResponseEntity<ResponseWrapper> actual;
         try {
             actual = gitHubWebhooksController.gitHubWebhooks(SIGNATURE, null);
         } catch( Exception e) {
             actual = null;
         }
-        ResponseEntity expected = new ResponseEntity<>(new ResponseWrapper(SUCCESS), HttpStatus.OK);
+        ResponseEntity<ResponseWrapper> expected = new ResponseEntity<>(new ResponseWrapper(SUCCESS), HttpStatus.OK);
         assertEquals(expected.toString().substring(0, 42), actual.toString().substring(0, 42));
     }
 
     @Test
     public void okTest() {
-        ResponseEntity actual;
+        ResponseEntity<ResponseWrapper> actual;
 
         String  json_to_test =
             "{" +
@@ -83,7 +83,7 @@ public class GitHubWebhooksControllerTest {
         } catch( Exception e) {
             actual = null;
         }
-        ResponseEntity expected = new ResponseEntity<>(new ResponseWrapper(SUCCESS), HttpStatus.OK);
+        ResponseEntity<ResponseWrapper> expected = new ResponseEntity<>(new ResponseWrapper(SUCCESS), HttpStatus.OK);
         assertEquals(expected.toString().substring(0, 42), actual.toString().substring(0, 42));
     }
 }

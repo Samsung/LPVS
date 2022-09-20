@@ -1,5 +1,6 @@
 package com.lpvs.service.scanner.scanoss;
 
+import com.lpvs.entity.LPVSLicense;
 import com.lpvs.entity.config.WebhookConfig;
 import com.lpvs.service.GitHubService;
 import com.lpvs.service.LicenseService;
@@ -16,6 +17,7 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class ScanossDetectServiceTest {
@@ -39,11 +41,22 @@ public class ScanossDetectServiceTest {
         ScanossDetectService scanossDetectService = new ScanossDetectService();
         LicenseService licenseService = Mockito.mock(LicenseService.class);
         GitHubService gitHubService = Mockito.mock(GitHubService.class);
+        String licenseConflictsSource = "scanner";
         ReflectionTestUtils.setField(scanossDetectService, "licenseService", licenseService);
         ReflectionTestUtils.setField(scanossDetectService, "gitHubService", gitHubService);
         WebhookConfig webhookConfig = Mockito.mock(WebhookConfig.class);
         Mockito.when(webhookConfig.getRepositoryName()).thenReturn("A");
         Mockito.when(webhookConfig.getHeadCommitSHA()).thenReturn("B");
+        scanossDetectService.checkLicenses(webhookConfig);
+        ReflectionTestUtils.setField(licenseService, "licenseConflictsSource", licenseConflictsSource);
+        Mockito.when(licenseService.findLicenseBySPDX("MIT")).thenReturn(new LPVSLicense(){{
+            setLicenseName("MIT");
+            setLicenseId(1L);
+            setSpdxId("MIT");
+            setIncompatibleWith(new ArrayList<String>(){{
+                add("LGPL-2.1-or-later");
+            }});
+        }});
         scanossDetectService.checkLicenses(webhookConfig);
     }
 }
