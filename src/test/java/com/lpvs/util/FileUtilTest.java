@@ -1,6 +1,7 @@
 package com.lpvs.util;
 
 import com.google.gson.reflect.TypeToken;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.kohsuke.github.GHPullRequestFileDetail;
 import org.kohsuke.github.PagedIterable;
@@ -22,8 +23,9 @@ public class FileUtilTest {
             add(detail);
         }}, "", "", 1);
         ReflectionTestUtils.setField(detail, "patch", "+ a\n- b\n@@ -8,7 +8,6 @@\n c");
-        FileUtil.saveFiles(new ArrayList<GHPullRequestFileDetail>(){{
-            add(detail);
-        }}, "", "", 1);
+        Assertions.assertEquals("Projects//:::::Projects//delete",
+                FileUtil.saveFiles(new ArrayList<GHPullRequestFileDetail>(){{
+                    add(detail);
+                }}, "", "", 1));
     }
 }

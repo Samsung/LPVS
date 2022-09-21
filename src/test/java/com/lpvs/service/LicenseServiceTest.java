@@ -3,6 +3,7 @@ package com.lpvs.service;
 import com.lpvs.entity.LPVSFile;
 import com.lpvs.entity.LPVSLicense;
 import com.lpvs.entity.config.WebhookConfig;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -69,6 +70,6 @@ public class LicenseServiceTest {
         ReflectionTestUtils.setField(licenseService, "licenseConflicts",
                 new ArrayList<LicenseService.Conflict<String, String>>()
                 {{ add(new LicenseService.Conflict<>("", "")); }});
-        licenseService.findConflicts(webhookConfig, fileList);
+        Assertions.assertNotNull(licenseService.findConflicts(webhookConfig, fileList));
     }
 }

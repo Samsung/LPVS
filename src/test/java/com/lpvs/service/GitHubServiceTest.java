@@ -1433,7 +1433,7 @@ public class GitHubServiceTest {
     }
 
     @Nested
-    class TestCommentResults__ATest {
+    class TestCommentResults {
 
         final String GH_LOGIN = "test_login";
         final String GH_AUTH_TOKEN = "test_auth_token";
@@ -1450,7 +1450,7 @@ public class GitHubServiceTest {
         }
 
         @Test
-        public void testCommentResults__ATest() throws IOException {
+        public void testCommentResults() throws IOException {
             GitHub gitHub = Mockito.mock(GitHub.class);
             GHRepository repository = Mockito.mock(GHRepository.class);
             ReflectionTestUtils.setField(gh_service, "gitHub", gitHub);
@@ -1484,6 +1484,7 @@ public class GitHubServiceTest {
             gh_service.commentResults(webhookConfig, fileList, conflictList);
             license.setAccess("");
             gh_service.commentResults(webhookConfig, fileList, conflictList);
+            Mockito.verify(gitHub, times(2)).getRepository(Mockito.anyString());
         }
     }
 }

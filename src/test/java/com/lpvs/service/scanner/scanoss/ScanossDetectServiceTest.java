@@ -6,6 +6,7 @@ import com.lpvs.service.GitHubService;
 import com.lpvs.service.LicenseService;
 import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -33,7 +34,9 @@ public class ScanossDetectServiceTest {
 
     @AfterEach
     public void tearDown() {
-        //
+        if ((new File("RESULTS")).exists()) {
+            new File("RESULTS").delete();
+        }
     }
 
     @Test
@@ -57,6 +60,6 @@ public class ScanossDetectServiceTest {
                 add("LGPL-2.1-or-later");
             }});
         }});
-        scanossDetectService.checkLicenses(webhookConfig);
+        Assertions.assertNotNull(scanossDetectService.checkLicenses(webhookConfig));
     }
 }
