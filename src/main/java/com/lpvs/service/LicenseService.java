@@ -142,10 +142,10 @@ public class LicenseService {
     public LPVSLicense checkLicense(String spdxId) {
         LPVSLicense newLicense = findLicenseBySPDX(spdxId);
         if (newLicense == null && spdxId.contains("+")) {
-            newLicense = findLicenseBySPDX(spdxId.replace("+","") + "-or-later");
+            newLicense = findLicenseBySPDX(spdxId.replace("+", "") + "-or-later");
         }
         if (newLicense == null && spdxId.contains("+")) {
-            newLicense = findLicenseBySPDX(spdxId + "-only");
+            newLicense = findLicenseBySPDX(spdxId.replace("+", "") + "-only");
         }
         return newLicense;
     }
