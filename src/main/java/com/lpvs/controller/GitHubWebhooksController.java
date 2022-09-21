@@ -42,7 +42,7 @@ public class GitHubWebhooksController {
     ApplicationContext applicationContext;
 
     @PostConstruct
-    private void setProps() {
+    public void setProps() {
         this.GITHUB_SECRET = Optional.ofNullable(this.GITHUB_SECRET).filter(s -> !s.isEmpty())
                 .orElse(Optional.ofNullable(System.getenv("LPVS_GITHUB_SECRET")).orElse(""));
         if (this.GITHUB_SECRET.isEmpty()) {
