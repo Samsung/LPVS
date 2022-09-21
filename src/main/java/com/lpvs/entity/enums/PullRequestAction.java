@@ -27,8 +27,6 @@ public enum PullRequestAction {
         return type;
     }
 
-    private static Logger LOG = LoggerFactory.getLogger(PullRequestAction.class);
-
     public static PullRequestAction convertFrom(String action) {
         if (action.equals(OPEN.getPullRequestAction())) {
             return OPEN;

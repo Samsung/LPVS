@@ -28,7 +28,7 @@ public class DetectService {
     @Autowired
     private ScanossDetectService scanossDetectService;
 
-    private static Logger LOG = LoggerFactory.getLogger(DetectService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DetectService.class);
 
     @PostConstruct
     private void init() {

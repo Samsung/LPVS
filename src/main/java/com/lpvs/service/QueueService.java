@@ -36,7 +36,7 @@ public class QueueService {
         this.licenseService = licenseService;
     }
 
-    private static Logger LOG = LoggerFactory.getLogger(QueueService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(QueueService.class);
 
     private static final BlockingDeque<WebhookConfig> QUEUE =  new LinkedBlockingDeque<>();
 

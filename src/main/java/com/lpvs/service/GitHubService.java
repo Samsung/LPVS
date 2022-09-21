@@ -40,7 +40,7 @@ public class GitHubService {
         this.GITHUB_API_URL = GITHUB_API_URL;
     }
 
-    private static Logger LOG = LoggerFactory.getLogger(GitHubService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(GitHubService.class);
 
     private static GitHub gitHub;
 

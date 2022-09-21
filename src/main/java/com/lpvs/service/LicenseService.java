@@ -31,7 +31,7 @@ public class LicenseService {
     @Value("${license_conflict:json}")
     public String licenseConflictsSource;
 
-    private static Logger LOG = LoggerFactory.getLogger(LicenseService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(LicenseService.class);
 
     private List<LPVSLicense> licenses;
 
@@ -134,8 +134,8 @@ public class LicenseService {
         String repositoryLicense = webhookConfig.getRepositoryLicense();
         if (repositoryLicense != null) {
             for (String detectedLicenseUnique : detectedLicensesUnique) {
-                for (Conflict licenseConflict : licenseConflicts) {
-                    Conflict possibleConflict = new Conflict(detectedLicenseUnique, repositoryLicense);
+                for (Conflict<String, String> licenseConflict : licenseConflicts) {
+                    Conflict<String, String> possibleConflict = new Conflict<>(detectedLicenseUnique, repositoryLicense);
                     if (licenseConflict.equals(possibleConflict)) {
                         foundConflicts.add(possibleConflict);
                     }
@@ -146,8 +146,12 @@ public class LicenseService {
         // 2. Check conflict between detected licenses
         for (int i = 0; i < detectedLicensesUnique.size(); i++) {
             for (int j = i + 1; j < detectedLicensesUnique.size() - 1; j++) {
-                for (Conflict licenseConflict : licenseConflicts) {
-                    Conflict possibleConflict = new Conflict(detectedLicensesUnique.toArray()[i], detectedLicensesUnique.toArray()[j]);
+                for (Conflict<String, String> licenseConflict : licenseConflicts) {
+                    Conflict<String, String> possibleConflict =
+                            new Conflict<>(
+                                    (String) detectedLicensesUnique.toArray()[i],
+                                    (String) detectedLicensesUnique.toArray()[j]
+                            );
                     if (licenseConflict.equals(possibleConflict)) {
                         foundConflicts.add(possibleConflict);
                     }
@@ -158,7 +162,7 @@ public class LicenseService {
         return foundConflicts;
     }
 
-    public class Conflict<License1, License2> {
+    public static class Conflict<License1, License2> {
         public License1 l1;
         public License2 l2;
         Conflict(License1 l1, License2 l2) {

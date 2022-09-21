@@ -33,13 +33,13 @@ import javax.crypto.spec.SecretKeySpec;
 @RestController
 public class GitHubWebhooksController {
     @Value("${github.secret:}")
-    private String GITHUB_SECRET;
+    private final String GITHUB_SECRET;
 
     private QueueService queueService;
 
     private GitHubService gitHubService;
 
-    private static Logger LOG = LoggerFactory.getLogger(GitHubWebhooksController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(GitHubWebhooksController.class);
 
     private static final String SIGNATURE = "X-Hub-Signature-256";
     private static final String SUCCESS = "Success";

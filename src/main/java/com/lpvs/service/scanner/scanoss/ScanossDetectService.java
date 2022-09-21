@@ -32,7 +32,7 @@ public class ScanossDetectService {
     @Autowired
     private GitHubService gitHubService;
 
-    private static Logger LOG = LoggerFactory.getLogger(ScanossDetectService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ScanossDetectService.class);
 
     public void runScan(WebhookConfig webhookConfig, String path) throws Exception {
         LOG.info("Starting Scanoss scanning");
