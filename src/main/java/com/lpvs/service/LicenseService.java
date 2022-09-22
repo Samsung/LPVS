@@ -14,7 +14,10 @@ import com.lpvs.entity.LPVSLicense;
 import com.lpvs.entity.config.WebhookConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.SpringApplication;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.io.Reader;
@@ -25,10 +28,16 @@ import java.util.*;
 @Service
 public class LicenseService {
 
-    @Value("${license_filepath:classes/licenses.json}")
-    public String licenseFilePath;
+    private final static String LICENSE_FILE_PATH_PROP_NAME = "license_filepath";
+    private final static String LICENSE_CONFLICT_SOURCE_PROP_NAME = "license_conflict";
 
-    @Value("${license_conflict:json}")
+    private final static String LICENSE_FILE_PATH_ENV_VAR_NAME = "LPVS_LICENSE_FILEPATH";
+    private final static String LICENSE_CONFLICT_SOURCE_ENV_VAR_NAME = "LPVS_LICENSE_CONFLICT";
+
+    private final static String LICENSE_FILE_PATH_DEFAULT = "classes/licenses.json";
+    private final static String LICENSE_CONFLICT_SOURCE_DEFAULT = "json";
+
+    public String licenseFilePath;
     public String licenseConflictsSource;
 
     private static final Logger LOG = LoggerFactory.getLogger(LicenseService.class);
@@ -36,9 +45,37 @@ public class LicenseService {
     private List<LPVSLicense> licenses;
 
     private List<Conflict<String, String>> licenseConflicts;
+    
+    @Autowired
+    public LicenseService(@Value("${" + LICENSE_FILE_PATH_PROP_NAME + ":" + LICENSE_FILE_PATH_DEFAULT + "}") String licenseFilePath,
+                          @Value("${" + LICENSE_CONFLICT_SOURCE_PROP_NAME + ":" + LICENSE_CONFLICT_SOURCE_DEFAULT + "}") String licenseConflictsSource) {
+        this.licenseFilePath = licenseFilePath;
+        this.licenseConflictsSource = licenseConflictsSource;
+    }
+
+    @Autowired
+    ApplicationContext applicationContext;
 
     @PostConstruct
     private void init() {
+        licenseFilePath = (licenseFilePath == null || licenseFilePath.equals(LICENSE_FILE_PATH_DEFAULT))
+        && System.getenv(LICENSE_FILE_PATH_ENV_VAR_NAME) != null
+                && !System.getenv(LICENSE_FILE_PATH_ENV_VAR_NAME).isEmpty() ?
+                System.getenv(LICENSE_FILE_PATH_ENV_VAR_NAME) : licenseFilePath;
+        licenseConflictsSource = (licenseConflictsSource == null || licenseConflictsSource.equals(
+                LICENSE_CONFLICT_SOURCE_DEFAULT
+        ))
+        && System.getenv(LICENSE_CONFLICT_SOURCE_ENV_VAR_NAME) != null
+                && !System.getenv(LICENSE_CONFLICT_SOURCE_ENV_VAR_NAME).isEmpty() ?
+                System.getenv(LICENSE_CONFLICT_SOURCE_ENV_VAR_NAME) : licenseConflictsSource;
+        if (licenseFilePath == null || licenseFilePath.isEmpty()) {
+            LOG.error(LICENSE_FILE_PATH_ENV_VAR_NAME + "(" + LICENSE_FILE_PATH_PROP_NAME + ") is not set");
+            System.exit(SpringApplication.exit(applicationContext, () -> -1));
+        }
+        if (licenseConflictsSource == null || licenseConflictsSource.isEmpty()) {
+            LOG.error(LICENSE_CONFLICT_SOURCE_ENV_VAR_NAME + "(" + LICENSE_CONFLICT_SOURCE_PROP_NAME + ") is not set");
+            System.exit(SpringApplication.exit(applicationContext, () -> -1));
+        }
         try {
             // 1. Load licenses
             // create Gson instance
@@ -105,10 +142,10 @@ public class LicenseService {
     public LPVSLicense checkLicense(String spdxId) {
         LPVSLicense newLicense = findLicenseBySPDX(spdxId);
         if (newLicense == null && spdxId.contains("+")) {
-            newLicense = findLicenseBySPDX(spdxId.replace("+","") + "-or-later");
+            newLicense = findLicenseBySPDX(spdxId.replace("+", "") + "-or-later");
         }
         if (newLicense == null && spdxId.contains("+")) {
-            newLicense = findLicenseBySPDX(spdxId + "-only");
+            newLicense = findLicenseBySPDX(spdxId.replace("+", "") + "-only");
         }
         return newLicense;
     }
@@ -145,7 +182,7 @@ public class LicenseService {
 
         // 2. Check conflict between detected licenses
         for (int i = 0; i < detectedLicensesUnique.size(); i++) {
-            for (int j = i + 1; j < detectedLicensesUnique.size() - 1; j++) {
+            for (int j = i + 1; j < detectedLicensesUnique.size(); j++) {
                 for (Conflict<String, String> licenseConflict : licenseConflicts) {
                     Conflict<String, String> possibleConflict =
                             new Conflict<>(

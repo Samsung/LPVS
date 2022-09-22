@@ -54,6 +54,8 @@ A template of the `licenses.json` file can be found in the repository at `src/ma
     ```text
    # Fill in the properties associated with github (github.token and github.secret required).
    github.token=
+   github.login=
+   github.api.url=
    github.secret=LPVS
 
    # Used license scanner: scanoss (at the moment, only this scanner is supported)
@@ -69,6 +71,11 @@ A template of the `licenses.json` file can be found in the repository at `src/ma
    # according to the template at 'src/main/resources/licenses.json')
    # > option "scanner": take conflicts from the scanner response
     license_conflict=json
+   
+   # Alternatively, you can supply all the necessary values associated with github
+   # and license using these env variables:
+   # LPVS_GITHUB_LOGIN, LPVS_GITHUB_TOKEN, LPVS_GITHUB_API_URL, LPVS_GITHUB_SECRET,
+   # LPVS_LICENSE_FILEPATH and LPVS_LICENSE_CONFLICT.
     ```
 
 4. Build LPVS application with Maven, then run it:
@@ -78,10 +85,15 @@ A template of the `licenses.json` file can be found in the repository at `src/ma
     java -jar lpvs-1.0.0.jar
     ```
 
+   When running the application you will also be able to use command line to input all the same values associated with github and license on the fly, like so:
+   ```bash
+   java -jar -Dgithub.token=<`my-token`> -Dgithub.secret=<`my-secret`> lpvs-1.0.0.jar
+   ```
+
    Or alternatively build and run the Docker container with LPVS:
    ```bash
     docker build -t lpvs .
-    docker run -p 7896:7896 --name lpvs -e LPVS_GITHUB_TOKEN=<`github.token`> lpvs:latest
+    docker run -p 7896:7896 --name lpvs -e LPVS_GITHUB_TOKEN=<`github.token`> -e LPVS_GITHUB_SECRET=<`github.secret`> lpvs:latest
     ```
     For additional information about using Docker and tips, please check file [Docker_Usage](.github/Docker_Usage.md).
     
