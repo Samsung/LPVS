@@ -66,7 +66,7 @@ public class LicenseServiceTest {
             add(file1);
             add(file2);
         }};
-        LicenseService licenseService = new LicenseService();
+        LicenseService licenseService = new LicenseService("", "");
         ReflectionTestUtils.setField(licenseService, "licenseConflicts",
                 new ArrayList<LicenseService.Conflict<String, String>>()
                 {{ add(new LicenseService.Conflict<>("", "")); }});
