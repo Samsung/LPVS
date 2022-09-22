@@ -101,7 +101,7 @@ public class GitHubWebhooksController {
         SecretKeySpec key = new SecretKeySpec(GITHUB_SECRET.getBytes("utf-8"), ALGORITHM);
         Mac mac = Mac.getInstance(ALGORITHM);
         mac.init(key);
-        String githubSecret = Hex.encodeHexString(mac.doFinal(payload.getBytes()));
+        String githubSecret = Hex.encodeHexString(mac.doFinal(payload.getBytes("utf-8")));
 
         LOG.info("lpvs   signature: " + lpvsSecret);
         LOG.info("github signature: " + githubSecret);
