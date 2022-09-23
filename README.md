@@ -82,12 +82,12 @@ A template of the `licenses.json` file can be found in the repository at `src/ma
     ```bash
     mvn clean install
     cd target/
-    java -jar lpvs-1.0.0.jar
+    java -jar lpvs-1.0.1.jar
     ```
 
    When running the application you will also be able to use command line to input all the same values associated with github and license on the fly, like so:
    ```bash
-   java -jar -Dgithub.token=<`my-token`> -Dgithub.secret=<`my-secret`> lpvs-1.0.0.jar
+   java -jar -Dgithub.token=<`my-token`> -Dgithub.secret=<`my-secret`> lpvs-1.0.1.jar
    ```
 
    Or alternatively build and run the Docker container with LPVS:
