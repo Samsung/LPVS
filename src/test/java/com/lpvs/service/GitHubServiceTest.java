@@ -1359,7 +1359,7 @@ public class GitHubServiceTest {
         final String matched_lines_1 = "1-6";
         final String component_1 = "LPVS::Services";
 
-        // `lpvs_file_1`
+        // `lpvs_license_1`
         LPVSLicense lpvs_license_1;
         final String license_name_1 = "MIT License";
         final String spdx_id_1 = "MIT";
