@@ -4,11 +4,13 @@
  * Use of this source code is governed by a MIT license that can be
  * found in the LICENSE file.
  */
+
 package com.lpvs.service;
 
 import com.lpvs.entity.LPVSFile;
 import com.lpvs.entity.LPVSLicense;
 import com.lpvs.entity.config.WebhookConfig;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -263,13 +265,13 @@ public class LicenseServiceTest {
         final LicenseService.Conflict<String, String> conf_1_2 = new LicenseService.Conflict<>(license1, license2);
 
         assertTrue(conf_1_2.equals(conf_1_2));
-        assertEquals(true, conf_1_2.equals(base_conf_12));
-        assertEquals(true, conf_1_2.equals(base_conf_21));
+        assertTrue(conf_1_2.equals(base_conf_12));
+        assertTrue(conf_1_2.equals(base_conf_21));
 
-        assertEquals(false, conf_1_2.equals(base_conf_22));
-        assertEquals(false, conf_1_2.equals(base_conf_11));
-        assertEquals(false, conf_1_2.equals(null));
-        assertEquals(false, conf_1_2.equals(license1));
+        assertFalse(conf_1_2.equals(base_conf_22));
+        assertFalse(conf_1_2.equals(base_conf_11));
+        assertFalse(conf_1_2.equals(license1));
+        assertFalse(conf_1_2.equals(null));
     }
 
     @Test
