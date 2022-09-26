@@ -19,12 +19,12 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = { "com.lpvs" })
 @EnableAutoConfiguration(exclude={DataSourceAutoConfiguration.class, HibernateJpaAutoConfiguration.class})
 @EnableAsync
 public class LicensePreValidationSystem {
 
-    private int corePoolSize;
+    private final int corePoolSize;
 
     public LicensePreValidationSystem(@Value("${lpvs.cores:8}") int corePoolSize) {
         this.corePoolSize = corePoolSize;

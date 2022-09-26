@@ -1,0 +1,142 @@
+{
+  "test - Copy.c": [
+    {
+      "component": "FFmpeg",
+      "file": "libavformat/aaxdec.c",
+      "file_hash": "4e64eb106ffa63ca7f6cc8c988f1cb10",
+      "file_url": "https://osskb.org/api/file_contents/4e64eb106ffa63ca7f6cc8c988f1cb10",
+      "id": "snippet",
+      "latest": "5.1.r105571",
+      "licenses": [
+        {
+          "checklist_url": "https://www.osadl.org/fileadmin/checklists/unreflicenses/LGPL-2.1-or-later.txt",
+          "copyleft": "yes",
+          "incompatible_with": "Apache-1.0, Apache-1.1, Apache-2.0, BSD-4-Clause, BSD-4-Clause-UC, FTL, IJG, OpenSSL, Python-2.0, zlib-acknowledgement, XFree86-1.1",
+          "name": "LGPL-2.1-or-later",
+          "osadl_updated": "2022-05-13 08:48",
+          "patent_hints": "yes",
+          "source": "file_header",
+          "url": "https://spdx.org/licenses/LGPL-2.1-or-later.html"
+        },
+        {
+          "checklist_url": "https://www.osadl.org/fileadmin/checklists/unreflicenses/LGPL-2.1-or-later.txt",
+          "copyleft": "yes",
+          "incompatible_with": "Apache-1.0, Apache-1.1, Apache-2.0, BSD-4-Clause, BSD-4-Clause-UC, FTL, IJG, OpenSSL, Python-2.0, zlib-acknowledgement, XFree86-1.1",
+          "name": "LGPL-2.1-or-later",
+          "osadl_updated": "2022-05-13 08:48",
+          "patent_hints": "yes",
+          "source": "scancode",
+          "url": "https://spdx.org/licenses/LGPL-2.1-or-later.html"
+        }
+      ],
+      "lines": "1-37",
+      "matched": "97%",
+      "oss_lines": "14-50",
+      "purl": [
+        "pkg:github/shiftmediaproject/ffmpeg"
+      ],
+      "release_date": "2021-08-08",
+      "server": {
+        "kb_version": {
+          "daily": "22.06.10",
+          "monthly": "22.05"
+        },
+        "version": "4.5.2"
+      },
+      "source_hash": "c27aa06008779ad2da604cd30c588ea4",
+      "status": "pending",
+      "url": "https://github.com/ShiftMediaProject/FFmpeg",
+      "url_hash": "cf73511d784cddc8b080c199948c98dd",
+      "vendor": "ShiftMediaProject",
+      "version": "4.5.r103180"
+    }
+  ],
+  "test.c": [
+    {
+      "component": "scanoss",
+      "file": "scanoss/cyclonedx.py",
+      "file_hash": "1ec8c7d5aa9f485aaa1a5091cb99a87e",
+      "file_url": "https://osskb.org/api/file_contents/1ec8c7d5aa9f485aaa1a5091cb99a87e",
+      "id": "snippet",
+      "latest": "0.7.4",
+      "licenses": [
+        {
+          "checklist_url": "https://www.osadl.org/fileadmin/checklists/unreflicenses/MIT.txt",
+          "copyleft": "no",
+          "name": "MIT",
+          "osadl_updated": "2022-05-13 08:48",
+          "patent_hints": "no",
+          "source": "component_declared"
+        },
+        {
+          "checklist_url": "https://www.osadl.org/fileadmin/checklists/unreflicenses/MIT.txt",
+          "copyleft": "no",
+          "name": "MIT",
+          "osadl_updated": "2022-05-13 08:48",
+          "patent_hints": "no",
+          "source": "file_spdx_tag",
+          "url": "https://spdx.org/licenses/MIT.html"
+        },
+        {
+          "checklist_url": "https://www.osadl.org/fileadmin/checklists/unreflicenses/MIT.txt",
+          "copyleft": "no",
+          "name": "MIT",
+          "osadl_updated": "2022-05-13 08:48",
+          "patent_hints": "no",
+          "source": "scancode",
+          "url": "https://spdx.org/licenses/MIT.html"
+        },
+        {
+          "checklist_url": "https://www.osadl.org/fileadmin/checklists/unreflicenses/GPL-2.0-or-later.txt",
+          "copyleft": "yes",
+          "incompatible_with": "Apache-1.0, Apache-1.1, Apache-2.0, BSD-4-Clause, BSD-4-Clause-UC, FTL, IJG, OpenSSL, Python-2.0, zlib-acknowledgement, XFree86-1.1",
+          "name": "GPL-2.0-or-later",
+          "osadl_updated": "2022-05-13 08:48",
+          "patent_hints": "yes",
+          "source": "component_declared",
+          "url": "https://spdx.org/licenses/GPL-2.0-or-later.html"
+        },
+        {
+          "checklist_url": "https://www.osadl.org/fileadmin/checklists/unreflicenses/GPL-2.0-only.txt",
+          "copyleft": "yes",
+          "incompatible_with": "Apache-1.0, Apache-1.1, Apache-2.0, BSD-4-Clause, BSD-4-Clause-UC, FTL, IJG, OpenSSL, Python-2.0, zlib-acknowledgement, XFree86-1.1",
+          "name": "GPL-2.0-only",
+          "osadl_updated": "2022-05-13 08:48",
+          "patent_hints": "yes",
+          "source": "license_file",
+          "url": "https://spdx.org/licenses/GPL-2.0-only.html"
+        },
+        {
+          "checklist_url": "https://www.osadl.org/fileadmin/checklists/unreflicenses/MIT.txt",
+          "copyleft": "no",
+          "name": "MIT",
+          "osadl_updated": "2022-05-13 08:48",
+          "patent_hints": "no",
+          "source": "license_file",
+          "url": "https://spdx.org/licenses/MIT.html"
+        }
+      ],
+      "lines": "36-157",
+      "matched": "77%",
+      "oss_lines": "18-139",
+      "purl": [
+        "pkg:pypi/scanoss",
+        "pkg:github/scanoss/scanoss.py"
+      ],
+      "release_date": "2021-11-08",
+      "server": {
+        "kb_version": {
+          "daily": "22.06.10",
+          "monthly": "22.05"
+        },
+        "version": "4.5.2"
+      },
+      "source_hash": "a4e27a561b13325615e283b841b702be",
+      "status": "pending",
+      "url": "https://pypi.org/project/scanoss",
+      "url_hash": "721d702fc347c87457be94b27e66eac5",
+      "vendor": "SCANOSS",
+      "version": "0.7.0"
+    }
+  ]
+}

@@ -8,6 +8,7 @@
 package com.lpvs.service.scanner.scanoss;
 
 import com.google.gson.*;
+import com.google.gson.reflect.TypeToken;
 import com.lpvs.entity.LPVSFile;
 import com.lpvs.entity.LPVSLicense;
 import com.lpvs.entity.config.WebhookConfig;
@@ -31,7 +32,7 @@ public class ScanossDetectService {
     @Autowired
     private GitHubService gitHubService;
 
-    private static Logger LOG = LoggerFactory.getLogger(ScanossDetectService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ScanossDetectService.class);
 
     public void runScan(WebhookConfig webhookConfig, String path) throws Exception {
         LOG.info("Starting Scanoss scanning");
@@ -79,11 +80,12 @@ public class ScanossDetectService {
             Gson gson = new Gson();
             Reader reader = Files.newBufferedReader(Paths.get("RESULTS/" + webhookConfig.getRepositoryName() + "_" + webhookConfig.getHeadCommitSHA() + ".json"));
             // convert JSON file to map
-            Map<ArrayList, String> map = gson.fromJson(reader, Map.class);
+            Map<String, ArrayList<Object>> map = gson.fromJson(reader,
+                    new TypeToken<Map<String, ArrayList<Object>>>() {}.getType());
 
             // parse map entries
             long ind = 0L;
-            for (Map.Entry entry : map.entrySet()) {
+            for (Map.Entry<String, ArrayList<Object>> entry : map.entrySet()) {
                 LPVSFile file = new LPVSFile();
                 file.setId(ind++);
                 file.setFilePath(entry.getKey().toString());
