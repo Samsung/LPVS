@@ -36,6 +36,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 @RestController
 public class GitHubWebhooksController {
+
     private String GITHUB_SECRET;
 
     @Autowired
@@ -56,7 +57,7 @@ public class GitHubWebhooksController {
 
     private GitHubService gitHubService;
 
-    private static Logger LOG = LoggerFactory.getLogger(GitHubWebhooksController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(GitHubWebhooksController.class);
 
     private static final String SIGNATURE = "X-Hub-Signature-256";
     private static final String SUCCESS = "Success";
@@ -101,7 +102,7 @@ public class GitHubWebhooksController {
         SecretKeySpec key = new SecretKeySpec(GITHUB_SECRET.getBytes("utf-8"), ALGORITHM);
         Mac mac = Mac.getInstance(ALGORITHM);
         mac.init(key);
-        String githubSecret = Hex.encodeHexString(mac.doFinal(payload.getBytes()));
+        String githubSecret = Hex.encodeHexString(mac.doFinal(payload.getBytes("utf-8")));
 
         LOG.info("lpvs   signature: " + lpvsSecret);
         LOG.info("github signature: " + githubSecret);

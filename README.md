@@ -71,12 +71,10 @@ A template of the `licenses.json` file can be found in the repository at `src/ma
    # according to the template at 'src/main/resources/licenses.json')
    # > option "scanner": take conflicts from the scanner response
     license_conflict=json
-   
-   # Alternatively, you can supply all the necessary values associated with github
-   # and license using these env variables:
-   # LPVS_GITHUB_LOGIN, LPVS_GITHUB_TOKEN, LPVS_GITHUB_API_URL, LPVS_GITHUB_SECRET,
-   # LPVS_LICENSE_FILEPATH and LPVS_LICENSE_CONFLICT.
     ```
+
+   Alternatively, you can supply all the necessary values associated with GitHub and license using these env variables:
+   `LPVS_GITHUB_LOGIN`, `LPVS_GITHUB_TOKEN`, `LPVS_GITHUB_API_URL`, `LPVS_GITHUB_SECRET`, `LPVS_LICENSE_FILEPATH` and `LPVS_LICENSE_CONFLICT`.
 
 4. Build LPVS application with Maven, then run it:
     ```bash

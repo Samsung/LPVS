@@ -23,7 +23,7 @@ public class QueueProcessorService {
 
     private QueueService queueService;
 
-    private static Logger LOG = LoggerFactory.getLogger(QueueProcessorService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(QueueProcessorService.class);
 
     @Autowired
     QueueProcessorService(QueueService queueService) {

@@ -81,6 +81,11 @@
             <artifactId>bridge-method-injector</artifactId>
             <version>1.23</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
 
     </dependencies>
 
@@ -127,6 +132,21 @@
                     <compilerArgs>
                         <arg>-Xlint:all,-serial,-processing</arg>
                     </compilerArgs>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs-maven-plugin</artifactId>
+                <version>4.7.1.1</version>
+                <configuration>
+                    <includeFilterFile>spotbugs-security-include.xml</includeFilterFile>
+                    <plugins>
+                        <plugin>
+                            <groupId>com.h3xstream.findsecbugs</groupId>
+                            <artifactId>findsecbugs-plugin</artifactId>
+                            <version>1.12.0</version>
+                        </plugin>
+                    </plugins>
                 </configuration>
             </plugin>
         </plugins>

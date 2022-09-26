@@ -40,7 +40,7 @@ public class LicenseService {
     public String licenseFilePath;
     public String licenseConflictsSource;
 
-    private static Logger LOG = LoggerFactory.getLogger(LicenseService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(LicenseService.class);
 
     private List<LPVSLicense> licenses;
 
@@ -184,8 +184,11 @@ public class LicenseService {
         for (int i = 0; i < detectedLicensesUnique.size(); i++) {
             for (int j = i + 1; j < detectedLicensesUnique.size(); j++) {
                 for (Conflict<String, String> licenseConflict : licenseConflicts) {
-                    Conflict<String, String> possibleConflict = new Conflict<>(detectedLicensesUnique.toArray()[i].toString(),
-                            detectedLicensesUnique.toArray()[j].toString());
+                    Conflict<String, String> possibleConflict =
+                            new Conflict<>(
+                                    (String) detectedLicensesUnique.toArray()[i],
+                                    (String) detectedLicensesUnique.toArray()[j]
+                            );
                     if (licenseConflict.equals(possibleConflict)) {
                         foundConflicts.add(possibleConflict);
                     }
@@ -197,8 +200,8 @@ public class LicenseService {
     }
 
     public static class Conflict<License1, License2> {
-        License1 l1;
-        License2 l2;
+        public License1 l1;
+        public License2 l2;
         Conflict(License1 l1, License2 l2) {
             this.l1 = l1;
             this.l2 = l2;
