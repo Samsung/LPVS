@@ -37,7 +37,6 @@ public class LicenseService {
 
     private List<Conflict<String, String>> licenseConflicts;
 
-
     // the method needs for test only
     public void public_init() {
         this.licenseFilePath = "license_filepath.classes/licenses.json"; // "${license_filepath:classes/licenses.json}"

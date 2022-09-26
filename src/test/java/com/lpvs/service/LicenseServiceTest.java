@@ -30,10 +30,6 @@ public class LicenseServiceTest {
     final LicenseService.Conflict<String, String> base_conf_22 = new LicenseService().new Conflict<>(license2, license2);
 
     @Test
-    public void initTest() {
-    }
-
-    @Test
     public void findConflictsEmptyScanResults() {
         List<LPVSFile> scanResults = new ArrayList<>();
         if (scanResults.isEmpty()) {
@@ -52,7 +48,6 @@ public class LicenseServiceTest {
         scanResults.add(lpvsFile);
         assertEquals(false, scanResults.isEmpty());
 
-
         LicenseService licenseService = new LicenseService();
         try {
             Method andPrivateMethod = LicenseService.class.getDeclaredMethod("init");
@@ -65,13 +60,9 @@ public class LicenseServiceTest {
             e.printStackTrace();
             assertEquals(false, true);
         }
-
-
         WebhookConfig webhookConfig = new WebhookConfig();
-
         assertEquals(null, licenseService.findConflicts(webhookConfig, scanResults));
     }
-
 
     @Test
     public void findConflictsMainReturn() {
@@ -79,7 +70,6 @@ public class LicenseServiceTest {
         LPVSFile lpvsFile = mock(LPVSFile.class);
         scanResults.add(lpvsFile);
         assertEquals(false, scanResults.isEmpty());
-
 
         LicenseService licenseService = new LicenseService();
         licenseService.public_init();
