@@ -71,7 +71,7 @@ public class GitHubService {
         }
     }
 
-    private static Logger LOG = LoggerFactory.getLogger(GitHubService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(GitHubService.class);
 
     private static GitHub gitHub;
 

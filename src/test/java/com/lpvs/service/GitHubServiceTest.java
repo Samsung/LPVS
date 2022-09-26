@@ -17,8 +17,10 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.kohsuke.github.*;
 import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -26,8 +28,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -1984,6 +1988,62 @@ public class GitHubServiceTest {
         public void testGetMatchedLinesAsLink_All() {
             // main test
             assertEquals(expected_result, gh_service.getMatchedLinesAsLink(webhookConfig, lpvs_file_1));
+        }
+    }
+    
+    @Nested
+    class TestCommentResults {
+
+        final String GH_LOGIN = "test_login";
+        final String GH_AUTH_TOKEN = "test_auth_token";
+        final String GH_API_URL = "test_api_url";
+        GitHubService gh_service = new GitHubService(GH_LOGIN, GH_AUTH_TOKEN, GH_API_URL);
+        WebhookConfig webhookConfig;
+
+        @BeforeEach
+        void setUp() {
+            webhookConfig = new WebhookConfig();
+            webhookConfig.setRepositoryName("LPVS");
+            webhookConfig.setRepositoryOrganization("Samsung");
+            webhookConfig.setPullRequestAPIUrl("http://url.com");
+        }
+
+        @Test
+        public void testCommentResults() throws IOException {
+            GitHub gitHub = Mockito.mock(GitHub.class);
+            GHRepository repository = Mockito.mock(GHRepository.class);
+            ReflectionTestUtils.setField(gh_service, "gitHub", gitHub);
+            Mockito.when(gitHub.getRepository(
+                    webhookConfig.getRepositoryOrganization() + "/" + webhookConfig.getRepositoryName()))
+                    .thenReturn(repository);
+            LPVSFile file = new LPVSFile();
+            LPVSLicense license = new LPVSLicense(){{
+                setChecklist_url("");
+                setAccess("unrviewed");
+            }};
+            file.setLicenses(new HashSet<LPVSLicense>(){{
+                add(license);
+            }});
+            file.setFilePath("");
+            file.setComponent("");
+            file.setSnippetMatch("");
+            file.setMatchedLines("");
+            List<LPVSFile> fileList = new ArrayList<LPVSFile>(){{
+                add(file);
+            }};
+            List<LicenseService.Conflict<String, String>> conflictList = new ArrayList<>();
+            conflictList.add(new LicenseService.Conflict<>("1", "2"));
+            GHPullRequest pullRequest = new GHPullRequest();
+            ReflectionTestUtils.setField(pullRequest, "url", "http://url.com");
+            List<GHPullRequest> pullRequestList = new ArrayList<GHPullRequest>(){{
+                add(pullRequest);
+            }};
+            Mockito.when(repository.getPullRequests(GHIssueState.OPEN))
+                    .thenReturn(pullRequestList);
+            gh_service.commentResults(webhookConfig, fileList, conflictList);
+            license.setAccess("");
+            gh_service.commentResults(webhookConfig, fileList, conflictList);
+            Mockito.verify(gitHub, times(2)).getRepository(Mockito.anyString());
         }
     }
 }

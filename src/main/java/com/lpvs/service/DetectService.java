@@ -33,7 +33,7 @@ public class DetectService {
         this.scanossDetectService = scanossDetectService;
     }
 
-    private static Logger LOG = LoggerFactory.getLogger(DetectService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DetectService.class);
 
     @PostConstruct
     private void init() {

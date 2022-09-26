@@ -8,7 +8,6 @@
 package com.lpvs.util;
 
 import org.kohsuke.github.GHPullRequestFileDetail;
-import org.kohsuke.github.PagedIterable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.FileSystemUtils;
@@ -19,9 +18,9 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 
 public class FileUtil {
-    private static Logger LOG = LoggerFactory.getLogger(FileUtil.class);
+    private static final Logger LOG = LoggerFactory.getLogger(FileUtil.class);
 
-    public static String saveFiles(PagedIterable<GHPullRequestFileDetail> files, String folder, String headCommitSHA, int deletions) {
+    public static String saveFiles(Iterable<GHPullRequestFileDetail> files, String folder, String headCommitSHA, int deletions) {
 
         String directoryPath = "Projects/" + folder + "/" + headCommitSHA;
         String directoryDeletionPath = "";
