@@ -36,6 +36,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 @RestController
 public class GitHubWebhooksController {
+
     private String GITHUB_SECRET;
 
     @Autowired
@@ -56,7 +57,7 @@ public class GitHubWebhooksController {
 
     private GitHubService gitHubService;
 
-    private static Logger LOG = LoggerFactory.getLogger(GitHubWebhooksController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(GitHubWebhooksController.class);
 
     private static final String SIGNATURE = "X-Hub-Signature-256";
     private static final String SUCCESS = "Success";

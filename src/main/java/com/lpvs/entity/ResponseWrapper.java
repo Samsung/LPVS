@@ -8,7 +8,6 @@
 package com.lpvs.entity;
 
 public class ResponseWrapper {
-
     private String message;
 
     public ResponseWrapper(String message) {

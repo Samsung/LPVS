@@ -19,7 +19,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.io.*;
-import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
@@ -33,7 +32,7 @@ public class ScanossDetectService {
     @Autowired
     private GitHubService gitHubService;
 
-    private static Logger LOG = LoggerFactory.getLogger(ScanossDetectService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ScanossDetectService.class);
 
     public void runScan(WebhookConfig webhookConfig, String path) throws Exception {
         LOG.info("Starting Scanoss scanning");
@@ -81,12 +80,12 @@ public class ScanossDetectService {
             Gson gson = new Gson();
             Reader reader = Files.newBufferedReader(Paths.get("RESULTS/" + webhookConfig.getRepositoryName() + "_" + webhookConfig.getHeadCommitSHA() + ".json"));
             // convert JSON file to map
-            Type mapType = new TypeToken<Map<ArrayList<String>, String>>() {}.getType();
-            Map<ArrayList<String>, String> map = gson.fromJson(reader, mapType);
+            Map<String, ArrayList<Object>> map = gson.fromJson(reader,
+                    new TypeToken<Map<String, ArrayList<Object>>>() {}.getType());
 
             // parse map entries
             long ind = 0L;
-            for (Map.Entry<ArrayList<String>, String> entry : map.entrySet()) {
+            for (Map.Entry<String, ArrayList<Object>> entry : map.entrySet()) {
                 LPVSFile file = new LPVSFile();
                 file.setId(ind++);
                 file.setFilePath(entry.getKey().toString());
