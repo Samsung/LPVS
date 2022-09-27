@@ -4,25 +4,27 @@
  * Use of this source code is governed by a MIT license that can be
  * found in the LICENSE file.
  */
- 
+
 package com.lpvs.service;
 
 import com.lpvs.entity.LPVSFile;
 import com.lpvs.entity.LPVSLicense;
 import com.lpvs.entity.config.WebhookConfig;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-import org.springframework.test.util.ReflectionTestUtils;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.springframework.test.util.ReflectionTestUtils;
+
 import java.lang.reflect.Field;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class LicenseServiceTest {
     @Test
@@ -231,5 +233,59 @@ public class LicenseServiceTest {
 
             assertEquals(expected, actual);
         }
+    }
+
+    final String license1 = "license1";
+    final String license2 = "license2";
+    final LicenseService.Conflict<String, String> base_conf_11 = new LicenseService.Conflict<>(license1, license1);
+    final LicenseService.Conflict<String, String> base_conf_12 = new LicenseService.Conflict<>(license1, license2);
+    final LicenseService.Conflict<String, String> base_conf_21 = new LicenseService.Conflict<>(license2, license1);
+    final LicenseService.Conflict<String, String> base_conf_22 = new LicenseService.Conflict<>(license2, license2);
+
+    @Test
+    public void findConflictsEmptyScanResults() {
+        List<LPVSFile> scanResults = new ArrayList<>();
+        if (scanResults.isEmpty()) {
+            System.out.println("is empty");
+        }
+        LicenseService mockLicenseService = new LicenseService(null, null);
+        WebhookConfig webhookConfig = new WebhookConfig(); // licenseConflicts = new ArrayList<>();
+        assertEquals(null, mockLicenseService.findConflicts(webhookConfig, scanResults));
+
+    }
+
+    @Test
+    public void conflictEquals() {
+        String license1 = "license1";
+        String license2 = "license2";
+
+        LicenseService.Conflict<String, String> conf = new LicenseService.Conflict<>(license1, license2);
+        assertNotEquals(conf.l1, conf.l2);
+    }
+
+    @Test
+    public void conflictEqualNotEqualsTest() {
+        final String license1 = "license1";
+        final String license2 = "license2";
+        final LicenseService.Conflict<String, String> conf_1_2 = new LicenseService.Conflict<>(license1, license2);
+
+        assertTrue(conf_1_2.equals(conf_1_2));
+        assertTrue(conf_1_2.equals(base_conf_12));
+        assertTrue(conf_1_2.equals(base_conf_21));
+
+        assertFalse(conf_1_2.equals(base_conf_22));
+        assertFalse(conf_1_2.equals(base_conf_11));
+        assertFalse(conf_1_2.equals(license1));
+        assertFalse(conf_1_2.equals(null));
+    }
+
+    @Test
+    public void hashTest() {
+        String license1 = "license1";
+        String license2 = "license2";
+        assertEquals(Objects.hash(license1, license2), base_conf_12.hashCode());
+        assertNotEquals(Objects.hash(license1, license2), base_conf_11.hashCode());
+        assertNotEquals(Objects.hash(license1, license2), base_conf_21.hashCode());
+        assertNotEquals(Objects.hash(license1, license2), base_conf_22.hashCode());
     }
 }
