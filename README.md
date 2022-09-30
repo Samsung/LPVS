@@ -5,6 +5,7 @@
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/Samsung/LPVS.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/Samsung/LPVS/alerts/)
 [![CodeQL Analysis](https://github.com/Samsung/LPVS/workflows/CodeQL%20Analysis/badge.svg)](https://github.com/Samsung/LPVS/actions?query=workflow%3A%22CodeQL+Analysis%22)
 [![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/6309/badge)](https://bestpractices.coreinfrastructure.org/projects/6309)
+[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/Samsung/LPVS/badge)](https://api.securityscorecards.dev/projects/github.com/Samsung/LPVS)
 [![RepoSize](https://img.shields.io/github/repo-size/samsung/lpvs.svg)](https://github.com/Samsung/LPVS)
 [![Release](https://img.shields.io/github/v/release/samsung/lpvs.svg)](https://github.com/Samsung/LPVS/releases)
 [![LICENSE](https://img.shields.io/github/license/samsung/lpvs.svg)](https://github.com/Samsung/LPVS/blob/main/LICENSE)
