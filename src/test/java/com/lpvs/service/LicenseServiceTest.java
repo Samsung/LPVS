@@ -148,8 +148,7 @@ public class LicenseServiceTest {
 
             Field conflicts_field = licenseService.getClass().getDeclaredField("licenseConflicts");
             conflicts_field.setAccessible(true);
-            List<LicenseService.Conflict<String, String>> conflicts_list
-                    = (List<LicenseService.Conflict<String, String>>) conflicts_field.get(licenseService);
+            List<?> conflicts_list = (List<?>) conflicts_field.get(licenseService);
 
             assertEquals(List.of(conflict_1, conflict_2), conflicts_list);
         }
