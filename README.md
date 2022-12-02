@@ -1,4 +1,5 @@
 
+
 ![License Pre-Validation Service (LPVS)](lpvslogo.png)
 [![Build](https://github.com/samsung/lpvs/workflows/Build/badge.svg)](https://github.com/samsung/lpvs/actions?query=workflow%3ABuild)
 [![Language grade: Java](https://img.shields.io/lgtm/grade/java/g/Samsung/LPVS.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/Samsung/LPVS/context:java)
