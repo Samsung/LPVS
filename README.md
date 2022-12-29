@@ -1,9 +1,7 @@
 
 ![License Pre-Validation Service (LPVS)](lpvslogo.png)
 [![Build](https://github.com/samsung/lpvs/workflows/Build/badge.svg)](https://github.com/samsung/lpvs/actions?query=workflow%3ABuild)
-[![Language grade: Java](https://img.shields.io/lgtm/grade/java/g/Samsung/LPVS.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/Samsung/LPVS/context:java)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7127523.svg)](https://doi.org/10.5281/zenodo.7127523)
-[![Total alerts](https://img.shields.io/lgtm/alerts/g/Samsung/LPVS.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/Samsung/LPVS/alerts/)
 [![CodeQL Analysis](https://github.com/Samsung/LPVS/workflows/CodeQL%20Analysis/badge.svg)](https://github.com/Samsung/LPVS/actions?query=workflow%3A%22CodeQL+Analysis%22)
 [![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/6309/badge)](https://bestpractices.coreinfrastructure.org/projects/6309)
 [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/Samsung/LPVS/badge)](https://api.securityscorecards.dev/projects/github.com/Samsung/LPVS)
