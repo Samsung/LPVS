@@ -7,32 +7,39 @@
 
 package com.lpvs.entity;
 
-import java.util.List;
+import javax.persistence.*;
+import java.util.Objects;
 
+@Entity
+@Table(name = "licenses", schema = "lpvs", indexes = {@Index(name = "spdx_id", columnList = "license_spdx", unique = true)})
 public class LPVSLicense {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long licenseId;
 
+    @Column(name = "license_name", nullable = false)
     private String licenseName;
 
+    @Column(name = "license_spdx", nullable = false)
     private String spdxId;
 
+    @Column(name = "license_usage")
     private String access;
 
+    @Transient
     private String checklistUrl;
-
-    private List<String> incompatibleWith;
 
     public LPVSLicense() {
     }
 
-    public LPVSLicense(Long licenseId, String licenseName, String spdxId, String access, String checklistUrl, List<String> incompatibleWith) {
+    public LPVSLicense(Long licenseId, String licenseName, String spdxId, String access, String checklistUrl) {
         this.licenseId = licenseId;
         this.licenseName = licenseName;
         this.spdxId = spdxId;
         this.access = access;
         this.checklistUrl = checklistUrl;
-        this.incompatibleWith = incompatibleWith;
     }
 
     public Long getLicenseId() {
@@ -67,28 +74,12 @@ public class LPVSLicense {
         this.access = access;
     }
 
-    public String getChecklist_url() {
-        return checklistUrl;
-    }
-
-    public void setChecklist_url(String checklist_url) {
-        this.checklistUrl = checklist_url;
-    }
-
     public String getChecklistUrl() {
         return checklistUrl;
     }
 
     public void setChecklistUrl(String checklistUrl) {
         this.checklistUrl = checklistUrl;
-    }
-
-    public List<String> getIncompatibleWith() {
-        return incompatibleWith;
-    }
-
-    public void setIncompatibleWith(List<String> incompatibleWith) {
-        this.incompatibleWith = incompatibleWith;
     }
 
 }

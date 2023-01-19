@@ -91,9 +91,9 @@ public class LPVSFile {
     public String convertLicensesToString() {
         String licenseNames = "";
         for (LPVSLicense license : this.licenses) {
-            licenseNames += (license.getChecklist_url() != null ? "<a target=\"_blank\" href=\"" + license.getChecklist_url() + "\">" : "") +
+            licenseNames += (license.getChecklistUrl() != null ? "<a target=\"_blank\" href=\"" + license.getChecklistUrl() + "\">" : "") +
                     license.getSpdxId() +
-                    (license.getChecklist_url() != null ? "</a>" : "") +
+                    (license.getChecklistUrl() != null ? "</a>" : "") +
                     " (" + license.getAccess().toLowerCase() + "), ";
         }
         if (licenseNames.endsWith(", ")) licenseNames = licenseNames.substring(0, licenseNames.length() - 2);

@@ -84,14 +84,12 @@ public class LPVSFileTest {
         final String baseSpdxId = "spdxId";
         final String baseAccess = "access";
         final String baseChecklistUrl = "checklistUrl";
-        List<String> baseIncompatibleWith = Arrays.asList("incompatibleWith1", "incompatibleWith2", "incompatibleWith3");
 
         LPVSLicense lpvsLicense = new LPVSLicense(baseLicenseId,
                 baseLicenseName,
                 baseSpdxId,
                 baseAccess,
-                baseChecklistUrl,
-                baseIncompatibleWith);
+                baseChecklistUrl);
 
         Set<LPVSLicense> licenses = new HashSet<>(Arrays.asList(lpvsLicense));
         lpvsFile.setLicenses(licenses);
@@ -111,15 +109,13 @@ public class LPVSFileTest {
                 baseLicenseName,
                 baseSpdxId,
                 baseAccess,
-                null,
-                baseIncompatibleWith);
+                null);
 
         LPVSLicense lpvsLicense2 = new LPVSLicense(baseLicenseId,
                 baseLicenseName,
                 baseSpdxId,
                 baseAccess,
-                null,
-                baseIncompatibleWith);
+                null);
 
         Set<LPVSLicense> licenses = new HashSet<>(Arrays.asList(lpvsLicense1, lpvsLicense2));
         lpvsFile.setLicenses(licenses);
@@ -139,15 +135,13 @@ public class LPVSFileTest {
                 baseLicenseName,
                 baseSpdxId,
                 baseAccess,
-                baseChecklistUrl,
-                baseIncompatibleWith);
+                baseChecklistUrl);
 
         LPVSLicense lpvsLicense2 = new LPVSLicense(baseLicenseId,
                 baseLicenseName,
                 baseSpdxId,
                 baseAccess,
-                baseChecklistUrl, /*null,*/
-                baseIncompatibleWith);
+                baseChecklistUrl);
 
         Set<LPVSLicense> licenses = new HashSet<>(Arrays.asList(lpvsLicense1, lpvsLicense2));
         lpvsFile.setLicenses(licenses);

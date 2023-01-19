@@ -123,10 +123,10 @@ public class ScanossDetectService {
                         // Check detected licenses
                         LPVSLicense lic = licenseService.findLicenseBySPDX(license.name);
                         if (lic != null) {
-                            lic.setChecklist_url(license.checklist_url);
+                            lic.setChecklistUrl(license.checklist_url);
                             licenses.add(lic);
                         } else {
-                            licenses.add(new LPVSLicense(0L, license.name, license.name, "UNREVIEWED", license.checklist_url, new ArrayList<>()));
+                            licenses.add(new LPVSLicense(0L, license.name, license.name, "UNREVIEWED", license.checklist_url));
                         }
 
                         // Check for the license conflicts if the property "license_conflict=scanner"

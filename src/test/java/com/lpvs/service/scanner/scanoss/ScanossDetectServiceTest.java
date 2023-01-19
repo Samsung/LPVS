@@ -63,9 +63,6 @@ public class ScanossDetectServiceTest {
             setLicenseName("MIT");
             setLicenseId(1L);
             setSpdxId("MIT");
-            setIncompatibleWith(new ArrayList<String>(){{
-                add("LGPL-2.1-or-later");
-            }});
         }});
         Assertions.assertNotNull(scanossDetectService.checkLicenses(webhookConfig));
     }

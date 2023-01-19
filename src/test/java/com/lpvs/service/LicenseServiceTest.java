@@ -36,7 +36,7 @@ public class LicenseServiceTest {
         webhookConfig.setPullRequestAPIUrl("http://url.com");
         LPVSFile file = new LPVSFile();
         LPVSLicense license = new LPVSLicense(){{
-            setChecklist_url("");
+            setChecklistUrl("");
             setAccess("unrviewed");
             setSpdxId("LPGL-2.1-or-later");
         }};
@@ -50,7 +50,7 @@ public class LicenseServiceTest {
 
         LPVSFile file1 = new LPVSFile();
         LPVSLicense license1 = new LPVSLicense(){{
-            setChecklist_url("");
+            setChecklistUrl("");
             setAccess("unrviewed");
             setSpdxId("Apache-2.0");
         }};
@@ -64,7 +64,7 @@ public class LicenseServiceTest {
 
         LPVSFile file2 = new LPVSFile();
         LPVSLicense license2 = new LPVSLicense(){{
-            setChecklist_url("");
+            setChecklistUrl("");
             setAccess("unrviewed");
             setSpdxId("MIT");
         }};
@@ -81,7 +81,7 @@ public class LicenseServiceTest {
             add(file1);
             add(file2);
         }};
-        LicenseService licenseService = new LicenseService("", "");
+        LicenseService licenseService = new LicenseService("");
         ReflectionTestUtils.setField(licenseService, "licenseConflicts",
                 new ArrayList<LicenseService.Conflict<String, String>>()
                 {{ add(new LicenseService.Conflict<>("", "")); }});
@@ -104,10 +104,10 @@ public class LicenseServiceTest {
 
         @BeforeEach
         void setUp() throws NoSuchFieldException, IllegalAccessException {
-            licenseService = new LicenseService(null, null);
+            licenseService = new LicenseService(null);
 
-            lpvs_license_1 = new LPVSLicense(1L, license_name_1, spdx_id_1, null, null, null);
-            lpvs_license_2 = new LPVSLicense(2L, license_name_2, spdx_id_2, null, null, null);
+            lpvs_license_1 = new LPVSLicense(1L, license_name_1, spdx_id_1, null, null);
+            lpvs_license_2 = new LPVSLicense(2L, license_name_2, spdx_id_2, null, null);
 
             Field conflicts_field = licenseService.getClass().getDeclaredField("licenses");
             conflicts_field.setAccessible(true);
@@ -134,7 +134,7 @@ public class LicenseServiceTest {
 
         @BeforeEach
         void setUp() throws NoSuchFieldException, IllegalAccessException {
-            licenseService = new LicenseService(null, null);
+            licenseService = new LicenseService(null);
             Field conflicts_field = licenseService.getClass().getDeclaredField("licenseConflicts");
             conflicts_field.setAccessible(true);
             conflicts_field.set(licenseService, new ArrayList<>());
@@ -171,11 +171,11 @@ public class LicenseServiceTest {
 
         @BeforeEach
         void setUp() throws NoSuchFieldException, IllegalAccessException {
-            licenseService = new LicenseService(null, null);
+            licenseService = new LicenseService(null);
 
-            lpvs_license_1 = new LPVSLicense(1L, null, spdx_id_1, null, null, null);
-            lpvs_license_2 = new LPVSLicense(1L, null, spdx_id_2, null, null, null);
-            lpvs_license_3 = new LPVSLicense(1L, null, spdx_id_3, null, null, null);
+            lpvs_license_1 = new LPVSLicense(1L, null, spdx_id_1, null, null);
+            lpvs_license_2 = new LPVSLicense(1L, null, spdx_id_2, null, null);
+            lpvs_license_3 = new LPVSLicense(1L, null, spdx_id_3, null, null);
 
             Field conflicts_field = licenseService.getClass().getDeclaredField("licenses");
             conflicts_field.setAccessible(true);
@@ -210,15 +210,15 @@ public class LicenseServiceTest {
 
         @BeforeEach
         void setUp() throws NoSuchFieldException, IllegalAccessException {
-            licenseService = new LicenseService(null, null);
+            licenseService = new LicenseService(null);
             Field conflicts_field = licenseService.getClass().getDeclaredField("licenseConflicts");
             conflicts_field.setAccessible(true);
             conflicts_field.set(licenseService, List.of(conflict_1));
 
-            lpvs_license_1 = new LPVSLicense(1L, null, spdx_id_1, null, null, null);
+            lpvs_license_1 = new LPVSLicense(1L, null, spdx_id_1, null, null);
             lpvs_file_1 = new LPVSFile(1L, null, null, null, null, Set.of(lpvs_license_1), null);
 
-            lpvs_license_2 = new LPVSLicense(2L, null, spdx_id_2, null, null, null);
+            lpvs_license_2 = new LPVSLicense(2L, null, spdx_id_2, null, null);
             lpvs_file_2 = new LPVSFile(2L, null, null, null, null, Set.of(lpvs_license_2), null);
 
             webhookConfig = new WebhookConfig();
@@ -247,7 +247,7 @@ public class LicenseServiceTest {
         if (scanResults.isEmpty()) {
             System.out.println("is empty");
         }
-        LicenseService mockLicenseService = new LicenseService(null, null);
+        LicenseService mockLicenseService = new LicenseService(null);
         WebhookConfig webhookConfig = new WebhookConfig(); // licenseConflicts = new ArrayList<>();
         assertEquals(null, mockLicenseService.findConflicts(webhookConfig, scanResults));
 

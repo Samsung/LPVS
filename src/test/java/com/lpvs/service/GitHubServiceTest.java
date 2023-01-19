@@ -1423,7 +1423,7 @@ public class GitHubServiceTest {
                 LOG.error("mocked_repo.getPullRequests error " + e);
             }
 
-            lpvs_license_1 = new LPVSLicense(1L, license_name_1, spdx_id_1, access_1, checklist_url_1, List.of());
+            lpvs_license_1 = new LPVSLicense(1L, license_name_1, spdx_id_1, access_1, checklist_url_1);
             lpvs_file_1 = new LPVSFile(1L, file_url_1, file_path_1, snippet_match_1, matched_lines_1, Set.of(lpvs_license_1), component_1);
             conflict_1 = new LicenseService.Conflict<>(conflict_1_l1, conflict_1_l2);
         }
@@ -1546,7 +1546,7 @@ public class GitHubServiceTest {
                 LOG.error("mocked_repo.getPullRequests error " + e);
             }
 
-            lpvs_license_1 = new LPVSLicense(1L, license_name_1, spdx_id_1, access_1, checklist_url_1, List.of());
+            lpvs_license_1 = new LPVSLicense(1L, license_name_1, spdx_id_1, access_1, checklist_url_1);
             lpvs_file_1 = new LPVSFile(1L, file_url_1, file_path_1, snippet_match_1, matched_lines_1, Set.of(lpvs_license_1), component_1);
         }
 
@@ -2018,7 +2018,7 @@ public class GitHubServiceTest {
                     .thenReturn(repository);
             LPVSFile file = new LPVSFile();
             LPVSLicense license = new LPVSLicense(){{
-                setChecklist_url("");
+                setChecklistUrl("");
                 setAccess("unrviewed");
             }};
             file.setLicenses(new HashSet<LPVSLicense>(){{

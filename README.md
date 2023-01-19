@@ -47,8 +47,8 @@ LPVS will start scanning automatically, then provide comments about the licenses
 
 1. Install SCANOSS Python package by following the [guideline](https://github.com/scanoss/scanoss.py#installation).
 
-2. Fill in `licenses.json` file with the information about permitted, restricted, and prohibited licenses (mandatory) as well as their compatibility specifics (optional). 
-A template of the `licenses.json` file can be found in the repository at `src/main/resources/licenses.json`.
+2. Create necessary MySQL database and user and fill in `licenses` and `license_conflicts` tables with the information about permitted, restricted, and prohibited licenses (mandatory) as well as their compatibility specifics (optional). 
+An example database dump file can be found in the repository at `src/main/resources/database_dump.sql`.
 
 3. Fill in the lines of the `src/main/resources/application.properties` file:
     ```text
@@ -61,20 +61,21 @@ A template of the `licenses.json` file can be found in the repository at `src/ma
    # Used license scanner: scanoss (at the moment, only this scanner is supported)
     scanner=scanoss
 
-   # Path to the 'licenses.json' file which contains information about permitted,
-   # restricted and prohibited licenses. This file should be filled according to
-   # the template which could be found at 'src/main/resources/licenses.json'
-    license_filepath=
-
    # Used license conflicts source:
-   # > option "json": take conflicts from 'licenses.json' (should be filled manually
-   # according to the template at 'src/main/resources/licenses.json')
+   # > option "db": take conflicts from MySQL database - 'license_conflicts' table (should be filled manually
+   # according to the example at 'src/main/resources/database_dump.sql')
    # > option "scanner": take conflicts from the scanner response
-    license_conflict=json
+    license_conflict=db
+
+   # DB configuration (URL, username and password) - example
+   ...
+   spring.datasource.url=jdbc:mysql://localhost:3306/lpvs?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+   spring.datasource.username=
+   spring.datasource.password=
     ```
 
    Alternatively, you can supply all the necessary values associated with GitHub and license using these env variables:
-   `LPVS_GITHUB_LOGIN`, `LPVS_GITHUB_TOKEN`, `LPVS_GITHUB_API_URL`, `LPVS_GITHUB_SECRET`, `LPVS_LICENSE_FILEPATH` and `LPVS_LICENSE_CONFLICT`.
+   `LPVS_GITHUB_LOGIN`, `LPVS_GITHUB_TOKEN`, `LPVS_GITHUB_API_URL`, `LPVS_GITHUB_SECRET` and `LPVS_LICENSE_CONFLICT`.
 
 4. Build LPVS application with Maven, then run it:
     ```bash

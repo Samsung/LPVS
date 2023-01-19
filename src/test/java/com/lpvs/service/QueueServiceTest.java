@@ -135,8 +135,7 @@ public class QueueServiceTest {
     static final String spdxIdTest = "test_spdx_id";
     static final String accessTest = "test_access";
     static final String checklistUrlTest = "test_checklist_url";
-    static final List<String> incompatibleWithTest = Arrays.asList("test_incompatible1", "test_incompatible2", "test_incompatible3");
-    static final LPVSLicense lpvsLicenseTest = new LPVSLicense(42L, licenseNameTest, spdxIdTest, accessTest, checklistUrlTest, incompatibleWithTest);
+    static final LPVSLicense lpvsLicenseTest = new LPVSLicense(42L, licenseNameTest, spdxIdTest, accessTest, checklistUrlTest);
 
     // LPVSFile-1
     static final Long id_1 = 1L;
