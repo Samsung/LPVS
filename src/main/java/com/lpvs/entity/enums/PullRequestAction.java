@@ -7,9 +7,6 @@
 
 package com.lpvs.entity.enums;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 public enum PullRequestAction {
     OPEN("opened"),
     REOPEN("reopened"),

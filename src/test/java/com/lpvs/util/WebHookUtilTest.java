@@ -48,16 +48,11 @@ public class WebHookUtilTest {
 
             expected = new WebhookConfig();
             expected.setAction(PullRequestAction.OPEN);
-            expected.setRepositoryName("LPVS");
-            expected.setRepositoryOrganization("Samsung");
             expected.setPullRequestUrl("https://github.com/Samsung/LPVS/pull/18");
             expected.setPullRequestFilesUrl("https://github.com/o-kopysov/LPVS/tree/utests");  // fork == True
             expected.setPullRequestAPIUrl("https://api.github.com/repos/Samsung/LPVS/pulls/18");
-            expected.setRepositoryUrl("https://github.com/Samsung/LPVS");
             expected.setUserId("bot");
-            expected.setPullRequestId(18L);
             expected.setHeadCommitSHA("edde69ecb8e8a88dde09fa9789e2c9cab7cf7cf9");
-            expected.setPullRequestBranch("o-kopysov:utests");
             expected.setAttempts(0);
         }
 
@@ -100,16 +95,11 @@ public class WebHookUtilTest {
 
             expected = new WebhookConfig();
             expected.setAction(PullRequestAction.OPEN);
-            expected.setRepositoryName("LPVS");
-            expected.setRepositoryOrganization("Samsung");
             expected.setPullRequestUrl("https://github.com/Samsung/LPVS/pull/18");
             expected.setPullRequestFilesUrl("https://github.com/Samsung/LPVS/pull/18");  // fork == False
             expected.setPullRequestAPIUrl("https://api.github.com/repos/Samsung/LPVS/pulls/18");
-            expected.setRepositoryUrl("https://github.com/Samsung/LPVS");
             expected.setUserId("bot");
-            expected.setPullRequestId(18L);
             expected.setHeadCommitSHA("edde69ecb8e8a88dde09fa9789e2c9cab7cf7cf9");
-            expected.setPullRequestBranch("o-kopysov:utests");
             expected.setAttempts(0);
         }
 

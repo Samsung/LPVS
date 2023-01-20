@@ -24,11 +24,6 @@ public class WebhookUtil {
 
         JsonObject json = gson.fromJson(payload, JsonObject.class);
         webhookConfig.setAction(PullRequestAction.convertFrom(json.get("action").getAsString()));
-        webhookConfig.setRepositoryName(json.getAsJsonObject("repository")
-                                            .get("name").getAsString());
-        webhookConfig.setRepositoryOrganization(json.getAsJsonObject("repository")
-                                                    .get("full_name").getAsString()
-                                                    .split("/")[0]);
         String url = json.getAsJsonObject("pull_request").get("html_url").getAsString();
         webhookConfig.setPullRequestUrl(url);
         if (json.getAsJsonObject("pull_request").getAsJsonObject("head").getAsJsonObject("repo").get("fork").getAsBoolean()) {
@@ -37,17 +32,11 @@ public class WebhookUtil {
             webhookConfig.setPullRequestFilesUrl(webhookConfig.getPullRequestUrl());
         }
         webhookConfig.setPullRequestAPIUrl(json.getAsJsonObject("pull_request").get("url").getAsString());
-        webhookConfig.setRepositoryUrl(json.getAsJsonObject("repository").get("html_url").getAsString());
         webhookConfig.setUserId("bot");
-        webhookConfig.setPullRequestId(Long.parseLong(url.split("/")[url.split("/").length -1]));
         webhookConfig.setHeadCommitSHA(json.getAsJsonObject("pull_request")
                                             .getAsJsonObject("head")
                                             .get("sha").getAsString());
-        webhookConfig.setPullRequestBranch(json.getAsJsonObject("pull_request")
-                .getAsJsonObject("head")
-                .get("ref").getAsString());
         webhookConfig.setAttempts(0);
-
         return webhookConfig;
     }
 

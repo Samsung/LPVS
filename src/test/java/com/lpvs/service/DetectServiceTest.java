@@ -60,7 +60,7 @@ public class DetectServiceTest {
             detectService = new DetectService("scanoss", scanoss_mock);
 
             webhookConfig = new WebhookConfig();
-            webhookConfig.setRepositoryId(1L);
+            webhookConfig.setId(1L);
 
             lpvs_file_1 = new LPVSFile(1L, null, null, null, null, null, null);
             lpvs_file_2 = new LPVSFile(2L, null, null, null, null, null, null);
@@ -103,7 +103,7 @@ public class DetectServiceTest {
             detectService = new DetectService("scanoss", scanoss_mock);
 
             webhookConfig = new WebhookConfig();
-            webhookConfig.setRepositoryId(1L);
+            webhookConfig.setId(1L);
 
             try {
                 doThrow(new Exception(exc_msg))

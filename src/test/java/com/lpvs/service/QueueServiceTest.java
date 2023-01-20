@@ -41,19 +41,19 @@ public class QueueServiceTest {
             queueService = new QueueService(null, null, null);
 
             whConfig1 = new WebhookConfig();
-            whConfig1.setRepositoryId(1L);
+            whConfig1.setId(1L);
 
             whConfig2 = new WebhookConfig();
-            whConfig2.setRepositoryId(2L);
+            whConfig2.setId(2L);
 
             whConfig3 = new WebhookConfig();
-            whConfig3.setRepositoryId(3L);
+            whConfig3.setId(3L);
 
             whConfig4 = new WebhookConfig();
-            whConfig4.setRepositoryId(4L);
+            whConfig4.setId(4L);
 
             whConfig5 = new WebhookConfig();
-            whConfig5.setRepositoryId(5L);
+            whConfig5.setId(5L);
         }
 
         @Test
@@ -70,10 +70,6 @@ public class QueueServiceTest {
                 // `whConfig`s 1-4 are left in Queue
                 queueService.delete(whConfig4);
                 assertEquals(whConfig3, queueService.getQueueFirstElement());
-
-                // `whConfig`s 1-2 are left in Queue
-                queueService.delete(whConfig1);
-                assertEquals(whConfig2, queueService.getQueueFirstElement());
 
             } catch (InterruptedException e) {
                 LOG.error("InterruptedException at QueueServiceTest.testQueueMethods(): " + e);

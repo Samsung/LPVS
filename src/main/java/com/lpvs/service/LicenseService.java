@@ -7,8 +7,6 @@
 
 package com.lpvs.service;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.lpvs.entity.LPVSFile;
 import com.lpvs.entity.LPVSLicense;
 import com.lpvs.entity.LPVSLicenseConflict;
@@ -23,9 +21,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
-import java.io.Reader;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.*;
 
 @Service

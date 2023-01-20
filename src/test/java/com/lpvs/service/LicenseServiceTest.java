@@ -30,8 +30,7 @@ public class LicenseServiceTest {
     @Test
     public void testFindConflicts() {
         WebhookConfig webhookConfig = new WebhookConfig();
-        webhookConfig.setRepositoryName("LPVS");
-        webhookConfig.setRepositoryOrganization("Samsung");
+        webhookConfig.setPullRequestUrl("http://github.com/Samsung/LPVS/pull/1");
         webhookConfig.setRepositoryLicense("Apache-2.0");
         webhookConfig.setPullRequestAPIUrl("http://url.com");
         LPVSFile file = new LPVSFile();

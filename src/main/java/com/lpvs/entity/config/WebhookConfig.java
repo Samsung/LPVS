@@ -9,50 +9,73 @@ package com.lpvs.entity.config;
 
 import com.lpvs.entity.enums.PullRequestAction;
 
+import javax.persistence.*;
 import java.util.Date;
 import java.util.Objects;
 
+@Entity
+@Table(name = "queue", schema = "lpvs")
 public class WebhookConfig {
-    Long webhookId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long id;
+
+    @Column(name = "action")
     PullRequestAction action;
-    Long repositoryId;
-    String repositoryName;
-    String repositoryOrganization;
-    String repositoryUrl;
-    String repositoryLicense;
-    String headCommitSHA;
-    String pullRequestUrl;
-    String pullRequestFilesUrl;
-    String pullRequestAPIUrl;
-    Long pullRequestId;
-    String pullRequestName;
-    String userId;
-    String hubLink;
-    String branch;
-    String pullRequestBranch;
+
+    @Column(name = "attempts")
     int attempts;
+
+    @Column(name = "scan_date")
     Date date;
+
+    @Column(name = "user")
+    String userId;
+
+    @Column(name = "review_system_type")
     String reviewSystemType;
-    String reviewSystemName;
-    String statusCallbackUrl;
 
-    public WebhookConfig() {
+    @Column(name = "pull_request_url", columnDefinition = "LONGTEXT")
+    String pullRequestUrl;
+
+    @Column(name = "pull_request_files_url", columnDefinition = "LONGTEXT")
+    String pullRequestFilesUrl;
+
+    @Column(name = "pull_request_api_url", columnDefinition = "LONGTEXT")
+    String pullRequestAPIUrl;
+
+    @Column(name = "commit_sha", columnDefinition = "LONGTEXT")
+    String headCommitSHA;
+
+    @Transient
+    String repositoryLicense;
+
+    public WebhookConfig() { }
+
+    public Long getId() { return id; }
+
+    public void setId(Long id) { this.id = id; }
+
+    public PullRequestAction getAction() {
+        return action;
     }
 
-    public Long getWebhookId() {
-        return webhookId;
+    public void setAction(PullRequestAction action) {
+        this.action = action;
     }
 
-    public void setWebhookId(Long webhookId) {
-        this.webhookId = webhookId;
+    public int getAttempts() { return attempts; }
+
+    public void setAttempts(int attempts) {
+        this.attempts = attempts;
     }
 
-    public Long getRepositoryId() {
-        return repositoryId;
+    public Date getDate() {
+        return date;
     }
 
-    public void setRepositoryId(Long repositoryId) {
-        this.repositoryId = repositoryId;
+    public void setDate(Date date) {
+        this.date = date;
     }
 
     public String getUserId() {
@@ -63,80 +86,12 @@ public class WebhookConfig {
         this.userId = userId;
     }
 
-    public Long getPullRequestId() {
-        return pullRequestId;
+    public String getReviewSystemType() {
+        return reviewSystemType;
     }
 
-    public void setPullRequestId(Long pullRequestId) {
-        this.pullRequestId = pullRequestId;
-    }
-
-    public String getPullRequestName() {
-        return pullRequestName;
-    }
-
-    public void setPullRequestName(String pullRequestName) {
-        this.pullRequestName = pullRequestName;
-    }
-
-    public String getBranch() {
-        return branch;
-    }
-
-    public void setBranch(String branch) {
-        this.branch = branch;
-    }
-
-    public String getRepositoryLicense() {
-        return repositoryLicense;
-    }
-
-    public void setRepositoryLicense(String repositoryLicense) {
-        this.repositoryLicense = repositoryLicense;
-    }
-
-    public String getHubLink() {
-        return hubLink;
-    }
-
-    public void setHubLink(String hubLink) {
-        this.hubLink = hubLink;
-    }
-
-    public String getRepositoryOrganization() {
-        return repositoryOrganization;
-    }
-
-    public void setRepositoryOrganization(String repositoryOrganization) {
-        this.repositoryOrganization = repositoryOrganization;
-    }
-
-    public String getRepositoryUrl() {
-        return repositoryUrl;
-    }
-
-    public void setRepositoryUrl(String repositoryUrl) {
-        this.repositoryUrl = repositoryUrl;
-    }
-
-    public String getHeadCommitSHA() { return headCommitSHA; }
-
-    public void setHeadCommitSHA(String headCommitSHA) { this.headCommitSHA = headCommitSHA; }
-
-    public PullRequestAction getAction() {
-        return action;
-    }
-
-    public void setAction(PullRequestAction action) {
-        this.action = action;
-    }
-
-    public String getRepositoryName() {
-        return repositoryName;
-    }
-
-    public void setRepositoryName(String repositoryName) {
-        this.repositoryName = repositoryName;
+    public void setReviewSystemType(String reviewSystemType) {
+        this.reviewSystemType = reviewSystemType;
     }
 
     public String getPullRequestUrl() {
@@ -155,67 +110,21 @@ public class WebhookConfig {
         this.pullRequestFilesUrl = pullRequestFilesUrl;
     }
 
-    public String getPullRequestAPIUrl() {
-        return pullRequestAPIUrl;
-    }
+    public String getPullRequestAPIUrl() { return pullRequestAPIUrl; }
 
-    public void setPullRequestAPIUrl(String pullRequestAPIUrl) {
-        this.pullRequestAPIUrl = pullRequestAPIUrl;
-    }
+    public void setPullRequestAPIUrl(String pullRequestAPIUrl) { this.pullRequestAPIUrl = pullRequestAPIUrl; }
 
-    public int getAttempts() {
-        return attempts;
-    }
+    public String getHeadCommitSHA() { return headCommitSHA; }
 
-    public void setAttempts(int attempts) {
-        this.attempts = attempts;
-    }
+    public void setHeadCommitSHA(String headCommitSHA) { this.headCommitSHA = headCommitSHA; }
 
-    public String getPullRequestBranch() {
-        return pullRequestBranch;
-    }
+    public String getRepositoryLicense() { return repositoryLicense; }
 
-    public void setPullRequestBranch(String pullRequestBranch) {
-        this.pullRequestBranch = pullRequestBranch;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public String getReviewSystemType() {
-        return reviewSystemType;
-    }
-
-    public void setReviewSystemType(String reviewSystemType) {
-        this.reviewSystemType = reviewSystemType;
-    }
-
-    public String getReviewSystemName() {
-        return reviewSystemName;
-    }
-
-    public void setReviewSystemName(String reviewSystemName) {
-        this.reviewSystemName = reviewSystemName;
-    }
-
-    public String getStatusCallbackUrl() {
-        return statusCallbackUrl;
-    }
-
-    public void setStatusCallbackUrl(String statusCallbackUrl) {
-        this.statusCallbackUrl = statusCallbackUrl;
-    }
+    public void setRepositoryLicense(String repositoryLicense) { this.repositoryLicense = repositoryLicense; }
 
     @Override
     public String toString(){
-        return "WebhookConfig [action = " + getAction() + "; organization name = " + getRepositoryOrganization() +
-                "; repository name = " + getRepositoryName() + "; PR URL = " + getPullRequestUrl() +
-                "; commit = " + getHeadCommitSHA() + "]";
+        return "WebhookConfig [action = " + getAction() + "; pull request = " + getPullRequestUrl() + "; commit SHA = " + getHeadCommitSHA() + "]";
     }
 
     @Override
@@ -225,29 +134,13 @@ public class WebhookConfig {
         WebhookConfig that = (WebhookConfig) o;
         return attempts == that.attempts &&
                 action == that.action &&
-                Objects.equals(repositoryId, that.repositoryId) &&
-                Objects.equals(repositoryName, that.repositoryName) &&
-                Objects.equals(repositoryOrganization, that.repositoryOrganization) &&
-                Objects.equals(repositoryUrl, that.repositoryUrl) &&
-                Objects.equals(repositoryLicense, that.repositoryLicense) &&
-                Objects.equals(headCommitSHA, that.headCommitSHA) &&
-                Objects.equals(pullRequestUrl, that.pullRequestUrl) &&
-                Objects.equals(pullRequestFilesUrl, that.pullRequestFilesUrl) &&
-                Objects.equals(pullRequestAPIUrl, that.pullRequestAPIUrl) &&
-                Objects.equals(pullRequestId, that.pullRequestId) &&
-                Objects.equals(pullRequestName, that.pullRequestName) &&
                 Objects.equals(userId, that.userId) &&
-                Objects.equals(hubLink, that.hubLink) &&
-                Objects.equals(branch, that.branch) &&
-                Objects.equals(pullRequestBranch, that.pullRequestBranch) &&
-                Objects.equals(date, that.date) &&
-                Objects.equals(reviewSystemType, that.reviewSystemType) &&
-                Objects.equals(reviewSystemName, that.reviewSystemName) &&
-                Objects.equals(statusCallbackUrl, that.statusCallbackUrl);
+                pullRequestUrl.equals(that.pullRequestUrl) &&
+                Objects.equals(headCommitSHA, that.headCommitSHA);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(action, repositoryId, repositoryName, repositoryOrganization, repositoryUrl, repositoryLicense, headCommitSHA, pullRequestUrl, pullRequestFilesUrl, pullRequestAPIUrl, pullRequestId, pullRequestName, userId, hubLink, branch, pullRequestBranch, attempts, date, reviewSystemType, reviewSystemName, statusCallbackUrl);
+        return Objects.hash(action, attempts, userId, pullRequestUrl, headCommitSHA);
     }
 }

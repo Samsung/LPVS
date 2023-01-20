@@ -29,6 +29,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -77,25 +78,24 @@ public class GitHubService {
 
     public String getPullRequestFiles (WebhookConfig webhookConfig) {
         if (webhookConfig.getAction().equals(PullRequestAction.RESCAN)) {
-            webhookConfig.setPullRequestAPIUrl(GITHUB_API_URL + "/repos/" + webhookConfig.getRepositoryOrganization() + "/" +
-                    webhookConfig.getRepositoryName() + "/pulls/" + webhookConfig.getPullRequestId());
+            webhookConfig.setPullRequestAPIUrl(GITHUB_API_URL + "/repos/" + getRepositoryOrganization(webhookConfig) + "/" +
+                    getRepositoryName(webhookConfig) + "/pulls/" + getPullRequestId(webhookConfig));
         }
         try {
             if (GITHUB_AUTH_TOKEN.isEmpty()) setGithubTokenFromEnv();
             if (GITHUB_API_URL.isEmpty()) gitHub = GitHub.connect(GITHUB_LOGIN, GITHUB_AUTH_TOKEN);
             else gitHub = GitHub.connectToEnterpriseWithOAuth(GITHUB_API_URL, GITHUB_LOGIN, GITHUB_AUTH_TOKEN);
-            GHRepository repository = gitHub.getRepository(webhookConfig.getRepositoryOrganization()+"/"
-                                                                            +webhookConfig.getRepositoryName());
+            GHRepository repository = gitHub.getRepository(getRepositoryOrganization(webhookConfig)+"/"
+                                                                            + getRepositoryName(webhookConfig));
             GHPullRequest pullRequest = getPullRequest(webhookConfig, repository);
             if (pullRequest == null){
-                LOG.error("Can't find pull request " + webhookConfig.getPullRequestAPIUrl());
+                LOG.error("Can't find pull request " + webhookConfig.getPullRequestUrl());
                 return null;
             }
-            webhookConfig.setPullRequestName(pullRequest.getTitle());
             if (webhookConfig.getAction().equals(PullRequestAction.RESCAN)) {
                 webhookConfig.setHeadCommitSHA(pullRequest.getHead().getSha());
             }
-            return FileUtil.saveFiles(pullRequest.listFiles(),webhookConfig.getRepositoryOrganization()+"/"+webhookConfig.getRepositoryName(),
+            return FileUtil.saveFiles(pullRequest.listFiles(),getRepositoryOrganization(webhookConfig)+"/"+getRepositoryName(webhookConfig),
                                         webhookConfig.getHeadCommitSHA(), pullRequest.getDeletions());
         } catch (IOException e){
             LOG.error("Can't authorize getPullRequestFiles() " + e);
@@ -107,7 +107,7 @@ public class GitHubService {
         try {
             List<GHPullRequest> pullRequests = repository.getPullRequests(GHIssueState.OPEN);
             for (GHPullRequest pullRequest : pullRequests) {
-                if (pullRequest.getUrl().toString().equals(webhookConfig.getPullRequestAPIUrl())){
+                if (pullRequest.getUrl().toString().equals(webhookConfig.getPullRequestUrl())){
                     return pullRequest;
                 }
             }
@@ -122,8 +122,8 @@ public class GitHubService {
             if (GITHUB_AUTH_TOKEN.isEmpty()) setGithubTokenFromEnv();
             if (GITHUB_API_URL.isEmpty()) gitHub = GitHub.connect(GITHUB_LOGIN, GITHUB_AUTH_TOKEN);
             else gitHub = GitHub.connectToEnterpriseWithOAuth(GITHUB_API_URL, GITHUB_LOGIN, GITHUB_AUTH_TOKEN);
-            GHRepository repository = gitHub.getRepository(webhookConfig.getRepositoryOrganization() + "/"
-                                                                                + webhookConfig.getRepositoryName());
+            GHRepository repository = gitHub.getRepository(getRepositoryOrganization(webhookConfig) + "/"
+                                                                                + getRepositoryName(webhookConfig));
             repository.createCommitStatus(webhookConfig.getHeadCommitSHA(), GHCommitState.PENDING, null,
                                             "Scanning opensource licenses", "[Open Source License Validation]");
         } catch (IOException e) {
@@ -136,8 +136,8 @@ public class GitHubService {
             if (GITHUB_AUTH_TOKEN.isEmpty()) setGithubTokenFromEnv();
             if (GITHUB_API_URL.isEmpty()) gitHub = GitHub.connect(GITHUB_LOGIN, GITHUB_AUTH_TOKEN);
             else gitHub = GitHub.connectToEnterpriseWithOAuth(GITHUB_API_URL, GITHUB_LOGIN, GITHUB_AUTH_TOKEN);
-            GHRepository repository = gitHub.getRepository(webhookConfig.getRepositoryOrganization() + "/"
-                    + webhookConfig.getRepositoryName());
+            GHRepository repository = gitHub.getRepository(getRepositoryOrganization(webhookConfig) + "/"
+                    + getRepositoryName(webhookConfig));
             repository.createCommitStatus(webhookConfig.getHeadCommitSHA(), GHCommitState.ERROR, null,
                     "Scanning process failed", "[Open Source License Validation]");
         } catch (IOException e) {
@@ -147,12 +147,12 @@ public class GitHubService {
 
     public void commentResults(WebhookConfig webhookConfig, List<LPVSFile> scanResults, List<LicenseService.Conflict<String, String>> conflicts) {
         try {
-            GHRepository repository = gitHub.getRepository(webhookConfig.getRepositoryOrganization() + "/"
-                    + webhookConfig.getRepositoryName());
+            GHRepository repository = gitHub.getRepository(getRepositoryOrganization(webhookConfig) + "/"
+                    + getRepositoryName(webhookConfig));
             GHPullRequest pullRequest = getPullRequest(webhookConfig, repository);
 
             if (pullRequest == null){
-                LOG.error("Can't find pull request " + webhookConfig.getPullRequestAPIUrl());
+                LOG.error("Can't find pull request " + webhookConfig.getPullRequestUrl());
                 return;
             }
             if (scanResults.isEmpty()) {
@@ -210,8 +210,8 @@ public class GitHubService {
 
     public String getRepositoryLicense(WebhookConfig webhookConfig) {
         try {
-            String repositoryName = webhookConfig.getRepositoryName();
-            String repositoryOrganization = webhookConfig.getRepositoryOrganization();
+            String repositoryName = getRepositoryName(webhookConfig);
+            String repositoryOrganization = getRepositoryOrganization(webhookConfig);
             if (GITHUB_AUTH_TOKEN.isEmpty()) setGithubTokenFromEnv();
             if (GITHUB_API_URL.isEmpty()) gitHub = GitHub.connect(GITHUB_LOGIN, GITHUB_AUTH_TOKEN);
             else gitHub = GitHub.connectToEnterpriseWithOAuth(GITHUB_API_URL, GITHUB_LOGIN, GITHUB_AUTH_TOKEN);
@@ -229,7 +229,7 @@ public class GitHubService {
     }
 
     public String getMatchedLinesAsLink(WebhookConfig webhookConfig, LPVSFile file) {
-        String prefix = webhookConfig.getRepositoryUrl() + "/blob/" + webhookConfig.getHeadCommitSHA() + "/" + file.getFilePath();
+        String prefix = getRepositoryUrl(webhookConfig) + "/blob/" + webhookConfig.getHeadCommitSHA() + "/" + file.getFilePath();
         String matchedLines = new String();
         if (file.getMatchedLines().equals("all")) {
             return "<a target=\"_blank\" href=\"" + prefix + "\">" + file.getMatchedLines() + "</a>";
@@ -245,6 +245,28 @@ public class GitHubService {
 
     public void setGithubTokenFromEnv() {
             if (System.getenv("LPVS_GITHUB_TOKEN") != null) GITHUB_AUTH_TOKEN = System.getenv("LPVS_GITHUB_TOKEN");
+    }
+
+    public String getRepositoryOrganization(WebhookConfig webhookConfig) {
+        List<String> url = Arrays.asList(webhookConfig.getPullRequestUrl().split("/"));
+        int index = url.indexOf("pull");
+        return url.get(index - 2);
+    }
+
+    public String getRepositoryName(WebhookConfig webhookConfig) {
+        List<String> url = Arrays.asList(webhookConfig.getPullRequestUrl().split("/"));
+        int index = url.indexOf("pull");
+        return url.get(index - 1);
+    }
+
+    public String getRepositoryUrl(WebhookConfig webhookConfig) {
+        int index = webhookConfig.getPullRequestUrl().indexOf("/pull");
+        return webhookConfig.getPullRequestUrl().substring(0, index);
+    }
+
+    public String getPullRequestId(WebhookConfig webhookConfig) {
+        List<String> url = Arrays.asList(webhookConfig.getPullRequestUrl().split("/"));
+        return url.get(url.size() - 1);
     }
 
 }

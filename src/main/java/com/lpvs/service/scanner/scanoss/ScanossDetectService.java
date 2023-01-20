@@ -46,7 +46,7 @@ public class ScanossDetectService {
                 "scanoss-py", "scan",
                 "-t",
                 "--no-wfp-output",
-                "-o", "RESULTS/" + webhookConfig.getRepositoryName() + "_" + webhookConfig.getHeadCommitSHA() + ".json",
+                "-o", "RESULTS/" + gitHubService.getRepositoryName(webhookConfig) + "_" + webhookConfig.getHeadCommitSHA() + ".json",
                 path
             );
             Process process = processBuilder.inheritIO().start();
@@ -78,7 +78,7 @@ public class ScanossDetectService {
         List<LPVSFile> detectedFiles = new ArrayList<>();
         try {
             Gson gson = new Gson();
-            Reader reader = Files.newBufferedReader(Paths.get("RESULTS/" + webhookConfig.getRepositoryName() + "_" + webhookConfig.getHeadCommitSHA() + ".json"));
+            Reader reader = Files.newBufferedReader(Paths.get("RESULTS/" + gitHubService.getRepositoryName(webhookConfig) + "_" + webhookConfig.getHeadCommitSHA() + ".json"));
             // convert JSON file to map
             Map<String, ArrayList<Object>> map = gson.fromJson(reader,
                     new TypeToken<Map<String, ArrayList<Object>>>() {}.getType());

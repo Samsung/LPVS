@@ -32,19 +32,15 @@ public class LPVSLicenseConflict {
 
     public LPVSLicenseConflict() { }
 
-    public LPVSLicense getRepositoryLicense() {
-        return repositoryLicense;
-    }
+    public Long getConflictId() { return conflictId; }
 
-    public void setRepositoryLicense(LPVSLicense repositoryLicense) {
-        this.repositoryLicense = repositoryLicense;
-    }
+    public void setConflictId(Long conflictId) { this.conflictId = conflictId; }
 
-    public LPVSLicense getConflictLicense() {
-        return conflictLicense;
-    }
+    public LPVSLicense getRepositoryLicense() { return repositoryLicense; }
 
-    public void setConflictLicense(LPVSLicense conflictLicense) {
-        this.conflictLicense = conflictLicense;
-    }
+    public void setRepositoryLicense(LPVSLicense repositoryLicense) { this.repositoryLicense = repositoryLicense; }
+
+    public LPVSLicense getConflictLicense() { return conflictLicense; }
+
+    public void setConflictLicense(LPVSLicense conflictLicense) { this.conflictLicense = conflictLicense; }
 }

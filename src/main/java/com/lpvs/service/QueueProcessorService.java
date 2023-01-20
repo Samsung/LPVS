@@ -34,7 +34,7 @@ public class QueueProcessorService {
     private void queueProcessor() throws Exception {
         while (true) {
             WebhookConfig webhookConfig = queueService.getQueueFirstElement();
-            LOG.info("PROCESS Webhook id = " + webhookConfig.getWebhookId());
+            LOG.info("PROCESS Webhook id = " + webhookConfig.getId());
             webhookConfig.setDate(new Date());
             queueService.processWebHook(webhookConfig);
         }
