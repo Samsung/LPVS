@@ -69,7 +69,7 @@ An example database dump file can be found in the repository at `src/main/resour
 
    # DB configuration (URL, username and password) - example
    ...
-   spring.datasource.url=jdbc:mysql://localhost:3306/lpvs?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+   spring.datasource.url=jdbc:mysql://localhost:3306/lpvs
    spring.datasource.username=
    spring.datasource.password=
     ```
