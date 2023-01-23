@@ -57,10 +57,13 @@ An example database dump file can be found in the repository at `src/main/resour
    github.login=
    github.api.url=
    github.secret=LPVS
-   For convience adding these properties included in docker-compose.yml (so not needed to add it in application.properties).
+   ```
+   For convience adding these properties(associated with github) included in docker-compose.yml (so not needed to add it in application.properties).
    For additional information about using Docker and tips, please check file [Docker_Usage](.github/Docker_Usage.md).
    
-
+   
+   
+   ```text
    # Used license scanner: scanoss (at the moment, only this scanner is supported)
     scanner=scanoss
 
@@ -76,8 +79,10 @@ An example database dump file can be found in the repository at `src/main/resour
    spring.datasource.username=
    spring.datasource.password=
     ```
-   For convience adding these properties included in docker-compose.yml (so not needed to add it in application.properties).
+   For convience adding these properties(DB configuration) included in docker-compose.yml (so not needed to add it in application.properties).
    For additional information about using Docker and tips, please check file [Docker_Usage](.github/Docker_Usage.md).
+
+
 
    Alternatively, you can supply all the necessary values associated with GitHub and license using these env variables:
    `LPVS_GITHUB_LOGIN`, `LPVS_GITHUB_TOKEN`, `LPVS_GITHUB_API_URL`, `LPVS_GITHUB_SECRET` and `LPVS_LICENSE_CONFLICT`.
