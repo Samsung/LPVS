@@ -21,12 +21,14 @@ public class LPVSLicenseConflictTest {
     final String baseLicenseName1 = "licenseName1";
     final String baseSpdxId1 = "spdxId1";
     final String baseAccess1 = "access1";
+    final String alternativeName1 = "licenseNameAlternative1";
     final String baseChecklistUrl1 = "checklistUrl1";
 
     final long baseLicenseId2 = 234567890L;
     final String baseLicenseName2 = "licenseName2";
     final String baseSpdxId2 = "spdxId2";
     final String baseAccess2 = "access2";
+    final String alternativeName2 = "licenseNameAlternative2";
     final String baseChecklistUrl2 = "checklistUrl2";
 
     @BeforeEach
@@ -35,11 +37,13 @@ public class LPVSLicenseConflictTest {
                 baseLicenseName1,
                 baseSpdxId1,
                 baseAccess1,
+                alternativeName1,
                 baseChecklistUrl1);
         lpvsLicense2 = new LPVSLicense(baseLicenseId2,
                 baseLicenseName2,
                 baseSpdxId2,
                 baseAccess2,
+                alternativeName2,
                 baseChecklistUrl2);
         licenseConflict = new LPVSLicenseConflict();
         licenseConflict.setConflictId(1L);

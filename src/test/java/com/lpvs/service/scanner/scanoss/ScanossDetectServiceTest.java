@@ -11,6 +11,7 @@ import com.lpvs.entity.LPVSLicense;
 import com.lpvs.entity.config.WebhookConfig;
 import com.lpvs.service.GitHubService;
 import com.lpvs.service.LicenseService;
+import com.lpvs.util.WebhookUtil;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -53,7 +54,7 @@ public class ScanossDetectServiceTest {
         ReflectionTestUtils.setField(scanossDetectService, "licenseService", licenseService);
         ReflectionTestUtils.setField(scanossDetectService, "gitHubService", gitHubService);
         WebhookConfig webhookConfig = Mockito.mock(WebhookConfig.class);
-        Mockito.when(gitHubService.getRepositoryName(webhookConfig)).thenReturn("A");
+        Mockito.when(WebhookUtil.getRepositoryName(webhookConfig)).thenReturn("A");
         Mockito.when(webhookConfig.getHeadCommitSHA()).thenReturn("B");
         scanossDetectService.checkLicenses(webhookConfig);
         ReflectionTestUtils.setField(licenseService, "licenseConflictsSource", licenseConflictsSource);

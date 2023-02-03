@@ -9,6 +9,7 @@ package com.lpvs.service;
 
 import com.lpvs.entity.LPVSFile;
 import com.lpvs.entity.LPVSLicense;
+import com.lpvs.entity.LPVSPullRequest;
 import com.lpvs.entity.config.WebhookConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -38,7 +39,7 @@ public class QueueServiceTest {
 
         @BeforeEach
         void setUp() {
-            queueService = new QueueService(null, null, null);
+            queueService = new QueueService(null, null, null, 4);
 
             whConfig1 = new WebhookConfig();
             whConfig1.setId(1L);
@@ -65,11 +66,11 @@ public class QueueServiceTest {
                 queueService.addFirst(whConfig4);
                 queueService.addFirst(whConfig5);
 
-                assertEquals(whConfig5, queueService.getQueueFirstElement());
+                assertEquals(whConfig5, queueService.getQueue().take());
 
                 // `whConfig`s 1-4 are left in Queue
                 queueService.delete(whConfig4);
-                assertEquals(whConfig3, queueService.getQueueFirstElement());
+                assertEquals(whConfig3, queueService.getQueue().take());
 
             } catch (InterruptedException e) {
                 LOG.error("InterruptedException at QueueServiceTest.testQueueMethods(): " + e);
@@ -85,11 +86,14 @@ public class QueueServiceTest {
         DetectService mockDetectService;
         LicenseService mockLicenseService;
         WebhookConfig webhookConfig;
-
+        LPVSPullRequest lpvsPullRequest;
+        int maxAttempts = 4;
 
         @BeforeEach
         void setUp() {
             webhookConfig = new WebhookConfig();
+
+            lpvsPullRequest = new LPVSPullRequest();
 
             mockGitHubService = mock(GitHubService.class);
             when(mockGitHubService.getPullRequestFiles(webhookConfig)).thenReturn(null);
@@ -97,9 +101,11 @@ public class QueueServiceTest {
             mockDetectService = mock(DetectService.class);
             mockLicenseService = mock(LicenseService.class);
 
+
             queueService = new QueueService(mockGitHubService,
                                             mockDetectService,
-                                            mockLicenseService);
+                                            mockLicenseService,
+                                            maxAttempts);
         }
 
         @Test
@@ -108,7 +114,7 @@ public class QueueServiceTest {
             queueService.processWebHook(webhookConfig);
 
             verify(mockGitHubService, times(1)).getPullRequestFiles(webhookConfig);
-            verify(mockGitHubService, times(1)).commentResults(eq(webhookConfig), anyList(), anyList());
+            verify(mockGitHubService, times(1)).commentResults(eq(webhookConfig), anyList(), anyList(), lpvsPullRequest);
             verify(mockGitHubService, times(1)).setErrorCheck(webhookConfig);
 
             verifyNoMoreInteractions(mockGitHubService);
@@ -130,8 +136,9 @@ public class QueueServiceTest {
     static final String licenseNameTest = "test_license_name";
     static final String spdxIdTest = "test_spdx_id";
     static final String accessTest = "test_access";
+    static final String alternativeNameTest = "test_alternative_name";
     static final String checklistUrlTest = "test_checklist_url";
-    static final LPVSLicense lpvsLicenseTest = new LPVSLicense(42L, licenseNameTest, spdxIdTest, accessTest, checklistUrlTest);
+    static final LPVSLicense lpvsLicenseTest = new LPVSLicense(42L, licenseNameTest, spdxIdTest, accessTest, alternativeNameTest, checklistUrlTest);
 
     // LPVSFile-1
     static final Long id_1 = 1L;
@@ -141,7 +148,7 @@ public class QueueServiceTest {
     static final String matchedLines_1 = "test_matched_lines_1";
     static final Set<LPVSLicense> licenses_1 = new HashSet<>(Collections.singletonList(lpvsLicenseTest));
     static final String component_1 = "test_component_1";
-    static final LPVSFile lpvsFileTest_1 = new LPVSFile(id_1, fileUrl_1, filePath_1, snippetMatch_1, matchedLines_1, licenses_1, component_1);
+    static final LPVSFile lpvsFileTest_1 = new LPVSFile(id_1, fileUrl_1, filePath_1, snippetMatch_1, matchedLines_1, licenses_1, component_1, null, null, null, null, null);
 
     // LPVSFile-2
     static final Long id_2 = 2L;
@@ -151,7 +158,7 @@ public class QueueServiceTest {
     static final String matchedLines_2 = "test_matched_lines_2";
     static final Set<LPVSLicense> licenses_2 = new HashSet<>(Collections.singletonList(lpvsLicenseTest));
     static final String component_2 = "test_component_2";
-    static final LPVSFile lpvsFileTest_2 = new LPVSFile(id_2, fileUrl_2, filePath_2, snippetMatch_2, matchedLines_2, licenses_2, component_2);
+    static final LPVSFile lpvsFileTest_2 = new LPVSFile(id_2, fileUrl_2, filePath_2, snippetMatch_2, matchedLines_2, licenses_2, component_2, null, null, null, null, null);
 
     static final List<LPVSFile> LPVSFilesTest = Arrays.asList(lpvsFileTest_1, lpvsFileTest_2);
 
@@ -162,9 +169,11 @@ public class QueueServiceTest {
         DetectService mockDetectService;
         LicenseService mockLicenseService;
         WebhookConfig webhookConfigMain;
+        LPVSPullRequest lpvsPullRequest;
 
         @BeforeEach
         void setUp() {
+            lpvsPullRequest = new LPVSPullRequest();
             webhookConfigMain = new WebhookConfig();
 
             mockGitHubService = mock(GitHubService.class);
@@ -186,7 +195,8 @@ public class QueueServiceTest {
 
             queueService = new QueueService(mockGitHubService,
                                             mockDetectService,
-                                            mockLicenseService);
+                                            mockLicenseService,
+                                            4);
         }
 
         @Test
@@ -204,7 +214,7 @@ public class QueueServiceTest {
                 fail();
             }
             verify(mockLicenseService, times(1)).findConflicts(webhookConfigMain, LPVSFilesTest);
-            verify(mockGitHubService, times(1)).commentResults(webhookConfigMain, LPVSFilesTest, Collections.emptyList());
+            verify(mockGitHubService, times(1)).commentResults(webhookConfigMain, LPVSFilesTest, Collections.emptyList(), lpvsPullRequest);
 
             verifyNoMoreInteractions(mockGitHubService);
             verifyNoMoreInteractions(mockDetectService);
@@ -219,9 +229,11 @@ public class QueueServiceTest {
         DetectService mockDetectService;
         LicenseService mockLicenseService;
         WebhookConfig webhookConfigMain;
+        LPVSPullRequest lpvsPullRequest;
 
         @BeforeEach
         void setUp() {
+            lpvsPullRequest = new LPVSPullRequest();
             webhookConfigMain = new WebhookConfig();
 
             mockGitHubService = mock(GitHubService.class);
@@ -243,7 +255,8 @@ public class QueueServiceTest {
 
             queueService = new QueueService(mockGitHubService,
                                             mockDetectService,
-                                            mockLicenseService);
+                                            mockLicenseService,
+                                            4);
         }
 
         @Test
@@ -261,7 +274,7 @@ public class QueueServiceTest {
                 fail();
             }
             verify(mockLicenseService, times(1)).findConflicts(webhookConfigMain, LPVSFilesTest);
-            verify(mockGitHubService, times(1)).commentResults(webhookConfigMain, LPVSFilesTest, Collections.emptyList());
+            verify(mockGitHubService, times(1)).commentResults(webhookConfigMain, LPVSFilesTest, Collections.emptyList(), lpvsPullRequest);
 
             verifyNoMoreInteractions(mockGitHubService);
             verifyNoMoreInteractions(mockDetectService);
@@ -276,9 +289,11 @@ public class QueueServiceTest {
         DetectService mockDetectService;
         LicenseService mockLicenseService;
         WebhookConfig webhookConfigMain;
+        LPVSPullRequest lpvsPullRequest;
 
         @BeforeEach
         void setUp() {
+            lpvsPullRequest = new LPVSPullRequest();
             webhookConfigMain = new WebhookConfig();
 
             mockGitHubService = mock(GitHubService.class);
@@ -301,7 +316,8 @@ public class QueueServiceTest {
 
             queueService = new QueueService(mockGitHubService,
                                             mockDetectService,
-                                            mockLicenseService);
+                                            mockLicenseService,
+                                            4);
         }
 
         @Test
@@ -320,7 +336,7 @@ public class QueueServiceTest {
                 fail();
             }
             verify(mockLicenseService, times(1)).findConflicts(webhookConfigMain, LPVSFilesTest);
-            verify(mockGitHubService, times(1)).commentResults(webhookConfigMain, LPVSFilesTest, Collections.emptyList());
+            verify(mockGitHubService, times(1)).commentResults(webhookConfigMain, LPVSFilesTest, Collections.emptyList(), lpvsPullRequest);
 
             verifyNoMoreInteractions(mockGitHubService);
             verifyNoMoreInteractions(mockDetectService);
@@ -335,9 +351,11 @@ public class QueueServiceTest {
         DetectService mockDetectService;
         LicenseService mockLicenseService;
         WebhookConfig webhookConfigMain;
+        LPVSPullRequest lpvsPullRequest;
 
         @BeforeEach
         void setUp() {
+            lpvsPullRequest = new LPVSPullRequest();
             webhookConfigMain = new WebhookConfig();
 
             mockGitHubService = mock(GitHubService.class);
@@ -361,7 +379,8 @@ public class QueueServiceTest {
 
             queueService = new QueueService(mockGitHubService,
                                             mockDetectService,
-                                            mockLicenseService);
+                                            mockLicenseService,
+                                            4);
         }
 
         @Test
@@ -380,7 +399,7 @@ public class QueueServiceTest {
                 fail();
             }
             verify(mockLicenseService, times(1)).findConflicts(webhookConfigMain, LPVSFilesTest);
-            verify(mockGitHubService, times(1)).commentResults(webhookConfigMain, LPVSFilesTest, Collections.emptyList());
+            verify(mockGitHubService, times(1)).commentResults(webhookConfigMain, LPVSFilesTest, Collections.emptyList(), lpvsPullRequest);
 
             verifyNoMoreInteractions(mockGitHubService);
             verifyNoMoreInteractions(mockDetectService);
@@ -395,9 +414,11 @@ public class QueueServiceTest {
         DetectService mockDetectService;
         LicenseService mockLicenseService;
         WebhookConfig webhookConfigMain;
+        LPVSPullRequest lpvsPullRequest;
 
         @BeforeEach
         void setUp() {
+            lpvsPullRequest = new LPVSPullRequest();
             webhookConfigMain = new WebhookConfig();
 
             mockGitHubService = mock(GitHubService.class);
@@ -420,7 +441,8 @@ public class QueueServiceTest {
 
             queueService = new QueueService(mockGitHubService,
                                             mockDetectService,
-                                            mockLicenseService);
+                                            mockLicenseService,
+                                            4);
         }
 
         @Test
@@ -439,7 +461,7 @@ public class QueueServiceTest {
                 fail();
             }
             verify(mockLicenseService, times(1)).findConflicts(webhookConfigMain, LPVSFilesTest);
-            verify(mockGitHubService, times(1)).commentResults(webhookConfigMain, LPVSFilesTest, Collections.emptyList());
+            verify(mockGitHubService, times(1)).commentResults(webhookConfigMain, LPVSFilesTest, Collections.emptyList(), lpvsPullRequest);
 
             verifyNoMoreInteractions(mockGitHubService);
             verifyNoMoreInteractions(mockDetectService);
@@ -454,9 +476,11 @@ public class QueueServiceTest {
         DetectService mockDetectService;
         LicenseService mockLicenseService;
         WebhookConfig webhookConfigMain;
+        LPVSPullRequest lpvsPullRequest;
 
         @BeforeEach
         void setUp() {
+            lpvsPullRequest = new LPVSPullRequest();
             webhookConfigMain = new WebhookConfig();
 
             mockGitHubService = mock(GitHubService.class);
@@ -479,7 +503,8 @@ public class QueueServiceTest {
 
             queueService = new QueueService(mockGitHubService,
                                             mockDetectService,
-                                            mockLicenseService);
+                                            mockLicenseService,
+                                            4);
         }
 
         @Test
@@ -498,7 +523,7 @@ public class QueueServiceTest {
                 fail();
             }
             verify(mockLicenseService, times(1)).findConflicts(webhookConfigMain, LPVSFilesTest);
-            verify(mockGitHubService, times(1)).commentResults(webhookConfigMain, LPVSFilesTest, Collections.emptyList());
+            verify(mockGitHubService, times(1)).commentResults(webhookConfigMain, LPVSFilesTest, Collections.emptyList(), lpvsPullRequest);
 
             verifyNoMoreInteractions(mockGitHubService);
             verifyNoMoreInteractions(mockDetectService);

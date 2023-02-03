@@ -18,6 +18,7 @@ public class LPVSLicenseTest {
     final String baseLicenseName = "licenseName";
     final String baseSpdxId = "spdxId";
     final String baseAccess = "access";
+    final String baseAlternativeName = "licenseNameAlternative";
     final String baseChecklistUrl = "checklistUrl";
 
     @BeforeEach
@@ -26,6 +27,7 @@ public class LPVSLicenseTest {
                 baseLicenseName,
                 baseSpdxId,
                 baseAccess,
+                baseAlternativeName,
                 baseChecklistUrl);
     }
 
@@ -72,6 +74,15 @@ public class LPVSLicenseTest {
         lpvsLicense.setAccess(newActualAccess);
         assertNotEquals(lpvsLicense.getAccess(), baseAccess);
         assertEquals(lpvsLicense.getAccess(), newActualAccess);
+    }
+
+    @Test
+    public void setAlternativeNamesTest() {
+        final String newActualAlternativeNames = "newAlternativeName";
+        assertEquals(lpvsLicense.getAlternativeNames(), baseAlternativeName);
+        lpvsLicense.setAccess(newActualAlternativeNames);
+        assertNotEquals(lpvsLicense.getAlternativeNames(), baseAlternativeName);
+        assertEquals(lpvsLicense.getAlternativeNames(), newActualAlternativeNames);
     }
 
     @Test

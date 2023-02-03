@@ -32,7 +32,7 @@ public class QueueProcessorServiceTest {
 
         queueService = mock(QueueService.class);
         try {
-            when(queueService.getQueueFirstElement())
+            when(queueService.getQueue().take())
                     // first iteration
                     .thenReturn(webhookConfigTest)
                     // second iteration
@@ -67,7 +67,7 @@ public class QueueProcessorServiceTest {
 
         try {
             // called twice, first iteration, and second
-            verify(queueService, times(2)).getQueueFirstElement();
+            verify(queueService, times(2)).getQueue().take();
         } catch (InterruptedException e) {
             LOG.error("InterruptedException at QueueProcessorServiceTest.testQueueProcessor(): " + e);
             fail();

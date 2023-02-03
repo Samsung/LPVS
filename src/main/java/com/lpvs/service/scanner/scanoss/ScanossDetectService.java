@@ -14,6 +14,7 @@ import com.lpvs.entity.LPVSLicense;
 import com.lpvs.entity.config.WebhookConfig;
 import com.lpvs.service.GitHubService;
 import com.lpvs.service.LicenseService;
+import com.lpvs.util.WebhookUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +47,7 @@ public class ScanossDetectService {
                 "scanoss-py", "scan",
                 "-t",
                 "--no-wfp-output",
-                "-o", "RESULTS/" + gitHubService.getRepositoryName(webhookConfig) + "_" + webhookConfig.getHeadCommitSHA() + ".json",
+                "-o", "RESULTS/" + WebhookUtil.getRepositoryName(webhookConfig) + "_" + webhookConfig.getHeadCommitSHA() + ".json",
                 path
             );
             Process process = processBuilder.inheritIO().start();
@@ -78,7 +79,8 @@ public class ScanossDetectService {
         List<LPVSFile> detectedFiles = new ArrayList<>();
         try {
             Gson gson = new Gson();
-            Reader reader = Files.newBufferedReader(Paths.get("RESULTS/" + gitHubService.getRepositoryName(webhookConfig) + "_" + webhookConfig.getHeadCommitSHA() + ".json"));
+            Reader reader = Files.newBufferedReader(Paths.get("RESULTS/" + WebhookUtil.getRepositoryName(webhookConfig) +
+                    "_" + webhookConfig.getHeadCommitSHA() + ".json"));
             // convert JSON file to map
             Map<String, ArrayList<Object>> map = gson.fromJson(reader,
                     new TypeToken<Map<String, ArrayList<Object>>>() {}.getType());
@@ -112,10 +114,15 @@ public class ScanossDetectService {
                 }
                 content = content.replaceAll("}\"}", "\"}}");
                 ScanossJsonStructure object = gson.fromJson(content, ScanossJsonStructure.class);
-                if (object.file_url != null) file.setFileUrl(object.file_url);
-                if (object.component != null) file.setComponent(object.component);
-                if (object.lines != null) file.setMatchedLines(object.lines);
+                if (object.id != null) file.setSnippetType(object.id);
                 if (object.matched != null) file.setSnippetMatch(object.matched);
+                if (object.lines != null) file.setMatchedLines(object.lines);
+                if (object.file != null) file.setComponentFilePath(object.file);
+                if (object.component != null) file.setComponentName(object.component);
+                if (object.oss_lines != null) file.setComponentLines(object.oss_lines);
+                if (object.url != null) file.setComponentUrl(object.url);
+                if (object.version != null) file.setComponentVersion(object.version);
+                if (object.vendor != null) file.setComponentVendor(object.vendor);
 
                 Set<LPVSLicense> licenses = new HashSet<>();
                 if (object.licenses != null) {
@@ -126,7 +133,7 @@ public class ScanossDetectService {
                             lic.setChecklistUrl(license.checklist_url);
                             licenses.add(lic);
                         } else {
-                            licenses.add(new LPVSLicense(0L, license.name, license.name, "UNREVIEWED", license.checklist_url));
+                            licenses.add(new LPVSLicense(0L, license.name, license.name, "UNREVIEWED", null, license.checklist_url));
                         }
 
                         // Check for the license conflicts if the property "license_conflict=scanner"

@@ -43,9 +43,15 @@ public class LicenseServiceTest {
             add(license);
         }});
         file.setFilePath("");
-        file.setComponent("");
+        file.setComponentFilePath("");
+        file.setComponentName("");
+        file.setComponentLines("");
+        file.setComponentUrl("");
+        file.setComponentVersion("");
+        file.setComponentVendor("");
         file.setSnippetMatch("");
         file.setMatchedLines("");
+        file.setSnippetType("");
 
         LPVSFile file1 = new LPVSFile();
         LPVSLicense license1 = new LPVSLicense(){{
@@ -57,9 +63,15 @@ public class LicenseServiceTest {
             add(license1);
         }});
         file1.setFilePath("");
-        file1.setComponent("");
+        file1.setComponentFilePath("");
+        file1.setComponentName("");
+        file1.setComponentLines("");
+        file1.setComponentUrl("");
+        file1.setComponentVersion("");
+        file1.setComponentVendor("");
         file1.setSnippetMatch("");
         file1.setMatchedLines("");
+        file1.setSnippetType("");
 
         LPVSFile file2 = new LPVSFile();
         LPVSLicense license2 = new LPVSLicense(){{
@@ -71,9 +83,15 @@ public class LicenseServiceTest {
             add(license2);
         }});
         file2.setFilePath("");
-        file2.setComponent("");
+        file2.setComponentFilePath("");
+        file2.setComponentName("");
+        file2.setComponentLines("");
+        file2.setComponentUrl("");
+        file2.setComponentVersion("");
+        file2.setComponentVendor("");
         file2.setSnippetMatch("");
         file2.setMatchedLines("");
+        file2.setSnippetType("");
 
         List<LPVSFile> fileList = new ArrayList<LPVSFile>(){{
             add(file);
@@ -105,8 +123,8 @@ public class LicenseServiceTest {
         void setUp() throws NoSuchFieldException, IllegalAccessException {
             licenseService = new LicenseService(null);
 
-            lpvs_license_1 = new LPVSLicense(1L, license_name_1, spdx_id_1, null, null);
-            lpvs_license_2 = new LPVSLicense(2L, license_name_2, spdx_id_2, null, null);
+            lpvs_license_1 = new LPVSLicense(1L, license_name_1, spdx_id_1, null, null, null);
+            lpvs_license_2 = new LPVSLicense(2L, license_name_2, spdx_id_2, null, null, null);
 
             Field conflicts_field = licenseService.getClass().getDeclaredField("licenses");
             conflicts_field.setAccessible(true);
@@ -172,9 +190,9 @@ public class LicenseServiceTest {
         void setUp() throws NoSuchFieldException, IllegalAccessException {
             licenseService = new LicenseService(null);
 
-            lpvs_license_1 = new LPVSLicense(1L, null, spdx_id_1, null, null);
-            lpvs_license_2 = new LPVSLicense(1L, null, spdx_id_2, null, null);
-            lpvs_license_3 = new LPVSLicense(1L, null, spdx_id_3, null, null);
+            lpvs_license_1 = new LPVSLicense(1L, null, spdx_id_1, null, null, null);
+            lpvs_license_2 = new LPVSLicense(1L, null, spdx_id_2, null, null, null);
+            lpvs_license_3 = new LPVSLicense(1L, null, spdx_id_3, null, null, null);
 
             Field conflicts_field = licenseService.getClass().getDeclaredField("licenses");
             conflicts_field.setAccessible(true);
@@ -214,11 +232,11 @@ public class LicenseServiceTest {
             conflicts_field.setAccessible(true);
             conflicts_field.set(licenseService, List.of(conflict_1));
 
-            lpvs_license_1 = new LPVSLicense(1L, null, spdx_id_1, null, null);
-            lpvs_file_1 = new LPVSFile(1L, null, null, null, null, Set.of(lpvs_license_1), null);
+            lpvs_license_1 = new LPVSLicense(1L, null, spdx_id_1, null, null, null);
+            lpvs_file_1 = new LPVSFile(1L, null, null, null, null, Set.of(lpvs_license_1), null, null, null, null, null, null);
 
-            lpvs_license_2 = new LPVSLicense(2L, null, spdx_id_2, null, null);
-            lpvs_file_2 = new LPVSFile(2L, null, null, null, null, Set.of(lpvs_license_2), null);
+            lpvs_license_2 = new LPVSLicense(2L, null, spdx_id_2, null, null, null);
+            lpvs_file_2 = new LPVSFile(2L, null, null, null, null, Set.of(lpvs_license_2), null, null, null, null, null, null);
 
             webhookConfig = new WebhookConfig();
             webhookConfig.setRepositoryLicense("MIT");

@@ -64,10 +64,6 @@ public class QueueService {
         QUEUE.remove(webhookConfig);
     }
 
-    public void add(WebhookConfig webhookConfig) throws InterruptedException {
-        QUEUE.put(webhookConfig);
-    }
-
     public BlockingDeque<WebhookConfig> getQueue() {
         return QUEUE;
     }

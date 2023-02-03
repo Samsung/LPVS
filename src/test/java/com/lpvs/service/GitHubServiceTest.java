@@ -9,9 +9,11 @@ package com.lpvs.service;
 
 import com.lpvs.entity.LPVSFile;
 import com.lpvs.entity.LPVSLicense;
+import com.lpvs.entity.LPVSPullRequest;
 import com.lpvs.entity.config.WebhookConfig;
 import com.lpvs.entity.enums.PullRequestAction;
 import com.lpvs.util.FileUtil;
+import com.lpvs.util.WebhookUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -159,7 +161,7 @@ public class GitHubServiceTest {
             webhookConfig.setPullRequestUrl(url_pr_2);
 
             try {
-                when(mocked_instance_gh.getRepository(gh_service.getRepositoryOrganization(webhookConfig) + "/" + gh_service.getRepositoryName(webhookConfig))).thenReturn(mocked_repo);
+                when(mocked_instance_gh.getRepository(WebhookUtil.getRepositoryOrganization(webhookConfig) + "/" + WebhookUtil.getRepositoryName(webhookConfig))).thenReturn(mocked_repo);
             } catch (IOException e) {
                 LOG.error("mocked_repo.getRepository error " + e);
             }
@@ -182,9 +184,12 @@ public class GitHubServiceTest {
         @Test
         public void testGetPullRequestFiles__ApiUrlAbsentPullPresentNoRescan() {
 
-            try (MockedStatic<GitHub> mocked_static_gh = mockStatic(GitHub.class); MockedStatic<FileUtil> mocked_static_file_util = mockStatic(FileUtil.class)) {
+            try (MockedStatic<GitHub> mocked_static_gh = mockStatic(GitHub.class); MockedStatic<FileUtil> mocked_static_file_util =
+                    mockStatic(FileUtil.class)) {
                 mocked_static_gh.when(() -> GitHub.connect(GH_LOGIN, GH_AUTH_TOKEN)).thenReturn(mocked_instance_gh);
-                mocked_static_file_util.when(() -> FileUtil.saveFiles(mocked_list_files, gh_service.getRepositoryOrganization(webhookConfig) + "/" + gh_service.getRepositoryName(webhookConfig), commit_sha, 0))
+                mocked_static_file_util.when(() -> FileUtil.saveFiles(mocked_list_files,
+                        WebhookUtil.getRepositoryOrganization(webhookConfig) + "/" + WebhookUtil.getRepositoryName(webhookConfig),
+                        commit_sha, 0))
                         .thenReturn(githubFiles);
 
                 // main test
@@ -197,7 +202,8 @@ public class GitHubServiceTest {
 
                 // `mocked_instance_gh` verify
                 try {
-                    verify(mocked_instance_gh, times(1)).getRepository(gh_service.getRepositoryOrganization(webhookConfig) + "/" + gh_service.getRepositoryName(webhookConfig));
+                    verify(mocked_instance_gh, times(1)).getRepository(WebhookUtil.getRepositoryOrganization(webhookConfig) +
+                            "/" + WebhookUtil.getRepositoryName(webhookConfig));
                 } catch (IOException e) {
                     LOG.error("TestGetPullRequestFiles__ApiUrlAbsentPullPresentNoRescan.testGetPullRequestFiles__ApiUrlAbsentPullPresentNoRescan() error " + e);
                     fail();
@@ -215,7 +221,8 @@ public class GitHubServiceTest {
 
                 // `mocked_static_file_util` verify
                 mocked_static_file_util.verify(
-                        () -> FileUtil.saveFiles(mocked_list_files, gh_service.getRepositoryOrganization(webhookConfig) + "/" + gh_service.getRepositoryName(webhookConfig), commit_sha, 0),
+                        () -> FileUtil.saveFiles(mocked_list_files, WebhookUtil.getRepositoryOrganization(webhookConfig) +
+                                "/" + WebhookUtil.getRepositoryName(webhookConfig), commit_sha, 0),
                         times(1));
                 mocked_static_file_util.verifyNoMoreInteractions();
             }
@@ -256,7 +263,8 @@ public class GitHubServiceTest {
 
 
             try {
-                when(mocked_instance_gh.getRepository(gh_service.getRepositoryOrganization(webhookConfig) + "/" + gh_service.getRepositoryName(webhookConfig))).thenReturn(mocked_repo);
+                when(mocked_instance_gh.getRepository(WebhookUtil.getRepositoryOrganization(webhookConfig) +
+                        "/" + WebhookUtil.getRepositoryName(webhookConfig))).thenReturn(mocked_repo);
             } catch (IOException e) {
                 LOG.error("mocked_repo.getRepository error " + e);
             }
@@ -294,7 +302,8 @@ public class GitHubServiceTest {
 
                 // `mocked_instance_gh` verify
                 try {
-                    verify(mocked_instance_gh, times(1)).getRepository(gh_service.getRepositoryOrganization(webhookConfig) + "/" + gh_service.getRepositoryName(webhookConfig));
+                    verify(mocked_instance_gh, times(1)).getRepository(WebhookUtil.getRepositoryOrganization(webhookConfig) +
+                            "/" + WebhookUtil.getRepositoryName(webhookConfig));
                 } catch (IOException e) {
                     LOG.error("TestGetPullRequestFiles__ApiUrlPresentPullPresentNoRescan.testGetPullRequestFiles__ApiUrlPresentPullPresentNoRescan() error " + e);
                     fail();
@@ -343,7 +352,8 @@ public class GitHubServiceTest {
             webhookConfig.setPullRequestUrl(url_pr_3);
 
             try {
-                when(mocked_instance_gh.getRepository(gh_service.getRepositoryOrganization(webhookConfig) + "/" + gh_service.getRepositoryName(webhookConfig))).thenReturn(mocked_repo);
+                when(mocked_instance_gh.getRepository(WebhookUtil.getRepositoryOrganization(webhookConfig) +
+                        "/" + WebhookUtil.getRepositoryName(webhookConfig))).thenReturn(mocked_repo);
             } catch (IOException e) {
                 LOG.error("mocked_repo.getRepository error " + e);
             }
@@ -377,7 +387,8 @@ public class GitHubServiceTest {
 
                 // `mocked_instance_gh` verify
                 try {
-                    verify(mocked_instance_gh, times(1)).getRepository(gh_service.getRepositoryOrganization(webhookConfig) + "/" + gh_service.getRepositoryName(webhookConfig));
+                    verify(mocked_instance_gh, times(1)).getRepository(WebhookUtil.getRepositoryOrganization(webhookConfig) +
+                            "/" + WebhookUtil.getRepositoryName(webhookConfig));
                 } catch (IOException e) {
                     LOG.error("TestGetPullRequestFiles__ApiUrlAbsentPullAbsentNoRescan.testGetPullRequestFiles__ApiUrlAbsentPullAbsentNoRescan() error " + e);
                     fail();
@@ -420,7 +431,8 @@ public class GitHubServiceTest {
             webhookConfig.setPullRequestUrl(url_pr_3);
 
             try {
-                when(mocked_instance_gh.getRepository(gh_service.getRepositoryOrganization(webhookConfig) + "/" + gh_service.getRepositoryName(webhookConfig))).thenReturn(mocked_repo);
+                when(mocked_instance_gh.getRepository(WebhookUtil.getRepositoryOrganization(webhookConfig) +
+                        "/" + WebhookUtil.getRepositoryName(webhookConfig))).thenReturn(mocked_repo);
             } catch (IOException e) {
                 LOG.error("mocked_repo.getRepository error " + e);
             }
@@ -454,7 +466,8 @@ public class GitHubServiceTest {
 
                 // `mocked_instance_gh` verify
                 try {
-                    verify(mocked_instance_gh, times(1)).getRepository(gh_service.getRepositoryOrganization(webhookConfig) + "/" + gh_service.getRepositoryName(webhookConfig));
+                    verify(mocked_instance_gh, times(1)).getRepository(
+                            WebhookUtil.getRepositoryOrganization(webhookConfig) + "/" + WebhookUtil.getRepositoryName(webhookConfig));
                 } catch (IOException e) {
                     LOG.error("TestGetPullRequestFiles__ApiUrlPresentPullAbsentNoRescan.testGetPullRequestFiles__ApiUrlPresentPullAbsentNoRescan() error " + e);
                     fail();
@@ -492,7 +505,8 @@ public class GitHubServiceTest {
             webhookConfig.setPullRequestUrl(url_pr_3);
 
             try {
-                when(mocked_instance_gh.getRepository(gh_service.getRepositoryOrganization(webhookConfig) + "/" + gh_service.getRepositoryName(webhookConfig))).thenReturn(mocked_repo);
+                when(mocked_instance_gh.getRepository(WebhookUtil.getRepositoryOrganization(webhookConfig) +
+                        "/" + WebhookUtil.getRepositoryName(webhookConfig))).thenReturn(mocked_repo);
             } catch (IOException e) {
                 LOG.error("mocked_repo.getRepository error " + e);
             }
@@ -520,7 +534,8 @@ public class GitHubServiceTest {
 
                 // `mocked_instance_gh` verify
                 try {
-                    verify(mocked_instance_gh, times(1)).getRepository(gh_service.getRepositoryOrganization(webhookConfig) + "/" + gh_service.getRepositoryName(webhookConfig));
+                    verify(mocked_instance_gh, times(1)).getRepository(
+                            WebhookUtil.getRepositoryOrganization(webhookConfig) + "/" + WebhookUtil.getRepositoryName(webhookConfig));
                 } catch (IOException e) {
                     LOG.error("TestGetPullRequestFiles__ApiUrlAbsentPullExceptionNoRescan.testGetPullRequestFiles__ApiUrlAbsentPullExceptionNoRescan() error " + e);
                     fail();
@@ -558,7 +573,8 @@ public class GitHubServiceTest {
             webhookConfig.setPullRequestUrl(url_pr_3);
 
             try {
-                when(mocked_instance_gh.getRepository(gh_service.getRepositoryOrganization(webhookConfig) + "/" + gh_service.getRepositoryName(webhookConfig))).thenReturn(mocked_repo);
+                when(mocked_instance_gh.getRepository(WebhookUtil.getRepositoryOrganization(webhookConfig) +
+                        "/" + WebhookUtil.getRepositoryName(webhookConfig))).thenReturn(mocked_repo);
             } catch (IOException e) {
                 LOG.error("mocked_repo.getRepository error " + e);
             }
@@ -585,7 +601,8 @@ public class GitHubServiceTest {
 
                 // `mocked_instance_gh` verify
                 try {
-                    verify(mocked_instance_gh, times(1)).getRepository(gh_service.getRepositoryOrganization(webhookConfig) + "/" + gh_service.getRepositoryName(webhookConfig));
+                    verify(mocked_instance_gh, times(1)).getRepository(
+                            WebhookUtil.getRepositoryOrganization(webhookConfig) + "/" + WebhookUtil.getRepositoryName(webhookConfig));
                 } catch (IOException e) {
                     LOG.error("TestGetPullRequestFiles__ApiUrlPresentPullExceptionNoRescan.testGetPullRequestFiles__ApiUrlPresentPullExceptionNoRescan() error " + e);
                     fail();
@@ -638,7 +655,8 @@ public class GitHubServiceTest {
             webhookConfig.setHeadCommitSHA(commit_sha);
 
             try {
-                when(mocked_instance_gh.getRepository(gh_service.getRepositoryOrganization(webhookConfig) + "/" + gh_service.getRepositoryName(webhookConfig))).thenReturn(mocked_repo);
+                when(mocked_instance_gh.getRepository(WebhookUtil.getRepositoryOrganization(webhookConfig) +
+                        "/" + WebhookUtil.getRepositoryName(webhookConfig))).thenReturn(mocked_repo);
             } catch (IOException e) {
                 LOG.error("mocked_repo.getRepository error " + e);
             }
@@ -678,7 +696,8 @@ public class GitHubServiceTest {
 
                 // `mocked_instance_gh` verify
                 try {
-                    verify(mocked_instance_gh, times(1)).getRepository(gh_service.getRepositoryOrganization(webhookConfig) + "/" + gh_service.getRepositoryName(webhookConfig));
+                    verify(mocked_instance_gh, times(1)).getRepository(
+                            WebhookUtil.getRepositoryOrganization(webhookConfig) + "/" + WebhookUtil.getRepositoryName(webhookConfig));
                 } catch (IOException e) {
                     LOG.error("TestGetPullRequestFiles__ApiUrlPresentPullPresentRescanPresent.testGetPullRequestFiles__ApiUrlPresentPullPresentRescanPresent() error " + e);
                     fail();
@@ -725,7 +744,8 @@ public class GitHubServiceTest {
             webhookConfig.setPullRequestUrl(url_pr_1);
 
             try {
-                when(mocked_instance_gh.getRepository(gh_service.getRepositoryOrganization(webhookConfig) + "/" + gh_service.getRepositoryName(webhookConfig))).thenReturn(mocked_repo);
+                when(mocked_instance_gh.getRepository(WebhookUtil.getRepositoryOrganization(webhookConfig) +
+                        "/" + WebhookUtil.getRepositoryName(webhookConfig))).thenReturn(mocked_repo);
             } catch (IOException e) {
                 LOG.error("mocked_repo.getRepository error " + e);
             }
@@ -755,7 +775,8 @@ public class GitHubServiceTest {
 
                 // `mocked_instance_gh` verify
                 try {
-                    verify(mocked_instance_gh, times(1)).getRepository(gh_service.getRepositoryOrganization(webhookConfig) + "/" + gh_service.getRepositoryName(webhookConfig));
+                    verify(mocked_instance_gh, times(1)).getRepository(
+                            WebhookUtil.getRepositoryOrganization(webhookConfig) + "/" + WebhookUtil.getRepositoryName(webhookConfig));
                 } catch (IOException e) {
                     LOG.error("TestSetPendingCheck__ApiUrlAbsentNormalExecution.testSetPendingCheck__ApiUrlAbsentNormalExecution() error " + e);
                     fail();
@@ -795,7 +816,8 @@ public class GitHubServiceTest {
             webhookConfig.setPullRequestUrl(url_pr_1);
 
             try {
-                when(mocked_instance_gh.getRepository(gh_service.getRepositoryOrganization(webhookConfig) + "/" + gh_service.getRepositoryName(webhookConfig))).thenReturn(mocked_repo);
+                when(mocked_instance_gh.getRepository(WebhookUtil.getRepositoryOrganization(webhookConfig) +
+                        "/" + WebhookUtil.getRepositoryName(webhookConfig))).thenReturn(mocked_repo);
             } catch (IOException e) {
                 LOG.error("mocked_repo.getRepository error " + e);
             }
@@ -825,7 +847,8 @@ public class GitHubServiceTest {
 
                 // `mocked_instance_gh` verify
                 try {
-                    verify(mocked_instance_gh, times(1)).getRepository(gh_service.getRepositoryOrganization(webhookConfig) + "/" + gh_service.getRepositoryName(webhookConfig));
+                    verify(mocked_instance_gh, times(1)).getRepository(
+                            WebhookUtil.getRepositoryOrganization(webhookConfig) + "/" + WebhookUtil.getRepositoryName(webhookConfig));
                 } catch (IOException e) {
                     LOG.error("TestSetPendingCheck__ApiUrlPresentNormalExecution.testSetPendingCheck__ApiUrlPresentNormalExecution() error " + e);
                     fail();
@@ -923,7 +946,7 @@ public class GitHubServiceTest {
             webhookConfig.setPullRequestUrl(url_pr_1);
 
             try {
-                when(mocked_instance_gh.getRepository(gh_service.getRepositoryOrganization(webhookConfig) + "/" + gh_service.getRepositoryName(webhookConfig))).thenReturn(mocked_repo);
+                when(mocked_instance_gh.getRepository(WebhookUtil.getRepositoryOrganization(webhookConfig) + "/" + WebhookUtil.getRepositoryName(webhookConfig))).thenReturn(mocked_repo);
             } catch (IOException e) {
                 LOG.error("mocked_repo.getRepository error " + e);
             }
@@ -953,7 +976,8 @@ public class GitHubServiceTest {
 
                 // `mocked_instance_gh` verify
                 try {
-                    verify(mocked_instance_gh, times(1)).getRepository(gh_service.getRepositoryOrganization(webhookConfig) + "/" + gh_service.getRepositoryName(webhookConfig));
+                    verify(mocked_instance_gh, times(1)).getRepository(
+                            WebhookUtil.getRepositoryOrganization(webhookConfig) + "/" + WebhookUtil.getRepositoryName(webhookConfig));
                 } catch (IOException e) {
                     LOG.error("TestSetErrorCheck__ApiUrlAbsentNormalExecution.testSetErrorCheck__ApiUrlAbsentNormalExecution() error " + e);
                     fail();
@@ -993,7 +1017,8 @@ public class GitHubServiceTest {
             webhookConfig.setPullRequestUrl(url_pr_1);
 
             try {
-                when(mocked_instance_gh.getRepository(gh_service.getRepositoryOrganization(webhookConfig) + "/" + gh_service.getRepositoryName(webhookConfig))).thenReturn(mocked_repo);
+                when(mocked_instance_gh.getRepository(WebhookUtil.getRepositoryOrganization(webhookConfig) +
+                        "/" + WebhookUtil.getRepositoryName(webhookConfig))).thenReturn(mocked_repo);
             } catch (IOException e) {
                 LOG.error("mocked_repo.getRepository error " + e);
             }
@@ -1023,7 +1048,8 @@ public class GitHubServiceTest {
 
                 // `mocked_instance_gh` verify
                 try {
-                    verify(mocked_instance_gh, times(1)).getRepository(gh_service.getRepositoryOrganization(webhookConfig) + "/" + gh_service.getRepositoryName(webhookConfig));
+                    verify(mocked_instance_gh, times(1)).getRepository(
+                            WebhookUtil.getRepositoryOrganization(webhookConfig) + "/" + WebhookUtil.getRepositoryName(webhookConfig));
                 } catch (IOException e) {
                     LOG.error("TestSetErrorCheck__ApiUrlPresentNormalExecution.testSetErrorCheck__ApiUrlPresentNormalExecution() error " + e);
                     fail();
@@ -1112,6 +1138,7 @@ public class GitHubServiceTest {
         final String url_pr_1 = "https://github.com/Samsung/LPVS/pull/18";
         final String url_pr_2 = "https://github.com/Samsung/LPVS/pull/19";
         WebhookConfig webhookConfig;
+        LPVSPullRequest lpvsPullRequest;
         final String url_pr_3 = "https://github.com/Samsung/LPVS/pull/20";
 
         @BeforeEach
@@ -1126,12 +1153,14 @@ public class GitHubServiceTest {
                 fail();
             }
 
+            lpvsPullRequest = new LPVSPullRequest();
             webhookConfig = new WebhookConfig();
             webhookConfig.setPullRequestAPIUrl(url_pr_3);
             webhookConfig.setPullRequestUrl(url_pr_3);
 
             try {
-                when(mocked_instance_gh.getRepository(gh_service.getRepositoryOrganization(webhookConfig) + "/" + gh_service.getRepositoryName(webhookConfig))).thenReturn(mocked_repo);
+                when(mocked_instance_gh.getRepository(WebhookUtil.getRepositoryOrganization(webhookConfig) +
+                        "/" + WebhookUtil.getRepositoryName(webhookConfig))).thenReturn(mocked_repo);
             } catch (IOException e) {
                 LOG.error("mocked_repo.getRepository error " + e);
             }
@@ -1152,11 +1181,12 @@ public class GitHubServiceTest {
         @Test
         public void testCommentResults__PrAbsent() {
             // main test
-            gh_service.commentResults(webhookConfig, null, null);
+            gh_service.commentResults(webhookConfig, null, null, lpvsPullRequest);
 
             // `mocked_instance_gh` verify
             try {
-                verify(mocked_instance_gh, times(1)).getRepository(gh_service.getRepositoryOrganization(webhookConfig) + "/" + gh_service.getRepositoryName(webhookConfig));
+                verify(mocked_instance_gh, times(1)).getRepository(
+                        WebhookUtil.getRepositoryOrganization(webhookConfig) + "/" + WebhookUtil.getRepositoryName(webhookConfig));
             } catch (IOException e) {
                 LOG.error("TestCommentResults__PrAbsent.testCommentResults__PrAbsent() error " + e);
                 fail();
@@ -1179,6 +1209,7 @@ public class GitHubServiceTest {
         final GitHubService gh_service = new GitHubService(null, null, null);
         GitHub mocked_instance_gh = mock(GitHub.class);
         WebhookConfig webhookConfig;
+        LPVSPullRequest lpvsPullRequest;
 
         @BeforeEach
         void setUp() {
@@ -1192,13 +1223,14 @@ public class GitHubServiceTest {
                 fail();
             }
 
+            lpvsPullRequest = new LPVSPullRequest();
             webhookConfig = new WebhookConfig();
             final String url_pr = "https://github.com/Samsung/LPVS/pull/18";
             webhookConfig.setPullRequestUrl(url_pr);
 
             try {
                 when(mocked_instance_gh
-                        .getRepository(gh_service.getRepositoryOrganization(webhookConfig) + "/" + gh_service.getRepositoryName(webhookConfig)))
+                        .getRepository(WebhookUtil.getRepositoryOrganization(webhookConfig) + "/" + WebhookUtil.getRepositoryName(webhookConfig)))
                         .thenThrow(new IOException("Test exception for TestCommentResults__CantAuthorize. Normal behavior."));
             } catch (IOException e) {
                 LOG.error("mocked_repo.getRepository error " + e);
@@ -1208,11 +1240,12 @@ public class GitHubServiceTest {
         @Test
         public void testCommentResults__CantAuthorize() {
             // main test
-            gh_service.commentResults(webhookConfig, null, null);
+            gh_service.commentResults(webhookConfig, null, null, lpvsPullRequest);
 
             // `mocked_instance_gh` verify
             try {
-                verify(mocked_instance_gh, times(1)).getRepository(gh_service.getRepositoryOrganization(webhookConfig) + "/" + gh_service.getRepositoryName(webhookConfig));
+                verify(mocked_instance_gh, times(1)).getRepository(
+                        WebhookUtil.getRepositoryOrganization(webhookConfig) + "/" + WebhookUtil.getRepositoryName(webhookConfig));
             } catch (IOException e) {
                 LOG.error("TestCommentResults__CantAuthorize.testCommentResults__CantAuthorize() error " + e);
                 fail();
@@ -1231,6 +1264,7 @@ public class GitHubServiceTest {
         final String url_pr_1 = "https://github.com/Samsung/LPVS/pull/18";
         final String url_pr_2 = "https://github.com/Samsung/LPVS/pull/19";
         WebhookConfig webhookConfig;
+        LPVSPullRequest lpvsPullRequest;
         final String commit_sha = "895337e89ae103ff2d18c9e0d93709f743226afa";
 
         @BeforeEach
@@ -1245,13 +1279,15 @@ public class GitHubServiceTest {
                 fail();
             }
 
+            lpvsPullRequest = new LPVSPullRequest();
             webhookConfig = new WebhookConfig();
             webhookConfig.setPullRequestAPIUrl(url_pr_2);
             webhookConfig.setHeadCommitSHA(commit_sha);
             webhookConfig.setPullRequestUrl(url_pr_2);
 
             try {
-                when(mocked_instance_gh.getRepository(gh_service.getRepositoryOrganization(webhookConfig) + "/" + gh_service.getRepositoryName(webhookConfig))).thenReturn(mocked_repo);
+                when(mocked_instance_gh.getRepository(WebhookUtil.getRepositoryOrganization(webhookConfig) +
+                        "/" + WebhookUtil.getRepositoryName(webhookConfig))).thenReturn(mocked_repo);
             } catch (IOException e) {
                 LOG.error("mocked_repo.getRepository error " + e);
             }
@@ -1272,11 +1308,12 @@ public class GitHubServiceTest {
         @Test
         public void testCommentResults__ScanResultsEmpty() {
             // main test
-            gh_service.commentResults(webhookConfig, List.of(), null);
+            gh_service.commentResults(webhookConfig, List.of(), null, lpvsPullRequest);
 
             // `mocked_instance_gh` verify
             try {
-                verify(mocked_instance_gh, times(1)).getRepository(gh_service.getRepositoryOrganization(webhookConfig) + "/" + gh_service.getRepositoryName(webhookConfig));
+                verify(mocked_instance_gh, times(1)).getRepository(
+                        WebhookUtil.getRepositoryOrganization(webhookConfig) + "/" + WebhookUtil.getRepositoryName(webhookConfig));
             } catch (IOException e) {
                 LOG.error("TestCommentResults__ScanResultsEmpty.testCommentResults__ScanResultsEmpty() error " + e);
                 fail();
@@ -1306,6 +1343,7 @@ public class GitHubServiceTest {
         final String url_pr_1 = "https://github.com/Samsung/LPVS/pull/18";
         final String url_pr_2 = "https://github.com/Samsung/LPVS/pull/19";
 
+        LPVSPullRequest lpvsPullRequest;
         // `webhookConfig`
         WebhookConfig webhookConfig;
         final String commit_sha = "895337e89ae103ff2d18c9e0d93709f743226afa";
@@ -1328,6 +1366,7 @@ public class GitHubServiceTest {
         final String license_name_1 = "MIT License";
         final String spdx_id_1 = "MIT";
         final String access_1 = "PROHIBITED";
+        final String alternativeName_1 = "";
         final String checklist_url_1 = "https://opensource.org/licenses/MIT";
 
         // `conflict_1`
@@ -1362,13 +1401,14 @@ public class GitHubServiceTest {
                 fail();
             }
 
+            lpvsPullRequest = new LPVSPullRequest();
             webhookConfig = new WebhookConfig();
             webhookConfig.setPullRequestAPIUrl(url_pr_2);
             webhookConfig.setHeadCommitSHA(commit_sha);
             webhookConfig.setPullRequestUrl(url_pr_2);
 
             try {
-                when(mocked_instance_gh.getRepository(gh_service.getRepositoryOrganization(webhookConfig) + "/" + gh_service.getRepositoryName(webhookConfig))).thenReturn(mocked_repo);
+                when(mocked_instance_gh.getRepository(WebhookUtil.getRepositoryOrganization(webhookConfig) + "/" + WebhookUtil.getRepositoryName(webhookConfig))).thenReturn(mocked_repo);
             } catch (IOException e) {
                 LOG.error("mocked_repo.getRepository error " + e);
             }
@@ -1385,19 +1425,20 @@ public class GitHubServiceTest {
                 LOG.error("mocked_repo.getPullRequests error " + e);
             }
 
-            lpvs_license_1 = new LPVSLicense(1L, license_name_1, spdx_id_1, access_1, checklist_url_1);
-            lpvs_file_1 = new LPVSFile(1L, file_url_1, file_path_1, snippet_match_1, matched_lines_1, Set.of(lpvs_license_1), component_1);
+            lpvs_license_1 = new LPVSLicense(1L, license_name_1, spdx_id_1, access_1, alternativeName_1, checklist_url_1);
+            lpvs_file_1 = new LPVSFile(1L, file_url_1, file_path_1, snippet_match_1, matched_lines_1, Set.of(lpvs_license_1), component_1, null, null, null, null, null);
             conflict_1 = new LicenseService.Conflict<>(conflict_1_l1, conflict_1_l2);
         }
 
         @Test
         public void testCommentResults__ProhibitedPresentConflictsPresent() {
             // main test
-            gh_service.commentResults(webhookConfig, List.of(lpvs_file_1), List.of(conflict_1));
+            gh_service.commentResults(webhookConfig, List.of(lpvs_file_1), List.of(conflict_1), lpvsPullRequest);
 
             // `mocked_instance_gh` verify
             try {
-                verify(mocked_instance_gh, times(1)).getRepository(gh_service.getRepositoryOrganization(webhookConfig) + "/" + gh_service.getRepositoryName(webhookConfig));
+                verify(mocked_instance_gh, times(1)).getRepository(
+                        WebhookUtil.getRepositoryOrganization(webhookConfig) + "/" + WebhookUtil.getRepositoryName(webhookConfig));
             } catch (IOException e) {
                 LOG.error("TestCommentResults__ProhibitedPresentConflictsPresent.testCommentResults__ProhibitedPresentConflictsPresent() error " + e);
                 fail();
@@ -1431,6 +1472,7 @@ public class GitHubServiceTest {
         final String url_pr_1 = "https://github.com/Samsung/LPVS/pull/18";
         final String url_pr_2 = "https://github.com/Samsung/LPVS/pull/19";
 
+        LPVSPullRequest lpvsPullRequest;
         // `webhookConfig`
         WebhookConfig webhookConfig;
         final String commit_sha = "895337e89ae103ff2d18c9e0d93709f743226afa";
@@ -1453,6 +1495,7 @@ public class GitHubServiceTest {
         final String license_name_1 = "MIT License";
         final String spdx_id_1 = "MIT";
         final String access_1 = "PERMITTED";
+        final String alternativeName_1 = "";
         final String checklist_url_1 = "https://opensource.org/licenses/MIT";
 
         final String expected_comment = "**\\[Open Source License Validation\\]**  No license issue detected \n\n" +
@@ -1480,13 +1523,15 @@ public class GitHubServiceTest {
                 fail();
             }
 
+            lpvsPullRequest = new LPVSPullRequest();
+
             webhookConfig = new WebhookConfig();
             webhookConfig.setPullRequestAPIUrl(url_pr_2);
             webhookConfig.setHeadCommitSHA(commit_sha);
             webhookConfig.setPullRequestUrl(url_pr_2);
 
             try {
-                when(mocked_instance_gh.getRepository(gh_service.getRepositoryOrganization(webhookConfig) + "/" + gh_service.getRepositoryName(webhookConfig))).thenReturn(mocked_repo);
+                when(mocked_instance_gh.getRepository(WebhookUtil.getRepositoryOrganization(webhookConfig) + "/" + WebhookUtil.getRepositoryName(webhookConfig))).thenReturn(mocked_repo);
             } catch (IOException e) {
                 LOG.error("mocked_repo.getRepository error " + e);
             }
@@ -1503,18 +1548,19 @@ public class GitHubServiceTest {
                 LOG.error("mocked_repo.getPullRequests error " + e);
             }
 
-            lpvs_license_1 = new LPVSLicense(1L, license_name_1, spdx_id_1, access_1, checklist_url_1);
-            lpvs_file_1 = new LPVSFile(1L, file_url_1, file_path_1, snippet_match_1, matched_lines_1, Set.of(lpvs_license_1), component_1);
+            lpvs_license_1 = new LPVSLicense(1L, license_name_1, spdx_id_1, access_1, alternativeName_1, checklist_url_1);
+            lpvs_file_1 = new LPVSFile(1L, file_url_1, file_path_1, snippet_match_1, matched_lines_1, Set.of(lpvs_license_1), component_1, null, null, null, null, null);
         }
 
         @Test
         public void testCommentResults__ProhibitedAbsentConflictsAbsent() {
             // main test
-            gh_service.commentResults(webhookConfig, List.of(lpvs_file_1), List.of());
+            gh_service.commentResults(webhookConfig, List.of(lpvs_file_1), List.of(), lpvsPullRequest);
 
             // `mocked_instance_gh` verify
             try {
-                verify(mocked_instance_gh, times(1)).getRepository(gh_service.getRepositoryOrganization(webhookConfig) + "/" + gh_service.getRepositoryName(webhookConfig));
+                verify(mocked_instance_gh, times(1)).getRepository(
+                        WebhookUtil.getRepositoryOrganization(webhookConfig) + "/" + WebhookUtil.getRepositoryName(webhookConfig));
             } catch (IOException e) {
                 LOG.error("TestCommentResults__ProhibitedAbsentConflictsAbsent.testCommentResults__ProhibitedAbsentConflictsAbsent() error " + e);
                 fail();
@@ -1558,7 +1604,7 @@ public class GitHubServiceTest {
             webhookConfig.setPullRequestUrl(url_pr);
 
             try {
-                when(mocked_instance_gh.getRepository(gh_service.getRepositoryOrganization(webhookConfig) + "/" + gh_service.getRepositoryName(webhookConfig))).thenReturn(mocked_repo);
+                when(mocked_instance_gh.getRepository(WebhookUtil.getRepositoryOrganization(webhookConfig) + "/" + WebhookUtil.getRepositoryName(webhookConfig))).thenReturn(mocked_repo);
             } catch (IOException e) {
                 LOG.error("mocked_repo.getRepository error " + e);
             }
@@ -1586,7 +1632,8 @@ public class GitHubServiceTest {
 
                 // `mocked_instance_gh` verify
                 try {
-                    verify(mocked_instance_gh, times(1)).getRepository(gh_service.getRepositoryOrganization(webhookConfig) + "/" + gh_service.getRepositoryName(webhookConfig));
+                    verify(mocked_instance_gh, times(1)).getRepository(
+                            WebhookUtil.getRepositoryOrganization(webhookConfig) + "/" + WebhookUtil.getRepositoryName(webhookConfig));
                 } catch (IOException e) {
                     LOG.error("mocked_instance_gh.getRepository error " + e);
                 }
@@ -1626,7 +1673,7 @@ public class GitHubServiceTest {
             webhookConfig = new WebhookConfig();
             webhookConfig.setPullRequestUrl(url_pr_1);
             try {
-                when(mocked_instance_gh.getRepository(gh_service.getRepositoryOrganization(webhookConfig) + "/" + gh_service.getRepositoryName(webhookConfig))).thenReturn(mocked_repo);
+                when(mocked_instance_gh.getRepository(WebhookUtil.getRepositoryOrganization(webhookConfig) + "/" + WebhookUtil.getRepositoryName(webhookConfig))).thenReturn(mocked_repo);
             } catch (IOException e) {
                 LOG.error("mocked_repo.getRepository error " + e);
             }
@@ -1654,7 +1701,8 @@ public class GitHubServiceTest {
 
                 // `mocked_instance_gh` verify
                 try {
-                    verify(mocked_instance_gh, times(1)).getRepository(gh_service.getRepositoryOrganization(webhookConfig) + "/" + gh_service.getRepositoryName(webhookConfig));
+                    verify(mocked_instance_gh, times(1)).getRepository(
+                            WebhookUtil.getRepositoryOrganization(webhookConfig) + "/" + WebhookUtil.getRepositoryName(webhookConfig));
                 } catch (IOException e) {
                     LOG.error("mocked_instance_gh.getRepository error " + e);
                 }
@@ -1695,7 +1743,7 @@ public class GitHubServiceTest {
             webhookConfig.setPullRequestUrl(url_pr_1);
 
             try {
-                when(mocked_instance_gh.getRepository(gh_service.getRepositoryOrganization(webhookConfig) + "/" + gh_service.getRepositoryName(webhookConfig))).thenReturn(mocked_repo);
+                when(mocked_instance_gh.getRepository(WebhookUtil.getRepositoryOrganization(webhookConfig) + "/" + WebhookUtil.getRepositoryName(webhookConfig))).thenReturn(mocked_repo);
             } catch (IOException e) {
                 LOG.error("mocked_repo.getRepository error " + e);
             }
@@ -1723,7 +1771,8 @@ public class GitHubServiceTest {
 
                 // `mocked_instance_gh` verify
                 try {
-                    verify(mocked_instance_gh, times(1)).getRepository(gh_service.getRepositoryOrganization(webhookConfig) + "/" + gh_service.getRepositoryName(webhookConfig));
+                    verify(mocked_instance_gh, times(1)).getRepository(
+                            WebhookUtil.getRepositoryOrganization(webhookConfig) + "/" + WebhookUtil.getRepositoryName(webhookConfig));
                 } catch (IOException e) {
                     LOG.error("mocked_instance_gh.getRepository error " + e);
                 }
@@ -1765,7 +1814,7 @@ public class GitHubServiceTest {
             webhookConfig.setPullRequestUrl(url_pr_1);
 
             try {
-                when(mocked_instance_gh.getRepository(gh_service.getRepositoryOrganization(webhookConfig) + "/" + gh_service.getRepositoryName(webhookConfig))).thenReturn(mocked_repo);
+                when(mocked_instance_gh.getRepository(WebhookUtil.getRepositoryOrganization(webhookConfig) + "/" + WebhookUtil.getRepositoryName(webhookConfig))).thenReturn(mocked_repo);
             } catch (IOException e) {
                 LOG.error("mocked_repo.getRepository error " + e);
             }
@@ -1793,7 +1842,8 @@ public class GitHubServiceTest {
 
                 // `mocked_instance_gh` verify
                 try {
-                    verify(mocked_instance_gh, times(1)).getRepository(gh_service.getRepositoryOrganization(webhookConfig) + "/" + gh_service.getRepositoryName(webhookConfig));
+                    verify(mocked_instance_gh, times(1)).getRepository(
+                            WebhookUtil.getRepositoryOrganization(webhookConfig) + "/" + WebhookUtil.getRepositoryName(webhookConfig));
                 } catch (IOException e) {
                     LOG.error("mocked_instance_gh.getRepository error " + e);
                 }
@@ -1905,7 +1955,7 @@ public class GitHubServiceTest {
             webhookConfig.setHeadCommitSHA(commit_sha);
             webhookConfig.setPullRequestUrl(pr_url);
 
-            lpvs_file_1 = new LPVSFile(1L, null, file_path_1, null, matched_lines_1, null, null);
+            lpvs_file_1 = new LPVSFile(1L, null, file_path_1, null, matched_lines_1, null, null, null, null, null, null, null);
         }
 
         @Test
@@ -1937,7 +1987,7 @@ public class GitHubServiceTest {
             webhookConfig.setHeadCommitSHA(commit_sha);
             webhookConfig.setPullRequestUrl(pr_url);
 
-            lpvs_file_1 = new LPVSFile(1L, null, file_path_1, null, matched_lines_1, null, null);
+            lpvs_file_1 = new LPVSFile(1L, null, file_path_1, null, matched_lines_1, null, null, null, null, null, null, null);
         }
 
         @Test
@@ -1956,12 +2006,14 @@ public class GitHubServiceTest {
         GitHubService gh_service = new GitHubService(GH_LOGIN, GH_AUTH_TOKEN, GH_API_URL);
         final String url_pr_1 = "https://github.com/Samsung/LPVS/pull/18";
         WebhookConfig webhookConfig;
+        LPVSPullRequest lpvsPullRequest;
 
         @BeforeEach
         void setUp() {
             webhookConfig = new WebhookConfig();
             webhookConfig.setPullRequestUrl(url_pr_1);
             webhookConfig.setPullRequestAPIUrl("http://url.com");
+            lpvsPullRequest = new LPVSPullRequest();
         }
 
         @Test
@@ -1969,10 +2021,10 @@ public class GitHubServiceTest {
             GitHub gitHub = Mockito.mock(GitHub.class);
             GHRepository repository = Mockito.mock(GHRepository.class);
             ReflectionTestUtils.setField(gh_service, "gitHub", gitHub);
-            System.out.println(gh_service.getRepositoryOrganization(webhookConfig));
-            System.out.println(gh_service.getRepositoryName(webhookConfig));
+            System.out.println(WebhookUtil.getRepositoryOrganization(webhookConfig));
+            System.out.println(WebhookUtil.getRepositoryName(webhookConfig));
             Mockito.when(gitHub.getRepository(
-                    gh_service.getRepositoryOrganization(webhookConfig) + "/" + gh_service.getRepositoryName(webhookConfig)))
+                    WebhookUtil.getRepositoryOrganization(webhookConfig) + "/" + WebhookUtil.getRepositoryName(webhookConfig)))
                     .thenReturn(repository);
             LPVSFile file = new LPVSFile();
             LPVSLicense license = new LPVSLicense(){{
@@ -1983,9 +2035,15 @@ public class GitHubServiceTest {
                 add(license);
             }});
             file.setFilePath("");
-            file.setComponent("");
+            file.setComponentFilePath("");
+            file.setComponentName("");
+            file.setComponentLines("");
+            file.setComponentUrl("");
+            file.setComponentVersion("");
+            file.setComponentVendor("");
             file.setSnippetMatch("");
             file.setMatchedLines("");
+            file.setSnippetType("");
             List<LPVSFile> fileList = new ArrayList<LPVSFile>(){{
                 add(file);
             }};
@@ -1998,9 +2056,9 @@ public class GitHubServiceTest {
             }};
             Mockito.when(repository.getPullRequests(GHIssueState.OPEN))
                     .thenReturn(pullRequestList);
-            gh_service.commentResults(webhookConfig, fileList, conflictList);
+            gh_service.commentResults(webhookConfig, fileList, conflictList, lpvsPullRequest);
             license.setAccess("");
-            gh_service.commentResults(webhookConfig, fileList, conflictList);
+            gh_service.commentResults(webhookConfig, fileList, conflictList, lpvsPullRequest);
             Mockito.verify(gitHub, times(2)).getRepository(Mockito.anyString());
         }
     }

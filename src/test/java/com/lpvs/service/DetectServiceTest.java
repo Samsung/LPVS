@@ -62,8 +62,8 @@ public class DetectServiceTest {
             webhookConfig = new WebhookConfig();
             webhookConfig.setId(1L);
 
-            lpvs_file_1 = new LPVSFile(1L, null, null, null, null, null, null);
-            lpvs_file_2 = new LPVSFile(2L, null, null, null, null, null, null);
+            lpvs_file_1 = new LPVSFile(1L, null, null, null, null, null, null, null, null, null, null, null);
+            lpvs_file_2 = new LPVSFile(2L, null, null, null, null, null, null, null, null, null, null, null);
 
             when(scanoss_mock.checkLicenses(webhookConfig)).thenReturn(List.of(lpvs_file_1, lpvs_file_2));
         }

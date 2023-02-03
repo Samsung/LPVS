@@ -9,11 +9,12 @@ package com.lpvs.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Set;
 
-@Getter @Setter @AllArgsConstructor
+@Getter @Setter @AllArgsConstructor @NoArgsConstructor
 public class LPVSFile {
 
     private Long id;

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2022, Samsung Electronics Co., Ltd. All rights reserved.
+ * Copyright (c) 2023, Samsung Electronics Co., Ltd. All rights reserved.
  *
  * Use of this source code is governed by a MIT license that can be
  * found in the LICENSE file.
@@ -9,13 +9,14 @@ package com.lpvs.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "licenses", schema = "lpvs", indexes = {@Index(name = "spdx_id", columnList = "license_spdx", unique = true)})
-@Getter @Setter @AllArgsConstructor
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor
 public class LPVSLicense {
 
     @Id

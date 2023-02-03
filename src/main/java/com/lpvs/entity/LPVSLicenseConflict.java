@@ -8,13 +8,14 @@
 package com.lpvs.entity;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "license_conflicts", schema = "lpvs")
-@Getter @Setter
+@Getter @Setter @NoArgsConstructor
 public class LPVSLicenseConflict {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
