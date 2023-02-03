@@ -32,8 +32,9 @@ public class QueueProcessorService {
 
     @EventListener(ApplicationReadyEvent.class)
     private void queueProcessor() throws Exception {
+        queueService.checkForQueue();
         while (true) {
-            WebhookConfig webhookConfig = queueService.getQueueFirstElement();
+            WebhookConfig webhookConfig = queueService.getQueue().take();
             LOG.info("PROCESS Webhook id = " + webhookConfig.getId());
             webhookConfig.setDate(new Date());
             queueService.processWebHook(webhookConfig);

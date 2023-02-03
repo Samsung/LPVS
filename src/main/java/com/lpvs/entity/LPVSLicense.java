@@ -7,10 +7,15 @@
 
 package com.lpvs.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "licenses", schema = "lpvs", indexes = {@Index(name = "spdx_id", columnList = "license_spdx", unique = true)})
+@Getter @Setter @AllArgsConstructor
 public class LPVSLicense {
 
     @Id
@@ -27,58 +32,10 @@ public class LPVSLicense {
     @Column(name = "license_usage")
     private String access;
 
+    @Column(name = "license_alternative_names", columnDefinition = "LONGTEXT")
+    private String alternativeNames;
+
     @Transient
     private String checklistUrl;
-
-    public LPVSLicense() {
-    }
-
-    public LPVSLicense(Long licenseId, String licenseName, String spdxId, String access, String checklistUrl) {
-        this.licenseId = licenseId;
-        this.licenseName = licenseName;
-        this.spdxId = spdxId;
-        this.access = access;
-        this.checklistUrl = checklistUrl;
-    }
-
-    public Long getLicenseId() {
-        return licenseId;
-    }
-
-    public void setLicenseId(Long licenseId) {
-        this.licenseId = licenseId;
-    }
-
-    public String getLicenseName() {
-        return licenseName;
-    }
-
-    public void setLicenseName(String licenseName) {
-        this.licenseName = licenseName;
-    }
-
-    public String getSpdxId() {
-        return spdxId;
-    }
-
-    public void setSpdxId(String spdxId) {
-        this.spdxId = spdxId;
-    }
-
-    public String getAccess() {
-        return access;
-    }
-
-    public void setAccess(String access) {
-        this.access = access;
-    }
-
-    public String getChecklistUrl() {
-        return checklistUrl;
-    }
-
-    public void setChecklistUrl(String checklistUrl) {
-        this.checklistUrl = checklistUrl;
-    }
 
 }

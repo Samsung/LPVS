@@ -8,6 +8,7 @@
 package com.lpvs.controller;
 
 import com.lpvs.entity.config.WebhookConfig;
+import com.lpvs.repository.QueueRepository;
 import com.lpvs.service.GitHubService;
 import com.lpvs.service.QueueService;
 import com.lpvs.util.WebhookUtil;
@@ -55,6 +56,9 @@ public class GitHubWebhooksController {
     @Autowired
     private QueueService queueService;
 
+    @Autowired
+    private QueueRepository queueRepository;
+
     private GitHubService gitHubService;
 
     private static final Logger LOG = LoggerFactory.getLogger(GitHubWebhooksController.class);
@@ -88,6 +92,7 @@ public class GitHubWebhooksController {
         } else if (WebhookUtil.checkPayload(payload)) {
             WebhookConfig webhookConfig = WebhookUtil.getGitHubWebhookConfig(payload);
             webhookConfig.setDate(new Date());
+            queueRepository.save(webhookConfig);
             LOG.info("Repository scanning is enabled: On");
             gitHubService.setPendingCheck(webhookConfig);
             queueService.addFirst(webhookConfig);

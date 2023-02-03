@@ -152,6 +152,7 @@ public class LicenseService {
         // 1. Check conflict between repository license and detected licenses
         List<Conflict<String, String>> foundConflicts = new ArrayList<>();
         String repositoryLicense = webhookConfig.getRepositoryLicense();
+        // ToDo: add check for license alternative names. Reason: GitHub can use not SPDX ID.
         if (repositoryLicense != null) {
             for (String detectedLicenseUnique : detectedLicensesUnique) {
                 for (Conflict<String, String> licenseConflict : licenseConflicts) {

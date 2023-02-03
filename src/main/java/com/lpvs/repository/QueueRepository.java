@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface QueueRepository extends CrudRepository<WebhookConfig, Long> {
 
-    @Query(value = "SELECT * FROM soshub.lpvs_bot_queue", nativeQuery = true)
+    @Query(value = "SELECT * FROM lpvs.queue", nativeQuery = true)
     List<WebhookConfig> getQueueList();
 }

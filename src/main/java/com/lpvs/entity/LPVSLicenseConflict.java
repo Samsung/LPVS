@@ -7,10 +7,14 @@
 
 package com.lpvs.entity;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "license_conflicts", schema = "lpvs")
+@Getter @Setter
 public class LPVSLicenseConflict {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,18 +33,4 @@ public class LPVSLicenseConflict {
         this.repositoryLicense = repositoryLicense;
         this.conflictLicense = conflictLicense;
     }
-
-    public LPVSLicenseConflict() { }
-
-    public Long getConflictId() { return conflictId; }
-
-    public void setConflictId(Long conflictId) { this.conflictId = conflictId; }
-
-    public LPVSLicense getRepositoryLicense() { return repositoryLicense; }
-
-    public void setRepositoryLicense(LPVSLicense repositoryLicense) { this.repositoryLicense = repositoryLicense; }
-
-    public LPVSLicense getConflictLicense() { return conflictLicense; }
-
-    public void setConflictLicense(LPVSLicense conflictLicense) { this.conflictLicense = conflictLicense; }
 }
