@@ -1955,7 +1955,7 @@ public class GitHubServiceTest {
             webhookConfig.setHeadCommitSHA(commit_sha);
             webhookConfig.setPullRequestUrl(pr_url);
 
-            lpvs_file_1 = new LPVSFile(1L, null, file_path_1, null, matched_lines_1, null, null, null, null, null, null, null);
+            lpvs_file_1 = new LPVSFile(1L, file_path_1, "snippet", null, matched_lines_1, null, null, null, null, null, null, null);
         }
 
         @Test
@@ -1987,7 +1987,7 @@ public class GitHubServiceTest {
             webhookConfig.setHeadCommitSHA(commit_sha);
             webhookConfig.setPullRequestUrl(pr_url);
 
-            lpvs_file_1 = new LPVSFile(1L, null, file_path_1, null, matched_lines_1, null, null, null, null, null, null, null);
+            lpvs_file_1 = new LPVSFile(1L, file_path_1, "snippet", null, matched_lines_1, null, null, null, null, null, null, null);
         }
 
         @Test

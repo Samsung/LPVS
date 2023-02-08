@@ -80,7 +80,7 @@ public class LPVSLicenseTest {
     public void setAlternativeNamesTest() {
         final String newActualAlternativeNames = "newAlternativeName";
         assertEquals(lpvsLicense.getAlternativeNames(), baseAlternativeName);
-        lpvsLicense.setAccess(newActualAlternativeNames);
+        lpvsLicense.setAlternativeNames(newActualAlternativeNames);
         assertNotEquals(lpvsLicense.getAlternativeNames(), baseAlternativeName);
         assertEquals(lpvsLicense.getAlternativeNames(), newActualAlternativeNames);
     }

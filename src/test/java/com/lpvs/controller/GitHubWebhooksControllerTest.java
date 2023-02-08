@@ -90,6 +90,8 @@ public class GitHubWebhooksControllerTest {
             actual = null;
         }
         ResponseEntity<ResponseWrapper> expected = new ResponseEntity<>(new ResponseWrapper(SUCCESS), HttpStatus.OK);
+        LOG.info("EXPECTED: " + expected.toString());
+        LOG.info("ACTUAL: " + actual.toString());
         assertEquals(expected.toString().substring(0, 42), actual.toString().substring(0, 42));
     }
 

@@ -77,6 +77,7 @@ public class GitHubWebhooksController {
     @RequestMapping(value = "/webhooks", method = RequestMethod.POST)
     public ResponseEntity<ResponseWrapper> gitHubWebhooks(@RequestHeader(SIGNATURE) String signature, @RequestBody String payload) throws Exception {
         LOG.info("New webhook request received");
+        LOG.info(payload);
 
         // if signature is empty return 401
         if (!StringUtils.hasText(signature)) {

@@ -12,6 +12,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
 @Table(name = "pull_requests", schema = "lpvs")
@@ -37,4 +38,20 @@ public class LPVSPullRequest {
 
     @Column(name = "status")
     private String status;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        LPVSPullRequest that = (LPVSPullRequest) o;
+        return date.equals(that.date) &&
+                repositoryName.equals(that.repositoryName) &&
+                pullRequestUrl.equals(that.pullRequestUrl) &&
+                pullRequestFilesUrl.equals(that.pullRequestFilesUrl);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(date, repositoryName, pullRequestUrl, pullRequestFilesUrl);
+    }
 }

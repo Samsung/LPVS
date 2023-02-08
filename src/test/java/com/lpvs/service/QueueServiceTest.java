@@ -11,6 +11,7 @@ import com.lpvs.entity.LPVSFile;
 import com.lpvs.entity.LPVSLicense;
 import com.lpvs.entity.LPVSPullRequest;
 import com.lpvs.entity.config.WebhookConfig;
+import com.lpvs.util.WebhookUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -88,19 +89,26 @@ public class QueueServiceTest {
         WebhookConfig webhookConfig;
         LPVSPullRequest lpvsPullRequest;
         int maxAttempts = 4;
+        Date date = new Date();
 
         @BeforeEach
         void setUp() {
             webhookConfig = new WebhookConfig();
+            webhookConfig.setPullRequestUrl("http://test_url/url/pull/1");
+            webhookConfig.setPullRequestFilesUrl("http://test_url/url");
+            webhookConfig.setDate(date);
 
             lpvsPullRequest = new LPVSPullRequest();
+            lpvsPullRequest.setRepositoryName("test_url/url");
+            lpvsPullRequest.setDate(date);
+            lpvsPullRequest.setPullRequestUrl("http://test_url/url/pull/1");
+            lpvsPullRequest.setPullRequestFilesUrl("http://test_url/url");
 
             mockGitHubService = mock(GitHubService.class);
             when(mockGitHubService.getPullRequestFiles(webhookConfig)).thenReturn(null);
 
             mockDetectService = mock(DetectService.class);
             mockLicenseService = mock(LicenseService.class);
-
 
             queueService = new QueueService(mockGitHubService,
                                             mockDetectService,
@@ -114,7 +122,7 @@ public class QueueServiceTest {
             queueService.processWebHook(webhookConfig);
 
             verify(mockGitHubService, times(1)).getPullRequestFiles(webhookConfig);
-            verify(mockGitHubService, times(1)).commentResults(eq(webhookConfig), anyList(), anyList(), lpvsPullRequest);
+            verify(mockGitHubService, times(1)).commentResults(eq(webhookConfig), anyList(), anyList(), eq(lpvsPullRequest));
             verify(mockGitHubService, times(1)).setErrorCheck(webhookConfig);
 
             verifyNoMoreInteractions(mockGitHubService);
@@ -170,11 +178,20 @@ public class QueueServiceTest {
         LicenseService mockLicenseService;
         WebhookConfig webhookConfigMain;
         LPVSPullRequest lpvsPullRequest;
+        Date date = new Date();
 
         @BeforeEach
         void setUp() {
             lpvsPullRequest = new LPVSPullRequest();
+            lpvsPullRequest.setRepositoryName("test_url/url");
+            lpvsPullRequest.setDate(date);
+            lpvsPullRequest.setPullRequestUrl("http://test_url/url/pull/1");
+            lpvsPullRequest.setPullRequestFilesUrl("http://test_url/url");
+
             webhookConfigMain = new WebhookConfig();
+            webhookConfigMain.setPullRequestUrl("http://test_url/url/pull/1");
+            webhookConfigMain.setPullRequestFilesUrl("http://test_url/url");
+            webhookConfigMain.setDate(date);
 
             mockGitHubService = mock(GitHubService.class);
             when(mockGitHubService.getPullRequestFiles(webhookConfigMain)).thenReturn(filePathTestNoDeletion);
@@ -214,7 +231,7 @@ public class QueueServiceTest {
                 fail();
             }
             verify(mockLicenseService, times(1)).findConflicts(webhookConfigMain, LPVSFilesTest);
-            verify(mockGitHubService, times(1)).commentResults(webhookConfigMain, LPVSFilesTest, Collections.emptyList(), lpvsPullRequest);
+            verify(mockGitHubService, times(1)).commentResults(eq(webhookConfigMain), eq(LPVSFilesTest), eq(Collections.emptyList()), eq(lpvsPullRequest));
 
             verifyNoMoreInteractions(mockGitHubService);
             verifyNoMoreInteractions(mockDetectService);
@@ -230,11 +247,20 @@ public class QueueServiceTest {
         LicenseService mockLicenseService;
         WebhookConfig webhookConfigMain;
         LPVSPullRequest lpvsPullRequest;
+        Date date = new Date();
 
         @BeforeEach
         void setUp() {
             lpvsPullRequest = new LPVSPullRequest();
+            lpvsPullRequest.setRepositoryName("test_url/url");
+            lpvsPullRequest.setDate(date);
+            lpvsPullRequest.setPullRequestUrl("http://test_url/url/pull/1");
+            lpvsPullRequest.setPullRequestFilesUrl("http://test_url/url");
+
             webhookConfigMain = new WebhookConfig();
+            webhookConfigMain.setPullRequestUrl("http://test_url/url/pull/1");
+            webhookConfigMain.setPullRequestFilesUrl("http://test_url/url");
+            webhookConfigMain.setDate(date);
 
             mockGitHubService = mock(GitHubService.class);
             when(mockGitHubService.getPullRequestFiles(webhookConfigMain)).thenReturn(filePathTestWithDeletion);
@@ -274,7 +300,7 @@ public class QueueServiceTest {
                 fail();
             }
             verify(mockLicenseService, times(1)).findConflicts(webhookConfigMain, LPVSFilesTest);
-            verify(mockGitHubService, times(1)).commentResults(webhookConfigMain, LPVSFilesTest, Collections.emptyList(), lpvsPullRequest);
+            verify(mockGitHubService, times(1)).commentResults(eq(webhookConfigMain), eq(LPVSFilesTest), eq(Collections.emptyList()), eq(lpvsPullRequest));
 
             verifyNoMoreInteractions(mockGitHubService);
             verifyNoMoreInteractions(mockDetectService);
@@ -290,11 +316,20 @@ public class QueueServiceTest {
         LicenseService mockLicenseService;
         WebhookConfig webhookConfigMain;
         LPVSPullRequest lpvsPullRequest;
+        Date date = new Date();
 
         @BeforeEach
         void setUp() {
             lpvsPullRequest = new LPVSPullRequest();
+            lpvsPullRequest.setRepositoryName("test_url/url");
+            lpvsPullRequest.setDate(date);
+            lpvsPullRequest.setPullRequestUrl("http://test_url/url/pull/1");
+            lpvsPullRequest.setPullRequestFilesUrl("http://test_url/url");
+
             webhookConfigMain = new WebhookConfig();
+            webhookConfigMain.setPullRequestUrl("http://test_url/url/pull/1");
+            webhookConfigMain.setPullRequestFilesUrl("http://test_url/url");
+            webhookConfigMain.setDate(date);
 
             mockGitHubService = mock(GitHubService.class);
             when(mockGitHubService.getPullRequestFiles(webhookConfigMain)).thenReturn(filePathTestNoDeletion);
@@ -336,7 +371,7 @@ public class QueueServiceTest {
                 fail();
             }
             verify(mockLicenseService, times(1)).findConflicts(webhookConfigMain, LPVSFilesTest);
-            verify(mockGitHubService, times(1)).commentResults(webhookConfigMain, LPVSFilesTest, Collections.emptyList(), lpvsPullRequest);
+            verify(mockGitHubService, times(1)).commentResults(eq(webhookConfigMain), eq(LPVSFilesTest), eq(Collections.emptyList()), eq(lpvsPullRequest));
 
             verifyNoMoreInteractions(mockGitHubService);
             verifyNoMoreInteractions(mockDetectService);
@@ -352,11 +387,20 @@ public class QueueServiceTest {
         LicenseService mockLicenseService;
         WebhookConfig webhookConfigMain;
         LPVSPullRequest lpvsPullRequest;
+        Date date = new Date();
 
         @BeforeEach
         void setUp() {
             lpvsPullRequest = new LPVSPullRequest();
+            lpvsPullRequest.setRepositoryName("test_url/url");
+            lpvsPullRequest.setDate(date);
+            lpvsPullRequest.setPullRequestUrl("http://test_url/url/pull/1");
+            lpvsPullRequest.setPullRequestFilesUrl("http://test_url/url");
+
             webhookConfigMain = new WebhookConfig();
+            webhookConfigMain.setPullRequestUrl("http://test_url/url/pull/1");
+            webhookConfigMain.setPullRequestFilesUrl("http://test_url/url");
+            webhookConfigMain.setDate(date);
 
             mockGitHubService = mock(GitHubService.class);
             when(mockGitHubService.getPullRequestFiles(webhookConfigMain)).thenReturn(filePathTestWithDeletion);
@@ -399,7 +443,7 @@ public class QueueServiceTest {
                 fail();
             }
             verify(mockLicenseService, times(1)).findConflicts(webhookConfigMain, LPVSFilesTest);
-            verify(mockGitHubService, times(1)).commentResults(webhookConfigMain, LPVSFilesTest, Collections.emptyList(), lpvsPullRequest);
+            verify(mockGitHubService, times(1)).commentResults(eq(webhookConfigMain), eq(LPVSFilesTest), eq(Collections.emptyList()), eq(lpvsPullRequest));
 
             verifyNoMoreInteractions(mockGitHubService);
             verifyNoMoreInteractions(mockDetectService);
@@ -415,11 +459,20 @@ public class QueueServiceTest {
         LicenseService mockLicenseService;
         WebhookConfig webhookConfigMain;
         LPVSPullRequest lpvsPullRequest;
+        Date date = new Date();
 
         @BeforeEach
         void setUp() {
             lpvsPullRequest = new LPVSPullRequest();
+            lpvsPullRequest.setRepositoryName("test_url/url");
+            lpvsPullRequest.setDate(date);
+            lpvsPullRequest.setPullRequestUrl("http://test_url/url/pull/1");
+            lpvsPullRequest.setPullRequestFilesUrl("http://test_url/url");
+
             webhookConfigMain = new WebhookConfig();
+            webhookConfigMain.setPullRequestUrl("http://test_url/url/pull/1");
+            webhookConfigMain.setPullRequestFilesUrl("http://test_url/url");
+            webhookConfigMain.setDate(date);
 
             mockGitHubService = mock(GitHubService.class);
             when(mockGitHubService.getPullRequestFiles(webhookConfigMain)).thenReturn(filePathTestNoDeletion);
@@ -461,7 +514,7 @@ public class QueueServiceTest {
                 fail();
             }
             verify(mockLicenseService, times(1)).findConflicts(webhookConfigMain, LPVSFilesTest);
-            verify(mockGitHubService, times(1)).commentResults(webhookConfigMain, LPVSFilesTest, Collections.emptyList(), lpvsPullRequest);
+            verify(mockGitHubService, times(1)).commentResults(eq(webhookConfigMain), eq(LPVSFilesTest), eq(Collections.emptyList()), eq(lpvsPullRequest));
 
             verifyNoMoreInteractions(mockGitHubService);
             verifyNoMoreInteractions(mockDetectService);
@@ -477,11 +530,20 @@ public class QueueServiceTest {
         LicenseService mockLicenseService;
         WebhookConfig webhookConfigMain;
         LPVSPullRequest lpvsPullRequest;
+        Date date = new Date();
 
         @BeforeEach
         void setUp() {
             lpvsPullRequest = new LPVSPullRequest();
+            lpvsPullRequest.setRepositoryName("test_url/url");
+            lpvsPullRequest.setDate(date);
+            lpvsPullRequest.setPullRequestUrl("http://test_url/url/pull/1");
+            lpvsPullRequest.setPullRequestFilesUrl("http://test_url/url");
+
             webhookConfigMain = new WebhookConfig();
+            webhookConfigMain.setPullRequestUrl("http://test_url/url/pull/1");
+            webhookConfigMain.setPullRequestFilesUrl("http://test_url/url");
+            webhookConfigMain.setDate(date);
 
             mockGitHubService = mock(GitHubService.class);
             when(mockGitHubService.getPullRequestFiles(webhookConfigMain)).thenReturn(filePathTestWithDeletion);
@@ -523,7 +585,7 @@ public class QueueServiceTest {
                 fail();
             }
             verify(mockLicenseService, times(1)).findConflicts(webhookConfigMain, LPVSFilesTest);
-            verify(mockGitHubService, times(1)).commentResults(webhookConfigMain, LPVSFilesTest, Collections.emptyList(), lpvsPullRequest);
+            verify(mockGitHubService, times(1)).commentResults(eq(webhookConfigMain), eq(LPVSFilesTest), eq(Collections.emptyList()), eq(lpvsPullRequest));
 
             verifyNoMoreInteractions(mockGitHubService);
             verifyNoMoreInteractions(mockDetectService);
