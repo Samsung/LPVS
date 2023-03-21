@@ -8,10 +8,9 @@
 package com.lpvs.service;
 
 import com.lpvs.entity.LPVSFile;
-import com.lpvs.entity.config.WebhookConfig;
-import com.lpvs.service.scanner.scanoss.ScanossDetectService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.lpvs.entity.LPVSQueue;
+import com.lpvs.service.scanner.scanoss.LPVSScanossDetectService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -20,27 +19,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class DetectService {
+@Slf4j
+public class LPVSDetectService {
 
     private String scannerType;
 
-    private ScanossDetectService scanossDetectService;
+    private LPVSScanossDetectService scanossDetectService;
 
     @Autowired
-    public DetectService(@Value("${scanner:scanoss}") String scannerType,
-                         ScanossDetectService scanossDetectService) {
+    public LPVSDetectService(@Value("${scanner:scanoss}") String scannerType,
+                             LPVSScanossDetectService scanossDetectService) {
         this.scannerType = scannerType;
         this.scanossDetectService = scanossDetectService;
     }
 
-    private static final Logger LOG = LoggerFactory.getLogger(DetectService.class);
-
     @PostConstruct
     private void init() {
-        LOG.info("License detection scanner: " + scannerType);
+        log.info("License detection scanner: " + scannerType);
     }
 
-    public List<LPVSFile> runScan(WebhookConfig webhookConfig, String path) throws Exception {
+    public List<LPVSFile> runScan(LPVSQueue webhookConfig, String path) throws Exception {
         if (scannerType.equals("scanoss")) {
             scanossDetectService.runScan(webhookConfig, path);
             return scanossDetectService.checkLicenses(webhookConfig);

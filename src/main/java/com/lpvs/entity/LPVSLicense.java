@@ -13,11 +13,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "licenses", schema = "lpvs", indexes = {@Index(name = "spdx_id", columnList = "license_spdx", unique = true)})
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
-public class LPVSLicense {
+public class LPVSLicense implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

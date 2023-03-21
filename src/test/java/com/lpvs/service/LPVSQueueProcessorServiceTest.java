@@ -7,46 +7,45 @@
 
 package com.lpvs.service;
 
-import com.lpvs.entity.config.WebhookConfig;
+import com.lpvs.entity.LPVSQueue;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.*;
 
-public class QueueProcessorServiceTest {
-    private static Logger LOG = LoggerFactory.getLogger(QueueProcessorServiceTest.class);
+@Slf4j
+public class LPVSQueueProcessorServiceTest {
 
-    QueueProcessorService queueProcessorService;
-    WebhookConfig webhookConfigTest;
-    QueueService queueService;
+    LPVSQueueProcessorService queueProcessorService = mock(LPVSQueueProcessorService.class);
+    LPVSQueue webhookConfigTest = mock(LPVSQueue.class);
+    LPVSQueueService queueService = mock(LPVSQueueService.class);;
 
     @BeforeEach
     void setUp() {
-        webhookConfigTest = new WebhookConfig();
+        webhookConfigTest = new LPVSQueue();
+        queueService =mock(LPVSQueueService.class);
 
-        queueService = mock(QueueService.class);
         try {
-            when(queueService.getQueue().take())
+            when(queueService.getQueueFirstElement())
                     // first iteration
                     .thenReturn(webhookConfigTest)
                     // second iteration
                     .thenThrow(new InterruptedException("Test InterruptedException at 2nd iteration"));
         } catch (InterruptedException e) {
-            LOG.error("InterruptedException at QueueProcessorServiceTest.setUp(): " + e);
+            log.error("InterruptedException at LPVSQueueProcessorServiceTest.setUp(): " + e);
             fail();
         }
 
-        queueProcessorService = new QueueProcessorService(queueService);
+        queueProcessorService = new LPVSQueueProcessorService(queueService);
     }
 
     @Test
-    public void testQueueProcessor() {
+    public void testQueueProcessor() throws IOException {
         // first iteration of loop inside method passes, second stops by Exception
         try {
             Method method = queueProcessorService.getClass().getDeclaredMethod("queueProcessor");
@@ -55,24 +54,26 @@ public class QueueProcessorServiceTest {
             method.invoke(queueProcessorService);
         } catch (InvocationTargetException e) {
             if (e.getCause() instanceof InterruptedException) {
-                LOG.info("Awaited behavior: InterruptedException at QueueProcessorServiceTest.testQueueProcessor(): " + e);
+                log.info("Awaited behavior: InterruptedException at LPVSQueueProcessorServiceTest.testQueueProcessor(): " + e);
             } else {
-                LOG.error("InvocationTargetException at QueueProcessorServiceTest.testQueueProcessor(). Cause: " + e.getCause());
+                log.error("InvocationTargetException at LPVSQueueProcessorServiceTest.testQueueProcessor(). Cause: " + e.getCause());
                 fail();
             }
         } catch (NoSuchMethodException | IllegalAccessException e) {
-            LOG.error("NoSuchMethodException |  IllegalAccessException at QueueProcessorServiceTest.testQueueProcessor(): " + e);
+            log.error("NoSuchMethodException |  IllegalAccessException at LPVSQueueProcessorServiceTest.testQueueProcessor(): " + e);
             fail();
         }
 
         try {
             // called twice, first iteration, and second
-            verify(queueService, times(2)).getQueue().take();
+            verify(queueService, times(2)).getQueueFirstElement();
         } catch (InterruptedException e) {
-            LOG.error("InterruptedException at QueueProcessorServiceTest.testQueueProcessor(): " + e);
+            log.error("InterruptedException at LPVSQueueProcessorServiceTest.testQueueProcessor(): " + e);
             fail();
         }
         // called once, only at the end of first iteration
         verify(queueService, times(1)).processWebHook(webhookConfigTest);
     }
+
+
 }

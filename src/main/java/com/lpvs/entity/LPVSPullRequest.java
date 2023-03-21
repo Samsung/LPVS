@@ -11,21 +11,25 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 
 @Entity
 @Table(name = "pull_requests", schema = "lpvs")
 @Getter @Setter
-public class LPVSPullRequest {
+public class LPVSPullRequest implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long pullRequestId;
+    private Long id;
 
     @Column(name = "scan_date")
     private Date date;
+
+    @Column(name = "user")
+    private String user;
 
     @Column(name = "repository_name")
     private String repositoryName;

@@ -8,7 +8,7 @@
 package com.lpvs.repository;
 
 import com.lpvs.entity.LPVSDetectedLicense;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface LPVSDetectedLicenseRepository extends CrudRepository<LPVSDetectedLicense, Long> {
+public interface LPVSDetectedLicenseRepository extends JpaRepository<LPVSDetectedLicense, Long> {
 }

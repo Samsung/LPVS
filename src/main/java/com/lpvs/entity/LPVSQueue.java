@@ -5,26 +5,27 @@
  * found in the LICENSE file.
  */
 
-package com.lpvs.entity.config;
+package com.lpvs.entity;
 
-import com.lpvs.entity.enums.PullRequestAction;
+import com.lpvs.entity.enums.LPVSPullRequestAction;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 
 @Entity
 @Table(name = "queue", schema = "lpvs")
 @Getter @Setter
-public class WebhookConfig {
+public class LPVSQueue implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "action")
-    private PullRequestAction action;
+    private LPVSPullRequestAction action;
 
     @Column(name = "attempts")
     private int attempts;
@@ -38,6 +39,9 @@ public class WebhookConfig {
     @Column(name = "review_system_type")
     private String reviewSystemType;
 
+    @Column(name = "repository_url")
+    private String repositoryUrl;
+
     @Column(name = "pull_request_url", columnDefinition = "LONGTEXT")
     private String pullRequestUrl;
 
@@ -47,22 +51,23 @@ public class WebhookConfig {
     @Column(name = "pull_request_api_url", columnDefinition = "LONGTEXT")
     private String pullRequestAPIUrl;
 
+    @Column(name = "status_callback_url", columnDefinition = "LONGTEXT")
+    private String statusCallbackUrl;
+
     @Column(name = "commit_sha", columnDefinition = "LONGTEXT")
     private String headCommitSHA;
 
     @Transient
     private String repositoryLicense;
 
-    @Override
-    public String toString(){
-        return "WebhookConfig [action = " + getAction() + "; pull request = " + getPullRequestUrl() + "; commit SHA = " + getHeadCommitSHA() + "]";
-    }
+    @Transient
+    private String hubLink;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        WebhookConfig that = (WebhookConfig) o;
+        LPVSQueue that = (LPVSQueue) o;
         return attempts == that.attempts &&
                 action == that.action &&
                 Objects.equals(userId, that.userId) &&

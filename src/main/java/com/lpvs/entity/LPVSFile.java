@@ -7,6 +7,7 @@
 
 package com.lpvs.entity;
 
+import com.lpvs.entity.enums.LPVSVcs;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,19 +25,25 @@ public class LPVSFile {
     private String matchedLines;
     private Set<LPVSLicense> licenses;
     private String componentFilePath;
+    private String componentFileUrl;
     private String componentName;
     private String componentLines;
     private String componentUrl;
     private String componentVersion;
     private String componentVendor;
 
-    public String convertLicensesToString() {
+    public String convertLicensesToString(LPVSVcs vcs) {
         String licenseNames = "";
         for (LPVSLicense license : this.licenses) {
-            licenseNames += (license.getChecklistUrl() != null ? "<a target=\"_blank\" href=\"" + license.getChecklistUrl() + "\">" : "") +
-                    license.getSpdxId() +
-                    (license.getChecklistUrl() != null ? "</a>" : "") +
-                    " (" + license.getAccess().toLowerCase() + "), ";
+            if (vcs != null && vcs.equals(LPVSVcs.GITHUB)) {
+                licenseNames += (license.getChecklistUrl() != null ? "<a target=\"_blank\" href=\"" + license.getChecklistUrl() + "\">" : "") +
+                        license.getSpdxId() +
+                        (license.getChecklistUrl() != null ? "</a>" : "") +
+                        " (" + license.getAccess().toLowerCase() + "), ";
+            } else {
+                licenseNames += license.getSpdxId() + (license.getChecklistUrl() != null ? " (" + license.getChecklistUrl() + ")" : "") +
+                        " - " + license.getAccess().toLowerCase() + ", ";
+            }
         }
         if (licenseNames.endsWith(", ")) licenseNames = licenseNames.substring(0, licenseNames.length() - 2);
         return licenseNames;

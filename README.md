@@ -46,6 +46,9 @@ LPVS will start scanning automatically, then provide comments about the licenses
 ## LPVS Backend Configuration
 
 1. Install SCANOSS Python package by following the [guideline](https://github.com/scanoss/scanoss.py#installation).
+    ```bash
+    pip3 install scanoss
+    ```
 
 2. Create necessary MySQL database and user and fill in `licenses` and `license_conflicts` tables with the information about permitted, restricted, and prohibited licenses (mandatory) as well as their compatibility specifics (optional). 
 An example database dump file can be found in the repository at `src/main/resources/database_dump.sql`.
@@ -81,12 +84,12 @@ An example database dump file can be found in the repository at `src/main/resour
     ```bash
     mvn clean install
     cd target/
-    java -jar lpvs-1.0.1.jar
+    java -jar lpvs-1.0.2.jar
     ```
 
    When running the application you will also be able to use command line to input all the same values associated with github and license on the fly, like so:
    ```bash
-   java -jar -Dgithub.token=<`my-token`> -Dgithub.secret=<`my-secret`> lpvs-1.0.1.jar
+   java -jar -Dgithub.token=<`my-token`> -Dgithub.secret=<`my-secret`> lpvs-1.0.2.jar
    ```
 
    Or alternatively build and run the Docker container with LPVS:

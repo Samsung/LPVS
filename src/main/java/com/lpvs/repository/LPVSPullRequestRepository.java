@@ -8,7 +8,12 @@
 package com.lpvs.repository;
 
 import com.lpvs.entity.LPVSPullRequest;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
-public interface LPVSPullRequestRepository extends CrudRepository<LPVSPullRequest, Long> {
+import java.util.Date;
+
+public interface LPVSPullRequestRepository extends JpaRepository<LPVSPullRequest, Long> {
+    @Query(value = "SELECT now();", nativeQuery = true)
+    Date getNow();
 }

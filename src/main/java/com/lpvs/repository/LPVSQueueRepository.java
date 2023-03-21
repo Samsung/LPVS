@@ -7,14 +7,14 @@
 
 package com.lpvs.repository;
 
-import com.lpvs.entity.config.WebhookConfig;
+import com.lpvs.entity.LPVSQueue;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 
-public interface QueueRepository extends CrudRepository<WebhookConfig, Long> {
+public interface LPVSQueueRepository extends JpaRepository<LPVSQueue, Long> {
 
-    @Query(value = "SELECT * FROM lpvs.queue", nativeQuery = true)
-    List<WebhookConfig> getQueueList();
+    @Query(value = "SELECT * FROM lpvs_queue", nativeQuery = true)
+    List<LPVSQueue> getQueueList();
 }

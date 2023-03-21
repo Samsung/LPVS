@@ -8,13 +8,12 @@
 package com.lpvs.service;
 
 import com.lpvs.entity.LPVSFile;
-import com.lpvs.entity.config.WebhookConfig;
-import com.lpvs.service.scanner.scanoss.ScanossDetectService;
+import com.lpvs.entity.LPVSQueue;
+import com.lpvs.service.scanner.scanoss.LPVSScanossDetectService;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -25,13 +24,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.*;
 
-
-public class DetectServiceTest {
-    private static Logger LOG = LoggerFactory.getLogger(DetectServiceTest.class);
+@Slf4j
+public class LPVSDetectServiceTest {
 
     @Nested
     class TestInit {
-        final DetectService detectService = new DetectService("scanoss", null);
+        final LPVSDetectService detectService = new LPVSDetectService("scanoss", null);
 
         @Test
         public void testInit() {
@@ -40,7 +38,7 @@ public class DetectServiceTest {
                 init_method.setAccessible(true);
                 init_method.invoke(detectService);
             } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-                LOG.error("DetectServiceTest::TestInit exception: " + e);
+                log.error("LPVSDetectServiceTest::TestInit exception: " + e);
                 fail();
             }
         }
@@ -48,22 +46,22 @@ public class DetectServiceTest {
 
     @Nested
     class TestRunScan__Scanoss {
-        DetectService detectService;
-        ScanossDetectService scanoss_mock = mock(ScanossDetectService.class);
-        WebhookConfig webhookConfig;
+        LPVSDetectService detectService;
+        LPVSScanossDetectService scanoss_mock = mock(LPVSScanossDetectService.class);
+        LPVSQueue webhookConfig;
         final String test_path = "test_path";
 
         LPVSFile lpvs_file_1, lpvs_file_2;
 
         @BeforeEach
         void setUp() {
-            detectService = new DetectService("scanoss", scanoss_mock);
+            detectService = new LPVSDetectService("scanoss", scanoss_mock);
 
-            webhookConfig = new WebhookConfig();
+            webhookConfig = new LPVSQueue();
             webhookConfig.setId(1L);
 
-            lpvs_file_1 = new LPVSFile(1L, null, null, null, null, null, null, null, null, null, null, null);
-            lpvs_file_2 = new LPVSFile(2L, null, null, null, null, null, null, null, null, null, null, null);
+            lpvs_file_1 = new LPVSFile(1L, null, null, null, null, null, null, null, null, null, null, null, null);
+            lpvs_file_2 = new LPVSFile(2L, null, null, null, null, null, null, null, null, null, null, null, null);
 
             when(scanoss_mock.checkLicenses(webhookConfig)).thenReturn(List.of(lpvs_file_1, lpvs_file_2));
         }
@@ -74,7 +72,7 @@ public class DetectServiceTest {
                 // main test
                 assertEquals(List.of(lpvs_file_1, lpvs_file_2), detectService.runScan(webhookConfig, test_path));
             } catch (Exception e) {
-                LOG.error("DetectServiceTest::TestRunScan__Scanoss exception: " + e);
+                log.error("LPVSDetectServiceTest::TestRunScan__Scanoss exception: " + e);
                 fail();
             }
 
@@ -82,7 +80,7 @@ public class DetectServiceTest {
             try {
                 verify(scanoss_mock, times(1)).runScan(webhookConfig, test_path);
             } catch (Exception e) {
-                LOG.error("DetectServiceTest::TestRunScan__Scanoss exception: " + e);
+                log.error("LPVSDetectServiceTest::TestRunScan__Scanoss exception: " + e);
                 fail();
             }
             verify(scanoss_mock, times(1)).checkLicenses(webhookConfig);
@@ -92,17 +90,17 @@ public class DetectServiceTest {
 
     @Nested
     class TestRunScan__ScanossException {
-        DetectService detectService;
-        ScanossDetectService scanoss_mock = mock(ScanossDetectService.class);
-        WebhookConfig webhookConfig;
+        LPVSDetectService detectService;
+        LPVSScanossDetectService scanoss_mock = mock(LPVSScanossDetectService.class);
+        LPVSQueue webhookConfig;
         final String test_path = "test_path";
         final String exc_msg = "Test exception for TestRunScan__ScanossException. Normal behavior.";
 
         @BeforeEach
         void setUp() {
-            detectService = new DetectService("scanoss", scanoss_mock);
+            detectService = new LPVSDetectService("scanoss", scanoss_mock);
 
-            webhookConfig = new WebhookConfig();
+            webhookConfig = new LPVSQueue();
             webhookConfig.setId(1L);
 
             try {
@@ -110,7 +108,7 @@ public class DetectServiceTest {
                         .when(scanoss_mock)
                         .runScan(webhookConfig, test_path);
             } catch (Exception e) {
-                LOG.error("DetectServiceTest::TestRunScan__ScanossException exception: " + e);
+                log.error("LPVSDetectServiceTest::TestRunScan__ScanossException exception: " + e);
                 fail();
             }
         }
@@ -132,7 +130,7 @@ public class DetectServiceTest {
             try {
                 verify(scanoss_mock, times(1)).runScan(webhookConfig, test_path);
             } catch (Exception e) {
-                LOG.error("DetectServiceTest::TestRunScan__ScanossException exception: " + e);
+                log.error("LPVSDetectServiceTest::TestRunScan__ScanossException exception: " + e);
                 fail();
             }
             verifyNoMoreInteractions(scanoss_mock);
@@ -141,11 +139,11 @@ public class DetectServiceTest {
 
     @Nested
     class TestRunScan__NotScanoss {
-        DetectService detectService;
+        LPVSDetectService detectService;
 
         @BeforeEach
         void setUp() {
-            detectService = new DetectService("not_scanoss", null);
+            detectService = new LPVSDetectService("not_scanoss", null);
         }
 
         @Test
@@ -154,7 +152,7 @@ public class DetectServiceTest {
             try {
                 assertEquals(new ArrayList<>(), detectService.runScan(null, null));
             } catch (Exception e) {
-                LOG.error("DetectServiceTest::TestRunScan__NotScanoss exception: " + e);
+                log.error("LPVSDetectServiceTest::TestRunScan__NotScanoss exception: " + e);
                 fail();
             }
         }

@@ -18,12 +18,12 @@ import java.util.List;
 @Repository
 public interface LPVSLicenseRepository extends CrudRepository<LPVSLicense, Long> {
 
-    @Query(value = "SELECT * FROM lpvs.licenses", nativeQuery = true)
+    @Query(value = "SELECT * FROM code_licenses", nativeQuery = true)
     List<LPVSLicense> takeAllLicenses();
 
-    @Query("SELECT m FROM LPVSLicense m WHERE m.spdxId = :spdxId LIMIT 1")
+    @Query(value =  "SELECT * FROM code_licenses WHERE code_licenses.license_spdx = :spdxId ORDER BY id DESC LIMIT 1", nativeQuery = true)
     LPVSLicense searchBySpdxId(@Param("spdxId") String spdxId);
 
-    @Query("SELECT m FROM LPVSLicense m WHERE m.alternativeNames LIKE %:licenseName% LIMIT 1")
+    @Query(value = "SELECT * FROM code_licenses WHERE code_licenses.license_alternative_names LIKE %:licenseName% ORDER BY id DESC LIMIT 1", nativeQuery = true)
     LPVSLicense searchByAlternativeLicenseNames(@Param("licenseName") String licenseName);
 }

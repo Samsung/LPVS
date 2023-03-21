@@ -7,15 +7,16 @@
 
 package com.lpvs.entity.enums;
 
-public enum PullRequestStatus {
+public enum LPVSPullRequestStatus {
     NO_ACCESS("Cannot access the pull request"),
     ISSUES_DETECTED("License issues detected"),
     INTERNAL_ERROR("Error while posting results"),
-    COMPLETED("Scan completed");
+    COMPLETED("Scan completed"),
+    SCANNING("Scan is scheduled");
 
     private final String status;
 
-    PullRequestStatus(final String status) {
+    LPVSPullRequestStatus(final String status) {
         this.status = status;
     }
 

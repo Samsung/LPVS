@@ -10,51 +10,58 @@ package com.lpvs.service;
 import com.lpvs.entity.LPVSFile;
 import com.lpvs.entity.LPVSLicense;
 import com.lpvs.entity.LPVSPullRequest;
-import com.lpvs.entity.config.WebhookConfig;
-import com.lpvs.util.WebhookUtil;
+import com.lpvs.entity.LPVSQueue;
+import com.lpvs.entity.enums.LPVSPullRequestStatus;
+import com.lpvs.repository.LPVSPullRequestRepository;
+import com.lpvs.repository.LPVSQueueRepository;
+import com.lpvs.util.LPVSWebhookUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-public class QueueServiceTest {
-
-    private static Logger LOG = LoggerFactory.getLogger(QueueServiceTest.class);
+@Slf4j
+public class LPVSQueueServiceTest {
 
     @Nested
     class TestQueueMethods {
 
-        QueueService queueService;
+        LPVSQueueService queueService;
 
-        WebhookConfig whConfig1;
-        WebhookConfig whConfig2;
-        WebhookConfig whConfig3;
-        WebhookConfig whConfig4;
-        WebhookConfig whConfig5;
+        LPVSQueue whConfig1;
+        LPVSQueue whConfig2;
+        LPVSQueue whConfig3;
+        LPVSQueue whConfig4;
+        LPVSQueue whConfig5;
+        LPVSPullRequestRepository mocked_lpvsPullRequestRepository = mock(LPVSPullRequestRepository.class);
+        LPVSQueueRepository mocked_queueRepository = mock(LPVSQueueRepository.class);
 
         @BeforeEach
         void setUp() {
-            queueService = new QueueService(null, null, null, 4);
+            queueService = new LPVSQueueService(null, null, null, mocked_lpvsPullRequestRepository, mocked_queueRepository, 4);
 
-            whConfig1 = new WebhookConfig();
+            whConfig1 = new LPVSQueue();
             whConfig1.setId(1L);
 
-            whConfig2 = new WebhookConfig();
+            whConfig2 = new LPVSQueue();
             whConfig2.setId(2L);
 
-            whConfig3 = new WebhookConfig();
+            whConfig3 = new LPVSQueue();
             whConfig3.setId(3L);
 
-            whConfig4 = new WebhookConfig();
+            whConfig4 = new LPVSQueue();
             whConfig4.setId(4L);
 
-            whConfig5 = new WebhookConfig();
+            whConfig5 = new LPVSQueue();
             whConfig5.setId(5L);
         }
 
@@ -74,7 +81,7 @@ public class QueueServiceTest {
                 assertEquals(whConfig3, queueService.getQueue().take());
 
             } catch (InterruptedException e) {
-                LOG.error("InterruptedException at QueueServiceTest.testQueueMethods(): " + e);
+                log.error("InterruptedException at LPVSQueueServiceTest.testQueueMethods(): " + e);
                 fail();
             }
         }
@@ -82,48 +89,59 @@ public class QueueServiceTest {
 
     @Nested
     class TestProcessWebHook__NoPRDownloaded {
-        QueueService queueService;
-        GitHubService mockGitHubService;
-        DetectService mockDetectService;
-        LicenseService mockLicenseService;
-        WebhookConfig webhookConfig;
+        LPVSQueueService queueService;
+        LPVSGitHubService mockGitHubService;
+        LPVSDetectService mockDetectService;
+        LPVSLicenseService mockLicenseService;
+        LPVSPullRequestRepository mocked_lpvsPullRequestRepository = mock(LPVSPullRequestRepository.class);
+        LPVSQueueRepository mocked_queueRepository = mock(LPVSQueueRepository.class);
+        LPVSQueue webhookConfig;
         LPVSPullRequest lpvsPullRequest;
         int maxAttempts = 4;
         Date date = new Date();
 
         @BeforeEach
         void setUp() {
-            webhookConfig = new WebhookConfig();
-            webhookConfig.setPullRequestUrl("http://test_url/url/pull/1");
-            webhookConfig.setPullRequestFilesUrl("http://test_url/url");
-            webhookConfig.setDate(date);
+            when(mocked_lpvsPullRequestRepository.saveAndFlush(Mockito.any(LPVSPullRequest.class)))
+                    .thenAnswer(i -> i.getArguments()[0]);
 
             lpvsPullRequest = new LPVSPullRequest();
             lpvsPullRequest.setRepositoryName("test_url/url");
             lpvsPullRequest.setDate(date);
             lpvsPullRequest.setPullRequestUrl("http://test_url/url/pull/1");
             lpvsPullRequest.setPullRequestFilesUrl("http://test_url/url");
+            lpvsPullRequest.setStatus(LPVSPullRequestStatus.SCANNING.toString());
+            lpvsPullRequest.setUser("user");
 
-            mockGitHubService = mock(GitHubService.class);
+            webhookConfig = new LPVSQueue();
+            webhookConfig.setPullRequestUrl("http://test_url/url/pull/1");
+            webhookConfig.setPullRequestFilesUrl("http://test_url/url");
+            webhookConfig.setRepositoryUrl("http://test_url/url");
+            webhookConfig.setUserId("user");
+            webhookConfig.setDate(date);
+            webhookConfig.setRepositoryUrl("http://test_url/url");
+
+            mockGitHubService = mock(LPVSGitHubService.class);
             when(mockGitHubService.getPullRequestFiles(webhookConfig)).thenReturn(null);
 
-            mockDetectService = mock(DetectService.class);
-            mockLicenseService = mock(LicenseService.class);
+            mockDetectService = mock(LPVSDetectService.class);
+            mockLicenseService = mock(LPVSLicenseService.class);
 
-            queueService = new QueueService(mockGitHubService,
+            queueService = new LPVSQueueService(mockGitHubService,
                                             mockDetectService,
                                             mockLicenseService,
+                                            mocked_lpvsPullRequestRepository,
+                                            mocked_queueRepository,
                                             maxAttempts);
         }
 
         @Test
-        public void testProcessWebHook__NoPRDownloaded() {
+        public void testProcessWebHook__NoPRDownloaded() throws IOException {
             // main test
             queueService.processWebHook(webhookConfig);
 
             verify(mockGitHubService, times(1)).getPullRequestFiles(webhookConfig);
-            verify(mockGitHubService, times(1)).commentResults(eq(webhookConfig), anyList(), anyList(), eq(lpvsPullRequest));
-            verify(mockGitHubService, times(1)).setErrorCheck(webhookConfig);
+            verify(mockGitHubService, times(1)).commentResults(eq(webhookConfig), any(), any(), eq(lpvsPullRequest));
 
             verifyNoMoreInteractions(mockGitHubService);
             verifyNoMoreInteractions(mockDetectService);
@@ -152,72 +170,85 @@ public class QueueServiceTest {
     static final Long id_1 = 1L;
     static final String fileUrl_1 = "test_file_url_1";
     static final String filePath_1 = "test_file_path_1";
+    static final String snippetType_1 = "test_snippet_type_1";
     static final String snippetMatch_1 = "test_snippet_match_1";
     static final String matchedLines_1 = "test_matched_lines_1";
     static final Set<LPVSLicense> licenses_1 = new HashSet<>(Collections.singletonList(lpvsLicenseTest));
     static final String component_1 = "test_component_1";
-    static final LPVSFile lpvsFileTest_1 = new LPVSFile(id_1, fileUrl_1, filePath_1, snippetMatch_1, matchedLines_1, licenses_1, component_1, null, null, null, null, null);
+    static final LPVSFile lpvsFileTest_1 = new LPVSFile(id_1, filePath_1, snippetType_1, snippetMatch_1, matchedLines_1, licenses_1, component_1, null, null, null, null, null, null);
 
     // LPVSFile-2
     static final Long id_2 = 2L;
     static final String fileUrl_2 = "test_file_url_2";
     static final String filePath_2 = "test_file_path_2";
+    static final String snippetType_2 = "test_snippet_type_2";
     static final String snippetMatch_2 = "test_snippet_match_2";
     static final String matchedLines_2 = "test_matched_lines_2";
     static final Set<LPVSLicense> licenses_2 = new HashSet<>(Collections.singletonList(lpvsLicenseTest));
     static final String component_2 = "test_component_2";
-    static final LPVSFile lpvsFileTest_2 = new LPVSFile(id_2, fileUrl_2, filePath_2, snippetMatch_2, matchedLines_2, licenses_2, component_2, null, null, null, null, null);
+    static final LPVSFile lpvsFileTest_2 = new LPVSFile(id_2, filePath_2, snippetType_2, snippetMatch_2, matchedLines_2, licenses_2, component_2, null, null, null, null, null, null);
 
     static final List<LPVSFile> LPVSFilesTest = Arrays.asList(lpvsFileTest_1, lpvsFileTest_2);
 
     @Nested
     class TestProcessWebHook__DeletionAbsentLicensePresent {
-        QueueService queueService;
-        GitHubService mockGitHubService;
-        DetectService mockDetectService;
-        LicenseService mockLicenseService;
-        WebhookConfig webhookConfigMain;
+        LPVSQueueService queueService;
+        LPVSGitHubService mockGitHubService;
+        LPVSDetectService mockDetectService;
+        LPVSLicenseService mockLicenseService;
+        LPVSPullRequestRepository mocked_lpvsPullRequestRepository = mock(LPVSPullRequestRepository.class);
+        LPVSQueueRepository mocked_queueRepository = mock(LPVSQueueRepository.class);
+        LPVSQueue webhookConfigMain;
         LPVSPullRequest lpvsPullRequest;
         Date date = new Date();
 
         @BeforeEach
         void setUp() {
+            when(mocked_lpvsPullRequestRepository.saveAndFlush(Mockito.any(LPVSPullRequest.class)))
+                    .thenAnswer(i -> i.getArguments()[0]);
+
             lpvsPullRequest = new LPVSPullRequest();
             lpvsPullRequest.setRepositoryName("test_url/url");
             lpvsPullRequest.setDate(date);
             lpvsPullRequest.setPullRequestUrl("http://test_url/url/pull/1");
             lpvsPullRequest.setPullRequestFilesUrl("http://test_url/url");
+            lpvsPullRequest.setStatus(LPVSPullRequestStatus.SCANNING.toString());
+            lpvsPullRequest.setUser("user");
 
-            webhookConfigMain = new WebhookConfig();
+            webhookConfigMain = new LPVSQueue();
             webhookConfigMain.setPullRequestUrl("http://test_url/url/pull/1");
             webhookConfigMain.setPullRequestFilesUrl("http://test_url/url");
+            webhookConfigMain.setRepositoryUrl("http://test_url/url");
+            webhookConfigMain.setUserId("user");
             webhookConfigMain.setDate(date);
 
-            mockGitHubService = mock(GitHubService.class);
+            mockGitHubService = mock(LPVSGitHubService.class);
             when(mockGitHubService.getPullRequestFiles(webhookConfigMain)).thenReturn(filePathTestNoDeletion);
             when(mockGitHubService.getRepositoryLicense(webhookConfigMain)).thenReturn(licenseNameTest);
 
-            mockLicenseService = mock(LicenseService.class);
+            mockLicenseService = mock(LPVSLicenseService.class);
             when(mockLicenseService.checkLicense(licenseNameTest)).thenReturn(lpvsLicenseTest);
 
-            mockDetectService = mock(DetectService.class);
+            mockDetectService = mock(LPVSDetectService.class);
             try {
                 when(mockDetectService.runScan(webhookConfigMain, filePathTestNoDeletion)).thenReturn(LPVSFilesTest);
             } catch (Exception e) {
-                LOG.error("TestProcessWebHook__DeletionAbsentLicensePresent: Exception: " + e);
+                log.error("TestProcessWebHook__DeletionAbsentLicensePresent: Exception: " + e);
                 fail();
             }
 
             when(mockLicenseService.findConflicts(webhookConfigMain, LPVSFilesTest)).thenReturn(Collections.emptyList());
 
-            queueService = new QueueService(mockGitHubService,
+            queueService = new LPVSQueueService(mockGitHubService,
                                             mockDetectService,
                                             mockLicenseService,
+                                            mocked_lpvsPullRequestRepository,
+                                            mocked_queueRepository,
                                             4);
         }
 
         @Test
-        public void testProcessWebHook____DeletionAbsentLicensePresent() {
+        public void testProcessWebHook____DeletionAbsentLicensePresent() throws IOException {
             // main test
             queueService.processWebHook(webhookConfigMain);
 
@@ -227,7 +258,7 @@ public class QueueServiceTest {
             try {
                 verify(mockDetectService, times(1)).runScan(webhookConfigMain, filePathTestNoDeletion);
             } catch (Exception e) {
-                LOG.error("TestProcessWebHook__DeletionAbsentLicensePresent: Exception: " + e);
+                log.error("TestProcessWebHook__DeletionAbsentLicensePresent: Exception: " + e);
                 fail();
             }
             verify(mockLicenseService, times(1)).findConflicts(webhookConfigMain, LPVSFilesTest);
@@ -241,52 +272,63 @@ public class QueueServiceTest {
 
     @Nested
     class TestProcessWebHook__DeletionPresentLicensePresent {
-        QueueService queueService;
-        GitHubService mockGitHubService;
-        DetectService mockDetectService;
-        LicenseService mockLicenseService;
-        WebhookConfig webhookConfigMain;
+        LPVSQueueService queueService;
+        LPVSGitHubService mockGitHubService;
+        LPVSDetectService mockDetectService;
+        LPVSLicenseService mockLicenseService;
+        LPVSPullRequestRepository mocked_lpvsPullRequestRepository = mock(LPVSPullRequestRepository.class);
+        LPVSQueueRepository mocked_queueRepository = mock(LPVSQueueRepository.class);
+        LPVSQueue webhookConfigMain;
         LPVSPullRequest lpvsPullRequest;
         Date date = new Date();
 
         @BeforeEach
         void setUp() {
+            when(mocked_lpvsPullRequestRepository.saveAndFlush(Mockito.any(LPVSPullRequest.class)))
+                    .thenAnswer(i -> i.getArguments()[0]);
+
             lpvsPullRequest = new LPVSPullRequest();
             lpvsPullRequest.setRepositoryName("test_url/url");
             lpvsPullRequest.setDate(date);
             lpvsPullRequest.setPullRequestUrl("http://test_url/url/pull/1");
             lpvsPullRequest.setPullRequestFilesUrl("http://test_url/url");
+            lpvsPullRequest.setStatus(LPVSPullRequestStatus.SCANNING.toString());
+            lpvsPullRequest.setUser("user");
 
-            webhookConfigMain = new WebhookConfig();
+            webhookConfigMain = new LPVSQueue();
             webhookConfigMain.setPullRequestUrl("http://test_url/url/pull/1");
             webhookConfigMain.setPullRequestFilesUrl("http://test_url/url");
+            webhookConfigMain.setRepositoryUrl("http://test_url/url");
+            webhookConfigMain.setUserId("user");
             webhookConfigMain.setDate(date);
 
-            mockGitHubService = mock(GitHubService.class);
+            mockGitHubService = mock(LPVSGitHubService.class);
             when(mockGitHubService.getPullRequestFiles(webhookConfigMain)).thenReturn(filePathTestWithDeletion);
             when(mockGitHubService.getRepositoryLicense(webhookConfigMain)).thenReturn(licenseNameTest);
 
-            mockLicenseService = mock(LicenseService.class);
+            mockLicenseService = mock(LPVSLicenseService.class);
             when(mockLicenseService.checkLicense(licenseNameTest)).thenReturn(lpvsLicenseTest);
 
-            mockDetectService = mock(DetectService.class);
+            mockDetectService = mock(LPVSDetectService.class);
             try {
                 when(mockDetectService.runScan(webhookConfigMain, filePathTestWithDeletionTruncated)).thenReturn(LPVSFilesTest);
             } catch (Exception e) {
-                LOG.error("TestProcessWebHook__DeletionAbsentLicensePresent: Exception: " + e);
+                log.error("TestProcessWebHook__DeletionAbsentLicensePresent: Exception: " + e);
                 fail();
             }
 
             when(mockLicenseService.findConflicts(webhookConfigMain, LPVSFilesTest)).thenReturn(Collections.emptyList());
 
-            queueService = new QueueService(mockGitHubService,
+            queueService = new LPVSQueueService(mockGitHubService,
                                             mockDetectService,
                                             mockLicenseService,
+                                            mocked_lpvsPullRequestRepository,
+                                            mocked_queueRepository,
                                             4);
         }
 
         @Test
-        public void testProcessWebHook____DeletionPresentLicensePresent() {
+        public void testProcessWebHook____DeletionPresentLicensePresent() throws IOException {
             // main test
             queueService.processWebHook(webhookConfigMain);
 
@@ -296,7 +338,7 @@ public class QueueServiceTest {
             try {
                 verify(mockDetectService, times(1)).runScan(webhookConfigMain, filePathTestWithDeletionTruncated);
             } catch (Exception e) {
-                LOG.error("TestProcessWebHook__DeletionAbsentLicensePresent: Exception: " + e);
+                log.error("TestProcessWebHook__DeletionAbsentLicensePresent: Exception: " + e);
                 fail();
             }
             verify(mockLicenseService, times(1)).findConflicts(webhookConfigMain, LPVSFilesTest);
@@ -310,11 +352,13 @@ public class QueueServiceTest {
 
     @Nested
     class TestProcessWebHook__DeletionAbsentLicenseFound {
-        QueueService queueService;
-        GitHubService mockGitHubService;
-        DetectService mockDetectService;
-        LicenseService mockLicenseService;
-        WebhookConfig webhookConfigMain;
+        LPVSQueueService queueService;
+        LPVSGitHubService mockGitHubService;
+        LPVSDetectService mockDetectService;
+        LPVSLicenseService mockLicenseService;
+        LPVSPullRequestRepository mocked_lpvsPullRequestRepository = mock(LPVSPullRequestRepository.class);
+        LPVSQueueRepository mocked_queueRepository = mock(LPVSQueueRepository.class);
+        LPVSQueue webhookConfigMain;
         LPVSPullRequest lpvsPullRequest;
         Date date = new Date();
 
@@ -325,38 +369,47 @@ public class QueueServiceTest {
             lpvsPullRequest.setDate(date);
             lpvsPullRequest.setPullRequestUrl("http://test_url/url/pull/1");
             lpvsPullRequest.setPullRequestFilesUrl("http://test_url/url");
+            lpvsPullRequest.setStatus(LPVSPullRequestStatus.SCANNING.toString());
+            lpvsPullRequest.setUser("user");
 
-            webhookConfigMain = new WebhookConfig();
+            webhookConfigMain = new LPVSQueue();
             webhookConfigMain.setPullRequestUrl("http://test_url/url/pull/1");
             webhookConfigMain.setPullRequestFilesUrl("http://test_url/url");
+            webhookConfigMain.setRepositoryUrl("http://test_url/url");
+            webhookConfigMain.setUserId("user");
             webhookConfigMain.setDate(date);
 
-            mockGitHubService = mock(GitHubService.class);
+            mockGitHubService = mock(LPVSGitHubService.class);
             when(mockGitHubService.getPullRequestFiles(webhookConfigMain)).thenReturn(filePathTestNoDeletion);
             when(mockGitHubService.getRepositoryLicense(webhookConfigMain)).thenReturn(licenseNameTest);
 
-            mockLicenseService = mock(LicenseService.class);
+            mockLicenseService = mock(LPVSLicenseService.class);
             when(mockLicenseService.checkLicense(licenseNameTest)).thenReturn(null);
             when(mockLicenseService.findLicenseByName(licenseNameTest)).thenReturn(lpvsLicenseTest);
 
-            mockDetectService = mock(DetectService.class);
+            mockDetectService = mock(LPVSDetectService.class);
             try {
                 when(mockDetectService.runScan(webhookConfigMain, filePathTestNoDeletion)).thenReturn(LPVSFilesTest);
             } catch (Exception e) {
-                LOG.error("TestProcessWebHook__DeletionAbsentLicensePresent: Exception: " + e);
+                log.error("TestProcessWebHook__DeletionAbsentLicensePresent: Exception: " + e);
                 fail();
             }
 
             when(mockLicenseService.findConflicts(webhookConfigMain, LPVSFilesTest)).thenReturn(Collections.emptyList());
 
-            queueService = new QueueService(mockGitHubService,
+            when(mocked_lpvsPullRequestRepository.saveAndFlush(Mockito.any(LPVSPullRequest.class)))
+                    .thenAnswer(i -> i.getArguments()[0]);
+
+            queueService = new LPVSQueueService(mockGitHubService,
                                             mockDetectService,
                                             mockLicenseService,
+                                            mocked_lpvsPullRequestRepository,
+                                            mocked_queueRepository,
                                             4);
         }
 
         @Test
-        public void testProcessWebHook__DeletionAbsentLicenseFound() {
+        public void testProcessWebHook__DeletionAbsentLicenseFound() throws IOException {
             // main test
             queueService.processWebHook(webhookConfigMain);
 
@@ -367,7 +420,7 @@ public class QueueServiceTest {
             try {
                 verify(mockDetectService, times(1)).runScan(webhookConfigMain, filePathTestNoDeletion);
             } catch (Exception e) {
-                LOG.error("TestProcessWebHook__DeletionAbsentLicensePresent: Exception: " + e);
+                log.error("TestProcessWebHook__DeletionAbsentLicensePresent: Exception: " + e);
                 fail();
             }
             verify(mockLicenseService, times(1)).findConflicts(webhookConfigMain, LPVSFilesTest);
@@ -381,54 +434,66 @@ public class QueueServiceTest {
 
     @Nested
     class TestProcessWebHook__DeletionPresentLicenseFound {
-        QueueService queueService;
-        GitHubService mockGitHubService;
-        DetectService mockDetectService;
-        LicenseService mockLicenseService;
-        WebhookConfig webhookConfigMain;
+        LPVSQueueService queueService;
+        LPVSGitHubService mockGitHubService;
+        LPVSDetectService mockDetectService;
+        LPVSLicenseService mockLicenseService;
+        LPVSPullRequestRepository mocked_lpvsPullRequestRepository = mock(LPVSPullRequestRepository.class);
+        LPVSQueueRepository mocked_queueRepository = mock(LPVSQueueRepository.class);
+        LPVSQueue webhookConfigMain;
         LPVSPullRequest lpvsPullRequest;
         Date date = new Date();
 
         @BeforeEach
         void setUp() {
+            when(mocked_lpvsPullRequestRepository.saveAndFlush(Mockito.any(LPVSPullRequest.class)))
+                    .thenAnswer(i -> i.getArguments()[0]);
+
             lpvsPullRequest = new LPVSPullRequest();
             lpvsPullRequest.setRepositoryName("test_url/url");
             lpvsPullRequest.setDate(date);
             lpvsPullRequest.setPullRequestUrl("http://test_url/url/pull/1");
             lpvsPullRequest.setPullRequestFilesUrl("http://test_url/url");
+            lpvsPullRequest.setStatus(LPVSPullRequestStatus.SCANNING.toString());
+            lpvsPullRequest.setUser("user");
 
-            webhookConfigMain = new WebhookConfig();
+            webhookConfigMain = new LPVSQueue();
             webhookConfigMain.setPullRequestUrl("http://test_url/url/pull/1");
             webhookConfigMain.setPullRequestFilesUrl("http://test_url/url");
+            webhookConfigMain.setRepositoryUrl("http://test_url/url");
+            webhookConfigMain.setUserId("user");
             webhookConfigMain.setDate(date);
 
-            mockGitHubService = mock(GitHubService.class);
+
+            mockGitHubService = mock(LPVSGitHubService.class);
             when(mockGitHubService.getPullRequestFiles(webhookConfigMain)).thenReturn(filePathTestWithDeletion);
             when(mockGitHubService.getRepositoryLicense(webhookConfigMain)).thenReturn(licenseNameTest);
 
-            mockLicenseService = mock(LicenseService.class);
+            mockLicenseService = mock(LPVSLicenseService.class);
             when(mockLicenseService.checkLicense(licenseNameTest)).thenReturn(null);
             when(mockLicenseService.findLicenseByName(licenseNameTest)).thenReturn(lpvsLicenseTest);
 
-            mockDetectService = mock(DetectService.class);
+            mockDetectService = mock(LPVSDetectService.class);
             try {
                 when(mockDetectService.runScan(webhookConfigMain, filePathTestWithDeletionTruncated)).thenReturn(LPVSFilesTest);
             } catch (Exception e) {
-                LOG.error("TestProcessWebHook__DeletionAbsentLicensePresent: Exception: " + e);
+                log.error("TestProcessWebHook__DeletionAbsentLicensePresent: Exception: " + e);
                 fail();
             }
 
             when(mockLicenseService.findConflicts(webhookConfigMain, LPVSFilesTest)).thenReturn(Collections.emptyList());
 
 
-            queueService = new QueueService(mockGitHubService,
+            queueService = new LPVSQueueService(mockGitHubService,
                                             mockDetectService,
                                             mockLicenseService,
+                                            mocked_lpvsPullRequestRepository,
+                                            mocked_queueRepository,
                                             4);
         }
 
         @Test
-        public void testProcessWebHook__DeletionPresentLicenseFound() {
+        public void testProcessWebHook__DeletionPresentLicenseFound() throws IOException {
             // main test
             queueService.processWebHook(webhookConfigMain);
 
@@ -439,7 +504,7 @@ public class QueueServiceTest {
             try {
                 verify(mockDetectService, times(1)).runScan(webhookConfigMain, filePathTestWithDeletionTruncated);
             } catch (Exception e) {
-                LOG.error("TestProcessWebHook__DeletionAbsentLicensePresent: Exception: " + e);
+                log.error("TestProcessWebHook__DeletionAbsentLicensePresent: Exception: " + e);
                 fail();
             }
             verify(mockLicenseService, times(1)).findConflicts(webhookConfigMain, LPVSFilesTest);
@@ -453,53 +518,64 @@ public class QueueServiceTest {
 
     @Nested
     class TestProcessWebHook__DeletionAbsentLicenseNull {
-        QueueService queueService;
-        GitHubService mockGitHubService;
-        DetectService mockDetectService;
-        LicenseService mockLicenseService;
-        WebhookConfig webhookConfigMain;
+        LPVSQueueService queueService;
+        LPVSGitHubService mockGitHubService;
+        LPVSDetectService mockDetectService;
+        LPVSLicenseService mockLicenseService;
+        LPVSPullRequestRepository mocked_lpvsPullRequestRepository = mock(LPVSPullRequestRepository.class);
+        LPVSQueueRepository mocked_queueRepository = mock(LPVSQueueRepository.class);
+        LPVSQueue webhookConfigMain;
         LPVSPullRequest lpvsPullRequest;
         Date date = new Date();
 
         @BeforeEach
         void setUp() {
+            when(mocked_lpvsPullRequestRepository.saveAndFlush(Mockito.any(LPVSPullRequest.class)))
+                    .thenAnswer(i -> i.getArguments()[0]);
+
             lpvsPullRequest = new LPVSPullRequest();
             lpvsPullRequest.setRepositoryName("test_url/url");
             lpvsPullRequest.setDate(date);
             lpvsPullRequest.setPullRequestUrl("http://test_url/url/pull/1");
             lpvsPullRequest.setPullRequestFilesUrl("http://test_url/url");
+            lpvsPullRequest.setStatus(LPVSPullRequestStatus.SCANNING.toString());
+            lpvsPullRequest.setUser("user");
 
-            webhookConfigMain = new WebhookConfig();
+            webhookConfigMain = new LPVSQueue();
             webhookConfigMain.setPullRequestUrl("http://test_url/url/pull/1");
             webhookConfigMain.setPullRequestFilesUrl("http://test_url/url");
+            webhookConfigMain.setRepositoryUrl("http://test_url/url");
+            webhookConfigMain.setUserId("user");
             webhookConfigMain.setDate(date);
 
-            mockGitHubService = mock(GitHubService.class);
+            mockGitHubService = mock(LPVSGitHubService.class);
             when(mockGitHubService.getPullRequestFiles(webhookConfigMain)).thenReturn(filePathTestNoDeletion);
             when(mockGitHubService.getRepositoryLicense(webhookConfigMain)).thenReturn(licenseNameTest);
 
-            mockLicenseService = mock(LicenseService.class);
+            mockLicenseService = mock(LPVSLicenseService.class);
             when(mockLicenseService.checkLicense(licenseNameTest)).thenReturn(null);
             when(mockLicenseService.findLicenseByName(licenseNameTest)).thenReturn(null);
 
-            mockDetectService = mock(DetectService.class);
+            mockDetectService = mock(LPVSDetectService.class);
             try {
                 when(mockDetectService.runScan(webhookConfigMain, filePathTestNoDeletion)).thenReturn(LPVSFilesTest);
             } catch (Exception e) {
-                LOG.error("TestProcessWebHook__DeletionAbsentLicensePresent: Exception: " + e);
+                log.error("TestProcessWebHook__DeletionAbsentLicensePresent: Exception: " + e);
                 fail();
             }
 
             when(mockLicenseService.findConflicts(webhookConfigMain, LPVSFilesTest)).thenReturn(Collections.emptyList());
 
-            queueService = new QueueService(mockGitHubService,
+            queueService = new LPVSQueueService(mockGitHubService,
                                             mockDetectService,
                                             mockLicenseService,
+                                            mocked_lpvsPullRequestRepository,
+                                            mocked_queueRepository,
                                             4);
         }
 
         @Test
-        public void testProcessWebHook__DeletionAbsentLicenseNull() {
+        public void testProcessWebHook__DeletionAbsentLicenseNull() throws IOException {
             // main test
             queueService.processWebHook(webhookConfigMain);
 
@@ -510,7 +586,7 @@ public class QueueServiceTest {
             try {
                 verify(mockDetectService, times(1)).runScan(webhookConfigMain, filePathTestNoDeletion);
             } catch (Exception e) {
-                LOG.error("TestProcessWebHook__DeletionAbsentLicensePresent: Exception: " + e);
+                log.error("TestProcessWebHook__DeletionAbsentLicensePresent: Exception: " + e);
                 fail();
             }
             verify(mockLicenseService, times(1)).findConflicts(webhookConfigMain, LPVSFilesTest);
@@ -524,53 +600,65 @@ public class QueueServiceTest {
 
     @Nested
     class TestProcessWebHook__DeletionPresentLicenseNull {
-        QueueService queueService;
-        GitHubService mockGitHubService;
-        DetectService mockDetectService;
-        LicenseService mockLicenseService;
-        WebhookConfig webhookConfigMain;
+        LPVSQueueService queueService;
+        LPVSGitHubService mockGitHubService;
+        LPVSDetectService mockDetectService;
+        LPVSLicenseService mockLicenseService;
+        LPVSPullRequestRepository mocked_lpvsPullRequestRepository = mock(LPVSPullRequestRepository.class);
+        LPVSQueueRepository mocked_queueRepository = mock(LPVSQueueRepository.class);
+        LPVSQueue webhookConfigMain;
         LPVSPullRequest lpvsPullRequest;
         Date date = new Date();
 
         @BeforeEach
         void setUp() {
+            when(mocked_lpvsPullRequestRepository.saveAndFlush(Mockito.any(LPVSPullRequest.class)))
+                    .thenAnswer(i -> i.getArguments()[0]);
+
             lpvsPullRequest = new LPVSPullRequest();
             lpvsPullRequest.setRepositoryName("test_url/url");
             lpvsPullRequest.setDate(date);
             lpvsPullRequest.setPullRequestUrl("http://test_url/url/pull/1");
             lpvsPullRequest.setPullRequestFilesUrl("http://test_url/url");
+            lpvsPullRequest.setStatus(LPVSPullRequestStatus.SCANNING.toString());
+            lpvsPullRequest.setUser("user");
 
-            webhookConfigMain = new WebhookConfig();
+            webhookConfigMain = new LPVSQueue();
             webhookConfigMain.setPullRequestUrl("http://test_url/url/pull/1");
             webhookConfigMain.setPullRequestFilesUrl("http://test_url/url");
+            webhookConfigMain.setRepositoryUrl("http://test_url/url");
+            webhookConfigMain.setUserId("user");
             webhookConfigMain.setDate(date);
 
-            mockGitHubService = mock(GitHubService.class);
+
+            mockGitHubService = mock(LPVSGitHubService.class);
             when(mockGitHubService.getPullRequestFiles(webhookConfigMain)).thenReturn(filePathTestWithDeletion);
             when(mockGitHubService.getRepositoryLicense(webhookConfigMain)).thenReturn(licenseNameTest);
 
-            mockLicenseService = mock(LicenseService.class);
+            mockLicenseService = mock(LPVSLicenseService.class);
             when(mockLicenseService.checkLicense(licenseNameTest)).thenReturn(null);
             when(mockLicenseService.findLicenseByName(licenseNameTest)).thenReturn(null);
 
-            mockDetectService = mock(DetectService.class);
+            mockDetectService = mock(LPVSDetectService.class);
             try {
                 when(mockDetectService.runScan(webhookConfigMain, filePathTestWithDeletionTruncated)).thenReturn(LPVSFilesTest);
             } catch (Exception e) {
-                LOG.error("TestProcessWebHook__DeletionAbsentLicensePresent: Exception: " + e);
+                log.error("TestProcessWebHook__DeletionAbsentLicensePresent: Exception: " + e);
                 fail();
             }
 
             when(mockLicenseService.findConflicts(webhookConfigMain, LPVSFilesTest)).thenReturn(Collections.emptyList());
 
-            queueService = new QueueService(mockGitHubService,
+            queueService = new LPVSQueueService(mockGitHubService,
                                             mockDetectService,
                                             mockLicenseService,
+                                            mocked_lpvsPullRequestRepository,
+                                            mocked_queueRepository,
                                             4);
         }
 
         @Test
-        public void testProcessWebHook__DeletionAbsentLicenseNull() {
+        public void testProcessWebHook__DeletionAbsentLicenseNull() throws IOException {
             // main test
             queueService.processWebHook(webhookConfigMain);
 
@@ -581,7 +669,7 @@ public class QueueServiceTest {
             try {
                 verify(mockDetectService, times(1)).runScan(webhookConfigMain, filePathTestWithDeletionTruncated);
             } catch (Exception e) {
-                LOG.error("TestProcessWebHook__DeletionAbsentLicensePresent: Exception: " + e);
+                log.error("TestProcessWebHook__DeletionAbsentLicensePresent: Exception: " + e);
                 fail();
             }
             verify(mockLicenseService, times(1)).findConflicts(webhookConfigMain, LPVSFilesTest);

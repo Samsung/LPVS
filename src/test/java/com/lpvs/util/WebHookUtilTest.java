@@ -7,8 +7,8 @@
 
 package com.lpvs.util;
 
-import com.lpvs.entity.config.WebhookConfig;
-import com.lpvs.entity.enums.PullRequestAction;
+import com.lpvs.entity.LPVSQueue;
+import com.lpvs.entity.enums.LPVSPullRequestAction;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -20,7 +20,7 @@ public class WebHookUtilTest {
     @Nested
     class TestGetGitHubWebhookConfig__ForkTrue {
         String json_to_test;
-        WebhookConfig expected;
+        LPVSQueue expected;
 
         @BeforeEach
         void setUp() {
@@ -46,12 +46,13 @@ public class WebHookUtilTest {
                     "}" +
                 "}";
 
-            expected = new WebhookConfig();
-            expected.setAction(PullRequestAction.OPEN);
+            expected = new LPVSQueue();
+            expected.setAction(LPVSPullRequestAction.OPEN);
             expected.setPullRequestUrl("https://github.com/Samsung/LPVS/pull/18");
             expected.setPullRequestFilesUrl("https://github.com/o-kopysov/LPVS/tree/utests");  // fork == True
             expected.setPullRequestAPIUrl("https://api.github.com/repos/Samsung/LPVS/pulls/18");
-            expected.setUserId("bot");
+            expected.setRepositoryUrl("https://github.com/Samsung/LPVS");
+            expected.setUserId("GitHub hook");
             expected.setHeadCommitSHA("edde69ecb8e8a88dde09fa9789e2c9cab7cf7cf9");
             expected.setAttempts(0);
         }
@@ -59,7 +60,7 @@ public class WebHookUtilTest {
         @Test
         public void testGetGitHubWebhookConfig__ForkTrue() {
             // main test
-            assertEquals(expected, WebhookUtil.getGitHubWebhookConfig(json_to_test));
+            assertEquals(expected, LPVSWebhookUtil.getGitHubWebhookConfig(json_to_test));
         }
     }
 
@@ -67,7 +68,7 @@ public class WebHookUtilTest {
     @Nested
     class TestGetGitHubWebhookConfig__ForkFalse {
         String json_to_test;
-        WebhookConfig expected;
+        LPVSQueue expected;
 
         @BeforeEach
         void setUp() {
@@ -93,20 +94,22 @@ public class WebHookUtilTest {
                     "}" +
                 "}";
 
-            expected = new WebhookConfig();
-            expected.setAction(PullRequestAction.OPEN);
+            expected = new LPVSQueue();
+            expected.setAction(LPVSPullRequestAction.OPEN);
             expected.setPullRequestUrl("https://github.com/Samsung/LPVS/pull/18");
             expected.setPullRequestFilesUrl("https://github.com/Samsung/LPVS/pull/18");  // fork == False
             expected.setPullRequestAPIUrl("https://api.github.com/repos/Samsung/LPVS/pulls/18");
-            expected.setUserId("bot");
+            expected.setRepositoryUrl("https://github.com/Samsung/LPVS");
+            expected.setUserId("GitHub hook");
             expected.setHeadCommitSHA("edde69ecb8e8a88dde09fa9789e2c9cab7cf7cf9");
             expected.setAttempts(0);
         }
 
+
         @Test
         public void testGetGitHubWebhookConfig__ForkFalse() {
             // main test
-            assertEquals(expected, WebhookUtil.getGitHubWebhookConfig(json_to_test));
+            assertEquals(expected, LPVSWebhookUtil.getGitHubWebhookConfig(json_to_test));
         }
     }
 
@@ -122,26 +125,26 @@ public class WebHookUtilTest {
                     "\"action\": \"opened\", " +
                     "\"zen\": \"test\"" +
                 "}";
-            assertFalse(WebhookUtil.checkPayload(json_to_test));
+            assertFalse(LPVSWebhookUtil.checkPayload(json_to_test));
 
-            // test the rest 6 cases of `PullRequestAction`
+            // test the rest 6 cases of `LPVSPullRequestAction`
             json_to_test = "{\"action\": \"opened\"}";
-            assertTrue(WebhookUtil.checkPayload(json_to_test));
+            assertTrue(LPVSWebhookUtil.checkPayload(json_to_test));
 
             json_to_test = "{\"action\": \"reopened\"}";
-            assertTrue(WebhookUtil.checkPayload(json_to_test));
+            assertTrue(LPVSWebhookUtil.checkPayload(json_to_test));
 
             json_to_test = "{\"action\": \"synchronize\"}";
-            assertTrue(WebhookUtil.checkPayload(json_to_test));
+            assertTrue(LPVSWebhookUtil.checkPayload(json_to_test));
 
             json_to_test = "{\"action\": \"closed\"}";
-            assertFalse(WebhookUtil.checkPayload(json_to_test));
+            assertFalse(LPVSWebhookUtil.checkPayload(json_to_test));
 
             json_to_test = "{\"action\": \"rescan\"}";
-            assertFalse(WebhookUtil.checkPayload(json_to_test));
+            assertFalse(LPVSWebhookUtil.checkPayload(json_to_test));
 
             json_to_test = "{\"action\": \"any_of_above\"}";
-            assertFalse(WebhookUtil.checkPayload(json_to_test));
+            assertFalse(LPVSWebhookUtil.checkPayload(json_to_test));
         }
     }
 }

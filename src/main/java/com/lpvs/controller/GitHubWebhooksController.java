@@ -7,13 +7,14 @@
 
 package com.lpvs.controller;
 
-import com.lpvs.entity.config.WebhookConfig;
-import com.lpvs.repository.QueueRepository;
-import com.lpvs.service.GitHubService;
-import com.lpvs.service.QueueService;
-import com.lpvs.util.WebhookUtil;
-import com.lpvs.entity.ResponseWrapper;
+import com.lpvs.entity.LPVSQueue;
+import com.lpvs.repository.LPVSQueueRepository;
+import com.lpvs.service.LPVSGitHubService;
+import com.lpvs.service.LPVSQueueService;
+import com.lpvs.util.LPVSWebhookUtil;
+import com.lpvs.entity.LPVSResponseWrapper;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Hex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +37,7 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
 @RestController
+@Slf4j
 public class GitHubWebhooksController {
 
     private String GITHUB_SECRET;
@@ -48,58 +50,61 @@ public class GitHubWebhooksController {
         this.GITHUB_SECRET = Optional.ofNullable(this.GITHUB_SECRET).filter(s -> !s.isEmpty())
                 .orElse(Optional.ofNullable(System.getenv("LPVS_GITHUB_SECRET")).orElse(""));
         if (this.GITHUB_SECRET.isEmpty()) {
-            LOG.error("LPVS_GITHUB_SECRET(github.secret) is not set.");
+            log.error("LPVS_GITHUB_SECRET(github.secret) is not set.");
             System.exit(SpringApplication.exit(applicationContext, () -> -1));
         }
     }
 
     @Autowired
-    private QueueService queueService;
+    private LPVSQueueService queueService;
 
     @Autowired
-    private QueueRepository queueRepository;
+    private LPVSQueueRepository queueRepository;
 
-    private GitHubService gitHubService;
-
-    private static final Logger LOG = LoggerFactory.getLogger(GitHubWebhooksController.class);
+    private LPVSGitHubService gitHubService;
 
     private static final String SIGNATURE = "X-Hub-Signature-256";
     private static final String SUCCESS = "Success";
     private static final String ERROR = "Error";
     private static final String ALGORITHM = "HmacSHA256";
 
-    public GitHubWebhooksController(QueueService queueService, GitHubService gitHubService, @Value("${github.secret:}") String GITHUB_SECRET) {
+    public GitHubWebhooksController(LPVSQueueService queueService, LPVSGitHubService gitHubService, LPVSQueueRepository queueRepository, @Value("${github.secret:}") String GITHUB_SECRET) {
         this.queueService = queueService;
         this.gitHubService = gitHubService;
+        this.queueRepository = queueRepository;
         this.GITHUB_SECRET = GITHUB_SECRET;
     }
 
     @RequestMapping(value = "/webhooks", method = RequestMethod.POST)
-    public ResponseEntity<ResponseWrapper> gitHubWebhooks(@RequestHeader(SIGNATURE) String signature, @RequestBody String payload) throws Exception {
-        LOG.info("New webhook request received");
-        LOG.info(payload);
+    public ResponseEntity<LPVSResponseWrapper> gitHubWebhooks(@RequestHeader(SIGNATURE) String signature, @RequestBody String payload) throws Exception {
+        log.debug("New webhook request received");
 
         // if signature is empty return 401
         if (!StringUtils.hasText(signature)) {
-            return new ResponseEntity<>(new ResponseWrapper(ERROR), HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(new LPVSResponseWrapper(ERROR), HttpStatus.FORBIDDEN);
         } else if (!GITHUB_SECRET.trim().isEmpty() && wrongSecret(signature, payload)) {
-            return new ResponseEntity<>(new ResponseWrapper(ERROR), HttpStatus.FORBIDDEN);
+            log.info("SECRET: " + GITHUB_SECRET);
+            log.info("WRONG: " + wrongSecret(signature, payload));
+            return new ResponseEntity<>(new LPVSResponseWrapper(ERROR), HttpStatus.FORBIDDEN);
         }
 
         // if payload is empty, don't do anything
         if (!StringUtils.hasText(payload)) {
-            LOG.info("Response to empty payload sent");
-            return new ResponseEntity<>(new ResponseWrapper(SUCCESS), HttpStatus.OK);
-        } else if (WebhookUtil.checkPayload(payload)) {
-            WebhookConfig webhookConfig = WebhookUtil.getGitHubWebhookConfig(payload);
+            log.debug("Response to empty payload sent");
+            return new ResponseEntity<>(new LPVSResponseWrapper(SUCCESS), HttpStatus.OK);
+        } else if (LPVSWebhookUtil.checkPayload(payload)) {
+            LPVSQueue webhookConfig = LPVSWebhookUtil.getGitHubWebhookConfig(payload);
             webhookConfig.setDate(new Date());
+            webhookConfig.setReviewSystemType("github");
             queueRepository.save(webhookConfig);
-            LOG.info("Repository scanning is enabled: On");
+            log.debug("Pull request scanning is enabled");
             gitHubService.setPendingCheck(webhookConfig);
+            log.debug("Set status to Pending done");
             queueService.addFirst(webhookConfig);
+            log.debug("Put Webhook config to the queue done");
         }
-        LOG.info("Response sent");
-        return new ResponseEntity<>(new ResponseWrapper(SUCCESS), HttpStatus.OK);
+        log.debug("Response sent");
+        return new ResponseEntity<>(new LPVSResponseWrapper(SUCCESS), HttpStatus.OK);
     }
 
     public boolean wrongSecret(String signature, String payload) throws Exception {
@@ -110,8 +115,8 @@ public class GitHubWebhooksController {
         mac.init(key);
         String githubSecret = Hex.encodeHexString(mac.doFinal(payload.getBytes("utf-8")));
 
-        LOG.info("lpvs   signature: " + lpvsSecret);
-        LOG.info("github signature: " + githubSecret);
+        log.debug("lpvs   signature: " + lpvsSecret);
+        log.debug("github signature: " + githubSecret);
 
         return !lpvsSecret.equals(githubSecret);
     }

@@ -6,13 +6,17 @@
  */
 package com.lpvs.controller;
 
-import com.lpvs.entity.ResponseWrapper;
-import com.lpvs.service.GitHubService;
-import com.lpvs.service.QueueService;
+import com.lpvs.entity.LPVSQueue;
+import com.lpvs.entity.LPVSResponseWrapper;
+import com.lpvs.repository.LPVSQueueRepository;
+import com.lpvs.service.LPVSGitHubService;
+import com.lpvs.service.LPVSQueueService;
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
 import org.junitpioneer.jupiter.SetEnvironmentVariable;
+import org.mockito.Mockito;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -21,46 +25,48 @@ import org.springframework.http.ResponseEntity;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
+@Slf4j
 public class GitHubWebhooksControllerTest {
 
     private static final String SIGNATURE = "X-Hub-Signature-256";
     private static final String SUCCESS = "Success";
     private static final String ERROR = "Error";
 
-    private static Logger LOG = LoggerFactory.getLogger(GitHubWebhooksControllerTest.class);
-
-    QueueService mocked_instance_queueServ = mock(QueueService.class);
-    GitHubService mocked_instance_ghServ = mock(GitHubService.class);
-    GitHubWebhooksController gitHubWebhooksController = new GitHubWebhooksController(mocked_instance_queueServ, mocked_instance_ghServ, "");
+    LPVSQueueService mocked_instance_queueServ = mock(LPVSQueueService.class);
+    LPVSGitHubService mocked_instance_ghServ = mock(LPVSGitHubService.class);
+    LPVSQueueRepository mocked_queueRepo = mock(LPVSQueueRepository.class);
+    GitHubWebhooksController gitHubWebhooksController = new GitHubWebhooksController(mocked_instance_queueServ, mocked_instance_ghServ, mocked_queueRepo, "");
 
     @Test
     public void noSignatureTest() {
-        ResponseEntity<ResponseWrapper> actual;
+        ResponseEntity<LPVSResponseWrapper> actual;
         try {
             actual = gitHubWebhooksController.gitHubWebhooks(null, null);
         } catch( Exception e) {
             actual = null;
         }
-        ResponseEntity<ResponseWrapper> expected = new ResponseEntity<>(new ResponseWrapper(ERROR), HttpStatus.FORBIDDEN);
+        ResponseEntity<LPVSResponseWrapper> expected = new ResponseEntity<>(new LPVSResponseWrapper(ERROR), HttpStatus.FORBIDDEN);
         assertEquals(expected.toString().substring(0, 56), actual.toString().substring(0, 56));
     }
 
     @Test
     public void noPayloadTest() {
-        ResponseEntity<ResponseWrapper> actual;
+        ResponseEntity<LPVSResponseWrapper> actual;
         try {
             actual = gitHubWebhooksController.gitHubWebhooks(SIGNATURE, null);
         } catch( Exception e) {
             actual = null;
         }
-        ResponseEntity<ResponseWrapper> expected = new ResponseEntity<>(new ResponseWrapper(SUCCESS), HttpStatus.OK);
+        ResponseEntity<LPVSResponseWrapper> expected = new ResponseEntity<>(new LPVSResponseWrapper(SUCCESS), HttpStatus.OK);
         assertEquals(expected.toString().substring(0, 42), actual.toString().substring(0, 42));
     }
 
     @Test
     public void okTest() {
-        ResponseEntity<ResponseWrapper> actual;
+        ResponseEntity<LPVSResponseWrapper> actual;
+        LPVSQueueRepository queueRepository;
 
         String  json_to_test =
             "{" +
@@ -87,11 +93,10 @@ public class GitHubWebhooksControllerTest {
         try {
             actual = gitHubWebhooksController.gitHubWebhooks(SIGNATURE, json_to_test);
         } catch( Exception e) {
+            log.error(e.getMessage());
             actual = null;
         }
-        ResponseEntity<ResponseWrapper> expected = new ResponseEntity<>(new ResponseWrapper(SUCCESS), HttpStatus.OK);
-        LOG.info("EXPECTED: " + expected.toString());
-        LOG.info("ACTUAL: " + actual.toString());
+        ResponseEntity<LPVSResponseWrapper> expected = new ResponseEntity<>(new LPVSResponseWrapper(SUCCESS), HttpStatus.OK);
         assertEquals(expected.toString().substring(0, 42), actual.toString().substring(0, 42));
     }
 
@@ -129,7 +134,7 @@ public class GitHubWebhooksControllerTest {
             secret = gitHubWebhooksController.wrongSecret(signature + " ", json_to_test);
             assertEquals(secret, true);
         } catch (Exception e) {
-            LOG.error("GitHubWebhooksControllerTest::wrongSecretTest exception: " + e);
+            log.error("GitHubWebhooksControllerTest::wrongSecretTest exception: " + e);
             fail();
         }
     }

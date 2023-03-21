@@ -11,13 +11,14 @@ import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import com.lpvs.entity.LPVSFile;
 import com.lpvs.entity.LPVSLicense;
-import com.lpvs.entity.config.WebhookConfig;
-import com.lpvs.service.GitHubService;
-import com.lpvs.service.LicenseService;
-import com.lpvs.util.WebhookUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.lpvs.entity.LPVSQueue;
+import com.lpvs.repository.LPVSLicenseRepository;
+import com.lpvs.service.LPVSGitHubService;
+import com.lpvs.service.LPVSLicenseService;
+import com.lpvs.util.LPVSWebhookUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import java.io.*;
 import java.nio.file.Files;
@@ -25,18 +26,23 @@ import java.nio.file.Paths;
 import java.util.*;
 
 @Service
-public class ScanossDetectService {
+@Slf4j
+public class LPVSScanossDetectService {
 
     @Autowired
-    private LicenseService licenseService;
+    private LPVSLicenseService licenseService;
 
     @Autowired
-    private GitHubService gitHubService;
+    private LPVSGitHubService gitHubService;
 
-    private static final Logger LOG = LoggerFactory.getLogger(ScanossDetectService.class);
+    @Autowired
+    private LPVSLicenseRepository lpvsLicenseRepository;
 
-    public void runScan(WebhookConfig webhookConfig, String path) throws Exception {
-        LOG.info("Starting Scanoss scanning");
+    @Value("${debug:false}")
+    private Boolean debug;
+
+    public void runScan(LPVSQueue webhookConfig, String path) throws Exception {
+        log.debug("Starting Scanoss scanning");
 
         try {
             ProcessBuilder processBuilder;
@@ -44,22 +50,22 @@ public class ScanossDetectService {
                 new File("RESULTS").mkdir();
             }
             processBuilder = new ProcessBuilder(
-                "scanoss-py", "scan",
-                "-t",
-                "--no-wfp-output",
-                "-o", "RESULTS/" + WebhookUtil.getRepositoryName(webhookConfig) + "_" + webhookConfig.getHeadCommitSHA() + ".json",
-                path
+                    "scanoss-py", "scan",
+                    debug ? "-t" : "-q",
+                    "--no-wfp-output",
+                    "-o", "RESULTS/" + LPVSWebhookUtil.getRepositoryName(webhookConfig) + "_" + webhookConfig.getHeadCommitSHA() + ".json",
+                    path
             );
             Process process = processBuilder.inheritIO().start();
 
             int status = process.waitFor();
 
             if (status == 1) {
-                LOG.error("Scanoss scanner terminated with none-zero code. Terminating.");
+                log.error("Scanoss scanner terminated with none-zero code. Terminating.");
                 BufferedReader output = null;
                 try {
                     output = new BufferedReader(new InputStreamReader(process.getErrorStream()));
-                    LOG.error(output.readLine());
+                    log.error(output.readLine());
                     throw new Exception("Scanoss scanner terminated with none-zero code. Terminating.");
                 }
                 finally {
@@ -68,18 +74,18 @@ public class ScanossDetectService {
                 }
             }
         } catch (IOException | InterruptedException ex) {
-            LOG.error("Scanoss scanner terminated with none-zero code. Terminating.");
+            log.error("Scanoss scanner terminated with none-zero code. Terminating.");
             throw ex;
         }
 
-        LOG.info("Scanoss scan done");
+        log.debug("Scanoss scan done");
     }
 
-    public List<LPVSFile> checkLicenses(WebhookConfig webhookConfig) {
+    public List<LPVSFile> checkLicenses(LPVSQueue webhookConfig) {
         List<LPVSFile> detectedFiles = new ArrayList<>();
         try {
             Gson gson = new Gson();
-            Reader reader = Files.newBufferedReader(Paths.get("RESULTS/" + WebhookUtil.getRepositoryName(webhookConfig) +
+            Reader reader = Files.newBufferedReader(Paths.get("RESULTS/" + LPVSWebhookUtil.getRepositoryName(webhookConfig) +
                     "_" + webhookConfig.getHeadCommitSHA() + ".json"));
             // convert JSON file to map
             Map<String, ArrayList<Object>> map = gson.fromJson(reader,
@@ -118,6 +124,7 @@ public class ScanossDetectService {
                 if (object.matched != null) file.setSnippetMatch(object.matched);
                 if (object.lines != null) file.setMatchedLines(object.lines);
                 if (object.file != null) file.setComponentFilePath(object.file);
+                if (object.file_url != null) file.setComponentFileUrl(object.file_url);
                 if (object.component != null) file.setComponentName(object.component);
                 if (object.oss_lines != null) file.setComponentLines(object.oss_lines);
                 if (object.url != null) file.setComponentUrl(object.url);
@@ -133,7 +140,15 @@ public class ScanossDetectService {
                             lic.setChecklistUrl(license.checklist_url);
                             licenses.add(lic);
                         } else {
-                            licenses.add(new LPVSLicense(0L, license.name, license.name, "UNREVIEWED", null, license.checklist_url));
+                            LPVSLicense newLicense = new LPVSLicense();
+                            newLicense.setSpdxId(license.name);
+                            newLicense.setLicenseName(license.name);
+                            newLicense.setAccess("UNREVIEWED");
+                            newLicense.setChecklistUrl(license.checklist_url);
+                            newLicense.setAlternativeNames(null);
+                            newLicense = lpvsLicenseRepository.save(newLicense);
+                            licenseService.addLicenseToList(newLicense);
+                            licenses.add(newLicense);
                         }
 
                         // Check for the license conflicts if the property "license_conflict=scanner"
@@ -153,7 +168,7 @@ public class ScanossDetectService {
             // close reader
             reader.close();
         } catch (Exception ex) {
-            LOG.error(ex.toString());
+            log.error(ex.toString());
         }
         return detectedFiles;
     }
