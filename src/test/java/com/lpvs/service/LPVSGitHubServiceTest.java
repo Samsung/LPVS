@@ -12,6 +12,7 @@ import com.lpvs.entity.LPVSLicense;
 import com.lpvs.entity.LPVSPullRequest;
 import com.lpvs.entity.LPVSQueue;
 import com.lpvs.entity.enums.LPVSPullRequestAction;
+import com.lpvs.entity.enums.LPVSVcs;
 import com.lpvs.repository.LPVSDetectedLicenseRepository;
 import com.lpvs.repository.LPVSLicenseConflictRepository;
 import com.lpvs.repository.LPVSLicenseRepository;
@@ -2128,7 +2129,7 @@ public class LPVSGitHubServiceTest {
         @Test
         public void testGetMatchedLinesAsLink_NotAll() {
             // main test
-            assertEquals(expected_result, LPVSCommentUtil.getMatchedLinesAsLink(webhookConfig, lpvs_file_1));
+            assertEquals(expected_result, LPVSCommentUtil.getMatchedLinesAsLink(webhookConfig, lpvs_file_1, LPVSVcs.GITHUB));
         }
     }
 
@@ -2159,7 +2160,7 @@ public class LPVSGitHubServiceTest {
         @Test
         public void testGetMatchedLinesAsLink_All() {
             // main test
-            assertEquals(expected_result, LPVSCommentUtil.getMatchedLinesAsLink(webhookConfig, lpvs_file_1));
+            assertEquals(expected_result, LPVSCommentUtil.getMatchedLinesAsLink(webhookConfig, lpvs_file_1, LPVSVcs.GITHUB));
         }
     }
     

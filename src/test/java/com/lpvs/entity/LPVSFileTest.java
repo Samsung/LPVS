@@ -8,6 +8,7 @@ package com.lpvs.entity;
 
 import java.util.*;
 
+import com.lpvs.entity.enums.LPVSVcs;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -140,7 +141,7 @@ public class LPVSFileTest {
 
         Set<LPVSLicense> licenses = new HashSet<>(Arrays.asList(lpvsLicense));
         lpvsFile.setLicenses(licenses);
-        assertEquals(lpvsFile.convertLicensesToString(), "<a target=\"_blank\" href=\"checklistUrl\">spdxId</a> (access)");
+        assertEquals(lpvsFile.convertLicensesToString(LPVSVcs.GITHUB), "<a target=\"_blank\" href=\"checklistUrl\">spdxId</a> (access)");
     }
 
     @Test
@@ -169,7 +170,7 @@ public class LPVSFileTest {
 
         Set<LPVSLicense> licenses = new HashSet<>(Arrays.asList(lpvsLicense1, lpvsLicense2));
         lpvsFile.setLicenses(licenses);
-        assertEquals(lpvsFile.convertLicensesToString(), "spdxId (access), spdxId (access)");
+        assertEquals(lpvsFile.convertLicensesToString(LPVSVcs.GITHUB), "spdxId (access), spdxId (access)");
     }
 
     @Test
@@ -198,6 +199,6 @@ public class LPVSFileTest {
 
         Set<LPVSLicense> licenses = new HashSet<>(Arrays.asList(lpvsLicense1, lpvsLicense2));
         lpvsFile.setLicenses(licenses);
-        assertEquals(lpvsFile.convertLicensesToString(), "<a target=\"_blank\" href=\"checklistUrl\">spdxId</a> (access), <a target=\"_blank\" href=\"checklistUrl\">spdxId</a> (access)");
+        assertEquals(lpvsFile.convertLicensesToString(LPVSVcs.GITHUB), "<a target=\"_blank\" href=\"checklistUrl\">spdxId</a> (access), <a target=\"_blank\" href=\"checklistUrl\">spdxId</a> (access)");
     }
 }

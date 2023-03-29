@@ -107,8 +107,6 @@ public class LPVSGitHubService {
             log.debug("Repository Info: " + LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)+"/" + LPVSWebhookUtil.getRepositoryName(webhookConfig));
             GHRepository repository = gitHub.getRepository(LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)+"/" + LPVSWebhookUtil.getRepositoryName(webhookConfig));
 
-            log.debug("Repository: " + repository.getFullName());
-
             GHPullRequest pullRequest = getPullRequest(webhookConfig, repository);
             if (pullRequest == null){
                 log.error("Can't find pull request " + webhookConfig.getPullRequestUrl());
