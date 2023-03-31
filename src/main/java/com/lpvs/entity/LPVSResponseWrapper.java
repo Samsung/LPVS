@@ -7,10 +7,14 @@
 
 package com.lpvs.entity;
 
-public class ResponseWrapper {
+public class LPVSResponseWrapper {
     private String message;
 
-    public ResponseWrapper(String message) {
+    public LPVSResponseWrapper(String message) {
         this.message = message;
+    }
+
+    public String getMessage() {
+        return this.message;
     }
 }

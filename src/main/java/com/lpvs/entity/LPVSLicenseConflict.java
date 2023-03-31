@@ -7,44 +7,32 @@
 
 package com.lpvs.entity;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "license_conflicts", schema = "lpvs")
-public class LPVSLicenseConflict {
+@Getter @Setter @NoArgsConstructor
+public class LPVSLicenseConflict implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long conflictId;
 
     @ManyToOne
-    @JoinColumn(name = "repository_license", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "repository_license_id", referencedColumnName = "id", nullable = false)
     private LPVSLicense repositoryLicense;
 
     @ManyToOne
-    @JoinColumn(name = "conflict_license", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "conflict_license_id", referencedColumnName = "id", nullable = false)
     private LPVSLicense conflictLicense;
 
     public LPVSLicenseConflict(LPVSLicense repositoryLicense, LPVSLicense conflictLicense) {
         this.repositoryLicense = repositoryLicense;
-        this.conflictLicense = conflictLicense;
-    }
-
-    public LPVSLicenseConflict() { }
-
-    public LPVSLicense getRepositoryLicense() {
-        return repositoryLicense;
-    }
-
-    public void setRepositoryLicense(LPVSLicense repositoryLicense) {
-        this.repositoryLicense = repositoryLicense;
-    }
-
-    public LPVSLicense getConflictLicense() {
-        return conflictLicense;
-    }
-
-    public void setConflictLicense(LPVSLicense conflictLicense) {
         this.conflictLicense = conflictLicense;
     }
 }

@@ -10,9 +10,6 @@ package com.lpvs.entity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 public class LPVSLicenseTest {
@@ -21,6 +18,7 @@ public class LPVSLicenseTest {
     final String baseLicenseName = "licenseName";
     final String baseSpdxId = "spdxId";
     final String baseAccess = "access";
+    final String baseAlternativeName = "licenseNameAlternative";
     final String baseChecklistUrl = "checklistUrl";
 
     @BeforeEach
@@ -29,6 +27,7 @@ public class LPVSLicenseTest {
                 baseLicenseName,
                 baseSpdxId,
                 baseAccess,
+                baseAlternativeName,
                 baseChecklistUrl);
     }
 
@@ -75,6 +74,15 @@ public class LPVSLicenseTest {
         lpvsLicense.setAccess(newActualAccess);
         assertNotEquals(lpvsLicense.getAccess(), baseAccess);
         assertEquals(lpvsLicense.getAccess(), newActualAccess);
+    }
+
+    @Test
+    public void setAlternativeNamesTest() {
+        final String newActualAlternativeNames = "newAlternativeName";
+        assertEquals(lpvsLicense.getAlternativeNames(), baseAlternativeName);
+        lpvsLicense.setAlternativeNames(newActualAlternativeNames);
+        assertNotEquals(lpvsLicense.getAlternativeNames(), baseAlternativeName);
+        assertEquals(lpvsLicense.getAlternativeNames(), newActualAlternativeNames);
     }
 
     @Test
