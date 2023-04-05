@@ -33,4 +33,4 @@ EXPOSE 7896
 WORKDIR /$PRJ_DIR/target
 
 # Run application in container
-CMD ["java", "-jar", "lpvs-1.0.1.jar"]
+CMD ["java", "-jar", "lpvs-1.0.2.jar"]

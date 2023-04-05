@@ -7,119 +7,104 @@
 
 package com.lpvs.service;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.lpvs.entity.LPVSFile;
 import com.lpvs.entity.LPVSLicense;
-import com.lpvs.entity.config.WebhookConfig;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.lpvs.entity.LPVSLicenseConflict;
+import com.lpvs.entity.LPVSQueue;
+import com.lpvs.repository.LPVSLicenseConflictRepository;
+import com.lpvs.repository.LPVSLicenseRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
-import java.io.Reader;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.*;
 
 @Service
-public class LicenseService {
+@Slf4j
+public class LPVSLicenseService {
 
-    private final static String LICENSE_FILE_PATH_PROP_NAME = "license_filepath";
     private final static String LICENSE_CONFLICT_SOURCE_PROP_NAME = "license_conflict";
 
-    private final static String LICENSE_FILE_PATH_ENV_VAR_NAME = "LPVS_LICENSE_FILEPATH";
     private final static String LICENSE_CONFLICT_SOURCE_ENV_VAR_NAME = "LPVS_LICENSE_CONFLICT";
 
-    private final static String LICENSE_FILE_PATH_DEFAULT = "classes/licenses.json";
-    private final static String LICENSE_CONFLICT_SOURCE_DEFAULT = "json";
+    private final static String LICENSE_CONFLICT_SOURCE_DEFAULT = "db";
 
-    public String licenseFilePath;
     public String licenseConflictsSource;
-
-    private static final Logger LOG = LoggerFactory.getLogger(LicenseService.class);
 
     private List<LPVSLicense> licenses;
 
     private List<Conflict<String, String>> licenseConflicts;
-    
+
     @Autowired
-    public LicenseService(@Value("${" + LICENSE_FILE_PATH_PROP_NAME + ":" + LICENSE_FILE_PATH_DEFAULT + "}") String licenseFilePath,
-                          @Value("${" + LICENSE_CONFLICT_SOURCE_PROP_NAME + ":" + LICENSE_CONFLICT_SOURCE_DEFAULT + "}") String licenseConflictsSource) {
-        this.licenseFilePath = licenseFilePath;
+    public LPVSLicenseService(@Value("${" + LICENSE_CONFLICT_SOURCE_PROP_NAME + ":" + LICENSE_CONFLICT_SOURCE_DEFAULT + "}") String licenseConflictsSource) {
         this.licenseConflictsSource = licenseConflictsSource;
     }
 
     @Autowired
     ApplicationContext applicationContext;
 
+    @Autowired
+    private LPVSLicenseRepository lpvsLicenseRepository;
+
+    @Autowired
+    private LPVSLicenseConflictRepository lpvsLicenseConflictRepository;
+
     @PostConstruct
     private void init() {
-        licenseFilePath = (licenseFilePath == null || licenseFilePath.equals(LICENSE_FILE_PATH_DEFAULT))
-        && System.getenv(LICENSE_FILE_PATH_ENV_VAR_NAME) != null
-                && !System.getenv(LICENSE_FILE_PATH_ENV_VAR_NAME).isEmpty() ?
-                System.getenv(LICENSE_FILE_PATH_ENV_VAR_NAME) : licenseFilePath;
         licenseConflictsSource = (licenseConflictsSource == null || licenseConflictsSource.equals(
                 LICENSE_CONFLICT_SOURCE_DEFAULT
         ))
-        && System.getenv(LICENSE_CONFLICT_SOURCE_ENV_VAR_NAME) != null
+                && System.getenv(LICENSE_CONFLICT_SOURCE_ENV_VAR_NAME) != null
                 && !System.getenv(LICENSE_CONFLICT_SOURCE_ENV_VAR_NAME).isEmpty() ?
                 System.getenv(LICENSE_CONFLICT_SOURCE_ENV_VAR_NAME) : licenseConflictsSource;
-        if (licenseFilePath == null || licenseFilePath.isEmpty()) {
-            LOG.error(LICENSE_FILE_PATH_ENV_VAR_NAME + "(" + LICENSE_FILE_PATH_PROP_NAME + ") is not set");
-            System.exit(SpringApplication.exit(applicationContext, () -> -1));
-        }
+
         if (licenseConflictsSource == null || licenseConflictsSource.isEmpty()) {
-            LOG.error(LICENSE_CONFLICT_SOURCE_ENV_VAR_NAME + "(" + LICENSE_CONFLICT_SOURCE_PROP_NAME + ") is not set");
+            log.error(LICENSE_CONFLICT_SOURCE_ENV_VAR_NAME + "(" + LICENSE_CONFLICT_SOURCE_PROP_NAME + ") is not set");
             System.exit(SpringApplication.exit(applicationContext, () -> -1));
         }
         try {
-            // 1. Load licenses
-            // create Gson instance
-            Gson gson = new Gson();
-            // create a reader
-            Reader reader = Files.newBufferedReader(Paths.get(licenseFilePath));
-            // convert JSON array to list of licenses
-            licenses = new Gson().fromJson(reader, new TypeToken<List<LPVSLicense>>() {}.getType());
+            // 1. Load licenses from DB
+            licenses = lpvsLicenseRepository.takeAllLicenses();
             // print info
-            LOG.info("LICENSES: loaded " + licenses.size() + " licenses from JSON file.");
-            // close reader
-            reader.close();
+            log.info("LICENSES: loaded " + licenses.size() + " licenses from DB.");
 
             // 2. Load license conflicts
             licenseConflicts = new ArrayList<>();
 
-            if (licenseConflictsSource.equalsIgnoreCase("json")) {
-                for (LPVSLicense license : licenses) {
-                    if (license.getIncompatibleWith() != null && !license.getIncompatibleWith().isEmpty()) {
-                        for (String lic : license.getIncompatibleWith()) {
-                            Conflict<String, String> conf = new Conflict<>(license.getSpdxId(), lic);
-                            if (!licenseConflicts.contains(conf)) {
-                                licenseConflicts.add(conf);
-                            }
-                        }
+            if (licenseConflictsSource.equalsIgnoreCase("db")) {
+                List<LPVSLicenseConflict> conflicts = lpvsLicenseConflictRepository.takeAllLicenseConflicts();
+                for (LPVSLicenseConflict conflict : conflicts) {
+                    Conflict<String, String> conf = new Conflict<>(conflict.getConflictLicense().getSpdxId(), conflict.getRepositoryLicense().getSpdxId());
+                    if (!licenseConflicts.contains(conf)) {
+                        licenseConflicts.add(conf);
                     }
                 }
-                LOG.info("LICENSE CONFLICTS: loaded " + licenseConflicts.size() + " license conflicts.");
+                // print info
+                log.info("LICENSE CONFLICTS: loaded " + licenseConflicts.size() + " license conflicts from DB.");
             }
 
         } catch (Exception ex) {
-            LOG.error(ex.toString());
+            log.warn("LICENSES and LICENSE CONFLICTS are not loaded.");
+            log.error(ex.toString());
             licenses = new ArrayList<>();
             licenseConflicts = new ArrayList<>();
         }
     }
 
     public LPVSLicense findLicenseBySPDX(String name) {
-       for (LPVSLicense license : licenses) {
-          if (license.getSpdxId().equalsIgnoreCase(name)) {
-              return license;
-          }
-       }
-       return null;
+        for (LPVSLicense license : licenses) {
+            if (license.getSpdxId().equalsIgnoreCase(name)) {
+                return license;
+            }
+        }
+        return null;
+    }
+
+    public void addLicenseToList(LPVSLicense license) {
+        licenses.add(license);
     }
 
     public LPVSLicense  findLicenseByName(String name) {
@@ -150,10 +135,12 @@ public class LicenseService {
         return newLicense;
     }
 
-    public List<Conflict<String, String>> findConflicts(WebhookConfig webhookConfig, List<LPVSFile> scanResults) {
+    // Changed method to never return null
+    public List<Conflict<String, String>> findConflicts(LPVSQueue webhookConfig, List<LPVSFile> scanResults) {
+        List<Conflict<String, String>> foundConflicts = new ArrayList<>();
 
         if (scanResults.isEmpty() || licenseConflicts.isEmpty()) {
-            return null;
+            return foundConflicts;
         }
 
         // 0. Extract the set of detected licenses from scan results
@@ -167,8 +154,8 @@ public class LicenseService {
         Set<String> detectedLicensesUnique = new HashSet<>(detectedLicenses);
 
         // 1. Check conflict between repository license and detected licenses
-        List<Conflict<String, String>> foundConflicts = new ArrayList<>();
         String repositoryLicense = webhookConfig.getRepositoryLicense();
+        // ToDo: add check for license alternative names. Reason: GitHub can use not SPDX ID.
         if (repositoryLicense != null) {
             for (String detectedLicenseUnique : detectedLicensesUnique) {
                 for (Conflict<String, String> licenseConflict : licenseConflicts) {

@@ -7,6 +7,7 @@
 
 package com.lpvs.entity;
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -16,15 +17,15 @@ import java.lang.reflect.Field;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
-public class ResponseWrapperTest {
-    private static Logger LOG = LoggerFactory.getLogger(ResponseWrapperTest.class);
+@Slf4j
+public class LPVSResponseWrapperTest {
 
     final String test_value = "test_value";
-    ResponseWrapper responseWrapper;
+    LPVSResponseWrapper responseWrapper;
 
     @Test
     public void testResponseWrapperConstructor() {
-        responseWrapper = new ResponseWrapper(test_value);
+        responseWrapper = new LPVSResponseWrapper(test_value);
 
         String actual;
         try {
@@ -32,7 +33,7 @@ public class ResponseWrapperTest {
             message_field.setAccessible(true);
             actual = (String) message_field.get(responseWrapper);
         } catch (NoSuchFieldException | IllegalAccessException e) {
-            LOG.error("Java reflect exception at ResponseWrapperTest: " + e);
+            log.error("Java reflect exception at LPVSResponseWrapperTest: " + e);
             fail();
 
             throw new RuntimeException();  // to get rid of "`actual` may be unassigned" warning

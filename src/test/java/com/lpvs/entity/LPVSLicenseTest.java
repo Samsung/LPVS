@@ -10,9 +10,6 @@ package com.lpvs.entity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 public class LPVSLicenseTest {
@@ -21,8 +18,8 @@ public class LPVSLicenseTest {
     final String baseLicenseName = "licenseName";
     final String baseSpdxId = "spdxId";
     final String baseAccess = "access";
+    final String baseAlternativeName = "licenseNameAlternative";
     final String baseChecklistUrl = "checklistUrl";
-    List<String> baseIncompatibleWith = Arrays.asList("incompatibleWith1", "incompatibleWith2", "incompatibleWith3");
 
     @BeforeEach
     void setUp() {
@@ -30,8 +27,8 @@ public class LPVSLicenseTest {
                 baseLicenseName,
                 baseSpdxId,
                 baseAccess,
-                baseChecklistUrl,
-                baseIncompatibleWith);
+                baseAlternativeName,
+                baseChecklistUrl);
     }
 
     @Test
@@ -41,7 +38,6 @@ public class LPVSLicenseTest {
         assertEquals(lpvsLicense.getSpdxId(), baseSpdxId);
         assertEquals(lpvsLicense.getAccess(), baseAccess);
         assertEquals(lpvsLicense.getChecklistUrl(), baseChecklistUrl);
-        assertIterableEquals(lpvsLicense.getIncompatibleWith(), baseIncompatibleWith);
     }
 
     @Test
@@ -81,24 +77,20 @@ public class LPVSLicenseTest {
     }
 
     @Test
+    public void setAlternativeNamesTest() {
+        final String newActualAlternativeNames = "newAlternativeName";
+        assertEquals(lpvsLicense.getAlternativeNames(), baseAlternativeName);
+        lpvsLicense.setAlternativeNames(newActualAlternativeNames);
+        assertNotEquals(lpvsLicense.getAlternativeNames(), baseAlternativeName);
+        assertEquals(lpvsLicense.getAlternativeNames(), newActualAlternativeNames);
+    }
+
+    @Test
     public void setChecklistUrlTest() {
         final String newActualCheckUrl = "NewCheckUrl";
         assertEquals(lpvsLicense.getChecklistUrl(), baseChecklistUrl);
         lpvsLicense.setChecklistUrl(newActualCheckUrl);
         assertNotEquals(lpvsLicense.getChecklistUrl(), baseChecklistUrl);
         assertEquals(lpvsLicense.getChecklistUrl(), newActualCheckUrl);
-    }
-
-    @Test
-    public void setIncompatibleWithTest() {
-        List<String> newIncompatibleWith = Arrays.asList("newIncompatibleWith1", "newIncompatibleWith2", "newIncompatibleWith3");
-        assertIterableEquals(lpvsLicense.getIncompatibleWith(), baseIncompatibleWith);
-        lpvsLicense.setIncompatibleWith(newIncompatibleWith);
-        for (String base : baseIncompatibleWith) {
-            for (String actual : lpvsLicense.getIncompatibleWith()) {
-                assertNotEquals(base, actual);
-            }
-        }
-        assertIterableEquals(lpvsLicense.getIncompatibleWith(), newIncompatibleWith);
     }
 }

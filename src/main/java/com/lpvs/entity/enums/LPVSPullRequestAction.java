@@ -7,10 +7,7 @@
 
 package com.lpvs.entity.enums;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-public enum PullRequestAction {
+public enum LPVSPullRequestAction {
     OPEN("opened"),
     REOPEN("reopened"),
     CLOSE("closed"),
@@ -19,7 +16,7 @@ public enum PullRequestAction {
 
     private final String type;
 
-    PullRequestAction(final String type) {
+    LPVSPullRequestAction(final String type) {
         this.type = type;
     }
 
@@ -27,7 +24,7 @@ public enum PullRequestAction {
         return type;
     }
 
-    public static PullRequestAction convertFrom(String action) {
+    public static LPVSPullRequestAction convertFrom(String action) {
         if (action.equals(OPEN.getPullRequestAction())) {
             return OPEN;
         } else if (action.equals(REOPEN.getPullRequestAction())) {

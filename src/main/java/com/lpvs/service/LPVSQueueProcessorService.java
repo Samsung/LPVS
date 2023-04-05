@@ -7,9 +7,8 @@
 
 package com.lpvs.service;
 
-import com.lpvs.entity.config.WebhookConfig;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.lpvs.entity.LPVSQueue;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
@@ -19,22 +18,22 @@ import java.util.*;
 
 
 @Service
-public class QueueProcessorService {
+@Slf4j
+public class LPVSQueueProcessorService {
 
-    private QueueService queueService;
-
-    private static final Logger LOG = LoggerFactory.getLogger(QueueProcessorService.class);
+    private LPVSQueueService queueService;
 
     @Autowired
-    QueueProcessorService(QueueService queueService) {
+    LPVSQueueProcessorService(LPVSQueueService queueService) {
         this.queueService = queueService;
     }
 
     @EventListener(ApplicationReadyEvent.class)
     private void queueProcessor() throws Exception {
+        queueService.checkForQueue();
         while (true) {
-            WebhookConfig webhookConfig = queueService.getQueueFirstElement();
-            LOG.info("PROCESS Webhook id = " + webhookConfig.getWebhookId());
+            LPVSQueue webhookConfig = queueService.getQueueFirstElement();
+            log.info("PROCESS Webhook id = " + webhookConfig.getId());
             webhookConfig.setDate(new Date());
             queueService.processWebHook(webhookConfig);
         }
