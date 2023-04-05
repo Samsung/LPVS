@@ -41,3 +41,25 @@ To clean unused containers (if the command `docker run` was used a few times), _
    ```bash
    docker rm lpvs
    ```
+#### Using docker-compose
+ 
+Please fill 2 lines in file docker-compose.yml with correct data(mandatory):
+ - github.login=
+ - github.token=
+ 
+Other lines in 2 sections environment may be changed(optionally).
+
+Also directory of keeping MySQL data may be changed, line:
+ - ./mysql-lpvs-data:/var/lib/mysql # db storage -by default it is directory in root of repository with name mysql-lpvs-data
+
+Start docker-compose:
+   ```bash
+   docker-compose up -d --build
+   ```
+   
+ Stop docker-compose:
+   ```bash
+   docker-compose down -v --rmi local
+   ```  
+ 
+ 

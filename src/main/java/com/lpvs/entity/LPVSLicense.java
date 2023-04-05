@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2022, Samsung Electronics Co., Ltd. All rights reserved.
+ * Copyright (c) 2023, Samsung Electronics Co., Ltd. All rights reserved.
  *
  * Use of this source code is governed by a MIT license that can be
  * found in the LICENSE file.
@@ -7,88 +7,37 @@
 
 package com.lpvs.entity;
 
-import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-public class LPVSLicense {
+import javax.persistence.*;
+import java.io.Serializable;
 
+@Entity
+@Table(name = "licenses", schema = "lpvs", indexes = {@Index(name = "spdx_id", columnList = "license_spdx", unique = true)})
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor
+public class LPVSLicense implements Serializable {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long licenseId;
 
+    @Column(name = "license_name", nullable = false)
     private String licenseName;
 
+    @Column(name = "license_spdx", nullable = false)
     private String spdxId;
 
+    @Column(name = "license_usage")
     private String access;
 
+    @Column(name = "license_alternative_names", columnDefinition = "LONGTEXT")
+    private String alternativeNames;
+
+    @Transient
     private String checklistUrl;
-
-    private List<String> incompatibleWith;
-
-    public LPVSLicense() {
-    }
-
-    public LPVSLicense(Long licenseId, String licenseName, String spdxId, String access, String checklistUrl, List<String> incompatibleWith) {
-        this.licenseId = licenseId;
-        this.licenseName = licenseName;
-        this.spdxId = spdxId;
-        this.access = access;
-        this.checklistUrl = checklistUrl;
-        this.incompatibleWith = incompatibleWith;
-    }
-
-    public Long getLicenseId() {
-        return licenseId;
-    }
-
-    public void setLicenseId(Long licenseId) {
-        this.licenseId = licenseId;
-    }
-
-    public String getLicenseName() {
-        return licenseName;
-    }
-
-    public void setLicenseName(String licenseName) {
-        this.licenseName = licenseName;
-    }
-
-    public String getSpdxId() {
-        return spdxId;
-    }
-
-    public void setSpdxId(String spdxId) {
-        this.spdxId = spdxId;
-    }
-
-    public String getAccess() {
-        return access;
-    }
-
-    public void setAccess(String access) {
-        this.access = access;
-    }
-
-    public String getChecklist_url() {
-        return checklistUrl;
-    }
-
-    public void setChecklist_url(String checklist_url) {
-        this.checklistUrl = checklist_url;
-    }
-
-    public String getChecklistUrl() {
-        return checklistUrl;
-    }
-
-    public void setChecklistUrl(String checklistUrl) {
-        this.checklistUrl = checklistUrl;
-    }
-
-    public List<String> getIncompatibleWith() {
-        return incompatibleWith;
-    }
-
-    public void setIncompatibleWith(List<String> incompatibleWith) {
-        this.incompatibleWith = incompatibleWith;
-    }
 
 }

@@ -46,9 +46,12 @@ LPVS will start scanning automatically, then provide comments about the licenses
 ## LPVS Backend Configuration
 
 1. Install SCANOSS Python package by following the [guideline](https://github.com/scanoss/scanoss.py#installation).
+    ```bash
+    pip3 install scanoss
+    ```
 
-2. Fill in `licenses.json` file with the information about permitted, restricted, and prohibited licenses (mandatory) as well as their compatibility specifics (optional). 
-A template of the `licenses.json` file can be found in the repository at `src/main/resources/licenses.json`.
+2. Create necessary MySQL database and user and fill in `licenses` and `license_conflicts` tables with the information about permitted, restricted, and prohibited licenses (mandatory) as well as their compatibility specifics (optional). 
+An example database dump file can be found in the repository at `src/main/resources/database_dump.sql`.
 
 3. Fill in the lines of the `src/main/resources/application.properties` file:
     ```text
@@ -57,35 +60,46 @@ A template of the `licenses.json` file can be found in the repository at `src/ma
    github.login=
    github.api.url=
    github.secret=LPVS
-
+   ```
+   For convience adding these properties(associated with github) included in docker-compose.yml (so not needed to add it in application.properties).
+   For additional information about using Docker and tips, please check file [Docker_Usage](.github/Docker_Usage.md).
+   
+   
+   
+   ```text
    # Used license scanner: scanoss (at the moment, only this scanner is supported)
     scanner=scanoss
 
-   # Path to the 'licenses.json' file which contains information about permitted,
-   # restricted and prohibited licenses. This file should be filled according to
-   # the template which could be found at 'src/main/resources/licenses.json'
-    license_filepath=
-
    # Used license conflicts source:
-   # > option "json": take conflicts from 'licenses.json' (should be filled manually
-   # according to the template at 'src/main/resources/licenses.json')
+   # > option "db": take conflicts from MySQL database - 'license_conflicts' table (should be filled manually
+   # according to the example at 'src/main/resources/database_dump.sql')
    # > option "scanner": take conflicts from the scanner response
-    license_conflict=json
+    license_conflict=db
+
+   # DB configuration (URL, username and password) - example
+   ...
+   spring.datasource.url=jdbc:mysql://localhost:3306/lpvs
+   spring.datasource.username=
+   spring.datasource.password=
     ```
+   For convience adding these properties(DB configuration) included in docker-compose.yml (so not needed to add it in application.properties).
+   For additional information about using Docker and tips, please check file [Docker_Usage](.github/Docker_Usage.md).
+
+
 
    Alternatively, you can supply all the necessary values associated with GitHub and license using these env variables:
-   `LPVS_GITHUB_LOGIN`, `LPVS_GITHUB_TOKEN`, `LPVS_GITHUB_API_URL`, `LPVS_GITHUB_SECRET`, `LPVS_LICENSE_FILEPATH` and `LPVS_LICENSE_CONFLICT`.
+   `LPVS_GITHUB_LOGIN`, `LPVS_GITHUB_TOKEN`, `LPVS_GITHUB_API_URL`, `LPVS_GITHUB_SECRET` and `LPVS_LICENSE_CONFLICT`.
 
 4. Build LPVS application with Maven, then run it:
     ```bash
     mvn clean install
     cd target/
-    java -jar lpvs-1.0.1.jar
+    java -jar lpvs-1.0.2.jar
     ```
 
    When running the application you will also be able to use command line to input all the same values associated with github and license on the fly, like so:
    ```bash
-   java -jar -Dgithub.token=<`my-token`> -Dgithub.secret=<`my-secret`> lpvs-1.0.1.jar
+   java -jar -Dgithub.token=<`my-token`> -Dgithub.secret=<`my-secret`> lpvs-1.0.2.jar
    ```
 
    Or alternatively build and run the Docker container with LPVS:

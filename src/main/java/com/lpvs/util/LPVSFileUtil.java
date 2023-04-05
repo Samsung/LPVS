@@ -7,6 +7,8 @@
 
 package com.lpvs.util;
 
+import com.lpvs.entity.LPVSDiffFile;
+import lombok.extern.slf4j.Slf4j;
 import org.kohsuke.github.GHPullRequestFileDetail;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,9 +18,11 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 
-public class FileUtil {
-    private static final Logger LOG = LoggerFactory.getLogger(FileUtil.class);
+@Slf4j
+public class LPVSFileUtil {
 
     public static String saveFiles(Iterable<GHPullRequestFileDetail> files, String folder, String headCommitSHA, int deletions) {
 
@@ -40,7 +44,7 @@ public class FileUtil {
                 for (GHPullRequestFileDetail file : files) {
                     String patch = file.getPatch();
                     if (patch == null) {
-                        LOG.error("NULL PATCH for file "+ file.getFilename());
+                        log.error("NULL PATCH for file "+ file.getFilename());
                         continue;
                     }
                     int cnt = 1;
@@ -64,7 +68,7 @@ public class FileUtil {
                             int lIndex = patchString.indexOf(',', fIndex);
                             if (lIndex == -1) lIndex = patchString.indexOf(' ', fIndex);
                             int startLine = Integer.parseInt(patchString.substring(fIndex, lIndex));
-                            LOG.debug("Line from: " + startLine + " Git string: " + patchString);
+                            log.debug("Line from: " + startLine + " Git string: " + patchString);
                             for (int i = cnt; i < startLine; i++) {
                                 prettyPatch.append("\n");
                             }
@@ -99,7 +103,7 @@ public class FileUtil {
                 }
             }
         } catch (IOException e) {
-            LOG.error("Error while writing file. " + e.getMessage());
+            log.error("Error while writing file. " + e.getMessage());
         }
 
         if (deletions > 0) {
@@ -115,4 +119,52 @@ public class FileUtil {
             FileSystemUtils.deleteRecursively(dir);
         }
     }
+
+    public static List<LPVSDiffFile> parseDiff(String diffString){
+        LinkedList<LPVSDiffFile> resultFiles = new LinkedList<>();
+        String[] lines = diffString.split("\n");
+        log.info("# of lines: " + lines.length);
+        int count = 0;
+        for (String line: lines){
+            count += 1;
+            if (line.startsWith("+++") || line.startsWith("---")){
+                if (line.startsWith("---")){
+                    log.debug("line.startsWith(\"---\")");
+                    LPVSDiffFile diffFile = new LPVSDiffFile();
+                    diffFile.setOriginalFile(line.replace("--- ", "")
+                            .replace("---", "")
+                            .replace("a/", "")
+                            .replace("b/", ""));
+                    resultFiles.add(diffFile);
+                }
+                if (line.startsWith("+++")){
+                    log.debug("line.startsWith(\"+++\")");
+                    resultFiles.getLast().setNewFile(line.replace("+++ ", "")
+                            .replace("+++", "")
+                            .replace("a/", "")
+                            .replace("b/", ""));
+                }
+            } else if (line.startsWith("+")){
+                log.debug("line.startsWith(\"+\")");
+                resultFiles.getLast().appendAddedLine(line.replace("+", ""));
+            } else if (line.startsWith("-")){
+                log.debug("line.startsWith(\"-\")");
+                resultFiles.getLast().appendDeletedLine(line.replace("-", ""));
+            } else {
+                log.debug("Nothing!");
+            }
+        }
+        return resultFiles;
+    }
+
+    public static LPVSDiffFile checkFilePath(LPVSDiffFile diffFile){
+        if (!diffFile.getNewFile().equals(diffFile.getOriginalFile())){
+            if (diffFile.getNewFile().contains("/dev/null") && !diffFile.getOriginalFile().contains("/dev/null"))
+                diffFile.setNewFile(diffFile.getOriginalFile());
+            if (diffFile.getOriginalFile().contains("/dev/null") && !diffFile.getNewFile().contains("/dev/null"))
+                diffFile.setOriginalFile(diffFile.getNewFile());
+        }
+        return diffFile;
+    }
 }
+
