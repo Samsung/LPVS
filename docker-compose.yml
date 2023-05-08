@@ -3,8 +3,6 @@ version: '3.4'
 services:
 
   lpvs:
-    environment:
-      WAIT_HOSTS: mysqldb:3306
     build:
       context: .
     restart: always
@@ -33,9 +31,9 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: ""
     healthcheck:
-        test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
-        timeout: 20s
-        retries: 10
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
     volumes:
       - ./mysql-lpvs-data:/var/lib/mysql # db storage
       - ./src/main/resources/database_dump.sql:/docker-entrypoint-initdb.d/init.sql # init for creating db lpvs with predifined tables
