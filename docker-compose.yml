@@ -19,7 +19,8 @@ services:
       - github.api.url=https://api.github.com  # for usual GitHub account 
       - github.secret=LPVS 
     depends_on:
-      - mysqldb
+      mysqldb:
+        condition: service_healthy
     networks:
       - lpvs
       
