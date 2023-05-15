@@ -50,8 +50,52 @@ LPVS will start scanning automatically, then provide comments about the licenses
     pip3 install scanoss
     ```
 
-2. Create necessary MySQL database and user and fill in `licenses` and `license_conflicts` tables with the information about permitted, restricted, and prohibited licenses (mandatory) as well as their compatibility specifics (optional). 
-An example database dump file can be found in the repository at `src/main/resources/database_dump.sql`.
+2. Create necessary MySQL database and user (for the case when the database is supposed to be used)
+
+    2.1 Install MySQL server locally:
+
+    ```
+    sudo apt install mysql-server
+    ```
+
+    2.2 Start server:
+
+    ```
+    sudo service mysql start
+    ```
+
+    2.3 Then open Mysql command line interface:
+
+    ```
+    sudo mysql
+    ```
+
+    Run the following commands to create necessary database and user for SOSHUB:
+
+    ```
+    mysql> create database lpvs;
+    mysql> create user username;
+    mysql> grant all on lpvs.* to username;
+    mysql> alter user username identified by identified by 'password';
+    mysql> exit;
+    ```
+
+    2.4 Import existing dump file to newly created databse (optional instruction below):
+    ```
+    mysql -u username -p lpvs < src/main/resources/database_dump.sql
+    ```
+
+    When prompted, enter password: `password`
+
+    2.5 Fill in `licenses` and `license_conflicts` tables with the information about permitted, restricted, and prohibited licenses (mandatory) as well as their compatibility specifics (optional). 
+
+    An example database dump file can be found in the repository at `src/main/resources/database_dump.sql`.
+
+    2.6 Update the lines of the `src/main/resources/application.properties` file:
+    ```text
+    spring.datasource.username=username
+    spring.datasource.password=password
+    ```
 
 3. Fill in the lines of the `src/main/resources/application.properties` file:
     ```text
@@ -63,8 +107,6 @@ An example database dump file can be found in the repository at `src/main/resour
    ```
    For convience adding these properties(associated with github) included in docker-compose.yml (so not needed to add it in application.properties).
    For additional information about using Docker and tips, please check file [Docker_Usage](.github/Docker_Usage.md).
-   
-   
    
    ```text
    # Used license scanner: scanoss (at the moment, only this scanner is supported)
@@ -84,8 +126,6 @@ An example database dump file can be found in the repository at `src/main/resour
     ```
    For convience adding these properties(DB configuration) included in docker-compose.yml (so not needed to add it in application.properties).
    For additional information about using Docker and tips, please check file [Docker_Usage](.github/Docker_Usage.md).
-
-
 
    Alternatively, you can supply all the necessary values associated with GitHub and license using these env variables:
    `LPVS_GITHUB_LOGIN`, `LPVS_GITHUB_TOKEN`, `LPVS_GITHUB_API_URL`, `LPVS_GITHUB_SECRET` and `LPVS_LICENSE_CONFLICT`.
