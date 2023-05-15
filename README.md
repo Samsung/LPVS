@@ -82,11 +82,9 @@ LPVS will start scanning automatically, then provide comments about the licenses
 
     2.4 Import existing dump file to newly created databse (optional instruction below):
     ```
-    mysql -u username -p lpvs < src/main/resources/database_dump.sql
+    mysql -u[username] -p[password] < src/main/resources/database_dump.sql
     ```
-
-    When prompted, enter password: `password`
-
+    
     2.5 Fill in `licenses` and `license_conflicts` tables with the information about permitted, restricted, and prohibited licenses (mandatory) as well as their compatibility specifics (optional). 
 
     An example database dump file can be found in the repository at `src/main/resources/database_dump.sql`.
@@ -105,6 +103,8 @@ LPVS will start scanning automatically, then provide comments about the licenses
    github.api.url=
    github.secret=LPVS
    ```
+   Tip: For for usual GitHub account use  https://api.github.com  in field: github.api.url.  
+   
    For convience adding these properties(associated with github) included in docker-compose.yml (so not needed to add it in application.properties).
    For additional information about using Docker and tips, please check file [Docker_Usage](.github/Docker_Usage.md).
    
@@ -141,12 +141,20 @@ LPVS will start scanning automatically, then provide comments about the licenses
    ```bash
    java -jar -Dgithub.token=<`my-token`> -Dgithub.secret=<`my-secret`> lpvs-1.0.2.jar
    ```
+Tip: please use for this parameter -Dgithub.secret=  use LPVS as my-secret.
 
-   Or alternatively build and run the Docker container with LPVS:
-   ```bash
-    docker build -t lpvs .
-    docker run -p 7896:7896 --name lpvs -e LPVS_GITHUB_TOKEN=<`github.token`> -e LPVS_GITHUB_SECRET=<`github.secret`> lpvs:latest
+   Or alternatively build and run the Docker container with LPVS.
+   
+   For old version of Docker compose:
+       ```bash
+    docker-compose up -d --build
     ```
+    
+   For new version of Docker compose:
+   ```bash
+    docker compose up 
+    ```
+    
     For additional information about using Docker and tips, please check file [Docker_Usage](.github/Docker_Usage.md).
     
 5. Install [ngrok](https://dashboard.ngrok.com/get-started) (step 1 and 2) and run it with the following command:
