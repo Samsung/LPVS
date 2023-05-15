@@ -31,6 +31,6 @@ Start docker-compose (for new version of docker-compose):
    ```  
   Stop docker-compose(for new version of docker-compose):
    ```bash
-   docker-compose down -v --rmi local
+   docker compose down
    ```  
  
