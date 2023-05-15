@@ -105,7 +105,8 @@ LPVS will start scanning automatically, then provide comments about the licenses
    ```
    Tip: For for usual GitHub account use  https://api.github.com  in field: github.api.url.  
    
-   For convience adding these properties(associated with github) included in docker-compose.yml (so not needed to add it in application.properties).
+   For convience adding these properties(associated with github) included in docker-compose.yml (so not needed to add it in application.properties if it added in docker-compose.yml file).
+   
    For additional information about using Docker and tips, please check file [Docker_Usage](.github/Docker_Usage.md).
    
    ```text
@@ -124,7 +125,8 @@ LPVS will start scanning automatically, then provide comments about the licenses
    spring.datasource.username=
    spring.datasource.password=
     ```
-   For convience adding these properties(DB configuration) included in docker-compose.yml (so not needed to add it in application.properties).
+   For convience adding these properties(DB configuration) included in docker-compose.yml (so not needed to add it in application.properties if it added in docker-compose.yml file ).
+   
    For additional information about using Docker and tips, please check file [Docker_Usage](.github/Docker_Usage.md).
 
    Alternatively, you can supply all the necessary values associated with GitHub and license using these env variables:
@@ -146,16 +148,18 @@ Tip: please use for this parameter -Dgithub.secret=  use LPVS as my-secret.
    Or alternatively build and run the Docker container with LPVS.
    
    For old version of Docker compose:
-       ```bash
-    docker-compose up -d --build
+    ```
+      docker-compose up -d --build
     ```
     
    For new version of Docker compose:
-   ```bash
-    docker compose up 
     ```
+     docker compose up 
+    ```
+   
+   
+For additional information about using Docker and tips, please check file [Docker_Usage](.github/Docker_Usage.md).
     
-    For additional information about using Docker and tips, please check file [Docker_Usage](.github/Docker_Usage.md).
     
 5. Install [ngrok](https://dashboard.ngrok.com/get-started) (step 1 and 2) and run it with the following command:
     ```bash
