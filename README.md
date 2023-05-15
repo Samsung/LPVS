@@ -103,9 +103,9 @@ LPVS will start scanning automatically, then provide comments about the licenses
    github.api.url=
    github.secret=LPVS
    ```
-   Tip: For for usual GitHub account use  https://api.github.com  in field: github.api.url.  
+   Tip: For personal GitHub account use  `https://api.github.com`  in field `github.api.url=`.  
    
-   For convience adding these properties(associated with github) included in docker-compose.yml (so not needed to add it in application.properties if it added in docker-compose.yml file).
+   For convenience, adding these properties (associated with GitHub) included in `docker-compose.yml` (so not needed to add them in `application.properties` if added in `docker-compose.yml` file).
    
    For additional information about using Docker and tips, please check file [Docker_Usage](.github/Docker_Usage.md).
    
@@ -143,19 +143,19 @@ LPVS will start scanning automatically, then provide comments about the licenses
    ```bash
    java -jar -Dgithub.token=<`my-token`> -Dgithub.secret=<`my-secret`> lpvs-1.0.2.jar
    ```
-Tip: please use for this parameter -Dgithub.secret=  use LPVS as my-secret.
+   Tip: for parameter `-Dgithub.secret=`  is recommended to use `LPVS` as `my-secret`.
 
    Or alternatively build and run the Docker container with LPVS.
    
    For old version of Docker compose:
     ```
-      docker-compose up -d --build
+    docker-compose up -d --build
     ```
     
    For new version of Docker compose:
-    ```
-     docker compose up 
-    ```
+   ```
+   docker compose up 
+   ```
    
    
 For additional information about using Docker and tips, please check file [Docker_Usage](.github/Docker_Usage.md).
