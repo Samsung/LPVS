@@ -17,6 +17,35 @@ USE `lpvs`;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
+
+--
+-- Table structure for table `licenses`
+--
+
+DROP TABLE IF EXISTS `licenses`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `licenses` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `license_usage` varchar(255) DEFAULT NULL,
+  `license_name` varchar(255) NOT NULL,
+  `license_spdx` varchar(255) NOT NULL,
+  `license_alternative_names` longtext DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `spdx_id` (`license_spdx`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `licenses`
+--
+
+LOCK TABLES `licenses` WRITE;
+/*!40000 ALTER TABLE `licenses` DISABLE KEYS */;
+INSERT INTO `licenses` VALUES (1,'PERMITTED','Apache License 2.0','Apache-2.0',''),(2,'PROHIBITED','GNU General Public License v3.0 only','GPL-3.0-only',''),(3,'PERMITTED','OpenSSL License','OpenSSL',''),(4,'RESTRICTED','GNU Lesser General Public License v2.1 or later','GPL-2.0-or-later',''),(5,'PERMITTED','MIT License','MIT','');
+/*!40000 ALTER TABLE `licenses` ENABLE KEYS */;
+UNLOCK TABLES;
+
 --
 -- Table structure for table `license_conflicts`
 --
@@ -26,13 +55,13 @@ DROP TABLE IF EXISTS `license_conflicts`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `license_conflicts` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `conflict_license` bigint(20) NOT NULL,
-  `repository_license` bigint(20) NOT NULL,
+  `conflict_license_id` bigint(20) NOT NULL,
+  `repository_license_id` bigint(20) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `FKrtmiqvoah4x5lprxu186vp0i` (`conflict_license`),
-  KEY `FKbgosahkomx4ns2e7jyics99cl` (`repository_license`),
-  CONSTRAINT `FKbgosahkomx4ns2e7jyics99cl` FOREIGN KEY (`repository_license`) REFERENCES `licenses` (`id`),
-  CONSTRAINT `FKrtmiqvoah4x5lprxu186vp0i` FOREIGN KEY (`conflict_license`) REFERENCES `licenses` (`id`)
+  KEY `conflictlicense_idx` (`conflict_license_id`),
+  KEY `repositorylicense_idx` (`repository_license_id`),
+  CONSTRAINT `conflictlicense` FOREIGN KEY (`conflict_license_id`) REFERENCES `licenses` (`id`),
+  CONSTRAINT `repositorylicense` FOREIGN KEY (`repository_license_id`) REFERENCES `licenses` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -47,31 +76,86 @@ INSERT INTO `license_conflicts` VALUES (1,4,1),(2,4,3),(3,4,5);
 UNLOCK TABLES;
 
 --
--- Table structure for table `licenses`
+-- Table structure for table `pull_requests`
 --
 
-DROP TABLE IF EXISTS `licenses`;
+DROP TABLE IF EXISTS `pull_requests`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `licenses` (
+CREATE TABLE `pull_requests` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `license_usage` varchar(255) DEFAULT NULL,
-  `license_name` varchar(255) NOT NULL,
-  `license_spdx` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `spdx_id` (`license_spdx`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+  `scan_date` datetime(6) NOT NULL,
+  `user` varchar(255) DEFAULT NULL,
+  `repository_name` varchar(255) NOT NULL,
+  `url` longtext NOT NULL,
+  `diff_url` longtext,
+  `status` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `licenses`
+-- Table structure for table `detected_license`
 --
 
-LOCK TABLES `licenses` WRITE;
-/*!40000 ALTER TABLE `licenses` DISABLE KEYS */;
-INSERT INTO `licenses` VALUES (1,'PERMITTED','Apache License 2.0','Apache-2.0'),(2,'PROHIBITED','GNU General Public License v3.0 only','GPL-3.0-only'),(3,'PERMITTED','OpenSSL License','OpenSSL'),(4,'RESTRICTED','GNU Lesser General Public License v2.1 or later','GPL-2.0-or-later'),(5,'PERMITTED','MIT License','MIT');
-/*!40000 ALTER TABLE `licenses` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `detected_license`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `detected_license` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `pull_request_id` bigint(20) DEFAULT NULL,
+  `license_id` bigint(20) DEFAULT NULL,
+  `conflict_id` bigint(20) DEFAULT NULL,
+  `repository_license_id` bigint(20) DEFAULT NULL,
+  `file_path` longtext,
+  `match_type` varchar(255) DEFAULT NULL,
+  `match_value` varchar(255) DEFAULT NULL,
+  `match_lines` varchar(255) DEFAULT NULL,
+  `component_file_path` longtext,
+  `component_file_url` longtext,
+  `component_name` varchar(255) DEFAULT NULL,
+  `component_lines` varchar(255) DEFAULT NULL,
+  `component_url` longtext,
+  `component_version` varchar(255) DEFAULT NULL,
+  `component_vendor` varchar(255) DEFAULT NULL,
+  `issue` bit(1) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `pullrequestid_idx` (`pull_request_id`),
+  KEY `licenseid_idx` (`license_id`),
+  KEY `repolicenseid_idx` (`repository_license_id`),
+  KEY `conflictid_idx` (`conflict_id`),
+  CONSTRAINT `conflictid` FOREIGN KEY (`conflict_id`) REFERENCES `license_conflicts` (`id`),
+  CONSTRAINT `licenseid` FOREIGN KEY (`license_id`) REFERENCES `licenses` (`id`),
+  CONSTRAINT `pullrequestid` FOREIGN KEY (`pull_request_id`) REFERENCES `pull_requests` (`id`),
+  CONSTRAINT `repolicenseid` FOREIGN KEY (`repository_license_id`) REFERENCES `licenses` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `queue`
+--
+
+DROP TABLE IF EXISTS `queue`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `queue` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `action` bigint(20) NOT NULL,
+  `attempts` int(11) DEFAULT '0',
+  `scan_date` datetime(6) DEFAULT NULL,
+  `user` varchar(255) DEFAULT NULL,
+  `review_system_type` varchar(255) DEFAULT NULL,
+  `repository_url` longtext,
+  `pull_request_url` longtext,
+  `pull_request_api_url` longtext,
+  `pull_request_diff_url` longtext,
+  `status_callback_url` longtext,
+  `commit_sha` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

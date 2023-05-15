@@ -15,6 +15,6 @@ import java.util.List;
 
 public interface LPVSQueueRepository extends JpaRepository<LPVSQueue, Long> {
 
-    @Query(value = "SELECT * FROM lpvs_queue", nativeQuery = true)
+    @Query(value = "SELECT * FROM queue", nativeQuery = true)
     List<LPVSQueue> getQueueList();
 }
