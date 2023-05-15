@@ -105,8 +105,6 @@ LPVS will start scanning automatically, then provide comments about the licenses
    ```
    Tip: For personal GitHub account use  `https://api.github.com`  in field `github.api.url=`.  
    
-   For convenience, adding these properties (associated with GitHub) included in `docker-compose.yml` (so not needed to add them in `application.properties` if added in `docker-compose.yml` file).
-   
    For additional information about using Docker and tips, please check file [Docker_Usage](.github/Docker_Usage.md).
    
    ```text
@@ -125,7 +123,6 @@ LPVS will start scanning automatically, then provide comments about the licenses
    spring.datasource.username=
    spring.datasource.password=
     ```
-   For convience adding these properties(DB configuration) included in docker-compose.yml (so not needed to add it in application.properties if it added in docker-compose.yml file ).
    
    For additional information about using Docker and tips, please check file [Docker_Usage](.github/Docker_Usage.md).
 
