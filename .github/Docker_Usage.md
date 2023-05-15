@@ -1,33 +1,28 @@
 
 #### Using docker-compose
  
-Please fill all needed lines in file `application-properties` according to README.md instructions.
+Please fill all needed lines in file `application-properties` according to `README.md` instructions.
 
-If you would like to use another than root user for DB that reflecting in fields:
-
+If you would like to use another than `root` user for DB that reflecting in fields in file `application.properties`:
+```
  spring.datasource.username=user
- 
  spring.datasource.password=password  
- 
- in file application.properties,
- 
- needed to add 2 fields in docker-compose.yml file in section environment before or after MYSQL_ROOT_PASSWORD values:
- 
+```
+ needed to add two fields in `docker-compose.yml` file in section `environment` before or after `MYSQL_ROOT_PASSWORD` value:
+```
   -MYSQL_USER: user
- 
   -MYSQL_PASSWORD: password
- 
-Else if only root used- i.e.
-
+```
+Otherwise, if only `root` user is used
+```
  spring.datasource.username=root
- 
  spring.datasource.password=rootpassword  
- 
-than only need to fill field
-
+```
+than only need to fill one field
+```
   -MYSQL_ROOT_PASSWORD:rootpassword
-
- But in both variants MYSQL_ROOT_PASSWORD field need to filled.
+```
+ But in both cases `MYSQL_ROOT_PASSWORD` need to be filled.
  
  
 Also directory of keeping MySQL data may be changed, line:
