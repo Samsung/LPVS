@@ -1,9 +1,14 @@
 
 #### Using docker-compose
  
-Please fill all needed lines in file `application-properties` according to `README.md` instructions.
+For using docker deploy scenario environment variables may be filled in file 'docker-compose.yml'.
 
-If you would like to use another than `root` user for DB that reflecting in fields in file `application.properties`:
+In this case these values in file 'docker-compose.yml' overwrite values mentioned in file `application.properties`.
+
+These variables need to be filled according to `README.md` instructions.
+
+
+If you would like to use another than `root` user for DB that reflecting in fields in file `application.properties` or in file 'docker-compose.yml' as :
 ```
  spring.datasource.username=user
  spring.datasource.password=password  
