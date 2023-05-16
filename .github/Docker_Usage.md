@@ -3,7 +3,7 @@
  
 For using docker deploy scenario environment variables may be filled in file `docker-compose.yml`.
 
-In this case these values in file 'docker-compose.yml' overwrite values mentioned in file `application.properties`.
+In this case these values in file `docker-compose.yml` overwrite values mentioned in file `application.properties`.
 
 These variables need to be filled according to `README.md` instructions.
 
