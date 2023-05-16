@@ -10,6 +10,13 @@ services:
       - "7896:7896"
     environment:
       - spring.datasource.url=jdbc:mysql://mysqldb:3306/lpvs
+      - spring.datasource.username=root
+      - spring.datasource.password=
+      ## github data
+      - github.login=
+      - github.token=
+      - github.api.url=https://api.github.com
+      - github.secret=LPVS
     depends_on:
       mysqldb:
         condition: service_healthy
