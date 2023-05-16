@@ -50,8 +50,50 @@ LPVS will start scanning automatically, then provide comments about the licenses
     pip3 install scanoss
     ```
 
-2. Create necessary MySQL database and user and fill in `licenses` and `license_conflicts` tables with the information about permitted, restricted, and prohibited licenses (mandatory) as well as their compatibility specifics (optional). 
-An example database dump file can be found in the repository at `src/main/resources/database_dump.sql`.
+2. Create necessary MySQL database and user (for the case when the database is supposed to be used)
+
+    2.1 Install MySQL server locally:
+
+    ```
+    sudo apt install mysql-server
+    ```
+
+    2.2 Start server:
+
+    ```
+    sudo service mysql start
+    ```
+
+    2.3 Then open Mysql command line interface:
+
+    ```
+    sudo mysql
+    ```
+
+    Run the following commands to create necessary database and user for SOSHUB:
+
+    ```
+    mysql> create database lpvs;
+    mysql> create user username;
+    mysql> grant all on lpvs.* to username;
+    mysql> alter user username identified by identified by 'password';
+    mysql> exit;
+    ```
+
+    2.4 Import existing dump file to newly created databse (optional instruction below):
+    ```
+    mysql -u[username] -p[password] < src/main/resources/database_dump.sql
+    ```
+    
+    2.5 Fill in `licenses` and `license_conflicts` tables with the information about permitted, restricted, and prohibited licenses (mandatory) as well as their compatibility specifics (optional). 
+
+    An example database dump file can be found in the repository at `src/main/resources/database_dump.sql`.
+
+    2.6 Update the lines of the `src/main/resources/application.properties` file:
+    ```text
+    spring.datasource.username=username
+    spring.datasource.password=password
+    ```
 
 3. Fill in the lines of the `src/main/resources/application.properties` file:
     ```text
@@ -61,10 +103,9 @@ An example database dump file can be found in the repository at `src/main/resour
    github.api.url=
    github.secret=LPVS
    ```
-   For convience adding these properties(associated with github) included in docker-compose.yml (so not needed to add it in application.properties).
+   Tip: For personal GitHub account use  `https://api.github.com`  in field `github.api.url=`.  
+   
    For additional information about using Docker and tips, please check file [Docker_Usage](.github/Docker_Usage.md).
-   
-   
    
    ```text
    # Used license scanner: scanoss (at the moment, only this scanner is supported)
@@ -82,10 +123,8 @@ An example database dump file can be found in the repository at `src/main/resour
    spring.datasource.username=
    spring.datasource.password=
     ```
-   For convience adding these properties(DB configuration) included in docker-compose.yml (so not needed to add it in application.properties).
+   
    For additional information about using Docker and tips, please check file [Docker_Usage](.github/Docker_Usage.md).
-
-
 
    Alternatively, you can supply all the necessary values associated with GitHub and license using these env variables:
    `LPVS_GITHUB_LOGIN`, `LPVS_GITHUB_TOKEN`, `LPVS_GITHUB_API_URL`, `LPVS_GITHUB_SECRET` and `LPVS_LICENSE_CONFLICT`.
@@ -101,13 +140,23 @@ An example database dump file can be found in the repository at `src/main/resour
    ```bash
    java -jar -Dgithub.token=<`my-token`> -Dgithub.secret=<`my-secret`> lpvs-1.0.2.jar
    ```
+   Tip: for parameter `-Dgithub.secret=`  is recommended to use `LPVS` as `my-secret`.
 
-   Or alternatively build and run the Docker container with LPVS:
-   ```bash
-    docker build -t lpvs .
-    docker run -p 7896:7896 --name lpvs -e LPVS_GITHUB_TOKEN=<`github.token`> -e LPVS_GITHUB_SECRET=<`github.secret`> lpvs:latest
+   Or alternatively build and run the Docker container with LPVS.
+   
+   For old version of Docker compose:
     ```
-    For additional information about using Docker and tips, please check file [Docker_Usage](.github/Docker_Usage.md).
+    docker-compose up -d --build
+    ```
+    
+   For new version of Docker compose:
+   ```
+   docker compose up 
+   ```
+   
+   
+For additional information about using Docker and tips, please check file [Docker_Usage](.github/Docker_Usage.md).
+    
     
 5. Install [ngrok](https://dashboard.ngrok.com/get-started) (step 1 and 2) and run it with the following command:
     ```bash

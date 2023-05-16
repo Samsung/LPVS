@@ -18,10 +18,10 @@ import java.util.List;
 @Repository
 public interface LPVSLicenseConflictRepository extends CrudRepository<LPVSLicenseConflict, Long> {
 
-    @Query(value = "SELECT * FROM lpvs_license_conflicts", nativeQuery = true)
+    @Query(value = "SELECT * FROM license_conflicts", nativeQuery = true)
     List<LPVSLicenseConflict> takeAllLicenseConflicts();
 
-    @Query(value = "SELECT * FROM lpvs_license_conflicts WHERE (lpvs_license_conflicts.repository_license_id = :license1 AND lpvs_license_conflicts.conflict_license_id = :license2) " +
-            "OR (lpvs_license_conflicts.repository_license_id = :license2 AND lpvs_license_conflicts.conflict_license_id = :license1) ORDER BY id DESC LIMIT 1", nativeQuery = true)
+    @Query(value = "SELECT * FROM license_conflicts WHERE (license_conflicts.repository_license_id = :license1 AND license_conflicts.conflict_license_id = :license2) " +
+            "OR (license_conflicts.repository_license_id = :license2 AND license_conflicts.conflict_license_id = :license1) ORDER BY id DESC LIMIT 1", nativeQuery = true)
     LPVSLicenseConflict findLicenseConflict(@Param("license1") Long license1, @Param("license2") Long license2);
 }

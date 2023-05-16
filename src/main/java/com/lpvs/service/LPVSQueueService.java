@@ -41,9 +41,6 @@ public class LPVSQueueService {
 
     private int maxAttempts;
 
-    @Value("${soshub.url}")
-    private String SOSHUB_URL;
-
     @Autowired
     public LPVSQueueService(LPVSGitHubService gitHubService,
                             LPVSDetectService detectService,
@@ -165,12 +162,10 @@ public class LPVSQueueService {
                     List<LPVSLicenseService.Conflict<String, String>> detectedConflicts = licenseService.findConflicts(webhookConfig, files);
 
                     log.debug("Creating comment");
-                    webhookConfig.setHubLink(SOSHUB_URL + "/view/lpvs/" + pullRequest.getId());
                     gitHubService.commentResults(webhookConfig, files, detectedConflicts, pullRequest);
                     log.debug("Results posted on GitHub");
                 } else {
                     log.warn("Files are not found. Probably pull request is not exists.");
-                    webhookConfig.setHubLink(SOSHUB_URL + "/view/lpvs/" + pullRequest.getId());
                     gitHubService.commentResults(webhookConfig, null, null, pullRequest);
                     delete(webhookConfig);
                     throw new Exception("Files are not found. Probably pull request is not exists. Terminating.");
@@ -181,7 +176,6 @@ public class LPVSQueueService {
             pullRequest = lpvsPullRequestRepository.saveAndFlush(pullRequest);
             log.error("Can't authorize commentResults() " + e);
             e.printStackTrace();
-            webhookConfig.setHubLink(SOSHUB_URL + "/view/lpvs/" + pullRequest.getId());
             delete(webhookConfig);
         }
     }
