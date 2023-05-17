@@ -5,6 +5,7 @@ services:
   lpvs:
     build:
       context: .
+    image: ghcr.io/samsung/lpvs:latest
     restart: always
     ports:
       - "7896:7896"
