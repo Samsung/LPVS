@@ -51,34 +51,34 @@ To make a clean pull request, follow the steps below:
     Keep in mind that for minor changes, such as typos or documentation updates, updating the Release Notes may not be necessary.
 
 8. Commit your changes with a descriptive commit message. Make sure to mention the issue number with `#XXX` so that GitHub will automatically link your commit with the issue:
-   ```sh
-   git add path/to/my/file
-   git commit -m "A brief description of this change which fixes #42" --signoff
-   ```
+	```sh
+	git add path/to/my/file
+	git commit -m "A brief description of this change which fixes #42" --signoff
+	```
 
 9. Pull the latest LPVS code from upstream into your branch:
-   ```sh
-   git rebase upstream/main
-   ```
+	```sh
+	git rebase upstream/main
+	```
 
 10. Push your code to your forked repository:
-   ```sh
-   git push -u origin my-feature
-   ```
-   `-u` parameter ensures that your branch will now automatically push and pull from the GitHub branch. That means if you type `git push` next time, it will know where to push to.
+	```sh
+	git push -u origin my-feature
+	```
+	`-u` parameter ensures that your branch will now automatically push and pull from the GitHub branch. That means if you type `git push` next time, it will know where to push to.
 
 11. Open a pull request against the upstream repository. Go to your repository on GitHub and click "Pull Request". Choose your branch on the right and enter some more details in the comment box. To link the pull request to the issue, include `#999` in the pull request comment, where 999 is the issue number.
-    > Note that each pull-request should fix a single change.
+	> Note that each pull-request should fix a single change.
 
 12. Someone from the LPVS team will review your code, and you might be asked to make some changes. If requested, make the necessary changes and push them to your branch. The pull request will be updated automatically.
 
 13. Once your code is accepted, it will be merged into the main branch and become part of the next LPVS release. If your code is not accepted, don't be discouraged. LPVS aims to meet specific requirements and priorities, and your contribution will still be available on GitHub as a reference for others.
 
 13. After your contribution is merged or declined, you can delete the branch you've worked on from your local repository and your forked repository:
-   ```sh
-   git checkout main
-   git branch -D my-feature
-   git push origin --delete my-feature
-   ```
+	```sh
+	git checkout main
+	git branch -D my-feature
+	git push origin --delete my-feature
+	```
 
 Thank you for your contribution to LPVS!
