@@ -45,6 +45,10 @@ public class GitHubWebhooksController {
     @Autowired
     ApplicationContext applicationContext;
 
+    /**
+     * Sets the GitHub secret from the LPVS_GITHUB_SECRET environment variable or the application property.
+     * Exits the application if the secret is not set.
+     */
     @PostConstruct
     public void setProps() {
         this.GITHUB_SECRET = Optional.ofNullable(this.GITHUB_SECRET).filter(s -> !s.isEmpty())
@@ -75,6 +79,14 @@ public class GitHubWebhooksController {
         this.GITHUB_SECRET = GITHUB_SECRET;
     }
 
+    /**
+     * Handles the GitHub webhook events and processes the payload.
+     *
+     * @param signature The signature of the webhook event.
+     * @param payload   The payload of the webhook event.
+     * @return The response entity indicating the status of the processing.
+     * @throws Exception if an error occurs during processing.
+     */
     @RequestMapping(value = "/webhooks", method = RequestMethod.POST)
     public ResponseEntity<LPVSResponseWrapper> gitHubWebhooks(@RequestHeader(SIGNATURE) String signature, @RequestBody String payload) throws Exception {
         log.debug("New webhook request received");
@@ -107,6 +119,14 @@ public class GitHubWebhooksController {
         return new ResponseEntity<>(new LPVSResponseWrapper(SUCCESS), HttpStatus.OK);
     }
 
+    /**
+     * Verifies if the signature matches the calculated signature using the GitHub secret.
+     *
+     * @param signature The signature to verify.
+     * @param payload   The payload to calculate the signature.
+     * @return true if the signature is valid, false otherwise.
+     * @throws Exception if an error occurs during signature verification.
+     */
     public boolean wrongSecret(String signature, String payload) throws Exception {
         String lpvsSecret = signature.split("=",2)[1];
 
