@@ -58,7 +58,7 @@ To make a clean pull request, follow the steps below:
 
 9. Pull the latest LPVS code from upstream into your branch:
    ```sh
-   git pull upstream main
+   git rebase upstream/main
    ```
 
 10. Push your code to your forked repository:
