@@ -60,7 +60,7 @@ To enable _LPVS_ license scanning for your project, you need to set up GitHub We
    - Click on `Add webhook`.
    - Fill in the `Payload URL` with: `http://<IP where LPVS is running>:7896/webhooks`.
      > If you're using ngrok, the `Payload URL` should be like `https://50be-62-205-136-206.ngrok-free.app/webhooks`.
-     - Install ngrok from [here](https://dashboard.ngrok.com/get-started) (follow steps 1 and 2).
+     - Install ngrok from [here](https://ngrok.com/docs/getting-started/#step-2-install-the-ngrok-agent) (follow steps 1 and 2).
      - Run ngrok using the command: `ngrok http 7896`.
    - Specify the content type as `application/json`.
    - Fill in the `Secret` field with the passphrase: `LPVS`.
