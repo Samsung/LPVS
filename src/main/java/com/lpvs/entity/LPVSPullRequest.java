@@ -7,7 +7,9 @@
 
 package com.lpvs.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -17,7 +19,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "pull_requests", schema = "lpvs")
-@Getter @Setter
+@Getter @Setter @AllArgsConstructor @NoArgsConstructor
 public class LPVSPullRequest implements Serializable {
 
     @Id
