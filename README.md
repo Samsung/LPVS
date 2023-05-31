@@ -10,161 +10,200 @@
 [![LICENSE](https://img.shields.io/github/license/samsung/lpvs.svg)](https://github.com/Samsung/LPVS/blob/main/LICENSE)
 
 ## Introduction
-OpenSource code [refers](https://en.wikipedia.org/wiki/Open-source_software) to software available for use, study, change, and distribution by anyone and for any purpose provided that the corresponding license conditions are met. License violation may end up with litigations, damage compensation, obligation to disclose intellectual property as well as reputational losses. 
+Open-source code [refers](https://en.wikipedia.org/wiki/Open-source_software) to software that is freely available for use, study, modification, and distribution, subject to meeting the conditions of the corresponding license. Failure to comply with the license conditions can lead to legal disputes, financial liabilities, the requirement to disclose intellectual property, and reputational damage.
 
-In a project with many external dependencies it might be really difficult to trace license obligations. Also if many collaborators are involved, a risk of non-intentional license violation (such as via Copy-Paste) grows. There are even more tricky nuances such as double-licensed dependencies or license change (because of owner, purpose, legislation change) that may make a previously safe dependency to become an unsafe one over time.
+In projects with numerous external dependencies, it can be challenging to track license obligations accurately. Additionally, when multiple collaborators are involved, the risk of unintentional license violations, such as through copy-pasting code snippets, increases. Furthermore, there are nuanced situations like dependencies with dual licensing or licenses that may change due to ownership, purpose, or legislative alterations. These factors can potentially turn previously safe dependencies into unsafe ones over time.
 
-_License Pre-Validation Service (LPVS)_ helps to mitigate license-related risks for OpenSource code. The tool analyzes the project, identifies its components and their respective licenses at every commit. Then it returns the list of potential issue cases as GitHub comments. _LPVS_ provides the comprehensive description of possible license violations, including  risky code location and license issue overview.
+To address these license-related risks for open-source code, we have developed the _License Pre-Validation Service (LPVS)_. This tool provides a solution to mitigate potential license issues. By analyzing the project, LPVS identifies its components and their respective licenses at every commit. It then generates a list of potential issue cases, which are communicated as comments on GitHub. LPVS offers a comprehensive description of possible license violations, including details on the location of risky code and an overview of the specific license-related issues.
+
+With LPVS, we aim to assist developers and project teams in ensuring license compliance for their open-source code. By providing insights into potential license violations and their implications, LPVS enables proactive management of license-related risks throughout the development process.
+
+We believe that LPVS will be an invaluable tool for maintaining the integrity of open-source projects and safeguarding against license infringements.
 
 ## Features
 
-- Available license scanners: [SCANOSS](https://www.scanoss.com)
-- _LPVS_ supports GitHub review system
+- License Scanners:
+
+    LPVS integrates with the [SCANOSS](https://www.scanoss.com) license scanner, allowing for comprehensive license analysis of the project's components. SCANOSS helps identify the licenses associated with the codebase, ensuring compliance with open-source license requirements. By leveraging SCANOSS, LPVS provides accurate and up-to-date information on the licenses used in the project.
+
+- GitHub Review System Integration:
+
+    LPVS seamlessly integrates with the GitHub review system, enhancing the collaboration and code review process. LPVS automatically generates comments on GitHub, highlighting potential license violations or issues within the codebase. This integration streamlines the review process, making it easier for developers and collaborators to identify and address license-related concerns directly within the GitHub environment.
+
+- Comprehensive Issue Description:
+
+    LPVS provides a detailed and comprehensive description of possible license violations within the project. This includes specific information on the location of potentially risky code and an overview of the license-related issues at hand. By offering this comprehensive insight, LPVS enables developers to have a clear understanding of the license-related risks within their codebase and take appropriate action to mitigate them.
+
+- Continuous Monitoring:
+
+    LPVS facilitates continuous monitoring of license-related risks throughout the development process. By analyzing each commit, LPVS ensures that any changes or additions to the codebase are assessed for potential license violations. This ongoing monitoring allows developers to proactively manage license compliance and address any issues that arise in a timely manner.
+
+- Risk Mitigation:
+
+    LPVS aims to mitigate license-related risks by providing early detection and identification of potential violations. By alerting developers to potential issues and providing the necessary information to understand and address them, LPVS empowers teams to take proactive steps to ensure compliance with open-source licenses. This helps mitigate the risk of legal disputes, financial liabilities, and reputational damage associated with license violations.
+
+With these features, LPVS assists developers in effectively managing license compliance for their open-source projects. By integrating with license scanning tools, supporting the GitHub review system, and providing comprehensive issue descriptions, LPVS offers a robust solution for identifying and addressing license-related risks in the software development lifecycle.
 
 ---
 
-## Quick start
+## Quick Start
 
-### 1. Setting up your project to interact with _LPVS_ 
+### 1. Setting up your project to interact with _LPVS_
 
-_LPVS_ license scan shall be enabled on your project via GitHub Webhooks:
+To enable _LPVS_ license scanning for your project, you need to set up GitHub Webhooks:
 
-1. [Creating a personal access token (`github.token`)](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token#creating-a-fine-grained-personal-access-token)
+1. Create a personal access token (`github.token`):
+   - Follow the instructions [here](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token#creating-a-fine-grained-personal-access-token) to create a personal access token with the necessary permissions.
 
-2. Configure webhook in your GitHub repository settings:
-    - go to `Settings` -> `Webhooks`
-    - press `Add webhook`
-    - fill in `Payload URL` with: `http://<IP where LPVS is running>:7896/webhooks`  
-        > In case of using the *ngrok*, the `Payload URL` should look like this `https://50be-62-205-136-206.ngrok-free.app/webhooks`  
-            - Install [*ngrok*](https://dashboard.ngrok.com/get-started) (step 1 and 2)  
-            - Run *ngrok* using the following command: `ngrok http 7896`
-    - specify content type: `application/json`
-    - fill in `Secret` field with the passphrase: `LPVS`
-    - the same passphrase must be saved in `github.secret` of LPVS backend `application.properties` or `docker-compose.yml` files 
-    - select `Let me select individual events` -> `Pull requests` (make sure that only `Pull requests` is selected)
-    - make it `Active`
-    - press `Add Webhook`
+2. Configure the webhook in your GitHub repository settings:
+   - Go to `Settings` -> `Webhooks`.
+   - Click on `Add webhook`.
+   - Fill in the `Payload URL` with: `http://<IP where LPVS is running>:7896/webhooks`.
+     > If you're using ngrok, the `Payload URL` should be like `https://50be-62-205-136-206.ngrok-free.app/webhooks`.
+     - Install ngrok from [here](https://ngrok.com/docs/getting-started/#step-2-install-the-ngrok-agent) (follow steps 1 and 2).
+     - Run ngrok using the command: `ngrok http 7896`.
+   - Specify the content type as `application/json`.
+   - Fill in the `Secret` field with the passphrase: `LPVS`.
+   - Save the same passphrase in `github.secret` of the LPVS backend `application.properties` or `docker-compose.yml` files.
+   - Select `Let me select individual events` -> `Pull requests` (make sure only `Pull requests` is selected).
+   - Set the webhook to `Active`.
+   - Click `Add Webhook`.
 
-Configuration from your project side is finished!
+Configuration from your project side is now complete!
 
 ---
 
-### 2. Using pre-built _LPVS_ Docker images
+### 2. Using pre-built LPVS Docker images
 
-This section provides how to download and run pre-built LPVS docker images without building the _LPVS_ project.
+This section explains how to download and run pre-built LPVS Docker images without building the _LPVS_ project.
 
-For using docker deploy scenario, environment variables may be filled in file `docker-compose.yml`.
+For the Docker deployment scenario, you may need to fill in the environment variables in the `docker-compose.yml` file.
 
-#### 2.1 Setting up _LPVS_ docker environment variables
-In this case, values in [`docker-compose.yml`](docker-compose.yml) file overwrite values mentioned in `application.properties`.
+#### 2.1 Setting up LPVS Docker environment variables
 
-If you plan to use other than `root` database user that reflecting in files `application.properties` or `docker-compose.yml` as:
+In the case where you plan to use a database user other than `root` that reflects in files `application.properties` or `docker-compose.yml` as:
 ```
  spring.datasource.username=user
  spring.datasource.password=password  
 ```
-then you needed to add two fields in `docker-compose.yml` file in section `environment` near `MYSQL_ROOT_PASSWORD` value:
+
+make the following changes in the `docker-compose.yml` file in section `environment` near `MYSQL_ROOT_PASSWORD` value:
+
+```yaml
+- MYSQL_USER: user
+- MYSQL_PASSWORD: password
 ```
-  -MYSQL_USER: user
-  -MYSQL_PASSWORD: password
+
+If you are using only the `root` user, make the following change:
+
+```yaml
+- MYSQL_ROOT_PASSWORD: rootpassword
 ```
-Otherwise, if only `root` user is used
+
+In both cases, ensure that the `MYSQL_ROOT_PASSWORD` field is filled.
+
+You can also change the directory for storing MySQL data by modifying the following line:
+
+```yaml
+- ./mysql-lpvs-data:/var/lib/mysql # db storage by default it is a directory in the root of the repository with the name mysql-lpvs-data
 ```
- spring.datasource.username=root
- spring.datasource.password=rootpassword  
-```
-than only need to fill one field
-```
-  -MYSQL_ROOT_PASSWORD:rootpassword
-```
- But in both cases `MYSQL_ROOT_PASSWORD` need to be filled.
- 
- 
-Also directory of keeping MySQL data may be changed, line:
-```
- - ./mysql-lpvs-data:/var/lib/mysql # db storage by default it is directory in root of repository with name mysql-lpvs-data
-```
-#### 2.2 Run `lpvs` and `mysqldb` docker images by docker-compose
-Start _LPVS_ services by `docker-compose` (before Compose V2)
+
+#### 2.2 Running LPVS and MySQL Docker images with Docker Compose
+
+Start the _LPVS_ services using `docker-compose` (before Compose V2):
+
 ```bash
 docker-compose up -d
 ```
-Start _LPVS_ services by `docker compose` (after Compose V2)
+
+Start the _LPVS_ services using `docker compose` (after Compose V2):
+
 ```bash
 docker compose up -d
 ```
 
-Stop _LPVS_ services by `docker-compose` (before Compose V2)
+Stop the _LPVS_ services using `docker-compose` (before Compose V2):
+
 ```bash
 docker-compose down -v --rmi local
-```  
-Stop _LPVS_ services by `docker compose` (after Compose V2)
+```
+
+Stop the _LPVS_ services using `docker compose` (after Compose V2):
+
 ```bash
 docker compose down
-```  
+```
 
-**Now you can create a new pull request or update it with commits. _LPVS_ will start scanning automatically, then provide comments about the licenses found in the project.**
+You can now create a new pull request or update an existing one with commits. LPVS will automatically start scanning and provide comments about the licenses found in the project.
 
 ---
    
-## How to build and run _LPVS_ from source code
+## How to Build and Run _LPVS_ from Source Code
 
 #### 1. Build Prerequisites
-- SCANOSS Python package by following the [guideline](https://github.com/scanoss/scanoss.py#installation).
-```bash
-pip3 install scanoss
-```
-- Install MySQL server locally
-```
-sudo apt install mysql-server
-```
 
-#### 2. Create necessary MySQL database and user (for the case when the database is supposed to be used)
-2.1 Start MySQL server
-```
-sudo service mysql start
-```
-2.2 Open Mysql command line interface
-```
-sudo mysql
-```
+Before building LPVS from source code, ensure that you have the following prerequisites installed:
 
-Run the following commands to create necessary database and user
-```
-mysql> create database lpvs;
-mysql> create user username;
-mysql> grant all on lpvs.* to username;
-mysql> alter user username identified by identified by 'password';
-mysql> exit;
-```
+- SCANOSS Python package by following the [guidelines](https://github.com/scanoss/scanoss.py#installation). Install it using the command:
+  ```bash
+  pip3 install scanoss
+  ```
+  Make sure that the path variable is added to the environment:
+  ```bash
+  export PATH="$HOME/.local/bin:$PATH"
+  ```
 
-2.3 Import existing dump file to newly created databse (_optional instruction below_)
-```
-mysql -u[username] -p[password] < src/main/resources/database_dump.sql
-```
-   
-2.4 Fill in `licenses` and `license_conflicts` tables with the information about permitted, restricted, and prohibited licenses (mandatory) as well as their compatibility specifics (optional). 
+- MySQL server installed locally. Install it using the command:
+  ```bash
+  sudo apt install mysql-server
+  ```
 
-An example database dump file can be found in the repository at [`src/main/resources/database_dump.sql`](src/main/resources/database_dump.sql).
-    
-2.5 Update the lines of the [`src/main/resources/application.properties`](src/main/resources/application.properties) file:
-```text
-spring.datasource.username=username
-spring.datasource.password=password
-```
+#### 2. Create Necessary MySQL Database and User (optional if not using a database)
 
-#### 3 Setting up _LPVS_ `application.properties`
+2.1 Start the MySQL server:
+   ```bash
+   sudo service mysql start
+   ```
 
-Fill in the lines of the [`src/main/resources/application.properties`](src/main/resources/application.properties) file:
+2.2 Open the MySQL command line interface:
+   ```bash
+   sudo mysql
+   ```
 
-```text
-# Fill in the properties associated with github (github.token and github.secret required).
+2.3 Run the following commands in the MySQL command line interface to create the necessary database and user:
+   ```sql
+   mysql> create database lpvs;
+   mysql> create user username;
+   mysql> grant all on lpvs.* to username;
+   mysql> alter user username identified by 'password';
+   mysql> exit;
+   ```
+
+2.4 (Optional) If you have an existing dump file, import it into the newly created database using the command:
+   ```bash
+   mysql -u[username] -p[password] < src/main/resources/database_dump.sql
+   ```
+
+2.5 Fill in the `licenses` and `license_conflicts` tables with the information about permitted, restricted, and prohibited licenses, as well as their compatibility specifics. You can find an example database dump file in the repository at [`src/main/resources/database_dump.sql`](src/main/resources/database_dump.sql).
+
+2.6 Update the following lines in the [`src/main/resources/application.properties`](src/main/resources/application.properties) file:
+   ```properties
+   spring.datasource.username=username
+   spring.datasource.password=password
+   ```
+
+#### 3. Setting up _LPVS_ `application.properties`
+
+Fill in the following lines in the [`src/main/resources/application.properties`](src/main/resources/application.properties) file:
+
+```properties
+# GitHub configuration (github.token and github.secret required)
 github.token=
 github.login=
 github.api.url=
 github.secret=LPVS
 ```
-> Tip: For personal GitHub account use  `https://api.github.com`  in field `github.api.url=`.  
+   > Note: For personal GitHub account use  `https://api.github.com`  in field `github.api.url=`.  
    
 ```text
 # Used license scanner: scanoss (at the moment, only this scanner is supported)
@@ -183,34 +222,47 @@ spring.datasource.username=
 spring.datasource.password=
 ```
 
-Alternatively, you can supply all the necessary values associated with GitHub and license using these env variables: `LPVS_GITHUB_LOGIN`, `LPVS_GITHUB_TOKEN`, `LPVS_GITHUB_API_URL`, `LPVS_GITHUB_SECRET` and `LPVS_LICENSE_CONFLICT`.
+Alternatively, you can provide the necessary values using the following environment variables: `LPVS_GITHUB_LOGIN`, `LPVS_GITHUB_TOKEN`, `LPVS_GITHUB_API_URL`, `LPVS_GITHUB_SECRET`, and `LPVS_LICENSE_CONFLICT`.
 
-#### 4 Build _LPVS_ application with Maven, then run it:
-```bash
-mvn clean install
-cd target/
-java -jar lpvs-*.jar
-```
+#### 4. Build LPVS Application with Maven and Run it
+To build LPVS from source code and run it, follow these steps:
 
-When running the application you will also be able to use command line to input all the same values associated with github and license on the fly, like so:
-```bash
-java -jar -Dgithub.token=<`my-token`> -Dgithub.secret=<`my-secret`> lpvs-*.jar
-```
-> Tip: for parameter `-Dgithub.secret=`  is recommended to use `LPVS` as `my-secret`.
+4.1 Build the LPVS application using Maven:
+   ```bash
+   mvn clean install
+   ```
 
-**Now you can create a new pull request or update it with commits. _LPVS_ will start scanning automatically, then provide comments about the licenses found in the project.**
+4.2 Navigate to the target directory:
+   ```bash
+   cd target/
+   ```
+
+4.3 Run the LPVS application using the following command:
+   ```bash
+   java -jar lpvs-*.jar
+   ```
+
+   Alternatively, you can provide the necessary values associated with GitHub and license using the command line:
+   ```bash
+   java -jar -Dgithub.token=<my-token> -Dgithub.secret=<my-secret> lpvs-*.jar
+   ```
+   > Note: Use `LPVS` as the value for the `-Dgithub.secret=` parameter.
+
+LPVS is now built and running. You can create a new pull request or update an existing one with commits, and LPVS will automatically start scanning and provide comments about the licenses found in the project.
 
 ---
 
 ## License
 
-The _LPVS_ source code is distributed under the [MIT](https://opensource.org/licenses/MIT) open source license.
+The LPVS source code is distributed under the [MIT](https://opensource.org/licenses/MIT) open source license.
 
 ---
 
 ## Contributing
 
-You are welcome to contribute to _LPVS_ project. 
-Contributing is also a great way to practice social coding at Github, study new technologies and enrich your public portfolio.  
-[How to contribute code](.github/CONTRIBUTING.md)  
-[How to report a security vulnerability](.github/SECURITY.md)  
+You are welcome to contribute to the LPVS project. Contributing is a great way to practice social coding on GitHub, learn new technologies, and enhance your public portfolio. If you would like to contribute, please follow the guidelines below:
+
+- [How to Contribute Code](.github/CONTRIBUTING.md)
+- [How to Report a Security Vulnerability](.github/SECURITY.md)
+
+Thank you for your interest in contributing to LPVS! Your contributions are highly appreciated.

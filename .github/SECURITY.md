@@ -1,25 +1,21 @@
-# Security policy
+# Security Policy
 
-### Contents
+## Table of Contents
 1. [Introduction](#1-introduction)
 2. [Vulnerabilities](#2-vulnerabilities)  
     2.1 [Supported Versions](#21-supported-versions)  
     2.2 [Vulnerability Report](#22-vulnerability-report)  
     2.3 [Security Disclosure](#23-security-disclosure)  
 
----
-
 ## 1. Introduction
 
-This document describes the sequence of actions when the vulnerability is founded, the product version that fixes them, security requirements, as well as the required process of developing a secure code.
- 
----
+This document outlines the procedures for addressing vulnerabilities, the supported versions of LPVS, security requirements, and the recommended practices for developing secure code.
 
 ## 2. Vulnerabilities
 
 ### 2.1 Supported Versions
 
-We are releasing patches to eliminate vulnerabilities, you can see below:
+We provide patches to address vulnerabilities for the following versions of LPVS:
 
 | Version     | Supported by | LPVS               | 3-rd party component                           |
 | ----------- | ------------ | ------------------ | ---------------------------------------------- |
@@ -27,28 +23,27 @@ We are releasing patches to eliminate vulnerabilities, you can see below:
 
 ### 2.2 Vulnerability Report
 
-The LPVS team assigns the highest priority to all security bugs in LPVS project. We appreciate your efforts and
-responsible disclosure of information to eliminate vulnerabilities.
+The LPVS team takes security bugs seriously and gives them the highest priority. We appreciate your responsible disclosure of security-related information to help us address vulnerabilities.
 
-Please report security bugs by emailing the Security Issue Review (SIR) team at: o.kopysov@samsung.com marked "SECURITY".
-Our team will confirm your request and within 1 week will try to prepare recommendations for elimination. Our team will keep you updated on the progress towards the fix until the full announcement of the patch release. During this process, the lpvs team may request additional information or guidance.
-
+To report security bugs, please email the LPVS Security Issue Review (SIR) team at _o.kopysov@samsung.com_ with the subject line "SECURITY". Our team will acknowledge your report and aim to provide recommendations for mitigation within 1 week. Throughout the process, we will keep you informed of the progress towards the fix and may request additional information or guidance.
 
 ### 2.3 Security Disclosure
 
-When a security group receives a security error report as previously mentioned, it is assigned the highest priority and the person in charge. This person will coordinate the patch and release process,
-including the following steps:
+Once a security vulnerability is reported to the LPVS team, it is treated with the highest priority. The assigned person will coordinate the patch and release process, which includes the following steps:
 
-  * Confirm the problem and identify the affected versions.
-  * Check the code to find any similar problems.
-  * Prepare fixes for all releases still in maintenance. These fixes will
-    released as quickly as possible.
+- Confirm the problem and identify the affected versions.
+- Conduct a thorough code review to identify any similar issues.
+- Prepare fixes for all supported versions. The fixes will be released as soon as possible.
 
-We suggest the following format when disclosing vulnerabilities:
+When disclosing vulnerabilities, we recommend following this format:
 
-  * Your name and email.
-  * Include scope of vulnerability. Let us know who could use this exploit.
-  * Document steps to identify the vulnerability. It is important that we can reproduce your findings. 
-  * How to exploit vulnerability, give us an attack scenario.
+- Provide your name and email address.
+- Clearly define the scope of the vulnerability and identify potential exploiters.
+- Document the steps to reproduce the vulnerability to help us validate and address it effectively.
+- Describe the exploitation scenario to understand the impact and severity.
 
----
+We appreciate your collaboration in making LPVS more secure.
+
+If you have any further questions or concerns, please reach out to us.
+
+Note: This security policy is subject to change and may be updated without notice.

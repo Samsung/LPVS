@@ -1,107 +1,84 @@
 ## Contributing
 
-If you want to contribute to a project and make it better, your help is very
-welcome. Contributing is also a great way to learn more about social coding on
-Github, new technologies and and their ecosystems and how to make constructive,
-helpful bug reports, feature requests and the noblest of all contributions:
-a good, clean pull request.
+If you want to contribute to the LPVS project and make it better, your help is very welcome. Contributing is also a great way to learn more about social coding on GitHub, new technologies, and how to make constructive bug reports, feature requests, and the noblest of all contributions: a good, clean pull request.
 
-You can use templates to create a description of your
-[**pull request**](PULL_REQUEST_TEMPLATE.md) or [**issue**](ISSUE_TEMPLATE.md),
-the design of the template will greatly simplify LPVS team work on
-injecting your code. But **this is not mandatory**. We will always welcome any
-help.
+You can use templates to create a description of your [pull request](PULL_REQUEST_TEMPLATE.md) or [issue](ISSUE_TEMPLATE.md), which will greatly simplify the LPVS team's work on reviewing and incorporating your code. However, using these templates is not mandatory, and we will always welcome any help.
 
-### How to make a clean pull request
+To make a clean pull request, follow the steps below:
 
-#### 1. [Fork](http://help.github.com/fork-a-repo/) the LPVS repository on github and clone your fork to your development environment
-```sh
-git clone https://github.com/YOUR-GITHUB-USERNAME/LPVS.git
-```
-If you have trouble setting up GIT with GitHub in Linux, or are getting errors like "Permission Denied (publickey)", then you must [setup your GIT installation to work with GitHub](http://help.github.com/linux-set-up-git/)
+1. [Fork](http://help.github.com/fork-a-repo/) the LPVS repository on GitHub and clone your fork to your development environment:
+   ```sh
+   git clone https://github.com/YOUR-GITHUB-USERNAME/LPVS.git
+   ```
+   If you have trouble setting up Git with GitHub in Linux or are getting errors like "Permission Denied (publickey)", you must [set up your Git installation to work with GitHub](http://help.github.com/linux-set-up-git/).
 
-#### 2. Add the main LPVS repository as an additional git remote called "upstream"
-Change to the directory where you cloned LPVS, normally, "LPVS". Then enter the following command:
-```sh
-git remote add upstream https://github.com/samsung/lpvs
-```
+2. Add the main LPVS repository as an additional Git remote called "upstream":
+   ```sh
+   git remote add upstream https://github.com/samsung/lpvs
+   ```
 
-#### 3. Make sure there is an issue created for the thing you are working on.
+3. Make sure there is an issue created for the task you are working on. All new features and bug fixes should have an associated issue to provide a single point of reference for discussion and documentation. If the issue already exists, leave a comment on that issue indicating that you intend to work on it. If it doesn't exist, open a new issue for your task. 
 
-All new features and bug fixes should have an associated issue to provide a single point of reference for discussion and documentation. Take a few minutes to look through the existing issue list for one that matches the contribution you intend to make. If you find one already on the issue list, then please leave a comment on that issue indicating you intend to work on that item. If you do not find an existing issue matching what you intend to work on, please open a new issue for your item. This will allow the team to review your suggestion, and provide appropriate feedback along the way.
+    > For small changes or documentation issues, creating an issue is not necessary, and a pull request is sufficient.
 
-> For small changes or documentation issues, you don't need to create an issue, a pull request is enough in this case.
+4. Fetch the latest code from the main LPVS branch:
+   ```sh
+   git fetch upstream
+   ```
+    You should start at this point for every new contribution to make sure you are working on the latest code.
 
-#### 4. Fetch the latest code from the main LPVS branch
-```sh
-git fetch upstream
-```
-You should start at this point for every new contribution to make sure you are working on the latest code.
+5. Create a new branch for your feature based on the current LPVS main branch:
 
-#### 5. Create a new branch for your feature based on the current LPVS main branch
+    Each separate bug fix or feature addition should have its own branch. Branch names should be descriptive and start with the number of the corresponding issue, if applicable. If you're not fixing a specific issue, you can skip the number. 
+	```sh
+	git checkout upstream/<NAMED_RELEASE>
+	git checkout -b 999-name-of-your-branch-goes-here
+	```
+    Above, <NAMED_RELEASE> can be '1.0.0', etc. - see the list of releases or `main` branch.
 
-> That's very important since you will not be able to submit more than one pull request from your account if you'll use main.
+6. Write your code and make the necessary changes.
+   - Follow the coding conventions and style guidelines used in the LPVS project.
+   - Write clear, concise, and well-documented code.
+   - Include unit tests to ensure the correctness of your code.
+   - If you're adding a new feature, consider updating the relevant documentation and examples.
+   - If you're fixing a bug, provide a clear explanation of the issue and how your code resolves it.
 
-Each separate bug fix or change should go in its own branch. Branch names should be descriptive and start with the number of the issue that your code relates to. If you aren't fixing any particular issue, just skip number. For example:
-```sh
-git checkout upstream/<NAMED_RELEASE>
-git checkout -b 999-name-of-your-branch-goes-here
-```
-Above, <NAMED_RELEASE> can be '1.0.0', etc. - see list of releases or `main` branch
+    Feel free to reach out if you have any further questions or need additional assistance!
 
-#### 6. Do your magic, write your code
-> TBD
+7. Update the Release Notes
+    After committing your changes, consider updating the Release Notes file to include a summary of your contribution. If your change fixes a bug, use the following format: Bug #issue_number: a description of the bug fix (Your Name). For enhancements, use Enh #issue_number: a description of the enhancement (Your Name).
 
-#### 7. Update the ReleaseNotes
-Edit the ReleaseNotes file to include your change, you should insert this at the top of the file under the "Work in progress" heading, the line in the change log should look like one of the following:
-```sh
-Bug #999: a description of the bug fix (Your Name)
-Enh #999: a description of the enhancement (Your Name)
-```
-`#999` is the issue number that the `Bug` or `Enh` is referring to.  
-The changelog should be grouped by type (`Bug`,`Enh`) and ordered by issue number.
+    Keep in mind that for minor changes, such as typos or documentation updates, updating the Release Notes may not be necessary.
 
-For very small fixes, e.g. typos and documentation changes, there is no need to update the ReleaseNotes.
+8. Commit your changes with a descriptive commit message. Make sure to mention the issue number with `#XXX` so that GitHub will automatically link your commit with the issue:
+	```sh
+	git add path/to/my/file
+	git commit -m "A brief description of this change which fixes #42" --signoff
+	```
 
-#### 8. Commit your changes
+9. Pull the latest LPVS code from upstream into your branch:
+	```sh
+	git rebase upstream/main
+	```
 
-add the files/changes you want to commit to the staging area with
-```sh
-git add path/to/my/file
-```
+10. Push your code to your forked repository:
+	```sh
+	git push -u origin my-feature
+	```
+	`-u` parameter ensures that your branch will now automatically push and pull from the GitHub branch. That means if you type `git push` next time, it will know where to push to.
 
-Commit your changes with a descriptive commit message. Make sure to mention the ticket number with #XXX so github will automatically link your commit with the ticket:
-```sh
-git commit -m "A brief description of this change which fixes #42 goes here" --signoff
-```
+11. Open a pull request against the upstream repository. Go to your repository on GitHub and click "Pull Request". Choose your branch on the right and enter some more details in the comment box. To link the pull request to the issue, include `#999` in the pull request comment, where 999 is the issue number.
+	> Note that each pull-request should fix a single change.
 
-#### 9. Pull the latest LPVS code from upstream into your branch
-```sh
-git pull upstream <NAMED_RELEASE>
-```
-This ensures you have the latest code in your branch before you open your pull request. If there are any merge conflicts, you should fix them now and commit the changes again. This ensures that it's easy for the LPVS team to merge your changes with one click.
+12. Someone from the LPVS team will review your code, and you might be asked to make some changes. If requested, make the necessary changes and push them to your branch. The pull request will be updated automatically.
 
-#### 10. Having resolved any conflicts, push your code to github
-```sh
-git push -u origin 999-name-of-your-branch-goes-here
-```
+13. Once your code is accepted, it will be merged into the main branch and become part of the next LPVS release. If your code is not accepted, don't be discouraged. LPVS aims to meet specific requirements and priorities, and your contribution will still be available on GitHub as a reference for others.
 
-The `-u` parameter ensures that your branch will now automatically push and pull from the github branch. That means if you type `git push` the next time it will know where to push to.
+13. After your contribution is merged or declined, you can delete the branch you've worked on from your local repository and your forked repository:
+	```sh
+	git checkout main
+	git branch -D my-feature
+	git push origin --delete my-feature
+	```
 
-#### 11. Open a pull request against upstream.
-Go to your repository on github and click "Pull Request", choose your branch on the right and enter some more details in the comment box. To link the pull request to the issue put anywhere in the pull comment `#999` where 999 is the issue number. <br>
-_Please check out if your PR passes through an automatic build verification._
-
-> Note that each pull-request should fix a single change.
-
-#### 12. Someone will review your code
-Someone will review your code, and you might be asked to make some changes, if so go to step #6 (you don't need to open another pull request if your current one is still open). If your code is accepted it will be merged into the main branch and become part of the next LPVS release. If not, don't be disheartened, different people need different features and LPVS can't be everything to everyone, your code will still be available on github as a reference for people who need it.
-
-#### 13. Cleaning it up
-
-After your code was either accepted or declined you can delete branches you've worked with from your local repository and `origin`.
-```sh
-git checkout <NAMED_RELEASE>
-git branch -D 999-name-of-your-branch-goes-here
-git push origin --delete 999-name-of-your-branch-goes-here
-```
+Thank you for your contribution to LPVS!
