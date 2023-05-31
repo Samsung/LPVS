@@ -148,6 +148,10 @@ Before building LPVS from source code, ensure that you have the following prereq
   ```bash
   pip3 install scanoss
   ```
+  Make sure that the path variable is added to the environment:
+  ```bash
+  export PATH="$HOME/.local/bin:$PATH"
+  ```
 
 - MySQL server installed locally. Install it using the command:
   ```bash
