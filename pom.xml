@@ -61,7 +61,7 @@
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
-            <version>1.15</version>
+            <version>1.16.0</version>
         </dependency>
 
         <!-- Support of static mocks present only in mockito-inline, not mockito-core -->
