@@ -35,13 +35,19 @@ public class LPVSFile {
     public String convertLicensesToString(LPVSVcs vcs) {
         String licenseNames = "";
         for (LPVSLicense license : this.licenses) {
+            String licSpdxId = license.getSpdxId();
+            // Check if the license SPDX ID has scanner-specific name
+            if (licSpdxId.startsWith("LicenseRef")) {
+                // Change the name of the license that will be displayed in PR comment to scanner-independent
+                licSpdxId = "UNREVIEWED LICENSE : " + licSpdxId.replaceAll("LicenseRef-scancode-", "").replaceAll("LicenseRef-scanoss-", "");
+            }
             if (vcs != null && vcs.equals(LPVSVcs.GITHUB)) {
                 licenseNames += (license.getChecklistUrl() != null ? "<a target=\"_blank\" href=\"" + license.getChecklistUrl() + "\">" : "") +
-                        license.getSpdxId() +
+                        licSpdxId +
                         (license.getChecklistUrl() != null ? "</a>" : "") +
                         " (" + license.getAccess().toLowerCase() + "), ";
             } else {
-                licenseNames += license.getSpdxId() + (license.getChecklistUrl() != null ? " (" + license.getChecklistUrl() + ")" : "") +
+                licenseNames += licSpdxId + (license.getChecklistUrl() != null ? " (" + license.getChecklistUrl() + ")" : "") +
                         " - " + license.getAccess().toLowerCase() + ", ";
             }
         }

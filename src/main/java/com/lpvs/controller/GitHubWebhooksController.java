@@ -11,17 +11,12 @@ import com.lpvs.entity.LPVSQueue;
 import com.lpvs.repository.LPVSQueueRepository;
 import com.lpvs.service.LPVSGitHubService;
 import com.lpvs.service.LPVSQueueService;
+import com.lpvs.util.LPVSExitHandler;
 import com.lpvs.util.LPVSWebhookUtil;
 import com.lpvs.entity.LPVSResponseWrapper;
-
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.codec.binary.Hex;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.SpringApplication;
-import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
@@ -33,17 +28,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.util.Date;
 import java.util.Optional;
 import javax.annotation.PostConstruct;
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
 
-@RestController
-@Slf4j
+@RestController @Slf4j
 public class GitHubWebhooksController {
 
     private String GITHUB_SECRET;
-
-    @Autowired
-    ApplicationContext applicationContext;
 
     @PostConstruct
     public void setProps() {
@@ -51,7 +40,7 @@ public class GitHubWebhooksController {
                 .orElse(Optional.ofNullable(System.getenv("LPVS_GITHUB_SECRET")).orElse(""));
         if (this.GITHUB_SECRET.isEmpty()) {
             log.error("LPVS_GITHUB_SECRET(github.secret) is not set.");
-            System.exit(SpringApplication.exit(applicationContext, () -> -1));
+            exitHandler.exit(-1);
         }
     }
 
@@ -63,28 +52,26 @@ public class GitHubWebhooksController {
 
     private LPVSGitHubService gitHubService;
 
+    private LPVSExitHandler exitHandler;
+
     private static final String SIGNATURE = "X-Hub-Signature-256";
     private static final String SUCCESS = "Success";
     private static final String ERROR = "Error";
-    private static final String ALGORITHM = "HmacSHA256";
 
-    public GitHubWebhooksController(LPVSQueueService queueService, LPVSGitHubService gitHubService, LPVSQueueRepository queueRepository, @Value("${github.secret:}") String GITHUB_SECRET) {
+    public GitHubWebhooksController(LPVSQueueService queueService, LPVSGitHubService gitHubService, LPVSQueueRepository queueRepository, @Value("${github.secret:}") String GITHUB_SECRET, LPVSExitHandler exitHandler) {
         this.queueService = queueService;
         this.gitHubService = gitHubService;
         this.queueRepository = queueRepository;
         this.GITHUB_SECRET = GITHUB_SECRET;
+        this.exitHandler = exitHandler;
     }
 
     @RequestMapping(value = "/webhooks", method = RequestMethod.POST)
     public ResponseEntity<LPVSResponseWrapper> gitHubWebhooks(@RequestHeader(SIGNATURE) String signature, @RequestBody String payload) throws Exception {
-        log.debug("New webhook request received");
+        log.debug("New GitHub webhook request received");
 
         // if signature is empty return 401
         if (!StringUtils.hasText(signature)) {
-            return new ResponseEntity<>(new LPVSResponseWrapper(ERROR), HttpStatus.FORBIDDEN);
-        } else if (!GITHUB_SECRET.trim().isEmpty() && wrongSecret(signature, payload)) {
-            log.info("SECRET: " + GITHUB_SECRET);
-            log.info("WRONG: " + wrongSecret(signature, payload));
             return new ResponseEntity<>(new LPVSResponseWrapper(ERROR), HttpStatus.FORBIDDEN);
         }
 
@@ -107,17 +94,4 @@ public class GitHubWebhooksController {
         return new ResponseEntity<>(new LPVSResponseWrapper(SUCCESS), HttpStatus.OK);
     }
 
-    public boolean wrongSecret(String signature, String payload) throws Exception {
-        String lpvsSecret = signature.split("=",2)[1];
-
-        SecretKeySpec key = new SecretKeySpec(GITHUB_SECRET.getBytes("utf-8"), ALGORITHM);
-        Mac mac = Mac.getInstance(ALGORITHM);
-        mac.init(key);
-        String githubSecret = Hex.encodeHexString(mac.doFinal(payload.getBytes("utf-8")));
-
-        log.debug("lpvs   signature: " + lpvsSecret);
-        log.debug("github signature: " + githubSecret);
-
-        return !lpvsSecret.equals(githubSecret);
-    }
 }

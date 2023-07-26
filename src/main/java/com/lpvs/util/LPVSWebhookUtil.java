@@ -36,8 +36,8 @@ public class LPVSWebhookUtil {
         webhookConfig.setRepositoryUrl(json.getAsJsonObject("repository").get("html_url").getAsString());
         webhookConfig.setUserId("GitHub hook");
         webhookConfig.setHeadCommitSHA(json.getAsJsonObject("pull_request")
-                .getAsJsonObject("head")
-                .get("sha").getAsString());
+                                            .getAsJsonObject("head")
+                                            .get("sha").getAsString());
         webhookConfig.setAttempts(0);
         return webhookConfig;
     }
@@ -53,9 +53,8 @@ public class LPVSWebhookUtil {
         String actionString = json.get("action").getAsString();
         log.debug("Action " + actionString);
         LPVSPullRequestAction action = LPVSPullRequestAction.convertFrom(actionString);
-        //ToDo: handle all action types
         return (action != null) && (action.equals(LPVSPullRequestAction.UPDATE) || action.equals(LPVSPullRequestAction.OPEN)
-                || action.equals(LPVSPullRequestAction.REOPEN));
+                                                                            || action.equals(LPVSPullRequestAction.REOPEN));
     }
 
     public static String getRepositoryOrganization(LPVSQueue webhookConfig) {
@@ -102,7 +101,7 @@ public class LPVSWebhookUtil {
             log.error("No repository url info in webhook config");
             return "No repository url info in webhook config";
         }
-
+        
         List<String> url = Arrays.asList(webhookConfig.getPullRequestUrl().split("/"));
         return url.get(url.size() - 1);
     }

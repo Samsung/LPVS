@@ -13,11 +13,11 @@ import com.lpvs.entity.LPVSLicenseConflict;
 import com.lpvs.entity.LPVSQueue;
 import com.lpvs.repository.LPVSLicenseConflictRepository;
 import com.lpvs.repository.LPVSLicenseRepository;
+import com.lpvs.util.LPVSExitHandler;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.SpringApplication;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.util.*;
@@ -38,13 +38,14 @@ public class LPVSLicenseService {
 
     private List<Conflict<String, String>> licenseConflicts;
 
+    private LPVSExitHandler exitHandler;
+    
     @Autowired
-    public LPVSLicenseService(@Value("${" + LICENSE_CONFLICT_SOURCE_PROP_NAME + ":" + LICENSE_CONFLICT_SOURCE_DEFAULT + "}") String licenseConflictsSource) {
+    public LPVSLicenseService(@Value("${" + LICENSE_CONFLICT_SOURCE_PROP_NAME + ":" + LICENSE_CONFLICT_SOURCE_DEFAULT + "}") String licenseConflictsSource,
+                              LPVSExitHandler exitHandler) {
         this.licenseConflictsSource = licenseConflictsSource;
+        this.exitHandler = exitHandler;
     }
-
-    @Autowired
-    ApplicationContext applicationContext;
 
     @Autowired
     private LPVSLicenseRepository lpvsLicenseRepository;
@@ -63,44 +64,45 @@ public class LPVSLicenseService {
 
         if (licenseConflictsSource == null || licenseConflictsSource.isEmpty()) {
             log.error(LICENSE_CONFLICT_SOURCE_ENV_VAR_NAME + "(" + LICENSE_CONFLICT_SOURCE_PROP_NAME + ") is not set");
-            System.exit(SpringApplication.exit(applicationContext, () -> -1));
-        }
-        try {
-            // 1. Load licenses from DB
-            licenses = lpvsLicenseRepository.takeAllLicenses();
-            // print info
-            log.info("LICENSES: loaded " + licenses.size() + " licenses from DB.");
-
-            // 2. Load license conflicts
-            licenseConflicts = new ArrayList<>();
-
-            if (licenseConflictsSource.equalsIgnoreCase("db")) {
-                List<LPVSLicenseConflict> conflicts = lpvsLicenseConflictRepository.takeAllLicenseConflicts();
-                for (LPVSLicenseConflict conflict : conflicts) {
-                    Conflict<String, String> conf = new Conflict<>(conflict.getConflictLicense().getSpdxId(), conflict.getRepositoryLicense().getSpdxId());
-                    if (!licenseConflicts.contains(conf)) {
-                        licenseConflicts.add(conf);
-                    }
-                }
+            exitHandler.exit(-1);
+        } else {
+            try {
+                // 1. Load licenses from DB
+                licenses = lpvsLicenseRepository.takeAllLicenses();
                 // print info
-                log.info("LICENSE CONFLICTS: loaded " + licenseConflicts.size() + " license conflicts from DB.");
+                log.info("LICENSES: loaded " + licenses.size() + " licenses from DB.");
+    
+                // 2. Load license conflicts
+                licenseConflicts = new ArrayList<>();
+    
+                if (licenseConflictsSource.equalsIgnoreCase("db")) {
+                    List<LPVSLicenseConflict> conflicts = lpvsLicenseConflictRepository.takeAllLicenseConflicts();
+                    for (LPVSLicenseConflict conflict : conflicts) {
+                        Conflict<String, String> conf = new Conflict<>(conflict.getConflictLicense().getSpdxId(), conflict.getRepositoryLicense().getSpdxId());
+                        if (!licenseConflicts.contains(conf)) {
+                            licenseConflicts.add(conf);
+                        }
+                    }
+                    // print info
+                    log.info("LICENSE CONFLICTS: loaded " + licenseConflicts.size() + " license conflicts from DB.");
+                }
+    
+            } catch (Exception ex) {
+                log.warn("LICENSES and LICENSE CONFLICTS are not loaded.");
+                log.error(ex.toString());
+                licenses = new ArrayList<>();
+                licenseConflicts = new ArrayList<>();
             }
-
-        } catch (Exception ex) {
-            log.warn("LICENSES and LICENSE CONFLICTS are not loaded.");
-            log.error(ex.toString());
-            licenses = new ArrayList<>();
-            licenseConflicts = new ArrayList<>();
         }
     }
 
     public LPVSLicense findLicenseBySPDX(String name) {
-        for (LPVSLicense license : licenses) {
-            if (license.getSpdxId().equalsIgnoreCase(name)) {
-                return license;
-            }
-        }
-        return null;
+       for (LPVSLicense license : licenses) {
+          if (license.getSpdxId().equalsIgnoreCase(name)) {
+              return license;
+          }
+       }
+       return null;
     }
 
     public void addLicenseToList(LPVSLicense license) {
