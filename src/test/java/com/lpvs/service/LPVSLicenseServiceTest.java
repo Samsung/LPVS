@@ -10,6 +10,7 @@ package com.lpvs.service;
 import com.lpvs.entity.LPVSFile;
 import com.lpvs.entity.LPVSLicense;
 import com.lpvs.entity.LPVSQueue;
+import com.lpvs.util.LPVSExitHandler;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -27,6 +28,9 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class LPVSLicenseServiceTest {
+
+    private LPVSExitHandler exitHandler;
+
     @Test
     public void testFindConflicts() {
         LPVSQueue webhookConfig = new LPVSQueue();
@@ -98,7 +102,7 @@ public class LPVSLicenseServiceTest {
             add(file1);
             add(file2);
         }};
-        LPVSLicenseService licenseService = new LPVSLicenseService("");
+        LPVSLicenseService licenseService = new LPVSLicenseService("", exitHandler);
         ReflectionTestUtils.setField(licenseService, "licenseConflicts",
                 new ArrayList<LPVSLicenseService.Conflict<String, String>>()
                 {{ add(new LPVSLicenseService.Conflict<>("", "")); }});
@@ -121,7 +125,7 @@ public class LPVSLicenseServiceTest {
 
         @BeforeEach
         void setUp() throws NoSuchFieldException, IllegalAccessException {
-            licenseService = new LPVSLicenseService(null);
+            licenseService = new LPVSLicenseService(null, exitHandler);
 
             lpvs_license_1 = new LPVSLicense(1L, license_name_1, spdx_id_1, null, null, null);
             lpvs_license_2 = new LPVSLicense(2L, license_name_2, spdx_id_2, null, null, null);
@@ -151,7 +155,7 @@ public class LPVSLicenseServiceTest {
 
         @BeforeEach
         void setUp() throws NoSuchFieldException, IllegalAccessException {
-            licenseService = new LPVSLicenseService(null);
+            licenseService = new LPVSLicenseService(null, exitHandler);
             Field conflicts_field = licenseService.getClass().getDeclaredField("licenseConflicts");
             conflicts_field.setAccessible(true);
             conflicts_field.set(licenseService, new ArrayList<>());
@@ -188,7 +192,7 @@ public class LPVSLicenseServiceTest {
 
         @BeforeEach
         void setUp() throws NoSuchFieldException, IllegalAccessException {
-            licenseService = new LPVSLicenseService(null);
+            licenseService = new LPVSLicenseService(null, exitHandler);
 
             lpvs_license_1 = new LPVSLicense(1L, null, spdx_id_1, null, null, null);
             lpvs_license_2 = new LPVSLicense(1L, null, spdx_id_2, null, null, null);
@@ -227,7 +231,7 @@ public class LPVSLicenseServiceTest {
 
         @BeforeEach
         void setUp() throws NoSuchFieldException, IllegalAccessException {
-            licenseService = new LPVSLicenseService(null);
+            licenseService = new LPVSLicenseService(null, exitHandler);
             Field conflicts_field = licenseService.getClass().getDeclaredField("licenseConflicts");
             conflicts_field.setAccessible(true);
             conflicts_field.set(licenseService, List.of(conflict_1));
@@ -264,7 +268,7 @@ public class LPVSLicenseServiceTest {
         if (scanResults.isEmpty()) {
             System.out.println("is empty");
         }
-        LPVSLicenseService mockLicenseService = new LPVSLicenseService(null);
+        LPVSLicenseService mockLicenseService = new LPVSLicenseService(null, exitHandler);
         LPVSQueue webhookConfig = new LPVSQueue(); // licenseConflicts = new ArrayList<>();
         assertEquals(new ArrayList<>(), mockLicenseService.findConflicts(webhookConfig, scanResults));
 

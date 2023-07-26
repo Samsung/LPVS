@@ -7,6 +7,7 @@
 
 package com.lpvs.util;
 
+import com.lpvs.entity.LPVSQueue;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.kohsuke.github.GHPullRequestFileDetail;
@@ -18,14 +19,16 @@ public class FileUtilTest {
     @Test
     public void test() {
         GHPullRequestFileDetail detail = new GHPullRequestFileDetail();
+        LPVSQueue webhookConfig = new LPVSQueue();
+        webhookConfig.setHeadCommitSHA("aaaa");
+        webhookConfig.setRepositoryUrl("http://test.com/test/test");
         ReflectionTestUtils.setField(detail, "filename", "I_am_a_file");
-        LPVSFileUtil.saveFiles(new ArrayList<GHPullRequestFileDetail>(){{
+        LPVSFileUtil.saveGithubDiffs(new ArrayList<GHPullRequestFileDetail>(){{
             add(detail);
-        }}, "", "", 1);
+        }}, webhookConfig);
         ReflectionTestUtils.setField(detail, "patch", "+ a\n- b\n@@ -8,7 +8,6 @@\n c");
-        Assertions.assertEquals("Projects//:::::Projects//delete",
-                LPVSFileUtil.saveFiles(new ArrayList<GHPullRequestFileDetail>(){{
+        Assertions.assertFalse(LPVSFileUtil.saveGithubDiffs(new ArrayList<GHPullRequestFileDetail>(){{
                     add(detail);
-                }}, "", "", 1));
+                }}, webhookConfig).contains("Projects//aaaa"));
     }
 }
