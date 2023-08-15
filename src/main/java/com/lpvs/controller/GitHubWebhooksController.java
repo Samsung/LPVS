@@ -15,6 +15,9 @@ import com.lpvs.util.LPVSExitHandler;
 import com.lpvs.util.LPVSWebhookUtil;
 import com.lpvs.entity.LPVSResponseWrapper;
 import lombok.extern.slf4j.Slf4j;
+
+import org.apache.catalina.core.ApplicationContext;
+import org.apache.commons.codec.binary.Hex;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -28,11 +31,21 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.util.Date;
 import java.util.Optional;
 import javax.annotation.PostConstruct;
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
 
 @RestController @Slf4j
 public class GitHubWebhooksController {
 
     private String GITHUB_SECRET;
+
+    @Autowired
+    ApplicationContext applicationContext;
+
+    /**
+     * Sets the GitHub secret from the LPVS_GITHUB_SECRET environment variable or the application property.
+     * Exits the application if the secret is not set.
+     */
 
     @PostConstruct
     public void setProps() {
@@ -57,6 +70,7 @@ public class GitHubWebhooksController {
     private static final String SIGNATURE = "X-Hub-Signature-256";
     private static final String SUCCESS = "Success";
     private static final String ERROR = "Error";
+    private static final String ALGORITHM = "HmacSHA256";
 
     public GitHubWebhooksController(LPVSQueueService queueService, LPVSGitHubService gitHubService, LPVSQueueRepository queueRepository, @Value("${github.secret:}") String GITHUB_SECRET, LPVSExitHandler exitHandler) {
         this.queueService = queueService;
@@ -72,6 +86,10 @@ public class GitHubWebhooksController {
 
         // if signature is empty return 401
         if (!StringUtils.hasText(signature)) {
+            return new ResponseEntity<>(new LPVSResponseWrapper(ERROR), HttpStatus.FORBIDDEN);
+        } else if (!GITHUB_SECRET.trim().isEmpty() && wrongSecret(signature, payload)) {
+            log.info("SECRET: " + GITHUB_SECRET);
+            log.info("WRONG: " + wrongSecret(signature, payload));
             return new ResponseEntity<>(new LPVSResponseWrapper(ERROR), HttpStatus.FORBIDDEN);
         }
 
@@ -94,4 +112,17 @@ public class GitHubWebhooksController {
         return new ResponseEntity<>(new LPVSResponseWrapper(SUCCESS), HttpStatus.OK);
     }
 
+    public boolean wrongSecret(String signature, String payload) throws Exception {
+        String lpvsSecret = signature.split("=",2)[1];
+
+        SecretKeySpec key = new SecretKeySpec(GITHUB_SECRET.getBytes("utf-8"), ALGORITHM);
+        Mac mac = Mac.getInstance(ALGORITHM);
+        mac.init(key);
+        String githubSecret = Hex.encodeHexString(mac.doFinal(payload.getBytes("utf-8")));
+
+        log.debug("lpvs   signature: " + lpvsSecret);
+        log.debug("github signature: " + githubSecret);
+
+        return !lpvsSecret.equals(githubSecret);
+    }
 }

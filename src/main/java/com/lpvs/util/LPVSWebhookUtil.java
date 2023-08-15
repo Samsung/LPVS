@@ -101,7 +101,7 @@ public class LPVSWebhookUtil {
             log.error("No repository url info in webhook config");
             return "No repository url info in webhook config";
         }
-        
+
         List<String> url = Arrays.asList(webhookConfig.getPullRequestUrl().split("/"));
         return url.get(url.size() - 1);
     }
