@@ -46,7 +46,6 @@ public class GitHubWebhooksController {
      * Sets the GitHub secret from the LPVS_GITHUB_SECRET environment variable or the application property.
      * Exits the application if the secret is not set.
      */
-
     @PostConstruct
     public void setProps() {
         this.GITHUB_SECRET = Optional.ofNullable(this.GITHUB_SECRET).filter(s -> !s.isEmpty())

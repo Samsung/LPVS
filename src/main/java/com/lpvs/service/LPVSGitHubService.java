@@ -258,15 +258,15 @@ public class LPVSGitHubService {
             if (hasProhibitedOrRestricted || hasConflicts) {
                 lpvsPullRequest.setStatus(LPVSPullRequestStatus.ISSUES_DETECTED.toString());
                 pullRequestRepository.save(lpvsPullRequest);
-                pullRequest.comment("**\\[License Pre-Validation Service\\]** Potential license problem(s) detected \n\n" +
-                        webhookConfig.getHubLink() + ")</p>");
+                pullRequest.comment("**\\[License Pre-Validation Service\\]** Potential license problem(s) detected \n\n" + 
+                        commitComment + "(" + webhookConfig.getHubLink() + ")</p>");
                 repository.createCommitStatus(webhookConfig.getHeadCommitSHA(), GHCommitState.FAILURE, null,
                         "Potential license problem(s) detected", "[License Pre-Validation Service]");
             } else {
                 lpvsPullRequest.setStatus(LPVSPullRequestStatus.COMPLETED.toString());
                 pullRequestRepository.save(lpvsPullRequest);
-                pullRequest.comment("**\\[License Pre-Validation Service\\]**  No license issue detected \n\n" +
-                        webhookConfig.getHubLink() + ")</p>");
+                pullRequest.comment("**\\[License Pre-Validation Service\\]**  No license issue detected \n\n" + 
+                        commitComment + "(" + webhookConfig.getHubLink() + ")</p>");
                 repository.createCommitStatus(webhookConfig.getHeadCommitSHA(), GHCommitState.SUCCESS, null,
                         "No license issue detected", "[License Pre-Validation Service]");
             }
@@ -308,7 +308,7 @@ public class LPVSGitHubService {
 
 
     public void setGithubTokenFromEnv() {
-            if (System.getenv("LPVS_GITHUB_TOKEN") != null) GITHUB_AUTH_TOKEN = System.getenv("LPVS_GITHUB_TOKEN");
+        if (System.getenv("LPVS_GITHUB_TOKEN") != null) GITHUB_AUTH_TOKEN = System.getenv("LPVS_GITHUB_TOKEN");
     }
 
 }

@@ -12,9 +12,7 @@ public enum LPVSPullRequestAction {
     REOPEN("reopened"),
     CLOSE("closed"),
     UPDATE("synchronize"),
-    RESCAN("rescan"),
-    REVIEW_BOT_SCAN("review_bot_scan"),
-    FAST_SCAN("fast_scan");
+    RESCAN("rescan");
 
     private final String type;
 
@@ -37,10 +35,6 @@ public enum LPVSPullRequestAction {
             return UPDATE;
         } else if (action.equals(RESCAN.getPullRequestAction())) {
             return RESCAN;
-        } else if (action.equals(REVIEW_BOT_SCAN.getPullRequestAction())) {
-            return REVIEW_BOT_SCAN;
-        } else if (action.equals(FAST_SCAN.getPullRequestAction())) {
-            return FAST_SCAN;
         } else {
             return null;
         }
