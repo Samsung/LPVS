@@ -1506,8 +1506,7 @@ public class LPVSGitHubServiceTest {
                 " * found in the LICENSE file.\n" +
                 " */\n\n\n\n\n" +
                 "**Detected license conflicts:**\n\n\n" +
-                "<ul><li>MIT and Apache-1.0</li></ul>" +
-                "\n\n###### <p align='right'>Check the validation details on [SOSHUB LPVS](null)</p>";
+                "<ul><li>MIT and Apache-1.0</li></ul>()</p>";
 
         @BeforeEach
         void setUp() {
@@ -1530,6 +1529,7 @@ public class LPVSGitHubServiceTest {
             webhookConfig.setAction(LPVSPullRequestAction.OPEN);
             webhookConfig.setUserId("user");
             webhookConfig.setRepositoryUrl(repo_url);
+            webhookConfig.setHubLink("");
 
             try {
                 when(mocked_instance_gh.getRepository(LPVSWebhookUtil.getRepositoryOrganization(webhookConfig) + "/" + LPVSWebhookUtil.getRepositoryName(webhookConfig))).thenReturn(mocked_repo);
@@ -1645,8 +1645,8 @@ public class LPVSGitHubServiceTest {
                 " *\n" +
                 " * Use of this source code is governed by a MIT license that can be\n" +
                 " * found in the LICENSE file.\n" +
-                " */\n\n\n\n\n\n" +
-                "\n###### <p align='right'>Check the validation details on [SOSHUB LPVS](null)</p>";
+                " */\n\n\n\n\n" +
+                "(null)</p>";
 
         @BeforeEach
         void setUp() {
