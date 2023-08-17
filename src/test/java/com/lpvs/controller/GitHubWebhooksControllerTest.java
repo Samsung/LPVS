@@ -6,26 +6,22 @@
  */
 package com.lpvs.controller;
 
-import com.lpvs.entity.LPVSQueue;
 import com.lpvs.entity.LPVSResponseWrapper;
 import com.lpvs.repository.LPVSQueueRepository;
 import com.lpvs.service.LPVSGitHubService;
 import com.lpvs.service.LPVSQueueService;
 
+import com.lpvs.util.LPVSExitHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
-
 import org.junitpioneer.jupiter.SetEnvironmentVariable;
-import org.mockito.Mockito;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+
 
 @Slf4j
 public class GitHubWebhooksControllerTest {
@@ -34,10 +30,12 @@ public class GitHubWebhooksControllerTest {
     private static final String SUCCESS = "Success";
     private static final String ERROR = "Error";
 
+    private LPVSExitHandler exitHandler;
+
     LPVSQueueService mocked_instance_queueServ = mock(LPVSQueueService.class);
     LPVSGitHubService mocked_instance_ghServ = mock(LPVSGitHubService.class);
     LPVSQueueRepository mocked_queueRepo = mock(LPVSQueueRepository.class);
-    GitHubWebhooksController gitHubWebhooksController = new GitHubWebhooksController(mocked_instance_queueServ, mocked_instance_ghServ, mocked_queueRepo, "");
+    GitHubWebhooksController gitHubWebhooksController = new GitHubWebhooksController(mocked_instance_queueServ, mocked_instance_ghServ, mocked_queueRepo, "", exitHandler);
 
     @Test
     public void noSignatureTest() {

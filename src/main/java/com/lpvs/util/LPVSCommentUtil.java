@@ -17,7 +17,7 @@ public class LPVSCommentUtil {
 
     public static String getMatchedLinesAsLink(LPVSQueue webhookConfig, LPVSFile file, LPVSVcs vcs) {
         String prefix = LPVSWebhookUtil.getRepositoryUrl(webhookConfig) + "/blob/" + webhookConfig.getHeadCommitSHA() + "/" + file.getFilePath();
-        String matchedLines = new String();
+        String matchedLines = "";
         if (file.getMatchedLines().equals("all")) {
             if (vcs != null && vcs.equals(LPVSVcs.GITHUB)) {
                 return "<a target=\"_blank\" href=\"" + prefix + "\">" + file.getMatchedLines() + "</a>";

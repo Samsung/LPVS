@@ -42,17 +42,5 @@ public class LicensePreValidationSystemTest {
             verifyNoMoreInteractions(mocked_constructed_executor);
         }
     }
-
-    @Test
-    public void testMain() {
-        try (MockedConstruction<SpringApplication> mocked = mockConstruction(SpringApplication.class)) {
-            String[] args_to_main = new String[]{"arg1", "arg2", "arg3" };
-
-            LicensePreValidationSystem.main(args_to_main);
-
-            assertEquals(1, mocked.constructed().size());
-            SpringApplication mocked_constructed = mocked.constructed().get(0);
-            verify(mocked_constructed, times(1)).run(args_to_main);
-        }
-    }
+    
 }

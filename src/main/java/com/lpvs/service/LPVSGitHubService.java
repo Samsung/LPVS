@@ -16,6 +16,7 @@ import com.lpvs.repository.LPVSLicenseConflictRepository;
 import com.lpvs.repository.LPVSLicenseRepository;
 import com.lpvs.repository.LPVSPullRequestRepository;
 import com.lpvs.util.LPVSCommentUtil;
+import com.lpvs.util.LPVSExitHandler;
 import com.lpvs.util.LPVSFileUtil;
 import com.lpvs.util.LPVSWebhookUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -27,8 +28,6 @@ import org.kohsuke.github.GHIssueState;
 import org.kohsuke.github.GHCommitState;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.SpringApplication;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
@@ -54,9 +53,6 @@ public class LPVSGitHubService {
     private final static String GITHUB_API_URL_ENV_VAR_NAME = "LPVS_GITHUB_API_URL";
 
     @Autowired
-    ApplicationContext applicationContext;
-
-    @Autowired
     private LPVSPullRequestRepository pullRequestRepository;
 
     @Autowired
@@ -68,20 +64,23 @@ public class LPVSGitHubService {
     @Autowired
     private LPVSLicenseConflictRepository lpvsLicenseConflictRepository;
 
-    @Autowired
+    private LPVSExitHandler exitHandler;
+
     public LPVSGitHubService(@Value("${" + GITHUB_LOGIN_PROP_NAME + "}") String GITHUB_LOGIN,
                              @Value("${" + GITHUB_AUTH_TOKEN_PROP_NAME + "}") String GITHUB_AUTH_TOKEN,
                              @Value("${" + GITHUB_API_URL_PROP_NAME + "}") String GITHUB_API_URL,
                              LPVSPullRequestRepository pullRequestRepository,
                              LPVSDetectedLicenseRepository lpvsDetectedLicenseRepository,
                              LPVSLicenseRepository lpvsLicenseRepository,
-                             LPVSLicenseConflictRepository lpvsLicenseConflictRepository) {
+                             LPVSLicenseConflictRepository lpvsLicenseConflictRepository,
+                             LPVSExitHandler exitHandler) {
         this.GITHUB_LOGIN = Optional.ofNullable(GITHUB_LOGIN).filter(s -> !s.isEmpty())
                 .orElse(Optional.ofNullable(System.getenv(GITHUB_LOGIN_ENV_VAR_NAME)).orElse(""));
         this.GITHUB_AUTH_TOKEN = Optional.ofNullable(GITHUB_AUTH_TOKEN).filter(s -> !s.isEmpty())
                 .orElse(Optional.ofNullable(System.getenv(GITHUB_AUTH_TOKEN_ENV_VAR_NAME)).orElse(""));
         this.GITHUB_API_URL = Optional.ofNullable(GITHUB_API_URL).filter(s -> !s.isEmpty())
                 .orElse(Optional.ofNullable(System.getenv(GITHUB_API_URL_ENV_VAR_NAME)).orElse(""));
+        this.exitHandler = exitHandler;
         this.pullRequestRepository = pullRequestRepository;
         this.lpvsDetectedLicenseRepository = lpvsDetectedLicenseRepository;
         this.lpvsLicenseRepository = lpvsLicenseRepository;
@@ -93,7 +92,7 @@ public class LPVSGitHubService {
     private void checks() throws Exception {
         if (this.GITHUB_AUTH_TOKEN.isEmpty()) {
             log.error(GITHUB_AUTH_TOKEN_ENV_VAR_NAME + "(" + GITHUB_AUTH_TOKEN_PROP_NAME + ") is not set.");
-            System.exit(SpringApplication.exit(applicationContext, () -> -1));
+            exitHandler.exit(-1);
         }
     }
 
@@ -113,8 +112,7 @@ public class LPVSGitHubService {
                 return null;
             }
             log.debug("Saving files...");
-            return LPVSFileUtil.saveFiles(pullRequest.listFiles(), LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)+"/"+ LPVSWebhookUtil.getRepositoryName(webhookConfig),
-                    webhookConfig.getHeadCommitSHA(), pullRequest.getDeletions());
+            return LPVSFileUtil.saveGithubDiffs(pullRequest.listFiles(), webhookConfig);
         } catch (IOException e){
             log.error("Can't authorize getPullRequestFiles() " + e);
         }
@@ -125,10 +123,14 @@ public class LPVSGitHubService {
         try {
             List<GHPullRequest> pullRequests = repository.getPullRequests(GHIssueState.OPEN);
             for (GHPullRequest pullRequest : pullRequests) {
-                log.debug("Pull request check: " + pullRequest.getUrl().toString() + " / " + webhookConfig.getPullRequestAPIUrl());
-                if (pullRequest.getUrl().toString().equals(webhookConfig.getPullRequestAPIUrl())){
-                    log.debug("Return pull request " + pullRequest.getDiffUrl());
-                    return pullRequest;
+                if (null != pullRequest.getUrl()) {
+                    log.debug("Pull request check: " + pullRequest.getUrl().toString() + " / " + webhookConfig.getPullRequestAPIUrl());
+                    if (pullRequest.getUrl().toString().equals(webhookConfig.getPullRequestAPIUrl())){
+                        log.debug("Return pull request " + pullRequest.getDiffUrl());
+                        return pullRequest;
+                    }
+                } else {
+                    log.warn("Failed to get pull request URL");
                 }
             }
         } catch (IOException e){
@@ -144,7 +146,7 @@ public class LPVSGitHubService {
             else gitHub = GitHub.connectToEnterpriseWithOAuth(GITHUB_API_URL, GITHUB_LOGIN, GITHUB_AUTH_TOKEN);
             GHRepository repository = gitHub.getRepository(LPVSWebhookUtil.getRepositoryOrganization(webhookConfig) + "/" + LPVSWebhookUtil.getRepositoryName(webhookConfig));
             repository.createCommitStatus(webhookConfig.getHeadCommitSHA(), GHCommitState.PENDING, null,
-                    "Scanning opensource licenses", "[License Pre-Validation Service]");
+                                            "Scanning opensource licenses", "[License Pre-Validation Service]");
         } catch (IOException e) {
             log.error("Can't authorize setPendingCheck()" + e);
         }
@@ -229,10 +231,11 @@ public class LPVSGitHubService {
 
             if (conflicts != null && conflicts.size() > 0) {
                 hasConflicts = true;
-                commitComment += "**Detected license conflicts:**\n\n\n";
-                commitComment += "<ul>";
+                StringBuilder commitCommentBuilder = new StringBuilder();
+                commitCommentBuilder.append("**Detected license conflicts:**\n\n\n");
+                commitCommentBuilder.append("<ul>");
                 for (LPVSLicenseService.Conflict<String, String> conflict : conflicts) {
-                    commitComment += "<li>" + conflict.l1 + " and " + conflict.l2 + "</li>";
+                    commitCommentBuilder.append("<li>" + conflict.l1 + " and " + conflict.l2 + "</li>");
                     LPVSDetectedLicense detectedIssue = new LPVSDetectedLicense();
                     detectedIssue.setPullRequest(lpvsPullRequest);
                     Long l1 = lpvsLicenseRepository.searchBySpdxId(conflict.l1).getLicenseId();
@@ -248,19 +251,22 @@ public class LPVSGitHubService {
                     detectedIssue.setIssue(true);
                     lpvsDetectedLicenseRepository.saveAndFlush(detectedIssue);
                 }
-                commitComment += "</ul>";
+                commitCommentBuilder.append("</ul>");
+                commitComment += commitCommentBuilder.toString();
             }
 
             if (hasProhibitedOrRestricted || hasConflicts) {
                 lpvsPullRequest.setStatus(LPVSPullRequestStatus.ISSUES_DETECTED.toString());
                 pullRequestRepository.save(lpvsPullRequest);
-                pullRequest.comment("**\\[License Pre-Validation Service\\]** Potential license problem(s) detected \n\n" + commitComment);
+                pullRequest.comment("**\\[License Pre-Validation Service\\]** Potential license problem(s) detected \n\n" + 
+                        commitComment + "(" + webhookConfig.getHubLink() + ")</p>");
                 repository.createCommitStatus(webhookConfig.getHeadCommitSHA(), GHCommitState.FAILURE, null,
                         "Potential license problem(s) detected", "[License Pre-Validation Service]");
             } else {
                 lpvsPullRequest.setStatus(LPVSPullRequestStatus.COMPLETED.toString());
                 pullRequestRepository.save(lpvsPullRequest);
-                pullRequest.comment("**\\[License Pre-Validation Service\\]**  No license issue detected \n\n" + commitComment);
+                pullRequest.comment("**\\[License Pre-Validation Service\\]**  No license issue detected \n\n" + 
+                        commitComment + "(" + webhookConfig.getHubLink() + ")</p>");
                 repository.createCommitStatus(webhookConfig.getHeadCommitSHA(), GHCommitState.SUCCESS, null,
                         "No license issue detected", "[License Pre-Validation Service]");
             }

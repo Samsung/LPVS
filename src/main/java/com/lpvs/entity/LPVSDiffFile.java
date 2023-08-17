@@ -13,27 +13,14 @@ import lombok.Setter;
 import java.util.LinkedList;
 import java.util.List;
 
-@Getter
-@Setter
+@Getter @Setter
 public class LPVSDiffFile {
-    private String originalFile;
-    private String newFile;
-    private List<String> addedLines;
-    private List<String> deletedLines;
-    private List<String> unchangedLines;
+    private String oldFileName;
+    private String newFileName;
+    private List<String> changedLines;
 
-    public void appendAddedLine(String line){
-        if (this.addedLines == null) this.addedLines = new LinkedList<>();
-        this.addedLines.add(line);
-    }
-
-    public void appendDeletedLine(String line){
-        if (this.deletedLines == null) this.deletedLines = new LinkedList<>();
-        this.deletedLines.add(line);
-    }
-
-    public void appendUnchangedLine(String line){
-        if (this.unchangedLines == null) this.unchangedLines = new LinkedList<>();
-        this.unchangedLines.add(line);
+    public void appendPatchedLine(String line){
+        if (this.changedLines == null) this.changedLines = new LinkedList<>();
+        this.changedLines.add(line);
     }
 }

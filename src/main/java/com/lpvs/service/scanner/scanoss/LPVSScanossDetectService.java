@@ -16,6 +16,8 @@ import com.lpvs.repository.LPVSLicenseRepository;
 import com.lpvs.service.LPVSGitHubService;
 import com.lpvs.service.LPVSLicenseService;
 import com.lpvs.util.LPVSWebhookUtil;
+
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,6 +26,9 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
+
+import static com.lpvs.util.LPVSFileUtil.getScanResultsDirectoryPath;
+import static com.lpvs.util.LPVSFileUtil.getScanResultsJsonFilePath;
 
 @Service
 @Slf4j
@@ -46,15 +51,20 @@ public class LPVSScanossDetectService {
 
         try {
             ProcessBuilder processBuilder;
-            if (!(new File("RESULTS").exists())) {
-                new File("RESULTS").mkdir();
+            File resultsDir = new File(getScanResultsDirectoryPath(webhookConfig));
+            if (resultsDir.mkdirs()) {
+                log.debug("Scan result directory has been created: " + resultsDir.getAbsolutePath());
+            } else if (resultsDir.isDirectory()) {
+                log.debug("Scan result directory already been created: " + resultsDir.getAbsolutePath());
+            } else {
+                log.error("Directory %s could not be created." + resultsDir.getAbsolutePath());
             }
             processBuilder = new ProcessBuilder(
-                    "scanoss-py", "scan",
-                    debug ? "-t" : "-q",
-                    "--no-wfp-output",
-                    "-o", "RESULTS/" + LPVSWebhookUtil.getRepositoryName(webhookConfig) + "_" + webhookConfig.getHeadCommitSHA() + ".json",
-                    path
+                "scanoss-py", "scan",
+                debug ? "-t" : "-q",
+                "--no-wfp-output",
+                "-o", getScanResultsJsonFilePath(webhookConfig),
+                path
             );
             Process process = processBuilder.inheritIO().start();
 
@@ -64,7 +74,7 @@ public class LPVSScanossDetectService {
                 log.error("Scanoss scanner terminated with none-zero code. Terminating.");
                 BufferedReader output = null;
                 try {
-                    output = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+                    output = new BufferedReader(new InputStreamReader(process.getErrorStream(), "UTF-8"));
                     log.error(output.readLine());
                     throw new Exception("Scanoss scanner terminated with none-zero code. Terminating.");
                 }
@@ -81,18 +91,29 @@ public class LPVSScanossDetectService {
         log.debug("Scanoss scan done");
     }
 
+    @SuppressFBWarnings("UWF_UNWRITTEN_FIELD")
     public List<LPVSFile> checkLicenses(LPVSQueue webhookConfig) {
         List<LPVSFile> detectedFiles = new ArrayList<>();
         try {
             Gson gson = new Gson();
-            Reader reader = Files.newBufferedReader(Paths.get("RESULTS/" + LPVSWebhookUtil.getRepositoryName(webhookConfig) +
-                    "_" + webhookConfig.getHeadCommitSHA() + ".json"));
+            Reader reader;
+            if (webhookConfig.getHeadCommitSHA() == null || webhookConfig.getHeadCommitSHA().equals("")){
+                reader = Files.newBufferedReader(Paths.get(System.getProperty("user.home") + "/" + "Results/" +
+                        LPVSWebhookUtil.getRepositoryName(webhookConfig) + "/" + LPVSWebhookUtil.getPullRequestId(webhookConfig) + ".json"));
+            } else {
+                reader = Files.newBufferedReader(Paths.get(System.getProperty("user.home") + "/" + "Results/" +
+                        LPVSWebhookUtil.getRepositoryName(webhookConfig) + "/" + webhookConfig.getHeadCommitSHA() + ".json"));
+            }
             // convert JSON file to map
             Map<String, ArrayList<Object>> map = gson.fromJson(reader,
                     new TypeToken<Map<String, ArrayList<Object>>>() {}.getType());
 
             // parse map entries
             long ind = 0L;
+            if (null == map) {
+                log.error("Error parsing Json File");
+                return detectedFiles;
+            }
             for (Map.Entry<String, ArrayList<Object>> entry : map.entrySet()) {
                 LPVSFile file = new LPVSFile();
                 file.setId(ind++);
@@ -167,13 +188,14 @@ public class LPVSScanossDetectService {
 
             // close reader
             reader.close();
-        } catch (Exception ex) {
+        } catch (IOException ex) {
             log.error(ex.toString());
         }
         return detectedFiles;
     }
 
     // Scanoss JSON structure
+    @SuppressFBWarnings(value = {"UUF_UNUSED_FIELD", "SIC_INNER_SHOULD_BE_STATIC"}, justification = "Parser class for Json deserialization")
     private class ScanossJsonStructure {
         private String component;
         private String file;
