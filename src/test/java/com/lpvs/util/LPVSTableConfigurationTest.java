@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest(classes = LPVSTableConfiguration.class)
 @TestPropertySource(properties = {
         "app.table.detectedLicenseName=mockDetectedLicenseName",
-        "app.table.detectedLicenseShema=mockDetectedLicenseShema",
+        "app.table.detectedLicenseSchema=mockDetectedLicenseSchema",
         "app.table.diffFileName=mockDiffFileName",
         "app.table.pullRequestsName=mockPullRequestsName",
         "app.table.queueName=mockQueueName"
@@ -33,8 +33,8 @@ public class LPVSTableConfigurationTest {
     }
 
     @Test
-    public void testGetDetectedLicenseShema() {
-        assertEquals("mockDetectedLicenseShema", config.getDetectedLicenseShema());
+    public void testGetDetectedLicenseSchema() {
+        assertEquals("mockDetectedLicenseSchema", config.getDetectedLicenseSchema());
     }
 
     @Test

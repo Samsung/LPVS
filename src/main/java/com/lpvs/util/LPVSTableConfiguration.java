@@ -15,8 +15,8 @@ public class LPVSTableConfiguration {
     @Value("${app.table.detectedLicenseName}")
     private String detectedLicenseName;
 
-    @Value("${app.table.detectedLicenseShema}")
-    private String detectedLicenseShema;
+    @Value("${app.table.detectedLicenseSchema}")
+    private String detectedLicenseSchema;
 
     @Value("${app.table.diffFileName}")
     private String diffFileName;
@@ -32,9 +32,9 @@ public class LPVSTableConfiguration {
         return detectedLicenseName;
     }
 
-    // Configuration for detected license shema
-    public String getDetectedLicenseShema() {
-        return detectedLicenseShema;
+    // Configuration for detected license schema
+    public String getDetectedLicenseSchema() {
+        return detectedLicenseSchema;
     }
 
     // Configuration for diff file name table
