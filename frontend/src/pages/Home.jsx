@@ -1,28 +1,8 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
+import React from "react";
+import { Link } from "react-router-dom";
 import "../css/Home_style.css";
 
 export const Home = () => {
-
-  const navigate = useNavigate();
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [username, setUsername] = useState("");
-
-  useEffect(() => {
-    axios.get("/login/check").then((loginresponse) => {
-      if (loginresponse.data.isLoggedIn) {
-          if(!loginresponse.data.member.nickname) {
-            alert("To use service, You must enter a GitHub ID.")
-            navigate ("/user/info");
-          }
-          setIsLoggedIn(loginresponse.data.isLoggedIn);
-          axios.get("/user/info").then((userInfoResponse) => {
-            setUsername(userInfoResponse.data);
-        });
-      }
-    });
-  }, []);
 
   return (
     <div className="home">
@@ -72,12 +52,12 @@ export const Home = () => {
             Validation <br />
             Service
           </div>
-          <div className="text-wrapper-3">About</div>
+          <div className="text-wrapper-2">About</div>
         </div>
         <div className="menubar-top">
           <div className="menu-line" />
           <Link to={"/home"} style={{ color: "black", textDecoration: "none"}}>
-          <img className="LPVS" alt="Lpvs" src="/image/LPVS_logo21.png" />
+          <img className="LPVS" alt="Lpvs" src="/image/LPVS_logo_bar.png" />
             </Link>
         </div>
       </div>
