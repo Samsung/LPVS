@@ -155,6 +155,18 @@ CREATE TABLE `queue` (
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Table structure for table `member`
+--
+
+CREATE TABLE `member` (
+  `member_id` bigint(20) PRIMARY KEY NOT NULL AUTO_INCREMENT,
+  `e-mail` varchar(255) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `nickname` varchar(255) DEFAULT NULL,
+  `provider` varchar(10) NOT NULL,
+  `organization` varchar(255) DEFAULT NULL
+);
 
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
