@@ -1,0 +1,123 @@
+/**
+ * Copyright 2023 kyudori, Basaeng, hwan5180, quswjdgma83
+ *
+ * Use of this source code is governed by a MIT license that can be
+ * found in the LICENSE file.
+ */
+
+.home {
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+}
+
+.home .div {
+  background-color: #ffffff;
+  height: 1080px;
+  width: 1920px;
+  position: relative;
+}
+
+.home .LPVS-info {
+  height: 896px;
+  width: 1273px;
+  position: absolute;
+  top: 120px;
+  left: 593px;
+}
+
+.home .overlap-group {
+  background-color: #000000ba;
+  height: 896px;
+  width: 1271px;
+  position: relative;
+}
+
+.home .open-source-code {
+  color: #ffffff;
+  font-family: "Inter-Medium", Helvetica;
+  font-size: 24px;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: normal;
+  position: absolute;
+  top: 35px;
+  left: 42px;
+  width: 1195px;
+}
+
+.home .text-wrapper,
+.home .span {
+  font-weight: 500;
+}
+
+.home .LPVS-logo {
+  height: 885px;
+  width: 574px;
+  position: absolute;
+  top: 139px;
+  left: 0;
+}
+
+.home .LPVS-remove {
+  height: 407px;
+  width: 472px;
+  position: absolute;
+  top: 446px;
+  left: 0;
+  object-fit: cover;
+}
+
+.home .license-pre {
+  color: #00057b;
+  font-family: "Inter-Bold", Helvetica;
+  font-size: 60px;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: normal;
+  position: absolute;
+  top: 88px;
+  left: 56px;
+}
+
+.home .text-wrapper-2 {
+  color: #80808275;
+  font-family: "Inter-Bold", Helvetica;
+  font-size: 70px;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: normal;
+  position: absolute;
+  top: 0;
+  left: 56px;
+  white-space: nowrap;
+  width: 217px;
+}
+
+.home .menubar-top {
+  height: 101px;
+  width: 1842px;
+  position: absolute;
+  top: 8px;
+  left: 39px;
+}
+
+.home .menu-line {
+  background-color: #0057b8;
+  height: 3px;
+  width: 1842px;
+  position: absolute;
+  top: 98px;
+  left: 0;
+}
+
+.home .LPVS {
+  height: 96px;
+  width: 309px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  object-fit: cover;
+}
