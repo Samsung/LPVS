@@ -1,3 +1,10 @@
+/**
+ * Copyright 2023 kyudori, Basaeng, hwan5180, quswjdgma83
+ *
+ * Use of this source code is governed by a MIT license that can be
+ * found in the LICENSE file.
+ */
+
 import React from "react";
 import { Link } from "react-router-dom";
 import "../css/Home_style.css";
