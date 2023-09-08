@@ -88,7 +88,6 @@ public class LPVSGitHubService {
     }
 
     @PostConstruct
-    @Profile("!test")
     private void checks() throws Exception {
         if (this.GITHUB_AUTH_TOKEN.isEmpty()) {
             log.error(GITHUB_AUTH_TOKEN_ENV_VAR_NAME + "(" + GITHUB_AUTH_TOKEN_PROP_NAME + ") is not set.");
