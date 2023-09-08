@@ -93,10 +93,6 @@ public class LPVSGitHubService {
             log.error(GITHUB_AUTH_TOKEN_ENV_VAR_NAME + "(" + GITHUB_AUTH_TOKEN_PROP_NAME + ") is not set.");
             exitHandler.exit(-1);
         }
-        if (this.GITHUB_LOGIN.isEmpty()) {
-            log.error(GITHUB_LOGIN_ENV_VAR_NAME + "(" + GITHUB_LOGIN_PROP_NAME + ") is not set.");
-            exitHandler.exit(-1);
-        }
     }
 
     private static GitHub gitHub;
