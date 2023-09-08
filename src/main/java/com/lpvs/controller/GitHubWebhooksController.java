@@ -39,7 +39,6 @@ public class GitHubWebhooksController {
 
     private String GITHUB_SECRET;
 
-    @Autowired
     ApplicationContext applicationContext;
 
     /**
