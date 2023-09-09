@@ -156,13 +156,13 @@ CREATE TABLE `queue` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `member`
+-- Table structure for table `LPVSMember`
 --
 
-DROP TABLE IF EXISTS `member`;
+DROP TABLE IF EXISTS `LPVSMember`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `member` (
+CREATE TABLE `LPVSMember` (
   `id` bigint(20) PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `e-mail` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL,
