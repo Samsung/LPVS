@@ -1,3 +1,10 @@
+/**
+ * Copyright 2023 Basaeng, kyudori, hwan5180, quswjdgma83
+ *
+ * Use of this source code is governed by a MIT license that can be
+ * found in the LICENSE file.
+ */
+
 package com.lpvs.entity;
 
 import lombok.Builder;
@@ -15,7 +22,7 @@ public class LPVSMember {
 
     @Id
     @GeneratedValue
-    @Column(name = "member_id")
+    @Column(name = "id")
     private Long id;
 
     @Column(name = "name", nullable = false)

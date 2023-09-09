@@ -1,3 +1,10 @@
+/**
+ * Copyright 2023 Basaeng, kyudori, hwan5180, quswjdgma83
+ *
+ * Use of this source code is governed by a MIT license that can be
+ * found in the LICENSE file.
+ */
+
 package com.lpvs.service;
 
 import com.lpvs.entity.LPVSMember;
@@ -13,11 +20,11 @@ import java.util.Map;
 
 @Service
 @Slf4j
-public class LoginCheckService {
+public class LPVSLoginCheckService {
     private LPVSPullRequestRepository lpvsPullRequestRepository;
     private LPVSMemberRepository memberRepository;
 
-    public LoginCheckService(LPVSPullRequestRepository lpvsPullRequestRepository, LPVSMemberRepository memberRepository) {
+    public LPVSLoginCheckService(LPVSPullRequestRepository lpvsPullRequestRepository, LPVSMemberRepository memberRepository) {
         this.lpvsPullRequestRepository = lpvsPullRequestRepository;
         this.memberRepository = memberRepository;
     }
