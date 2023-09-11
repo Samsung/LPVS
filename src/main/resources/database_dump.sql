@@ -156,7 +156,7 @@ CREATE TABLE `queue` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `LPVSMember`
+-- Table structure for table `member`
 --
 
 DROP TABLE IF EXISTS `member`;
