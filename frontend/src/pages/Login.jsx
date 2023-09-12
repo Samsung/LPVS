@@ -21,7 +21,7 @@ export const Login = () => {
           <div className="overlap">
             <div className="login-header">
               <div className="overlap-group">
-                <img className="line" alt="Line" src="/image/svg/Line_2.svg" />
+                <div className="line" alt="Line" />
                 <div className="text-wrapper">SNS Login</div>
               </div>
             </div>

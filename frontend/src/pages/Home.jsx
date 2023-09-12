@@ -25,6 +25,15 @@ export const Home = () => {
     });
   }, []);
 
+  function truncateName(name) {
+    if (/[\u3131-\u314e\u314f-\u3163\uac00-\ud7a3]/g.test(name)) {
+      return name.length > 3 ? `${name.substring(0, 3)}.` : name;
+    } else {
+      return name.length > 5 ? `${name.substring(0, 5)}.` : name;
+    }
+  }
+
+
   return (
     <div className="home">
       <div className="div">
@@ -82,10 +91,14 @@ export const Home = () => {
                     {isLoggedIn ? (
                       <span style={{ color: "black", textDecoration: "none" }}>
                         <Link
-                          to={"/home"}
+                          to={"/user/info"}
                           style={{ color: "black", textDecoration: "none" }}
                         >
-                          {username.name}
+                          {username?.name ? (
+                            <div>{truncateName(username.name)}</div>
+                              ) : (
+                              <div>Loading...</div>
+                          )}
                         </Link>
                       </span>
                     ) : (

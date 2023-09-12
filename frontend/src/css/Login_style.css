@@ -53,6 +53,7 @@
 }
 
 .login .line {
+    background-color: #000000;
     height: 1px;
     left: 0;
     object-fit: cover;
