@@ -14,7 +14,6 @@ import com.lpvs.repository.LPVSLicenseRepository;
 import com.lpvs.repository.LPVSMemberRepository;
 import com.lpvs.repository.LPVSPullRequestRepository;
 import com.lpvs.service.LPVSLoginCheckService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
