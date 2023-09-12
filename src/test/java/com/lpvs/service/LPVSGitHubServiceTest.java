@@ -1646,7 +1646,7 @@ public class LPVSGitHubServiceTest {
                 " * Use of this source code is governed by a MIT license that can be\n" +
                 " * found in the LICENSE file.\n" +
                 " */\n\n\n\n\n" +
-                "(null)</p>";
+                "</p>";
 
         @BeforeEach
         void setUp() {
