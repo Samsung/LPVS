@@ -172,3 +172,12 @@
   white-space: nowrap;
   width: 71px;
 }
+
+.login .LPVS {
+  height: 96px;
+  left: 0;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  width: 229px;
+}
