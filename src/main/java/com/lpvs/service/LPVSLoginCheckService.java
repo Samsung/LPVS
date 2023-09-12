@@ -35,7 +35,6 @@ public class LPVSLoginCheckService {
             if (oAuth2User == null) {
                 return Boolean.FALSE;
             }
-            Map<String, Object> attributes = oAuth2User.getAttributes();
             return Boolean.TRUE;
         } catch (NullPointerException e) {
             return Boolean.FALSE;

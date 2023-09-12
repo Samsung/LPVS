@@ -21,7 +21,7 @@ public class PageControllerAdvice {
 
     @ExceptionHandler(LoginFailedException.class)
     public ResponseEntity<ErrorResponse> loginFailedHandle(LoginFailedException e) {
-        log.info("loginFailed");
+        log.error("loginFailed" + e.getMessage());
         errorResponse = new ErrorResponse(e.getMessage(), HttpStatus.UNAUTHORIZED.name(), HttpStatus.UNAUTHORIZED.value());
         return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
     }

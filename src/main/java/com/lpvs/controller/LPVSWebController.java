@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-@Slf4j
 public class LPVSWebController {
     private LPVSMemberRepository memberRepository;
     private LPVSDetectedLicenseRepository detectedLicenseRepository;

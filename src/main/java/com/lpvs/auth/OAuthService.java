@@ -27,7 +27,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
-    private final LPVSMemberRepository LPVSMemberRepository;
+    private final LPVSMemberRepository lpvsMemberRepository;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -56,7 +56,7 @@ public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2
 
     }
 
-    private Map customAttribute(Map attributes, String userNameAttributeName, MemberProfile memberProfile, String registrationId) {
+    private Map<String, Object> customAttribute(Map<String, Object> attributes, String userNameAttributeName, MemberProfile memberProfile, String registrationId) {
         Map<String, Object> customAttribute = new LinkedHashMap<>();
         customAttribute.put(userNameAttributeName, attributes.get(userNameAttributeName));
         customAttribute.put("provider", registrationId);
@@ -68,11 +68,11 @@ public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2
 
     private LPVSMember saveOrUpdate(MemberProfile memberProfile) {
 
-        LPVSMember LPVSMember = LPVSMemberRepository.findByEmailAndProvider(memberProfile.getEmail(), memberProfile.getProvider())
+        LPVSMember lpvsMember = lpvsMemberRepository.findByEmailAndProvider(memberProfile.getEmail(), memberProfile.getProvider())
                 .map(m -> m.update(memberProfile.getName(), memberProfile.getEmail()))
                 .orElse(memberProfile.toMember());
 
-        return LPVSMemberRepository.save(LPVSMember);
+        return lpvsMemberRepository.save(lpvsMember);
     }
 
 }
