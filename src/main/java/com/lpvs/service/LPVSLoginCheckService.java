@@ -11,7 +11,6 @@ import com.lpvs.entity.LPVSMember;
 import com.lpvs.exception.LoginFailedException;
 import com.lpvs.repository.LPVSMemberRepository;
 import com.lpvs.repository.LPVSPullRequestRepository;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
@@ -19,7 +18,6 @@ import org.springframework.stereotype.Service;
 import java.util.Map;
 
 @Service
-@Slf4j
 public class LPVSLoginCheckService {
     private LPVSPullRequestRepository lpvsPullRequestRepository;
     private LPVSMemberRepository memberRepository;
