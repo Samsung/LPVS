@@ -15,71 +15,76 @@
 
 .home .div {
   background-color: #ffffff;
+  border: 1px none;
   height: 1080px;
-  width: 1920px;
   position: relative;
+  width: 1920px;
 }
 
 .home .LPVS-info {
   height: 896px;
-  width: 1273px;
-  position: absolute;
-  top: 120px;
   left: 593px;
+  position: absolute;
+  top: 140px;
+  width: 1273px;
 }
 
 .home .overlap-group {
   background-color: #000000ba;
-  height: 896px;
-  width: 1271px;
+  height: 800px;
   position: relative;
+  width: 1265px;
+  top: -10px;
 }
 
-.home .open-source-code {
+.home .user-guide {
   color: #ffffff;
   font-family: "Inter-Medium", Helvetica;
   font-size: 24px;
   font-weight: 400;
+  left: 42px;
   letter-spacing: 0;
   line-height: normal;
   position: absolute;
-  top: 35px;
-  left: 42px;
+  top: 15px;
   width: 1195px;
 }
 
-.home .text-wrapper,
-.home .span {
+.home .text-wrapper {
   font-weight: 500;
+}
+
+.home .span {
+  font-family: "Inter-Regular", Helvetica;
 }
 
 .home .LPVS-logo {
   height: 885px;
+  left: 15px;
+  position: absolute;
+  top: 125px;
   width: 574px;
-  position: absolute;
-  top: 139px;
-  left: 0;
 }
 
-.home .LPVS-remove {
+.home .LPVS-github {
   height: 407px;
-  width: 472px;
-  position: absolute;
-  top: 446px;
-  left: 0;
+  left: 30px;
   object-fit: cover;
+  position: absolute;
+  top: 400px;
+  width: 472px;
 }
 
-.home .license-pre {
+.home .license-explain {
   color: #00057b;
   font-family: "Inter-Bold", Helvetica;
   font-size: 60px;
   font-weight: 700;
+  left: 56px;
   letter-spacing: 0;
   line-height: normal;
   position: absolute;
-  top: 88px;
-  left: 56px;
+  top: 80px;
 }
 
 .home .text-wrapper-2 {
@@ -87,37 +92,92 @@
   font-family: "Inter-Bold", Helvetica;
   font-size: 70px;
   font-weight: 700;
+  left: 56px;
   letter-spacing: 0;
   line-height: normal;
   position: absolute;
-  top: 0;
-  left: 56px;
+  top: -10px;
   white-space: nowrap;
   width: 217px;
 }
 
 .home .menubar-top {
   height: 101px;
-  width: 1842px;
+  left: 39px;
   position: absolute;
   top: 8px;
-  left: 39px;
+  width: 1842px;
 }
 
 .home .menu-line {
   background-color: #0057b8;
   height: 3px;
-  width: 1842px;
+  left: 0;
   position: absolute;
   top: 98px;
-  left: 0;
+  width: 1842px;
+}
+
+.home .menu {
+  height: 43px;
+  left: 1270px;
+  position: absolute;
+  top: 37px;
+  width: 578px;
+}
+
+.home .overlap {
+  height: 43px;
+  left: 302px;
+  position: absolute;
+  top: 0;
+  width: 272px;
+}
+
+.home .profile {
+  height: 43px;
+  left: 136px;
+  position: absolute;
+  top: 0;
+  width: 135px;
+}
+
+.home .overlap-group-2 {
+  background-color: #d9d9d9;
+  border-radius: 50px;
+  height: 43px;
+  position: relative;
+  width: 133px;
+}
+
+.home .image {
+  height: 31px;
+  left: 11px;
+  object-fit: cover;
+  position: absolute;
+  top: 7px;
+  width: 35px;
+}
+
+.home .text-wrapper-3 {
+  color: #000000;
+  font-family: "Inter-SemiBold", Helvetica;
+  font-size: 20px;
+  font-weight: 600;
+  left: 56px;
+  letter-spacing: 0;
+  line-height: normal;
+  position: absolute;
+  top: 8px;
+  white-space: nowrap;
+  width: 71px;
 }
 
 .home .LPVS {
   height: 96px;
-  width: 309px;
-  position: absolute;
-  top: 0;
   left: 0;
   object-fit: cover;
+  position: absolute;
+  top: 0;
+  width: 229px;
 }
