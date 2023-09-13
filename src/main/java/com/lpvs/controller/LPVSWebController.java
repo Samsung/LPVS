@@ -7,11 +7,12 @@ import com.lpvs.repository.LPVSLicenseRepository;
 import com.lpvs.repository.LPVSMemberRepository;
 import com.lpvs.repository.LPVSPullRequestRepository;
 import com.lpvs.service.LPVSLoginCheckService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.Map;
 
 @Controller
 public class LPVSWebController {
@@ -19,7 +20,7 @@ public class LPVSWebController {
     private LPVSDetectedLicenseRepository detectedLicenseRepository;
     private LPVSPullRequestRepository lpvsPullRequestRepository;
     private LPVSLicenseRepository licenseRepository;
-    private LPVSLoginCheckService LPVSLoginCheckService;
+    private LPVSLoginCheckService lpvsLoginCheckService;
 
     public LPVSWebController(LPVSMemberRepository memberRepository, LPVSDetectedLicenseRepository detectedLicenseRepository,
                              LPVSPullRequestRepository lpvsPullRequestRepository, LPVSLicenseRepository licenseRepository,
@@ -28,25 +29,27 @@ public class LPVSWebController {
         this.detectedLicenseRepository = detectedLicenseRepository;
         this.lpvsPullRequestRepository = lpvsPullRequestRepository;
         this.licenseRepository = licenseRepository;
-        this.LPVSLoginCheckService = LPVSLoginCheckService;
+        this.lpvsLoginCheckService = LPVSLoginCheckService;
     }
 
     @GetMapping("user/info")
     @ResponseBody
     public LPVSMember personalInfoSettings(Authentication authentication) {
-        LPVSLoginCheckService.loginVerification(authentication);
-        return LPVSLoginCheckService.getMemberFromMemberMap(authentication);
+        lpvsLoginCheckService.loginVerification(authentication);
+        return lpvsLoginCheckService.getMemberFromMemberMap(authentication);
     }
 
     @GetMapping("login/check")
     @ResponseBody
     public LPVSLoginMember loginMember(Authentication authentication) {
-        Boolean isLoggedIn = LPVSLoginCheckService.oauthLoginStatus(authentication);
-        if (isLoggedIn) {
-            LPVSMember findMember = LPVSLoginCheckService.getMemberFromMemberMap(authentication);
-            return new LPVSLoginMember(isLoggedIn, findMember);
+        Map<String, Object> oauthLoginMemberMap = lpvsLoginCheckService.getOauthLoginMemberMap(authentication);
+        boolean isLoggedIn = oauthLoginMemberMap == null || oauthLoginMemberMap.isEmpty();
+
+        if (!isLoggedIn) {
+            LPVSMember findMember = lpvsLoginCheckService.getMemberFromMemberMap(authentication);
+            return new LPVSLoginMember(!isLoggedIn, findMember);
         } else {
-            return new LPVSLoginMember(isLoggedIn, null);
+            return new LPVSLoginMember(!isLoggedIn, null);
         }
     }
 

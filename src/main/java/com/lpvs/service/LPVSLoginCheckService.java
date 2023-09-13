@@ -28,18 +28,6 @@ public class LPVSLoginCheckService {
         this.lpvsPullRequestRepository = lpvsPullRequestRepository;
         this.memberRepository = memberRepository;
     }
-
-    public Boolean oauthLoginStatus(Authentication authentication) {
-        try {
-            OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
-            if (oAuth2User == null) {
-                return Boolean.FALSE;
-            }
-            return Boolean.TRUE;
-        } catch (NullPointerException e) {
-            return Boolean.FALSE;
-        }
-    }
     public Map<String, Object> getOauthLoginMemberMap(Authentication authentication) {
         try {
             OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
@@ -51,9 +39,9 @@ public class LPVSLoginCheckService {
     }
 
     public void loginVerification(Authentication authentication) {
-        Boolean loginStatus = oauthLoginStatus(authentication);
+        Map<String, Object> oauthLoginMemberMap = getOauthLoginMemberMap(authentication);
 
-        if (!loginStatus) {
+        if (oauthLoginMemberMap == null || oauthLoginMemberMap.isEmpty()) {
             throw new LoginFailedException("LoginFailedException");
         }
     }
