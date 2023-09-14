@@ -251,6 +251,11 @@ public class LPVSGitHubService {
                     lpvsDetectedLicenseRepository.saveAndFlush(detectedIssue);
                 }
                 commitCommentBuilder.append("</ul>");
+                if (null != webhookConfig.getHubLink()) {
+                    commitCommentBuilder.append("(");
+                    commitCommentBuilder.append(webhookConfig.getHubLink());
+                    commitCommentBuilder.append(")");
+                }
                 commitComment += commitCommentBuilder.toString();
             }
 
@@ -258,14 +263,14 @@ public class LPVSGitHubService {
                 lpvsPullRequest.setStatus(LPVSPullRequestStatus.ISSUES_DETECTED.toString());
                 pullRequestRepository.save(lpvsPullRequest);
                 pullRequest.comment("**\\[License Pre-Validation Service\\]** Potential license problem(s) detected \n\n" + 
-                        commitComment + "(" + webhookConfig.getHubLink() + ")</p>");
+                        commitComment + "</p>");
                 repository.createCommitStatus(webhookConfig.getHeadCommitSHA(), GHCommitState.FAILURE, null,
                         "Potential license problem(s) detected", "[License Pre-Validation Service]");
             } else {
                 lpvsPullRequest.setStatus(LPVSPullRequestStatus.COMPLETED.toString());
                 pullRequestRepository.save(lpvsPullRequest);
                 pullRequest.comment("**\\[License Pre-Validation Service\\]**  No license issue detected \n\n" + 
-                        commitComment + "(" + webhookConfig.getHubLink() + ")</p>");
+                        commitComment + "</p>");
                 repository.createCommitStatus(webhookConfig.getHeadCommitSHA(), GHCommitState.SUCCESS, null,
                         "No license issue detected", "[License Pre-Validation Service]");
             }
