@@ -14,6 +14,7 @@ import com.lpvs.repository.LPVSPullRequestRepository;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 import java.util.Optional;
@@ -45,6 +46,7 @@ public class LPVSLoginCheckService {
         }
     }
 
+    @Transactional
     public LPVSMember getMemberFromMemberMap(Authentication authentication) {
         Map<String, Object> memberMap = getOauthLoginMemberMap(authentication);
         String name = (String) memberMap.get("name");
@@ -52,6 +54,7 @@ public class LPVSLoginCheckService {
         String provider = (String) memberMap.get("provider");
 
         Optional<LPVSMember> findMemberOptional = memberRepository.findByEmailAndProvider(email, provider);
+
         if (findMemberOptional.isPresent()) {
             return findMemberOptional.get();
         } else {
@@ -61,5 +64,4 @@ public class LPVSLoginCheckService {
             return newMember;
         }
     }
-
 }
