@@ -35,7 +35,7 @@ export const User = () => {
         if (loginresponse.data.isLoggedIn) {
           setIsLoggedIn(loginresponse.data.isLoggedIn);
           axios.get("/user/info").then((userInfoResponse) => {
-            setUsername(userInfoResponse.data);
+            setUserInfo(userInfoResponse.data);
           });
         }
       })
@@ -64,7 +64,7 @@ export const User = () => {
       url: `/user/update`, 
       method: 'post',
       data: {
-        nickName: editedUserInfo?.nickname,
+        nickname: editedUserInfo?.nickname,
         organization: editedUserInfo?.organization 
       },
       headers: { "Access-Control-Allow-Origin": "*" },
@@ -97,7 +97,7 @@ export const User = () => {
     });
   };
   
-  const [userInfoChanged, setUserInfoChanged] = useState(false);
+  const [setUserInfoChanged] = useState(false);
 
   console.log(editedUserInfo)
 
@@ -116,28 +116,6 @@ export const User = () => {
     }));
   };
 
-  const handleLinkClick = (event) => {
-    event.preventDefault(); // Prevent default action
-
-    if (!userInfo?.nickname) {
-      alert('To use service, You must enter a GitHub ID.');
-      navigate('/user/info');
-    } else {
-      navigate(`/dashboard/send/${userInfo.nickname}`);
-    }
-  };
-
-  const handleHistoryLinkClick = (event) => {
-    event.preventDefault();
-
-    if (!userInfo?.nickname) {
-      alert('To use service, You must enter a GitHub ID.');
-      navigate('/user/info');
-    } else {
-      navigate(`/history/send/${userInfo.nickname}`);
-    }
-  };
-
   const handleLogoClick = (event) => {
     event.preventDefault();
 
@@ -148,18 +126,6 @@ export const User = () => {
       navigate('/home');
     }
   };
-
-  const handleSupportLinkClick = (event) => {
-    event.preventDefault();
-
-    if (!userInfo?.nickname) {
-      alert('To use service, You must enter a GitHub ID.');
-      navigate('/user/info');
-    } else {
-      navigate('/support');
-    }
-  };
-
 
   function truncateName(name) {
     if (/[\u3131-\u314e\u314f-\u3163\uac00-\ud7a3]/g.test(name)) {
@@ -177,7 +143,7 @@ export const User = () => {
             <div className="overlap-group">
               <div className="logout-button">
                 <div className="overlap-group-2">
-                  <div className="text-wrapper"><logout-link href = "http://localhost:7896/oauth/logout"> Logout </logout-link></div>
+                  <div className="text-wrapper"><a style={{color:"black", textDecoration:"none"}} href = "http://localhost:7896/oauth/logout"> Logout </a></div>
                   <div className="logout-rect" />
                 </div>
               </div>

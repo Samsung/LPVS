@@ -61,10 +61,6 @@
     position: relative;
     width: 127px;
   }
-
-  .logout-link {
-    text-decoration-line: none;
-  }
   
   .user .text-wrapper {
     color: #000000;

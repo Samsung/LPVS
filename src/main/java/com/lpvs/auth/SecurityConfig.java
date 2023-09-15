@@ -33,7 +33,7 @@ public class SecurityConfig {
                 .and()
                 .logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/oauth/logout"))
-                .logoutSuccessUrl("/")
+                .logoutSuccessUrl("http://localhost:3000")
                 .invalidateHttpSession(true)
                 .clearAuthentication(true)
                 .and()
