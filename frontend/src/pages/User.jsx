@@ -38,6 +38,7 @@ export const User = () => {
             setUserInfo(userInfoResponse.data);
           });
         }
+        else navigate("/login")
       })
       .catch(function(error) {
         console.log(error.toJSON());
@@ -70,15 +71,12 @@ export const User = () => {
       headers: { "Access-Control-Allow-Origin": "*" },
     })
     .then((response) => {
-      // Spring server user info re-view
       return axios.get("/user/info");
     })
     .then((userInfoResponse) => {
-      // Update status when new information is fetched from the server
       setUserInfo(userInfoResponse.data);
       console.log(userInfoResponse.data);
   
-      // After admit the modifications, the screen is updated with new information
       setUserInfoChanged(true);
   
       if(!editedUserInfo.organization){
@@ -86,7 +84,7 @@ export const User = () => {
       } else {
         alert(`User information has been updated.\nGitHubID: ${editedUserInfo.nickname}\nOrganization: ${editedUserInfo.organization}`);
       }
-      navigate("/home");
+      window.location.reload(true);
     })
     .catch((error) => {
       if (error.response && error.response.status === 409) {
@@ -97,7 +95,7 @@ export const User = () => {
     });
   };
   
-  const [setUserInfoChanged] = useState(false);
+  const [userInfoChanged, setUserInfoChanged] = useState(false);
 
   console.log(editedUserInfo)
 
