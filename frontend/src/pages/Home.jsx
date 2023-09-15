@@ -94,7 +94,7 @@ export const Home = () => {
                     {isLoggedIn ? (
                       <span style={{ color: "black", textDecoration: "none" }}>
                         <Link
-                          to={"/home"}
+                          to={"/user/info"}
                           style={{ color: "black", textDecoration: "none" }}
                         >
                           {username?.name ? (

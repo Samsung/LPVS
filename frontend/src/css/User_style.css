@@ -1,0 +1,576 @@
+/**
+ * Copyright 2023 kyudori, Basaeng, hwan5180, quswjdgma83
+ *
+ * Use of this source code is governed by a MIT license that can be
+ * found in the LICENSE file.
+ */
+  
+  .user {
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+  }
+  
+  .user .div {
+    background-color: #ffffff;
+    border: 1px none;
+    height: 1080px;
+    position: relative;
+    width: 1920px;
+  }
+  
+  .user .setting {
+    height: 620px;
+    left: 430px;
+    position: absolute;
+    top: 252px;
+    width: 1056px;
+  }
+  
+  .user .overlap {
+    background-image: url(../../public/image/png/ProfileBoxStroke.png);
+    background-size: 100% 100%;
+    height: 630px;
+    left: -5px;
+    position: relative;
+    top: -1px;
+    width: 1066px;
+  }
+  
+  .user .overlap-group {
+    height: 60px;
+    left: 114px;
+    position: absolute;
+    top: 35px;
+    width: 844px;
+  }
+  
+  .user .logout-button {
+    height: 37px;
+    left: 715px;
+    position: absolute;
+    top: 10px;
+    width: 129px;
+  }
+  
+  .user .overlap-group-2 {
+    border-radius: 5px;
+    height: 37px;
+    position: relative;
+    width: 127px;
+  }
+
+  .logout-link {
+    text-decoration-line: none;
+  }
+  
+  .user .text-wrapper {
+    color: #000000;
+    font-family: "Inter-SemiBold", Helvetica;
+    font-size: 20px;
+    font-weight: 600;
+    left: 29px;
+    letter-spacing: 0;
+    line-height: normal;
+    position: absolute;
+    top: 6px;
+    white-space: nowrap;
+    cursor: pointer;
+    z-index: 999;
+  }
+  
+  .user .logout-rect {
+    border: 1px solid;
+    border-color: #000000;
+    border-radius: 5px;
+    height: 37px;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 127px;
+  }
+  
+  .user .profile-header {
+    height: 60px;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 844px;
+  }
+  
+  .user .overlap-2 {
+    height: 60px;
+    position: relative;
+    width: 842px;
+  }
+  
+  .user .profile-line {
+    background-color: #000000;
+    height: 3px;
+    left: -30px;
+    object-fit: cover;
+    position: absolute;
+    top: 57px;
+    width: 875px;
+    z-index: 1000;
+    border-radius: 5px;
+  }
+  
+  .user .text-wrapper-2 {
+    color: #000000;
+    font-family: "Inter-Bold", Helvetica;
+    font-size: 40px;
+    font-weight: 700;
+    left: 0;
+    letter-spacing: 0;
+    line-height: normal;
+    position: absolute;
+    top: 0;
+    width: 147px;
+  }
+  
+  .user .admit-button {
+    height: 37px;
+    left: 470px;
+    position: absolute;
+    top: 534px;
+    width: 129px;
+  }
+  
+  .user .overlap-3 {
+    border-radius: 25px;
+    height: 37px;
+    position: relative;
+    width: 127px;
+  }
+  
+  .user .text-wrapper-3 {
+    color: #000000;
+    font-family: "Inter-SemiBold", Helvetica;
+    font-size: 20px;
+    font-weight: 600;
+    left: 34px;
+    letter-spacing: 0;
+    line-height: normal;
+    position: absolute;
+    top: 6px;
+    white-space: nowrap;
+    z-index: 999;
+    cursor: pointer;
+  }
+  
+  .user .admit-rect {
+    border: 1px solid;
+    border-color: #000000;
+    border-radius: 25px;
+    height: 37px;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 127px;
+  }
+  
+  .user .overlap-4 {
+    height: 110px;
+    left: 945px;
+    position: absolute;
+    top: 373px;
+    width: 87px;
+  }
+  
+  .user .organization-edit {
+    border: 1px solid;
+    border-color: #000000;
+    border-radius: 25px;
+    height: 37px;
+    left: 0;
+    position: absolute;
+    top: 73px;
+    width: 83px;
+  }
+  
+  .user .github-id-edit {
+    height: 103px;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 87px;
+  }
+  
+  .user .overlap-5 {
+    border-radius: 25px;
+    height: 37px;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 83px;
+  }
+  
+  .user .text-wrapper-4 {
+    color: #000000;
+    font-family: "Inter- Bold", Helvetica;
+    font-size: 20px;
+    font-weight: 700;
+    left: 50%;
+    transform: translateX(-50%);
+    letter-spacing: 0;
+    line-height: normal;
+    position: absolute;
+    top: 9px;
+    z-index: 999;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  
+  
+  .user .admit-rect-2 {
+    border: 1px solid;
+    border-color: #000000;
+    border-radius: 25px;
+    height: 37px;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 83px;
+  }
+  
+  .user .text-wrapper-5 {
+    color: #000000;
+    font-family: "Inter-Bold", Helvetica;
+    font-size: 20px;
+    font-weight: 600;
+    left: 50%;
+    transform: translateX(-50%);
+    letter-spacing: 0;
+    line-height: normal;
+    position: absolute;
+    top: 81px;
+    z-index: 999;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  
+  .user .profile-title {
+    height: 330px;
+    left: 80px;
+    position: absolute;
+    top: 148px;
+    width: 288px;
+  }
+  
+  .user .text-wrapper-6 {
+    color: #000000;
+    font-family: "Inter-Bold", Helvetica;
+    font-size: 30px;
+    font-weight: 700;
+    left: 0;
+    letter-spacing: 0;
+    line-height: normal;
+    position: absolute;
+    top: 294px;
+    width: 278px;
+  }
+  
+  .user .text-wrapper-7 {
+    color: #000000;
+    font-family: "Inter-Bold", Helvetica;
+    font-size: 30px;
+    font-weight: 700;
+    left: 0;
+    letter-spacing: 0;
+    line-height: normal;
+    position: absolute;
+    top: 225px;
+    width: 138px;
+  }
+  
+  .user .text-wrapper-8 {
+    color: #000000;
+    font-family: "Inter-Bold", Helvetica;
+    font-size: 30px;
+    font-weight: 700;
+    left: 0;
+    letter-spacing: 0;
+    line-height: normal;
+    position: absolute;
+    top: 151px;
+    width: 90px;
+  }
+  
+  .user .text-wrapper-9 {
+    color: #000000;
+    font-family: "Inter-Bold", Helvetica;
+    font-size: 30px;
+    font-weight: 700;
+    left: 0;
+    letter-spacing: 0;
+    line-height: normal;
+    position: absolute;
+    top: 75px;
+    width: 94px;
+  }
+  
+  .user .text-wrapper-10 {
+    color: #000000;
+    font-family: "Inter-Bold", Helvetica;
+    font-size: 30px;
+    font-weight: 700;
+    left: 0;
+    letter-spacing: 0;
+    line-height: normal;
+    position: absolute;
+    top: 0;
+    width: 151px;
+  }
+  
+  .user .profile-input-box {
+    height: 347px;
+    left: 380px;
+    position: absolute;
+    top: 141px;
+    width: 545px;
+  }
+  
+  .user .organization-box {
+    height: 50px;
+    left: 0;
+    position: absolute;
+    top: 297px;
+    width: 547px;
+  }
+  
+  .user .div-wrapper {
+    background-color: #d9d9d9;
+    border-radius: 15px;
+    height: 50px;
+    position: relative;
+    width: 545px;
+  }
+  
+  .user .org-text {
+    color: #6f656599;
+    font-family: "Inter-SemiBold", Helvetica;
+    font-size: 20px;
+    font-weight: 600;
+    left: 25px;
+    letter-spacing: 0;
+    line-height: normal;
+    position: absolute;
+    top: -7px;
+    width: 412px;
+  }
+  
+  /* input element style */
+  input[type="text"] {
+    height: auto;
+    line-height: normal;
+    padding: 0.8em 0.5em;
+    font-family: "Inter-SemiBold", Helvetica;
+    font-size: 20px;
+    font-weight: 600;
+    color: #6f656599;
+    width: 412px;
+    border: none;
+    background-color: transparent;
+    position: absolute;
+    top: -2px;
+    left: 17px;
+    outline: none;
+    /* click effect eliminate border */
+  }
+  
+  
+  
+  .user .github-ID-box {
+    height: 50px;
+    left: 0;
+    position: absolute;
+    top: 224px;
+    width: 547px;
+  }
+  
+  .user .text-wrapper-11 {
+    color: #0057b8;
+    font-family: "Inter-SemiBold", Helvetica;
+    font-size: 20px;
+    font-weight: 600;
+    left: 25px;
+    letter-spacing: 0;
+    line-height: normal;
+    position: absolute;
+    white-space: nowrap;
+    top: -7px;
+  }
+  
+  .user .social-box {
+    height: 50px;
+    left: 0;
+    position: absolute;
+    top: 152px;
+    width: 547px;
+  }
+  
+  .user .text-wrapper-12 {
+    color: #000000;
+    font-family: "Inter-SemiBold", Helvetica;
+    font-size: 20px;
+    font-weight: 600;
+    left: 25px;
+    letter-spacing: 0;
+    line-height: normal;
+    position: absolute;
+    top: 12px;
+    width: 70px;
+  }
+  
+  .user .email-box {
+    height: 50px;
+    left: 0;
+    position: absolute;
+    top: 76px;
+    width: 547px;
+  }
+  
+  .user .text-wrapper-13 {
+    color: #000000;
+    font-family: "Inter-SemiBold", Helvetica;
+    font-size: 20px;
+    font-weight: 600;
+    left: 25px;
+    letter-spacing: 0;
+    line-height: normal;
+    position: absolute;
+    top: 12px;
+    width: 208px;
+  }
+  
+  .user .user-name-box {
+    height: 50px;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 547px;
+  }
+  
+  .user .text-wrapper-14 {
+    color: #000000;
+    font-family: "Inter-SemiBold", Helvetica;
+    font-size: 20px;
+    font-weight: 600;
+    left: 25px;
+    letter-spacing: 0;
+    line-height: normal;
+    position: absolute;
+    top: 12px;
+    width: 540px;
+  }
+  
+  .user .menubar-top {
+    height: 101px;
+    left: 39px;
+    position: absolute;
+    top: 8px;
+    width: 1842px;
+  }
+  
+  .user .menu-line {
+    background-color: #0057b8;
+    height: 3px;
+    left: 0;
+    position: absolute;
+    top: 98px;
+    width: 1842px;
+  }
+  
+  .user .menu {
+    height: 43px;
+    left: 1270px;
+    position: absolute;
+    top: 37px;
+    width: 578px;
+  }
+  
+  .user .overlap-6 {
+    height: 43px;
+    left: 302px;
+    position: absolute;
+    top: 0;
+    width: 272px;
+  }
+  
+  .user .profile {
+    height: 43px;
+    left: 136px;
+    position: absolute;
+    top: 0;
+    width: 135px;
+  }
+  
+  .user .overlap-group-3 {
+    background-color: #d9d9d9;
+    border-radius: 50px;
+    height: 43px;
+    position: relative;
+    width: 133px;
+  }
+  
+  .user .image {
+    height: 31px;
+    left: 11px;
+    object-fit: cover;
+    position: absolute;
+    top: 6px;
+    width: 35px;
+  }
+  
+  .user .text-wrapper-16 {
+    color: #000000;
+    font-family: "Inter-SemiBold", Helvetica;
+    font-size: 20px;
+    font-weight: 600;
+    left: 50px;
+    letter-spacing: 0;
+    line-height: normal;
+    position: absolute;
+    top: 10px;
+    white-space: nowrap;
+    width: 150px;
+  }
+  
+  .user .LPVS {
+    height: 96px;
+    left: 0;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    width: 229px;
+  }
+  
+  .input-style {
+    border: 1px solid #ccc;
+    padding: 8px;
+    transition: border-color 0.3s ease-in-out;
+    /* border color change animation */
+  }
+  
+  .input-style.blink {
+    animation: blink-animation 1s infinite;
+    /* blinking animation apply */
+  }
+  
+  @keyframes blink-animation {
+  
+    0%,
+    100% {
+      border-color: red;
+      /* border color change to red */
+    }
+  
+    50% {
+      border-color: #ccc;
+      /* border color change to gray */
+    }
+  }
+  
