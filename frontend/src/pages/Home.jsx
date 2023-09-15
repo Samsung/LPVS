@@ -15,14 +15,18 @@ export const Home = () => {
   const [username, setUsername] = useState("");
 
   useEffect(() => {
-    axios.get("/login/check").then((loginresponse) => {
-      if (loginresponse.data.isLoggedIn) {
-        setIsLoggedIn(loginresponse.data.isLoggedIn);
-        axios.get("/user/info").then((userInfoResponse) => {
-          setUsername(userInfoResponse.data);
-        });
-      }
-    });
+    axios.get("/login/check")
+      .then((loginresponse) => {
+        if (loginresponse.data.isLoggedIn) {
+          setIsLoggedIn(loginresponse.data.isLoggedIn);
+          axios.get("/user/info").then((userInfoResponse) => {
+            setUsername(userInfoResponse.data);
+          });
+        }
+      })
+      .catch(function(error) {
+        console.log(error.toJSON());
+      });
   }, []);
 
   function truncateName(name) {
