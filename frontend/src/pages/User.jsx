@@ -30,15 +30,18 @@ export const User = () => {
 
   
   useEffect(() => {
-    axios.get("/login/check").then((loginresponse) => {
-      if (loginresponse.data.isLoggedIn) {
+    axios.get("/login/check")
+      .then((loginresponse) => {
+        if (loginresponse.data.isLoggedIn) {
           setIsLoggedIn(loginresponse.data.isLoggedIn);
-        axios.get("/user/info").then((userInfoResponse) => {
-          setUserInfo(userInfoResponse.data);
-        });
-      }
-      else navigate("/login");
-    });
+          axios.get("/user/info").then((userInfoResponse) => {
+            setUsername(userInfoResponse.data);
+          });
+        }
+      })
+      .catch(function(error) {
+        console.log(error.toJSON());
+      });
   }, []);
 
   useEffect(() => {
