@@ -58,17 +58,10 @@ public class LPVSLoginCheckService {
         if (findMemberOptional.isPresent()) {
             return findMemberOptional.get();
         } else {
-            synchronized (this) {
-                findMemberOptional = memberRepository.findByEmailAndProvider(email, provider);
-                if (findMemberOptional.isPresent()) {
-                    return findMemberOptional.get();
-                } else {
-                    LPVSMember newMember = new LPVSMember();
-                    newMember.setJoin(name, email, provider);
-                    memberRepository.save(newMember);
-                    return newMember;
-                }
-            }
+            LPVSMember newMember = new LPVSMember();
+            newMember.setJoin(name, email, provider);
+            memberRepository.save(newMember);
+            return newMember;
         }
     }
 }
