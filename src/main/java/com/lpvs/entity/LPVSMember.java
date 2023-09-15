@@ -17,7 +17,7 @@ import javax.persistence.*;
 @Getter @NoArgsConstructor
 @DynamicUpdate
 @Entity
-@Table(name = "member", uniqueConstraints = @UniqueConstraint(columnNames = {"email", "provider"}))
+@Table(name = "member", schema = "lpvs", indexes = {@Index(name = "unq_member", columnList = "email, provider", unique = true)})
 public class LPVSMember {
 
     @Id
