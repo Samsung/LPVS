@@ -30,7 +30,6 @@ public class SecurityConfig {
     @Value("${cors.allowed-origin}")
     private String corsAllowedOrigin;
 
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
