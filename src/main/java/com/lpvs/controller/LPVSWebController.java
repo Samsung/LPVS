@@ -39,12 +39,14 @@ public class LPVSWebController {
         this.licenseRepository = licenseRepository;
         this.lpvsLoginCheckService = LPVSLoginCheckService;
     }
+
     @GetMapping("user/info")
     @ResponseBody
     public LPVSMember personalInfoSettings(Authentication authentication) {
         lpvsLoginCheckService.loginVerification(authentication);
         return lpvsLoginCheckService.getMemberFromMemberMap(authentication);
     }
+
     @GetMapping("login/check")
     @ResponseBody
     public LPVSLoginMember loginMember(Authentication authentication) {

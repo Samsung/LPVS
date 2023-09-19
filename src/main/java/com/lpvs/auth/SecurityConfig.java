@@ -8,6 +8,7 @@
 package com.lpvs.auth;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -23,6 +24,13 @@ public class SecurityConfig {
 
     private final OAuthService oAuthService;
 
+    @Value("${frontend.main-page.url}")
+    private String frontendMainPageUrl;
+
+    @Value("${cors.allowed-origin}")
+    private String corsAllowedOrigin;
+
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -33,7 +41,7 @@ public class SecurityConfig {
                 .and()
                 .logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/oauth/logout"))
-                .logoutSuccessUrl("http://localhost:3000")
+                .logoutSuccessUrl(frontendMainPageUrl)
                 .invalidateHttpSession(true)
                 .clearAuthentication(true)
                 .and()
@@ -42,7 +50,7 @@ public class SecurityConfig {
                 .and()
                 .oauth2Login()
                 .successHandler(new MyAuthenticationSuccessHandler())
-                .defaultSuccessUrl("http://localhost:3000", true)
+                .defaultSuccessUrl(frontendMainPageUrl, true)
                 .userInfoEndpoint()
                 .userService(oAuthService);
 
@@ -52,7 +60,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin("http://localhost:3000");
+        configuration.addAllowedOrigin(corsAllowedOrigin);
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");
         configuration.setAllowCredentials(true);
