@@ -14,10 +14,12 @@ import com.lpvs.repository.LPVSLicenseRepository;
 import com.lpvs.repository.LPVSMemberRepository;
 import com.lpvs.repository.LPVSPullRequestRepository;
 import com.lpvs.service.LPVSLoginCheckService;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -58,6 +60,21 @@ public class LPVSWebController {
         } else {
             return new LPVSLoginMember(!isLoggedIn, null);
         }
+    }
+
+    @CrossOrigin("cors.allowed-origin")
+    @PostMapping("user/update")
+    public ResponseEntity<LPVSMember> postSettingTest(@RequestBody Map<String, String> map, Authentication authentication) {
+        lpvsLoginCheckService.loginVerification(authentication);
+        LPVSMember findMember = lpvsLoginCheckService.getMemberFromMemberMap(authentication);
+        try {
+            findMember.setNickname(map.get("nickname"));
+            findMember.setOrganization(map.get("organization"));
+            memberRepository.saveAndFlush(findMember);
+        } catch (DataIntegrityViolationException e) {
+            throw new IllegalArgumentException("DuplicatedKeyException");
+        }
+        return ResponseEntity.ok().body(findMember);
     }
 
 }
