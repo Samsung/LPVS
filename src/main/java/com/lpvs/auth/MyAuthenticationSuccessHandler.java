@@ -7,6 +7,7 @@
 
 package com.lpvs.auth;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -21,8 +22,10 @@ import java.nio.charset.StandardCharsets;
 
 @Component
 public class MyAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
+    @Value("${frontend.main-page.url:}")
+    private String frontendMainPageUrl;
 
-    String REDIRECT_URI = "http://localhost:3000/login/callback";
+    private String REDIRECT_URI = frontendMainPageUrl+"/login/callback";
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {

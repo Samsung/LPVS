@@ -62,7 +62,6 @@ public class LPVSWebController {
         }
     }
 
-    @CrossOrigin("cors.allowed-origin")
     @PostMapping("user/update")
     public ResponseEntity<LPVSMember> postSettingTest(@RequestBody Map<String, String> map, Authentication authentication) {
         lpvsLoginCheckService.loginVerification(authentication);

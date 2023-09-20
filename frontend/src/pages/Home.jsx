@@ -10,6 +10,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import "../css/Home_style.css";
 
+export const LPVS_SERVER = process.env.REACT_APP_LPVS_SERVER;
 export const Home = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState("");

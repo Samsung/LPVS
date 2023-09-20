@@ -10,7 +10,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import "../css/User_style.css";
-
+import { LPVS_SERVER } from "./Home";
 
 export const User = () => {
 
@@ -141,7 +141,7 @@ export const User = () => {
             <div className="overlap-group">
               <div className="logout-button">
                 <div className="overlap-group-2">
-                  <div className="text-wrapper"><a style={{color:"black", textDecoration:"none"}} href = "http://localhost:7896/oauth/logout"> Logout </a></div>
+                  <div className="text-wrapper"><a style={{color:"black", textDecoration:"none"}} href = {LPVS_SERVER+"/oauth/logout"}> Logout </a></div>
                   <div className="logout-rect" />
                 </div>
               </div>

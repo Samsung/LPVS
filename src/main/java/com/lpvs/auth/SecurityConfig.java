@@ -24,10 +24,10 @@ public class SecurityConfig {
 
     private final OAuthService oAuthService;
 
-    @Value("${frontend.main-page.url}")
+    @Value("${frontend.main-page.url:/}")
     private String frontendMainPageUrl;
 
-    @Value("${cors.allowed-origin}")
+    @Value("${cors.allowed-origin:}")
     private String corsAllowedOrigin;
 
     @Bean
@@ -67,5 +67,4 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
-
 }
