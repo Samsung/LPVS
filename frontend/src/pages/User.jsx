@@ -10,7 +10,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import "../css/User_style.css";
-
+import { LPVS_SERVER } from "./Home";
 
 export const User = () => {
 
@@ -18,6 +18,7 @@ export const User = () => {
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userInfo, setUserInfo] = useState(null);
+  const [userInfoChanged, setUserInfoChanged] = useState(false);
 
   const [isEditing_nickname, setIsEditing_nickname] = useState(false);
   const [isEditing_organization, setIsEditing_organization] = useState(false);
@@ -26,8 +27,6 @@ export const User = () => {
     nickname: "",
     organization: "",
   });
-  console.log(userInfo)
-
   
   useEffect(() => {
     axios.get("/login/check")
@@ -74,17 +73,18 @@ export const User = () => {
       return axios.get("/user/info");
     })
     .then((userInfoResponse) => {
+      setUserInfoChanged(true);
+      setIsEditing_nickname(false)
+      setIsEditing_organization(false)
+  
       setUserInfo(userInfoResponse.data);
       console.log(userInfoResponse.data);
-  
-      setUserInfoChanged(true);
-  
+
       if(!editedUserInfo.organization){
         alert(`User information has been updated.\nGitHubID: ${editedUserInfo.nickname}`);
       } else {
         alert(`User information has been updated.\nGitHubID: ${editedUserInfo.nickname}\nOrganization: ${editedUserInfo.organization}`);
       }
-      window.location.reload(true);
     })
     .catch((error) => {
       if (error.response && error.response.status === 409) {
@@ -94,11 +94,6 @@ export const User = () => {
       }
     });
   };
-  
-  const [userInfoChanged, setUserInfoChanged] = useState(false);
-
-  console.log(editedUserInfo)
-
 
   const handleUsernameChange = (event) => {
     setEditedUserInfo(prevState => ({
@@ -119,7 +114,7 @@ export const User = () => {
 
     if (!userInfo?.nickname) {
       alert('To use service, You must enter a GitHub ID.');
-      navigate('/user/info');
+      navigate('/user/setting');
     } else {
       navigate('/home');
     }
@@ -141,7 +136,7 @@ export const User = () => {
             <div className="overlap-group">
               <div className="logout-button">
                 <div className="overlap-group-2">
-                  <div className="text-wrapper"><a style={{color:"black", textDecoration:"none"}} href = "http://localhost:7896/oauth/logout"> Logout </a></div>
+                  <div className="text-wrapper"><a style={{color:"black", textDecoration:"none"}} href = {LPVS_SERVER+"/oauth/logout"}> Logout </a></div>
                   <div className="logout-rect" />
                 </div>
               </div>
@@ -266,7 +261,7 @@ export const User = () => {
                       <div className="text-wrapper-16">
                       <span style={{ color: "black", textDecoration: "none" }}>
                         <Link
-                          to={"/user/info"}
+                          to={"/user/setting"}
                           style={{ color: "black", textDecoration: "none" }}
                         >
                           {userInfo?.name ? (

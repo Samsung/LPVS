@@ -15,6 +15,7 @@ import com.lpvs.repository.LPVSMemberRepository;
 import com.lpvs.repository.LPVSPullRequestRepository;
 import com.lpvs.service.LPVSLoginCheckService;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -24,7 +25,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 @Controller
-public class LPVSWebController {
+public class LPVSWebController implements ErrorController {
     private LPVSMemberRepository memberRepository;
     private LPVSDetectedLicenseRepository detectedLicenseRepository;
     private LPVSPullRequestRepository lpvsPullRequestRepository;
@@ -62,7 +63,6 @@ public class LPVSWebController {
         }
     }
 
-    @CrossOrigin("cors.allowed-origin")
     @PostMapping("user/update")
     public ResponseEntity<LPVSMember> postSettingTest(@RequestBody Map<String, String> map, Authentication authentication) {
         lpvsLoginCheckService.loginVerification(authentication);
@@ -77,4 +77,8 @@ public class LPVSWebController {
         return ResponseEntity.ok().body(findMember);
     }
 
+    @GetMapping("error")
+    public String redirect(){
+        return "index.html";
+    }
 }
