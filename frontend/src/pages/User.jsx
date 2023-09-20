@@ -18,6 +18,7 @@ export const User = () => {
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userInfo, setUserInfo] = useState(null);
+  const [userInfoChanged, setUserInfoChanged] = useState(false);
 
   const [isEditing_nickname, setIsEditing_nickname] = useState(false);
   const [isEditing_organization, setIsEditing_organization] = useState(false);
@@ -26,8 +27,6 @@ export const User = () => {
     nickname: "",
     organization: "",
   });
-  console.log(userInfo)
-
   
   useEffect(() => {
     axios.get("/login/check")
@@ -74,17 +73,18 @@ export const User = () => {
       return axios.get("/user/info");
     })
     .then((userInfoResponse) => {
+      setUserInfoChanged(true);
+      setIsEditing_nickname(false)
+      setIsEditing_organization(false)
+  
       setUserInfo(userInfoResponse.data);
       console.log(userInfoResponse.data);
-  
-      setUserInfoChanged(true);
-  
+
       if(!editedUserInfo.organization){
         alert(`User information has been updated.\nGitHubID: ${editedUserInfo.nickname}`);
       } else {
         alert(`User information has been updated.\nGitHubID: ${editedUserInfo.nickname}\nOrganization: ${editedUserInfo.organization}`);
       }
-      window.location.reload(true);
     })
     .catch((error) => {
       if (error.response && error.response.status === 409) {
@@ -94,11 +94,6 @@ export const User = () => {
       }
     });
   };
-  
-  const [userInfoChanged, setUserInfoChanged] = useState(false);
-
-  console.log(editedUserInfo)
-
 
   const handleUsernameChange = (event) => {
     setEditedUserInfo(prevState => ({
