@@ -114,7 +114,7 @@ export const User = () => {
 
     if (!userInfo?.nickname) {
       alert('To use service, You must enter a GitHub ID.');
-      navigate('/user/info');
+      navigate('/user/setting');
     } else {
       navigate('/home');
     }
@@ -261,7 +261,7 @@ export const User = () => {
                       <div className="text-wrapper-16">
                       <span style={{ color: "black", textDecoration: "none" }}>
                         <Link
-                          to={"/user/info"}
+                          to={"/user/setting"}
                           style={{ color: "black", textDecoration: "none" }}
                         >
                           {userInfo?.name ? (

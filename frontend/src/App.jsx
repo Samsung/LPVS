@@ -19,7 +19,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/home" element={<Home />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/user/info" element={<User />} />
+          <Route path="/user/setting" element={<User />} />
         </Routes>
       </div>
     </BrowserRouter>
