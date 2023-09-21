@@ -173,6 +173,30 @@
   width: 71px;
 }
 
+.home .text-wrapper-7 {
+  color: #000000;
+  font-family: "Inter-Regular", Helvetica;
+  font-size: 30px;
+  font-weight: 400;
+  left: 320px;
+  letter-spacing: 0;
+  line-height: normal;
+  position: absolute;
+  top: 3px;
+  white-space: nowrap;
+  width: 104px;
+}
+
+.home .profile-border {
+  background-color: #d9d9d9;
+  height: 3px;
+  left: 104px;
+  position: absolute;
+  top: 20px;
+  transform: rotate(-90deg);
+  width: 40px;
+}
+
 .home .LPVS {
   height: 96px;
   left: 0;

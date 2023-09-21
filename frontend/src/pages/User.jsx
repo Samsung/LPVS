@@ -275,6 +275,14 @@ export const User = () => {
                         </div>
                 </div>
               </div>
+              <div className="text-wrapper-18">
+                <Link
+                  to={`/history/send/${userInfo?.nickname}`}
+                  style={{ color: 'black', textDecoration: 'none' }}
+                  onClick={handleHistoryLinkClick}>
+                  History
+                </Link>
+              </div>
           </div>
           <Link to="/home" style={{ color: 'black', textDecoration: 'none' }}>
             <img
