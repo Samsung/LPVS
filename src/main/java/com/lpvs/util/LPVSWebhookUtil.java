@@ -38,6 +38,9 @@ public class LPVSWebhookUtil {
         webhookConfig.setHeadCommitSHA(json.getAsJsonObject("pull_request")
                                             .getAsJsonObject("head")
                                             .get("sha").getAsString());
+
+        webhookConfig.setSender(json.getAsJsonObject("sender").get("login").getAsString());
+        webhookConfig.setOwner(json.getAsJsonObject("pull_request").getAsJsonObject("head").getAsJsonObject("repo").getAsJsonObject("owner").get("login").getAsString());
         webhookConfig.setAttempts(0);
         return webhookConfig;
     }
