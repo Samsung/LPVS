@@ -6,6 +6,7 @@
  */
 
 package com.lpvs.entity.history;
+
 import com.lpvs.entity.LPVSPullRequest;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

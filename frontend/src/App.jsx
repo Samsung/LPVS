@@ -21,7 +21,6 @@ function App() {
           <Route path="/home" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/user/setting" element={<User />} />
-          <Route path="/user/setting" element={<User />} />
           <Route path="/history/:type/:name" element={<History />} />
         </Routes>
       </div>

@@ -109,6 +109,17 @@ export const User = () => {
     }));
   };
 
+  const handleHistoryLinkClick = (event) => {
+    event.preventDefault();
+
+    if (!userInfo?.nickname) {
+      alert('To use service, You must enter a GitHub ID.');
+      navigate('/user/setting');
+    } else {
+      navigate(`/history/send/${userInfo.nickname}`);
+    }
+  };
+
   const handleLogoClick = (event) => {
     event.preventDefault();
 
@@ -255,6 +266,7 @@ export const User = () => {
           <div className="menu-line" />
           <div className="menu">
             <div className="overlap-6">
+            <div className="profile-border" />
                 <div className="profile">
                   <div className="overlap-group-3">
                     <img className="image" alt="Image" src="/image/png/ProfileImg.png" />

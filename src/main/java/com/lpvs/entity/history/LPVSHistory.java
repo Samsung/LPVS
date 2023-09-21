@@ -19,7 +19,6 @@ public class LPVSHistory {
     private String url; // pr
     private String status; //pr
     private String sender;
-
     private String pullNumber; // pull/number
     private Boolean hasIssue;
 }

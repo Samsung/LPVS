@@ -19,6 +19,7 @@ import java.util.Date;
 public interface LPVSPullRequestRepository extends JpaRepository<LPVSPullRequest, Long> {
     @Query(value = "SELECT now();", nativeQuery = true)
     Date getNow();
+
     @Query(value = "select pr from LPVSPullRequest pr where pr.repositoryName like :name%")
     Page<LPVSPullRequest> findPullRequestByNameLike(@Param("name") String name, Pageable pageable);
 

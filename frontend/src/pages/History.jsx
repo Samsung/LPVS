@@ -6,10 +6,10 @@
  */
 
 import {React,useEffect, useState} from "react";
+import axios from 'axios';
 import { Link, useParams, useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import "../css/History_style.css";
-import axios from 'axios';
 
 export const History= () => {
 
@@ -34,16 +34,16 @@ export const History= () => {
             .then((userInfoResponse) => {
               setUsername(userInfoResponse.data);
             })
-            .catch((error) => {
-              console.log("Error fetching user info:", error);
+            .catch(function(error) {
+              console.log(error.toJSON());
               navigate("/login");
             });
         } else {
           navigate("/login");
         }
       })
-      .catch((error) => {
-        console.log("Error checking login status:", error);
+      .catch(function(error) {
+        console.log(error.toJSON());
         navigate("/login");
       });
   }, []);
@@ -55,11 +55,11 @@ export const History= () => {
         console.log(response.data)
           setlpvsHistories(response.data);
       })
-      .catch((error) => {
-        console.log(error);
-        const userChoice = window.confirm("Please enter the Organization information on the User page.");
+      .catch(function(error) {
+        console.log(error.toJSON());
+        const userChoice = window.confirm("Please enter the GitHub ID on the User page.");
         if (userChoice) {
-          navigate('/user/info');
+          navigate('/user/setting');
         } else {
           navigate(`/history/send/${username?.nickname}?page=0`);
         }
@@ -95,7 +95,6 @@ export const History= () => {
   const navigateToSend = () => {
       navigate(`/history/send/${username?.nickname}?page=0`);
   };
-
 
    const [pageCount,setPageCount] = useState(1);
    const [currentPage, setCurrentPage] = useState(1);
@@ -290,7 +289,6 @@ export const History= () => {
             </Link>
             ): null}
 
-
             {lpvsHistories.lpvsHistories[1]?.status !== undefined ? (   
               <Link to={`/result/${lpvsHistories.lpvsHistories[1]?.pullRequestId}`} style={{ color: "black", textDecoration: "none"}}>
             <div className="history-3">
@@ -350,14 +348,20 @@ export const History= () => {
               <div className="profile">
                 <div className="overlap-group-2">
                   <img className="image" alt="Image" src="/image/png/ProfileImg.png" />
-                  <div className="text-wrapper-23"><Link to={"/user/info"} style={{ color: "black", textDecoration: "none"}}>{username.name}</Link></div>
+                  <div className="text-wrapper-23"><Link to={"/user/setting"} style={{ color: "black", textDecoration: "none"}}>{username.name}</Link></div>
                 </div>
               </div>
             </div>
-              <div className="text-wrapper-22"><Link to={`/history/send/${username?.nickname}?page=0`} style={{ color: "black", textDecoration: "none"}}>History</Link></div>
-            <Link to={"/home"} style={{ color: "black", textDecoration: "none"}}>
-          <img className="LPVS" alt="Lpvs" src="/image/png/LPVS_logo_bar.png" />
-            </Link>
+              <div className="text-wrapper-22">
+                <Link 
+                to={`/history/send/${username?.nickname}?page=0`} 
+                style={{ color: "black", textDecoration: "none"}}>History
+                </Link>
+              </div>
+                <Link to={"/home"} 
+                style={{ color: "black", textDecoration: "none"}}>
+                <img className="LPVS" alt="img" src="/image/png/LPVS_logo_bar.png" />
+                </Link>
           </div>
         </div>
       </div>
