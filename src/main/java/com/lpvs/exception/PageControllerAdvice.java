@@ -26,6 +26,13 @@ public class PageControllerAdvice {
         return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
     }
 
+    @ExceptionHandler(WrongAccessException.class)
+    public ResponseEntity<ErrorResponse> wrongAccessHandle(WrongAccessException e) {
+        log.error("wrongAccess");
+        errorResponse = new ErrorResponse(e.getMessage(), HttpStatus.FORBIDDEN.name(), HttpStatus.FORBIDDEN.value());
+        return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+    }
+
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErrorResponse> handleSQLException(IllegalArgumentException e) {
         log.error("duplicated key exception" + e.getMessage());
