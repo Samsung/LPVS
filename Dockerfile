@@ -1,10 +1,3 @@
-FROM node:18 AS frontend
-
-WORKDIR /frontend
-COPY frontend .
-RUN npm install
-RUN npm run build
-
 # Base image for building lpvs lib
 FROM openjdk:11 AS builder
 
@@ -38,7 +31,6 @@ EXPOSE 7896
 
 # Set workdir for running jar
 WORKDIR /root/
-COPY --from=frontend /frontend/build/ ./static/
 COPY --from=builder /root/target/lpvs-*.jar ./lpvs.jar
 
 # Run application in container

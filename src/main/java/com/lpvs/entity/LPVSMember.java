@@ -17,7 +17,7 @@ import javax.persistence.*;
 @Getter @NoArgsConstructor
 @DynamicUpdate
 @Entity
-@Table(name = "member", schema = "lpvs", indexes = {@Index(name = "unq_member", columnList = "email, provider", unique = true)})
+@Table(name = "member")
 public class LPVSMember {
 
     @Id
@@ -61,11 +61,5 @@ public class LPVSMember {
 
     public void setOrganization(String organization) {
         this.organization = organization;
-    }
-
-    public void setJoin(String name, String email, String provider) {
-        this.name = name;
-        this.email = email;
-        this.provider = provider;
     }
 }

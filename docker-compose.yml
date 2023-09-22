@@ -10,8 +10,6 @@ services:
     ports:
       - "7896:7896"
     environment:
-#      - frontend.main-page.url=http://localhost:3000
-#      - cors.allowed-origin=http://localhost:3000
       - spring.datasource.url=jdbc:mysql://mysqldb:3306/lpvs
       - spring.datasource.username=root
       - spring.datasource.password=
@@ -19,17 +17,13 @@ services:
       - github.login=
       - github.token=
       - github.api.url=https://api.github.com 
-      - github.secret=LPVS
-      - spring.security.oauth2.client.registration.google.client-id=GOOGLE_CLIENT_ID
-      - spring.security.oauth2.client.registration.google.client-secret=GOOGLE_CLIENT_SECRET
-      - spring.security.oauth2.client.registration.google.redirect-uri=http://localhost:7896/login/oauth2/code/google
-      - spring.security.oauth2.client.registration.google.scope=profile, email
+      - github.secret=LPVS 
     depends_on:
       mysqldb:
         condition: service_healthy
     networks:
       - lpvs
-
+      
   mysqldb:
     image: mysql:latest
     restart: always
@@ -42,7 +36,7 @@ services:
       timeout: 20s
       retries: 10
     volumes:
-      #- ./mysql-lpvs-data:/var/lib/mysql # db storage
+      - ./mysql-lpvs-data:/var/lib/mysql # db storage
       - ./src/main/resources/database_dump.sql:/docker-entrypoint-initdb.d/init.sql # init for creating db lpvs with predifined tables
       ##- ./conf/my.cnf:/etc/mysql/my.cnf # custom mysql config- if needed 
     networks:

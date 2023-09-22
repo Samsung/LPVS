@@ -52,6 +52,7 @@ public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2
         return new DefaultOAuth2User(Collections.singleton(new SimpleGrantedAuthority("USER")),
                 customAttribute,
                 userNameAttributeName);
+
     }
 
     private Map<String, Object> customAttribute(Map<String, Object> attributes, String userNameAttributeName, MemberProfile memberProfile, String registrationId) {
@@ -61,6 +62,7 @@ public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2
         customAttribute.put("name", memberProfile.getName());
         customAttribute.put("email", memberProfile.getEmail());
         return customAttribute;
+
     }
 
     private LPVSMember saveOrUpdate(MemberProfile memberProfile) {
@@ -71,4 +73,5 @@ public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2
 
         return lpvsMemberRepository.save(lpvsMember);
     }
+
 }

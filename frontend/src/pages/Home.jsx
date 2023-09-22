@@ -10,24 +10,19 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import "../css/Home_style.css";
 
-export const LPVS_SERVER = process.env.REACT_APP_LPVS_SERVER;
 export const Home = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState("");
 
   useEffect(() => {
-    axios.get("/login/check")
-      .then((loginresponse) => {
-        if (loginresponse.data.isLoggedIn) {
-          setIsLoggedIn(loginresponse.data.isLoggedIn);
-          axios.get("/user/info").then((userInfoResponse) => {
-            setUsername(userInfoResponse.data);
-          });
-        }
-      })
-      .catch(function(error) {
-        console.log(error.toJSON());
-      });
+    axios.get("/login/check").then((loginresponse) => {
+      if (loginresponse.data.isLoggedIn) {
+        setIsLoggedIn(loginresponse.data.isLoggedIn);
+        axios.get("/user/info").then((userInfoResponse) => {
+          setUsername(userInfoResponse.data);
+        });
+      }
+    });
   }, []);
 
   function truncateName(name) {
@@ -37,6 +32,7 @@ export const Home = () => {
       return name.length > 5 ? `${name.substring(0, 5)}.` : name;
     }
   }
+
 
   return (
     <div className="home">
@@ -95,7 +91,7 @@ export const Home = () => {
                     {isLoggedIn ? (
                       <span style={{ color: "black", textDecoration: "none" }}>
                         <Link
-                          to={"/user/setting"}
+                          to={"/user/info"}
                           style={{ color: "black", textDecoration: "none" }}
                         >
                           {username?.name ? (

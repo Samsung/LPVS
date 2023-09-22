@@ -132,7 +132,6 @@ public class LPVSScanossDetectService {
                         .replaceAll("],", "\"],")
                         .replaceAll("\"\\{\"","{\"")
                         .replaceAll("\"}\"]", "\"}]")
-                        .replaceAll("\\[\"\"\\]", "[]")
                         .replaceAll("incompatible_with\" : (\".*?\"), \"name", "incompatible_with\" : \\[$1\\], \"name")
                         ;
                 content = content.substring(1, content.length() - 1);
