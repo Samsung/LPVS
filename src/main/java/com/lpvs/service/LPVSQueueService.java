@@ -138,6 +138,8 @@ public class LPVSQueueService {
                 pullRequest.setRepositoryName(LPVSWebhookUtil.getRepositoryOrganization(webhookConfig) + "/" + LPVSWebhookUtil.getRepositoryName(webhookConfig));
                 pullRequest.setDate(webhookConfig.getDate());
                 pullRequest.setStatus(LPVSPullRequestStatus.SCANNING.toString());
+                pullRequest.setSender(webhookConfig.getSender());
+                pullRequest.setOwner(webhookConfig.getOwner());
                 pullRequest = lpvsPullRequestRepository.saveAndFlush(pullRequest);
                 log.debug("ID: " + pullRequest.getId() + " " + pullRequest.toString());
 
