@@ -36,13 +36,19 @@ public class WebHookUtilTest {
                         "\"html_url\": \"https://github.com/Samsung/LPVS/pull/18\", " +
                         "\"head\": {" +
                             "\"repo\": {" +
-                                "\"fork\": true, " +
+                                "\"owner\": {" +
+                                    "\"login\": \"Samsung\"" +
+                                "}," +
+                        "\"fork\": true, " +
                                 "\"html_url\": \"https://github.com/o-kopysov/LPVS/tree/utests\"" +
                             "}, " +
                             "\"sha\": \"edde69ecb8e8a88dde09fa9789e2c9cab7cf7cf9\", " +
                             "\"ref\": \"o-kopysov:utests\"" +
                         "}, " +
                         "\"url\": \"https://api.github.com/repos/Samsung/LPVS/pulls/18\"" +
+                    "}," +
+                    "\"sender\": {" +
+                        "\"login\": \"o-kopysov\"" +
                     "}" +
                 "}";
 
@@ -53,6 +59,8 @@ public class WebHookUtilTest {
             expected.setPullRequestAPIUrl("https://api.github.com/repos/Samsung/LPVS/pulls/18");
             expected.setRepositoryUrl("https://github.com/Samsung/LPVS");
             expected.setUserId("GitHub hook");
+            expected.setSender("o-kopysov");
+            expected.setOwner("Samsung");
             expected.setHeadCommitSHA("edde69ecb8e8a88dde09fa9789e2c9cab7cf7cf9");
             expected.setAttempts(0);
         }
@@ -84,6 +92,9 @@ public class WebHookUtilTest {
                         "\"html_url\": \"https://github.com/Samsung/LPVS/pull/18\", " +
                         "\"head\": {" +
                             "\"repo\": {" +
+                                "\"owner\": {" +
+                                    "\"login\": \"Samsung\"" +
+                                "}," +
                                 "\"fork\": false, " +
                                 "\"html_url\": \"https://github.com/o-kopysov/LPVS/tree/utests\"" +
                             "}, " +
@@ -91,6 +102,9 @@ public class WebHookUtilTest {
                             "\"ref\": \"o-kopysov:utests\"" +
                         "}, " +
                         "\"url\": \"https://api.github.com/repos/Samsung/LPVS/pulls/18\"" +
+                    "}," +
+                    "\"sender\": {" +
+                        "\"login\": \"o-kopysov\"" +
                     "}" +
                 "}";
 
@@ -101,6 +115,8 @@ public class WebHookUtilTest {
             expected.setPullRequestAPIUrl("https://api.github.com/repos/Samsung/LPVS/pulls/18");
             expected.setRepositoryUrl("https://github.com/Samsung/LPVS");
             expected.setUserId("GitHub hook");
+            expected.setSender("o-kopysov");
+            expected.setOwner("Samsung");
             expected.setHeadCommitSHA("edde69ecb8e8a88dde09fa9789e2c9cab7cf7cf9");
             expected.setAttempts(0);
         }

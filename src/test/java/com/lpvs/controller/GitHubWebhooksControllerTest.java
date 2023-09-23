@@ -78,6 +78,9 @@ public class GitHubWebhooksControllerTest {
                     "\"html_url\": \"https://github.com/Samsung/LPVS/pull/18\", " +
                     "\"head\": {" +
                         "\"repo\": {" +
+                            "\"owner\": {" +
+                                "\"login\": \"Samsung\"" +
+                            "}," +
                             "\"fork\": true, " +
                             "\"html_url\": \"https://github.com/o-kopysov/LPVS/tree/utests\"" +
                         "}, " +
@@ -85,6 +88,9 @@ public class GitHubWebhooksControllerTest {
                         "\"ref\": \"o-kopysov:utests\"" +
                     "}, " +
                     "\"url\": \"https://api.github.com/repos/Samsung/LPVS/pulls/18\"" +
+                "}," +
+                "\"sender\": {" +
+                    "\"login\": \"o-kopysov\"" +
                 "}" +
             "}";
 
