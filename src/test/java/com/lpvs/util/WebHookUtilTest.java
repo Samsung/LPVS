@@ -39,7 +39,7 @@ public class WebHookUtilTest {
                                 "\"owner\": {" +
                                     "\"login\": \"Samsung\"" +
                                 "}," +
-                        "\"fork\": true, " +
+                                "\"fork\": true, " +
                                 "\"html_url\": \"https://github.com/o-kopysov/LPVS/tree/utests\"" +
                             "}, " +
                             "\"sha\": \"edde69ecb8e8a88dde09fa9789e2c9cab7cf7cf9\", " +
