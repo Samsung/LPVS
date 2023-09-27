@@ -36,6 +36,15 @@ public enum OAuthAttributes {
         memberProfile.setName((String) kakaoProfile.get("nickname"));
         memberProfile.setEmail((String) kakaoAccount.get("email"));
         return memberProfile;
+    }),
+
+    GITHUB("github", (attributes) -> {
+        MemberProfile memberProfile = new MemberProfile();
+        memberProfile.setName((String) attributes.get("name"));
+        // TODO: The email from Github can be null, so place the login value for a while.
+        //       Changing unique key from the member table is required.
+        memberProfile.setEmail((String) attributes.get("login"));
+        return memberProfile;
     });
 
     private final String registrationId;
