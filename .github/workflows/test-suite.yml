@@ -26,7 +26,7 @@ jobs:
       run: mvn -B package -Pcoverage --file pom.xml
     - name: Generate JaCoCo badge
       id: jacoco
-      uses: cicirello/jacoco-badge-generator@a0c1eb19a496308187341ed2a736ef5df78b7003
+      uses: cicirello/jacoco-badge-generator@f33476a5a3fd5a4f77cb5eef2ebe728c1dd5b921
       with:
         badges-directory: badges
         generate-summary: true
