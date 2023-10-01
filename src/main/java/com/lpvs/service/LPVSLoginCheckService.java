@@ -53,26 +53,36 @@ public class LPVSLoginCheckService {
         }
     }
 
-    @Transactional
     public LPVSMember getMemberFromMemberMap(Authentication authentication) {
         Map<String, Object> memberMap = getOauthLoginMemberMap(authentication);
-        String name = (String) memberMap.get("name");
         String email = (String) memberMap.get("email");
         String provider = (String) memberMap.get("provider");
 
-        Optional<LPVSMember> findMemberOptional = memberRepository.findByEmailAndProvider(email, provider);
+        LPVSMember findMember = memberRepository.findByEmailAndProvider(email, provider).get();
 
-        if (findMemberOptional.isPresent()) {
-            return findMemberOptional.get();
-        } else {
-            LPVSMember newMember = new LPVSMember();
-            newMember.setJoin(name, email, provider);
-            memberRepository.save(newMember);
-            return newMember;
-        }
+        return findMember;
     }
+
+//    @Transactional
+//    public LPVSMember getMemberFromMemberMap(Authentication authentication) {
+//        Map<String, Object> memberMap = getOauthLoginMemberMap(authentication);
+//        String name = (String) memberMap.get("name");
+//        String email = (String) memberMap.get("email");
+//        String provider = (String) memberMap.get("provider");
+//
+//        Optional<LPVSMember> findMemberOptional = memberRepository.findByEmailAndProvider(email, provider);
+//
+//        if (findMemberOptional.isPresent()) {
+//            return findMemberOptional.get();
+//        } else {
+//            LPVSMember newMember = new LPVSMember();
+//            newMember.setJoin(name, email, provider);
+//            memberRepository.save(newMember);
+//            return newMember;
+//        }
+//    }
     public HistoryPageEntity pathCheck(String type, String name,
-                                       Pageable pageable, Authentication authentication) {
+                                Pageable pageable, Authentication authentication) {
 
         loginVerification(authentication);
         LPVSMember findMember = getMemberFromMemberMap(authentication);
@@ -83,11 +93,11 @@ public class LPVSLoginCheckService {
 
         if ((type.equals("own") && findNickName.equals(name)) ||
                 (type.equals("org") && findOrganization.equals(name))) {
-            prPage = lpvsPullRequestRepository.findPullRequestByNameLike(name + "/", pageable);
-            count = lpvsPullRequestRepository.CountByPullRequestWhereNameLike(name + "/");
+            prPage = lpvsPullRequestRepository.findByPullRequestBase(name, pageable);
+            count = lpvsPullRequestRepository.CountByPullRequestBase(name);
         } else if (type.equals("send") && findNickName.equals(name)) {
-            prPage = lpvsPullRequestRepository.findBySender(name, pageable);
-            count = lpvsPullRequestRepository.CountBySender(name);
+            prPage = lpvsPullRequestRepository.findBySenderOrPullRequestHead(name, pageable);
+            count = lpvsPullRequestRepository.CountBySenderOrPullRequestHead(name);
         } else {
             throw new WrongAccessException("WrongAccessException");
         }

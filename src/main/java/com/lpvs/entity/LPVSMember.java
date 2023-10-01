@@ -63,9 +63,4 @@ public class LPVSMember {
         this.organization = organization;
     }
 
-    public void setJoin(String name, String email, String provider) {
-        this.name = name;
-        this.email = email;
-        this.provider = provider;
-    }
 }

@@ -7,17 +7,19 @@
 
 package com.lpvs.controller;
 
-import com.lpvs.entity.LPVSLoginMember;
-import com.lpvs.entity.LPVSMember;
-import com.lpvs.entity.LPVSPullRequest;
+import com.lpvs.entity.*;
 import com.lpvs.entity.history.HistoryEntity;
 import com.lpvs.entity.history.HistoryPageEntity;
 import com.lpvs.entity.history.LPVSHistory;
+import com.lpvs.entity.result.LPVSResult;
+import com.lpvs.entity.result.LPVSResultFile;
+import com.lpvs.entity.result.LPVSResultInfo;
 import com.lpvs.repository.LPVSDetectedLicenseRepository;
 import com.lpvs.repository.LPVSLicenseRepository;
 import com.lpvs.repository.LPVSMemberRepository;
 import com.lpvs.repository.LPVSPullRequestRepository;
 import com.lpvs.service.LPVSLoginCheckService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -32,10 +34,12 @@ import org.springframework.web.bind.annotation.*;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Controller
+@Slf4j
 public class LPVSWebController implements ErrorController {
     private LPVSMemberRepository memberRepository;
     private LPVSDetectedLicenseRepository detectedLicenseRepository;
@@ -65,7 +69,7 @@ public class LPVSWebController implements ErrorController {
     public LPVSLoginMember loginMember(Authentication authentication) {
         Map<String, Object> oauthLoginMemberMap = lpvsLoginCheckService.getOauthLoginMemberMap(authentication);
         boolean isLoggedIn = oauthLoginMemberMap == null || oauthLoginMemberMap.isEmpty();
-
+        log.info("{}", oauthLoginMemberMap);
         if (!isLoggedIn) {
             LPVSMember findMember = lpvsLoginCheckService.getMemberFromMemberMap(authentication);
             return new LPVSLoginMember(!isLoggedIn, findMember);
