@@ -31,4 +31,18 @@ public interface LPVSPullRequestRepository extends JpaRepository<LPVSPullRequest
 
     @Query(value = "select count(*) from LPVSPullRequest pr where pr.sender = :name")
     Long CountBySender(@Param("name") String name);
+
+    @Query(value = "select pr from LPVSPullRequest pr where pr.pullRequestBase = :name")
+    Page<LPVSPullRequest> findByPullRequestBase(@Param("name") String name, Pageable pageable);
+
+    @Query(value = "select count(*) from LPVSPullRequest pr where pr.pullRequestBase = :name")
+    Long CountByPullRequestBase(@Param("name") String name);
+
+    @Query(value = "select pr from LPVSPullRequest pr where pr.sender = :name or pr.pullRequestHead = :name")
+    Page<LPVSPullRequest> findBySenderOrPullRequestHead(@Param("name") String name, Pageable pageable);
+
+    @Query(value = "select count(*) from LPVSPullRequest pr where pr.sender = :name or pr.pullRequestHead = :name")
+    Long CountBySenderOrPullRequestHead(@Param("name") String name);
+
+
 }

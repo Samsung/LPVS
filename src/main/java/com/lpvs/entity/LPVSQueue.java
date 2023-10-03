@@ -57,12 +57,14 @@ public class LPVSQueue implements Serializable {
     @Column(name = "commit_sha", columnDefinition = "LONGTEXT")
     private String headCommitSHA;
 
+    @Column(name = "pull_request_head")
+    private String pullRequestHead;
+
+    @Column(name = "pull_request_base")
+    private String pullRequestBase;
+
     @Column(name = "sender")
     private String sender;
-
-    @Column(name = "owner")
-    private String owner;
-
     @Transient
     private String repositoryLicense;
 
