@@ -10,9 +10,9 @@ import java.util.List;
 @Getter @Setter @AllArgsConstructor
 public class LPVSResultInfo {
 
-    private Long id; //pr.id
-    private Date scanDate; //pr
-    private String repositoryName; //pr
-    private String status; //pr
+    private Long id;
+    private Date scanDate;
+    private String repositoryName;
+    private String status;
     private List<String> detectedLicenses;
 }

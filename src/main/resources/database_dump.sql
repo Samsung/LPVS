@@ -90,6 +90,9 @@ CREATE TABLE `pull_requests` (
   `url` longtext NOT NULL,
   `diff_url` longtext,
   `status` varchar(255) DEFAULT NULL,
+  `pull_request_head` varchar(255) NOT NULL,
+  `pull_request_base` varchar(255) NOT NULL,
+  `sender` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;

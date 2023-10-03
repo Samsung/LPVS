@@ -25,8 +25,10 @@ public class LPVSPullRequestTest {
     final String pullRequestUrl = "pulRequestUrl";
     final String pullRequestFilesUrl = "pullRequestFileUrl";
     final String status = "status";
+    final String pullRequestBase = "user";
+    final String pullRequestHead = "user";
     final String sender = "user";
-    final String owner = "user";
+
 
     @BeforeEach
     void setUp() {
@@ -37,8 +39,9 @@ public class LPVSPullRequestTest {
                 pullRequestUrl,
                 pullRequestFilesUrl,
                 status,
-                sender,
-                owner);
+                pullRequestBase,
+                pullRequestHead,
+                sender);
     }
 
     @Test

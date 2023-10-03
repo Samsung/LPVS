@@ -6,11 +6,11 @@ import lombok.Getter;
 @Getter @AllArgsConstructor
 public class LPVSResultFile {
 
-    private Long id; //dl.id
-    private String path; //dl.file_path
-    private String componentFileUrl; //dl
-    private String matchLine; //dl
-    private String matchValue; //dl
+    private Long id;
+    private String path;
+    private String componentFileUrl;
+    private String matchLine;
+    private String matchValue;
 
     private String status; //license.licenseUsage
     private String licenseSpdx; //license

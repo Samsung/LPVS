@@ -69,7 +69,6 @@ public class LPVSWebController implements ErrorController {
     public LPVSLoginMember loginMember(Authentication authentication) {
         Map<String, Object> oauthLoginMemberMap = lpvsLoginCheckService.getOauthLoginMemberMap(authentication);
         boolean isLoggedIn = oauthLoginMemberMap == null || oauthLoginMemberMap.isEmpty();
-        log.info("{}", oauthLoginMemberMap);
         if (!isLoggedIn) {
             LPVSMember findMember = lpvsLoginCheckService.getMemberFromMemberMap(authentication);
             return new LPVSLoginMember(!isLoggedIn, findMember);
