@@ -8,6 +8,7 @@
 [![RepoSize](https://img.shields.io/github/repo-size/samsung/lpvs.svg)](https://github.com/Samsung/LPVS)
 [![Release](https://img.shields.io/github/v/release/samsung/lpvs.svg)](https://github.com/Samsung/LPVS/releases)
 [![LICENSE](https://img.shields.io/github/license/samsung/lpvs.svg)](https://github.com/Samsung/LPVS/blob/main/LICENSE)
+[![Project Map](https://sourcespy.com/shield.svg)](https://sourcespy.com/github/samsunglpvs/)
 
 ## Introduction
 Open-source code [refers](https://en.wikipedia.org/wiki/Open-source_software) to software that is freely available for use, study, modification, and distribution, subject to meeting the conditions of the corresponding license. Failure to comply with the license conditions can lead to legal disputes, financial liabilities, the requirement to disclose intellectual property, and reputational damage.
