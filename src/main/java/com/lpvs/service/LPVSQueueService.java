@@ -97,6 +97,9 @@ public class LPVSQueueService {
                 pullRequest.setRepositoryName(LPVSWebhookUtil.getRepositoryOrganization(webhook) + "/" + LPVSWebhookUtil.getRepositoryName(webhook));
                 pullRequest.setDate(webhook.getDate());
                 pullRequest.setStatus(LPVSPullRequestStatus.NO_ACCESS.toString());
+                pullRequest.setPullRequestHead(webhook.getPullRequestHead());
+                pullRequest.setPullRequestBase(webhook.getPullRequestBase());
+                pullRequest.setSender(webhook.getSender());
                 pullRequest = lpvsPullRequestRepository.saveAndFlush(pullRequest);
 
                 if (webhook.getUserId().equals("GitHub hook")) {
@@ -136,6 +139,9 @@ public class LPVSQueueService {
                 pullRequest.setRepositoryName(LPVSWebhookUtil.getRepositoryOrganization(webhookConfig) + "/" + LPVSWebhookUtil.getRepositoryName(webhookConfig));
                 pullRequest.setDate(webhookConfig.getDate());
                 pullRequest.setStatus(LPVSPullRequestStatus.SCANNING.toString());
+                pullRequest.setPullRequestHead(webhookConfig.getPullRequestHead());
+                pullRequest.setPullRequestBase(webhookConfig.getPullRequestBase());
+                pullRequest.setSender(webhookConfig.getSender());
                 pullRequest = lpvsPullRequestRepository.saveAndFlush(pullRequest);
                 log.debug("ID: " + pullRequest.getId() + " " + pullRequest.toString());
 

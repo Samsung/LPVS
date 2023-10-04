@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2022, Samsung Electronics Co., Ltd. All rights reserved.
+ * Copyright (c) 2023, Samsung Electronics Co., Ltd. All rights reserved.
  *
  * Use of this source code is governed by a MIT license that can be
  * found in the LICENSE file.
@@ -34,8 +34,18 @@ public class WebHookUtilTest {
                     "}, " +
                     "\"pull_request\": {" +
                         "\"html_url\": \"https://github.com/Samsung/LPVS/pull/18\", " +
+                        "\"base\": {" +
+                            "\"repo\": {" +
+                                "\"owner\": {" +
+                                    "\"login\": \"Samsung\"" +
+                                "}" +
+                            "}" +
+                        "}, " +
                         "\"head\": {" +
                             "\"repo\": {" +
+                                "\"owner\": {" +
+                                    "\"login\": \"o-kopysov\"" +
+                                "}," +
                                 "\"fork\": true, " +
                                 "\"html_url\": \"https://github.com/o-kopysov/LPVS/tree/utests\"" +
                             "}, " +
@@ -43,6 +53,9 @@ public class WebHookUtilTest {
                             "\"ref\": \"o-kopysov:utests\"" +
                         "}, " +
                         "\"url\": \"https://api.github.com/repos/Samsung/LPVS/pulls/18\"" +
+                    "}," +
+                    "\"sender\": {" +
+                        "\"login\": \"o-kopysov\"" +
                     "}" +
                 "}";
 
@@ -53,6 +66,9 @@ public class WebHookUtilTest {
             expected.setPullRequestAPIUrl("https://api.github.com/repos/Samsung/LPVS/pulls/18");
             expected.setRepositoryUrl("https://github.com/Samsung/LPVS");
             expected.setUserId("GitHub hook");
+            expected.setPullRequestBase("Samsung");
+            expected.setPullRequestHead("o-kopysov");
+            expected.setSender("o-kopysov");
             expected.setHeadCommitSHA("edde69ecb8e8a88dde09fa9789e2c9cab7cf7cf9");
             expected.setAttempts(0);
         }
@@ -82,8 +98,18 @@ public class WebHookUtilTest {
                     "}, " +
                     "\"pull_request\": {" +
                         "\"html_url\": \"https://github.com/Samsung/LPVS/pull/18\", " +
+                        "\"base\": {" +
+                            "\"repo\": {" +
+                                "\"owner\": {" +
+                                    "\"login\": \"Samsung\"" +
+                                "}" +
+                            "}" +
+                        "}, " +
                         "\"head\": {" +
                             "\"repo\": {" +
+                                "\"owner\": {" +
+                                    "\"login\": \"o-kopysov\"" +
+                                "}," +
                                 "\"fork\": false, " +
                                 "\"html_url\": \"https://github.com/o-kopysov/LPVS/tree/utests\"" +
                             "}, " +
@@ -91,6 +117,9 @@ public class WebHookUtilTest {
                             "\"ref\": \"o-kopysov:utests\"" +
                         "}, " +
                         "\"url\": \"https://api.github.com/repos/Samsung/LPVS/pulls/18\"" +
+                    "}," +
+                    "\"sender\": {" +
+                        "\"login\": \"o-kopysov\"" +
                     "}" +
                 "}";
 
@@ -101,6 +130,9 @@ public class WebHookUtilTest {
             expected.setPullRequestAPIUrl("https://api.github.com/repos/Samsung/LPVS/pulls/18");
             expected.setRepositoryUrl("https://github.com/Samsung/LPVS");
             expected.setUserId("GitHub hook");
+            expected.setPullRequestBase("Samsung");
+            expected.setPullRequestHead("o-kopysov");
+            expected.setSender("o-kopysov");
             expected.setHeadCommitSHA("edde69ecb8e8a88dde09fa9789e2c9cab7cf7cf9");
             expected.setAttempts(0);
         }

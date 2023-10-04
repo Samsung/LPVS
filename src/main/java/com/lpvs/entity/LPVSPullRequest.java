@@ -45,6 +45,15 @@ public class LPVSPullRequest implements Serializable {
     @Column(name = "status")
     private String status;
 
+    @Column(name = "pull_request_head")
+    private String pullRequestHead;
+
+    @Column(name = "pull_request_base")
+    private String pullRequestBase;
+
+    @Column(name = "sender")
+    private String sender;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -45,6 +45,7 @@ public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2
 
         MemberProfile memberProfile = OAuthAttributes.extract(registrationId, attributes);
         memberProfile.setProvider(registrationId);
+        saveOrUpdate(memberProfile);
 
         Map<String, Object> customAttribute = customAttribute(attributes, userNameAttributeName,
                 memberProfile, registrationId);
