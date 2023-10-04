@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2023, Samsung Electronics Co., Ltd. All rights reserved.
+ * Copyright 2023 Basaeng, kyudori, hwan5180, quswjdgma83
  *
  * Use of this source code is governed by a MIT license that can be
  * found in the LICENSE file.

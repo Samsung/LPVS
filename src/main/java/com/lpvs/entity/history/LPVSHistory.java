@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2023, Samsung Electronics Co., Ltd. All rights reserved.
+ * Copyright 2023 Basaeng, kyudori, hwan5180, quswjdgma83
  *
  * Use of this source code is governed by a MIT license that can be
  * found in the LICENSE file.
@@ -13,11 +13,11 @@ import lombok.Setter;
 
 @Getter @Setter @AllArgsConstructor
 public class LPVSHistory {
-    private String scanDate; //pr
-    private String repositoryName; //pr
-    private Long pullRequestId; //pr
-    private String url; // pr
-    private String status; //pr
+    private String scanDate;
+    private String repositoryName;
+    private Long pullRequestId;
+    private String url;
+    private String status;
     private String sender;
     private String pullNumber; // pull/number
     private Boolean hasIssue;
