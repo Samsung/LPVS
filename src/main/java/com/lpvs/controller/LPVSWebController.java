@@ -57,72 +57,76 @@ public class LPVSWebController implements ErrorController {
         this.lpvsLoginCheckService = LPVSLoginCheckService;
     }
 
-    @GetMapping("user/info")
-    @ResponseBody
-    public LPVSMember personalInfoSettings(Authentication authentication) {
-        lpvsLoginCheckService.loginVerification(authentication);
-        return lpvsLoginCheckService.getMemberFromMemberMap(authentication);
-    }
+    @RequestMapping("/api/v1/web")
+    @RestController
+    class PublicInterface {
+        @GetMapping("/user/info")
+        @ResponseBody
+        public LPVSMember personalInfoSettings(Authentication authentication) {
+            lpvsLoginCheckService.loginVerification(authentication);
+            return lpvsLoginCheckService.getMemberFromMemberMap(authentication);
+        }
 
-    @GetMapping("login/check")
-    @ResponseBody
-    public LPVSLoginMember loginMember(Authentication authentication) {
-        Map<String, Object> oauthLoginMemberMap = lpvsLoginCheckService.getOauthLoginMemberMap(authentication);
-        boolean isLoggedIn = oauthLoginMemberMap == null || oauthLoginMemberMap.isEmpty();
-        if (!isLoggedIn) {
+        @GetMapping("/user/login")
+        @ResponseBody
+        public LPVSLoginMember loginMember(Authentication authentication) {
+            Map<String, Object> oauthLoginMemberMap = lpvsLoginCheckService.getOauthLoginMemberMap(authentication);
+            boolean isLoggedIn = oauthLoginMemberMap == null || oauthLoginMemberMap.isEmpty();
+            if (!isLoggedIn) {
+                LPVSMember findMember = lpvsLoginCheckService.getMemberFromMemberMap(authentication);
+                return new LPVSLoginMember(!isLoggedIn, findMember);
+            } else {
+                return new LPVSLoginMember(!isLoggedIn, null);
+            }
+        }
+
+        @PostMapping("/user/update")
+        public ResponseEntity<LPVSMember> postSettingTest(@RequestBody Map<String, String> map, Authentication authentication) {
+            lpvsLoginCheckService.loginVerification(authentication);
             LPVSMember findMember = lpvsLoginCheckService.getMemberFromMemberMap(authentication);
-            return new LPVSLoginMember(!isLoggedIn, findMember);
-        } else {
-            return new LPVSLoginMember(!isLoggedIn, null);
+            try {
+                findMember.setNickname(map.get("nickname"));
+                findMember.setOrganization(map.get("organization"));
+                memberRepository.saveAndFlush(findMember);
+            } catch (DataIntegrityViolationException e) {
+                throw new IllegalArgumentException("DuplicatedKeyException");
+            }
+            return ResponseEntity.ok().body(findMember);
+        }
+
+        @ResponseBody
+        @GetMapping("/history/{type}/{name}")
+        public HistoryEntity newHistoryPageByUser(@PathVariable("type") String type,
+                                                  @PathVariable("name") String name,
+                                                  @PageableDefault(size = 5, sort = "date",
+                                                          direction = Sort.Direction.DESC) Pageable pageable, Authentication authentication) {
+
+            HistoryPageEntity historyPageEntity = lpvsLoginCheckService.pathCheck(type, name, pageable, authentication);
+            Page<LPVSPullRequest> prPage = historyPageEntity.getPrPage();
+            Long count = historyPageEntity.getCount();
+
+            List<LPVSHistory> lpvsHistories = new ArrayList<>();
+            List<LPVSPullRequest> lpvsPullRequests = prPage.getContent();
+
+            for (LPVSPullRequest pr : lpvsPullRequests) {
+                String[] pullNumberTemp = pr.getPullRequestUrl().split("/");
+                LocalDateTime localDateTime = new Timestamp(pr.getDate().getTime()).toLocalDateTime();
+                String formattingDateTime = lpvsLoginCheckService.dateTimeFormatting(localDateTime);
+
+                Boolean hasIssue = detectedLicenseRepository.existsIssue(pr);
+
+                lpvsHistories.add(new LPVSHistory(formattingDateTime, pr.getRepositoryName(), pr.getId(),
+                        pr.getPullRequestUrl(), pr.getStatus(), pr.getSender(),
+                        pullNumberTemp[pullNumberTemp.length-2] + "/" +
+                                pullNumberTemp[pullNumberTemp.length-1], hasIssue));
+            }
+
+            HistoryEntity historyEntity = new HistoryEntity(lpvsHistories, count);
+            return historyEntity;
         }
     }
 
-    @PostMapping("user/update")
-    public ResponseEntity<LPVSMember> postSettingTest(@RequestBody Map<String, String> map, Authentication authentication) {
-        lpvsLoginCheckService.loginVerification(authentication);
-        LPVSMember findMember = lpvsLoginCheckService.getMemberFromMemberMap(authentication);
-        try {
-            findMember.setNickname(map.get("nickname"));
-            findMember.setOrganization(map.get("organization"));
-            memberRepository.saveAndFlush(findMember);
-        } catch (DataIntegrityViolationException e) {
-            throw new IllegalArgumentException("DuplicatedKeyException");
-        }
-        return ResponseEntity.ok().body(findMember);
-    }
-
-    @ResponseBody
-    @GetMapping("/history/{type}/{name}")
-    public HistoryEntity newHistoryPageByUser(@PathVariable("type") String type,
-                                              @PathVariable("name") String name,
-                                              @PageableDefault(size = 5, sort = "date",
-                                                      direction = Sort.Direction.DESC) Pageable pageable, Authentication authentication) {
-
-        HistoryPageEntity historyPageEntity = lpvsLoginCheckService.pathCheck(type, name, pageable, authentication);
-        Page<LPVSPullRequest> prPage = historyPageEntity.getPrPage();
-        Long count = historyPageEntity.getCount();
-
-        List<LPVSHistory> lpvsHistories = new ArrayList<>();
-        List<LPVSPullRequest> lpvsPullRequests = prPage.getContent();
-
-        for (LPVSPullRequest pr : lpvsPullRequests) {
-            String[] pullNumberTemp = pr.getPullRequestUrl().split("/");
-            LocalDateTime localDateTime = new Timestamp(pr.getDate().getTime()).toLocalDateTime();
-            String formattingDateTime = lpvsLoginCheckService.dateTimeFormatting(localDateTime);
-
-            Boolean hasIssue = detectedLicenseRepository.existsIssue(pr);
-
-            lpvsHistories.add(new LPVSHistory(formattingDateTime, pr.getRepositoryName(), pr.getId(),
-                    pr.getPullRequestUrl(), pr.getStatus(), pr.getSender(),
-                    pullNumberTemp[pullNumberTemp.length-2] + "/" +
-                            pullNumberTemp[pullNumberTemp.length-1], hasIssue));
-        }
-
-        HistoryEntity historyEntity = new HistoryEntity(lpvsHistories, count);
-        return historyEntity;
-    }
-
-    @GetMapping("error")
+    @GetMapping("/error")
     public String redirect(){
         return "index.html";
     }
