@@ -27,4 +27,7 @@ public interface LPVSLicenseRepository extends CrudRepository<LPVSLicense, Long>
     @Query(value = "SELECT * FROM licenses WHERE licenses.license_alternative_names LIKE %:licenseName% ORDER BY id DESC LIMIT 1", nativeQuery = true)
     LPVSLicense searchByAlternativeLicenseNames(@Param("licenseName") String licenseName);
 
+    @Query(value = "select licenses.spdxId from LPVSLicense licenses")
+    List<String> takeAllSpdxId();
+
 }

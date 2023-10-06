@@ -124,6 +124,66 @@ public class LPVSWebController implements ErrorController {
             HistoryEntity historyEntity = new HistoryEntity(lpvsHistories, count);
             return historyEntity;
         }
+
+        @ResponseBody
+        @GetMapping("/result/{prId}")
+        public LPVSResult resultPage(@PathVariable("prId") Long prId, @PageableDefault(size = 5, sort = "id",
+                direction = Sort.Direction.ASC) Pageable pageable, Authentication authentication) {
+
+            lpvsLoginCheckService.loginVerification(authentication);
+            //LPVSMember findMember = lpvsLoginCheckService.getMemberFromMemberMap(authentication);
+
+            LPVSPullRequest pr = lpvsPullRequestRepository.findById(prId).get();
+            List<LPVSLicense> distinctByLicense = detectedLicenseRepository.findDistinctByLicense(pr);
+            List<String> detectedLicenses = new ArrayList<>();
+            Map<String, Integer> licenseCountMap = new HashMap<>();
+
+            List<String> allSpdxId = licenseRepository.takeAllSpdxId();
+            for (String spdxId : allSpdxId) {
+                licenseCountMap.put(spdxId, 0);
+            }
+            for (LPVSLicense lpvsLicense : distinctByLicense) {
+                detectedLicenses.add(lpvsLicense.getSpdxId());
+            }
+
+            LPVSResultInfo lpvsResultInfo = new LPVSResultInfo(pr.getId(), pr.getDate(), pr.getRepositoryName(),
+                    pr.getStatus(), detectedLicenses);
+
+            Page<LPVSDetectedLicense> dlPage = detectedLicenseRepository.findByPullRequest(pr, pageable);
+            List<LPVSDetectedLicense> dlList = detectedLicenseRepository.findByPullRequest(pr);
+            List<LPVSResultFile> lpvsResultFileList = new ArrayList<>();
+            Boolean hasIssue = detectedLicenseRepository.existsIssue(pr);
+
+            String licenseSpdxId;
+            String status;
+            for (LPVSDetectedLicense dl : dlPage) {
+                if (dl.getLicense() == null) {
+                    licenseSpdxId = null;
+                    status = null;
+                } else {
+                    licenseSpdxId = dl.getLicense().getSpdxId();
+                    status = dl.getLicense().getAccess();
+                }
+                lpvsResultFileList.add(new LPVSResultFile(dl.getId(), dl.getFilePath(),
+                        dl.getComponentFileUrl(), dl.getLines(), dl.getMatch(),
+                        status, licenseSpdxId));
+            }
+
+            for (LPVSDetectedLicense dl : dlList) {
+                if (dl.getLicense() != null) {
+                    licenseSpdxId = dl.getLicense().getSpdxId();
+                    licenseCountMap.put(licenseSpdxId,
+                            licenseCountMap.get(licenseSpdxId) + 1);
+                }
+            }
+
+            Long count = detectedLicenseRepository.CountByDetectedLicenseWherePullRequestId(pr);
+            String[] tempPullNumber = pr.getPullRequestUrl().split("/");
+            LPVSResult lpvsResult = new LPVSResult(lpvsResultFileList, lpvsResultInfo, count, licenseCountMap,
+                    tempPullNumber[tempPullNumber.length-2] + '/' +
+                            tempPullNumber[tempPullNumber.length-1], hasIssue);
+            return lpvsResult;
+        }
     }
 
     @GetMapping("/error")
