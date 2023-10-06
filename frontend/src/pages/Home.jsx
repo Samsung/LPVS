@@ -17,7 +17,7 @@ export const Home = () => {
     const [username, setUsername] = useState("");
 
     useEffect(() => {
-        axios.get("/login/check")
+        axios.get("/user/login")
             .then((loginresponse) => {
                 if (loginresponse.data.isLoggedIn) {
                     setIsLoggedIn(loginresponse.data.isLoggedIn);
@@ -100,7 +100,7 @@ export const Home = () => {
                                                 </Link>
                                             </span>
                                         ) : (
-                                            <Link to={"/login"} style={{ color: "black", textDecoration: "none" }}>
+                                            <Link to={"/user/login"} style={{ color: "black", textDecoration: "none" }}>
                                                 Login
                                             </Link>
                                         )}

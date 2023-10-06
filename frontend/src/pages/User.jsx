@@ -29,7 +29,7 @@ export const User = () => {
   });
   
   useEffect(() => {
-    axios.get("/login/check")
+    axios.get("/user/login")
       .then((loginresponse) => {
         if (loginresponse.data.isLoggedIn) {
           setIsLoggedIn(loginresponse.data.isLoggedIn);
@@ -37,7 +37,7 @@ export const User = () => {
             setUserInfo(userInfoResponse.data);
           });
         }
-        else navigate("/login")
+        else navigate("/user/login")
       })
       .catch(function(error) {
         console.log(error.toJSON());

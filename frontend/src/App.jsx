@@ -6,12 +6,14 @@
  */
 
 import React from 'react';
+import axios from "axios";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from './pages/Home';
 import Login from './pages/Login';
 import User from './pages/User';
 import History from './pages/History';
 
+axios.defaults.baseURL = '/api/v1/web';
 function App() {
   return (
     <BrowserRouter>
@@ -19,7 +21,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/home" element={<Home />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/user/login" element={<Login />} />
           <Route path="/user/setting" element={<User />} />
           <Route path="/history/:type/:name" element={<History />} />
         </Routes>

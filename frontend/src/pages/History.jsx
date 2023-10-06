@@ -26,7 +26,7 @@ export const History= () => {
   const [username, setUsername] = useState("");
 
   useEffect(() => {
-    axios.get("/login/check")
+    axios.get("/user/login")
       .then((loginresponse) => {
         if (loginresponse.data.isLoggedIn) {
           setIsLoggedIn(loginresponse.data.isLoggedIn);
@@ -36,15 +36,15 @@ export const History= () => {
             })
             .catch(function(error) {
               console.log(error.toJSON());
-              navigate("/login");
+              navigate("/user/login");
             });
         } else {
-          navigate("/login");
+          navigate("/user/login");
         }
       })
       .catch(function(error) {
         console.log(error.toJSON());
-        navigate("/login");
+        navigate("/user/login");
       });
   }, []);
 
