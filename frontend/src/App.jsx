@@ -12,6 +12,7 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import User from './pages/User';
 import History from './pages/History';
+import Result from './pages/Result';
 
 axios.defaults.baseURL = '/api/v1/web';
 function App() {
@@ -24,6 +25,7 @@ function App() {
           <Route path="/user/login" element={<Login />} />
           <Route path="/user/setting" element={<User />} />
           <Route path="/history/:type/:name" element={<History />} />
+          <Route path="/result/:pull_request_id" element={<Result />} />
         </Routes>
       </div>
     </BrowserRouter>

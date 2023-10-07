@@ -188,7 +188,7 @@ export const History= () => {
             </div>
 
             <div className="my-option-header">
-              <img className="my-option-line" alt="My option line" src="/image/svg/historyMyOptionLine.svg" />
+              <img className="my-option-line" alt="My option line" src="/image/svg/HistoryMyOptionLine.svg" />
               <div className="text-wrapper-3">My Option</div>
             </div>
           </div>
@@ -337,7 +337,6 @@ export const History= () => {
             </div>
             </Link>
             ): null}
-
           </div>
         </div>
         <div className="menubar-top">
