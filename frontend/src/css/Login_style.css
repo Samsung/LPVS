@@ -5,30 +5,30 @@
  * found in the LICENSE file.
  */
 
-.login {
+  .login {
     background-color: #ffffff;
     display: flex;
     flex-direction: row;
     justify-content: center;
     width: 100%;
-}
+  }
 
-.login .div {
+  .login .div {
     background-color: #ffffff;
     height: 1080px;
     position: relative;
     width: 1920px;
-}
+  }
 
-.login .SNS-login {
+  .login .SNS-login {
     height: 500px;
     left: 560px;
     position: absolute;
     top: 290px;
     width: 800px;
-}
+  }
 
-.login .overlap {
+  .login .overlap {
     background-image: url(../../public/image/svg/SNSWrapper.svg);
     background-size: 100% 100%;
     height: 510px;
@@ -36,23 +36,23 @@
     position: relative;
     top: -1px;
     width: 810px;
-}
+  }
 
-.login .login-header {
+  .login .login-header {
     height: 58px;
     left: 36px;
     position: absolute;
     top: 27px;
     width: 752px;
-}
+  }
 
-.login .overlap-group {
+  .login .overlap-group {
     height: 58px;
     position: relative;
     width: 750px;
-}
+  }
 
-.login .line {
+  .login .line {
     background-color: #000000;
     height: 1px;
     left: 0;
@@ -60,9 +60,9 @@
     position: absolute;
     top: 57px;
     width: 750px;
-}
+  }
 
-.login .text-wrapper {
+  .login .text-wrapper {
     color: #000000;
     font-family: "Inter-Bold", Helvetica;
     font-size: 40px;
@@ -73,92 +73,90 @@
     position: absolute;
     top: 0;
     width: 249px;
-}
+  }
 
-/* Common SNS item styling */
-.sns-item {
+  .sns-item {
     display: flex;
     flex-direction: row;
     align-items: center;
     position: absolute;
     width: 500px; /* adjust based on content size */
     left: 150px; /* generic left alignment */
-}
+  }
 
-.sns-item .text-wrapper-2 {
+  .sns-item .text-wrapper-2 {
     font-family: "Inter-Bold", Helvetica;
     font-size: 30px;
-    font-weight: 500;  
-    margin-right: 20px; 
-}
+    font-weight: 500;
+    margin-right: 20px;
+  }
 
-.sns-item .text-wrapper-3 {
+  .sns-item .text-wrapper-3 {
     font-family: "Inter-Bold", Helvetica;
     font-size: 30px;
-    font-weight: 500;  
-    margin-right: 20px; 
-}
+    font-weight: 500;
+    margin-right: 20px;
+  }
 
-.sns-item .text-wrapper-4 {
+  .sns-item .text-wrapper-4 {
     font-family: "Inter-Bold", Helvetica;
     font-size: 30px;
-    font-weight: 500;  
-    margin-right: 20px; 
-}
-.login .google .sns-logo {
+    font-weight: 500;
+    margin-right: 20px;
+  }
+  .login .google .sns-logo {
     margin-left: -10px;
-}
+  }
 
-.sns-logo {
+  .sns-logo {
     width: 366px;
     height: 90px;
     position: relative;
-}
+  }
 
-/* Adjust positioning for each sns item */
-.login .naver {
+
+  .login .naver {
     top: 125px;
-}
+  }
 
-.login .kakao {
+  .login .kakao {
     top: 250px;
-}
+  }
 
-.login .google {
+  .login .google {
     top: 375px;
-}
+  }
 
-/* Rest of your styling remains the same */
-.login .menubar-top {
+  .login .menubar-top {
     height: 101px;
     left: 39px;
     position: absolute;
     top: 8px;
     width: 1842px;
-}
+  }
 
-.login .menu-line {
+  .login .menu-line {
     background-color: #0057b8;
     height: 3px;
     left: 0;
     position: absolute;
     top: 98px;
     width: 1842px;
-}
+  }
 
-.login .menu {
+  .login .menu {
     height: 43px;
     left: 1708px;
     position: absolute;
     top: 37px;
     width: 133px;
-}
+  }
 
-.login .LPVS {
+  .login .LPVS {
     height: 96px;
     left: 0;
     object-fit: cover;
     position: absolute;
     top: 0;
     width: 229px;
-}
+  }

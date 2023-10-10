@@ -237,6 +237,15 @@ const licenseCount = () => {
     { name: "Unsupported License", value: lpvsResult?.count - licenseCount()}
   ];
 
+//===============================PieChart==============================================================
+  function truncateName(name) {
+    if (/[\u3131-\u314e\u314f-\u3163\uac00-\ud7a3]/g.test(name)) {
+      return name.length > 3 ? `${name.substring(0, 3)}.` : name;
+    } else {
+      return name.length > 5 ? `${name.substring(0, 5)}.` : name;
+    }
+  }
+
   return (
     <div className="result-pull-request">
       <div className="div">
@@ -266,44 +275,174 @@ const licenseCount = () => {
               <div className="text-wrapper-6">Component</div>
             </div>
             <div className="license-chart">
-              <div className="text-wrapper-7" style={setFont(4)} >{lpvsResult?.lpvsResultFileList[4]?.licenseSpdx}</div>
-              <div className="text-wrapper-8" style={setFont(3)} >{lpvsResult?.lpvsResultFileList[3]?.licenseSpdx}</div>
-              <div className="text-wrapper-9" style={setFont(2)} >{lpvsResult?.lpvsResultFileList[2]?.licenseSpdx}</div>
-              <div className="text-wrapper-10" style={setFont(1)} >{lpvsResult?.lpvsResultFileList[1]?.licenseSpdx}</div>
-              <div className="text-wrapper-11" style={setFont(0)} >{lpvsResult?.lpvsResultFileList[0]?.licenseSpdx}</div>
+              <div className="text-wrapper-7" style={setFont(4)} >
+                {lpvsResult?.lpvsResultFileList[4]?.licenseSpdx == null ? (
+                  "NULL"
+                ) : (
+                    lpvsResult?.lpvsResultFileList[4]?.licenseSpdx
+              )}
+              </div>
+              <div className="text-wrapper-8" style={setFont(3)} >
+                {lpvsResult?.lpvsResultFileList[3]?.licenseSpdx == null ? (
+                    "NULL"
+                ) : (
+                    lpvsResult?.lpvsResultFileList[3]?.licenseSpdx
+                )}
+              </div>
+              <div className="text-wrapper-9" style={setFont(2)} >
+                {lpvsResult?.lpvsResultFileList[2]?.licenseSpdx == null ? (
+                    "NULL"
+                ) : (
+                    lpvsResult?.lpvsResultFileList[2]?.licenseSpdx
+                )}
+              </div>
+              <div className="text-wrapper-10" style={setFont(1)} >
+                {lpvsResult?.lpvsResultFileList[1]?.licenseSpdx == null ? (
+                    "NULL"
+                ) : (
+                    lpvsResult?.lpvsResultFileList[1]?.licenseSpdx
+                )}
+              </div>
+              <div className="text-wrapper-11" style={setFont(0)} >
+                {lpvsResult?.lpvsResultFileList[0]?.licenseSpdx == null ? (
+                    "NULL"
+                ) : (
+                    lpvsResult?.lpvsResultFileList[0]?.licenseSpdx
+                )}
+              </div>
               <div className="text-wrapper-12">Detected Licenses</div>
             </div>
             <div className="match-value-chart">
               <div className="text-wrapper-13">Match Value</div>
-              <div className="text-wrapper-14">{lpvsResult?.lpvsResultFileList[4]?.matchValue}</div>
-              <div className="text-wrapper-15">{lpvsResult?.lpvsResultFileList[3]?.matchValue}</div>
-              <div className="text-wrapper-16">{lpvsResult?.lpvsResultFileList[2]?.matchValue}</div>
-              <div className="text-wrapper-17">{lpvsResult?.lpvsResultFileList[1]?.matchValue}</div>
-              <div className="text-wrapper-18">{lpvsResult?.lpvsResultFileList[0]?.matchValue}</div>
+              <div className="text-wrapper-14">
+                {lpvsResult?.lpvsResultFileList[4]?.matchValue == null ? (
+                  "NULL"
+                ) : (
+                  lpvsResult?.lpvsResultFileList[4]?.matchValue
+              )}
+              </div>
+              <div className="text-wrapper-15">
+                {lpvsResult?.lpvsResultFileList[3]?.matchValue == null ? (
+                    "NULL"
+                ) : (
+                    lpvsResult?.lpvsResultFileList[3]?.matchValue
+                )}
+              </div>
+              <div className="text-wrapper-16">
+                {lpvsResult?.lpvsResultFileList[2]?.matchValue == null ? (
+                    "NULL"
+                ) : (
+                    lpvsResult?.lpvsResultFileList[2]?.matchValue
+                )}
+              </div>
+              <div className="text-wrapper-17">
+                {lpvsResult?.lpvsResultFileList[1]?.matchValue == null ? (
+                    "NULL"
+                ) : (
+                    lpvsResult?.lpvsResultFileList[1]?.matchValue
+                )}
+              </div>
+              <div className="text-wrapper-18">
+                {lpvsResult?.lpvsResultFileList[0]?.matchValue == null ? (
+                    "NULL"
+                ) : (
+                    lpvsResult?.lpvsResultFileList[0]?.matchValue
+                )}
+              </div>
             </div>
             <div className="match-line-chart">
-              <div className="text-wrapper-19">{lpvsResult?.lpvsResultFileList[4]?.matchLine}</div>
-              <div className="text-wrapper-20">{lpvsResult?.lpvsResultFileList[3]?.matchLine}</div>
-              <div className="text-wrapper-21">{lpvsResult?.lpvsResultFileList[2]?.matchLine}</div>
-              <div className="text-wrapper-22">{lpvsResult?.lpvsResultFileList[1]?.matchLine}</div>
-              <div className="text-wrapper-23">{lpvsResult?.lpvsResultFileList[0]?.matchLine}</div>
+              <div className="text-wrapper-19-container">
+                <div className={`text-wrapper-19 ${lpvsResult?.lpvsResultFileList[4]?.matchLine?.length >= 11 ? 'long' : 'short'}`}>
+                  {lpvsResult?.lpvsResultFileList[4]?.matchLine == null ? (
+                    "NULL"
+                ) : (
+                      lpvsResult?.lpvsResultFileList[4]?.matchLine
+                )}
+                </div>
+              </div>
+              <div className="text-wrapper-20-container">
+                <div className={`text-wrapper-20 ${lpvsResult?.lpvsResultFileList[3]?.matchLine?.length >= 11 ? 'long' : 'short'}`}>
+                  {lpvsResult?.lpvsResultFileList[3]?.matchLine == null ? (
+                      "NULL"
+                  ) : (
+                      lpvsResult?.lpvsResultFileList[3]?.matchLine
+                  )}
+                </div>
+              </div>
+              <div className="text-wrapper-21-container">
+                <div className={`text-wrapper-21 ${lpvsResult?.lpvsResultFileList[2]?.matchLine?.length >= 11 ? 'long' : 'short'}`}>
+                  {lpvsResult?.lpvsResultFileList[2]?.matchLine == null ? (
+                      "NULL"
+                  ) : (
+                      lpvsResult?.lpvsResultFileList[2]?.matchLine
+                  )}
+                </div>
+              </div>
+              <div className="text-wrapper-22-container">
+                <div className={`text-wrapper-22 ${lpvsResult?.lpvsResultFileList[1]?.matchLine?.length >= 11 ? 'long' : 'short'}`}>
+                  {lpvsResult?.lpvsResultFileList[1]?.matchLine == null ? (
+                      "NULL"
+                  ) : (
+                      lpvsResult?.lpvsResultFileList[1]?.matchLine
+                  )}
+                </div>
+              </div>
+              <div className="text-wrapper-23-container">
+                <div className={`text-wrapper-23 ${lpvsResult?.lpvsResultFileList[0]?.matchLine?.length >= 11 ? 'long' : 'short'}`}>
+                  {lpvsResult?.lpvsResultFileList[0]?.matchLine == null ? (
+                      "NULL"
+                  ) : (
+                      lpvsResult?.lpvsResultFileList[0]?.matchLine
+                  )}
+                </div>
+              </div>
               <div className="text-wrapper-24">Match Line</div>
             </div>
             <div className="path-chart">
               <div className="text-wrapper-25-container">
-                <div className={`text-wrapper-25 ${lpvsResult?.lpvsResultFileList[4]?.path.length >= 28 ? 'long' : 'short'}`}>{lpvsResult?.lpvsResultFileList[4]?.path}</div>
+                <div className={`text-wrapper-25 ${lpvsResult?.lpvsResultFileList[4]?.path?.length >= 28 ? 'long' : 'short'}`}>
+                  {lpvsResult?.lpvsResultFileList[4]?.path == null ? (
+                      "NULL"
+                  ) : (
+                      lpvsResult?.lpvsResultFileList[4]?.path
+                  )}
+                </div>
               </div>
               <div className="text-wrapper-26-container">
-                <div className={`text-wrapper-26 ${lpvsResult?.lpvsResultFileList[3]?.path.length >= 28 ? 'long' : 'short'}`}>{lpvsResult?.lpvsResultFileList[3]?.path}</div>
+                <div className={`text-wrapper-26 ${lpvsResult?.lpvsResultFileList[3]?.path?.length >= 28 ? 'long' : 'short'}`}>
+                  {lpvsResult?.lpvsResultFileList[3]?.path == null ? (
+                      "NULL"
+                  ) : (
+                      lpvsResult?.lpvsResultFileList[3]?.path
+                  )}
+                </div>
               </div>
               <div className="text-wrapper-27-container">
-                <div className={`text-wrapper-27 ${lpvsResult?.lpvsResultFileList[2]?.path.length >= 28 ? 'long' : 'short'}`}>{lpvsResult?.lpvsResultFileList[2]?.path}</div>
+                <div className={`text-wrapper-27 ${lpvsResult?.lpvsResultFileList[2]?.path?.length >= 28 ? 'long' : 'short'}`}>
+                  {lpvsResult?.lpvsResultFileList[2]?.path == null ? (
+                      "NULL"
+                  ) : (
+                      lpvsResult?.lpvsResultFileList[2]?.path
+                  )}
+                </div>
               </div>
               <div className="text-wrapper-28-container">
-                <div className={`text-wrapper-28 ${lpvsResult?.lpvsResultFileList[1]?.path.length >= 28 ? 'long' : 'short'}`}>{lpvsResult?.lpvsResultFileList[1]?.path}</div>
+                <div className={`text-wrapper-28 ${lpvsResult?.lpvsResultFileList[1]?.path?.length >= 28 ? 'long' : 'short'}`}>
+                  {lpvsResult?.lpvsResultFileList[1]?.path == null ? (
+                      "NULL"
+                  ) : (
+                      lpvsResult?.lpvsResultFileList[1]?.path
+                  )}
+                </div>
               </div>
               <div className="text-wrapper-29-container">
-                <div className={`text-wrapper-29 ${lpvsResult?.lpvsResultFileList[0]?.path.length >= 28 ? 'long' : 'short'}`}>{lpvsResult?.lpvsResultFileList[0]?.path}</div>
+                <div className={`text-wrapper-29 ${lpvsResult?.lpvsResultFileList[0]?.path?.length >= 28 ? 'long' : 'short'}`}>
+                  {lpvsResult?.lpvsResultFileList[0]?.path == null ? (
+                      "NULL"
+                  ) : (
+                      lpvsResult?.lpvsResultFileList[0]?.path
+                  )}
+                </div>
               </div>
               <div className="text-wrapper-30">Path</div>
             </div>
@@ -496,7 +635,13 @@ const licenseCount = () => {
               <div className="profile">
                 <div className="overlap-group-2">
                   <img className="image-2" alt="Image" src="/image/png/ProfileImg.png" />
-                  <div className="text-wrapper-44"><Link to={"/user/setting"} style={{ color: "black", textDecoration: "none"}}>{username.name}</Link></div>
+                  <div className="text-wrapper-44"><Link to={"/user/setting"} style={{ color: "black", textDecoration: "none"}}>{username?.name ? (
+                      <div>{truncateName(username.name)}</div>
+                  ) : (
+                      <div>Loading...</div>
+                  )}
+                  </Link>
+                  </div>
                 </div>
               </div>
             </div>
