@@ -645,6 +645,7 @@ const licenseCount = () => {
                 </div>
               </div>
             </div>
+            <div className="text-wrapper-45"><Link to={`/dashboard/send/${username?.nickname}`} style={{ color: "black", textDecoration: "none"}}>Dashboard</Link></div>
             <div className="text-wrapper-46"><Link to={`/history/send/${username?.nickname}?page=0`}  style={{ color: "black", textDecoration: "none"}}>History</Link></div>
           </div>
           <Link to={"/home"} style={{ color: "black", textDecoration: "none"}}>

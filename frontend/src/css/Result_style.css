@@ -1646,13 +1646,13 @@ width: 162px;
   font-family: "Inter-Regular", Helvetica;
   font-size: 30px;
   font-weight: 400;
-  left: 125px;
+  left: 1530px;
   letter-spacing: 0;
   line-height: normal;
   position: absolute;
   top: 6px;
-  white-space: nowrap;
-  width: 167px;
+  width: 115px;
+
 }
 
 .result-pull-request .text-wrapper-46 {
@@ -1660,12 +1660,13 @@ width: 162px;
   font-family: "Inter-Regular", Helvetica;
   font-size: 30px;
   font-weight: 400;
-  left: 1590px;
+  left: 1420px;
   letter-spacing: 0;
   line-height: normal;
   position: absolute;
-  top: 40px;
-  width: 115px;
+  top: 6px;
+  white-space: nowrap;
+  width: 167px;
 }
 
 .result-pull-request .LPVS {

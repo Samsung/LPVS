@@ -110,6 +110,14 @@ export const Home = () => {
                         </div>
                         <div className="text-wrapper-7">
                             {isLoggedIn ? (
+                                <Link to={`/dashboard/send/${username?.nickname}`} style={{ color: "black", textDecoration: "none" }}>
+                                    Dashboard
+                                </Link>
+                            ) : null}
+                        </div>
+
+                        <div className="text-wrapper-6">
+                            {isLoggedIn ? (
                                 <Link to={`/history/send/${username?.nickname}?page=0`} style={{ color: "black", textDecoration: "none" }}>
                                     History
                                 </Link>
