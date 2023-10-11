@@ -148,6 +148,14 @@ export const History= () => {
     return <div>Loading...</div>;
   }
 
+  function truncateName(name) {
+        if (/[\u3131-\u314e\u314f-\u3163\uac00-\ud7a3]/g.test(name)) {
+            return name.length > 3 ? `${name.substring(0, 3)}.` : name;
+        } else {
+            return name.length > 5 ? `${name.substring(0, 5)}.` : name;
+        }
+  }
+
   const pageArrow=(page)=> {
     if(page<=5) {
       return false;
@@ -188,7 +196,7 @@ export const History= () => {
             </div>
 
             <div className="my-option-header">
-              <img className="my-option-line" alt="My option line" src="/image/svg/historyMyOptionLine.svg" />
+              <img className="my-option-line" alt="My option line" src="/image/svg/HistoryMyOptionLine.svg" />
               <div className="text-wrapper-3">My Option</div>
             </div>
           </div>
@@ -337,7 +345,6 @@ export const History= () => {
             </div>
             </Link>
             ): null}
-
           </div>
         </div>
         <div className="menubar-top">
@@ -348,7 +355,12 @@ export const History= () => {
               <div className="profile">
                 <div className="overlap-group-2">
                   <img className="image" alt="Image" src="/image/png/ProfileImg.png" />
-                  <div className="text-wrapper-23"><Link to={"/user/setting"} style={{ color: "black", textDecoration: "none"}}>{username.name}</Link></div>
+                  <div className="text-wrapper-23"><Link to={"/user/setting"} style={{ color: "black", textDecoration: "none"}}>{username.name ? (
+                      <div>{truncateName(username.name)}</div>
+                  ) : (
+                      <div>Loading...</div>
+                  )}
+                  </Link></div>
                 </div>
               </div>
             </div>
