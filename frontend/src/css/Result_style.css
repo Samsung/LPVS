@@ -1555,7 +1555,7 @@ width: 162px;
 }
 
 .result-pull-request .menu-line {
-  background-color: #000000;
+  background-color: #0057b8;
   height: 3px;
   left: 0;
   position: absolute;
@@ -1646,11 +1646,11 @@ width: 162px;
   font-family: "Inter-Regular", Helvetica;
   font-size: 30px;
   font-weight: 400;
-  left: 1530px;
+  left: 1535px;
   letter-spacing: 0;
   line-height: normal;
   position: absolute;
-  top: 6px;
+  top: 42px;
   width: 115px;
 
 }
@@ -1660,11 +1660,11 @@ width: 162px;
   font-family: "Inter-Regular", Helvetica;
   font-size: 30px;
   font-weight: 400;
-  left: 1420px;
+  left: 1425px;
   letter-spacing: 0;
   line-height: normal;
   position: absolute;
-  top: 6px;
+  top: 42px;
   white-space: nowrap;
   width: 167px;
 }

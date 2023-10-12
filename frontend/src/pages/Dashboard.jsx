@@ -10,17 +10,15 @@ import "../css/Dashboard_style.css";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { PieChart, Pie, Sector, Cell, ResponsiveContainer, Rectangle } from 'recharts';
+import { PieChart, Pie, Cell } from 'recharts';
 import {BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, LineChart, Line } from "recharts";
 
 export const Dashboard = () => {
 
     const navigate = useNavigate();
     const { type, name } = useParams();
-
     const [ isLoggedIn, setIsLoggedIn ] = useState(false);
     const [username, setUsername] = useState("");
-
     const [dashBoardInfo, setDashBoardInfo] = useState();
 
     useEffect(() => {
@@ -58,7 +56,6 @@ export const Dashboard = () => {
                 navigate("/user/login");
             });
     }, []);
-
     const navigateToOrg = () => {
         if (!username?.organization || username?.organization.trim() === "") {
             window.alert("Please enter the Organization information on the User page.");
@@ -69,7 +66,7 @@ export const Dashboard = () => {
     const navigateToOwn = () => {
         if (!username?.nickname || username?.nickname.trim() === "") {
             window.alert("Please enter the Organization information on the User page.");
-            navigate('/user/info')
+            navigate('/user/setting')
         } else {
             navigate(`/dashboard/own/${username?.nickname}`);
         }
@@ -77,12 +74,11 @@ export const Dashboard = () => {
     const navigateToSend = () => {
         if (!username?.nickname || username?.nickname.trim() === "") {
             window.alert("Please enter the Organization information on the User page.");
-            navigate('/user/info')
+            navigate('/user/setting')
         } else {
             navigate(`/dashboard/send/${username?.nickname}`);
         }
     };
-
     const add_Licenses =()=> {
         let a =
             dashBoardInfo?.licenseCountMap['GPL-2.0-or-later']+
@@ -92,40 +88,31 @@ export const Dashboard = () => {
             dashBoardInfo?.licenseCountMap?.MIT
         return a;
     }
-//=============================PullRequests====================
 
+//=============================PullRequests====================
     const PRdataMaps = dashBoardInfo?.dashboardElementsByDates?.map(function(element){
         return element.date
     })
-
     const PRsMaps = dashBoardInfo?.dashboardElementsByDates?.map(function(element){
         return element.pullRequestCount
     })
-
     const PR_data=[];
-
-
 
     for (var i=0; i < PRdataMaps?.length; i++) {
         PR_data.push({'name': PRdataMaps[i], 'Pull Requests': PRsMaps[i], 'amt': 2100});
     }
-
     console.log()
     console.log(PR_data)
-
     PR_data.sort((a, b) =>
         a.name.localeCompare(b.name));
 
 //==========================Participants============================
-
     const PC_dataMaps = dashBoardInfo?.dashboardElementsByDates?.map(function(element){
         return element.date
     })
-
     const PC_Maps = dashBoardInfo?.dashboardElementsByDates?.map(function(element){
         return element.participantCount
     })
-
     const PC_data=[];
 
     for (var i=0; i < PC_dataMaps?.length; i++) {
@@ -134,24 +121,20 @@ export const Dashboard = () => {
 
     PC_data.sort((a, b) =>
         a.name.localeCompare(b.name));
-//=================License Usage===========================================
 
+//=================License Usage===========================================
     const LU_dataMaps = dashBoardInfo?.dashboardElementsByDates?.map(function(element){
         return element.date
     })
-
     const high_Maps = dashBoardInfo?.dashboardElementsByDates?.map(function(element){
         return element.riskGradeMap.HIGH
     })
-
     const medium_Maps = dashBoardInfo?.dashboardElementsByDates?.map(function(element){
         return element.riskGradeMap.MIDDLE
     })
-
     const low_Maps = dashBoardInfo?.dashboardElementsByDates?.map(function(element){
         return element.riskGradeMap.LOW
     })
-
     const LU_data=[];
 
     for (var i=0; i < LU_dataMaps?.length; i++) {
@@ -160,9 +143,9 @@ export const Dashboard = () => {
 
     LU_data.sort((a, b) =>
         a.name.localeCompare(b.name));
+
 //===================Pie Chart=========================================================
     const COLORS = ['#F28300', '#a31f34', '#7f237d', '#000000', '#73c541', '#007c31'];
-
     const data = [
         { name: "Unsupported License", value: dashBoardInfo?.totalDetectionCount - add_Licenses()},
         { name: "MIT", value: dashBoardInfo?.licenseCountMap?.MIT },
@@ -171,6 +154,7 @@ export const Dashboard = () => {
         { name: "Open SSL", value: dashBoardInfo?.licenseCountMap.OpenSSL },
         { name: "GNU LG", value: dashBoardInfo?.licenseCountMap['GPL-2.0-or-later'] },
     ];
+
 //===================Truncate Name=========================================================
     function truncateName(name) {
         if (/[\u3131-\u314e\u314f-\u3163\uac00-\ud7a3]/g.test(name)) {
@@ -179,7 +163,6 @@ export const Dashboard = () => {
             return name.length > 5 ? `${name.substring(0, 5)}.` : name;
         }
     }
-
     return (
         <div className="dashboard-send">
             <div className="div">
@@ -201,7 +184,7 @@ export const Dashboard = () => {
                                         left: 30,
                                         bottom: 5,
                                     }}
-                                >
+                                    >
                                     <CartesianGrid strokeDasharray="3 3" />
                                     <XAxis dataKey="name" />
                                     <YAxis />
@@ -212,14 +195,11 @@ export const Dashboard = () => {
                                     <Line type="monotone" dataKey="low" stroke="#00FF19" />
                                 </LineChart>
                             </div>
-
                         </div>
                         <div className="pie-chart">
                             <div className="overlap">
                                 <div className="div-3" />
                                 <div className="status">
-
-
                                     {Object.entries(dashBoardInfo?.licenseCountMap || {}).map(([license, count]) => {
 
                                         const cleanLicenseName = license.replace(/[^a-zA-Z]/g, '');
@@ -235,11 +215,7 @@ export const Dashboard = () => {
                                     })}
                                     <div className="Unsupported-license">
                                         <div className="text-wrapper-2">{dashBoardInfo?.totalDetectionCount-add_Licenses()}</div>
-                                        <div className="text-wrapper-300">{dashBoardInfo?.totalDetectionCount == 0 ? (
-                                            <>Unsupported Licenses</>
-                                        ) : (
-                                        null
-                                        )}</div>
+                                        <div className="text-wrapper-unsupport">Other Licenses</div>
                                         <div className="Unsupported-license-color" />
                                     </div>
                                     <div className="total-header">
@@ -267,9 +243,6 @@ export const Dashboard = () => {
                                     </Pie>
                                     <Tooltip />
                                 </PieChart>
-
-
-
                                 <div className="div-2">
                                     <div className="overlap-group">
                                         <div className="text-wrapper-10">Detected Licenses</div>
@@ -303,9 +276,7 @@ export const Dashboard = () => {
                                     <Bar dataKey="Pull Requests" fill="#FF8BD1" barSize={20}/>
                                 </BarChart>
                             </div>
-
                         </div>
-
                         <div className="div-3">
                             <div className="number-of">
                                 <div className="text-wrapper-11">Participants</div>
@@ -331,7 +302,6 @@ export const Dashboard = () => {
                                     <Bar dataKey="Participants" fill="#73C541" barSize={20}/>
                                 </BarChart>
                             </div>
-
                         </div>
                     </div>
                     <div className="dashboard-data">
@@ -403,21 +373,16 @@ export const Dashboard = () => {
                                 <div className="text-wrapper-22">{PR_data[PR_data.length-1]?.name}</div>
                             </div>
                         </div>
-
                         <div style={{fontSize: '35px', marginTop:'5px', fontWeight: '500', marginLeft: '150px'}}>
                             Date
                         </div>
-
-
                         <p className="wave" style={{marginTop:'-18px'}}>~</p>
                         <div className="date-start">
                             <div className="overlap-4">
                                 <div className="text-wrapper-23">{PR_data[0]?.name}</div>
                             </div>
                         </div>
-
                     </div>
-
                     <div className="my-option">
                         <div className="overlap-5">
                             <div className="org-button">
@@ -463,7 +428,7 @@ export const Dashboard = () => {
                                 <div className="profile">
                                     <div className="overlap-group-7">
                                         <img className="image-3" alt="Image" src="/image/png/ProfileImg.png" />
-                                        <div className="text-wrapper-28"><Link to={"/user/info"} style={{ color: "black", textDecoration: "none"}}>{username?.name ? (
+                                        <div className="text-wrapper-27"><Link to={"/user/setting"} style={{ color: "black", textDecoration: "none"}}>{username?.name ? (
                                             <div>{truncateName(username.name)}</div>
                                         ) : (
                                             <div>Loading...</div>
@@ -471,7 +436,7 @@ export const Dashboard = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div className="text-wrapper-27"><Link to={`/dashboard/send/${username?.nickname}`} style={{ color: "black", textDecoration: "none"}}>Dashboard</Link></div>
+                            <div className="text-wrapper-28"><Link to={`/dashboard/send/${username?.nickname}`} style={{ color: "black", textDecoration: "none"}}>Dashboard</Link></div>
                             <div className="text-wrapper-29"><Link to={`/history/send/${username?.nickname}?page=0`} style={{ color: "black", textDecoration: "none"}}>History</Link></div>
                         </div>
                     </div>

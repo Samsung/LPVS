@@ -1,3 +1,10 @@
+/**
+ * Copyright 2023 Basaeng, kyudori, hwan5180, quswjdgma83
+ *
+ * Use of this source code is governed by a MIT license that can be
+ * found in the LICENSE file.
+ */
+
 package com.lpvs.service;
 
 import com.lpvs.entity.LPVSDetectedLicense;
@@ -22,7 +29,6 @@ import java.util.*;
 @Service
 @Slf4j
 public class LPVSStatisticsService {
-
     private LPVSPullRequestRepository lpvsPullRequestRepository;
     private LPVSDetectedLicenseRepository lpvsDetectedLicenseRepository;
     private LPVSLoginCheckService loginCheckService;
@@ -168,4 +174,3 @@ public class LPVSStatisticsService {
         return riskGradeMap;
     }
 }
-

@@ -18,7 +18,6 @@ export const Result = () => {
   
   const { pull_request_id } = useParams();
   const [ lpvsResult, setLPVSResult ] = useState();
-  const [ licenseDetection, setlicenseDetection ] = useState(false);
   
   const navigate = useNavigate();
   const location = useLocation();

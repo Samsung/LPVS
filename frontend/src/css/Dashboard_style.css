@@ -163,7 +163,7 @@
 
 }
 
-.dashboard-send .text-wrapper-300 {
+.dashboard-send .text-wrapper-unsupport {
     color: #000000;
     font-family: "Inter-Regular", Helvetica;
     font-size: 25px;
@@ -1036,7 +1036,7 @@
     width: 40px;
 }
 
-.dashboard-send .text-wrapper-27 {
+.dashboard-send .text-wrapper-28 {
     color: #000000;
     font-family: "Inter-Regular", Helvetica;
     font-size: 30px;
@@ -1074,7 +1074,7 @@
     width: 35px;
 }
 
-.dashboard-send .text-wrapper-28 {
+.dashboard-send .text-wrapper-27 {
     color: #000000;
     font-family: "Inter-SemiBold", Helvetica;
     font-size: 20px;
@@ -1093,7 +1093,7 @@
     font-family: "Inter-Regular", Helvetica;
     font-size: 30px;
     font-weight: 400;
-    left: 160px;
+    left: 155px;
     letter-spacing: 0;
     line-height: normal;
     position: absolute;
