@@ -7,7 +7,7 @@ import lombok.Setter;
 import java.util.Date;
 import java.util.List;
 
-@Getter @Setter @AllArgsConstructor
+@Getter @AllArgsConstructor
 public class LPVSResultInfo {
 
     private Long id;
