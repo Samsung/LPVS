@@ -19,11 +19,11 @@ import static org.junit.jupiter.api.Assertions.*;
 public class LPVSResultInfoTest {
 
     private LPVSResultInfo lpvsResultInfo;
-    Long id = 1L;
-    Date scanDate = new Date();
-    String repositoryName = "example/repository";
-    String status = "Success";
-    List<String> detectedLicenses = Arrays.asList("LicenseA", "LicenseB");
+    private Long id = 1L;
+    private Date scanDate = new Date();
+    private String repositoryName = "example/repository";
+    private String status = "Success";
+    private List<String> detectedLicenses = Arrays.asList("LicenseA", "LicenseB");
 
     @BeforeEach
     public void setUp() {

@@ -23,12 +23,12 @@ import java.util.Map;
 public class LPVSResultTest {
 
     private LPVSResult lpvsResult;
-    List<LPVSResultFile> resultFileList = new ArrayList<>();
-    LPVSResultInfo resultInfo = new LPVSResultInfo(null, null, null, null, null);
-    Long count = 42L;
-    Map<String, Integer> licenseCountMap = new HashMap<>();
-    String pullNumber = "123";
-    Boolean hasIssue = true;
+    private List<LPVSResultFile> resultFileList = new ArrayList<>();
+    private LPVSResultInfo resultInfo = new LPVSResultInfo(null, null, null, null, null);
+    private Long count = 42L;
+    private Map<String, Integer> licenseCountMap = new HashMap<>();
+    private String pullNumber = "123";
+    private Boolean hasIssue = true;
 
     @BeforeEach
     public void setUp() {

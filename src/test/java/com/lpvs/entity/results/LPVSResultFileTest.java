@@ -18,13 +18,13 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 public class LPVSResultFileTest {
 
     private LPVSResultFile lpvsResultFile;
-	Long id = 1L;
-	String path = "example/file.txt";
-	String componentFileUrl = "https://example.com/file.txt";
-	String matchLine = "This is a matching line";
-	String matchValue = "LicenseA";
-	String status = "license.licenseUsage";
-	String licenseSpdx = "LicenseA";
+    private Long id = 1L;
+    private String path = "example/file.txt";
+    private String componentFileUrl = "https://example.com/file.txt";
+    private String matchLine = "This is a matching line";
+    private String matchValue = "LicenseA";
+    private String status = "license.licenseUsage";
+    private String licenseSpdx = "LicenseA";
 
     @BeforeEach
     public void setUp() {
