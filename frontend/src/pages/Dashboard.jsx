@@ -200,22 +200,21 @@ export const Dashboard = () => {
                             <div className="overlap">
                                 <div className="div-3" />
                                 <div className="status">
-                                    {Object.entries(dashBoardInfo?.licenseCountMap || {}).map(([license, count]) => {
-
-                                        const cleanLicenseName = license.replace(/[^a-zA-Z]/g, '');
-                                        if ( cleanLicenseName == 'MIT' || cleanLicenseName == 'Apache' || cleanLicenseName == 'GPLorlater' || cleanLicenseName == 'GPLonly' || cleanLicenseName == 'OpenSSL' )
-                                            return (
-                                                <div className={cleanLicenseName} key={license}>
-                                                    <div className="text-wrapper-2">{count}</div>
-                                                    <div className={`text-wrapper-${cleanLicenseName}`}>{license}</div>
-                                                    <div className={`${cleanLicenseName}-color`}></div>
-                                                </div>
-                                            );
-                                        else return null;
-                                    })}
+                                {Object.entries(dashBoardInfo?.licenseCountMap || {}).map(([license, count]) => {
+                                const cleanLicenseName = license.replace(/[^a-zA-Z]/g, '');
+                                if (['MIT', 'Apache', 'GPLorlater', 'GPLonly', 'OpenSSL'].includes(cleanLicenseName)) {
+                                return (
+                                    <div className={`${cleanLicenseName}`} key={license}>
+                                        <div className="text-wrapper-2">{count}</div>
+                                        <div className={`text-wrapper-${cleanLicenseName}`}>{license}</div>
+                                        <div className={`${cleanLicenseName}-color`}></div>
+                                    </div>
+                                );
+                                } else return null;
+                                })}
                                     <div className="Unsupported-license">
                                         <div className="text-wrapper-2">{dashBoardInfo?.totalDetectionCount-add_Licenses()}</div>
-                                        <div className="text-wrapper-unsupport">Other Licenses</div>
+                                        <div className="text-wrapper-Unsupported-license">Other Licenses</div>
                                         <div className="Unsupported-license-color" />
                                     </div>
                                     <div className="total-header">

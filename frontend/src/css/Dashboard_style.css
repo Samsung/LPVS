@@ -113,17 +113,25 @@
     height: 231px;
     left: 434px;
     position: absolute;
-    top: 132px;
+    top: 105px;
     width: 428px;
     z-index: 1000;
+    display: flex;           
+    flex-direction: column;   
+    justify-content: space-between;
+    align-items: center;  
 }
 
-.dashboard-send .GPLorlater {
-    height: 33px;
-    left: 8px;
-    position: absolute;
-    top: 198px;
-    width: 418px;
+.dashboard-send .GPLorlater,
+.dashboard-send .OpenSSL,
+.dashboard-send .GPLonly,
+.dashboard-send .Apache,
+.dashboard-send .MIT,
+.dashboard-send .Unsupported-license {
+    position: relative; 
+    bottom: -40px; 
+    left: -200px; 
+    margin: 20px 0; 
 }
 
 .dashboard-send .text-wrapper-2 {
@@ -131,7 +139,7 @@
     font-family: "Inter-Regular", Helvetica;
     font-size: 25px;
     font-weight: 400;
-    left: 345px;
+    left: 320px;
     letter-spacing: 0;
     line-height: normal;
     position: absolute;
@@ -140,7 +148,12 @@
     width: 41px;
 }
 
-.dashboard-send .text-wrapper-GPLorlater {
+.dashboard-send .text-wrapper-GPLorlater,
+.dashboard-send .text-wrapper-OpenSSL,
+.dashboard-send .text-wrapper-GPLonly,
+.dashboard-send .text-wrapper-Apache,
+.dashboard-send .text-wrapper-MIT,
+.dashboard-send .text-wrapper-Unsupported-license {
     color: #000000;
     font-family: "Inter-Regular", Helvetica;
     font-size: 25px;
@@ -152,29 +165,6 @@
     top: 0;
     white-space: nowrap;
     width: 300px;
-}
-
-.dashboard-send .Unsupported-license {
-    height: 33px;
-    left: 8px;
-    position: absolute;
-    top: 230px;
-    width: 418px;
-
-}
-
-.dashboard-send .text-wrapper-unsupport {
-    color: #000000;
-    font-family: "Inter-Regular", Helvetica;
-    font-size: 25px;
-    font-weight: 400;
-    left: 27px;
-    letter-spacing: 0;
-    line-height: normal;
-    position: absolute;
-    top: 0;
-    white-space: nowrap;
-    width: 148px;
 }
 
 .dashboard-send .Unsupported-license-color {
@@ -196,28 +186,6 @@
     width: 19px;
 }
 
-.dashboard-send .OpenSSL {
-    height: 33px;
-    left: 8px;
-    position: absolute;
-    top: 162px;
-    width: 418px;
-}
-
-.dashboard-send .text-wrapper-OpenSSL {
-    color: #000000;
-    font-family: "Inter-Regular", Helvetica;
-    font-size: 25px;
-    font-weight: 400;
-    left: 27px;
-    letter-spacing: 0;
-    line-height: normal;
-    position: absolute;
-    top: 0;
-    white-space: nowrap;
-    width: 148px;
-}
-
 .dashboard-send .OpenSSL-color {
     background-color: #73c541;
     height: 19px;
@@ -227,59 +195,14 @@
     width: 19px;
 }
 
-.dashboard-send .GPLonly {
-    height: 32px;
-    left: 8px;
-    position: absolute;
-    top: 126px;
-    width: 418px;
-}
-
-.dashboard-send .text-wrapper-GPLonly {
-    color: #000000;
-    font-family: "Inter-Regular", Helvetica;
-    font-size: 25px;
-    font-weight: 400;
-    left: 27px;
-    letter-spacing: 0;
-    line-height: normal;
-    position: absolute;
-    top: 0;
-    white-space: nowrap;
-    width: 290px;
-}
-
 .dashboard-send .GPLonly-color {
     background-color: #000000;
     height: 19px;
     left: 0;
-
     position: absolute;
     top: 3px;
     width: 19px;
     z-index: 2000;
-}
-
-.dashboard-send .Apache {
-    height: 32px;
-    left: 8px;
-    position: absolute;
-    top: 90px;
-    width: 418px;
-}
-
-.dashboard-send .text-wrapper-Apache {
-    color: #000000;
-    font-family: "Inter-Regular", Helvetica;
-    font-size: 25px;
-    font-weight: 400;
-    left: 27px;
-    letter-spacing: 0;
-    line-height: normal;
-    position: absolute;
-    top: 0;
-    white-space: nowrap;
-    width: 168px;
 }
 
 .dashboard-send .Apache-color {
@@ -289,28 +212,6 @@
     position: absolute;
     top: 3px;
     width: 19px;
-}
-
-.dashboard-send .MIT {
-    height: 32px;
-    left: 8px;
-    position: absolute;
-    top: 54px;
-    width: 418px;
-}
-
-.dashboard-send .text-wrapper-MIT {
-    color: #000000;
-    font-family: "Inter-Regular", Helvetica;
-    font-size: 25px;
-    font-weight: 400;
-    left: 27px;
-    letter-spacing: 0;
-    line-height: normal;
-    position: absolute;
-    top: 0;
-    white-space: nowrap;
-    width: 60px;
 }
 
 .dashboard-send .MIT-color {
@@ -354,7 +255,6 @@
     white-space: nowrap;
     width: 142px;
 }
-
 
 .dashboard-send .text-wrapper-9 {
     color: #000000;
