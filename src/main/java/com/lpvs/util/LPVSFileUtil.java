@@ -5,9 +5,8 @@
  * found in the LICENSE file.
  */
 
- package com.lpvs.util;
+package com.lpvs.util;
 
-import com.lpvs.entity.LPVSDiffFile;
 import com.lpvs.entity.LPVSQueue;
 import lombok.extern.slf4j.Slf4j;
 import org.kohsuke.github.GHPullRequestFileDetail;
@@ -22,7 +21,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 
 @Slf4j
@@ -112,71 +110,6 @@ public class LPVSFileUtil {
         if (dir.exists()) {
             FileSystemUtils.deleteRecursively(dir);
         }
-    }
-
-    public static List<LPVSDiffFile> parseDiff(String diffString){
-        LinkedList<LPVSDiffFile> resultFiles = new LinkedList<>();
-        String[] lines = diffString.split("\n");
-        log.debug("# of lines: " + lines.length);
-        for (String line: lines){
-            if (line.startsWith("+++") || line.startsWith("---")){
-                if (line.startsWith("---")){
-                    log.debug("line.startsWith(\"---\")");
-                    LPVSDiffFile diffFile = new LPVSDiffFile();
-                    diffFile.setOldFileName(line.replace("--- ", "")
-                            .replace("---", "")
-                            .replace("a/", "")
-                            .replace("b/", ""));
-                    resultFiles.add(diffFile);
-                }
-                if (line.startsWith("+++")){
-                    log.debug("line.startsWith(\"+++\")");
-                    resultFiles.getLast().setNewFileName(line.replace("+++ ", "")
-                            .replace("+++", "")
-                            .replace("a/", "")
-                            .replace("b/", ""));
-                }
-            } else if (line.startsWith("+")){
-                log.debug("line.startsWith(\"+\")");
-                resultFiles.getLast().appendPatchedLine(line.replace("+", ""));
-            } else {
-                log.debug("Skip the line.");
-            }
-        }
-        return resultFiles;
-    }
-
-    public static LPVSDiffFile checkFilePath(LPVSDiffFile diffFile){
-        if (null == diffFile) {
-            log.error("DiffFile is absent");
-            return null;
-        }
-        if (!diffFile.getNewFileName().equals(diffFile.getOldFileName())){
-            if (diffFile.getNewFileName().contains("/dev/null") && !diffFile.getOldFileName().contains("/dev/null"))
-                diffFile.setNewFileName(diffFile.getOldFileName());
-            if (diffFile.getOldFileName().contains("/dev/null") && !diffFile.getNewFileName().contains("/dev/null"))
-                diffFile.setOldFileName(diffFile.getNewFileName());
-        }
-        return diffFile;
-    }
-
-    public static String saveReviewBotDiffs(String patch, LPVSQueue webhookConfig) {
-        String directoryPath = LPVSFileUtil.getLocalDirectoryPath(webhookConfig);
-        deleteIfExists(directoryPath);
-        boolean result = new File(directoryPath).mkdirs();
-        if (result) {
-            List<LPVSDiffFile> parsedDiffs = parseDiff(patch);
-            for (LPVSDiffFile diffFile: parsedDiffs) {
-                if (null == diffFile) {
-                    log.error("DiffFile is absent");
-                    continue;
-                }
-                log.info(checkFilePath(diffFile).getNewFileName());
-                log.info(diffFile.getChangedLines().toString());
-                saveFile(checkFilePath(diffFile).getNewFileName(), directoryPath, diffFile.getChangedLines());
-            }
-        }
-        return directoryPath;
     }
 
     public static String getLocalDirectoryPath(LPVSQueue webhookConfig){

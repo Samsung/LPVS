@@ -68,8 +68,8 @@ public class LPVSWebhookUtil {
         }
 
         if (null == webhookConfig.getRepositoryUrl()) {
-            log.error("No repository url info in webhook config");
-            return "No repository url info in webhook config";
+            log.error("No repository URL info in webhook config");
+            return "No repository URL info in webhook config";
         }
 
         List<String> url = Arrays.asList(webhookConfig.getRepositoryUrl().split("/"));
@@ -83,8 +83,8 @@ public class LPVSWebhookUtil {
         }
 
         if (null == webhookConfig.getRepositoryUrl()) {
-            log.error("No repository url info in webhook config");
-            return "No repository url info in webhook config";
+            log.error("No repository URL info in webhook config");
+            return "No repository URL info in webhook config";
         }
 
         List<String> url = Arrays.asList(webhookConfig.getRepositoryUrl().split("/"));
@@ -102,8 +102,13 @@ public class LPVSWebhookUtil {
         }
 
         if (null == webhookConfig.getRepositoryUrl()) {
-            log.error("No repository url info in webhook config");
-            return "No repository url info in webhook config";
+            log.error("No repository URL info in webhook config");
+            return "No repository URL info in webhook config";
+        }
+
+        if (null == webhookConfig.getPullRequestUrl()) {
+            log.error("Pull Request URL is absent in webhook config");
+            return "Pull Request URL is absent in webhook config";
         }
 
         List<String> url = Arrays.asList(webhookConfig.getPullRequestUrl().split("/"));
