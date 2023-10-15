@@ -531,19 +531,33 @@
     white-space: nowrap;
     width: 150px;
   }
-  
+
+  .user .text-wrapper-17 {
+    color: #000000;
+    font-family: "Inter-Regular", Helvetica;
+    font-size: 30px;
+    font-weight: 400;
+    left: 265px;
+    letter-spacing: 0;
+    line-height: normal;
+    position: absolute;
+    top: 6px;
+    white-space: nowrap;
+    width: 104px;
+  }
+
   .user .text-wrapper-18 {
     color: #000000;
     font-family: "Inter-Regular", Helvetica;
     font-size: 30px;
     font-weight: 400;
-    left: 320px;
+    left: 155px;
     letter-spacing: 0;
     line-height: normal;
     position: absolute;
-    top: 3px;
+    top: 6px;
     white-space: nowrap;
-    width: 104px;
+    width: 167px;
   }
 
   .user .profile-border {

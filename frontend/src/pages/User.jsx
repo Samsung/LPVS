@@ -109,6 +109,17 @@ export const User = () => {
     }));
   };
 
+  const handleLinkClick = (event) => {
+    event.preventDefault(); // Prevent default action
+
+    if (!userInfo?.nickname) {
+      alert('To use service, You must enter a GitHub ID.');
+      navigate('/user/setting');
+    } else {
+      navigate(`/dashboard/send/${userInfo.nickname}`);
+    }
+  };
+
   const handleHistoryLinkClick = (event) => {
     event.preventDefault();
 
@@ -287,7 +298,15 @@ export const User = () => {
                         </div>
                 </div>
               </div>
-              <div className="text-wrapper-18">
+            <div className="text-wrapper-17">
+              <Link
+                  to={`/dashboard/send/${userInfo?.nickname}`}
+                  style={{ color: 'black', textDecoration: 'none' }}
+                  onClick={handleLinkClick}>
+                Dashboard
+              </Link>
+            </div>
+            <div className="text-wrapper-18">
                 <Link
                   to={`/history/send/${userInfo?.nickname}`}
                   style={{ color: 'black', textDecoration: 'none' }}

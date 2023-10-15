@@ -15,6 +15,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.Date;
+import java.util.List;
 
 public interface LPVSPullRequestRepository extends JpaRepository<LPVSPullRequest, Long> {
     @Query(value = "SELECT now();", nativeQuery = true)
@@ -35,11 +36,17 @@ public interface LPVSPullRequestRepository extends JpaRepository<LPVSPullRequest
     @Query(value = "select pr from LPVSPullRequest pr where pr.pullRequestBase = :name")
     Page<LPVSPullRequest> findByPullRequestBase(@Param("name") String name, Pageable pageable);
 
+    @Query(value = "select pr from LPVSPullRequest pr where pr.pullRequestBase = :name")
+    List<LPVSPullRequest> findByPullRequestBase(@Param("name") String name);
+
     @Query(value = "select count(*) from LPVSPullRequest pr where pr.pullRequestBase = :name")
     Long CountByPullRequestBase(@Param("name") String name);
 
     @Query(value = "select pr from LPVSPullRequest pr where pr.sender = :name or pr.pullRequestHead = :name")
     Page<LPVSPullRequest> findBySenderOrPullRequestHead(@Param("name") String name, Pageable pageable);
+
+    @Query(value = "select pr from LPVSPullRequest pr where pr.sender = :name or pr.pullRequestHead = :name")
+    List<LPVSPullRequest> findBySenderOrPullRequestHead(@Param("name") String name);
 
     @Query(value = "select count(*) from LPVSPullRequest pr where pr.sender = :name or pr.pullRequestHead = :name")
     Long CountBySenderOrPullRequestHead(@Param("name") String name);

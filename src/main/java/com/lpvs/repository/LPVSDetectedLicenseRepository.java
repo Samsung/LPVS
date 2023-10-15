@@ -32,5 +32,8 @@ public interface LPVSDetectedLicenseRepository extends JpaRepository<LPVSDetecte
     @Query(value = "select distinct dl.license from LPVSDetectedLicense dl where dl.pullRequest = :pr")
     List<LPVSLicense> findDistinctByLicense(@Param("pr") LPVSPullRequest pr);
 
+    @Query(value = "select dl from LPVSDetectedLicense dl where dl.pullRequest = :pr and dl.license is not null")
+    List<LPVSDetectedLicense> findNotNullDLByPR(@Param("pr") LPVSPullRequest pr);
+
 
 }

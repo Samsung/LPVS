@@ -8,6 +8,7 @@
 package com.lpvs.controller;
 
 import com.lpvs.entity.*;
+import com.lpvs.entity.dashboard.Dashboard;
 import com.lpvs.entity.history.HistoryEntity;
 import com.lpvs.entity.history.HistoryPageEntity;
 import com.lpvs.entity.history.LPVSHistory;
@@ -19,6 +20,7 @@ import com.lpvs.repository.LPVSLicenseRepository;
 import com.lpvs.repository.LPVSMemberRepository;
 import com.lpvs.repository.LPVSPullRequestRepository;
 import com.lpvs.service.LPVSLoginCheckService;
+import com.lpvs.service.LPVSStatisticsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -47,14 +49,17 @@ public class LPVSWebController implements ErrorController {
     private LPVSLicenseRepository licenseRepository;
     private LPVSLoginCheckService lpvsLoginCheckService;
 
+    private LPVSStatisticsService lpvsStatisticsService;
+
     public LPVSWebController(LPVSMemberRepository memberRepository, LPVSDetectedLicenseRepository detectedLicenseRepository,
                              LPVSPullRequestRepository lpvsPullRequestRepository, LPVSLicenseRepository licenseRepository,
-                             LPVSLoginCheckService LPVSLoginCheckService) {
+                             LPVSLoginCheckService lpvsLoginCheckService, LPVSStatisticsService lpvsStatisticsService) {
         this.memberRepository = memberRepository;
         this.detectedLicenseRepository = detectedLicenseRepository;
         this.lpvsPullRequestRepository = lpvsPullRequestRepository;
         this.licenseRepository = licenseRepository;
-        this.lpvsLoginCheckService = LPVSLoginCheckService;
+        this.lpvsLoginCheckService = lpvsLoginCheckService;
+        this.lpvsStatisticsService = lpvsStatisticsService;
     }
 
     @RequestMapping("/api/v1/web")
@@ -117,8 +122,8 @@ public class LPVSWebController implements ErrorController {
 
                 lpvsHistories.add(new LPVSHistory(formattingDateTime, pr.getRepositoryName(), pr.getId(),
                         pr.getPullRequestUrl(), pr.getStatus(), pr.getSender(),
-                        pullNumberTemp[pullNumberTemp.length-2] + "/" +
-                                pullNumberTemp[pullNumberTemp.length-1], hasIssue));
+                        pullNumberTemp[pullNumberTemp.length - 2] + "/" +
+                                pullNumberTemp[pullNumberTemp.length - 1], hasIssue));
             }
 
             HistoryEntity historyEntity = new HistoryEntity(lpvsHistories, count);
@@ -183,6 +188,17 @@ public class LPVSWebController implements ErrorController {
                     tempPullNumber[tempPullNumber.length-2] + '/' +
                             tempPullNumber[tempPullNumber.length-1], hasIssue);
             return lpvsResult;
+        }
+
+        @ResponseBody
+        @GetMapping("dashboard/{type}/{name}")
+        public Dashboard dashboardPage(@PathVariable("type") String type,
+                                       @PathVariable("name") String name,
+                                       Authentication authentication) {
+
+            Dashboard dashboardEntity = lpvsStatisticsService.getDashboardEntity(type, name, authentication);
+
+            return dashboardEntity;
         }
     }
 
