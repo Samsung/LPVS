@@ -7,6 +7,7 @@
 
 package com.lpvs.entity.dashboard;
 
+import com.lpvs.entity.enums.Grade;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

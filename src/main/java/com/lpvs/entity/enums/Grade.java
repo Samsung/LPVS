@@ -5,7 +5,7 @@
  * found in the LICENSE file.
  */
 
-package com.lpvs.entity.dashboard;
+package com.lpvs.entity.enums;
 
 public enum Grade {
     SERIOUS, HIGH, MIDDLE, LOW, NONE

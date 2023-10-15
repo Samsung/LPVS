@@ -12,7 +12,7 @@ import com.lpvs.entity.LPVSMember;
 import com.lpvs.entity.LPVSPullRequest;
 import com.lpvs.entity.dashboard.Dashboard;
 import com.lpvs.entity.dashboard.DashboardElementsByDate;
-import com.lpvs.entity.dashboard.Grade;
+import com.lpvs.entity.enums.Grade;
 import com.lpvs.exception.WrongAccessException;
 import com.lpvs.repository.LPVSDetectedLicenseRepository;
 import com.lpvs.repository.LPVSLicenseRepository;
