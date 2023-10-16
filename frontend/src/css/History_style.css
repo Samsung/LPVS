@@ -4,6 +4,7 @@
  * Use of this source code is governed by a MIT license that can be
  * found in the LICENSE file.
  */
+
 .history-send {
   background-color: #ffffff;
   display: flex;
@@ -14,7 +15,6 @@
 .history-send .div {
   background-color: #ffffff;
   border: 1px none;
-  /* height: 1080px; */
   position: relative;
   width: 1920px;
 }
@@ -220,7 +220,6 @@
   white-space: nowrap;
 }
 
-/* 바꿈 */
 .history-send .page-move-tool-bar {
   height: 30px;
   left: 900px;
@@ -307,12 +306,10 @@
   cursor: pointer;
 }
 
-/* 전체 히스토리 여기 */
 .history-send .overlap-2 {
   width: 1236px;
   position: relative;
   margin: 140px 0 0 630px;
-  /* 변경됨 */
 }
 
 .history-send .history-box {
@@ -323,19 +320,16 @@
   width: 1236px;
 }
 
-/* 바뀜 */
 .history-send .history {
   height: 158px;
   left: 0;
-  /* position: absolute; */
   top: 724px;
   width: 1242px;
 }
 
-/* 바뀜 */
 .history-send .overlap-3 {
   margin-top: 22px;
-  background-image: url(../../public/image/Stroke.png);
+  background-image: url(../../public/image/png/Stroke.png);
   background-size: 100% 100%;
   height: 166px;
   position: relative;
@@ -439,7 +433,7 @@
 }
 
 .history-send .overlap-4 {
-  background-image: url(../../public/image/Stroke.png);
+  background-image: url(../../public/image/png/Stroke.png);
   background-size: 100% 100%;
   height: 166px;
   left: -4px;
@@ -541,7 +535,7 @@
 }
 
 .history-send .overlap-6 {
-  background-image: url(../../public/image/Stroke.png);
+  background-image: url(../../public/image/png/Stroke.png);
   background-size: 100% 100%;
   height: 166px;
   left: -4px;
@@ -614,7 +608,7 @@
 }
 
 .history-send .overlap-7 {
-  background-image: url(../../public/image/Stroke.png);
+  background-image: url(../../public/image/png/Stroke.png);
   background-size: 100% 100%;
   height: 166px;
   left: -4px;
@@ -680,7 +674,7 @@
 }
 
 .history-send .overlap-9 {
-  background-image: url(../../public/image/Stroke.png);
+  background-image: url(../../public/image/png/Stroke.png);
   background-size: 100% 100%;
   height: 166px;
   left: -4px;
@@ -889,7 +883,7 @@
   object-fit: cover;
   position: absolute;
   top: 0;
-  width: 309px;
+  width: 229px;
 }
 
 .history-send .complete {
@@ -1020,7 +1014,6 @@
   width: 100%;
 }
 
-/* 바뀜 */
 .history-send .dropdown {
   margin-left: 595px;
   margin-top: -5px;
