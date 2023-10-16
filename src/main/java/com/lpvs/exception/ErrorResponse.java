@@ -7,8 +7,11 @@
 
 package com.lpvs.exception;
 
+import lombok.Getter;
+
 import java.time.LocalDateTime;
 
+@Getter
 public class ErrorResponse {
 
     private LocalDateTime timestamp = LocalDateTime.now();
@@ -21,21 +24,5 @@ public class ErrorResponse {
         this.message = message;
         this.code = code;
         this.status = status;
-    }
-
-    public LocalDateTime getTimestamp() {
-        return timestamp;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public int getStatus() {
-        return status;
     }
 }
