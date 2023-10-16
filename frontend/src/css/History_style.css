@@ -1,23 +1,14 @@
-/**
- * Copyright 2023 kyudori, Basaeng, hwan5180, quswjdgma83
- *
- * Use of this source code is governed by a MIT license that can be
- * found in the LICENSE file.
- */
-
 .history-send {
   background-color: #ffffff;
   display: flex;
   flex-direction: row;
   justify-content: center;
-  width: 100%;
-  position: relative;
 }
 
 .history-send .div {
   background-color: #ffffff;
   border: 1px none;
-  height: 1080px;
+  /* height: 1080px; */
   position: relative;
   width: 1920px;
 }
@@ -223,20 +214,20 @@
   white-space: nowrap;
 }
 
+/* 바꿈 */
 .history-send .page-move-tool-bar {
   height: 30px;
-  left: 845px;
+  left: 900px;
   position: absolute;
-  top: 1027px;
   width: 286px;
 }
 
 .history-send .page-number {
   align-items: flex-start;
+  margin-top: 20px;
   display: inline-flex;
   gap: 33px;
   left: 35px;
-  position: absolute;
   top: 0;
 }
 
@@ -310,12 +301,12 @@
   cursor: pointer;
 }
 
+/* 전체 히스토리 여기 */
 .history-send .overlap-2 {
-  height: 882px;
-  left: 635px;
-  position: absolute;
-  top: 134px;
   width: 1236px;
+  position: relative;
+  margin: 140px 0 0 630px;
+  /* 변경됨 */
 }
 
 .history-send .history-box {
@@ -326,19 +317,21 @@
   width: 1236px;
 }
 
+/* 바뀜 */
 .history-send .history {
   height: 158px;
   left: 0;
-  position: absolute;
+  /* position: absolute; */
   top: 724px;
   width: 1242px;
 }
 
+/* 바뀜 */
 .history-send .overlap-3 {
-  background-image: url(../../public/image/png/Stroke.png);
+  margin-top: 22px;
+  background-image: url(../../public/image/Stroke.png);
   background-size: 100% 100%;
   height: 166px;
-  left: -4px;
   position: relative;
   width: 1244px;
 }
@@ -440,7 +433,7 @@
 }
 
 .history-send .overlap-4 {
-  background-image: url(../../public/image/png/Stroke.png);
+  background-image: url(../../public/image/Stroke.png);
   background-size: 100% 100%;
   height: 166px;
   left: -4px;
@@ -542,7 +535,7 @@
 }
 
 .history-send .overlap-6 {
-  background-image: url(../../public/image/png/Stroke.png);
+  background-image: url(../../public/image/Stroke.png);
   background-size: 100% 100%;
   height: 166px;
   left: -4px;
@@ -615,7 +608,7 @@
 }
 
 .history-send .overlap-7 {
-  background-image: url(../../public/image/png/Stroke.png);
+  background-image: url(../../public/image/Stroke.png);
   background-size: 100% 100%;
   height: 166px;
   left: -4px;
@@ -681,7 +674,7 @@
 }
 
 .history-send .overlap-9 {
-  background-image: url(../../public/image/png/Stroke.png);
+  background-image: url(../../public/image/Stroke.png);
   background-size: 100% 100%;
   height: 166px;
   left: -4px;
@@ -747,17 +740,17 @@
 
 
 .history-send .text-wrapper-21 {
-  color: #000000;
-  font-family: "Inter-Regular", Helvetica;
-  font-size: 30px;
-  font-weight: 400;
-  left: 1425px;
+  color: #d60000cf;
+  font-family: "Inter-Medium", Helvetica;
+  font-size: 20px;
+  font-weight: 500;
+  left: 44px;
   letter-spacing: 0;
   line-height: normal;
   position: absolute;
-  top: 43px;
+  top: 2px;
   white-space: nowrap;
-  width: 167px;
+  width: 100%
 }
 
 .history-send .menubar-top {
@@ -769,7 +762,7 @@
 }
 
 .history-send .menu-line {
-  background-color: #0057b8;
+  background-color: #000000;
   height: 3px;
   left: 0;
   position: absolute;
@@ -778,6 +771,7 @@
 }
 
 .history-send .menu {
+  background-color: white;
   height: 96px;
   left: 0;
   position: absolute;
@@ -808,11 +802,11 @@
   font-family: "Inter-Regular", Helvetica;
   font-size: 30px;
   font-weight: 400;
-  left: 1535px;
+  left: 0;
   letter-spacing: 0;
   line-height: normal;
   position: absolute;
-  top: 43px;
+  top: 6px;
   width: 115px;
 }
 
@@ -855,13 +849,41 @@
   width: 71px;
 }
 
+.history-send .text-wrapper-24 {
+  color: #000000;
+  font-family: "Inter-Regular", Helvetica;
+  font-size: 30px;
+  font-weight: 400;
+  left: 1395px;
+  letter-spacing: 0;
+  line-height: normal;
+  position: absolute;
+  top: 43px;
+  white-space: nowrap;
+  width: 167px;
+}
+
+.history-send .text-wrapper-25 {
+  color: #000000;
+  font-family: "Inter-Regular", Helvetica;
+  font-size: 30px;
+  font-weight: 400;
+  left: 1270px;
+  letter-spacing: 0;
+  line-height: normal;
+  position: absolute;
+  top: 43px;
+  white-space: nowrap;
+  width: 104px;
+}
+
 .history-send .LPVS {
   height: 96px;
   left: 0;
   object-fit: cover;
   position: absolute;
   top: 0;
-  width: 229px;
+  width: 309px;
 }
 
 .history-send .complete {
@@ -874,23 +896,11 @@
   top: 0px;
   white-space: nowrap;
   width: 100%;
-  margin-left: 10px;  
-  position: static;
-  z-index: 1;
-}
-
-.history-send .text-wrapper-998 {
-  color: #000000;
-  font-family: "Inter-Medium", Helvetica;
-  font-size: 20px;
-  font-weight: 500;
-  letter-spacing: 0;
-  line-height: normal;
-  top: 0;
-  width: 100%;
   margin-left: 10px;
+
   position: static;
-  right: 0;
+
+  z-index: 1;
 }
 
 .history-send .status-label {
@@ -1002,4 +1012,37 @@
   position: absolute;
   top: 3px;
   width: 100%;
+}
+
+/* 바뀜 */
+.history-send .dropdown {
+  margin-left: 595px;
+  margin-top: -5px;
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.history-send .dropdown span {
+  justify-content: start;
+  width: 170px;
+  font-size: 25px;
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+.history-send .dropdown select {
+  padding: 5px 12px;
+  border: 0.1px solid black;
+  border-radius: 8px;
+  background-color: white;
+  font-size: 16px;
+  text-align: center;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.history-send .dropdown select:focus {
+  border-color: #007BFF;
 }
