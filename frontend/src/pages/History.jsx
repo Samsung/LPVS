@@ -25,6 +25,12 @@ export const History= () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState("");
 
+  const [selectedSize, setSelectedSize] = useState(null);
+
+  useEffect(() => {
+  	setSelectedSize(5);
+}, []);
+
   useEffect(() => {
     axios.get("/user/login")
       .then((loginresponse) => {
@@ -52,7 +58,6 @@ export const History= () => {
     axios
       .get(`/history/${type}/${name}?page=${page}`)
       .then((response) => {
-        console.log(response.data)
           setlpvsHistories(response.data);
       })
       .catch(function(error) {
@@ -64,7 +69,7 @@ export const History= () => {
           navigate(`/history/send/${username?.nickname}?page=0`);
         }
       });
-  }, [type, name, page]);
+  }, [type, name, page, selectedSize]);
 
   const handlePageChange = (pageNumber) => {
     navigate(`/history/${type}/${name}?page=${pageNumber}`);
@@ -79,8 +84,6 @@ export const History= () => {
       setIsHistoriesEmpty(false);
     }
   }, [lpvsHistories, page]);
-  
-  console.log(lpvsHistories)
 
   const navigateToOrg = () => {
     if (!username?.organization || username?.organization.trim() === "") {
@@ -100,10 +103,8 @@ export const History= () => {
    const [currentPage, setCurrentPage] = useState(1);
 
    useEffect(()=> {
-    setPageCount(Math.ceil(lpvsHistories?.count/5))
-    }, [lpvsHistories?.count, currentPage]);
-
-   console.log(pageCount);
+    setPageCount(Math.ceil(lpvsHistories?.count/selectedSize));
+}, [lpvsHistories?.count, selectedSize]);
 
    const check_page_plus =()=> {
     if(currentPage <= pageCount) {
@@ -114,8 +115,7 @@ export const History= () => {
       return 
     }
    }
-   console.log(page);
-   console.log(currentPage);
+
    const check_page_minus =(page)=> {
     if(page <=4) {
       return setCurrentPage(currentPage)
@@ -142,7 +142,6 @@ export const History= () => {
       return 'Scan-completed';
     }
    }
-   console.log(lpvsHistories?.lpvsHistories[0]?.status)
 
   if (!lpvsHistories) {
     return <div>Loading...</div>;
@@ -161,7 +160,76 @@ export const History= () => {
       return false;
     }
   }
-  console.log(isHistoriesEmpty)
+
+  
+const renderHistories = (size) => {
+  return Array.from({ length: size }).map((_, index) => {
+    const history = lpvsHistories.lpvsHistories[index];
+    if (history?.status !== undefined) {
+      return (
+        <Link
+          key={index}
+          to={`/result/${history?.pullRequestId}`}
+          style={{ color: "black", textDecoration: "none" }}
+        >
+          <div className="history">
+            <div className="overlap-3">
+              <div className="text-wrapper-7">
+                {history?.repositoryName}
+                <div className="status-scan-error">
+                  <div className="overlap-10">
+                    <div className={status_check(history?.hasIssue) + '-text'}>
+                      {status_check(history?.hasIssue)}
+                    </div>
+                    <div className={status_check(history?.hasIssue)} />
+                    <div className="prid">
+                      <div className="div-wrapper">
+                        <div className="text-wrapper-10">{history?.pullNumber}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="text-wrapper-8">{history?.url}</div>
+                <div className="text-wrapper-9">{history?.scanDate}</div>
+              </div>
+            </div>
+          </div>
+        </Link>
+      );
+    }
+    return null;
+  });
+};
+
+const SIZE_DATA = [
+  { id: null, value: 'Choose view Size.' },
+  { id: '5', value: '5' },
+  { id: '10', value: '10' },
+  { id: '20', value: '20' },
+  { id: '50', value: '50' },
+];
+
+const SizeDropdown = () => {
+  const handleChange = (e) => {
+    setSelectedSize(e.target.value);
+    setCurrentPage(1);
+  };
+
+  return (
+    <div className="dropdown">
+        {selectedSize && <span> View Items {selectedSize}</span>}
+          <select  value={selectedSize} onChange={handleChange}>
+            {SIZE_DATA.map((product) => (
+              <option key={product.id} value={product.id}  disabled={product.id === null}>
+                {product.value}
+              </option>
+            ))}
+          </select>
+    </div>
+  );
+};
+
+
   return (
     <div className="history-send">
       <div className="div">
@@ -201,6 +269,11 @@ export const History= () => {
             </div>
           </div>
         </div>
+
+        <div className="overlap-2">
+          {renderHistories(selectedSize ?? 5)}
+        </div>
+
         <div className="page-move-tool-bar">
           <div className="page-number">
           <img src="/image/svg/LeftArrow.svg" onClick={() => {
@@ -216,137 +289,10 @@ export const History= () => {
             {trueOrFalse(currentPage+5) ? <img src="/image/svg/RightArrow.svg" onClick={() => {check_page_plus(); handlePageChange(currentPage + 4); }}style={{ cursor: "pointer" }}/> 
             : 
             <img src="/image/svg/RightArrow.svg" style={{ cursor: "pointer", opacity: 0.5 }}/>}
+            <SizeDropdown />
           </div>
         </div>
-        <div className="overlap-2">
-          <div className="history-box">
-        {lpvsHistories.lpvsHistories[4]?.status !== undefined ? (      
-          <Link to={`/result/${lpvsHistories.lpvsHistories[4]?.pullRequestId}`} style={{ color: "black", textDecoration: "none"}}>
-        <div className="history">
-            <div className="overlap-3">
 
-              <div className="text-wrapper-7">
-                  {lpvsHistories.lpvsHistories[4]?.repositoryName}
-                <div className="status-scan-error">
-                    <div className="overlap-10">
-                      <div className={status_check(lpvsHistories.lpvsHistories[4]?.hasIssue) + '-text'}>
-                        {status_check(lpvsHistories.lpvsHistories[4]?.hasIssue)}
-                      </div>
-                      <div className={status_check(lpvsHistories.lpvsHistories[4]?.hasIssue)} />
-                      <div className="prid">
-                        <div className="div-wrapper">
-                          <div className="text-wrapper-10">{lpvsHistories.lpvsHistories[4]?.pullNumber}</div>
-                        </div>
-                      </div>
-                    </div>
-              </div>
-            </div>
-
-              <div className="text-wrapper-8">{lpvsHistories.lpvsHistories[4]?.url}</div>
-              <div className="text-wrapper-9">{lpvsHistories.lpvsHistories[4]?.scanDate}</div>
-            </div>
-          </div></Link>    ): null}        
-
-          {lpvsHistories.lpvsHistories[3]?.status !== undefined ? (  
-            <Link to={`/result/${lpvsHistories.lpvsHistories[3]?.pullRequestId}`} style={{ color: "black", textDecoration: "none"}}>          
-          <div className="overlap-wrapper">
-              <div className="overlap-4">
-                <div className="text-wrapper-11">
-                  {lpvsHistories.lpvsHistories[3]?.repositoryName}
-                  <div className="status-issue">
-                    <div className="overlap-5">
-                      <div className={status_check(lpvsHistories.lpvsHistories[3]?.hasIssue) + '-text'}>{status_check(lpvsHistories.lpvsHistories[3]?.hasIssue)}</div>
-                      <div className={status_check(lpvsHistories.lpvsHistories[3]?.hasIssue)} />
-                    </div>
-                    <div className="overlap-group-wrapper">
-                      <div className="div-wrapper">
-                        <div className="text-wrapper-13">{lpvsHistories.lpvsHistories[3]?.pullNumber}</div>
-                      </div>
-                    </div>
-                    
-                  </div>
-                </div>
-                <div className="text-wrapper-8">{lpvsHistories.lpvsHistories[3]?.url}</div>
-                <div className="text-wrapper-9">{lpvsHistories.lpvsHistories[3]?.scanDate}</div>
-              </div>
-            </div>
-            </Link>): null}
-
-            {lpvsHistories.lpvsHistories[2]?.status !== undefined ? (
-              <Link to={`/result/${lpvsHistories.lpvsHistories[2]?.pullRequestId}`} style={{ color: "black", textDecoration: "none"}}>
-             <div className="history-2">
-              <div className="overlap-6">
-                <div className="text-wrapper-15">
-                  {lpvsHistories.lpvsHistories[2]?.repositoryName}
-                  <div className="status-scan">
-                    <div className="overlap-5">
-                      <div className={status_check(lpvsHistories.lpvsHistories[2]?.hasIssue) + '-text'}>{status_check(lpvsHistories.lpvsHistories[2]?.hasIssue)}</div>
-                      <div className={status_check(lpvsHistories.lpvsHistories[2]?.hasIssue)} />
-                    </div>
-                    <div className="prid-2">
-                      <div className="div-wrapper">
-                        <div className="text-wrapper-16">{lpvsHistories.lpvsHistories[2]?.pullNumber}</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="text-wrapper-8">{lpvsHistories.lpvsHistories[2]?.url}</div>
-                <div className="text-wrapper-9">{lpvsHistories.lpvsHistories[2]?.scanDate}</div>
-              </div>
-            </div>
-            </Link>
-            ): null}
-
-            {lpvsHistories.lpvsHistories[1]?.status !== undefined ? (   
-              <Link to={`/result/${lpvsHistories.lpvsHistories[1]?.pullRequestId}`} style={{ color: "black", textDecoration: "none"}}>
-            <div className="history-3">
-              <div className="overlap-7">
-                <div className="text-wrapper-17">
-                  {lpvsHistories.lpvsHistories[1]?.repositoryName}
-                  <div className="status-scan-2">
-                    <div className="overlap-8">
-                      <div className={status_check(lpvsHistories.lpvsHistories[1]?.hasIssue) + '-text'}>{status_check(lpvsHistories.lpvsHistories[1]?.hasIssue)}</div>
-                      <div className={status_check(lpvsHistories.lpvsHistories[1]?.hasIssue)} />
-                    </div>
-                    <div className="prid-3">
-                      <div className="div-wrapper">
-                        <div className="text-wrapper-18">{lpvsHistories.lpvsHistories[1]?.pullNumber}</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="text-wrapper-8">{lpvsHistories.lpvsHistories[1]?.url}</div>
-                <div className="text-wrapper-9">{lpvsHistories.lpvsHistories[1]?.scanDate}</div>
-              </div>
-            </div>
-            </Link>         
-            ) : null}
-            {lpvsHistories.lpvsHistories[0]?.status !== undefined ? (            
-            <Link to={`/result/${lpvsHistories.lpvsHistories[0]?.pullRequestId}`} style={{ color: "black", textDecoration: "none"}}>
-            <div className="history-4">
-              <div className="overlap-9">
-                <div className="text-wrapper-19">
-                  {lpvsHistories.lpvsHistories[0]?.repositoryName}
-                  <div className="status-issue-2">
-                    <div className="overlap-5">
-                      <div className={status_check(lpvsHistories.lpvsHistories[0]?.hasIssue) + '-text'}>{status_check(lpvsHistories.lpvsHistories[0]?.hasIssue)}</div>
-                      <div className={status_check(lpvsHistories.lpvsHistories[0]?.hasIssue)} />
-                    </div>
-                    <div className="prid-4">
-                      <div className="div-wrapper">
-                        <div className="text-wrapper-20">{lpvsHistories.lpvsHistories[0]?.pullNumber}</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="text-wrapper-8">{lpvsHistories.lpvsHistories[0]?.url}</div>
-                <div className="text-wrapper-9">{lpvsHistories.lpvsHistories[0]?.scanDate}</div>
-              </div>
-            </div>
-            </Link>
-            ): null}
-          </div>
-        </div>
         <div className="menubar-top">
           <div className="menu-line" />
           <div className="menu">
@@ -364,8 +310,7 @@ export const History= () => {
                 </div>
               </div>
             </div>
-              <div className="text-wrapper-22"><Link to={`/dashboard/send/${username?.nickname}`} style={{ color: "black", textDecoration: "none"}}>Dashboard</Link></div>
-              <div className="text-wrapper-21">
+              <div className="text-wrapper-22">
                 <Link 
                 to={`/history/send/${username?.nickname}?page=0`} 
                 style={{ color: "black", textDecoration: "none"}}>History
