@@ -12,10 +12,11 @@ import com.lpvs.entity.enums.LPVSPullRequestAction;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class WebHookUtilTest {
+public class LPVSWebhookUtilTest {
 
     @Nested
     class TestGetGitHubWebhookConfig__ForkTrue {
@@ -177,6 +178,46 @@ public class WebHookUtilTest {
 
             json_to_test = "{\"action\": \"any_of_above\"}";
             assertFalse(LPVSWebhookUtil.checkPayload(json_to_test));
+        }
+    }
+
+    @Nested
+    public class TestGetPullRequestId {
+
+        @Mock
+        private LPVSQueue mockWebhookConfig;
+
+        @Test
+        public void testGetPullRequestIdWithValidConfig() {
+            mockWebhookConfig = new LPVSQueue();
+            mockWebhookConfig.setRepositoryUrl("https://github.com/repo");
+            mockWebhookConfig.setPullRequestUrl("https://github.com/repo/pull/123");
+            String result = LPVSWebhookUtil.getPullRequestId(mockWebhookConfig);
+            assertEquals("123", result);
+        }
+
+        @Test
+        public void testGetPullRequestIdWithNullConfig() {
+            mockWebhookConfig = null;
+            String result = LPVSWebhookUtil.getPullRequestId(mockWebhookConfig);
+            assertEquals("Webhook is absent", result);
+        }
+
+        @Test
+        public void testGetPullRequestIdWithNullRepositoryUrl() {
+            mockWebhookConfig = new LPVSQueue();
+            mockWebhookConfig.setRepositoryUrl(null);
+            String result = LPVSWebhookUtil.getPullRequestId(mockWebhookConfig);
+            assertEquals("No repository URL info in webhook config", result);
+        }
+
+        @Test
+        public void testGetPullRequestIdWithNullPullRequestUrl() {
+            mockWebhookConfig = new LPVSQueue();
+            mockWebhookConfig.setRepositoryUrl("https://github.com/repo");
+            mockWebhookConfig.setPullRequestUrl(null);
+            String result = LPVSWebhookUtil.getPullRequestId(mockWebhookConfig);
+            assertEquals("Pull Request URL is absent in webhook config", result);
         }
     }
 }
