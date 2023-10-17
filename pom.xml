@@ -24,11 +24,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-core</artifactId>
-            <version>6.1.7.Final</version>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.boot.experimental</groupId>
             <artifactId>spring-boot-thin-layout</artifactId>
             <version>1.0.31.RELEASE</version>
