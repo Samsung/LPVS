@@ -9,12 +9,14 @@ package com.lpvs.entity.dashboard;
 
 import com.lpvs.entity.enums.Grade;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import java.time.LocalDate;
 import java.util.Map;
 
 @Getter @AllArgsConstructor
+@EqualsAndHashCode
 public class DashboardElementsByDate {
     private LocalDate date;
     private int participantCount;

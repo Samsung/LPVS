@@ -14,7 +14,7 @@ import lombok.Setter;
 import java.util.List;
 import java.util.Map;
 
-@Getter @Setter @AllArgsConstructor
+@Getter @AllArgsConstructor
 public class Dashboard {
     private String name;
     private Map<String, Integer> licenseCountMap;
