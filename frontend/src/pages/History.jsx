@@ -25,11 +25,7 @@ export const History = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState("");
 
-  const [selectedSize, setSelectedSize] = useState(null);
-
-  useEffect(() => {
-    setSelectedSize(5);
-  }, []);
+  const [selectedSize, setSelectedSize] = useState(5);
 
   useEffect(() => {
     axios.get("/user/login")
@@ -106,7 +102,7 @@ export const History = () => {
     setPageCount(Math.ceil(lpvsHistories?.count / selectedSize));
   }, [lpvsHistories?.count, selectedSize]);
 
-  const check_page_plus = () => {
+  const checkPagePlus = () => {
     if (currentPage <= pageCount) {
       console.log(currentPage)
       return setCurrentPage(currentPage + 5);
@@ -116,7 +112,7 @@ export const History = () => {
     }
   }
 
-  const check_page_minus = (page) => {
+  const checkPageMinus = (page) => {
     if (page <= 4) {
       return setCurrentPage(currentPage)
     }
@@ -134,7 +130,7 @@ export const History = () => {
     }
   }
 
-  const status_check = (a) => {
+  const statusCheck = (a) => {
     if (a) {
       return 'Issue-Detected';
     }
@@ -161,7 +157,6 @@ export const History = () => {
     }
   }
 
-
   const renderHistories = (size) => {
     return Array.from({ length: size }).map((_, index) => {
       const history = lpvsHistories.lpvsHistories[index];
@@ -178,10 +173,10 @@ export const History = () => {
                   {history?.repositoryName}
                   <div className="status-scan-error">
                     <div className="overlap-10">
-                      <div className={status_check(history?.hasIssue) + '-text'}>
-                        {status_check(history?.hasIssue)}
+                      <div className={statusCheck(history?.hasIssue) + '-text'}>
+                        {statusCheck(history?.hasIssue)}
                       </div>
-                      <div className={status_check(history?.hasIssue)} />
+                      <div className={statusCheck(history?.hasIssue)} />
                       <div className="prid">
                         <div className="div-wrapper">
                           <div className="text-wrapper-10">{history?.pullNumber}</div>
@@ -278,7 +273,7 @@ export const History = () => {
           <div className="page-number">
             <img src="/image/svg/LeftArrow.svg" onClick={() => {
               if (page > 4) {
-                check_page_minus();
+                checkPageMinus();
                 handlePageChange(currentPage - 2);
               }
             }} style={{ cursor: "pointer" }} />
@@ -287,7 +282,7 @@ export const History = () => {
             {trueOrFalse(currentPage + 2) && <div className="text-wrapper-6" onClick={() => handlePageChange(currentPage + 1)}>{currentPage + 2}</div>}
             {trueOrFalse(currentPage + 3) && <div className="text-wrapper-6" onClick={() => handlePageChange(currentPage + 2)}>{currentPage + 3}</div>}
             {trueOrFalse(currentPage + 4) && <div className="text-wrapper-5" onClick={() => handlePageChange(currentPage + 3)}>{currentPage + 4}</div>}
-            {trueOrFalse(currentPage + 5) ? <img src="/image/svg/RightArrow.svg" onClick={() => { check_page_plus(); handlePageChange(currentPage + 4); }} style={{ cursor: "pointer" }} />
+            {trueOrFalse(currentPage + 5) ? <img src="/image/svg/RightArrow.svg" onClick={() => { checkPagePlus(); handlePageChange(currentPage + 4); }} style={{ cursor: "pointer" }} />
               :
               <img src="/image/svg/RightArrow.svg" style={{ cursor: "pointer", opacity: 0.5 }} />}
             <SizeDropdown />
@@ -311,7 +306,11 @@ export const History = () => {
                 </div>
               </div>
             </div>
-            <div className="text-wrapper-22"><Link to={`/dashboard/send/${username?.nickname}`} style={{ color: "black", textDecoration: "none" }}>Dashboard</Link></div>
+            <div className="text-wrapper-22">
+              <Link 
+                to={`/dashboard/send/${username?.nickname}`} 
+                style={{ color: "black", textDecoration: "none" }}>Dashboard
+              </Link></div>
             <div className="text-wrapper-21">
               <Link
                 to={`/history/send/${username?.nickname}?page=0`}

@@ -364,8 +364,6 @@
   position: absolute;
   top: 65px;
   white-space: nowrap;
-
-
 }
 
 .history-send .text-wrapper-8 ::after {
@@ -740,17 +738,17 @@
 
 
 .history-send .text-wrapper-21 {
-  color: #d60000cf;
-  font-family: "Inter-Medium", Helvetica;
-  font-size: 20px;
-  font-weight: 500;
-  left: 44px;
+  color: #000000;
+  font-family: "Inter-Regular", Helvetica;
+  font-size: 30px;
+  font-weight: 400;
+  left: 1425px;
   letter-spacing: 0;
   line-height: normal;
   position: absolute;
-  top: 2px;
+  top: 42px;
   white-space: nowrap;
-  width: 100%
+  width: 167px;
 }
 
 .history-send .menubar-top {
@@ -802,11 +800,11 @@
   font-family: "Inter-Regular", Helvetica;
   font-size: 30px;
   font-weight: 400;
-  left: 0;
+  left: 1535px;
   letter-spacing: 0;
   line-height: normal;
   position: absolute;
-  top: 6px;
+  top: 42px;
   width: 115px;
 }
 
@@ -897,9 +895,7 @@
   white-space: nowrap;
   width: 100%;
   margin-left: 10px;
-
   position: static;
-
   z-index: 1;
 }
 
