@@ -151,12 +151,6 @@ export const History = () => {
     }
   }
 
-  const pageArrow = (page) => {
-    if (page <= 5) {
-      return false;
-    }
-  }
-
   const renderHistories = (size) => {
     return Array.from({ length: size }).map((_, index) => {
       const history = lpvsHistories.lpvsHistories[index];
@@ -261,6 +255,7 @@ export const History = () => {
             <div className="my-option-header">
               <img className="my-option-line" alt="My option line" src="/image/svg/HistoryMyOptionLine.svg" />
               <div className="text-wrapper-3">My Option</div>
+              <SizeDropdown />
             </div>
           </div>
         </div>
@@ -285,7 +280,6 @@ export const History = () => {
             {trueOrFalse(currentPage + 5) ? <img src="/image/svg/RightArrow.svg" onClick={() => { checkPagePlus(); handlePageChange(currentPage + 4); }} style={{ cursor: "pointer" }} />
               :
               <img src="/image/svg/RightArrow.svg" style={{ cursor: "pointer", opacity: 0.5 }} />}
-            <SizeDropdown />
           </div>
         </div>
 
