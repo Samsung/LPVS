@@ -114,7 +114,7 @@ public class LPVSQueueService {
         }
     }
 
-    private LPVSQueue getLatestScan(List<LPVSQueue> webhookConfigList) {
+    public LPVSQueue getLatestScan(List<LPVSQueue> webhookConfigList) {
         LPVSQueue latestWebhookConfig = webhookConfigList.get(0);
         for (LPVSQueue webhookConfig: webhookConfigList) {
             if(latestWebhookConfig.getDate().compareTo(webhookConfig.getDate()) < 0) {

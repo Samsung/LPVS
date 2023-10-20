@@ -9,10 +9,6 @@ package com.lpvs.service;
 import com.lpvs.entity.LPVSMember;
 import com.lpvs.entity.LPVSPullRequest;
 import com.lpvs.entity.enums.Grade;
-import com.lpvs.exception.WrongAccessException;
-import com.lpvs.repository.LPVSDetectedLicenseRepository;
-import com.lpvs.repository.LPVSLicenseRepository;
-import com.lpvs.repository.LPVSMemberRepository;
 import com.lpvs.repository.LPVSPullRequestRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,16 +33,7 @@ public class LPVSStatisticsServiceTest {
     private LPVSPullRequestRepository pullRequestRepository;
 
     @Mock
-    private LPVSDetectedLicenseRepository detectedLicenseRepository;
-
-    @Mock
     private LPVSLoginCheckService loginCheckService;
-
-    @Mock
-    private LPVSLicenseRepository licenseRepository;
-
-    @Mock
-    private LPVSMemberRepository memberRepository;
 
     @BeforeEach
     public void setUp() {

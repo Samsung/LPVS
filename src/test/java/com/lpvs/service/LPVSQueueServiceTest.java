@@ -4,24 +4,22 @@
  * Use of this source code is governed by a MIT license that can be
  * found in the LICENSE file.
  */
-
 package com.lpvs.service;
 
 import com.lpvs.entity.LPVSFile;
 import com.lpvs.entity.LPVSLicense;
 import com.lpvs.entity.LPVSPullRequest;
 import com.lpvs.entity.LPVSQueue;
+import com.lpvs.entity.enums.LPVSPullRequestAction;
 import com.lpvs.entity.enums.LPVSPullRequestStatus;
 import com.lpvs.repository.LPVSPullRequestRepository;
 import com.lpvs.repository.LPVSQueueRepository;
-import com.lpvs.util.LPVSWebhookUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.mockito.MockitoAnnotations;
 
 import java.io.IOException;
 import java.util.*;
@@ -678,6 +676,89 @@ public class LPVSQueueServiceTest {
             verifyNoMoreInteractions(mockGitHubService);
             verifyNoMoreInteractions(mockDetectService);
             verifyNoMoreInteractions(mockLicenseService);
+        }
+    }
+
+    @Nested
+    class TestProcessWebHook__queueMethods {
+
+        LPVSQueueService queueService;
+        LPVSGitHubService mockGitHubService;
+        LPVSDetectService mockDetectService;
+        LPVSLicenseService mockLicenseService;
+        LPVSPullRequestRepository mocked_lpvsPullRequestRepository;
+        LPVSQueueRepository mocked_queueRepository = mock(LPVSQueueRepository.class);
+
+        @BeforeEach
+        void setUp() {
+            MockitoAnnotations.openMocks(this);
+            queueService = new LPVSQueueService(mockGitHubService,
+                    mockDetectService,
+                    mockLicenseService,
+                    mocked_lpvsPullRequestRepository,
+                    mocked_queueRepository,
+                    4);
+        }
+
+        @Test
+        public void testCheckForQueue() {
+            LPVSQueue webhookConfig = new LPVSQueue();
+            webhookConfig.setAttempts(0);
+            webhookConfig.setDate(new Date());
+            when(mocked_queueRepository.getQueueList()).thenReturn(List.of(webhookConfig));
+            assertDoesNotThrow(() -> queueService.checkForQueue());
+            verify(mocked_queueRepository).save(webhookConfig);
+        }
+
+        @Test
+        public void testGetQueueFirstElement() throws InterruptedException {
+            LPVSQueue queue = new LPVSQueue();
+            queue.setId(1L);
+            queue.setAttempts(4);
+            queue.setAction(LPVSPullRequestAction.OPEN);
+            queue.setUserId("userId");
+            queue.setHeadCommitSHA("commitSha");
+            queue.setPullRequestUrl("url");
+            queueService.add(queue);
+            LPVSQueue result = queueService.getQueueFirstElement();
+            assertNotNull(result);
+        }
+
+        @Test
+        public void testAddFirst() {
+            LPVSQueue queue = new LPVSQueue();
+            assertDoesNotThrow(() -> queueService.addFirst(queue));
+        }
+
+        @Test
+        public void testAdd() {
+            LPVSQueue queue = new LPVSQueue();
+            assertDoesNotThrow(() -> queueService.add(queue));
+        }
+
+        @Test
+        public void testDelete() {
+            LPVSQueue queue = new LPVSQueue();
+            queue.setId(1L);
+            queue.setAttempts(4);
+            queue.setAction(LPVSPullRequestAction.OPEN);
+            queue.setUserId("userId");
+            queue.setHeadCommitSHA("commitSha");
+            queue.setPullRequestUrl("url");
+            assertDoesNotThrow(() -> queueService.delete(queue));
+            verify(mocked_queueRepository).deleteById(queue.getId());
+        }
+
+        @Test
+        public void testGetLatestScan() {
+            LPVSQueue webhookConfig1 = new LPVSQueue();
+            LPVSQueue webhookConfig2 = new LPVSQueue();
+            webhookConfig1.setDate(new Date(1));
+            webhookConfig2.setDate(new Date(2));
+            List<LPVSQueue> webhookConfigList = List.of(webhookConfig1, webhookConfig2);
+            LPVSQueue result = queueService.getLatestScan(webhookConfigList);
+            assertNotNull(result);
+            assertEquals(webhookConfig2, result);
         }
     }
 }
