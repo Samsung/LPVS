@@ -5,7 +5,7 @@
  * found in the LICENSE file.
  */
 
-package com.lpvs.auth;
+package com.lpvs.entity.auth;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -55,7 +55,8 @@ public enum OAuthAttributes {
         this.of = of;
     }
 
-    public static MemberProfile extract(String registrationId, Map<String, Object> attributes) {
+    public static MemberProfile 
+    extract(String registrationId, Map<String, Object> attributes) {
         return Arrays.stream(values())
                 .filter(provider -> registrationId.equals(provider.registrationId))
                 .findFirst()
