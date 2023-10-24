@@ -5,12 +5,13 @@
  * found in the LICENSE file.
  */
 
-package com.lpvs.auth;
+package com.lpvs.entity.auth;
 
 import java.util.Arrays;
 import java.util.Map;
 import java.util.function.Function;
 
+@SuppressWarnings("unchecked")
 public enum OAuthAttributes {
     GOOGLE("google", (attributes) -> {
         MemberProfile memberProfile = new MemberProfile();

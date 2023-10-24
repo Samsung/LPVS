@@ -5,7 +5,7 @@
  * found in the LICENSE file.
  */
 
-package com.lpvs.auth;
+package com.lpvs.entity.auth;
 
 import com.lpvs.entity.LPVSMember;
 import lombok.Getter;

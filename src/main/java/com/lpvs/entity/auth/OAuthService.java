@@ -5,11 +5,13 @@
  * found in the LICENSE file.
  */
 
-package com.lpvs.auth;
+package com.lpvs.entity.auth;
 
 import com.lpvs.entity.LPVSMember;
 import com.lpvs.repository.LPVSMemberRepository;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -28,10 +30,18 @@ import java.util.Map;
 public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
     private final LPVSMemberRepository lpvsMemberRepository;
+    
+    private DefaultOAuth2UserService oAuth2UserService = null;
+
+    @Autowired
+    public OAuthService(LPVSMemberRepository lpvsMemberRepository, DefaultOAuth2UserService oAuth2UserService) {
+        this.lpvsMemberRepository = lpvsMemberRepository;
+        this.oAuth2UserService = oAuth2UserService;
+    }   
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-        OAuth2UserService delegate = new DefaultOAuth2UserService();
+        OAuth2UserService <OAuth2UserRequest, OAuth2User> delegate = (null != oAuth2UserService)? oAuth2UserService : new DefaultOAuth2UserService();
         OAuth2User oAuth2User = delegate.loadUser(userRequest);
 
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
@@ -49,6 +59,7 @@ public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2
 
         Map<String, Object> customAttribute = customAttribute(attributes, userNameAttributeName,
                 memberProfile, registrationId);
+                
 
         return new DefaultOAuth2User(Collections.singleton(new SimpleGrantedAuthority("USER")),
                 customAttribute,
