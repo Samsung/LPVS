@@ -56,8 +56,7 @@ public enum OAuthAttributes {
         this.of = of;
     }
 
-    public static MemberProfile 
-    extract(String registrationId, Map<String, Object> attributes) {
+    public static MemberProfile extract(String registrationId, Map<String, Object> attributes) {
         return Arrays.stream(values())
                 .filter(provider -> registrationId.equals(provider.registrationId))
                 .findFirst()
