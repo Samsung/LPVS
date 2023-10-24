@@ -32,10 +32,12 @@ public class MemberProfileTest {
         profile.setName("John");
         profile.setEmail("john@example.com");
         profile.setProvider("OAuth2");
+        profile.setNickname("Johnny");
         LPVSMember member = profile.toMember();
 
         assertEquals("John", member.getName());
         assertEquals("john@example.com", member.getEmail());
         assertEquals("OAuth2", member.getProvider());
+        assertEquals("Johnny", profile.getNickname());
     }
 }

@@ -5,10 +5,11 @@
  * found in the LICENSE file.
  */
 
-package com.lpvs.entity.auth;
+package com.lpvs.service;
 
 import com.lpvs.repository.LPVSMemberRepository;
 
+import com.lpvs.service.OAuthService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
