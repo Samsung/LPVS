@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.function.Function;
 
+@SuppressWarnings("unchecked")
 public enum OAuthAttributes {
     GOOGLE("google", (attributes) -> {
         MemberProfile memberProfile = new MemberProfile();
