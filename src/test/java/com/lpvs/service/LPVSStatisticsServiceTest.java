@@ -15,6 +15,7 @@ import com.lpvs.entity.enums.Grade;
 import com.lpvs.exception.WrongAccessException;
 import com.lpvs.repository.LPVSDetectedLicenseRepository;
 import com.lpvs.repository.LPVSLicenseRepository;
+import com.lpvs.repository.LPVSMemberRepository;
 import com.lpvs.repository.LPVSPullRequestRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,11 +26,13 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.security.core.Authentication;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -136,6 +139,24 @@ public class LPVSStatisticsServiceTest {
         assertNotNull(result);
     }
 
+    public void testGetDashboardEntityWithDummyPRList() {
+        Authentication authentication = mock(Authentication.class);
+        LPVSMember member = new LPVSMember();
+        member.setNickname("testNickname");
+        List<LPVSPullRequest> prList = createMockPullRequestList();
+        List<LPVSDetectedLicense> dlList = Collections.emptyList();
+        when(licenseRepository.takeAllSpdxId()).thenReturn(Collections.<String>emptyList());
+        when(pullRequestRepository.findByPullRequestBase("testNickname")).thenReturn(prList);
+        when(detectedLicenseRepository.findNotNullDLByPR(any())).thenReturn(dlList);
+        LPVSStatisticsServiceHelper statisticsServiceHelper = new LPVSStatisticsServiceHelper(pullRequestRepository, detectedLicenseRepository, loginCheckService, licenseRepository, null, prList);
+
+        Dashboard dashboard = statisticsServiceHelper.getDashboardEntity("send", "testNickname", authentication);
+
+        assertNotNull(dashboard);
+        assertEquals("testNickname", dashboard.getName());
+        assertEquals(1, dashboard.getDashboardElementsByDates().size());     
+    }
+
     @Test
     public void testGetGradeHigh() {
         Grade grade = statisticsService.getGrade("80%");
@@ -158,5 +179,50 @@ public class LPVSStatisticsServiceTest {
     public void testGetGradeNone() {
         Grade grade = statisticsService.getGrade("10%");
         assertEquals(Grade.NONE, grade);
+    }
+
+    private List<LPVSPullRequest> createMockPullRequestList() {
+
+        LPVSPullRequest pullRequest1 = new LPVSPullRequest();
+        LPVSPullRequest pullRequest2 = new LPVSPullRequest();
+
+        pullRequest1.setDate(new Date());
+        pullRequest1.setRepositoryName("SampleRepository1");
+        pullRequest1.setPullRequestUrl("https://url.com/user/repo/pull/1");
+        pullRequest1.setPullRequestFilesUrl("https://url.com/user/repo/pull/1/files");
+        pullRequest2.setDate(new Date());
+        pullRequest2.setRepositoryName("SampleRepository2");
+        pullRequest2.setPullRequestUrl("https://url.com/user/repo/pull/2");
+        pullRequest2.setPullRequestFilesUrl("https://url.com/user/repo/pull/2/files");
+
+
+        List<LPVSPullRequest> pullRequestList = Arrays.asList(pullRequest1, pullRequest2);
+
+        return pullRequestList;
+    }
+
+
+    /**
+     * Helper class to mock `LPVSStatisticsService`
+     * we can't mock intenal call of  `pathCheck()` method
+     *
+     */
+    public class LPVSStatisticsServiceHelper extends LPVSStatisticsService {
+
+    List<LPVSPullRequest> pullRequestList;
+
+        public LPVSStatisticsServiceHelper(LPVSPullRequestRepository lpvsPullRequestRepository,
+                LPVSDetectedLicenseRepository lpvsDetectedLicenseRepository, LPVSLoginCheckService loginCheckService,
+                LPVSLicenseRepository lpvsLicenseRepository, LPVSMemberRepository memberRepository, List<LPVSPullRequest> pullRequestList) {
+            super(lpvsPullRequestRepository, lpvsDetectedLicenseRepository, loginCheckService, lpvsLicenseRepository,
+                    memberRepository);
+            this.pullRequestList = pullRequestList;
+        }
+
+        @Override
+        public List<LPVSPullRequest> pathCheck(String type, String name, Authentication authentication) {
+            return pullRequestList;
+        }
+    
     }
 }
