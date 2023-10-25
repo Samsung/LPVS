@@ -124,10 +124,6 @@ public class LPVSStatisticsServiceTest {
         member.setNickname("testNickname");
         when(loginCheckService.getMemberFromMemberMap(authentication)).thenReturn(member);
         when(pullRequestRepository.findByPullRequestBase("testNickname")).thenReturn(pullRequests);
-        /*List<LPVSPullRequest> result = statisticsService.pathCheck("own", "testNickname", authentication);
-
-        assertNotNull(result);
-        assertEquals(0, result.size());*/
         when(licenseRepository.takeAllSpdxId()).thenReturn(Collections.singletonList("MIT"));
         when(mockRequest.getDate()).thenReturn(new Date());
         when(mockRequest.getSender()).thenReturn("");
