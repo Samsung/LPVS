@@ -43,8 +43,18 @@ public class LPVSScanossDetectService {
     @Autowired
     private LPVSLicenseRepository lpvsLicenseRepository;
 
-    @Value("${debug:false}")
     private Boolean debug;
+
+    @Autowired
+    public LPVSScanossDetectService(@Value("${debug:false}") Boolean debug,
+                                    LPVSLicenseService licenseService,
+                                    LPVSGitHubService gitHubService,
+                                    LPVSLicenseRepository lpvsLicenseRepository) {
+        this.debug = debug;
+        this.licenseService = licenseService;
+        this.gitHubService = gitHubService;
+        this.lpvsLicenseRepository = lpvsLicenseRepository;
+    }
 
     public void runScan(LPVSQueue webhookConfig, String path) throws Exception {
         log.debug("Starting Scanoss scanning");
