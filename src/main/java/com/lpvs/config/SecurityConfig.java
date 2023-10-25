@@ -5,8 +5,9 @@
  * found in the LICENSE file.
  */
 
-package com.lpvs.entity.auth;
+package com.lpvs.config;
 
+import com.lpvs.service.OAuthService;
 import lombok.RequiredArgsConstructor;
 
 import java.io.IOException;
@@ -18,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -30,6 +32,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.util.UriComponentsBuilder;
 
+@Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {

@@ -5,7 +5,9 @@
  * found in the LICENSE file.
  */
 
-package com.lpvs.entity.auth;
+package com.lpvs.entity.enums;
+
+import com.lpvs.entity.auth.MemberProfile;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -22,7 +24,6 @@ public enum OAuthAttributes {
 
     NAVER("naver", (attributes) -> {
         Map<String, Object> response = (Map<String, Object>) attributes.get("response");
-        System.out.println(response);
         MemberProfile memberProfile = new MemberProfile();
         memberProfile.setName((String) response.get("name"));
         memberProfile.setEmail(((String) response.get("email")));
