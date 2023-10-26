@@ -21,14 +21,16 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 public class HistoryPageEntityTest {
 
     private HistoryPageEntity historyPageEntity;
-	private List<LPVSPullRequest> pullRequests = new ArrayList<>();
-	private Page<LPVSPullRequest> prPage;
+    private List<LPVSPullRequest> pullRequests = new ArrayList<>();
+    private Page<LPVSPullRequest> prPage;
     private Long count = 2L;
 
     @BeforeEach
     public void setUp() {
-        pullRequests.add(new LPVSPullRequest(1L, null, "Title 1", null, null, null, null, null, null, null));
-        pullRequests.add(new LPVSPullRequest(2L, null, "Title 2", null, null, null, null, null, null, null));
+        pullRequests.add(
+                new LPVSPullRequest(1L, null, "Title 1", null, null, null, null, null, null, null));
+        pullRequests.add(
+                new LPVSPullRequest(2L, null, "Title 2", null, null, null, null, null, null, null));
         prPage = new PageImpl<>(pullRequests);
         historyPageEntity = new HistoryPageEntity(prPage, count);
     }
@@ -44,13 +46,16 @@ public class HistoryPageEntityTest {
     public void testInequality() {
         // Test inequality when objects are not the same
         List<LPVSPullRequest> pullRequests1 = new ArrayList<>();
-        pullRequests1.add(new LPVSPullRequest(1L, null, "Title 1", null, null, null, null, null, null, null));
-        pullRequests1.add(new LPVSPullRequest(2L, null, "Title 2", null, null, null, null, null, null, null));
+        pullRequests1.add(
+                new LPVSPullRequest(1L, null, "Title 1", null, null, null, null, null, null, null));
+        pullRequests1.add(
+                new LPVSPullRequest(2L, null, "Title 2", null, null, null, null, null, null, null));
         Page<LPVSPullRequest> prPage1 = new PageImpl<>(pullRequests1);
         Long count1 = 2L;
         HistoryPageEntity entity1 = new HistoryPageEntity(prPage1, count1);
         List<LPVSPullRequest> pullRequests2 = new ArrayList<>();
-        pullRequests2.add(new LPVSPullRequest(3L, null, "Title 3", null, null, null, null, null, null, null));
+        pullRequests2.add(
+                new LPVSPullRequest(3L, null, "Title 3", null, null, null, null, null, null, null));
         Page<LPVSPullRequest> prPage2 = new PageImpl<>(pullRequests2);
         Long count2 = 1L;
         HistoryPageEntity entity2 = new HistoryPageEntity(prPage2, count2);

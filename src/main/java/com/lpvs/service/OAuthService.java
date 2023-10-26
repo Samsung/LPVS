@@ -4,7 +4,6 @@
  * Use of this source code is governed by a MIT license that can be
  * found in the LICENSE file.
  */
-
 package com.lpvs.service;
 
 import com.lpvs.entity.LPVSMember;
@@ -32,26 +31,30 @@ import java.util.Map;
 public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
     private final LPVSMemberRepository lpvsMemberRepository;
-    
+
     private DefaultOAuth2UserService oAuth2UserService = null;
 
     @Autowired
-    public OAuthService(LPVSMemberRepository lpvsMemberRepository, DefaultOAuth2UserService oAuth2UserService) {
+    public OAuthService(
+            LPVSMemberRepository lpvsMemberRepository, DefaultOAuth2UserService oAuth2UserService) {
         this.lpvsMemberRepository = lpvsMemberRepository;
         this.oAuth2UserService = oAuth2UserService;
-    }   
+    }
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-        OAuth2UserService <OAuth2UserRequest, OAuth2User> delegate = (null != oAuth2UserService)? oAuth2UserService : new DefaultOAuth2UserService();
+        OAuth2UserService<OAuth2UserRequest, OAuth2User> delegate =
+                (null != oAuth2UserService) ? oAuth2UserService : new DefaultOAuth2UserService();
         OAuth2User oAuth2User = delegate.loadUser(userRequest);
 
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
 
-        String userNameAttributeName = userRequest.getClientRegistration()
-                .getProviderDetails()
-                .getUserInfoEndpoint()
-                .getUserNameAttributeName();
+        String userNameAttributeName =
+                userRequest
+                        .getClientRegistration()
+                        .getProviderDetails()
+                        .getUserInfoEndpoint()
+                        .getUserNameAttributeName();
 
         Map<String, Object> attributes = oAuth2User.getAttributes();
 
@@ -59,16 +62,20 @@ public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2
         memberProfile.setProvider(registrationId);
         saveOrUpdate(memberProfile);
 
-        Map<String, Object> customAttribute = customAttribute(attributes, userNameAttributeName,
-                memberProfile, registrationId);
-                
+        Map<String, Object> customAttribute =
+                customAttribute(attributes, userNameAttributeName, memberProfile, registrationId);
 
-        return new DefaultOAuth2User(Collections.singleton(new SimpleGrantedAuthority("USER")),
+        return new DefaultOAuth2User(
+                Collections.singleton(new SimpleGrantedAuthority("USER")),
                 customAttribute,
                 userNameAttributeName);
     }
 
-    private Map<String, Object> customAttribute(Map<String, Object> attributes, String userNameAttributeName, MemberProfile memberProfile, String registrationId) {
+    private Map<String, Object> customAttribute(
+            Map<String, Object> attributes,
+            String userNameAttributeName,
+            MemberProfile memberProfile,
+            String registrationId) {
         Map<String, Object> customAttribute = new LinkedHashMap<>();
         customAttribute.put(userNameAttributeName, attributes.get(userNameAttributeName));
         customAttribute.put("provider", registrationId);
@@ -79,9 +86,12 @@ public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2
 
     private LPVSMember saveOrUpdate(MemberProfile memberProfile) {
 
-        LPVSMember lpvsMember = lpvsMemberRepository.findByEmailAndProvider(memberProfile.getEmail(), memberProfile.getProvider())
-                .map(m -> m.update(memberProfile.getName(), memberProfile.getEmail()))
-                .orElse(memberProfile.toMember());
+        LPVSMember lpvsMember =
+                lpvsMemberRepository
+                        .findByEmailAndProvider(
+                                memberProfile.getEmail(), memberProfile.getProvider())
+                        .map(m -> m.update(memberProfile.getName(), memberProfile.getEmail()))
+                        .orElse(memberProfile.toMember());
 
         return lpvsMemberRepository.save(lpvsMember);
     }

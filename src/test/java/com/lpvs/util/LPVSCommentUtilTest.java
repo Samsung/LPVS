@@ -19,8 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class LPVSCommentUtilTest {
 
-    @Mock
-    private LPVSQueue webhookConfig;
+    @Mock private LPVSQueue webhookConfig;
 
     @BeforeEach
     public void setUp() {
@@ -32,10 +31,12 @@ public class LPVSCommentUtilTest {
         LPVSFile file = new LPVSFile();
         file.setFilePath("exampleFile.txt");
         file.setMatchedLines("all");
-        Mockito.when(LPVSWebhookUtil.getRepositoryUrl(webhookConfig)).thenReturn("https://github.com/repo");
+        Mockito.when(LPVSWebhookUtil.getRepositoryUrl(webhookConfig))
+                .thenReturn("https://github.com/repo");
         Mockito.when(webhookConfig.getHeadCommitSHA()).thenReturn("headCommitSHA");
         String result = LPVSCommentUtil.getMatchedLinesAsLink(webhookConfig, file, LPVSVcs.GITHUB);
-        assertEquals("<a target=\"_blank\" href=\"https://github.com/repo/blob/headCommitSHA/exampleFile.txt\">all</a>",
+        assertEquals(
+                "<a target=\"_blank\" href=\"https://github.com/repo/blob/headCommitSHA/exampleFile.txt\">all</a>",
                 result);
     }
 
@@ -44,12 +45,14 @@ public class LPVSCommentUtilTest {
         LPVSFile file = new LPVSFile();
         file.setFilePath("exampleFile.txt");
         file.setMatchedLines("1-5,7,9-12");
-        Mockito.when(LPVSWebhookUtil.getRepositoryUrl(webhookConfig)).thenReturn("https://github.com/repo");
+        Mockito.when(LPVSWebhookUtil.getRepositoryUrl(webhookConfig))
+                .thenReturn("https://github.com/repo");
         Mockito.when(webhookConfig.getHeadCommitSHA()).thenReturn("headCommitSHA");
         String result = LPVSCommentUtil.getMatchedLinesAsLink(webhookConfig, file, LPVSVcs.GITHUB);
-        assertEquals("<a target=\"_blank\" href=\"https://github.com/repo/blob/headCommitSHA/exampleFile.txt#L1L5\">1-5</a>" +
-                "<a target=\"_blank\" href=\"https://github.com/repo/blob/headCommitSHA/exampleFile.txt#L7\">7</a>" +
-                "<a target=\"_blank\" href=\"https://github.com/repo/blob/headCommitSHA/exampleFile.txt#L9L12\">9-12</a>",
+        assertEquals(
+                "<a target=\"_blank\" href=\"https://github.com/repo/blob/headCommitSHA/exampleFile.txt#L1L5\">1-5</a>"
+                        + "<a target=\"_blank\" href=\"https://github.com/repo/blob/headCommitSHA/exampleFile.txt#L7\">7</a>"
+                        + "<a target=\"_blank\" href=\"https://github.com/repo/blob/headCommitSHA/exampleFile.txt#L9L12\">9-12</a>",
                 result);
     }
 
@@ -58,7 +61,8 @@ public class LPVSCommentUtilTest {
         LPVSFile file = new LPVSFile();
         file.setFilePath("exampleFile.txt");
         file.setMatchedLines("all");
-        Mockito.when(LPVSWebhookUtil.getRepositoryUrl(webhookConfig)).thenReturn("https://gerrit.org/repo");
+        Mockito.when(LPVSWebhookUtil.getRepositoryUrl(webhookConfig))
+                .thenReturn("https://gerrit.org/repo");
         Mockito.when(webhookConfig.getHeadCommitSHA()).thenReturn("headCommitSHA");
         String result = LPVSCommentUtil.getMatchedLinesAsLink(webhookConfig, file, LPVSVcs.GERRIT);
         assertEquals("all (https://gerrit.org/repo/blob/headCommitSHA/exampleFile.txt)", result);

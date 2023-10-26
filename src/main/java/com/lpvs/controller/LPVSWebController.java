@@ -4,7 +4,6 @@
  * Use of this source code is governed by a MIT license that can be
  * found in the LICENSE file.
  */
-
 package com.lpvs.controller;
 
 import com.lpvs.entity.*;
@@ -51,9 +50,13 @@ public class LPVSWebController implements ErrorController {
 
     private LPVSStatisticsService lpvsStatisticsService;
 
-    public LPVSWebController(LPVSMemberRepository memberRepository, LPVSDetectedLicenseRepository detectedLicenseRepository,
-                             LPVSPullRequestRepository lpvsPullRequestRepository, LPVSLicenseRepository licenseRepository,
-                             LPVSLoginCheckService lpvsLoginCheckService, LPVSStatisticsService lpvsStatisticsService) {
+    public LPVSWebController(
+            LPVSMemberRepository memberRepository,
+            LPVSDetectedLicenseRepository detectedLicenseRepository,
+            LPVSPullRequestRepository lpvsPullRequestRepository,
+            LPVSLicenseRepository licenseRepository,
+            LPVSLoginCheckService lpvsLoginCheckService,
+            LPVSStatisticsService lpvsStatisticsService) {
         this.memberRepository = memberRepository;
         this.detectedLicenseRepository = detectedLicenseRepository;
         this.lpvsPullRequestRepository = lpvsPullRequestRepository;
@@ -75,10 +78,12 @@ public class LPVSWebController implements ErrorController {
         @GetMapping("/user/login")
         @ResponseBody
         public LPVSLoginMember loginMember(Authentication authentication) {
-            Map<String, Object> oauthLoginMemberMap = lpvsLoginCheckService.getOauthLoginMemberMap(authentication);
+            Map<String, Object> oauthLoginMemberMap =
+                    lpvsLoginCheckService.getOauthLoginMemberMap(authentication);
             boolean isLoggedIn = oauthLoginMemberMap == null || oauthLoginMemberMap.isEmpty();
             if (!isLoggedIn) {
-                LPVSMember findMember = lpvsLoginCheckService.getMemberFromMemberMap(authentication);
+                LPVSMember findMember =
+                        lpvsLoginCheckService.getMemberFromMemberMap(authentication);
                 return new LPVSLoginMember(!isLoggedIn, findMember);
             } else {
                 return new LPVSLoginMember(!isLoggedIn, null);
@@ -86,7 +91,8 @@ public class LPVSWebController implements ErrorController {
         }
 
         @PostMapping("/user/update")
-        public ResponseEntity<LPVSMember> postSettingTest(@RequestBody Map<String, String> map, Authentication authentication) {
+        public ResponseEntity<LPVSMember> postSettingTest(
+                @RequestBody Map<String, String> map, Authentication authentication) {
             lpvsLoginCheckService.loginVerification(authentication);
             LPVSMember findMember = lpvsLoginCheckService.getMemberFromMemberMap(authentication);
             try {
@@ -101,12 +107,15 @@ public class LPVSWebController implements ErrorController {
 
         @ResponseBody
         @GetMapping("/history/{type}/{name}")
-        public HistoryEntity newHistoryPageByUser(@PathVariable("type") String type,
-                                                  @PathVariable("name") String name,
-                                                  @PageableDefault(size = 5, sort = "date",
-                                                          direction = Sort.Direction.DESC) Pageable pageable, Authentication authentication) {
+        public HistoryEntity newHistoryPageByUser(
+                @PathVariable("type") String type,
+                @PathVariable("name") String name,
+                @PageableDefault(size = 5, sort = "date", direction = Sort.Direction.DESC)
+                        Pageable pageable,
+                Authentication authentication) {
 
-            HistoryPageEntity historyPageEntity = lpvsLoginCheckService.pathCheck(type, name, pageable, authentication);
+            HistoryPageEntity historyPageEntity =
+                    lpvsLoginCheckService.pathCheck(type, name, pageable, authentication);
             Page<LPVSPullRequest> prPage = historyPageEntity.getPrPage();
             Long count = historyPageEntity.getCount();
 
@@ -115,15 +124,24 @@ public class LPVSWebController implements ErrorController {
 
             for (LPVSPullRequest pr : lpvsPullRequests) {
                 String[] pullNumberTemp = pr.getPullRequestUrl().split("/");
-                LocalDateTime localDateTime = new Timestamp(pr.getDate().getTime()).toLocalDateTime();
+                LocalDateTime localDateTime =
+                        new Timestamp(pr.getDate().getTime()).toLocalDateTime();
                 String formattingDateTime = lpvsLoginCheckService.dateTimeFormatting(localDateTime);
 
                 Boolean hasIssue = detectedLicenseRepository.existsIssue(pr);
 
-                lpvsHistories.add(new LPVSHistory(formattingDateTime, pr.getRepositoryName(), pr.getId(),
-                        pr.getPullRequestUrl(), pr.getStatus(), pr.getSender(),
-                        pullNumberTemp[pullNumberTemp.length - 2] + "/" +
-                                pullNumberTemp[pullNumberTemp.length - 1], hasIssue));
+                lpvsHistories.add(
+                        new LPVSHistory(
+                                formattingDateTime,
+                                pr.getRepositoryName(),
+                                pr.getId(),
+                                pr.getPullRequestUrl(),
+                                pr.getStatus(),
+                                pr.getSender(),
+                                pullNumberTemp[pullNumberTemp.length - 2]
+                                        + "/"
+                                        + pullNumberTemp[pullNumberTemp.length - 1],
+                                hasIssue));
             }
 
             HistoryEntity historyEntity = new HistoryEntity(lpvsHistories, count);
@@ -132,14 +150,18 @@ public class LPVSWebController implements ErrorController {
 
         @ResponseBody
         @GetMapping("/result/{prId}")
-        public LPVSResult resultPage(@PathVariable("prId") Long prId, @PageableDefault(size = 5, sort = "id",
-                direction = Sort.Direction.ASC) Pageable pageable, Authentication authentication) {
+        public LPVSResult resultPage(
+                @PathVariable("prId") Long prId,
+                @PageableDefault(size = 5, sort = "id", direction = Sort.Direction.ASC)
+                        Pageable pageable,
+                Authentication authentication) {
 
             lpvsLoginCheckService.loginVerification(authentication);
-            //LPVSMember findMember = lpvsLoginCheckService.getMemberFromMemberMap(authentication);
+            // LPVSMember findMember = lpvsLoginCheckService.getMemberFromMemberMap(authentication);
 
             LPVSPullRequest pr = lpvsPullRequestRepository.findById(prId).get();
-            List<LPVSLicense> distinctByLicense = detectedLicenseRepository.findDistinctByLicense(pr);
+            List<LPVSLicense> distinctByLicense =
+                    detectedLicenseRepository.findDistinctByLicense(pr);
             List<String> detectedLicenses = new ArrayList<>();
             Map<String, Integer> licenseCountMap = new HashMap<>();
 
@@ -151,10 +173,16 @@ public class LPVSWebController implements ErrorController {
                 detectedLicenses.add(lpvsLicense.getSpdxId());
             }
 
-            LPVSResultInfo lpvsResultInfo = new LPVSResultInfo(pr.getId(), pr.getDate(), pr.getRepositoryName(),
-                    pr.getStatus(), detectedLicenses);
+            LPVSResultInfo lpvsResultInfo =
+                    new LPVSResultInfo(
+                            pr.getId(),
+                            pr.getDate(),
+                            pr.getRepositoryName(),
+                            pr.getStatus(),
+                            detectedLicenses);
 
-            Page<LPVSDetectedLicense> dlPage = detectedLicenseRepository.findByPullRequest(pr, pageable);
+            Page<LPVSDetectedLicense> dlPage =
+                    detectedLicenseRepository.findByPullRequest(pr, pageable);
             List<LPVSDetectedLicense> dlList = detectedLicenseRepository.findByPullRequest(pr);
             List<LPVSResultFile> lpvsResultFileList = new ArrayList<>();
             Boolean hasIssue = detectedLicenseRepository.existsIssue(pr);
@@ -169,41 +197,55 @@ public class LPVSWebController implements ErrorController {
                     licenseSpdxId = dl.getLicense().getSpdxId();
                     status = dl.getLicense().getAccess();
                 }
-                lpvsResultFileList.add(new LPVSResultFile(dl.getId(), dl.getFilePath(),
-                        dl.getComponentFileUrl(), dl.getLines(), dl.getMatch(),
-                        status, licenseSpdxId));
+                lpvsResultFileList.add(
+                        new LPVSResultFile(
+                                dl.getId(),
+                                dl.getFilePath(),
+                                dl.getComponentFileUrl(),
+                                dl.getLines(),
+                                dl.getMatch(),
+                                status,
+                                licenseSpdxId));
             }
 
             for (LPVSDetectedLicense dl : dlList) {
                 if (dl.getLicense() != null) {
                     licenseSpdxId = dl.getLicense().getSpdxId();
-                    licenseCountMap.put(licenseSpdxId,
-                            licenseCountMap.get(licenseSpdxId) + 1);
+                    licenseCountMap.put(licenseSpdxId, licenseCountMap.get(licenseSpdxId) + 1);
                 }
             }
 
             Long count = detectedLicenseRepository.CountByDetectedLicenseWherePullRequestId(pr);
             String[] tempPullNumber = pr.getPullRequestUrl().split("/");
-            LPVSResult lpvsResult = new LPVSResult(lpvsResultFileList, lpvsResultInfo, count, licenseCountMap,
-                    tempPullNumber[tempPullNumber.length-2] + '/' +
-                            tempPullNumber[tempPullNumber.length-1], hasIssue);
+            LPVSResult lpvsResult =
+                    new LPVSResult(
+                            lpvsResultFileList,
+                            lpvsResultInfo,
+                            count,
+                            licenseCountMap,
+                            tempPullNumber[tempPullNumber.length - 2]
+                                    + '/'
+                                    + tempPullNumber[tempPullNumber.length - 1],
+                            hasIssue);
             return lpvsResult;
         }
 
         @ResponseBody
         @GetMapping("dashboard/{type}/{name}")
-        public Dashboard dashboardPage(@PathVariable("type") String type,
-                                       @PathVariable("name") String name,
-                                       Authentication authentication) {
+        public Dashboard dashboardPage(
+                @PathVariable("type") String type,
+                @PathVariable("name") String name,
+                Authentication authentication) {
 
-            Dashboard dashboardEntity = lpvsStatisticsService.getDashboardEntity(type, name, authentication);
+            Dashboard dashboardEntity =
+                    lpvsStatisticsService.getDashboardEntity(type, name, authentication);
 
             return dashboardEntity;
         }
     }
 
     @GetMapping("/error")
-    public String redirect(){
+    public String redirect() {
         return "index.html";
     }
 }

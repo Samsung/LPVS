@@ -4,7 +4,6 @@
  * Use of this source code is governed by a MIT license that can be
  * found in the LICENSE file.
  */
-
 package com.lpvs.entity;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -23,12 +22,14 @@ public class LPVSLicenseTest {
 
     @BeforeEach
     void setUp() {
-        lpvsLicense = new LPVSLicense(baseLicenseId,
-                baseLicenseName,
-                baseSpdxId,
-                baseAccess,
-                baseAlternativeName,
-                baseChecklistUrl);
+        lpvsLicense =
+                new LPVSLicense(
+                        baseLicenseId,
+                        baseLicenseName,
+                        baseSpdxId,
+                        baseAccess,
+                        baseAlternativeName,
+                        baseChecklistUrl);
     }
 
     @Test

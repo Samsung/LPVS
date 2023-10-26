@@ -4,7 +4,6 @@
  * Use of this source code is governed by a MIT license that can be
  * found in the LICENSE file.
  */
-
 package com.lpvs.service;
 
 import com.lpvs.entity.LPVSQueue;
@@ -23,19 +22,21 @@ public class LPVSQueueProcessorServiceTest {
 
     LPVSQueueProcessorService queueProcessorService = mock(LPVSQueueProcessorService.class);
     LPVSQueue webhookConfigTest = mock(LPVSQueue.class);
-    LPVSQueueService queueService = mock(LPVSQueueService.class);;
+    LPVSQueueService queueService = mock(LPVSQueueService.class);
+    ;
 
     @BeforeEach
     void setUp() {
         webhookConfigTest = new LPVSQueue();
-        queueService =mock(LPVSQueueService.class);
+        queueService = mock(LPVSQueueService.class);
 
         try {
             when(queueService.getQueueFirstElement())
                     // first iteration
                     .thenReturn(webhookConfigTest)
                     // second iteration
-                    .thenThrow(new InterruptedException("Test InterruptedException at 2nd iteration"));
+                    .thenThrow(
+                            new InterruptedException("Test InterruptedException at 2nd iteration"));
         } catch (InterruptedException e) {
             log.error("InterruptedException at LPVSQueueProcessorServiceTest.setUp(): " + e);
             fail();
@@ -54,13 +55,19 @@ public class LPVSQueueProcessorServiceTest {
             method.invoke(queueProcessorService);
         } catch (InvocationTargetException e) {
             if (e.getCause() instanceof InterruptedException) {
-                log.info("Awaited behavior: InterruptedException at LPVSQueueProcessorServiceTest.testQueueProcessor(): " + e);
+                log.info(
+                        "Awaited behavior: InterruptedException at LPVSQueueProcessorServiceTest.testQueueProcessor(): "
+                                + e);
             } else {
-                log.error("InvocationTargetException at LPVSQueueProcessorServiceTest.testQueueProcessor(). Cause: " + e.getCause());
+                log.error(
+                        "InvocationTargetException at LPVSQueueProcessorServiceTest.testQueueProcessor(). Cause: "
+                                + e.getCause());
                 fail();
             }
         } catch (NoSuchMethodException | IllegalAccessException e) {
-            log.error("NoSuchMethodException |  IllegalAccessException at LPVSQueueProcessorServiceTest.testQueueProcessor(): " + e);
+            log.error(
+                    "NoSuchMethodException |  IllegalAccessException at LPVSQueueProcessorServiceTest.testQueueProcessor(): "
+                            + e);
             fail();
         }
 
@@ -68,12 +75,12 @@ public class LPVSQueueProcessorServiceTest {
             // called twice, first iteration, and second
             verify(queueService, times(2)).getQueueFirstElement();
         } catch (InterruptedException e) {
-            log.error("InterruptedException at LPVSQueueProcessorServiceTest.testQueueProcessor(): " + e);
+            log.error(
+                    "InterruptedException at LPVSQueueProcessorServiceTest.testQueueProcessor(): "
+                            + e);
             fail();
         }
         // called once, only at the end of first iteration
         verify(queueService, times(1)).processWebHook(webhookConfigTest);
     }
-
-
 }

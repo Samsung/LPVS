@@ -4,13 +4,11 @@
  * Use of this source code is governed by a MIT license that can be
  * found in the LICENSE file.
  */
-
 package com.lpvs;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedConstruction;
-import org.springframework.boot.SpringApplication;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
@@ -28,7 +26,8 @@ public class LicensePreValidationSystemTest {
 
     @Test
     public void testGetAsyncExecutor() {
-        try (MockedConstruction<ThreadPoolTaskExecutor> mocked = mockConstruction(ThreadPoolTaskExecutor.class)) {
+        try (MockedConstruction<ThreadPoolTaskExecutor> mocked =
+                mockConstruction(ThreadPoolTaskExecutor.class)) {
             TaskExecutor executor = licensePreValidationSystem.getAsyncExecutor();
 
             assertEquals(1, mocked.constructed().size());
@@ -42,5 +41,4 @@ public class LicensePreValidationSystemTest {
             verifyNoMoreInteractions(mocked_constructed_executor);
         }
     }
-    
 }

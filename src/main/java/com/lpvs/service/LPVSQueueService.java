@@ -4,7 +4,6 @@
  * Use of this source code is governed by a MIT license that can be
  * found in the LICENSE file.
  */
-
 package com.lpvs.service;
 
 import com.lpvs.entity.LPVSFile;
@@ -42,12 +41,13 @@ public class LPVSQueueService {
     private int maxAttempts;
 
     @Autowired
-    public LPVSQueueService(LPVSGitHubService gitHubService,
-                            LPVSDetectService detectService,
-                            LPVSLicenseService licenseService,
-                            LPVSPullRequestRepository lpvsPullRequestRepository,
-                            LPVSQueueRepository queueRepository,
-                            @Value("${lpvs.attempts:4}") int maxAttempts) {
+    public LPVSQueueService(
+            LPVSGitHubService gitHubService,
+            LPVSDetectService detectService,
+            LPVSLicenseService licenseService,
+            LPVSPullRequestRepository lpvsPullRequestRepository,
+            LPVSQueueRepository queueRepository,
+            @Value("${lpvs.attempts:4}") int maxAttempts) {
         this.gitHubService = gitHubService;
         this.detectService = detectService;
         this.licenseService = licenseService;
@@ -60,7 +60,7 @@ public class LPVSQueueService {
         return QUEUE.takeFirst();
     }
 
-    private static final BlockingDeque<LPVSQueue> QUEUE =  new LinkedBlockingDeque<>();
+    private static final BlockingDeque<LPVSQueue> QUEUE = new LinkedBlockingDeque<>();
 
     public void addFirst(LPVSQueue webhookConfig) throws InterruptedException {
         QUEUE.putFirst(webhookConfig);
@@ -87,14 +87,17 @@ public class LPVSQueueService {
             webhookConfig.setAttempts(webhookConfig.getAttempts() + 1);
             queueRepository.save(webhookConfig);
         }
-        for (LPVSQueue webhook: webhookConfigList){
+        for (LPVSQueue webhook : webhookConfigList) {
             log.info("PROCESSING WebHook id = " + webhook.getId());
             if (webhook.getAttempts() > maxAttempts) {
                 LPVSPullRequest pullRequest = new LPVSPullRequest();
                 pullRequest.setPullRequestUrl(webhook.getPullRequestUrl());
                 pullRequest.setUser(webhook.getUserId());
                 pullRequest.setPullRequestFilesUrl(webhook.getPullRequestFilesUrl());
-                pullRequest.setRepositoryName(LPVSWebhookUtil.getRepositoryOrganization(webhook) + "/" + LPVSWebhookUtil.getRepositoryName(webhook));
+                pullRequest.setRepositoryName(
+                        LPVSWebhookUtil.getRepositoryOrganization(webhook)
+                                + "/"
+                                + LPVSWebhookUtil.getRepositoryName(webhook));
                 pullRequest.setDate(webhook.getDate());
                 pullRequest.setStatus(LPVSPullRequestStatus.NO_ACCESS.toString());
                 pullRequest.setPullRequestHead(webhook.getPullRequestHead());
@@ -106,7 +109,11 @@ public class LPVSQueueService {
                     gitHubService.setErrorCheck(webhook);
                 }
                 queueRepository.deleteById(webhook.getId());
-                log.info("Webhook id = " + webhook.getId() + " is deleted. Details on PR #" + pullRequest.getId());
+                log.info(
+                        "Webhook id = "
+                                + webhook.getId()
+                                + " is deleted. Details on PR #"
+                                + pullRequest.getId());
                 continue;
             }
             log.info("Add WebHook id = " + webhook.getId() + " to the queue.");
@@ -116,8 +123,8 @@ public class LPVSQueueService {
 
     public LPVSQueue getLatestScan(List<LPVSQueue> webhookConfigList) {
         LPVSQueue latestWebhookConfig = webhookConfigList.get(0);
-        for (LPVSQueue webhookConfig: webhookConfigList) {
-            if(latestWebhookConfig.getDate().compareTo(webhookConfig.getDate()) < 0) {
+        for (LPVSQueue webhookConfig : webhookConfigList) {
+            if (latestWebhookConfig.getDate().compareTo(webhookConfig.getDate()) < 0) {
                 latestWebhookConfig = webhookConfig;
             }
         }
@@ -128,55 +135,62 @@ public class LPVSQueueService {
     public void processWebHook(LPVSQueue webhookConfig) throws IOException {
         LPVSPullRequest pullRequest = new LPVSPullRequest();
         try {
-                log.info("GitHub Webhook processing...");
-                log.info(webhookConfig.toString());
+            log.info("GitHub Webhook processing...");
+            log.info(webhookConfig.toString());
 
-                String filePath = gitHubService.getPullRequestFiles(webhookConfig);
+            String filePath = gitHubService.getPullRequestFiles(webhookConfig);
 
-                pullRequest.setPullRequestUrl(webhookConfig.getPullRequestUrl());
-                pullRequest.setUser(webhookConfig.getUserId());
-                pullRequest.setPullRequestFilesUrl(webhookConfig.getPullRequestFilesUrl());
-                pullRequest.setRepositoryName(LPVSWebhookUtil.getRepositoryOrganization(webhookConfig) + "/" + LPVSWebhookUtil.getRepositoryName(webhookConfig));
-                pullRequest.setDate(webhookConfig.getDate());
-                pullRequest.setStatus(LPVSPullRequestStatus.SCANNING.toString());
-                pullRequest.setPullRequestHead(webhookConfig.getPullRequestHead());
-                pullRequest.setPullRequestBase(webhookConfig.getPullRequestBase());
-                pullRequest.setSender(webhookConfig.getSender());
-                pullRequest = lpvsPullRequestRepository.saveAndFlush(pullRequest);
-                log.debug("ID: " + pullRequest.getId() + " " + pullRequest.toString());
+            pullRequest.setPullRequestUrl(webhookConfig.getPullRequestUrl());
+            pullRequest.setUser(webhookConfig.getUserId());
+            pullRequest.setPullRequestFilesUrl(webhookConfig.getPullRequestFilesUrl());
+            pullRequest.setRepositoryName(
+                    LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                            + "/"
+                            + LPVSWebhookUtil.getRepositoryName(webhookConfig));
+            pullRequest.setDate(webhookConfig.getDate());
+            pullRequest.setStatus(LPVSPullRequestStatus.SCANNING.toString());
+            pullRequest.setPullRequestHead(webhookConfig.getPullRequestHead());
+            pullRequest.setPullRequestBase(webhookConfig.getPullRequestBase());
+            pullRequest.setSender(webhookConfig.getSender());
+            pullRequest = lpvsPullRequestRepository.saveAndFlush(pullRequest);
+            log.debug("ID: " + pullRequest.getId() + " " + pullRequest.toString());
 
-                if (filePath != null) {
-                    log.debug("Successfully downloaded files");
+            if (filePath != null) {
+                log.debug("Successfully downloaded files");
 
-                    if (filePath.contains(":::::")) {
-                        filePath = filePath.split(":::::")[0];
-                    }
-                    // check repository license
-                    String repositoryLicense = gitHubService.getRepositoryLicense(webhookConfig);
-                    if (licenseService.checkLicense(repositoryLicense) != null) {
-                        webhookConfig.setRepositoryLicense(licenseService.checkLicense(repositoryLicense).getSpdxId());
-                    } else if (licenseService.findLicenseByName(repositoryLicense) != null) {
-                        webhookConfig.setRepositoryLicense(licenseService.findLicenseByName(repositoryLicense).getSpdxId());
-                    } else {
-                        webhookConfig.setRepositoryLicense(null);
-                    }
-                    log.debug("Repository license: " + webhookConfig.getRepositoryLicense());
-
-                    List<LPVSFile> files = detectService.runScan(webhookConfig, filePath);
-
-                    // check license conflicts
-                    List<LPVSLicenseService.Conflict<String, String>> detectedConflicts = licenseService.findConflicts(webhookConfig, files);
-
-                    log.debug("Creating comment");
-                    gitHubService.commentResults(webhookConfig, files, detectedConflicts, pullRequest);
-                    log.debug("Results posted on GitHub");
-                } else {
-                    log.warn("Files are not found. Probably pull request is not exists.");
-                    gitHubService.commentResults(webhookConfig, null, null, pullRequest);
-                    delete(webhookConfig);
-                    throw new Exception("Files are not found. Probably pull request is not exists. Terminating.");
+                if (filePath.contains(":::::")) {
+                    filePath = filePath.split(":::::")[0];
                 }
+                // check repository license
+                String repositoryLicense = gitHubService.getRepositoryLicense(webhookConfig);
+                if (licenseService.checkLicense(repositoryLicense) != null) {
+                    webhookConfig.setRepositoryLicense(
+                            licenseService.checkLicense(repositoryLicense).getSpdxId());
+                } else if (licenseService.findLicenseByName(repositoryLicense) != null) {
+                    webhookConfig.setRepositoryLicense(
+                            licenseService.findLicenseByName(repositoryLicense).getSpdxId());
+                } else {
+                    webhookConfig.setRepositoryLicense(null);
+                }
+                log.debug("Repository license: " + webhookConfig.getRepositoryLicense());
+
+                List<LPVSFile> files = detectService.runScan(webhookConfig, filePath);
+
+                // check license conflicts
+                List<LPVSLicenseService.Conflict<String, String>> detectedConflicts =
+                        licenseService.findConflicts(webhookConfig, files);
+
+                log.debug("Creating comment");
+                gitHubService.commentResults(webhookConfig, files, detectedConflicts, pullRequest);
+                log.debug("Results posted on GitHub");
+            } else {
+                log.warn("Files are not found. Probably pull request is not exists.");
+                gitHubService.commentResults(webhookConfig, null, null, pullRequest);
                 delete(webhookConfig);
+                throw new Exception(
+                        "Files are not found. Probably pull request is not exists. Terminating.");
+            }
+            delete(webhookConfig);
         } catch (Exception | Error e) {
             pullRequest.setStatus(LPVSPullRequestStatus.INTERNAL_ERROR.toString());
             pullRequest = lpvsPullRequestRepository.saveAndFlush(pullRequest);
@@ -185,5 +199,4 @@ public class LPVSQueueService {
             delete(webhookConfig);
         }
     }
-
 }

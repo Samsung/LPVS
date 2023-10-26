@@ -4,7 +4,6 @@
  * Use of this source code is governed by a MIT license that can be
  * found in the LICENSE file.
  */
-
 package com.lpvs;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -20,8 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import com.lpvs.util.LPVSExitHandler;
 
-
-@SpringBootApplication(scanBasePackages = { "com.lpvs" })
+@SpringBootApplication(scanBasePackages = {"com.lpvs"})
 @EnableAutoConfiguration
 @EnableAsync
 public class LicensePreValidationSystem {
@@ -36,7 +34,8 @@ public class LicensePreValidationSystem {
 
     public static void main(String[] args) {
         try {
-            ApplicationContext applicationContext = SpringApplication.run(LicensePreValidationSystem.class, args);
+            ApplicationContext applicationContext =
+                    SpringApplication.run(LicensePreValidationSystem.class, args);
             exitHandler = applicationContext.getBean(LPVSExitHandler.class);
         } catch (IllegalArgumentException e) {
             System.err.println("An IllegalArgumentException occurred: " + e.getMessage());
@@ -45,7 +44,7 @@ public class LicensePreValidationSystem {
     }
 
     @Bean("threadPoolTaskExecutor")
-    public TaskExecutor getAsyncExecutor(){
+    public TaskExecutor getAsyncExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.setCorePoolSize(corePoolSize);
         executor.setThreadNamePrefix("LPVS-ASYNC::");
@@ -60,4 +59,3 @@ public class LicensePreValidationSystem {
         }
     }
 }
-

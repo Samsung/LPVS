@@ -4,12 +4,10 @@
  * Use of this source code is governed by a MIT license that can be
  * found in the LICENSE file.
  */
-
 package com.lpvs.service;
 
 import com.lpvs.repository.LPVSMemberRepository;
 
-import com.lpvs.service.OAuthService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -36,22 +34,28 @@ public class OAuthServiceTest {
         LPVSMemberRepository lpvsMemberRepository = mock(LPVSMemberRepository.class);
 
         // Create a sample OAuth2UserRequest
-        ClientRegistration clientRegistration = ClientRegistration
-                .withRegistrationId("google")
-                .userInfoUri("https://example.com/userinfo")
-                .userNameAttributeName("email")
-                .authorizationGrantType(AuthorizationGrantType.PASSWORD)
-                .clientId("id")
-                .tokenUri("https://example.com/tokenuri")
-                .build();
-        OAuth2UserRequest userRequest = new OAuth2UserRequest(
-                clientRegistration,
-                new OAuth2AccessToken(OAuth2AccessToken.TokenType.BEARER, "access-token", null, null));
+        ClientRegistration clientRegistration =
+                ClientRegistration.withRegistrationId("google")
+                        .userInfoUri("https://example.com/userinfo")
+                        .userNameAttributeName("email")
+                        .authorizationGrantType(AuthorizationGrantType.PASSWORD)
+                        .clientId("id")
+                        .tokenUri("https://example.com/tokenuri")
+                        .build();
+        OAuth2UserRequest userRequest =
+                new OAuth2UserRequest(
+                        clientRegistration,
+                        new OAuth2AccessToken(
+                                OAuth2AccessToken.TokenType.BEARER, "access-token", null, null));
 
         Map<String, Object> attributes = new LinkedHashMap<>();
         attributes.put("email", "testEmail");
         attributes.put("name", "testName");
-        OAuth2User oAuth2User = new DefaultOAuth2User(Collections.singleton(new SimpleGrantedAuthority("USER")), attributes, "email");
+        OAuth2User oAuth2User =
+                new DefaultOAuth2User(
+                        Collections.singleton(new SimpleGrantedAuthority("USER")),
+                        attributes,
+                        "email");
 
         // Mock the behavior of DefaultOAuth2UserService
         DefaultOAuth2UserService defaultUserService = Mockito.mock(DefaultOAuth2UserService.class);

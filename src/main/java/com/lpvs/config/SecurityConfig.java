@@ -4,7 +4,6 @@
  * Use of this source code is governed by a MIT license that can be
  * found in the LICENSE file.
  */
-
 package com.lpvs.config;
 
 import com.lpvs.service.OAuthService;
@@ -47,11 +46,13 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-                .cors()
+        http.cors()
                 .and()
-                .csrf().disable()
-                .headers().frameOptions().disable()
+                .csrf()
+                .disable()
+                .headers()
+                .frameOptions()
+                .disable()
                 .and()
                 .logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/oauth/logout"))
@@ -60,26 +61,35 @@ public class SecurityConfig {
                 .clearAuthentication(true)
                 .and()
                 .authorizeRequests()
-                .anyRequest().permitAll()
+                .anyRequest()
+                .permitAll()
                 .and()
                 .oauth2Login()
-                .successHandler(new AuthenticationSuccessHandler() {
-                    @Value("${frontend.main-page.url:}")
-                    private String frontendMainPageUrl;
+                .successHandler(
+                        new AuthenticationSuccessHandler() {
+                            @Value("${frontend.main-page.url:}")
+                            private String frontendMainPageUrl;
 
-                    private String REDIRECT_URI = frontendMainPageUrl+"/login/callback";
+                            private String REDIRECT_URI = frontendMainPageUrl + "/login/callback";
 
-                    @Override
-                    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-                        OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
-                        System.out.println("oAuth2User = " + oAuth2User);
+                            @Override
+                            public void onAuthenticationSuccess(
+                                    HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    Authentication authentication)
+                                    throws IOException, ServletException {
+                                OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
+                                System.out.println("oAuth2User = " + oAuth2User);
 
-                        response.sendRedirect(UriComponentsBuilder.fromUriString(REDIRECT_URI)
-                                .queryParam("accessToken", "accessToken")
-                                .queryParam("refreshToken", "refreshToken")
-                                .build().encode(StandardCharsets.UTF_8).toUriString());
-                    }
-                })
+                                response.sendRedirect(
+                                        UriComponentsBuilder.fromUriString(REDIRECT_URI)
+                                                .queryParam("accessToken", "accessToken")
+                                                .queryParam("refreshToken", "refreshToken")
+                                                .build()
+                                                .encode(StandardCharsets.UTF_8)
+                                                .toUriString());
+                            }
+                        })
                 .defaultSuccessUrl(frontendMainPageUrl, true)
                 .userInfoEndpoint()
                 .userService(oAuthService);

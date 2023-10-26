@@ -4,7 +4,6 @@
  * Use of this source code is governed by a MIT license that can be
  * found in the LICENSE file.
  */
-
 package com.lpvs.service;
 
 import com.lpvs.entity.LPVSFile;
@@ -27,8 +26,9 @@ public class LPVSDetectService {
     private LPVSScanossDetectService scanossDetectService;
 
     @Autowired
-    public LPVSDetectService(@Value("${scanner:scanoss}") String scannerType,
-                             LPVSScanossDetectService scanossDetectService) {
+    public LPVSDetectService(
+            @Value("${scanner:scanoss}") String scannerType,
+            LPVSScanossDetectService scanossDetectService) {
         this.scannerType = scannerType;
         this.scanossDetectService = scanossDetectService;
     }

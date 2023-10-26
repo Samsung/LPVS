@@ -33,7 +33,9 @@ public class LPVSResultTest {
     @BeforeEach
     public void setUp() {
         licenseCountMap.put("LicenseA", 1);
-        lpvsResult = new LPVSResult(resultFileList, resultInfo, count, licenseCountMap, pullNumber, hasIssue);
+        lpvsResult =
+                new LPVSResult(
+                        resultFileList, resultInfo, count, licenseCountMap, pullNumber, hasIssue);
     }
 
     @Test
@@ -50,8 +52,11 @@ public class LPVSResultTest {
     @Test
     public void testInequality() {
         // Test inequality when objects are not the same
-        LPVSResult result1 = new LPVSResult(resultFileList, resultInfo, count, licenseCountMap, pullNumber, hasIssue);
-        LPVSResult result2 = new LPVSResult(resultFileList, resultInfo, count, licenseCountMap, "456", hasIssue);
+        LPVSResult result1 =
+                new LPVSResult(
+                        resultFileList, resultInfo, count, licenseCountMap, pullNumber, hasIssue);
+        LPVSResult result2 =
+                new LPVSResult(resultFileList, resultInfo, count, licenseCountMap, "456", hasIssue);
         assertFalse(result1.equals(result2));
         assertFalse(result2.equals(result1));
     }
@@ -59,7 +64,9 @@ public class LPVSResultTest {
     @Test
     public void testDifferentClassesEquality() {
         // Test equality with an object of a different class
-        LPVSResult result1 = new LPVSResult(resultFileList, resultInfo, count, licenseCountMap, pullNumber, hasIssue);
+        LPVSResult result1 =
+                new LPVSResult(
+                        resultFileList, resultInfo, count, licenseCountMap, pullNumber, hasIssue);
         Object result2 = new Object();
         assertFalse(result1.equals(result2));
     }
@@ -67,7 +74,9 @@ public class LPVSResultTest {
     @Test
     public void testInequalityWithNullValues() {
         // Test inequality when some values are null
-        LPVSResult result1 = new LPVSResult(resultFileList, resultInfo, count, licenseCountMap, pullNumber, hasIssue);
+        LPVSResult result1 =
+                new LPVSResult(
+                        resultFileList, resultInfo, count, licenseCountMap, pullNumber, hasIssue);
         LPVSResult result2 = new LPVSResult(null, null, null, null, null, null);
         assertFalse(result1.equals(result2));
         assertFalse(result2.equals(result1));

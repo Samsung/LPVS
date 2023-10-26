@@ -4,7 +4,6 @@
  * Use of this source code is governed by a MIT license that can be
  * found in the LICENSE file.
  */
-
 package com.lpvs.service;
 
 import com.lpvs.entity.LPVSFile;
@@ -40,7 +39,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -71,11 +69,12 @@ public class LPVSGitHubServiceTest {
         private final int mockedGetDeletions;
         private final GHCommitPointer mockedGetHead;
 
-        public GHPullRequestOurMock(URL mockedGetUrl,
-                                    String mockedGetTitle,
-                                    PagedIterable<GHPullRequestFileDetail> mockedListFiles,
-                                    int mockedGetDeletions,
-                                    GHCommitPointer mockedGetHead) {
+        public GHPullRequestOurMock(
+                URL mockedGetUrl,
+                String mockedGetTitle,
+                PagedIterable<GHPullRequestFileDetail> mockedListFiles,
+                int mockedGetDeletions,
+                GHCommitPointer mockedGetHead) {
             this.mockedGetUrl = mockedGetUrl;
             this.mockedGetTitle = mockedGetTitle;
             this.mockedListFiles = mockedListFiles;
@@ -84,19 +83,29 @@ public class LPVSGitHubServiceTest {
         }
 
         @Override
-        public URL getUrl() { return mockedGetUrl; }
+        public URL getUrl() {
+            return mockedGetUrl;
+        }
 
         @Override
-        public String getTitle() { return mockedGetTitle; }
+        public String getTitle() {
+            return mockedGetTitle;
+        }
 
         @Override
-        public PagedIterable<GHPullRequestFileDetail> listFiles() { return mockedListFiles; }
+        public PagedIterable<GHPullRequestFileDetail> listFiles() {
+            return mockedListFiles;
+        }
 
         @Override
-        public int getDeletions() { return mockedGetDeletions; }
+        public int getDeletions() {
+            return mockedGetDeletions;
+        }
 
         @Override
-        public GHCommitPointer getHead() { return mockedGetHead; }
+        public GHCommitPointer getHead() {
+            return mockedGetHead;
+        }
 
         static class CommentCall {
             String arg;
@@ -143,21 +152,33 @@ public class LPVSGitHubServiceTest {
         final String GH_LOGIN = "test_login";
         final String GH_AUTH_TOKEN = "test_auth_token";
         final String GH_API_URL = "";
-        LPVSPullRequestRepository mocked_pullRequestRepository = mock(LPVSPullRequestRepository.class);
-        LPVSDetectedLicenseRepository mocked_lpvsDetectedLicenseRepository = mock(LPVSDetectedLicenseRepository.class);
+        LPVSPullRequestRepository mocked_pullRequestRepository =
+                mock(LPVSPullRequestRepository.class);
+        LPVSDetectedLicenseRepository mocked_lpvsDetectedLicenseRepository =
+                mock(LPVSDetectedLicenseRepository.class);
         LPVSLicenseRepository mocked_lpvsLicenseRepository = mock(LPVSLicenseRepository.class);
-        LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository = mock(LPVSLicenseConflictRepository.class);
-        final LPVSGitHubService gh_service = new LPVSGitHubService(GH_LOGIN, GH_AUTH_TOKEN, GH_API_URL, mocked_pullRequestRepository,
-                mocked_lpvsDetectedLicenseRepository, mocked_lpvsLicenseRepository, mocked_lpvsLicenseConflictRepository, exitHandler);
+        LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository =
+                mock(LPVSLicenseConflictRepository.class);
+        final LPVSGitHubService gh_service =
+                new LPVSGitHubService(
+                        GH_LOGIN,
+                        GH_AUTH_TOKEN,
+                        GH_API_URL,
+                        mocked_pullRequestRepository,
+                        mocked_lpvsDetectedLicenseRepository,
+                        mocked_lpvsLicenseRepository,
+                        mocked_lpvsLicenseConflictRepository,
+                        exitHandler);
         LPVSQueue webhookConfig;
         GitHub mocked_instance_gh = mock(GitHub.class);
         GHRepository mocked_repo = mock(GHRepository.class);
-        PagedIterable<GHPullRequestFileDetail> mocked_list_files = new PagedIterable<GHPullRequestFileDetail>() {
-            @Override
-            public PagedIterator<GHPullRequestFileDetail> _iterator(int i) {
-                return null;
-            }
-        };
+        PagedIterable<GHPullRequestFileDetail> mocked_list_files =
+                new PagedIterable<GHPullRequestFileDetail>() {
+                    @Override
+                    public PagedIterator<GHPullRequestFileDetail> _iterator(int i) {
+                        return null;
+                    }
+                };
         GHPullRequest mocked_pr_1;
         GHPullRequest mocked_pr_2;
         final String url_pr_1 = "https://github.com/Samsung/LPVS/pull/18";
@@ -174,21 +195,32 @@ public class LPVSGitHubServiceTest {
             webhookConfig.setPullRequestUrl(url_pr_2);
 
             try {
-                when(mocked_instance_gh.getRepository(LPVSWebhookUtil.getRepositoryOrganization(webhookConfig) + "/" + LPVSWebhookUtil.getRepositoryName(webhookConfig))).thenReturn(mocked_repo);
+                when(mocked_instance_gh.getRepository(
+                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                        + "/"
+                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig)))
+                        .thenReturn(mocked_repo);
             } catch (IOException e) {
                 log.error("mocked_repo.getRepository error " + e);
             }
             try {
-                mocked_pr_1 = new GHPullRequestOurMock(
-                        new URL(url_pr_1), null, null, -1, null);
-                mocked_pr_2 = new GHPullRequestOurMock(
-                        new URL(url_pr_2), "GithubService::getRepositoryLicense tests", mocked_list_files, 0, null);
+                mocked_pr_1 = new GHPullRequestOurMock(new URL(url_pr_1), null, null, -1, null);
+                mocked_pr_2 =
+                        new GHPullRequestOurMock(
+                                new URL(url_pr_2),
+                                "GithubService::getRepositoryLicense tests",
+                                mocked_list_files,
+                                0,
+                                null);
             } catch (MalformedURLException e) {
-                log.error("TestGetPullRequestFiles__ApiUrlAbsentPullPresentNoRescan.setUp() error " + e);
+                log.error(
+                        "TestGetPullRequestFiles__ApiUrlAbsentPullPresentNoRescan.setUp() error "
+                                + e);
                 fail();
             }
             try {
-                when(mocked_repo.getPullRequests(GHIssueState.OPEN)).thenReturn(Arrays.asList(mocked_pr_1, mocked_pr_2));
+                when(mocked_repo.getPullRequests(GHIssueState.OPEN))
+                        .thenReturn(Arrays.asList(mocked_pr_1, mocked_pr_2));
             } catch (IOException e) {
                 log.error("mocked_repo.getPullRequests error " + e);
             }
@@ -197,10 +229,14 @@ public class LPVSGitHubServiceTest {
         @Test
         public void testGetPullRequestFiles__ApiUrlAbsentPullPresentNoRescan() {
 
-            try (MockedStatic<GitHub> mocked_static_gh = mockStatic(GitHub.class); MockedStatic<LPVSFileUtil> mocked_static_file_util =
-                    mockStatic(LPVSFileUtil.class)) {
-                mocked_static_gh.when(() -> GitHub.connect(GH_LOGIN, GH_AUTH_TOKEN)).thenReturn(mocked_instance_gh);
-                mocked_static_file_util.when(() -> LPVSFileUtil.saveGithubDiffs(mocked_list_files, webhookConfig))
+            try (MockedStatic<GitHub> mocked_static_gh = mockStatic(GitHub.class);
+                    MockedStatic<LPVSFileUtil> mocked_static_file_util =
+                            mockStatic(LPVSFileUtil.class)) {
+                mocked_static_gh
+                        .when(() -> GitHub.connect(GH_LOGIN, GH_AUTH_TOKEN))
+                        .thenReturn(mocked_instance_gh);
+                mocked_static_file_util
+                        .when(() -> LPVSFileUtil.saveGithubDiffs(mocked_list_files, webhookConfig))
                         .thenReturn(githubFiles);
 
                 // main test
@@ -213,10 +249,15 @@ public class LPVSGitHubServiceTest {
 
                 // `mocked_instance_gh` verify
                 try {
-                    verify(mocked_instance_gh, times(1)).getRepository(LPVSWebhookUtil.getRepositoryOrganization(webhookConfig) +
-                            "/" + LPVSWebhookUtil.getRepositoryName(webhookConfig));
+                    verify(mocked_instance_gh, times(1))
+                            .getRepository(
+                                    LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                            + "/"
+                                            + LPVSWebhookUtil.getRepositoryName(webhookConfig));
                 } catch (IOException e) {
-                    log.error("TestGetPullRequestFiles__ApiUrlAbsentPullPresentNoRescan.testGetPullRequestFiles__ApiUrlAbsentPullPresentNoRescan() error " + e);
+                    log.error(
+                            "TestGetPullRequestFiles__ApiUrlAbsentPullPresentNoRescan.testGetPullRequestFiles__ApiUrlAbsentPullPresentNoRescan() error "
+                                    + e);
                     fail();
                 }
                 verifyNoMoreInteractions(mocked_instance_gh);
@@ -225,7 +266,9 @@ public class LPVSGitHubServiceTest {
                 try {
                     verify(mocked_repo, times(1)).getPullRequests(GHIssueState.OPEN);
                 } catch (IOException e) {
-                    log.error("TestGetPullRequestFiles__ApiUrlAbsentPullPresentNoRescan.testGetPullRequestFiles__ApiUrlAbsentPullPresentNoRescan() error " + e);
+                    log.error(
+                            "TestGetPullRequestFiles__ApiUrlAbsentPullPresentNoRescan.testGetPullRequestFiles__ApiUrlAbsentPullPresentNoRescan() error "
+                                    + e);
                     fail();
                 }
                 verifyNoMoreInteractions(mocked_repo);
@@ -244,21 +287,33 @@ public class LPVSGitHubServiceTest {
         final String GH_LOGIN = "test_login";
         final String GH_AUTH_TOKEN = "test_auth_token";
         final String GH_API_URL = "test_api_url";
-        LPVSPullRequestRepository mocked_pullRequestRepository = mock(LPVSPullRequestRepository.class);
-        LPVSDetectedLicenseRepository mocked_lpvsDetectedLicenseRepository = mock(LPVSDetectedLicenseRepository.class);
+        LPVSPullRequestRepository mocked_pullRequestRepository =
+                mock(LPVSPullRequestRepository.class);
+        LPVSDetectedLicenseRepository mocked_lpvsDetectedLicenseRepository =
+                mock(LPVSDetectedLicenseRepository.class);
         LPVSLicenseRepository mocked_lpvsLicenseRepository = mock(LPVSLicenseRepository.class);
-        LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository = mock(LPVSLicenseConflictRepository.class);
-        final LPVSGitHubService gh_service = new LPVSGitHubService(GH_LOGIN, GH_AUTH_TOKEN, GH_API_URL, mocked_pullRequestRepository,
-                mocked_lpvsDetectedLicenseRepository, mocked_lpvsLicenseRepository, mocked_lpvsLicenseConflictRepository, exitHandler);
+        LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository =
+                mock(LPVSLicenseConflictRepository.class);
+        final LPVSGitHubService gh_service =
+                new LPVSGitHubService(
+                        GH_LOGIN,
+                        GH_AUTH_TOKEN,
+                        GH_API_URL,
+                        mocked_pullRequestRepository,
+                        mocked_lpvsDetectedLicenseRepository,
+                        mocked_lpvsLicenseRepository,
+                        mocked_lpvsLicenseConflictRepository,
+                        exitHandler);
         LPVSQueue webhookConfig;
         GitHub mocked_instance_gh = mock(GitHub.class);
         GHRepository mocked_repo = mock(GHRepository.class);
-        PagedIterable<GHPullRequestFileDetail> mocked_list_files = new PagedIterable<GHPullRequestFileDetail>() {
-            @Override
-            public PagedIterator<GHPullRequestFileDetail> _iterator(int i) {
-                return null;
-            }
-        };
+        PagedIterable<GHPullRequestFileDetail> mocked_list_files =
+                new PagedIterable<GHPullRequestFileDetail>() {
+                    @Override
+                    public PagedIterator<GHPullRequestFileDetail> _iterator(int i) {
+                        return null;
+                    }
+                };
         GHPullRequest mocked_pr_1;
         GHPullRequest mocked_pr_2;
         final String url_pr_1 = "https://github.com/Samsung/LPVS/pull/18";
@@ -278,24 +333,33 @@ public class LPVSGitHubServiceTest {
             webhookConfig.setRepositoryUrl("https://github.com/Samsung/LPVS");
             webhookConfig.setPullRequestFilesUrl(url_pr_2);
 
-
             try {
-                when(mocked_instance_gh.getRepository(LPVSWebhookUtil.getRepositoryOrganization(webhookConfig) +
-                        "/" + LPVSWebhookUtil.getRepositoryName(webhookConfig))).thenReturn(mocked_repo);
+                when(mocked_instance_gh.getRepository(
+                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                        + "/"
+                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig)))
+                        .thenReturn(mocked_repo);
             } catch (IOException e) {
                 log.error("mocked_repo.getRepository error " + e);
             }
             try {
-                mocked_pr_1 = new GHPullRequestOurMock(
-                        new URL(url_pr_1), null, null, -1, null);
-                mocked_pr_2 = new GHPullRequestOurMock(
-                        new URL(url_pr_2), "GithubService::getRepositoryLicense tests", mocked_list_files, 0, null);
+                mocked_pr_1 = new GHPullRequestOurMock(new URL(url_pr_1), null, null, -1, null);
+                mocked_pr_2 =
+                        new GHPullRequestOurMock(
+                                new URL(url_pr_2),
+                                "GithubService::getRepositoryLicense tests",
+                                mocked_list_files,
+                                0,
+                                null);
             } catch (MalformedURLException e) {
-                log.error("TestGetPullRequestFiles__ApiUrlPresentPullPresentNoRescan.setUp() error " + e);
+                log.error(
+                        "TestGetPullRequestFiles__ApiUrlPresentPullPresentNoRescan.setUp() error "
+                                + e);
                 fail();
             }
             try {
-                when(mocked_repo.getPullRequests(GHIssueState.OPEN)).thenReturn(Arrays.asList(mocked_pr_1, mocked_pr_2));
+                when(mocked_repo.getPullRequests(GHIssueState.OPEN))
+                        .thenReturn(Arrays.asList(mocked_pr_1, mocked_pr_2));
             } catch (IOException e) {
                 log.error("mocked_repo.getPullRequests error " + e);
             }
@@ -304,9 +368,17 @@ public class LPVSGitHubServiceTest {
         @Test
         public void testGetPullRequestFiles__ApiUrlPresentPullPresentNoRescan() {
 
-            try (MockedStatic<GitHub> mocked_static_gh = mockStatic(GitHub.class); MockedStatic<LPVSFileUtil> mocked_static_file_util = mockStatic(LPVSFileUtil.class)) {
-                mocked_static_gh.when(() -> GitHub.connectToEnterpriseWithOAuth(GH_API_URL, GH_LOGIN, GH_AUTH_TOKEN)).thenReturn(mocked_instance_gh);
-                mocked_static_file_util.when(() -> LPVSFileUtil.saveGithubDiffs(mocked_list_files, webhookConfig))
+            try (MockedStatic<GitHub> mocked_static_gh = mockStatic(GitHub.class);
+                    MockedStatic<LPVSFileUtil> mocked_static_file_util =
+                            mockStatic(LPVSFileUtil.class)) {
+                mocked_static_gh
+                        .when(
+                                () ->
+                                        GitHub.connectToEnterpriseWithOAuth(
+                                                GH_API_URL, GH_LOGIN, GH_AUTH_TOKEN))
+                        .thenReturn(mocked_instance_gh);
+                mocked_static_file_util
+                        .when(() -> LPVSFileUtil.saveGithubDiffs(mocked_list_files, webhookConfig))
                         .thenReturn(githubFiles);
 
                 // main test
@@ -314,15 +386,24 @@ public class LPVSGitHubServiceTest {
 
                 // verification of calling methods on `Mock`s
                 // `mocked_static_gh` verify
-                mocked_static_gh.verify(() -> GitHub.connectToEnterpriseWithOAuth(GH_API_URL, GH_LOGIN, GH_AUTH_TOKEN), times(1));
+                mocked_static_gh.verify(
+                        () ->
+                                GitHub.connectToEnterpriseWithOAuth(
+                                        GH_API_URL, GH_LOGIN, GH_AUTH_TOKEN),
+                        times(1));
                 mocked_static_gh.verifyNoMoreInteractions();
 
                 // `mocked_instance_gh` verify
                 try {
-                    verify(mocked_instance_gh, times(1)).getRepository(LPVSWebhookUtil.getRepositoryOrganization(webhookConfig) +
-                            "/" + LPVSWebhookUtil.getRepositoryName(webhookConfig));
+                    verify(mocked_instance_gh, times(1))
+                            .getRepository(
+                                    LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                            + "/"
+                                            + LPVSWebhookUtil.getRepositoryName(webhookConfig));
                 } catch (IOException e) {
-                    log.error("TestGetPullRequestFiles__ApiUrlPresentPullPresentNoRescan.testGetPullRequestFiles__ApiUrlPresentPullPresentNoRescan() error " + e);
+                    log.error(
+                            "TestGetPullRequestFiles__ApiUrlPresentPullPresentNoRescan.testGetPullRequestFiles__ApiUrlPresentPullPresentNoRescan() error "
+                                    + e);
                     fail();
                 }
                 verifyNoMoreInteractions(mocked_instance_gh);
@@ -331,7 +412,9 @@ public class LPVSGitHubServiceTest {
                 try {
                     verify(mocked_repo, times(1)).getPullRequests(GHIssueState.OPEN);
                 } catch (IOException e) {
-                    log.error("TestGetPullRequestFiles__ApiUrlPresentPullPresentNoRescan.testGetPullRequestFiles__ApiUrlPresentPullPresentNoRescan() error " + e);
+                    log.error(
+                            "TestGetPullRequestFiles__ApiUrlPresentPullPresentNoRescan.testGetPullRequestFiles__ApiUrlPresentPullPresentNoRescan() error "
+                                    + e);
                     fail();
                 }
 
@@ -349,12 +432,23 @@ public class LPVSGitHubServiceTest {
         final String GH_LOGIN = "test_login";
         final String GH_AUTH_TOKEN = "test_auth_token";
         final String GH_API_URL = "";
-        LPVSPullRequestRepository mocked_pullRequestRepository = mock(LPVSPullRequestRepository.class);
-        LPVSDetectedLicenseRepository mocked_lpvsDetectedLicenseRepository = mock(LPVSDetectedLicenseRepository.class);
+        LPVSPullRequestRepository mocked_pullRequestRepository =
+                mock(LPVSPullRequestRepository.class);
+        LPVSDetectedLicenseRepository mocked_lpvsDetectedLicenseRepository =
+                mock(LPVSDetectedLicenseRepository.class);
         LPVSLicenseRepository mocked_lpvsLicenseRepository = mock(LPVSLicenseRepository.class);
-        LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository = mock(LPVSLicenseConflictRepository.class);
-        final LPVSGitHubService gh_service = new LPVSGitHubService(GH_LOGIN, GH_AUTH_TOKEN, GH_API_URL, mocked_pullRequestRepository,
-                mocked_lpvsDetectedLicenseRepository, mocked_lpvsLicenseRepository, mocked_lpvsLicenseConflictRepository, exitHandler);
+        LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository =
+                mock(LPVSLicenseConflictRepository.class);
+        final LPVSGitHubService gh_service =
+                new LPVSGitHubService(
+                        GH_LOGIN,
+                        GH_AUTH_TOKEN,
+                        GH_API_URL,
+                        mocked_pullRequestRepository,
+                        mocked_lpvsDetectedLicenseRepository,
+                        mocked_lpvsLicenseRepository,
+                        mocked_lpvsLicenseConflictRepository,
+                        exitHandler);
         LPVSQueue webhookConfig;
         GitHub mocked_instance_gh = mock(GitHub.class);
         GHRepository mocked_repo = mock(GHRepository.class);
@@ -373,8 +467,11 @@ public class LPVSGitHubServiceTest {
             webhookConfig.setPullRequestUrl(url_pr_3);
 
             try {
-                when(mocked_instance_gh.getRepository(LPVSWebhookUtil.getRepositoryOrganization(webhookConfig) +
-                        "/" + LPVSWebhookUtil.getRepositoryName(webhookConfig))).thenReturn(mocked_repo);
+                when(mocked_instance_gh.getRepository(
+                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                        + "/"
+                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig)))
+                        .thenReturn(mocked_repo);
             } catch (IOException e) {
                 log.error("mocked_repo.getRepository error " + e);
             }
@@ -382,11 +479,14 @@ public class LPVSGitHubServiceTest {
                 mocked_pr_1 = new GHPullRequestOurMock(new URL(url_pr_1), null, null, -1, null);
                 mocked_pr_2 = new GHPullRequestOurMock(new URL(url_pr_2), null, null, -1, null);
             } catch (MalformedURLException e) {
-                log.error("TestGetPullRequestFiles__ApiUrlAbsentPullAbsentNoRescan.setUp() error " + e);
+                log.error(
+                        "TestGetPullRequestFiles__ApiUrlAbsentPullAbsentNoRescan.setUp() error "
+                                + e);
                 fail();
             }
             try {
-                when(mocked_repo.getPullRequests(GHIssueState.OPEN)).thenReturn(Arrays.asList(mocked_pr_1, mocked_pr_2));
+                when(mocked_repo.getPullRequests(GHIssueState.OPEN))
+                        .thenReturn(Arrays.asList(mocked_pr_1, mocked_pr_2));
             } catch (IOException e) {
                 log.error("mocked_repo.getPullRequests error " + e);
             }
@@ -396,7 +496,9 @@ public class LPVSGitHubServiceTest {
         public void testGetPullRequestFiles__ApiUrlAbsentPullAbsentNoRescan() {
 
             try (MockedStatic<GitHub> mocked_static_gh = mockStatic(GitHub.class)) {
-                mocked_static_gh.when(() -> GitHub.connect(GH_LOGIN, GH_AUTH_TOKEN)).thenReturn(mocked_instance_gh);
+                mocked_static_gh
+                        .when(() -> GitHub.connect(GH_LOGIN, GH_AUTH_TOKEN))
+                        .thenReturn(mocked_instance_gh);
 
                 // main test
                 assertNull(gh_service.getPullRequestFiles(webhookConfig));
@@ -408,10 +510,15 @@ public class LPVSGitHubServiceTest {
 
                 // `mocked_instance_gh` verify
                 try {
-                    verify(mocked_instance_gh, times(1)).getRepository(LPVSWebhookUtil.getRepositoryOrganization(webhookConfig) +
-                            "/" + LPVSWebhookUtil.getRepositoryName(webhookConfig));
+                    verify(mocked_instance_gh, times(1))
+                            .getRepository(
+                                    LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                            + "/"
+                                            + LPVSWebhookUtil.getRepositoryName(webhookConfig));
                 } catch (IOException e) {
-                    log.error("TestGetPullRequestFiles__ApiUrlAbsentPullAbsentNoRescan.testGetPullRequestFiles__ApiUrlAbsentPullAbsentNoRescan() error " + e);
+                    log.error(
+                            "TestGetPullRequestFiles__ApiUrlAbsentPullAbsentNoRescan.testGetPullRequestFiles__ApiUrlAbsentPullAbsentNoRescan() error "
+                                    + e);
                     fail();
                 }
                 verifyNoMoreInteractions(mocked_instance_gh);
@@ -420,7 +527,9 @@ public class LPVSGitHubServiceTest {
                 try {
                     verify(mocked_repo, times(1)).getPullRequests(GHIssueState.OPEN);
                 } catch (IOException e) {
-                    log.error("TestGetPullRequestFiles__ApiUrlAbsentPullAbsentNoRescan.testGetPullRequestFiles__ApiUrlAbsentPullAbsentNoRescan() error " + e);
+                    log.error(
+                            "TestGetPullRequestFiles__ApiUrlAbsentPullAbsentNoRescan.testGetPullRequestFiles__ApiUrlAbsentPullAbsentNoRescan() error "
+                                    + e);
                     fail();
                 }
                 verifyNoMoreInteractions(mocked_repo);
@@ -433,12 +542,23 @@ public class LPVSGitHubServiceTest {
         final String GH_LOGIN = "test_login";
         final String GH_AUTH_TOKEN = "test_auth_token";
         final String GH_API_URL = "test_api_url";
-        LPVSPullRequestRepository mocked_pullRequestRepository = mock(LPVSPullRequestRepository.class);
-        LPVSDetectedLicenseRepository mocked_lpvsDetectedLicenseRepository = mock(LPVSDetectedLicenseRepository.class);
+        LPVSPullRequestRepository mocked_pullRequestRepository =
+                mock(LPVSPullRequestRepository.class);
+        LPVSDetectedLicenseRepository mocked_lpvsDetectedLicenseRepository =
+                mock(LPVSDetectedLicenseRepository.class);
         LPVSLicenseRepository mocked_lpvsLicenseRepository = mock(LPVSLicenseRepository.class);
-        LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository = mock(LPVSLicenseConflictRepository.class);
-        final LPVSGitHubService gh_service = new LPVSGitHubService(GH_LOGIN, GH_AUTH_TOKEN, GH_API_URL, mocked_pullRequestRepository,
-                mocked_lpvsDetectedLicenseRepository, mocked_lpvsLicenseRepository, mocked_lpvsLicenseConflictRepository, exitHandler);
+        LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository =
+                mock(LPVSLicenseConflictRepository.class);
+        final LPVSGitHubService gh_service =
+                new LPVSGitHubService(
+                        GH_LOGIN,
+                        GH_AUTH_TOKEN,
+                        GH_API_URL,
+                        mocked_pullRequestRepository,
+                        mocked_lpvsDetectedLicenseRepository,
+                        mocked_lpvsLicenseRepository,
+                        mocked_lpvsLicenseConflictRepository,
+                        exitHandler);
         LPVSQueue webhookConfig;
         GitHub mocked_instance_gh = mock(GitHub.class);
         GHRepository mocked_repo = mock(GHRepository.class);
@@ -457,8 +577,11 @@ public class LPVSGitHubServiceTest {
             webhookConfig.setPullRequestUrl(url_pr_3);
 
             try {
-                when(mocked_instance_gh.getRepository(LPVSWebhookUtil.getRepositoryOrganization(webhookConfig) +
-                        "/" + LPVSWebhookUtil.getRepositoryName(webhookConfig))).thenReturn(mocked_repo);
+                when(mocked_instance_gh.getRepository(
+                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                        + "/"
+                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig)))
+                        .thenReturn(mocked_repo);
             } catch (IOException e) {
                 log.error("mocked_repo.getRepository error " + e);
             }
@@ -466,11 +589,14 @@ public class LPVSGitHubServiceTest {
                 mocked_pr_1 = new GHPullRequestOurMock(new URL(url_pr_1), null, null, -1, null);
                 mocked_pr_2 = new GHPullRequestOurMock(new URL(url_pr_2), null, null, -1, null);
             } catch (MalformedURLException e) {
-                log.error("TestGetPullRequestFiles__ApiUrlPresentPullAbsentNoRescan.setUp() error " + e);
+                log.error(
+                        "TestGetPullRequestFiles__ApiUrlPresentPullAbsentNoRescan.setUp() error "
+                                + e);
                 fail();
             }
             try {
-                when(mocked_repo.getPullRequests(GHIssueState.OPEN)).thenReturn(Arrays.asList(mocked_pr_1, mocked_pr_2));
+                when(mocked_repo.getPullRequests(GHIssueState.OPEN))
+                        .thenReturn(Arrays.asList(mocked_pr_1, mocked_pr_2));
             } catch (IOException e) {
                 log.error("mocked_repo.getPullRequests error " + e);
             }
@@ -480,22 +606,36 @@ public class LPVSGitHubServiceTest {
         public void testGetPullRequestFiles__ApiUrlPresentPullAbsentNoRescan() {
 
             try (MockedStatic<GitHub> mocked_static_gh = mockStatic(GitHub.class)) {
-                mocked_static_gh.when(() -> GitHub.connectToEnterpriseWithOAuth(GH_API_URL, GH_LOGIN, GH_AUTH_TOKEN)).thenReturn(mocked_instance_gh);
+                mocked_static_gh
+                        .when(
+                                () ->
+                                        GitHub.connectToEnterpriseWithOAuth(
+                                                GH_API_URL, GH_LOGIN, GH_AUTH_TOKEN))
+                        .thenReturn(mocked_instance_gh);
 
                 // main test
                 assertNull(gh_service.getPullRequestFiles(webhookConfig));
 
                 // verification of calling methods on `Mock`s
                 // `mocked_static_gh` verify
-                mocked_static_gh.verify(() -> GitHub.connectToEnterpriseWithOAuth(GH_API_URL, GH_LOGIN, GH_AUTH_TOKEN), times(1));
+                mocked_static_gh.verify(
+                        () ->
+                                GitHub.connectToEnterpriseWithOAuth(
+                                        GH_API_URL, GH_LOGIN, GH_AUTH_TOKEN),
+                        times(1));
                 mocked_static_gh.verifyNoMoreInteractions();
 
                 // `mocked_instance_gh` verify
                 try {
-                    verify(mocked_instance_gh, times(1)).getRepository(
-                            LPVSWebhookUtil.getRepositoryOrganization(webhookConfig) + "/" + LPVSWebhookUtil.getRepositoryName(webhookConfig));
+                    verify(mocked_instance_gh, times(1))
+                            .getRepository(
+                                    LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                            + "/"
+                                            + LPVSWebhookUtil.getRepositoryName(webhookConfig));
                 } catch (IOException e) {
-                    log.error("TestGetPullRequestFiles__ApiUrlPresentPullAbsentNoRescan.testGetPullRequestFiles__ApiUrlPresentPullAbsentNoRescan() error " + e);
+                    log.error(
+                            "TestGetPullRequestFiles__ApiUrlPresentPullAbsentNoRescan.testGetPullRequestFiles__ApiUrlPresentPullAbsentNoRescan() error "
+                                    + e);
                     fail();
                 }
                 verifyNoMoreInteractions(mocked_instance_gh);
@@ -504,7 +644,9 @@ public class LPVSGitHubServiceTest {
                 try {
                     verify(mocked_repo, times(1)).getPullRequests(GHIssueState.OPEN);
                 } catch (IOException e) {
-                    log.error("TestGetPullRequestFiles__ApiUrlPresentPullAbsentNoRescan.testGetPullRequestFiles__ApiUrlPresentPullAbsentNoRescan() error " + e);
+                    log.error(
+                            "TestGetPullRequestFiles__ApiUrlPresentPullAbsentNoRescan.testGetPullRequestFiles__ApiUrlPresentPullAbsentNoRescan() error "
+                                    + e);
                     fail();
                 }
                 verifyNoMoreInteractions(mocked_repo);
@@ -517,12 +659,23 @@ public class LPVSGitHubServiceTest {
         final String GH_LOGIN = "test_login";
         final String GH_AUTH_TOKEN = "test_auth_token";
         final String GH_API_URL = "";
-        LPVSPullRequestRepository mocked_pullRequestRepository = mock(LPVSPullRequestRepository.class);
-        LPVSDetectedLicenseRepository mocked_lpvsDetectedLicenseRepository = mock(LPVSDetectedLicenseRepository.class);
+        LPVSPullRequestRepository mocked_pullRequestRepository =
+                mock(LPVSPullRequestRepository.class);
+        LPVSDetectedLicenseRepository mocked_lpvsDetectedLicenseRepository =
+                mock(LPVSDetectedLicenseRepository.class);
         LPVSLicenseRepository mocked_lpvsLicenseRepository = mock(LPVSLicenseRepository.class);
-        LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository = mock(LPVSLicenseConflictRepository.class);
-        final LPVSGitHubService gh_service = new LPVSGitHubService(GH_LOGIN, GH_AUTH_TOKEN, GH_API_URL, mocked_pullRequestRepository,
-                mocked_lpvsDetectedLicenseRepository, mocked_lpvsLicenseRepository, mocked_lpvsLicenseConflictRepository, exitHandler);
+        LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository =
+                mock(LPVSLicenseConflictRepository.class);
+        final LPVSGitHubService gh_service =
+                new LPVSGitHubService(
+                        GH_LOGIN,
+                        GH_AUTH_TOKEN,
+                        GH_API_URL,
+                        mocked_pullRequestRepository,
+                        mocked_lpvsDetectedLicenseRepository,
+                        mocked_lpvsLicenseRepository,
+                        mocked_lpvsLicenseConflictRepository,
+                        exitHandler);
         LPVSQueue webhookConfig;
         GitHub mocked_instance_gh = mock(GitHub.class);
         GHRepository mocked_repo = mock(GHRepository.class);
@@ -536,14 +689,20 @@ public class LPVSGitHubServiceTest {
             webhookConfig.setPullRequestUrl(url_pr_3);
 
             try {
-                when(mocked_instance_gh.getRepository(LPVSWebhookUtil.getRepositoryOrganization(webhookConfig) +
-                        "/" + LPVSWebhookUtil.getRepositoryName(webhookConfig))).thenReturn(mocked_repo);
+                when(mocked_instance_gh.getRepository(
+                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                        + "/"
+                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig)))
+                        .thenReturn(mocked_repo);
             } catch (IOException e) {
                 log.error("mocked_repo.getRepository error " + e);
             }
 
             try {
-                when(mocked_repo.getPullRequests(GHIssueState.OPEN)).thenThrow(new IOException("Test exception for TestGetPullRequestFiles__ApiUrlAbsentPullExceptionNoRescan. Normal behavior."));
+                when(mocked_repo.getPullRequests(GHIssueState.OPEN))
+                        .thenThrow(
+                                new IOException(
+                                        "Test exception for TestGetPullRequestFiles__ApiUrlAbsentPullExceptionNoRescan. Normal behavior."));
             } catch (IOException e) {
                 log.error("mocked_repo.getPullRequests error " + e);
             }
@@ -553,7 +712,9 @@ public class LPVSGitHubServiceTest {
         public void testGetPullRequestFiles__ApiUrlAbsentPullExceptionNoRescan() {
 
             try (MockedStatic<GitHub> mocked_static_gh = mockStatic(GitHub.class)) {
-                mocked_static_gh.when(() -> GitHub.connect(GH_LOGIN, GH_AUTH_TOKEN)).thenReturn(mocked_instance_gh);
+                mocked_static_gh
+                        .when(() -> GitHub.connect(GH_LOGIN, GH_AUTH_TOKEN))
+                        .thenReturn(mocked_instance_gh);
 
                 // main test
                 assertNull(gh_service.getPullRequestFiles(webhookConfig));
@@ -565,10 +726,15 @@ public class LPVSGitHubServiceTest {
 
                 // `mocked_instance_gh` verify
                 try {
-                    verify(mocked_instance_gh, times(1)).getRepository(
-                            LPVSWebhookUtil.getRepositoryOrganization(webhookConfig) + "/" + LPVSWebhookUtil.getRepositoryName(webhookConfig));
+                    verify(mocked_instance_gh, times(1))
+                            .getRepository(
+                                    LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                            + "/"
+                                            + LPVSWebhookUtil.getRepositoryName(webhookConfig));
                 } catch (IOException e) {
-                    log.error("TestGetPullRequestFiles__ApiUrlAbsentPullExceptionNoRescan.testGetPullRequestFiles__ApiUrlAbsentPullExceptionNoRescan() error " + e);
+                    log.error(
+                            "TestGetPullRequestFiles__ApiUrlAbsentPullExceptionNoRescan.testGetPullRequestFiles__ApiUrlAbsentPullExceptionNoRescan() error "
+                                    + e);
                     fail();
                 }
                 verifyNoMoreInteractions(mocked_instance_gh);
@@ -577,7 +743,9 @@ public class LPVSGitHubServiceTest {
                 try {
                     verify(mocked_repo, times(1)).getPullRequests(GHIssueState.OPEN);
                 } catch (IOException e) {
-                    log.error("TestGetPullRequestFiles__ApiUrlAbsentPullExceptionNoRescan.testGetPullRequestFiles__ApiUrlAbsentPullExceptionNoRescan() error " + e);
+                    log.error(
+                            "TestGetPullRequestFiles__ApiUrlAbsentPullExceptionNoRescan.testGetPullRequestFiles__ApiUrlAbsentPullExceptionNoRescan() error "
+                                    + e);
                     fail();
                 }
                 verifyNoMoreInteractions(mocked_repo);
@@ -590,12 +758,23 @@ public class LPVSGitHubServiceTest {
         final String GH_LOGIN = "test_login";
         final String GH_AUTH_TOKEN = "test_auth_token";
         final String GH_API_URL = "test_api_url";
-        LPVSPullRequestRepository mocked_pullRequestRepository = mock(LPVSPullRequestRepository.class);
-        LPVSDetectedLicenseRepository mocked_lpvsDetectedLicenseRepository = mock(LPVSDetectedLicenseRepository.class);
+        LPVSPullRequestRepository mocked_pullRequestRepository =
+                mock(LPVSPullRequestRepository.class);
+        LPVSDetectedLicenseRepository mocked_lpvsDetectedLicenseRepository =
+                mock(LPVSDetectedLicenseRepository.class);
         LPVSLicenseRepository mocked_lpvsLicenseRepository = mock(LPVSLicenseRepository.class);
-        LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository = mock(LPVSLicenseConflictRepository.class);
-        final LPVSGitHubService gh_service = new LPVSGitHubService(GH_LOGIN, GH_AUTH_TOKEN, GH_API_URL, mocked_pullRequestRepository,
-                mocked_lpvsDetectedLicenseRepository, mocked_lpvsLicenseRepository, mocked_lpvsLicenseConflictRepository, exitHandler);
+        LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository =
+                mock(LPVSLicenseConflictRepository.class);
+        final LPVSGitHubService gh_service =
+                new LPVSGitHubService(
+                        GH_LOGIN,
+                        GH_AUTH_TOKEN,
+                        GH_API_URL,
+                        mocked_pullRequestRepository,
+                        mocked_lpvsDetectedLicenseRepository,
+                        mocked_lpvsLicenseRepository,
+                        mocked_lpvsLicenseConflictRepository,
+                        exitHandler);
         LPVSQueue webhookConfig;
         GitHub mocked_instance_gh = mock(GitHub.class);
         GHRepository mocked_repo = mock(GHRepository.class);
@@ -609,13 +788,19 @@ public class LPVSGitHubServiceTest {
             webhookConfig.setPullRequestUrl(url_pr_3);
 
             try {
-                when(mocked_instance_gh.getRepository(LPVSWebhookUtil.getRepositoryOrganization(webhookConfig) +
-                        "/" + LPVSWebhookUtil.getRepositoryName(webhookConfig))).thenReturn(mocked_repo);
+                when(mocked_instance_gh.getRepository(
+                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                        + "/"
+                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig)))
+                        .thenReturn(mocked_repo);
             } catch (IOException e) {
                 log.error("mocked_repo.getRepository error " + e);
             }
             try {
-                when(mocked_repo.getPullRequests(GHIssueState.OPEN)).thenThrow(new IOException("Test exception for TestGetPullRequestFiles__ApiUrlPresentPullExceptionNoRescan. Normal behavior."));
+                when(mocked_repo.getPullRequests(GHIssueState.OPEN))
+                        .thenThrow(
+                                new IOException(
+                                        "Test exception for TestGetPullRequestFiles__ApiUrlPresentPullExceptionNoRescan. Normal behavior."));
             } catch (IOException e) {
                 log.error("mocked_repo.getPullRequests error " + e);
             }
@@ -625,22 +810,36 @@ public class LPVSGitHubServiceTest {
         public void testGetPullRequestFiles__ApiUrlPresentPullExceptionNoRescan() {
 
             try (MockedStatic<GitHub> mocked_static_gh = mockStatic(GitHub.class)) {
-                mocked_static_gh.when(() -> GitHub.connectToEnterpriseWithOAuth(GH_API_URL, GH_LOGIN, GH_AUTH_TOKEN)).thenReturn(mocked_instance_gh);
+                mocked_static_gh
+                        .when(
+                                () ->
+                                        GitHub.connectToEnterpriseWithOAuth(
+                                                GH_API_URL, GH_LOGIN, GH_AUTH_TOKEN))
+                        .thenReturn(mocked_instance_gh);
 
                 // main test
                 assertNull(gh_service.getPullRequestFiles(webhookConfig));
 
                 // verification of calling methods on `Mock`s
                 // `mocked_static_gh` verify
-                mocked_static_gh.verify(() -> GitHub.connectToEnterpriseWithOAuth(GH_API_URL, GH_LOGIN, GH_AUTH_TOKEN), times(1));
+                mocked_static_gh.verify(
+                        () ->
+                                GitHub.connectToEnterpriseWithOAuth(
+                                        GH_API_URL, GH_LOGIN, GH_AUTH_TOKEN),
+                        times(1));
                 mocked_static_gh.verifyNoMoreInteractions();
 
                 // `mocked_instance_gh` verify
                 try {
-                    verify(mocked_instance_gh, times(1)).getRepository(
-                            LPVSWebhookUtil.getRepositoryOrganization(webhookConfig) + "/" + LPVSWebhookUtil.getRepositoryName(webhookConfig));
+                    verify(mocked_instance_gh, times(1))
+                            .getRepository(
+                                    LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                            + "/"
+                                            + LPVSWebhookUtil.getRepositoryName(webhookConfig));
                 } catch (IOException e) {
-                    log.error("TestGetPullRequestFiles__ApiUrlPresentPullExceptionNoRescan.testGetPullRequestFiles__ApiUrlPresentPullExceptionNoRescan() error " + e);
+                    log.error(
+                            "TestGetPullRequestFiles__ApiUrlPresentPullExceptionNoRescan.testGetPullRequestFiles__ApiUrlPresentPullExceptionNoRescan() error "
+                                    + e);
                     fail();
                 }
                 verifyNoMoreInteractions(mocked_instance_gh);
@@ -649,7 +848,9 @@ public class LPVSGitHubServiceTest {
                 try {
                     verify(mocked_repo, times(1)).getPullRequests(GHIssueState.OPEN);
                 } catch (IOException e) {
-                    log.error("TestGetPullRequestFiles__ApiUrlPresentPullExceptionNoRescan.testGetPullRequestFiles__ApiUrlPresentPullExceptionNoRescan() error " + e);
+                    log.error(
+                            "TestGetPullRequestFiles__ApiUrlPresentPullExceptionNoRescan.testGetPullRequestFiles__ApiUrlPresentPullExceptionNoRescan() error "
+                                    + e);
                     fail();
                 }
                 verifyNoMoreInteractions(mocked_repo);
@@ -662,21 +863,33 @@ public class LPVSGitHubServiceTest {
         final String GH_LOGIN = "test_login";
         final String GH_AUTH_TOKEN = "test_auth_token";
         final String GH_API_URL = "https://api.github.com";
-        LPVSPullRequestRepository mocked_pullRequestRepository = mock(LPVSPullRequestRepository.class);
-        LPVSDetectedLicenseRepository mocked_lpvsDetectedLicenseRepository = mock(LPVSDetectedLicenseRepository.class);
+        LPVSPullRequestRepository mocked_pullRequestRepository =
+                mock(LPVSPullRequestRepository.class);
+        LPVSDetectedLicenseRepository mocked_lpvsDetectedLicenseRepository =
+                mock(LPVSDetectedLicenseRepository.class);
         LPVSLicenseRepository mocked_lpvsLicenseRepository = mock(LPVSLicenseRepository.class);
-        LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository = mock(LPVSLicenseConflictRepository.class);
-        final LPVSGitHubService gh_service = new LPVSGitHubService(GH_LOGIN, GH_AUTH_TOKEN, GH_API_URL, mocked_pullRequestRepository,
-                mocked_lpvsDetectedLicenseRepository, mocked_lpvsLicenseRepository, mocked_lpvsLicenseConflictRepository, exitHandler);
+        LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository =
+                mock(LPVSLicenseConflictRepository.class);
+        final LPVSGitHubService gh_service =
+                new LPVSGitHubService(
+                        GH_LOGIN,
+                        GH_AUTH_TOKEN,
+                        GH_API_URL,
+                        mocked_pullRequestRepository,
+                        mocked_lpvsDetectedLicenseRepository,
+                        mocked_lpvsLicenseRepository,
+                        mocked_lpvsLicenseConflictRepository,
+                        exitHandler);
         LPVSQueue webhookConfig;
         GitHub mocked_instance_gh = mock(GitHub.class);
         GHRepository mocked_repo = mock(GHRepository.class);
-        PagedIterable<GHPullRequestFileDetail> mocked_list_files = new PagedIterable<GHPullRequestFileDetail>() {
-            @Override
-            public PagedIterator<GHPullRequestFileDetail> _iterator(int i) {
-                return null;
-            }
-        };
+        PagedIterable<GHPullRequestFileDetail> mocked_list_files =
+                new PagedIterable<GHPullRequestFileDetail>() {
+                    @Override
+                    public PagedIterator<GHPullRequestFileDetail> _iterator(int i) {
+                        return null;
+                    }
+                };
         GHPullRequest mocked_pr_1;
         GHPullRequest mocked_pr_2;
         GHCommitPointer mocked_commit_pointer = mock(GHCommitPointer.class);
@@ -698,22 +911,32 @@ public class LPVSGitHubServiceTest {
             webhookConfig.setRepositoryUrl(repo_url);
 
             try {
-                when(mocked_instance_gh.getRepository(LPVSWebhookUtil.getRepositoryOrganization(webhookConfig) +
-                        "/" + LPVSWebhookUtil.getRepositoryName(webhookConfig))).thenReturn(mocked_repo);
+                when(mocked_instance_gh.getRepository(
+                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                        + "/"
+                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig)))
+                        .thenReturn(mocked_repo);
             } catch (IOException e) {
                 log.error("mocked_repo.getRepository error " + e);
             }
             try {
-                mocked_pr_1 = new GHPullRequestOurMock(
-                        new URL(url_pr_1), null, null, -1, null);
-                mocked_pr_2 = new GHPullRequestOurMock(
-                        new URL(url_pr_2), "GithubService::getRepositoryLicense tests", mocked_list_files, 0, mocked_commit_pointer);
+                mocked_pr_1 = new GHPullRequestOurMock(new URL(url_pr_1), null, null, -1, null);
+                mocked_pr_2 =
+                        new GHPullRequestOurMock(
+                                new URL(url_pr_2),
+                                "GithubService::getRepositoryLicense tests",
+                                mocked_list_files,
+                                0,
+                                mocked_commit_pointer);
             } catch (MalformedURLException e) {
-                log.error("TestGetPullRequestFiles__ApiUrlPresentPullPresentRescanPresent.setUp() error " + e);
+                log.error(
+                        "TestGetPullRequestFiles__ApiUrlPresentPullPresentRescanPresent.setUp() error "
+                                + e);
                 fail();
             }
             try {
-                when(mocked_repo.getPullRequests(GHIssueState.OPEN)).thenReturn(Arrays.asList(mocked_pr_1, mocked_pr_2));
+                when(mocked_repo.getPullRequests(GHIssueState.OPEN))
+                        .thenReturn(Arrays.asList(mocked_pr_1, mocked_pr_2));
             } catch (IOException e) {
                 log.error("mocked_repo.getPullRequests error " + e);
             }
@@ -724,9 +947,17 @@ public class LPVSGitHubServiceTest {
         @Test
         public void testGetPullRequestFiles__ApiUrlPresentPullPresentRescanPresent() {
 
-            try (MockedStatic<GitHub> mocked_static_gh = mockStatic(GitHub.class); MockedStatic<LPVSFileUtil> mocked_static_file_util = mockStatic(LPVSFileUtil.class)) {
-                mocked_static_gh.when(() -> GitHub.connectToEnterpriseWithOAuth(GH_API_URL, GH_LOGIN, GH_AUTH_TOKEN)).thenReturn(mocked_instance_gh);
-                mocked_static_file_util.when(() -> LPVSFileUtil.saveGithubDiffs(mocked_list_files, webhookConfig))
+            try (MockedStatic<GitHub> mocked_static_gh = mockStatic(GitHub.class);
+                    MockedStatic<LPVSFileUtil> mocked_static_file_util =
+                            mockStatic(LPVSFileUtil.class)) {
+                mocked_static_gh
+                        .when(
+                                () ->
+                                        GitHub.connectToEnterpriseWithOAuth(
+                                                GH_API_URL, GH_LOGIN, GH_AUTH_TOKEN))
+                        .thenReturn(mocked_instance_gh);
+                mocked_static_file_util
+                        .when(() -> LPVSFileUtil.saveGithubDiffs(mocked_list_files, webhookConfig))
                         .thenReturn(githubFiles);
 
                 // main test
@@ -734,15 +965,24 @@ public class LPVSGitHubServiceTest {
 
                 // verification of calling methods on `Mock`s
                 // `mocked_static_gh` verify
-                mocked_static_gh.verify(() -> GitHub.connectToEnterpriseWithOAuth(GH_API_URL, GH_LOGIN, GH_AUTH_TOKEN), times(1));
+                mocked_static_gh.verify(
+                        () ->
+                                GitHub.connectToEnterpriseWithOAuth(
+                                        GH_API_URL, GH_LOGIN, GH_AUTH_TOKEN),
+                        times(1));
                 mocked_static_gh.verifyNoMoreInteractions();
 
                 // `mocked_instance_gh` verify
                 try {
-                    verify(mocked_instance_gh, times(1)).getRepository(
-                            LPVSWebhookUtil.getRepositoryOrganization(webhookConfig) + "/" + LPVSWebhookUtil.getRepositoryName(webhookConfig));
+                    verify(mocked_instance_gh, times(1))
+                            .getRepository(
+                                    LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                            + "/"
+                                            + LPVSWebhookUtil.getRepositoryName(webhookConfig));
                 } catch (IOException e) {
-                    log.error("TestGetPullRequestFiles__ApiUrlPresentPullPresentRescanPresent.testGetPullRequestFiles__ApiUrlPresentPullPresentRescanPresent() error " + e);
+                    log.error(
+                            "TestGetPullRequestFiles__ApiUrlPresentPullPresentRescanPresent.testGetPullRequestFiles__ApiUrlPresentPullPresentRescanPresent() error "
+                                    + e);
                     fail();
                 }
                 verifyNoMoreInteractions(mocked_instance_gh);
@@ -751,7 +991,9 @@ public class LPVSGitHubServiceTest {
                 try {
                     verify(mocked_repo, times(1)).getPullRequests(GHIssueState.OPEN);
                 } catch (IOException e) {
-                    log.error("TestGetPullRequestFiles__ApiUrlPresentPullPresentRescanPresent.testGetPullRequestFiles__ApiUrlPresentPullPresentRescanPresent() error " + e);
+                    log.error(
+                            "TestGetPullRequestFiles__ApiUrlPresentPullPresentRescanPresent.testGetPullRequestFiles__ApiUrlPresentPullPresentRescanPresent() error "
+                                    + e);
                     fail();
                 }
                 verifyNoMoreInteractions(mocked_repo);
@@ -773,12 +1015,23 @@ public class LPVSGitHubServiceTest {
         final String GH_LOGIN = "test_login";
         final String GH_AUTH_TOKEN = "test_auth_token";
         final String GH_API_URL = "";
-        LPVSPullRequestRepository mocked_pullRequestRepository = mock(LPVSPullRequestRepository.class);
-        LPVSDetectedLicenseRepository mocked_lpvsDetectedLicenseRepository = mock(LPVSDetectedLicenseRepository.class);
+        LPVSPullRequestRepository mocked_pullRequestRepository =
+                mock(LPVSPullRequestRepository.class);
+        LPVSDetectedLicenseRepository mocked_lpvsDetectedLicenseRepository =
+                mock(LPVSDetectedLicenseRepository.class);
         LPVSLicenseRepository mocked_lpvsLicenseRepository = mock(LPVSLicenseRepository.class);
-        LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository = mock(LPVSLicenseConflictRepository.class);
-        final LPVSGitHubService gh_service = new LPVSGitHubService(GH_LOGIN, GH_AUTH_TOKEN, GH_API_URL, mocked_pullRequestRepository,
-                mocked_lpvsDetectedLicenseRepository, mocked_lpvsLicenseRepository, mocked_lpvsLicenseConflictRepository, exitHandler);
+        LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository =
+                mock(LPVSLicenseConflictRepository.class);
+        final LPVSGitHubService gh_service =
+                new LPVSGitHubService(
+                        GH_LOGIN,
+                        GH_AUTH_TOKEN,
+                        GH_API_URL,
+                        mocked_pullRequestRepository,
+                        mocked_lpvsDetectedLicenseRepository,
+                        mocked_lpvsLicenseRepository,
+                        mocked_lpvsLicenseConflictRepository,
+                        exitHandler);
         GitHub mocked_instance_gh = mock(GitHub.class);
         GHRepository mocked_repo = mock(GHRepository.class);
         LPVSQueue webhookConfig;
@@ -792,16 +1045,24 @@ public class LPVSGitHubServiceTest {
             webhookConfig.setPullRequestUrl(url_pr_1);
 
             try {
-                when(mocked_instance_gh.getRepository(LPVSWebhookUtil.getRepositoryOrganization(webhookConfig) +
-                        "/" + LPVSWebhookUtil.getRepositoryName(webhookConfig))).thenReturn(mocked_repo);
+                when(mocked_instance_gh.getRepository(
+                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                        + "/"
+                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig)))
+                        .thenReturn(mocked_repo);
             } catch (IOException e) {
                 log.error("mocked_repo.getRepository error " + e);
             }
 
             try {
                 // default behavior, it is written here just for clarity
-                when(mocked_repo.createCommitStatus(head_commit_sha, GHCommitState.PENDING, null,
-                        "Scanning opensource licenses", "[License Pre-Validation Service]")).thenReturn(null);
+                when(mocked_repo.createCommitStatus(
+                                head_commit_sha,
+                                GHCommitState.PENDING,
+                                null,
+                                "Scanning opensource licenses",
+                                "[License Pre-Validation Service]"))
+                        .thenReturn(null);
             } catch (IOException e) {
                 log.error("mocked_repo.getPullRequests error " + e);
             }
@@ -811,7 +1072,9 @@ public class LPVSGitHubServiceTest {
         public void testSetPendingCheck__ApiUrlAbsentNormalExecution() {
 
             try (MockedStatic<GitHub> mocked_static_gh = mockStatic(GitHub.class)) {
-                mocked_static_gh.when(() -> GitHub.connect(GH_LOGIN, GH_AUTH_TOKEN)).thenReturn(mocked_instance_gh);
+                mocked_static_gh
+                        .when(() -> GitHub.connect(GH_LOGIN, GH_AUTH_TOKEN))
+                        .thenReturn(mocked_instance_gh);
 
                 // main test
                 gh_service.setPendingCheck(webhookConfig);
@@ -823,21 +1086,32 @@ public class LPVSGitHubServiceTest {
 
                 // `mocked_instance_gh` verify
                 try {
-                    verify(mocked_instance_gh, times(1)).getRepository(
-                            LPVSWebhookUtil.getRepositoryOrganization(webhookConfig) + "/" + LPVSWebhookUtil.getRepositoryName(webhookConfig));
+                    verify(mocked_instance_gh, times(1))
+                            .getRepository(
+                                    LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                            + "/"
+                                            + LPVSWebhookUtil.getRepositoryName(webhookConfig));
                 } catch (IOException e) {
-                    log.error("TestSetPendingCheck__ApiUrlAbsentNormalExecution.testSetPendingCheck__ApiUrlAbsentNormalExecution() error " + e);
+                    log.error(
+                            "TestSetPendingCheck__ApiUrlAbsentNormalExecution.testSetPendingCheck__ApiUrlAbsentNormalExecution() error "
+                                    + e);
                     fail();
                 }
                 verifyNoMoreInteractions(mocked_instance_gh);
 
                 // `mocked_repo` verify
                 try {
-                    verify(mocked_repo, times(1)).createCommitStatus(
-                            head_commit_sha, GHCommitState.PENDING, null,
-                            "Scanning opensource licenses", "[License Pre-Validation Service]");
+                    verify(mocked_repo, times(1))
+                            .createCommitStatus(
+                                    head_commit_sha,
+                                    GHCommitState.PENDING,
+                                    null,
+                                    "Scanning opensource licenses",
+                                    "[License Pre-Validation Service]");
                 } catch (IOException e) {
-                    log.error("TestSetPendingCheck__ApiUrlAbsentNormalExecution.testSetPendingCheck__ApiUrlAbsentNormalExecution() error " + e);
+                    log.error(
+                            "TestSetPendingCheck__ApiUrlAbsentNormalExecution.testSetPendingCheck__ApiUrlAbsentNormalExecution() error "
+                                    + e);
                     fail();
                 }
                 verifyNoMoreInteractions(mocked_repo);
@@ -850,12 +1124,23 @@ public class LPVSGitHubServiceTest {
         final String GH_LOGIN = "test_login";
         final String GH_AUTH_TOKEN = "test_auth_token";
         final String GH_API_URL = "test_api_url";
-        LPVSPullRequestRepository mocked_pullRequestRepository = mock(LPVSPullRequestRepository.class);
-        LPVSDetectedLicenseRepository mocked_lpvsDetectedLicenseRepository = mock(LPVSDetectedLicenseRepository.class);
+        LPVSPullRequestRepository mocked_pullRequestRepository =
+                mock(LPVSPullRequestRepository.class);
+        LPVSDetectedLicenseRepository mocked_lpvsDetectedLicenseRepository =
+                mock(LPVSDetectedLicenseRepository.class);
         LPVSLicenseRepository mocked_lpvsLicenseRepository = mock(LPVSLicenseRepository.class);
-        LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository = mock(LPVSLicenseConflictRepository.class);
-        final LPVSGitHubService gh_service = new LPVSGitHubService(GH_LOGIN, GH_AUTH_TOKEN, GH_API_URL, mocked_pullRequestRepository,
-                mocked_lpvsDetectedLicenseRepository, mocked_lpvsLicenseRepository, mocked_lpvsLicenseConflictRepository, exitHandler);
+        LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository =
+                mock(LPVSLicenseConflictRepository.class);
+        final LPVSGitHubService gh_service =
+                new LPVSGitHubService(
+                        GH_LOGIN,
+                        GH_AUTH_TOKEN,
+                        GH_API_URL,
+                        mocked_pullRequestRepository,
+                        mocked_lpvsDetectedLicenseRepository,
+                        mocked_lpvsLicenseRepository,
+                        mocked_lpvsLicenseConflictRepository,
+                        exitHandler);
         GitHub mocked_instance_gh = mock(GitHub.class);
         GHRepository mocked_repo = mock(GHRepository.class);
         LPVSQueue webhookConfig;
@@ -869,16 +1154,24 @@ public class LPVSGitHubServiceTest {
             webhookConfig.setPullRequestUrl(url_pr_1);
 
             try {
-                when(mocked_instance_gh.getRepository(LPVSWebhookUtil.getRepositoryOrganization(webhookConfig) +
-                        "/" + LPVSWebhookUtil.getRepositoryName(webhookConfig))).thenReturn(mocked_repo);
+                when(mocked_instance_gh.getRepository(
+                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                        + "/"
+                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig)))
+                        .thenReturn(mocked_repo);
             } catch (IOException e) {
                 log.error("mocked_repo.getRepository error " + e);
             }
 
             try {
                 // default behavior, it is written here just for clarity
-                when(mocked_repo.createCommitStatus(head_commit_sha, GHCommitState.PENDING, null,
-                        "Scanning opensource licenses", "[License Pre-Validation Service]")).thenReturn(null);
+                when(mocked_repo.createCommitStatus(
+                                head_commit_sha,
+                                GHCommitState.PENDING,
+                                null,
+                                "Scanning opensource licenses",
+                                "[License Pre-Validation Service]"))
+                        .thenReturn(null);
             } catch (IOException e) {
                 log.error("mocked_repo.getPullRequests error " + e);
             }
@@ -888,33 +1181,53 @@ public class LPVSGitHubServiceTest {
         public void testSetPendingCheck__ApiUrlPresentNormalExecution() {
 
             try (MockedStatic<GitHub> mocked_static_gh = mockStatic(GitHub.class)) {
-                mocked_static_gh.when(() -> GitHub.connectToEnterpriseWithOAuth(GH_API_URL, GH_LOGIN, GH_AUTH_TOKEN)).thenReturn(mocked_instance_gh);
+                mocked_static_gh
+                        .when(
+                                () ->
+                                        GitHub.connectToEnterpriseWithOAuth(
+                                                GH_API_URL, GH_LOGIN, GH_AUTH_TOKEN))
+                        .thenReturn(mocked_instance_gh);
 
                 // main test
                 gh_service.setPendingCheck(webhookConfig);
 
                 // verification of calling methods on `Mock`s
                 // `mocked_static_gh` verify
-                mocked_static_gh.verify(() -> GitHub.connectToEnterpriseWithOAuth(GH_API_URL, GH_LOGIN, GH_AUTH_TOKEN), times(1));
+                mocked_static_gh.verify(
+                        () ->
+                                GitHub.connectToEnterpriseWithOAuth(
+                                        GH_API_URL, GH_LOGIN, GH_AUTH_TOKEN),
+                        times(1));
                 mocked_static_gh.verifyNoMoreInteractions();
 
                 // `mocked_instance_gh` verify
                 try {
-                    verify(mocked_instance_gh, times(1)).getRepository(
-                            LPVSWebhookUtil.getRepositoryOrganization(webhookConfig) + "/" + LPVSWebhookUtil.getRepositoryName(webhookConfig));
+                    verify(mocked_instance_gh, times(1))
+                            .getRepository(
+                                    LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                            + "/"
+                                            + LPVSWebhookUtil.getRepositoryName(webhookConfig));
                 } catch (IOException e) {
-                    log.error("TestSetPendingCheck__ApiUrlPresentNormalExecution.testSetPendingCheck__ApiUrlPresentNormalExecution() error " + e);
+                    log.error(
+                            "TestSetPendingCheck__ApiUrlPresentNormalExecution.testSetPendingCheck__ApiUrlPresentNormalExecution() error "
+                                    + e);
                     fail();
                 }
                 verifyNoMoreInteractions(mocked_instance_gh);
 
                 // `mocked_repo` verify
                 try {
-                    verify(mocked_repo, times(1)).createCommitStatus(
-                            head_commit_sha, GHCommitState.PENDING, null,
-                            "Scanning opensource licenses", "[License Pre-Validation Service]");
+                    verify(mocked_repo, times(1))
+                            .createCommitStatus(
+                                    head_commit_sha,
+                                    GHCommitState.PENDING,
+                                    null,
+                                    "Scanning opensource licenses",
+                                    "[License Pre-Validation Service]");
                 } catch (IOException e) {
-                    log.error("TestSetPendingCheck__ApiUrlPresentNormalExecution.testSetPendingCheck__ApiUrlPresentNormalExecution() error " + e);
+                    log.error(
+                            "TestSetPendingCheck__ApiUrlPresentNormalExecution.testSetPendingCheck__ApiUrlPresentNormalExecution() error "
+                                    + e);
                     fail();
                 }
                 verifyNoMoreInteractions(mocked_repo);
@@ -927,12 +1240,23 @@ public class LPVSGitHubServiceTest {
         final String GH_LOGIN = "test_login";
         final String GH_AUTH_TOKEN = "test_auth_token";
         final String GH_API_URL = "";
-        LPVSPullRequestRepository mocked_pullRequestRepository = mock(LPVSPullRequestRepository.class);
-        LPVSDetectedLicenseRepository mocked_lpvsDetectedLicenseRepository = mock(LPVSDetectedLicenseRepository.class);
+        LPVSPullRequestRepository mocked_pullRequestRepository =
+                mock(LPVSPullRequestRepository.class);
+        LPVSDetectedLicenseRepository mocked_lpvsDetectedLicenseRepository =
+                mock(LPVSDetectedLicenseRepository.class);
         LPVSLicenseRepository mocked_lpvsLicenseRepository = mock(LPVSLicenseRepository.class);
-        LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository = mock(LPVSLicenseConflictRepository.class);
-        final LPVSGitHubService gh_service = new LPVSGitHubService(GH_LOGIN, GH_AUTH_TOKEN, GH_API_URL, mocked_pullRequestRepository,
-                mocked_lpvsDetectedLicenseRepository, mocked_lpvsLicenseRepository, mocked_lpvsLicenseConflictRepository, exitHandler);
+        LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository =
+                mock(LPVSLicenseConflictRepository.class);
+        final LPVSGitHubService gh_service =
+                new LPVSGitHubService(
+                        GH_LOGIN,
+                        GH_AUTH_TOKEN,
+                        GH_API_URL,
+                        mocked_pullRequestRepository,
+                        mocked_lpvsDetectedLicenseRepository,
+                        mocked_lpvsLicenseRepository,
+                        mocked_lpvsLicenseConflictRepository,
+                        exitHandler);
         LPVSQueue webhookConfig;
 
         @BeforeEach
@@ -943,7 +1267,11 @@ public class LPVSGitHubServiceTest {
         @Test
         public void testSetPendingCheck__ApiUrlAbsentCantAuthorize() {
             try (MockedStatic<GitHub> mocked_static_gh = mockStatic(GitHub.class)) {
-                mocked_static_gh.when(() -> GitHub.connect(GH_LOGIN, GH_AUTH_TOKEN)).thenThrow(new IOException("Test exception for TestSetPendingCheck__ApiUrlAbsentCantAuthorize. Normal behavior."));
+                mocked_static_gh
+                        .when(() -> GitHub.connect(GH_LOGIN, GH_AUTH_TOKEN))
+                        .thenThrow(
+                                new IOException(
+                                        "Test exception for TestSetPendingCheck__ApiUrlAbsentCantAuthorize. Normal behavior."));
 
                 // main test
                 gh_service.setPendingCheck(webhookConfig);
@@ -961,12 +1289,23 @@ public class LPVSGitHubServiceTest {
         final String GH_LOGIN = "test_login";
         final String GH_AUTH_TOKEN = "test_auth_token";
         final String GH_API_URL = "test_api_url";
-        LPVSPullRequestRepository mocked_pullRequestRepository = mock(LPVSPullRequestRepository.class);
-        LPVSDetectedLicenseRepository mocked_lpvsDetectedLicenseRepository = mock(LPVSDetectedLicenseRepository.class);
+        LPVSPullRequestRepository mocked_pullRequestRepository =
+                mock(LPVSPullRequestRepository.class);
+        LPVSDetectedLicenseRepository mocked_lpvsDetectedLicenseRepository =
+                mock(LPVSDetectedLicenseRepository.class);
         LPVSLicenseRepository mocked_lpvsLicenseRepository = mock(LPVSLicenseRepository.class);
-        LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository = mock(LPVSLicenseConflictRepository.class);
-        final LPVSGitHubService gh_service = new LPVSGitHubService(GH_LOGIN, GH_AUTH_TOKEN, GH_API_URL, mocked_pullRequestRepository,
-                mocked_lpvsDetectedLicenseRepository, mocked_lpvsLicenseRepository, mocked_lpvsLicenseConflictRepository, exitHandler);
+        LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository =
+                mock(LPVSLicenseConflictRepository.class);
+        final LPVSGitHubService gh_service =
+                new LPVSGitHubService(
+                        GH_LOGIN,
+                        GH_AUTH_TOKEN,
+                        GH_API_URL,
+                        mocked_pullRequestRepository,
+                        mocked_lpvsDetectedLicenseRepository,
+                        mocked_lpvsLicenseRepository,
+                        mocked_lpvsLicenseConflictRepository,
+                        exitHandler);
         LPVSQueue webhookConfig;
 
         @BeforeEach
@@ -977,14 +1316,25 @@ public class LPVSGitHubServiceTest {
         @Test
         public void testSetPendingCheck__ApiUrlPresentCantAuthorize() {
             try (MockedStatic<GitHub> mocked_static_gh = mockStatic(GitHub.class)) {
-                mocked_static_gh.when(() -> GitHub.connectToEnterpriseWithOAuth(GH_API_URL, GH_LOGIN, GH_AUTH_TOKEN)).thenThrow(new IOException("Test exception for TestSetPendingCheck__ApiUrlPresentCantAuthorize. Normal behavior."));
+                mocked_static_gh
+                        .when(
+                                () ->
+                                        GitHub.connectToEnterpriseWithOAuth(
+                                                GH_API_URL, GH_LOGIN, GH_AUTH_TOKEN))
+                        .thenThrow(
+                                new IOException(
+                                        "Test exception for TestSetPendingCheck__ApiUrlPresentCantAuthorize. Normal behavior."));
 
                 // main test
                 gh_service.setPendingCheck(webhookConfig);
 
                 // verification of calling methods on `Mock`s
                 // `mocked_static_gh` verify
-                mocked_static_gh.verify(() -> GitHub.connectToEnterpriseWithOAuth(GH_API_URL, GH_LOGIN, GH_AUTH_TOKEN), times(1));
+                mocked_static_gh.verify(
+                        () ->
+                                GitHub.connectToEnterpriseWithOAuth(
+                                        GH_API_URL, GH_LOGIN, GH_AUTH_TOKEN),
+                        times(1));
                 mocked_static_gh.verifyNoMoreInteractions();
             }
         }
@@ -995,12 +1345,23 @@ public class LPVSGitHubServiceTest {
         final String GH_LOGIN = "test_login";
         final String GH_AUTH_TOKEN = "test_auth_token";
         final String GH_API_URL = "";
-        LPVSPullRequestRepository mocked_pullRequestRepository = mock(LPVSPullRequestRepository.class);
-        LPVSDetectedLicenseRepository mocked_lpvsDetectedLicenseRepository = mock(LPVSDetectedLicenseRepository.class);
+        LPVSPullRequestRepository mocked_pullRequestRepository =
+                mock(LPVSPullRequestRepository.class);
+        LPVSDetectedLicenseRepository mocked_lpvsDetectedLicenseRepository =
+                mock(LPVSDetectedLicenseRepository.class);
         LPVSLicenseRepository mocked_lpvsLicenseRepository = mock(LPVSLicenseRepository.class);
-        LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository = mock(LPVSLicenseConflictRepository.class);
-        final LPVSGitHubService gh_service = new LPVSGitHubService(GH_LOGIN, GH_AUTH_TOKEN, GH_API_URL, mocked_pullRequestRepository,
-                mocked_lpvsDetectedLicenseRepository, mocked_lpvsLicenseRepository, mocked_lpvsLicenseConflictRepository, exitHandler);
+        LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository =
+                mock(LPVSLicenseConflictRepository.class);
+        final LPVSGitHubService gh_service =
+                new LPVSGitHubService(
+                        GH_LOGIN,
+                        GH_AUTH_TOKEN,
+                        GH_API_URL,
+                        mocked_pullRequestRepository,
+                        mocked_lpvsDetectedLicenseRepository,
+                        mocked_lpvsLicenseRepository,
+                        mocked_lpvsLicenseConflictRepository,
+                        exitHandler);
         GitHub mocked_instance_gh = mock(GitHub.class);
         GHRepository mocked_repo = mock(GHRepository.class);
         LPVSQueue webhookConfig;
@@ -1014,15 +1375,24 @@ public class LPVSGitHubServiceTest {
             webhookConfig.setPullRequestUrl(url_pr_1);
 
             try {
-                when(mocked_instance_gh.getRepository(LPVSWebhookUtil.getRepositoryOrganization(webhookConfig) + "/" + LPVSWebhookUtil.getRepositoryName(webhookConfig))).thenReturn(mocked_repo);
+                when(mocked_instance_gh.getRepository(
+                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                        + "/"
+                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig)))
+                        .thenReturn(mocked_repo);
             } catch (IOException e) {
                 log.error("mocked_repo.getRepository error " + e);
             }
 
             try {
                 // default behavior, it is written here just for clarity
-                when(mocked_repo.createCommitStatus(head_commit_sha, GHCommitState.ERROR, null,
-                        "Scanning process failed", "[License Pre-Validation Service]")).thenReturn(null);
+                when(mocked_repo.createCommitStatus(
+                                head_commit_sha,
+                                GHCommitState.ERROR,
+                                null,
+                                "Scanning process failed",
+                                "[License Pre-Validation Service]"))
+                        .thenReturn(null);
             } catch (IOException e) {
                 log.error("mocked_repo.getPullRequests error " + e);
             }
@@ -1032,7 +1402,9 @@ public class LPVSGitHubServiceTest {
         public void testSetErrorCheck__ApiUrlAbsentNormalExecution() {
 
             try (MockedStatic<GitHub> mocked_static_gh = mockStatic(GitHub.class)) {
-                mocked_static_gh.when(() -> GitHub.connect(GH_LOGIN, GH_AUTH_TOKEN)).thenReturn(mocked_instance_gh);
+                mocked_static_gh
+                        .when(() -> GitHub.connect(GH_LOGIN, GH_AUTH_TOKEN))
+                        .thenReturn(mocked_instance_gh);
 
                 // main test
                 gh_service.setErrorCheck(webhookConfig);
@@ -1044,21 +1416,32 @@ public class LPVSGitHubServiceTest {
 
                 // `mocked_instance_gh` verify
                 try {
-                    verify(mocked_instance_gh, times(1)).getRepository(
-                            LPVSWebhookUtil.getRepositoryOrganization(webhookConfig) + "/" + LPVSWebhookUtil.getRepositoryName(webhookConfig));
+                    verify(mocked_instance_gh, times(1))
+                            .getRepository(
+                                    LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                            + "/"
+                                            + LPVSWebhookUtil.getRepositoryName(webhookConfig));
                 } catch (IOException e) {
-                    log.error("TestSetErrorCheck__ApiUrlAbsentNormalExecution.testSetErrorCheck__ApiUrlAbsentNormalExecution() error " + e);
+                    log.error(
+                            "TestSetErrorCheck__ApiUrlAbsentNormalExecution.testSetErrorCheck__ApiUrlAbsentNormalExecution() error "
+                                    + e);
                     fail();
                 }
                 verifyNoMoreInteractions(mocked_instance_gh);
 
                 // `mocked_repo` verify
                 try {
-                    verify(mocked_repo, times(1)).createCommitStatus(
-                            head_commit_sha, GHCommitState.ERROR, null,
-                            "Scanning process failed", "[License Pre-Validation Service]");
+                    verify(mocked_repo, times(1))
+                            .createCommitStatus(
+                                    head_commit_sha,
+                                    GHCommitState.ERROR,
+                                    null,
+                                    "Scanning process failed",
+                                    "[License Pre-Validation Service]");
                 } catch (IOException e) {
-                    log.error("TestSetErrorCheck__ApiUrlAbsentNormalExecution.testSetErrorCheck__ApiUrlAbsentNormalExecution() error " + e);
+                    log.error(
+                            "TestSetErrorCheck__ApiUrlAbsentNormalExecution.testSetErrorCheck__ApiUrlAbsentNormalExecution() error "
+                                    + e);
                     fail();
                 }
                 verifyNoMoreInteractions(mocked_repo);
@@ -1071,12 +1454,23 @@ public class LPVSGitHubServiceTest {
         final String GH_LOGIN = "test_login";
         final String GH_AUTH_TOKEN = "test_auth_token";
         final String GH_API_URL = "test_api_url";
-        LPVSPullRequestRepository mocked_pullRequestRepository = mock(LPVSPullRequestRepository.class);
-        LPVSDetectedLicenseRepository mocked_lpvsDetectedLicenseRepository = mock(LPVSDetectedLicenseRepository.class);
+        LPVSPullRequestRepository mocked_pullRequestRepository =
+                mock(LPVSPullRequestRepository.class);
+        LPVSDetectedLicenseRepository mocked_lpvsDetectedLicenseRepository =
+                mock(LPVSDetectedLicenseRepository.class);
         LPVSLicenseRepository mocked_lpvsLicenseRepository = mock(LPVSLicenseRepository.class);
-        LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository = mock(LPVSLicenseConflictRepository.class);
-        final LPVSGitHubService gh_service = new LPVSGitHubService(GH_LOGIN, GH_AUTH_TOKEN, GH_API_URL, mocked_pullRequestRepository,
-                mocked_lpvsDetectedLicenseRepository, mocked_lpvsLicenseRepository, mocked_lpvsLicenseConflictRepository, exitHandler);
+        LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository =
+                mock(LPVSLicenseConflictRepository.class);
+        final LPVSGitHubService gh_service =
+                new LPVSGitHubService(
+                        GH_LOGIN,
+                        GH_AUTH_TOKEN,
+                        GH_API_URL,
+                        mocked_pullRequestRepository,
+                        mocked_lpvsDetectedLicenseRepository,
+                        mocked_lpvsLicenseRepository,
+                        mocked_lpvsLicenseConflictRepository,
+                        exitHandler);
         GitHub mocked_instance_gh = mock(GitHub.class);
         GHRepository mocked_repo = mock(GHRepository.class);
         LPVSQueue webhookConfig;
@@ -1090,16 +1484,24 @@ public class LPVSGitHubServiceTest {
             webhookConfig.setPullRequestUrl(url_pr_1);
 
             try {
-                when(mocked_instance_gh.getRepository(LPVSWebhookUtil.getRepositoryOrganization(webhookConfig) +
-                        "/" + LPVSWebhookUtil.getRepositoryName(webhookConfig))).thenReturn(mocked_repo);
+                when(mocked_instance_gh.getRepository(
+                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                        + "/"
+                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig)))
+                        .thenReturn(mocked_repo);
             } catch (IOException e) {
                 log.error("mocked_repo.getRepository error " + e);
             }
 
             try {
                 // default behavior, it is written here just for clarity
-                when(mocked_repo.createCommitStatus(head_commit_sha, GHCommitState.ERROR, null,
-                        "Scanning process failed", "[License Pre-Validation Service]")).thenReturn(null);
+                when(mocked_repo.createCommitStatus(
+                                head_commit_sha,
+                                GHCommitState.ERROR,
+                                null,
+                                "Scanning process failed",
+                                "[License Pre-Validation Service]"))
+                        .thenReturn(null);
             } catch (IOException e) {
                 log.error("mocked_repo.getPullRequests error " + e);
             }
@@ -1109,33 +1511,53 @@ public class LPVSGitHubServiceTest {
         public void testSetErrorCheck__ApiUrlPresentNormalExecution() {
 
             try (MockedStatic<GitHub> mocked_static_gh = mockStatic(GitHub.class)) {
-                mocked_static_gh.when(() -> GitHub.connectToEnterpriseWithOAuth(GH_API_URL, GH_LOGIN, GH_AUTH_TOKEN)).thenReturn(mocked_instance_gh);
+                mocked_static_gh
+                        .when(
+                                () ->
+                                        GitHub.connectToEnterpriseWithOAuth(
+                                                GH_API_URL, GH_LOGIN, GH_AUTH_TOKEN))
+                        .thenReturn(mocked_instance_gh);
 
                 // main test
                 gh_service.setErrorCheck(webhookConfig);
 
                 // verification of calling methods on `Mock`s
                 // `mocked_static_gh` verify
-                mocked_static_gh.verify(() -> GitHub.connectToEnterpriseWithOAuth(GH_API_URL, GH_LOGIN, GH_AUTH_TOKEN), times(1));
+                mocked_static_gh.verify(
+                        () ->
+                                GitHub.connectToEnterpriseWithOAuth(
+                                        GH_API_URL, GH_LOGIN, GH_AUTH_TOKEN),
+                        times(1));
                 mocked_static_gh.verifyNoMoreInteractions();
 
                 // `mocked_instance_gh` verify
                 try {
-                    verify(mocked_instance_gh, times(1)).getRepository(
-                            LPVSWebhookUtil.getRepositoryOrganization(webhookConfig) + "/" + LPVSWebhookUtil.getRepositoryName(webhookConfig));
+                    verify(mocked_instance_gh, times(1))
+                            .getRepository(
+                                    LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                            + "/"
+                                            + LPVSWebhookUtil.getRepositoryName(webhookConfig));
                 } catch (IOException e) {
-                    log.error("TestSetErrorCheck__ApiUrlPresentNormalExecution.testSetErrorCheck__ApiUrlPresentNormalExecution() error " + e);
+                    log.error(
+                            "TestSetErrorCheck__ApiUrlPresentNormalExecution.testSetErrorCheck__ApiUrlPresentNormalExecution() error "
+                                    + e);
                     fail();
                 }
                 verifyNoMoreInteractions(mocked_instance_gh);
 
                 // `mocked_repo` verify
                 try {
-                    verify(mocked_repo, times(1)).createCommitStatus(
-                            head_commit_sha, GHCommitState.ERROR, null,
-                            "Scanning process failed", "[License Pre-Validation Service]");
+                    verify(mocked_repo, times(1))
+                            .createCommitStatus(
+                                    head_commit_sha,
+                                    GHCommitState.ERROR,
+                                    null,
+                                    "Scanning process failed",
+                                    "[License Pre-Validation Service]");
                 } catch (IOException e) {
-                    log.error("TestSetErrorCheck__ApiUrlPresentNormalExecution.testSetErrorCheck__ApiUrlPresentNormalExecution() error " + e);
+                    log.error(
+                            "TestSetErrorCheck__ApiUrlPresentNormalExecution.testSetErrorCheck__ApiUrlPresentNormalExecution() error "
+                                    + e);
                     fail();
                 }
                 verifyNoMoreInteractions(mocked_repo);
@@ -1148,12 +1570,23 @@ public class LPVSGitHubServiceTest {
         final String GH_LOGIN = "test_login";
         final String GH_AUTH_TOKEN = "test_auth_token";
         final String GH_API_URL = "";
-        LPVSPullRequestRepository mocked_pullRequestRepository = mock(LPVSPullRequestRepository.class);
-        LPVSDetectedLicenseRepository mocked_lpvsDetectedLicenseRepository = mock(LPVSDetectedLicenseRepository.class);
+        LPVSPullRequestRepository mocked_pullRequestRepository =
+                mock(LPVSPullRequestRepository.class);
+        LPVSDetectedLicenseRepository mocked_lpvsDetectedLicenseRepository =
+                mock(LPVSDetectedLicenseRepository.class);
         LPVSLicenseRepository mocked_lpvsLicenseRepository = mock(LPVSLicenseRepository.class);
-        LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository = mock(LPVSLicenseConflictRepository.class);
-        final LPVSGitHubService gh_service = new LPVSGitHubService(GH_LOGIN, GH_AUTH_TOKEN, GH_API_URL, mocked_pullRequestRepository,
-                mocked_lpvsDetectedLicenseRepository, mocked_lpvsLicenseRepository, mocked_lpvsLicenseConflictRepository, exitHandler);
+        LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository =
+                mock(LPVSLicenseConflictRepository.class);
+        final LPVSGitHubService gh_service =
+                new LPVSGitHubService(
+                        GH_LOGIN,
+                        GH_AUTH_TOKEN,
+                        GH_API_URL,
+                        mocked_pullRequestRepository,
+                        mocked_lpvsDetectedLicenseRepository,
+                        mocked_lpvsLicenseRepository,
+                        mocked_lpvsLicenseConflictRepository,
+                        exitHandler);
         LPVSQueue webhookConfig;
 
         @BeforeEach
@@ -1164,7 +1597,11 @@ public class LPVSGitHubServiceTest {
         @Test
         public void testSetErrorCheck__ApiUrlAbsentCantAuthorize() {
             try (MockedStatic<GitHub> mocked_static_gh = mockStatic(GitHub.class)) {
-                mocked_static_gh.when(() -> GitHub.connect(GH_LOGIN, GH_AUTH_TOKEN)).thenThrow(new IOException("Test exception for TestSetErrorCheck__ApiUrlAbsentCantAuthorize. Normal behavior."));
+                mocked_static_gh
+                        .when(() -> GitHub.connect(GH_LOGIN, GH_AUTH_TOKEN))
+                        .thenThrow(
+                                new IOException(
+                                        "Test exception for TestSetErrorCheck__ApiUrlAbsentCantAuthorize. Normal behavior."));
 
                 // main test
                 gh_service.setErrorCheck(webhookConfig);
@@ -1182,12 +1619,23 @@ public class LPVSGitHubServiceTest {
         final String GH_LOGIN = "test_login";
         final String GH_AUTH_TOKEN = "test_auth_token";
         final String GH_API_URL = "test_api_url";
-        LPVSPullRequestRepository mocked_pullRequestRepository = mock(LPVSPullRequestRepository.class);
-        LPVSDetectedLicenseRepository mocked_lpvsDetectedLicenseRepository = mock(LPVSDetectedLicenseRepository.class);
+        LPVSPullRequestRepository mocked_pullRequestRepository =
+                mock(LPVSPullRequestRepository.class);
+        LPVSDetectedLicenseRepository mocked_lpvsDetectedLicenseRepository =
+                mock(LPVSDetectedLicenseRepository.class);
         LPVSLicenseRepository mocked_lpvsLicenseRepository = mock(LPVSLicenseRepository.class);
-        LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository = mock(LPVSLicenseConflictRepository.class);
-        final LPVSGitHubService gh_service = new LPVSGitHubService(GH_LOGIN, GH_AUTH_TOKEN, GH_API_URL, mocked_pullRequestRepository,
-                mocked_lpvsDetectedLicenseRepository, mocked_lpvsLicenseRepository, mocked_lpvsLicenseConflictRepository, exitHandler);
+        LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository =
+                mock(LPVSLicenseConflictRepository.class);
+        final LPVSGitHubService gh_service =
+                new LPVSGitHubService(
+                        GH_LOGIN,
+                        GH_AUTH_TOKEN,
+                        GH_API_URL,
+                        mocked_pullRequestRepository,
+                        mocked_lpvsDetectedLicenseRepository,
+                        mocked_lpvsLicenseRepository,
+                        mocked_lpvsLicenseConflictRepository,
+                        exitHandler);
         LPVSQueue webhookConfig;
 
         @BeforeEach
@@ -1198,14 +1646,25 @@ public class LPVSGitHubServiceTest {
         @Test
         public void testSetErrorCheck__ApiUrlPresentCantAuthorize() {
             try (MockedStatic<GitHub> mocked_static_gh = mockStatic(GitHub.class)) {
-                mocked_static_gh.when(() -> GitHub.connectToEnterpriseWithOAuth(GH_API_URL, GH_LOGIN, GH_AUTH_TOKEN)).thenThrow(new IOException("Test exception for TestSetErrorCheck__ApiUrlPresentCantAuthorize. Normal behavior."));
+                mocked_static_gh
+                        .when(
+                                () ->
+                                        GitHub.connectToEnterpriseWithOAuth(
+                                                GH_API_URL, GH_LOGIN, GH_AUTH_TOKEN))
+                        .thenThrow(
+                                new IOException(
+                                        "Test exception for TestSetErrorCheck__ApiUrlPresentCantAuthorize. Normal behavior."));
 
                 // main test
                 gh_service.setErrorCheck(webhookConfig);
 
                 // verification of calling methods on `Mock`s
                 // `mocked_static_gh` verify
-                mocked_static_gh.verify(() -> GitHub.connectToEnterpriseWithOAuth(GH_API_URL, GH_LOGIN, GH_AUTH_TOKEN), times(1));
+                mocked_static_gh.verify(
+                        () ->
+                                GitHub.connectToEnterpriseWithOAuth(
+                                        GH_API_URL, GH_LOGIN, GH_AUTH_TOKEN),
+                        times(1));
                 mocked_static_gh.verifyNoMoreInteractions();
             }
         }
@@ -1213,12 +1672,23 @@ public class LPVSGitHubServiceTest {
 
     @Nested
     class TestCommentResults__PrAbsent {
-        LPVSPullRequestRepository mocked_pullRequestRepository = mock(LPVSPullRequestRepository.class);
-        LPVSDetectedLicenseRepository mocked_lpvsDetectedLicenseRepository = mock(LPVSDetectedLicenseRepository.class);
+        LPVSPullRequestRepository mocked_pullRequestRepository =
+                mock(LPVSPullRequestRepository.class);
+        LPVSDetectedLicenseRepository mocked_lpvsDetectedLicenseRepository =
+                mock(LPVSDetectedLicenseRepository.class);
         LPVSLicenseRepository mocked_lpvsLicenseRepository = mock(LPVSLicenseRepository.class);
-        LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository = mock(LPVSLicenseConflictRepository.class);
-        final LPVSGitHubService gh_service = new LPVSGitHubService(null, null, null, mocked_pullRequestRepository,
-                mocked_lpvsDetectedLicenseRepository, mocked_lpvsLicenseRepository, mocked_lpvsLicenseConflictRepository, exitHandler);
+        LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository =
+                mock(LPVSLicenseConflictRepository.class);
+        final LPVSGitHubService gh_service =
+                new LPVSGitHubService(
+                        null,
+                        null,
+                        null,
+                        mocked_pullRequestRepository,
+                        mocked_lpvsDetectedLicenseRepository,
+                        mocked_lpvsLicenseRepository,
+                        mocked_lpvsLicenseConflictRepository,
+                        exitHandler);
         GitHub mocked_instance_gh = mock(GitHub.class);
         GHRepository mocked_repo = mock(GHRepository.class);
         GHPullRequest mocked_pr_1;
@@ -1247,8 +1717,11 @@ public class LPVSGitHubServiceTest {
             webhookConfig.setPullRequestUrl(url_pr_3);
 
             try {
-                when(mocked_instance_gh.getRepository(LPVSWebhookUtil.getRepositoryOrganization(webhookConfig) +
-                        "/" + LPVSWebhookUtil.getRepositoryName(webhookConfig))).thenReturn(mocked_repo);
+                when(mocked_instance_gh.getRepository(
+                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                        + "/"
+                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig)))
+                        .thenReturn(mocked_repo);
             } catch (IOException e) {
                 log.error("mocked_repo.getRepository error " + e);
             }
@@ -1260,7 +1733,8 @@ public class LPVSGitHubServiceTest {
                 fail();
             }
             try {
-                when(mocked_repo.getPullRequests(GHIssueState.OPEN)).thenReturn(Arrays.asList(mocked_pr_1, mocked_pr_2));
+                when(mocked_repo.getPullRequests(GHIssueState.OPEN))
+                        .thenReturn(Arrays.asList(mocked_pr_1, mocked_pr_2));
             } catch (IOException e) {
                 log.error("mocked_repo.getPullRequests error " + e);
             }
@@ -1273,8 +1747,11 @@ public class LPVSGitHubServiceTest {
 
             // `mocked_instance_gh` verify
             try {
-                verify(mocked_instance_gh, times(1)).getRepository(
-                        LPVSWebhookUtil.getRepositoryOrganization(webhookConfig) + "/" + LPVSWebhookUtil.getRepositoryName(webhookConfig));
+                verify(mocked_instance_gh, times(1))
+                        .getRepository(
+                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                        + "/"
+                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig));
             } catch (IOException e) {
                 log.error("TestCommentResults__PrAbsent.testCommentResults__PrAbsent() error " + e);
                 fail();
@@ -1294,12 +1771,23 @@ public class LPVSGitHubServiceTest {
 
     @Nested
     class TestCommentResults__CantAuthorize {
-        LPVSPullRequestRepository mocked_pullRequestRepository = mock(LPVSPullRequestRepository.class);
-        LPVSDetectedLicenseRepository mocked_lpvsDetectedLicenseRepository = mock(LPVSDetectedLicenseRepository.class);
+        LPVSPullRequestRepository mocked_pullRequestRepository =
+                mock(LPVSPullRequestRepository.class);
+        LPVSDetectedLicenseRepository mocked_lpvsDetectedLicenseRepository =
+                mock(LPVSDetectedLicenseRepository.class);
         LPVSLicenseRepository mocked_lpvsLicenseRepository = mock(LPVSLicenseRepository.class);
-        LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository = mock(LPVSLicenseConflictRepository.class);
-        final LPVSGitHubService gh_service = new LPVSGitHubService(null, null, null, mocked_pullRequestRepository,
-                mocked_lpvsDetectedLicenseRepository, mocked_lpvsLicenseRepository, mocked_lpvsLicenseConflictRepository, exitHandler);
+        LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository =
+                mock(LPVSLicenseConflictRepository.class);
+        final LPVSGitHubService gh_service =
+                new LPVSGitHubService(
+                        null,
+                        null,
+                        null,
+                        mocked_pullRequestRepository,
+                        mocked_lpvsDetectedLicenseRepository,
+                        mocked_lpvsLicenseRepository,
+                        mocked_lpvsLicenseConflictRepository,
+                        exitHandler);
         GitHub mocked_instance_gh = mock(GitHub.class);
         LPVSQueue webhookConfig;
         LPVSPullRequest lpvsPullRequest;
@@ -1328,9 +1816,13 @@ public class LPVSGitHubServiceTest {
             webhookConfig.setPullRequestFilesUrl("https://github.com/Samsung/LPVS/pull/18");
 
             try {
-                when(mocked_instance_gh
-                        .getRepository(LPVSWebhookUtil.getRepositoryOrganization(webhookConfig) + "/" + LPVSWebhookUtil.getRepositoryName(webhookConfig)))
-                        .thenThrow(new IOException("Test exception for TestCommentResults__CantAuthorize. Normal behavior."));
+                when(mocked_instance_gh.getRepository(
+                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                        + "/"
+                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig)))
+                        .thenThrow(
+                                new IOException(
+                                        "Test exception for TestCommentResults__CantAuthorize. Normal behavior."));
             } catch (IOException e) {
                 log.error("mocked_repo.getRepository error " + e);
             }
@@ -1343,10 +1835,15 @@ public class LPVSGitHubServiceTest {
 
             // `mocked_instance_gh` verify
             try {
-                verify(mocked_instance_gh, times(2)).getRepository(
-                        LPVSWebhookUtil.getRepositoryOrganization(webhookConfig) + "/" + LPVSWebhookUtil.getRepositoryName(webhookConfig));
+                verify(mocked_instance_gh, times(2))
+                        .getRepository(
+                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                        + "/"
+                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig));
             } catch (IOException e) {
-                log.error("TestCommentResults__CantAuthorize.testCommentResults__CantAuthorize() error " + e);
+                log.error(
+                        "TestCommentResults__CantAuthorize.testCommentResults__CantAuthorize() error "
+                                + e);
                 fail();
             }
             verifyNoMoreInteractions(mocked_instance_gh);
@@ -1355,12 +1852,23 @@ public class LPVSGitHubServiceTest {
 
     @Nested
     class TestCommentResults__ScanResultsEmpty {
-        LPVSPullRequestRepository mocked_pullRequestRepository = mock(LPVSPullRequestRepository.class);
-        LPVSDetectedLicenseRepository mocked_lpvsDetectedLicenseRepository = mock(LPVSDetectedLicenseRepository.class);
+        LPVSPullRequestRepository mocked_pullRequestRepository =
+                mock(LPVSPullRequestRepository.class);
+        LPVSDetectedLicenseRepository mocked_lpvsDetectedLicenseRepository =
+                mock(LPVSDetectedLicenseRepository.class);
         LPVSLicenseRepository mocked_lpvsLicenseRepository = mock(LPVSLicenseRepository.class);
-        LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository = mock(LPVSLicenseConflictRepository.class);
-        final LPVSGitHubService gh_service = new LPVSGitHubService(null, null, null, mocked_pullRequestRepository,
-                mocked_lpvsDetectedLicenseRepository, mocked_lpvsLicenseRepository, mocked_lpvsLicenseConflictRepository, exitHandler);
+        LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository =
+                mock(LPVSLicenseConflictRepository.class);
+        final LPVSGitHubService gh_service =
+                new LPVSGitHubService(
+                        null,
+                        null,
+                        null,
+                        mocked_pullRequestRepository,
+                        mocked_lpvsDetectedLicenseRepository,
+                        mocked_lpvsLicenseRepository,
+                        mocked_lpvsLicenseConflictRepository,
+                        exitHandler);
         GitHub mocked_instance_gh = mock(GitHub.class);
         GHRepository mocked_repo = mock(GHRepository.class);
         GHPullRequest mocked_pr_1;
@@ -1390,8 +1898,11 @@ public class LPVSGitHubServiceTest {
             webhookConfig.setPullRequestUrl(url_pr_2);
 
             try {
-                when(mocked_instance_gh.getRepository(LPVSWebhookUtil.getRepositoryOrganization(webhookConfig) +
-                        "/" + LPVSWebhookUtil.getRepositoryName(webhookConfig))).thenReturn(mocked_repo);
+                when(mocked_instance_gh.getRepository(
+                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                        + "/"
+                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig)))
+                        .thenReturn(mocked_repo);
             } catch (IOException e) {
                 log.error("mocked_repo.getRepository error " + e);
             }
@@ -1403,7 +1914,8 @@ public class LPVSGitHubServiceTest {
                 fail();
             }
             try {
-                when(mocked_repo.getPullRequests(GHIssueState.OPEN)).thenReturn(Arrays.asList(mocked_pr_1, mocked_pr_2));
+                when(mocked_repo.getPullRequests(GHIssueState.OPEN))
+                        .thenReturn(Arrays.asList(mocked_pr_1, mocked_pr_2));
             } catch (IOException e) {
                 log.error("mocked_repo.getPullRequests error " + e);
             }
@@ -1416,10 +1928,15 @@ public class LPVSGitHubServiceTest {
 
             // `mocked_instance_gh` verify
             try {
-                verify(mocked_instance_gh, times(1)).getRepository(
-                        LPVSWebhookUtil.getRepositoryOrganization(webhookConfig) + "/" + LPVSWebhookUtil.getRepositoryName(webhookConfig));
+                verify(mocked_instance_gh, times(1))
+                        .getRepository(
+                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                        + "/"
+                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig));
             } catch (IOException e) {
-                log.error("TestCommentResults__ScanResultsEmpty.testCommentResults__ScanResultsEmpty() error " + e);
+                log.error(
+                        "TestCommentResults__ScanResultsEmpty.testCommentResults__ScanResultsEmpty() error "
+                                + e);
                 fail();
             }
             verifyNoMoreInteractions(mocked_instance_gh);
@@ -1427,10 +1944,17 @@ public class LPVSGitHubServiceTest {
             // `mocked_repo` verify
             try {
                 verify(mocked_repo, times(1)).getPullRequests(GHIssueState.OPEN);
-                verify(mocked_repo, times(1)).createCommitStatus(commit_sha, GHCommitState.SUCCESS, null,
-                        "No license issue detected", "[License Pre-Validation Service]");
+                verify(mocked_repo, times(1))
+                        .createCommitStatus(
+                                commit_sha,
+                                GHCommitState.SUCCESS,
+                                null,
+                                "No license issue detected",
+                                "[License Pre-Validation Service]");
             } catch (IOException e) {
-                log.error("TestCommentResults__ScanResultsEmpty.testCommentResults__ScanResultsEmpty() error " + e);
+                log.error(
+                        "TestCommentResults__ScanResultsEmpty.testCommentResults__ScanResultsEmpty() error "
+                                + e);
                 fail();
             }
             verifyNoMoreInteractions(mocked_repo);
@@ -1439,17 +1963,27 @@ public class LPVSGitHubServiceTest {
 
     @Nested
     class TestCommentResults__ProhibitedPresentConflictsPresent {
-        LPVSPullRequestRepository mocked_pullRequestRepository = mock(LPVSPullRequestRepository.class);
-        LPVSDetectedLicenseRepository mocked_lpvsDetectedLicenseRepository = mock(LPVSDetectedLicenseRepository.class);
+        LPVSPullRequestRepository mocked_pullRequestRepository =
+                mock(LPVSPullRequestRepository.class);
+        LPVSDetectedLicenseRepository mocked_lpvsDetectedLicenseRepository =
+                mock(LPVSDetectedLicenseRepository.class);
         LPVSLicenseRepository mocked_lpvsLicenseRepository = mock(LPVSLicenseRepository.class);
-        LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository = mock(LPVSLicenseConflictRepository.class);
-
+        LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository =
+                mock(LPVSLicenseConflictRepository.class);
 
         final String GH_LOGIN = "test_login";
         final String GH_AUTH_TOKEN = "test_auth_token";
         final String GH_API_URL = "";
-        final LPVSGitHubService gh_service = new LPVSGitHubService(GH_LOGIN, GH_AUTH_TOKEN, GH_API_URL, mocked_pullRequestRepository,
-                mocked_lpvsDetectedLicenseRepository, mocked_lpvsLicenseRepository, mocked_lpvsLicenseConflictRepository, exitHandler);
+        final LPVSGitHubService gh_service =
+                new LPVSGitHubService(
+                        GH_LOGIN,
+                        GH_AUTH_TOKEN,
+                        GH_API_URL,
+                        mocked_pullRequestRepository,
+                        mocked_lpvsDetectedLicenseRepository,
+                        mocked_lpvsLicenseRepository,
+                        mocked_lpvsLicenseConflictRepository,
+                        exitHandler);
 
         GitHub mocked_instance_gh = mock(GitHub.class);
         GHRepository mocked_repo = mock(GHRepository.class);
@@ -1466,18 +2000,21 @@ public class LPVSGitHubServiceTest {
 
         // `lpvs_file_1`
         LPVSFile lpvs_file_1;
-        final String file_url_1 = "https://github.com/Samsung/LPVS/tree/main/src/main/java/com/lpvs/service/LPVSGitHubService.java";
+        final String file_url_1 =
+                "https://github.com/Samsung/LPVS/tree/main/src/main/java/com/lpvs/service/LPVSGitHubService.java";
         final String file_path_1 = "src/main/java/com/lpvs/service/LPVSGitHubService.java";
         final String snippet_type_1 = "snippet";
-        final String snippet_match_1 = "/**\n" +
-                " * Copyright (c) 2022, Samsung Electronics Co., Ltd. All rights reserved.\n" +
-                " *\n" +
-                " * Use of this source code is governed by a MIT license that can be\n" +
-                " * found in the LICENSE file.\n" +
-                " */\n";
+        final String snippet_match_1 =
+                "/**\n"
+                        + " * Copyright (c) 2022, Samsung Electronics Co., Ltd. All rights reserved.\n"
+                        + " *\n"
+                        + " * Use of this source code is governed by a MIT license that can be\n"
+                        + " * found in the LICENSE file.\n"
+                        + " */\n";
         final String matched_lines_1 = "1-6";
         final String component_1 = "LPVS::Services";
-        final String component_file_path_1 = "src/main/java/com/lpvs/service/LPVSGitHubService.java";
+        final String component_file_path_1 =
+                "src/main/java/com/lpvs/service/LPVSGitHubService.java";
         final String component_file_url_1 = "src/main/java/com/lpvs/service/LPVSGitHubService.java";
 
         // `lpvs_license_1`
@@ -1493,20 +2030,21 @@ public class LPVSGitHubServiceTest {
         final String conflict_1_l1 = "MIT";
         final String conflict_1_l2 = "Apache-1.0";
 
-        final String expected_comment = "**\\[License Pre-Validation Service\\]** Potential license problem(s) detected \n\n" +
-                "**Detected licenses:**\n\n\n" +
-                "**File:** src/main/java/com/lpvs/service/LPVSGitHubService.java\n" +
-                "**License(s):** <a target=\"_blank\" href=\"https://opensource.org/licenses/MIT\">MIT</a> (prohibited)\n" +
-                "**Component:** LPVS::Services (src/main/java/com/lpvs/service/LPVSGitHubService.java)\n" +
-                "**Matched Lines:** <a target=\"_blank\" href=\"https://github.com/Samsung/LPVS/blob/895337e89ae103ff2d18c9e0d93709f743226afa/src/main/java/com/lpvs/service/LPVSGitHubService.java#L1L6\">1-6</a>\n" +
-                "**Snippet Match:** /**\n" +
-                " * Copyright (c) 2022, Samsung Electronics Co., Ltd. All rights reserved.\n" +
-                " *\n" +
-                " * Use of this source code is governed by a MIT license that can be\n" +
-                " * found in the LICENSE file.\n" +
-                " */\n\n\n\n\n" +
-                "**Detected license conflicts:**\n\n\n" +
-                "<ul><li>MIT and Apache-1.0</li></ul>()</p>";
+        final String expected_comment =
+                "**\\[License Pre-Validation Service\\]** Potential license problem(s) detected \n\n"
+                        + "**Detected licenses:**\n\n\n"
+                        + "**File:** src/main/java/com/lpvs/service/LPVSGitHubService.java\n"
+                        + "**License(s):** <a target=\"_blank\" href=\"https://opensource.org/licenses/MIT\">MIT</a> (prohibited)\n"
+                        + "**Component:** LPVS::Services (src/main/java/com/lpvs/service/LPVSGitHubService.java)\n"
+                        + "**Matched Lines:** <a target=\"_blank\" href=\"https://github.com/Samsung/LPVS/blob/895337e89ae103ff2d18c9e0d93709f743226afa/src/main/java/com/lpvs/service/LPVSGitHubService.java#L1L6\">1-6</a>\n"
+                        + "**Snippet Match:** /**\n"
+                        + " * Copyright (c) 2022, Samsung Electronics Co., Ltd. All rights reserved.\n"
+                        + " *\n"
+                        + " * Use of this source code is governed by a MIT license that can be\n"
+                        + " * found in the LICENSE file.\n"
+                        + " */\n\n\n\n\n"
+                        + "**Detected license conflicts:**\n\n\n"
+                        + "<ul><li>MIT and Apache-1.0</li></ul>()</p>";
 
         @BeforeEach
         void setUp() {
@@ -1516,7 +2054,8 @@ public class LPVSGitHubServiceTest {
                 staticPrivateGithub.setAccessible(true);
                 staticPrivateGithub.set(null, mocked_instance_gh);
             } catch (NoSuchFieldException | IllegalAccessException e) {
-                log.error("TestCommentResults__ProhibitedPresentConflictsPresent.setUp() error " + e);
+                log.error(
+                        "TestCommentResults__ProhibitedPresentConflictsPresent.setUp() error " + e);
                 fail();
             }
 
@@ -1532,7 +2071,11 @@ public class LPVSGitHubServiceTest {
             webhookConfig.setHubLink("");
 
             try {
-                when(mocked_instance_gh.getRepository(LPVSWebhookUtil.getRepositoryOrganization(webhookConfig) + "/" + LPVSWebhookUtil.getRepositoryName(webhookConfig))).thenReturn(mocked_repo);
+                when(mocked_instance_gh.getRepository(
+                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                        + "/"
+                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig)))
+                        .thenReturn(mocked_repo);
             } catch (IOException e) {
                 log.error("mocked_repo.getRepository error " + e);
             }
@@ -1540,35 +2083,65 @@ public class LPVSGitHubServiceTest {
                 mocked_pr_1 = new GHPullRequestOurMock(new URL(url_pr_1), null, null, -1, null);
                 mocked_pr_2 = new GHPullRequestOurMock(new URL(url_pr_2), null, null, -1, null);
             } catch (MalformedURLException e) {
-                log.error("TestCommentResults__ProhibitedPresentConflictsPresent.setUp() error " + e);
+                log.error(
+                        "TestCommentResults__ProhibitedPresentConflictsPresent.setUp() error " + e);
                 fail();
             }
             try {
-                when(mocked_repo.getPullRequests(GHIssueState.OPEN)).thenReturn(Arrays.asList(mocked_pr_1, mocked_pr_2));
+                when(mocked_repo.getPullRequests(GHIssueState.OPEN))
+                        .thenReturn(Arrays.asList(mocked_pr_1, mocked_pr_2));
             } catch (IOException e) {
                 log.error("mocked_repo.getPullRequests error " + e);
             }
 
-            lpvs_license_1 = new LPVSLicense(1L, license_name_1, spdx_id_1, access_1, alternativeName_1, checklist_url_1);
-            lpvs_file_1 = new LPVSFile(1L, file_path_1, snippet_type_1, snippet_match_1, matched_lines_1, Set.of(lpvs_license_1),
-                    component_file_path_1, component_file_url_1, component_1, null, null, null, null);
+            lpvs_license_1 =
+                    new LPVSLicense(
+                            1L,
+                            license_name_1,
+                            spdx_id_1,
+                            access_1,
+                            alternativeName_1,
+                            checklist_url_1);
+            lpvs_file_1 =
+                    new LPVSFile(
+                            1L,
+                            file_path_1,
+                            snippet_type_1,
+                            snippet_match_1,
+                            matched_lines_1,
+                            Set.of(lpvs_license_1),
+                            component_file_path_1,
+                            component_file_url_1,
+                            component_1,
+                            null,
+                            null,
+                            null,
+                            null);
             conflict_1 = new LPVSLicenseService.Conflict<>(conflict_1_l1, conflict_1_l2);
 
-            when(mocked_lpvsLicenseRepository.searchBySpdxId(anyString())).thenReturn(lpvs_license_1);
-            when(mocked_lpvsLicenseRepository.searchByAlternativeLicenseNames(anyString())).thenReturn(null);
+            when(mocked_lpvsLicenseRepository.searchBySpdxId(anyString()))
+                    .thenReturn(lpvs_license_1);
+            when(mocked_lpvsLicenseRepository.searchByAlternativeLicenseNames(anyString()))
+                    .thenReturn(null);
         }
 
         @Test
         public void testCommentResults__ProhibitedPresentConflictsPresent() throws IOException {
             // main test
-            gh_service.commentResults(webhookConfig, List.of(lpvs_file_1), List.of(conflict_1), lpvsPullRequest);
+            gh_service.commentResults(
+                    webhookConfig, List.of(lpvs_file_1), List.of(conflict_1), lpvsPullRequest);
 
             // `mocked_instance_gh` verify
             try {
-                verify(mocked_instance_gh, times(1)).getRepository(
-                        LPVSWebhookUtil.getRepositoryOrganization(webhookConfig) + "/" + LPVSWebhookUtil.getRepositoryName(webhookConfig));
+                verify(mocked_instance_gh, times(1))
+                        .getRepository(
+                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                        + "/"
+                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig));
             } catch (IOException e) {
-                log.error("TestCommentResults__ProhibitedPresentConflictsPresent.testCommentResults__ProhibitedPresentConflictsPresent() error " + e);
+                log.error(
+                        "TestCommentResults__ProhibitedPresentConflictsPresent.testCommentResults__ProhibitedPresentConflictsPresent() error "
+                                + e);
                 fail();
             }
             verifyNoMoreInteractions(mocked_instance_gh);
@@ -1576,10 +2149,17 @@ public class LPVSGitHubServiceTest {
             // `mocked_repo` verify
             try {
                 verify(mocked_repo, times(1)).getPullRequests(GHIssueState.OPEN);
-                verify(mocked_repo, times(1)).createCommitStatus(commit_sha, GHCommitState.FAILURE, null,
-                        "Potential license problem(s) detected", "[License Pre-Validation Service]");
+                verify(mocked_repo, times(1))
+                        .createCommitStatus(
+                                commit_sha,
+                                GHCommitState.FAILURE,
+                                null,
+                                "Potential license problem(s) detected",
+                                "[License Pre-Validation Service]");
             } catch (IOException e) {
-                log.error("TestCommentResults__ProhibitedPresentConflictsPresent.testCommentResults__ProhibitedPresentConflictsPresent() error " + e);
+                log.error(
+                        "TestCommentResults__ProhibitedPresentConflictsPresent.testCommentResults__ProhibitedPresentConflictsPresent() error "
+                                + e);
                 fail();
             }
             verifyNoMoreInteractions(mocked_repo);
@@ -1592,12 +2172,23 @@ public class LPVSGitHubServiceTest {
 
     @Nested
     class TestCommentResults__ProhibitedAbsentConflictsAbsent {
-        LPVSPullRequestRepository mocked_pullRequestRepository = mock(LPVSPullRequestRepository.class);
-        LPVSDetectedLicenseRepository mocked_lpvsDetectedLicenseRepository = mock(LPVSDetectedLicenseRepository.class);
+        LPVSPullRequestRepository mocked_pullRequestRepository =
+                mock(LPVSPullRequestRepository.class);
+        LPVSDetectedLicenseRepository mocked_lpvsDetectedLicenseRepository =
+                mock(LPVSDetectedLicenseRepository.class);
         LPVSLicenseRepository mocked_lpvsLicenseRepository = mock(LPVSLicenseRepository.class);
-        LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository = mock(LPVSLicenseConflictRepository.class);
-        final LPVSGitHubService gh_service = new LPVSGitHubService(null, null, null, mocked_pullRequestRepository,
-                mocked_lpvsDetectedLicenseRepository, mocked_lpvsLicenseRepository, mocked_lpvsLicenseConflictRepository, exitHandler);
+        LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository =
+                mock(LPVSLicenseConflictRepository.class);
+        final LPVSGitHubService gh_service =
+                new LPVSGitHubService(
+                        null,
+                        null,
+                        null,
+                        mocked_pullRequestRepository,
+                        mocked_lpvsDetectedLicenseRepository,
+                        mocked_lpvsLicenseRepository,
+                        mocked_lpvsLicenseConflictRepository,
+                        exitHandler);
         GitHub mocked_instance_gh = mock(GitHub.class);
         GHRepository mocked_repo = mock(GHRepository.class);
         GHPullRequest mocked_pr_1;
@@ -1612,18 +2203,21 @@ public class LPVSGitHubServiceTest {
 
         // `lpvs_file_1`
         LPVSFile lpvs_file_1;
-        final String file_url_1 = "https://github.com/Samsung/LPVS/tree/main/src/main/java/com/lpvs/service/LPVSGitHubService.java";
+        final String file_url_1 =
+                "https://github.com/Samsung/LPVS/tree/main/src/main/java/com/lpvs/service/LPVSGitHubService.java";
         final String file_path_1 = "src/main/java/com/lpvs/service/LPVSGitHubService.java";
         final String snippet_type_1 = "snippet";
-        final String snippet_match_1 = "/**\n" +
-                " * Copyright (c) 2022, Samsung Electronics Co., Ltd. All rights reserved.\n" +
-                " *\n" +
-                " * Use of this source code is governed by a MIT license that can be\n" +
-                " * found in the LICENSE file.\n" +
-                " */\n";
+        final String snippet_match_1 =
+                "/**\n"
+                        + " * Copyright (c) 2022, Samsung Electronics Co., Ltd. All rights reserved.\n"
+                        + " *\n"
+                        + " * Use of this source code is governed by a MIT license that can be\n"
+                        + " * found in the LICENSE file.\n"
+                        + " */\n";
         final String matched_lines_1 = "1-6";
         final String component_1 = "LPVS::Services";
-        final String component_file_path_1 = "src/main/java/com/lpvs/service/LPVSGitHubService.java";
+        final String component_file_path_1 =
+                "src/main/java/com/lpvs/service/LPVSGitHubService.java";
         final String component_file_url_1 = "src/main/java/com/lpvs/service/LPVSGitHubService.java";
 
         // `lpvs_license_1`
@@ -1634,19 +2228,20 @@ public class LPVSGitHubServiceTest {
         final String alternativeName_1 = "";
         final String checklist_url_1 = "https://opensource.org/licenses/MIT";
 
-        final String expected_comment = "**\\[License Pre-Validation Service\\]**  No license issue detected \n\n" +
-                "**Detected licenses:**\n\n\n" +
-                "**File:** src/main/java/com/lpvs/service/LPVSGitHubService.java\n" +
-                "**License(s):** <a target=\"_blank\" href=\"https://opensource.org/licenses/MIT\">MIT</a> (permitted)\n" +
-                "**Component:** LPVS::Services (src/main/java/com/lpvs/service/LPVSGitHubService.java)\n" +
-                "**Matched Lines:** <a target=\"_blank\" href=\"https://github.com/Samsung/LPVS/blob/895337e89ae103ff2d18c9e0d93709f743226afa/src/main/java/com/lpvs/service/LPVSGitHubService.java#L1L6\">1-6</a>\n" +
-                "**Snippet Match:** /**\n" +
-                " * Copyright (c) 2022, Samsung Electronics Co., Ltd. All rights reserved.\n" +
-                " *\n" +
-                " * Use of this source code is governed by a MIT license that can be\n" +
-                " * found in the LICENSE file.\n" +
-                " */\n\n\n\n\n" +
-                "</p>";
+        final String expected_comment =
+                "**\\[License Pre-Validation Service\\]**  No license issue detected \n\n"
+                        + "**Detected licenses:**\n\n\n"
+                        + "**File:** src/main/java/com/lpvs/service/LPVSGitHubService.java\n"
+                        + "**License(s):** <a target=\"_blank\" href=\"https://opensource.org/licenses/MIT\">MIT</a> (permitted)\n"
+                        + "**Component:** LPVS::Services (src/main/java/com/lpvs/service/LPVSGitHubService.java)\n"
+                        + "**Matched Lines:** <a target=\"_blank\" href=\"https://github.com/Samsung/LPVS/blob/895337e89ae103ff2d18c9e0d93709f743226afa/src/main/java/com/lpvs/service/LPVSGitHubService.java#L1L6\">1-6</a>\n"
+                        + "**Snippet Match:** /**\n"
+                        + " * Copyright (c) 2022, Samsung Electronics Co., Ltd. All rights reserved.\n"
+                        + " *\n"
+                        + " * Use of this source code is governed by a MIT license that can be\n"
+                        + " * found in the LICENSE file.\n"
+                        + " */\n\n\n\n\n"
+                        + "</p>";
 
         @BeforeEach
         void setUp() {
@@ -1670,7 +2265,11 @@ public class LPVSGitHubServiceTest {
             webhookConfig.setUserId("user");
 
             try {
-                when(mocked_instance_gh.getRepository(LPVSWebhookUtil.getRepositoryOrganization(webhookConfig) + "/" + LPVSWebhookUtil.getRepositoryName(webhookConfig))).thenReturn(mocked_repo);
+                when(mocked_instance_gh.getRepository(
+                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                        + "/"
+                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig)))
+                        .thenReturn(mocked_repo);
             } catch (IOException e) {
                 log.error("mocked_repo.getRepository error " + e);
             }
@@ -1682,27 +2281,54 @@ public class LPVSGitHubServiceTest {
                 fail();
             }
             try {
-                when(mocked_repo.getPullRequests(GHIssueState.OPEN)).thenReturn(Arrays.asList(mocked_pr_1, mocked_pr_2));
+                when(mocked_repo.getPullRequests(GHIssueState.OPEN))
+                        .thenReturn(Arrays.asList(mocked_pr_1, mocked_pr_2));
             } catch (IOException e) {
                 log.error("mocked_repo.getPullRequests error " + e);
             }
 
-            lpvs_license_1 = new LPVSLicense(1L, license_name_1, spdx_id_1, access_1, alternativeName_1, checklist_url_1);
-            lpvs_file_1 = new LPVSFile(1L, file_path_1, snippet_type_1, snippet_match_1, matched_lines_1, Set.of(lpvs_license_1),
-                    component_file_path_1, component_file_url_1, component_1, null, null, null, null);
+            lpvs_license_1 =
+                    new LPVSLicense(
+                            1L,
+                            license_name_1,
+                            spdx_id_1,
+                            access_1,
+                            alternativeName_1,
+                            checklist_url_1);
+            lpvs_file_1 =
+                    new LPVSFile(
+                            1L,
+                            file_path_1,
+                            snippet_type_1,
+                            snippet_match_1,
+                            matched_lines_1,
+                            Set.of(lpvs_license_1),
+                            component_file_path_1,
+                            component_file_url_1,
+                            component_1,
+                            null,
+                            null,
+                            null,
+                            null);
         }
 
         @Test
         public void testCommentResults__ProhibitedAbsentConflictsAbsent() throws IOException {
             // main test
-            gh_service.commentResults(webhookConfig, List.of(lpvs_file_1), List.of(), lpvsPullRequest);
+            gh_service.commentResults(
+                    webhookConfig, List.of(lpvs_file_1), List.of(), lpvsPullRequest);
 
             // `mocked_instance_gh` verify
             try {
-                verify(mocked_instance_gh, times(1)).getRepository(
-                        LPVSWebhookUtil.getRepositoryOrganization(webhookConfig) + "/" + LPVSWebhookUtil.getRepositoryName(webhookConfig));
+                verify(mocked_instance_gh, times(1))
+                        .getRepository(
+                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                        + "/"
+                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig));
             } catch (IOException e) {
-                log.error("TestCommentResults__ProhibitedAbsentConflictsAbsent.testCommentResults__ProhibitedAbsentConflictsAbsent() error " + e);
+                log.error(
+                        "TestCommentResults__ProhibitedAbsentConflictsAbsent.testCommentResults__ProhibitedAbsentConflictsAbsent() error "
+                                + e);
                 fail();
             }
             verifyNoMoreInteractions(mocked_instance_gh);
@@ -1710,10 +2336,17 @@ public class LPVSGitHubServiceTest {
             // `mocked_repo` verify
             try {
                 verify(mocked_repo, times(1)).getPullRequests(GHIssueState.OPEN);
-                verify(mocked_repo, times(1)).createCommitStatus(commit_sha, GHCommitState.SUCCESS, null,
-                        "No license issue detected", "[License Pre-Validation Service]");
+                verify(mocked_repo, times(1))
+                        .createCommitStatus(
+                                commit_sha,
+                                GHCommitState.SUCCESS,
+                                null,
+                                "No license issue detected",
+                                "[License Pre-Validation Service]");
             } catch (IOException e) {
-                log.error("TestCommentResults__ProhibitedAbsentConflictsAbsent.testCommentResults__ProhibitedAbsentConflictsAbsent() error " + e);
+                log.error(
+                        "TestCommentResults__ProhibitedAbsentConflictsAbsent.testCommentResults__ProhibitedAbsentConflictsAbsent() error "
+                                + e);
                 fail();
             }
             verifyNoMoreInteractions(mocked_repo);
@@ -1730,12 +2363,23 @@ public class LPVSGitHubServiceTest {
         final String GH_LOGIN = "test_login";
         final String GH_AUTH_TOKEN = "test_auth_token";
         final String GH_API_URL = "";
-        LPVSPullRequestRepository mocked_pullRequestRepository = mock(LPVSPullRequestRepository.class);
-        LPVSDetectedLicenseRepository mocked_lpvsDetectedLicenseRepository = mock(LPVSDetectedLicenseRepository.class);
+        LPVSPullRequestRepository mocked_pullRequestRepository =
+                mock(LPVSPullRequestRepository.class);
+        LPVSDetectedLicenseRepository mocked_lpvsDetectedLicenseRepository =
+                mock(LPVSDetectedLicenseRepository.class);
         LPVSLicenseRepository mocked_lpvsLicenseRepository = mock(LPVSLicenseRepository.class);
-        LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository = mock(LPVSLicenseConflictRepository.class);
-        final LPVSGitHubService gh_service = new LPVSGitHubService(GH_LOGIN, GH_AUTH_TOKEN, GH_API_URL, mocked_pullRequestRepository,
-                mocked_lpvsDetectedLicenseRepository, mocked_lpvsLicenseRepository, mocked_lpvsLicenseConflictRepository, exitHandler);
+        LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository =
+                mock(LPVSLicenseConflictRepository.class);
+        final LPVSGitHubService gh_service =
+                new LPVSGitHubService(
+                        GH_LOGIN,
+                        GH_AUTH_TOKEN,
+                        GH_API_URL,
+                        mocked_pullRequestRepository,
+                        mocked_lpvsDetectedLicenseRepository,
+                        mocked_lpvsLicenseRepository,
+                        mocked_lpvsLicenseConflictRepository,
+                        exitHandler);
         LPVSQueue webhookConfig;
         GitHub mocked_instance_gh = mock(GitHub.class);
         GHRepository mocked_repo = mock(GHRepository.class);
@@ -1749,7 +2393,11 @@ public class LPVSGitHubServiceTest {
             webhookConfig.setPullRequestUrl(url_pr);
 
             try {
-                when(mocked_instance_gh.getRepository(LPVSWebhookUtil.getRepositoryOrganization(webhookConfig) + "/" + LPVSWebhookUtil.getRepositoryName(webhookConfig))).thenReturn(mocked_repo);
+                when(mocked_instance_gh.getRepository(
+                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                        + "/"
+                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig)))
+                        .thenReturn(mocked_repo);
             } catch (IOException e) {
                 log.error("mocked_repo.getRepository error " + e);
             }
@@ -1765,7 +2413,9 @@ public class LPVSGitHubServiceTest {
         public void testGetRepositoryLicense__ApiUrlAbsentLisencePresent() {
 
             try (MockedStatic<GitHub> mocked_static_gh = mockStatic(GitHub.class)) {
-                mocked_static_gh.when(() -> GitHub.connect(GH_LOGIN, GH_AUTH_TOKEN)).thenReturn(mocked_instance_gh);
+                mocked_static_gh
+                        .when(() -> GitHub.connect(GH_LOGIN, GH_AUTH_TOKEN))
+                        .thenReturn(mocked_instance_gh);
 
                 // main test
                 assertEquals(test_license_key, gh_service.getRepositoryLicense(webhookConfig));
@@ -1777,8 +2427,11 @@ public class LPVSGitHubServiceTest {
 
                 // `mocked_instance_gh` verify
                 try {
-                    verify(mocked_instance_gh, times(1)).getRepository(
-                            LPVSWebhookUtil.getRepositoryOrganization(webhookConfig) + "/" + LPVSWebhookUtil.getRepositoryName(webhookConfig));
+                    verify(mocked_instance_gh, times(1))
+                            .getRepository(
+                                    LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                            + "/"
+                                            + LPVSWebhookUtil.getRepositoryName(webhookConfig));
                 } catch (IOException e) {
                     log.error("mocked_instance_gh.getRepository error " + e);
                 }
@@ -1805,16 +2458,28 @@ public class LPVSGitHubServiceTest {
         final String GH_LOGIN = "test_login";
         final String GH_AUTH_TOKEN = "test_auth_token";
         final String GH_API_URL = "";
-        LPVSPullRequestRepository mocked_pullRequestRepository = mock(LPVSPullRequestRepository.class);
-        LPVSDetectedLicenseRepository mocked_lpvsDetectedLicenseRepository = mock(LPVSDetectedLicenseRepository.class);
+        LPVSPullRequestRepository mocked_pullRequestRepository =
+                mock(LPVSPullRequestRepository.class);
+        LPVSDetectedLicenseRepository mocked_lpvsDetectedLicenseRepository =
+                mock(LPVSDetectedLicenseRepository.class);
         LPVSLicenseRepository mocked_lpvsLicenseRepository = mock(LPVSLicenseRepository.class);
-        LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository = mock(LPVSLicenseConflictRepository.class);
-        final LPVSGitHubService gh_service = new LPVSGitHubService(GH_LOGIN, GH_AUTH_TOKEN, GH_API_URL, mocked_pullRequestRepository,
-                mocked_lpvsDetectedLicenseRepository, mocked_lpvsLicenseRepository, mocked_lpvsLicenseConflictRepository, exitHandler);
+        LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository =
+                mock(LPVSLicenseConflictRepository.class);
+        final LPVSGitHubService gh_service =
+                new LPVSGitHubService(
+                        GH_LOGIN,
+                        GH_AUTH_TOKEN,
+                        GH_API_URL,
+                        mocked_pullRequestRepository,
+                        mocked_lpvsDetectedLicenseRepository,
+                        mocked_lpvsLicenseRepository,
+                        mocked_lpvsLicenseConflictRepository,
+                        exitHandler);
         LPVSQueue webhookConfig;
         GitHub mocked_instance_gh = mock(GitHub.class);
         GHRepository mocked_repo = mock(GHRepository.class);
         final String url_pr_1 = "https://github.com/Samsung/LPVS/pull/18";
+
         // GHLicense mocked_license = mock(GHLicense.class);
         // final String test_license_key = "test_license_key";
 
@@ -1823,7 +2488,11 @@ public class LPVSGitHubServiceTest {
             webhookConfig = new LPVSQueue();
             webhookConfig.setPullRequestUrl(url_pr_1);
             try {
-                when(mocked_instance_gh.getRepository(LPVSWebhookUtil.getRepositoryOrganization(webhookConfig) + "/" + LPVSWebhookUtil.getRepositoryName(webhookConfig))).thenReturn(mocked_repo);
+                when(mocked_instance_gh.getRepository(
+                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                        + "/"
+                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig)))
+                        .thenReturn(mocked_repo);
             } catch (IOException e) {
                 log.error("mocked_repo.getRepository error " + e);
             }
@@ -1839,7 +2508,9 @@ public class LPVSGitHubServiceTest {
         public void testGetRepositoryLicense__ApiUrlAbsentLisenceAbsent() {
 
             try (MockedStatic<GitHub> mocked_static_gh = mockStatic(GitHub.class)) {
-                mocked_static_gh.when(() -> GitHub.connect(GH_LOGIN, GH_AUTH_TOKEN)).thenReturn(mocked_instance_gh);
+                mocked_static_gh
+                        .when(() -> GitHub.connect(GH_LOGIN, GH_AUTH_TOKEN))
+                        .thenReturn(mocked_instance_gh);
 
                 // main test
                 assertEquals("Proprietary", gh_service.getRepositoryLicense(webhookConfig));
@@ -1851,8 +2522,11 @@ public class LPVSGitHubServiceTest {
 
                 // `mocked_instance_gh` verify
                 try {
-                    verify(mocked_instance_gh, times(1)).getRepository(
-                            LPVSWebhookUtil.getRepositoryOrganization(webhookConfig) + "/" + LPVSWebhookUtil.getRepositoryName(webhookConfig));
+                    verify(mocked_instance_gh, times(1))
+                            .getRepository(
+                                    LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                            + "/"
+                                            + LPVSWebhookUtil.getRepositoryName(webhookConfig));
                 } catch (IOException e) {
                     log.error("mocked_instance_gh.getRepository error " + e);
                 }
@@ -1879,12 +2553,23 @@ public class LPVSGitHubServiceTest {
         final String GH_LOGIN = "test_login";
         final String GH_AUTH_TOKEN = "test_auth_token";
         final String GH_API_URL = "test_api_url";
-        LPVSPullRequestRepository mocked_pullRequestRepository = mock(LPVSPullRequestRepository.class);
-        LPVSDetectedLicenseRepository mocked_lpvsDetectedLicenseRepository = mock(LPVSDetectedLicenseRepository.class);
+        LPVSPullRequestRepository mocked_pullRequestRepository =
+                mock(LPVSPullRequestRepository.class);
+        LPVSDetectedLicenseRepository mocked_lpvsDetectedLicenseRepository =
+                mock(LPVSDetectedLicenseRepository.class);
         LPVSLicenseRepository mocked_lpvsLicenseRepository = mock(LPVSLicenseRepository.class);
-        LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository = mock(LPVSLicenseConflictRepository.class);
-        final LPVSGitHubService gh_service = new LPVSGitHubService(GH_LOGIN, GH_AUTH_TOKEN, GH_API_URL, mocked_pullRequestRepository,
-                mocked_lpvsDetectedLicenseRepository, mocked_lpvsLicenseRepository, mocked_lpvsLicenseConflictRepository, exitHandler);
+        LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository =
+                mock(LPVSLicenseConflictRepository.class);
+        final LPVSGitHubService gh_service =
+                new LPVSGitHubService(
+                        GH_LOGIN,
+                        GH_AUTH_TOKEN,
+                        GH_API_URL,
+                        mocked_pullRequestRepository,
+                        mocked_lpvsDetectedLicenseRepository,
+                        mocked_lpvsLicenseRepository,
+                        mocked_lpvsLicenseConflictRepository,
+                        exitHandler);
         LPVSQueue webhookConfig;
         GitHub mocked_instance_gh = mock(GitHub.class);
         GHRepository mocked_repo = mock(GHRepository.class);
@@ -1898,7 +2583,11 @@ public class LPVSGitHubServiceTest {
             webhookConfig.setPullRequestUrl(url_pr_1);
 
             try {
-                when(mocked_instance_gh.getRepository(LPVSWebhookUtil.getRepositoryOrganization(webhookConfig) + "/" + LPVSWebhookUtil.getRepositoryName(webhookConfig))).thenReturn(mocked_repo);
+                when(mocked_instance_gh.getRepository(
+                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                        + "/"
+                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig)))
+                        .thenReturn(mocked_repo);
             } catch (IOException e) {
                 log.error("mocked_repo.getRepository error " + e);
             }
@@ -1914,20 +2603,32 @@ public class LPVSGitHubServiceTest {
         public void testGetRepositoryLicense__ApiUrlPresentLisencePresent() {
 
             try (MockedStatic<GitHub> mocked_static_gh = mockStatic(GitHub.class)) {
-                mocked_static_gh.when(() -> GitHub.connectToEnterpriseWithOAuth(GH_API_URL, GH_LOGIN, GH_AUTH_TOKEN)).thenReturn(mocked_instance_gh);
+                mocked_static_gh
+                        .when(
+                                () ->
+                                        GitHub.connectToEnterpriseWithOAuth(
+                                                GH_API_URL, GH_LOGIN, GH_AUTH_TOKEN))
+                        .thenReturn(mocked_instance_gh);
 
                 // main test
                 assertEquals(test_license_key, gh_service.getRepositoryLicense(webhookConfig));
 
                 // verification of calling methods on `Mock`s
                 // `mocked_static_gh` verify
-                mocked_static_gh.verify(() -> GitHub.connectToEnterpriseWithOAuth(GH_API_URL, GH_LOGIN, GH_AUTH_TOKEN), times(1));
+                mocked_static_gh.verify(
+                        () ->
+                                GitHub.connectToEnterpriseWithOAuth(
+                                        GH_API_URL, GH_LOGIN, GH_AUTH_TOKEN),
+                        times(1));
                 mocked_static_gh.verifyNoMoreInteractions();
 
                 // `mocked_instance_gh` verify
                 try {
-                    verify(mocked_instance_gh, times(1)).getRepository(
-                            LPVSWebhookUtil.getRepositoryOrganization(webhookConfig) + "/" + LPVSWebhookUtil.getRepositoryName(webhookConfig));
+                    verify(mocked_instance_gh, times(1))
+                            .getRepository(
+                                    LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                            + "/"
+                                            + LPVSWebhookUtil.getRepositoryName(webhookConfig));
                 } catch (IOException e) {
                     log.error("mocked_instance_gh.getRepository error " + e);
                 }
@@ -1948,19 +2649,29 @@ public class LPVSGitHubServiceTest {
         }
     }
 
-
     @Nested
     class TestGetRepositoryLicense__ApiUrlPresentLisenceAbsent {
 
         final String GH_LOGIN = "test_login";
         final String GH_AUTH_TOKEN = "test_auth_token";
         final String GH_API_URL = "test_api_url";
-        LPVSPullRequestRepository mocked_pullRequestRepository = mock(LPVSPullRequestRepository.class);
-        LPVSDetectedLicenseRepository mocked_lpvsDetectedLicenseRepository = mock(LPVSDetectedLicenseRepository.class);
+        LPVSPullRequestRepository mocked_pullRequestRepository =
+                mock(LPVSPullRequestRepository.class);
+        LPVSDetectedLicenseRepository mocked_lpvsDetectedLicenseRepository =
+                mock(LPVSDetectedLicenseRepository.class);
         LPVSLicenseRepository mocked_lpvsLicenseRepository = mock(LPVSLicenseRepository.class);
-        LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository = mock(LPVSLicenseConflictRepository.class);
-        final LPVSGitHubService gh_service = new LPVSGitHubService(GH_LOGIN, GH_AUTH_TOKEN, GH_API_URL, mocked_pullRequestRepository,
-                mocked_lpvsDetectedLicenseRepository, mocked_lpvsLicenseRepository, mocked_lpvsLicenseConflictRepository, exitHandler);
+        LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository =
+                mock(LPVSLicenseConflictRepository.class);
+        final LPVSGitHubService gh_service =
+                new LPVSGitHubService(
+                        GH_LOGIN,
+                        GH_AUTH_TOKEN,
+                        GH_API_URL,
+                        mocked_pullRequestRepository,
+                        mocked_lpvsDetectedLicenseRepository,
+                        mocked_lpvsLicenseRepository,
+                        mocked_lpvsLicenseConflictRepository,
+                        exitHandler);
         LPVSQueue webhookConfig;
         GitHub mocked_instance_gh = mock(GitHub.class);
         GHRepository mocked_repo = mock(GHRepository.class);
@@ -1974,7 +2685,11 @@ public class LPVSGitHubServiceTest {
             webhookConfig.setPullRequestUrl(url_pr_1);
 
             try {
-                when(mocked_instance_gh.getRepository(LPVSWebhookUtil.getRepositoryOrganization(webhookConfig) + "/" + LPVSWebhookUtil.getRepositoryName(webhookConfig))).thenReturn(mocked_repo);
+                when(mocked_instance_gh.getRepository(
+                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                        + "/"
+                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig)))
+                        .thenReturn(mocked_repo);
             } catch (IOException e) {
                 log.error("mocked_repo.getRepository error " + e);
             }
@@ -1990,20 +2705,32 @@ public class LPVSGitHubServiceTest {
         public void testGetRepositoryLicense__ApiUrlPresentLisenceAbsent() {
 
             try (MockedStatic<GitHub> mocked_static_gh = mockStatic(GitHub.class)) {
-                mocked_static_gh.when(() -> GitHub.connectToEnterpriseWithOAuth(GH_API_URL, GH_LOGIN, GH_AUTH_TOKEN)).thenReturn(mocked_instance_gh);
+                mocked_static_gh
+                        .when(
+                                () ->
+                                        GitHub.connectToEnterpriseWithOAuth(
+                                                GH_API_URL, GH_LOGIN, GH_AUTH_TOKEN))
+                        .thenReturn(mocked_instance_gh);
 
                 // main test
                 assertEquals("Proprietary", gh_service.getRepositoryLicense(webhookConfig));
 
                 // verification of calling methods on `Mock`s
                 // `mocked_static_gh` verify
-                mocked_static_gh.verify(() -> GitHub.connectToEnterpriseWithOAuth(GH_API_URL, GH_LOGIN, GH_AUTH_TOKEN), times(1));
+                mocked_static_gh.verify(
+                        () ->
+                                GitHub.connectToEnterpriseWithOAuth(
+                                        GH_API_URL, GH_LOGIN, GH_AUTH_TOKEN),
+                        times(1));
                 mocked_static_gh.verifyNoMoreInteractions();
 
                 // `mocked_instance_gh` verify
                 try {
-                    verify(mocked_instance_gh, times(1)).getRepository(
-                            LPVSWebhookUtil.getRepositoryOrganization(webhookConfig) + "/" + LPVSWebhookUtil.getRepositoryName(webhookConfig));
+                    verify(mocked_instance_gh, times(1))
+                            .getRepository(
+                                    LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                            + "/"
+                                            + LPVSWebhookUtil.getRepositoryName(webhookConfig));
                 } catch (IOException e) {
                     log.error("mocked_instance_gh.getRepository error " + e);
                 }
@@ -2024,19 +2751,29 @@ public class LPVSGitHubServiceTest {
         }
     }
 
-
     @Nested
     class TestGetRepositoryLicense__ApiUrlAbsentCantAuthorize {
 
         final String GH_LOGIN = "test_login";
         final String GH_AUTH_TOKEN = "test_auth_token";
         final String GH_API_URL = "";
-        LPVSPullRequestRepository mocked_pullRequestRepository = mock(LPVSPullRequestRepository.class);
-        LPVSDetectedLicenseRepository mocked_lpvsDetectedLicenseRepository = mock(LPVSDetectedLicenseRepository.class);
+        LPVSPullRequestRepository mocked_pullRequestRepository =
+                mock(LPVSPullRequestRepository.class);
+        LPVSDetectedLicenseRepository mocked_lpvsDetectedLicenseRepository =
+                mock(LPVSDetectedLicenseRepository.class);
         LPVSLicenseRepository mocked_lpvsLicenseRepository = mock(LPVSLicenseRepository.class);
-        LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository = mock(LPVSLicenseConflictRepository.class);
-        final LPVSGitHubService gh_service = new LPVSGitHubService(GH_LOGIN, GH_AUTH_TOKEN, GH_API_URL, mocked_pullRequestRepository,
-                mocked_lpvsDetectedLicenseRepository, mocked_lpvsLicenseRepository, mocked_lpvsLicenseConflictRepository, exitHandler);
+        LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository =
+                mock(LPVSLicenseConflictRepository.class);
+        final LPVSGitHubService gh_service =
+                new LPVSGitHubService(
+                        GH_LOGIN,
+                        GH_AUTH_TOKEN,
+                        GH_API_URL,
+                        mocked_pullRequestRepository,
+                        mocked_lpvsDetectedLicenseRepository,
+                        mocked_lpvsLicenseRepository,
+                        mocked_lpvsLicenseConflictRepository,
+                        exitHandler);
         final String url_pr_1 = "https://github.com/Samsung/LPVS/pull/18";
         LPVSQueue webhookConfig;
 
@@ -2050,7 +2787,9 @@ public class LPVSGitHubServiceTest {
         public void testGetRepositoryLicense__ApiUrlAbsentCantAuthorize() {
 
             try (MockedStatic<GitHub> mocked_static_gh = mockStatic(GitHub.class)) {
-                mocked_static_gh.when(() -> GitHub.connect(GH_LOGIN, GH_AUTH_TOKEN)).thenThrow(new IOException("test cant authorize"));
+                mocked_static_gh
+                        .when(() -> GitHub.connect(GH_LOGIN, GH_AUTH_TOKEN))
+                        .thenThrow(new IOException("test cant authorize"));
 
                 // main test
                 assertEquals("Proprietary", gh_service.getRepositoryLicense(webhookConfig));
@@ -2063,19 +2802,29 @@ public class LPVSGitHubServiceTest {
         }
     }
 
-
     @Nested
     class TestGetRepositoryLicense__ApiUrlPresentCantAuthorize {
 
         final String GH_LOGIN = "test_login";
         final String GH_AUTH_TOKEN = "test_auth_token";
         final String GH_API_URL = "test_api_url";
-        LPVSPullRequestRepository mocked_pullRequestRepository = mock(LPVSPullRequestRepository.class);
-        LPVSDetectedLicenseRepository mocked_lpvsDetectedLicenseRepository = mock(LPVSDetectedLicenseRepository.class);
+        LPVSPullRequestRepository mocked_pullRequestRepository =
+                mock(LPVSPullRequestRepository.class);
+        LPVSDetectedLicenseRepository mocked_lpvsDetectedLicenseRepository =
+                mock(LPVSDetectedLicenseRepository.class);
         LPVSLicenseRepository mocked_lpvsLicenseRepository = mock(LPVSLicenseRepository.class);
-        LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository = mock(LPVSLicenseConflictRepository.class);
-        final LPVSGitHubService gh_service = new LPVSGitHubService(GH_LOGIN, GH_AUTH_TOKEN, GH_API_URL, mocked_pullRequestRepository,
-                mocked_lpvsDetectedLicenseRepository, mocked_lpvsLicenseRepository, mocked_lpvsLicenseConflictRepository, exitHandler);
+        LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository =
+                mock(LPVSLicenseConflictRepository.class);
+        final LPVSGitHubService gh_service =
+                new LPVSGitHubService(
+                        GH_LOGIN,
+                        GH_AUTH_TOKEN,
+                        GH_API_URL,
+                        mocked_pullRequestRepository,
+                        mocked_lpvsDetectedLicenseRepository,
+                        mocked_lpvsLicenseRepository,
+                        mocked_lpvsLicenseConflictRepository,
+                        exitHandler);
         final String url_pr_1 = "https://github.com/Samsung/LPVS/pull/18";
         LPVSQueue webhookConfig;
 
@@ -2089,16 +2838,24 @@ public class LPVSGitHubServiceTest {
         public void testGetRepositoryLicense__ApiUrlPresentCantAuthorize() {
 
             try (MockedStatic<GitHub> mocked_static_gh = mockStatic(GitHub.class)) {
-                mocked_static_gh.when(() -> GitHub.connectToEnterpriseWithOAuth(GH_API_URL, GH_LOGIN, GH_AUTH_TOKEN)).thenThrow(new IOException("test cant authorize"));
+                mocked_static_gh
+                        .when(
+                                () ->
+                                        GitHub.connectToEnterpriseWithOAuth(
+                                                GH_API_URL, GH_LOGIN, GH_AUTH_TOKEN))
+                        .thenThrow(new IOException("test cant authorize"));
 
                 // main test
                 assertEquals("Proprietary", gh_service.getRepositoryLicense(webhookConfig));
 
                 // verification of calling methods on `Mock`s
                 // `mocked_static_gh` verify
-                mocked_static_gh.verify(() -> GitHub.connectToEnterpriseWithOAuth(GH_API_URL, GH_LOGIN, GH_AUTH_TOKEN), times(1));
+                mocked_static_gh.verify(
+                        () ->
+                                GitHub.connectToEnterpriseWithOAuth(
+                                        GH_API_URL, GH_LOGIN, GH_AUTH_TOKEN),
+                        times(1));
                 mocked_static_gh.verifyNoMoreInteractions();
-
             }
         }
     }
@@ -2116,7 +2873,8 @@ public class LPVSGitHubServiceTest {
         final String file_path_1 = "src/main/java/com/lpvs/service/LPVSGitHubService.java";
         final String matched_lines_1 = "1-6";
 
-        final String expected_result = "<a target=\"_blank\" href=\"https://github.com/Samsung/LPVS/blob/895337e89ae103ff2d18c9e0d93709f743226afa/src/main/java/com/lpvs/service/LPVSGitHubService.java#L1L6\">1-6</a>";
+        final String expected_result =
+                "<a target=\"_blank\" href=\"https://github.com/Samsung/LPVS/blob/895337e89ae103ff2d18c9e0d93709f743226afa/src/main/java/com/lpvs/service/LPVSGitHubService.java#L1L6\">1-6</a>";
 
         @BeforeEach
         void setUp() {
@@ -2125,13 +2883,30 @@ public class LPVSGitHubServiceTest {
             webhookConfig.setPullRequestUrl(pr_url);
             webhookConfig.setRepositoryUrl("https://github.com/Samsung/LPVS");
 
-            lpvs_file_1 = new LPVSFile(1L, file_path_1, "snippet", null, matched_lines_1, null, null, null, null, null, null, null, null);
+            lpvs_file_1 =
+                    new LPVSFile(
+                            1L,
+                            file_path_1,
+                            "snippet",
+                            null,
+                            matched_lines_1,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null);
         }
 
         @Test
         public void testGetMatchedLinesAsLink_NotAll() {
             // main test
-            assertEquals(expected_result, LPVSCommentUtil.getMatchedLinesAsLink(webhookConfig, lpvs_file_1, LPVSVcs.GITHUB));
+            assertEquals(
+                    expected_result,
+                    LPVSCommentUtil.getMatchedLinesAsLink(
+                            webhookConfig, lpvs_file_1, LPVSVcs.GITHUB));
         }
     }
 
@@ -2147,7 +2922,8 @@ public class LPVSGitHubServiceTest {
         final String file_path_1 = "LICENSE";
         final String matched_lines_1 = "all";
 
-        final String expected_result = "<a target=\"_blank\" href=\"https://github.com/Samsung/LPVS/blob/895337e89ae103ff2d18c9e0d93709f743226afa/LICENSE\">all</a>";
+        final String expected_result =
+                "<a target=\"_blank\" href=\"https://github.com/Samsung/LPVS/blob/895337e89ae103ff2d18c9e0d93709f743226afa/LICENSE\">all</a>";
 
         @BeforeEach
         void setUp() {
@@ -2156,28 +2932,56 @@ public class LPVSGitHubServiceTest {
             webhookConfig.setPullRequestUrl(pr_url);
             webhookConfig.setRepositoryUrl("https://github.com/Samsung/LPVS");
 
-            lpvs_file_1 = new LPVSFile(1L, file_path_1, "snippet", null, matched_lines_1, null, null, null, null, null, null, null, null);
+            lpvs_file_1 =
+                    new LPVSFile(
+                            1L,
+                            file_path_1,
+                            "snippet",
+                            null,
+                            matched_lines_1,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null);
         }
 
         @Test
         public void testGetMatchedLinesAsLink_All() {
             // main test
-            assertEquals(expected_result, LPVSCommentUtil.getMatchedLinesAsLink(webhookConfig, lpvs_file_1, LPVSVcs.GITHUB));
+            assertEquals(
+                    expected_result,
+                    LPVSCommentUtil.getMatchedLinesAsLink(
+                            webhookConfig, lpvs_file_1, LPVSVcs.GITHUB));
         }
     }
-    
+
     @Nested
     class TestCommentResults {
 
         final String GH_LOGIN = "test_login";
         final String GH_AUTH_TOKEN = "test_auth_token";
         final String GH_API_URL = "test_api_url";
-        LPVSPullRequestRepository mocked_pullRequestRepository = mock(LPVSPullRequestRepository.class);
-        LPVSDetectedLicenseRepository mocked_lpvsDetectedLicenseRepository = mock(LPVSDetectedLicenseRepository.class);
+        LPVSPullRequestRepository mocked_pullRequestRepository =
+                mock(LPVSPullRequestRepository.class);
+        LPVSDetectedLicenseRepository mocked_lpvsDetectedLicenseRepository =
+                mock(LPVSDetectedLicenseRepository.class);
         LPVSLicenseRepository mocked_lpvsLicenseRepository = mock(LPVSLicenseRepository.class);
-        LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository = mock(LPVSLicenseConflictRepository.class);
-        final LPVSGitHubService gh_service = new LPVSGitHubService(GH_LOGIN, GH_AUTH_TOKEN, GH_API_URL, mocked_pullRequestRepository,
-                mocked_lpvsDetectedLicenseRepository, mocked_lpvsLicenseRepository, mocked_lpvsLicenseConflictRepository, exitHandler);
+        LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository =
+                mock(LPVSLicenseConflictRepository.class);
+        final LPVSGitHubService gh_service =
+                new LPVSGitHubService(
+                        GH_LOGIN,
+                        GH_AUTH_TOKEN,
+                        GH_API_URL,
+                        mocked_pullRequestRepository,
+                        mocked_lpvsDetectedLicenseRepository,
+                        mocked_lpvsLicenseRepository,
+                        mocked_lpvsLicenseConflictRepository,
+                        exitHandler);
         final String url_pr_1 = "https://github.com/Samsung/LPVS/pull/18";
         LPVSQueue webhookConfig;
         LPVSPullRequest lpvsPullRequest;
@@ -2197,17 +3001,26 @@ public class LPVSGitHubServiceTest {
             ReflectionTestUtils.setField(gh_service, "gitHub", gitHub);
             System.out.println(LPVSWebhookUtil.getRepositoryOrganization(webhookConfig));
             System.out.println(LPVSWebhookUtil.getRepositoryName(webhookConfig));
-            Mockito.when(gitHub.getRepository(
-                    LPVSWebhookUtil.getRepositoryOrganization(webhookConfig) + "/" + LPVSWebhookUtil.getRepositoryName(webhookConfig)))
+            Mockito.when(
+                            gitHub.getRepository(
+                                    LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                            + "/"
+                                            + LPVSWebhookUtil.getRepositoryName(webhookConfig)))
                     .thenReturn(repository);
             LPVSFile file = new LPVSFile();
-            LPVSLicense license = new LPVSLicense(){{
-                setChecklistUrl("");
-                setAccess("unrviewed");
-            }};
-            file.setLicenses(new HashSet<LPVSLicense>(){{
-                add(license);
-            }});
+            LPVSLicense license =
+                    new LPVSLicense() {
+                        {
+                            setChecklistUrl("");
+                            setAccess("unrviewed");
+                        }
+                    };
+            file.setLicenses(
+                    new HashSet<LPVSLicense>() {
+                        {
+                            add(license);
+                        }
+                    });
             file.setFilePath("");
             file.setComponentFilePath("");
             file.setComponentName("");
@@ -2218,18 +3031,23 @@ public class LPVSGitHubServiceTest {
             file.setSnippetMatch("");
             file.setMatchedLines("");
             file.setSnippetType("");
-            List<LPVSFile> fileList = new ArrayList<LPVSFile>(){{
-                add(file);
-            }};
+            List<LPVSFile> fileList =
+                    new ArrayList<LPVSFile>() {
+                        {
+                            add(file);
+                        }
+                    };
             List<LPVSLicenseService.Conflict<String, String>> conflictList = new ArrayList<>();
             conflictList.add(new LPVSLicenseService.Conflict<>("1", "2"));
             GHPullRequest pullRequest = new GHPullRequest();
             ReflectionTestUtils.setField(pullRequest, "url", "http://url.com");
-            List<GHPullRequest> pullRequestList = new ArrayList<GHPullRequest>(){{
-                add(pullRequest);
-            }};
-            Mockito.when(repository.getPullRequests(GHIssueState.OPEN))
-                    .thenReturn(pullRequestList);
+            List<GHPullRequest> pullRequestList =
+                    new ArrayList<GHPullRequest>() {
+                        {
+                            add(pullRequest);
+                        }
+                    };
+            Mockito.when(repository.getPullRequests(GHIssueState.OPEN)).thenReturn(pullRequestList);
             gh_service.commentResults(webhookConfig, fileList, conflictList, lpvsPullRequest);
             license.setAccess("");
             gh_service.commentResults(webhookConfig, fileList, conflictList, lpvsPullRequest);

@@ -4,7 +4,6 @@
  * Use of this source code is governed by a MIT license that can be
  * found in the LICENSE file.
  */
-
 package com.lpvs.controller;
 
 import com.lpvs.entity.LPVSQueue;
@@ -34,7 +33,8 @@ import javax.annotation.PostConstruct;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
-@RestController @Slf4j
+@RestController
+@Slf4j
 public class GitHubWebhooksController {
 
     private String GITHUB_SECRET;
@@ -47,19 +47,21 @@ public class GitHubWebhooksController {
      */
     @PostConstruct
     public void setProps() {
-        this.GITHUB_SECRET = Optional.ofNullable(this.GITHUB_SECRET).filter(s -> !s.isEmpty())
-                .orElse(Optional.ofNullable(System.getenv("LPVS_GITHUB_SECRET")).orElse(""));
+        this.GITHUB_SECRET =
+                Optional.ofNullable(this.GITHUB_SECRET)
+                        .filter(s -> !s.isEmpty())
+                        .orElse(
+                                Optional.ofNullable(System.getenv("LPVS_GITHUB_SECRET"))
+                                        .orElse(""));
         if (this.GITHUB_SECRET.isEmpty()) {
             log.error("LPVS_GITHUB_SECRET(github.secret) is not set.");
             exitHandler.exit(-1);
         }
     }
 
-    @Autowired
-    private LPVSQueueService queueService;
+    @Autowired private LPVSQueueService queueService;
 
-    @Autowired
-    private LPVSQueueRepository queueRepository;
+    @Autowired private LPVSQueueRepository queueRepository;
 
     private LPVSGitHubService gitHubService;
 
@@ -70,7 +72,12 @@ public class GitHubWebhooksController {
     private static final String ERROR = "Error";
     private static final String ALGORITHM = "HmacSHA256";
 
-    public GitHubWebhooksController(LPVSQueueService queueService, LPVSGitHubService gitHubService, LPVSQueueRepository queueRepository, @Value("${github.secret:}") String GITHUB_SECRET, LPVSExitHandler exitHandler) {
+    public GitHubWebhooksController(
+            LPVSQueueService queueService,
+            LPVSGitHubService gitHubService,
+            LPVSQueueRepository queueRepository,
+            @Value("${github.secret:}") String GITHUB_SECRET,
+            LPVSExitHandler exitHandler) {
         this.queueService = queueService;
         this.gitHubService = gitHubService;
         this.queueRepository = queueRepository;
@@ -87,7 +94,9 @@ public class GitHubWebhooksController {
      * @throws Exception if an error occurs during processing.
      */
     @RequestMapping(value = "/webhooks", method = RequestMethod.POST)
-    public ResponseEntity<LPVSResponseWrapper> gitHubWebhooks(@RequestHeader(SIGNATURE) String signature, @RequestBody String payload) throws Exception {
+    public ResponseEntity<LPVSResponseWrapper> gitHubWebhooks(
+            @RequestHeader(SIGNATURE) String signature, @RequestBody String payload)
+            throws Exception {
         log.debug("New GitHub webhook request received");
 
         // if signature is empty return 401
@@ -127,7 +136,7 @@ public class GitHubWebhooksController {
      * @throws Exception if an error occurs during signature verification.
      */
     public boolean wrongSecret(String signature, String payload) throws Exception {
-        String lpvsSecret = signature.split("=",2)[1];
+        String lpvsSecret = signature.split("=", 2)[1];
 
         SecretKeySpec key = new SecretKeySpec(GITHUB_SECRET.getBytes("utf-8"), ALGORITHM);
         Mac mac = Mac.getInstance(ALGORITHM);

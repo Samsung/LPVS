@@ -4,11 +4,9 @@
  * Use of this source code is governed by a MIT license that can be
  * found in the LICENSE file.
  */
-
 package com.lpvs.entity.enums;
 
 import com.lpvs.entity.auth.MemberProfile;
-import com.lpvs.entity.enums.OAuthAttributes;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -20,24 +18,33 @@ public class OAuthAttributesTest {
 
     @Test
     public void testExtractOAuthAttributes() {
-        Map<String, Object> attributesSub = new HashMap<String, Object>() {{
-            put("name", "testName");
-            put("nickname", "testName");
-            put("email", "testEmail");
-        }};
+        Map<String, Object> attributesSub =
+                new HashMap<String, Object>() {
+                    {
+                        put("name", "testName");
+                        put("nickname", "testName");
+                        put("email", "testEmail");
+                    }
+                };
 
-        Map<String, Object> attributesKakao = new HashMap<String, Object>() {{
-            put("email", "testEmail");
-            put("profile", attributesSub);
-        }};
+        Map<String, Object> attributesKakao =
+                new HashMap<String, Object>() {
+                    {
+                        put("email", "testEmail");
+                        put("profile", attributesSub);
+                    }
+                };
 
-        Map<String, Object> attributes = new HashMap<String, Object>() {{
-            put("name", "testName");
-            put("email", "testEmail");
-            put("login", "testEmail");
-            put("response", attributesSub);
-            put("kakao_account", attributesKakao);
-        }};
+        Map<String, Object> attributes =
+                new HashMap<String, Object>() {
+                    {
+                        put("name", "testName");
+                        put("email", "testEmail");
+                        put("login", "testEmail");
+                        put("response", attributesSub);
+                        put("kakao_account", attributesKakao);
+                    }
+                };
 
         MemberProfile profileGoogle = OAuthAttributes.extract("google", attributes);
         assertEquals("testName", profileGoogle.getName());
@@ -58,12 +65,18 @@ public class OAuthAttributesTest {
 
     @Test
     public void testExtractOAuthAttributesUnknownProvider() {
-        Map<String, Object> attributes = new HashMap<String, Object>() {{
-            put("name", "testName");
-            put("email", "testEmail");
-        }};;
-        assertThrows(IllegalArgumentException.class, () -> {
-            OAuthAttributes.extract("unknown", attributes);
-        });
+        Map<String, Object> attributes =
+                new HashMap<String, Object>() {
+                    {
+                        put("name", "testName");
+                        put("email", "testEmail");
+                    }
+                };
+        ;
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> {
+                    OAuthAttributes.extract("unknown", attributes);
+                });
     }
 }

@@ -4,7 +4,6 @@
  * Use of this source code is governed by a MIT license that can be
  * found in the LICENSE file.
  */
-
 package com.lpvs.repository;
 
 import com.lpvs.entity.LPVSPullRequest;
@@ -42,14 +41,19 @@ public interface LPVSPullRequestRepository extends JpaRepository<LPVSPullRequest
     @Query(value = "select count(*) from LPVSPullRequest pr where pr.pullRequestBase = :name")
     Long CountByPullRequestBase(@Param("name") String name);
 
-    @Query(value = "select pr from LPVSPullRequest pr where pr.sender = :name or pr.pullRequestHead = :name")
-    Page<LPVSPullRequest> findBySenderOrPullRequestHead(@Param("name") String name, Pageable pageable);
+    @Query(
+            value =
+                    "select pr from LPVSPullRequest pr where pr.sender = :name or pr.pullRequestHead = :name")
+    Page<LPVSPullRequest> findBySenderOrPullRequestHead(
+            @Param("name") String name, Pageable pageable);
 
-    @Query(value = "select pr from LPVSPullRequest pr where pr.sender = :name or pr.pullRequestHead = :name")
+    @Query(
+            value =
+                    "select pr from LPVSPullRequest pr where pr.sender = :name or pr.pullRequestHead = :name")
     List<LPVSPullRequest> findBySenderOrPullRequestHead(@Param("name") String name);
 
-    @Query(value = "select count(*) from LPVSPullRequest pr where pr.sender = :name or pr.pullRequestHead = :name")
+    @Query(
+            value =
+                    "select count(*) from LPVSPullRequest pr where pr.sender = :name or pr.pullRequestHead = :name")
     Long CountBySenderOrPullRequestHead(@Param("name") String name);
-
-
 }

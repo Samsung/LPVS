@@ -4,7 +4,6 @@
  * Use of this source code is governed by a MIT license that can be
  * found in the LICENSE file.
  */
-
 package com.lpvs.service.scanner.scanoss;
 
 import com.lpvs.entity.LPVSLicense;
@@ -35,12 +34,18 @@ public class LPVSScanossDetectServiceTest {
     public void setUp() throws URISyntaxException, IOException {
         MockitoAnnotations.openMocks(this);
         String resourcePath = "A_B.json";
-        String destinationPath = System.getProperty("user.home") + File.separator + "Results" + File.separator + "C" ;
+        String destinationPath =
+                System.getProperty("user.home") + File.separator + "Results" + File.separator + "C";
         if (!(new File(destinationPath).exists())) {
             new File(destinationPath).mkdirs();
         }
-        Files.copy(Paths.get(Objects.requireNonNull(getClass().getClassLoader().getResource(resourcePath)).toURI()),
-                Paths.get(destinationPath + File.separator + resourcePath), StandardCopyOption.REPLACE_EXISTING);
+        Files.copy(
+                Paths.get(
+                        Objects.requireNonNull(
+                                        getClass().getClassLoader().getResource(resourcePath))
+                                .toURI()),
+                Paths.get(destinationPath + File.separator + resourcePath),
+                StandardCopyOption.REPLACE_EXISTING);
     }
 
     @AfterEach
@@ -55,19 +60,26 @@ public class LPVSScanossDetectServiceTest {
         LPVSLicenseService licenseService = Mockito.mock(LPVSLicenseService.class);
         LPVSGitHubService gitHubService = Mockito.mock(LPVSGitHubService.class);
         LPVSLicenseRepository lpvsLicenseRepository = Mockito.mock(LPVSLicenseRepository.class);
-        LPVSScanossDetectService scanossDetectService = new LPVSScanossDetectService(false, licenseService, gitHubService, lpvsLicenseRepository);
+        LPVSScanossDetectService scanossDetectService =
+                new LPVSScanossDetectService(
+                        false, licenseService, gitHubService, lpvsLicenseRepository);
         String licenseConflictsSource = "scanner";
         LPVSQueue webhookConfig = Mockito.mock(LPVSQueue.class);
         Mockito.when(LPVSWebhookUtil.getRepositoryName(webhookConfig)).thenReturn("C");
         Mockito.when(webhookConfig.getHeadCommitSHA()).thenReturn("A_B");
         Mockito.when(lpvsLicenseRepository.save(Mockito.any(LPVSLicense.class)))
                 .thenAnswer(i -> i.getArguments()[0]);
-        ReflectionTestUtils.setField(licenseService, "licenseConflictsSource", licenseConflictsSource);
-        Mockito.when(licenseService.findLicenseBySPDX("MIT")).thenReturn(new LPVSLicense(){{
-            setLicenseName("MIT");
-            setLicenseId(1L);
-            setSpdxId("MIT");
-        }});
+        ReflectionTestUtils.setField(
+                licenseService, "licenseConflictsSource", licenseConflictsSource);
+        Mockito.when(licenseService.findLicenseBySPDX("MIT"))
+                .thenReturn(
+                        new LPVSLicense() {
+                            {
+                                setLicenseName("MIT");
+                                setLicenseId(1L);
+                                setSpdxId("MIT");
+                            }
+                        });
         scanossDetectService.checkLicenses(webhookConfig);
         Assertions.assertNotNull(scanossDetectService.checkLicenses(webhookConfig));
     }
@@ -77,18 +89,25 @@ public class LPVSScanossDetectServiceTest {
         LPVSLicenseService licenseService = Mockito.mock(LPVSLicenseService.class);
         LPVSGitHubService gitHubService = Mockito.mock(LPVSGitHubService.class);
         LPVSLicenseRepository lpvsLicenseRepository = Mockito.mock(LPVSLicenseRepository.class);
-        LPVSScanossDetectService scanossDetectService = new LPVSScanossDetectService(false, licenseService, gitHubService, lpvsLicenseRepository);
+        LPVSScanossDetectService scanossDetectService =
+                new LPVSScanossDetectService(
+                        false, licenseService, gitHubService, lpvsLicenseRepository);
         String licenseConflictsSource = "scanner";
         LPVSQueue webhookConfig = Mockito.mock(LPVSQueue.class);
         Mockito.when(LPVSWebhookUtil.getRepositoryName(webhookConfig)).thenReturn("A");
         Mockito.when(webhookConfig.getHeadCommitSHA()).thenReturn(null);
         Mockito.when(webhookConfig.getPullRequestUrl()).thenReturn("A/B");
-        Mockito.when(licenseService.findLicenseBySPDX("MIT")).thenReturn(new LPVSLicense(){{
-            setLicenseName("MIT");
-            setLicenseId(1L);
-            setSpdxId("MIT");
-        }});
-        ReflectionTestUtils.setField(licenseService, "licenseConflictsSource", licenseConflictsSource);
+        Mockito.when(licenseService.findLicenseBySPDX("MIT"))
+                .thenReturn(
+                        new LPVSLicense() {
+                            {
+                                setLicenseName("MIT");
+                                setLicenseId(1L);
+                                setSpdxId("MIT");
+                            }
+                        });
+        ReflectionTestUtils.setField(
+                licenseService, "licenseConflictsSource", licenseConflictsSource);
         Assertions.assertNotNull(scanossDetectService.checkLicenses(webhookConfig));
     }
 }

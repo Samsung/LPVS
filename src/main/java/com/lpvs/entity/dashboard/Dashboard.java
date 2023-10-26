@@ -4,17 +4,16 @@
  * Use of this source code is governed by a MIT license that can be
  * found in the LICENSE file.
  */
-
 package com.lpvs.entity.dashboard;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.util.List;
 import java.util.Map;
 
-@Getter @AllArgsConstructor
+@Getter
+@AllArgsConstructor
 public class Dashboard {
     private String name;
     private Map<String, Integer> licenseCountMap;

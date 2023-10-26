@@ -22,7 +22,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.mock;
 
-
 @Slf4j
 public class GitHubWebhooksControllerTest {
 
@@ -35,17 +34,24 @@ public class GitHubWebhooksControllerTest {
     LPVSQueueService mocked_instance_queueServ = mock(LPVSQueueService.class);
     LPVSGitHubService mocked_instance_ghServ = mock(LPVSGitHubService.class);
     LPVSQueueRepository mocked_queueRepo = mock(LPVSQueueRepository.class);
-    GitHubWebhooksController gitHubWebhooksController = new GitHubWebhooksController(mocked_instance_queueServ, mocked_instance_ghServ, mocked_queueRepo, "", exitHandler);
+    GitHubWebhooksController gitHubWebhooksController =
+            new GitHubWebhooksController(
+                    mocked_instance_queueServ,
+                    mocked_instance_ghServ,
+                    mocked_queueRepo,
+                    "",
+                    exitHandler);
 
     @Test
     public void noSignatureTest() {
         ResponseEntity<LPVSResponseWrapper> actual;
         try {
             actual = gitHubWebhooksController.gitHubWebhooks(null, null);
-        } catch( Exception e) {
+        } catch (Exception e) {
             actual = null;
         }
-        ResponseEntity<LPVSResponseWrapper> expected = new ResponseEntity<>(new LPVSResponseWrapper(ERROR), HttpStatus.FORBIDDEN);
+        ResponseEntity<LPVSResponseWrapper> expected =
+                new ResponseEntity<>(new LPVSResponseWrapper(ERROR), HttpStatus.FORBIDDEN);
         assertEquals(expected.toString().substring(0, 56), actual.toString().substring(0, 56));
     }
 
@@ -54,10 +60,11 @@ public class GitHubWebhooksControllerTest {
         ResponseEntity<LPVSResponseWrapper> actual;
         try {
             actual = gitHubWebhooksController.gitHubWebhooks(SIGNATURE, null);
-        } catch( Exception e) {
+        } catch (Exception e) {
             actual = null;
         }
-        ResponseEntity<LPVSResponseWrapper> expected = new ResponseEntity<>(new LPVSResponseWrapper(SUCCESS), HttpStatus.OK);
+        ResponseEntity<LPVSResponseWrapper> expected =
+                new ResponseEntity<>(new LPVSResponseWrapper(SUCCESS), HttpStatus.OK);
         assertEquals(expected.toString().substring(0, 42), actual.toString().substring(0, 42));
     }
 
@@ -66,48 +73,49 @@ public class GitHubWebhooksControllerTest {
         ResponseEntity<LPVSResponseWrapper> actual;
         LPVSQueueRepository queueRepository;
 
-        String  json_to_test =
-            "{" +
-                "\"action\": \"opened\", " +
-                "\"repository\": {" +
-                    "\"name\": \"LPVS\", " +
-                    "\"full_name\": \"Samsung/LPVS\", " +
-                    "\"html_url\": \"https://github.com/Samsung/LPVS\"" +
-                "}, " +
-                "\"pull_request\": {" +
-                    "\"html_url\": \"https://github.com/Samsung/LPVS/pull/18\", " +
-                    "\"base\": {" +
-                        "\"repo\": {" +
-                            "\"owner\": {" +
-                                "\"login\": \"Samsung\"" +
-                            "}" +
-                        "}" +
-                    "}," +
-                    "\"head\": {" +
-                        "\"repo\": {" +
-                            "\"owner\": {" +
-                                "\"login\": \"o-kopysov\"" +
-                            "}," +
-                            "\"fork\": true, " +
-                            "\"html_url\": \"https://github.com/o-kopysov/LPVS/tree/utests\"" +
-                        "}, " +
-                        "\"sha\": \"edde69ecb8e8a88dde09fa9789e2c9cab7cf7cf9\", " +
-                        "\"ref\": \"o-kopysov:utests\"" +
-                    "}, " +
-                    "\"url\": \"https://api.github.com/repos/Samsung/LPVS/pulls/18\"" +
-                "}," +
-                "\"sender\": {" +
-                    "\"login\": \"o-kopysov\"" +
-                "}" +
-            "}";
+        String json_to_test =
+                "{"
+                        + "\"action\": \"opened\", "
+                        + "\"repository\": {"
+                        + "\"name\": \"LPVS\", "
+                        + "\"full_name\": \"Samsung/LPVS\", "
+                        + "\"html_url\": \"https://github.com/Samsung/LPVS\""
+                        + "}, "
+                        + "\"pull_request\": {"
+                        + "\"html_url\": \"https://github.com/Samsung/LPVS/pull/18\", "
+                        + "\"base\": {"
+                        + "\"repo\": {"
+                        + "\"owner\": {"
+                        + "\"login\": \"Samsung\""
+                        + "}"
+                        + "}"
+                        + "},"
+                        + "\"head\": {"
+                        + "\"repo\": {"
+                        + "\"owner\": {"
+                        + "\"login\": \"o-kopysov\""
+                        + "},"
+                        + "\"fork\": true, "
+                        + "\"html_url\": \"https://github.com/o-kopysov/LPVS/tree/utests\""
+                        + "}, "
+                        + "\"sha\": \"edde69ecb8e8a88dde09fa9789e2c9cab7cf7cf9\", "
+                        + "\"ref\": \"o-kopysov:utests\""
+                        + "}, "
+                        + "\"url\": \"https://api.github.com/repos/Samsung/LPVS/pulls/18\""
+                        + "},"
+                        + "\"sender\": {"
+                        + "\"login\": \"o-kopysov\""
+                        + "}"
+                        + "}";
 
         try {
             actual = gitHubWebhooksController.gitHubWebhooks(SIGNATURE, json_to_test);
-        } catch( Exception e) {
+        } catch (Exception e) {
             log.error(e.getMessage());
             actual = null;
         }
-        ResponseEntity<LPVSResponseWrapper> expected = new ResponseEntity<>(new LPVSResponseWrapper(SUCCESS), HttpStatus.OK);
+        ResponseEntity<LPVSResponseWrapper> expected =
+                new ResponseEntity<>(new LPVSResponseWrapper(SUCCESS), HttpStatus.OK);
         assertEquals(expected.toString().substring(0, 42), actual.toString().substring(0, 42));
     }
 
@@ -115,29 +123,30 @@ public class GitHubWebhooksControllerTest {
     @SetEnvironmentVariable(key = "LPVS_GITHUB_SECRET", value = "LPVS")
     public void wrongSecretTest() {
 
-        String signature = "sha256=c0ca451d2e2a7ea7d50bb29383996a35f43c7a9df0810bd6ffc45cefc8d1ce42";
+        String signature =
+                "sha256=c0ca451d2e2a7ea7d50bb29383996a35f43c7a9df0810bd6ffc45cefc8d1ce42";
 
-        String  json_to_test =
-                "{" +
-                        "\"action\": \"opened\", " +
-                        "\"repository\": {" +
-                        "\"name\": \"LPVS\", " +
-                        "\"full_name\": \"Samsung/LPVS\", " +
-                        "\"html_url\": \"https://github.com/Samsung/LPVS\"" +
-                        "}, " +
-                        "\"pull_request\": {" +
-                        "\"html_url\": \"https://github.com/Samsung/LPVS/pull/18\", " +
-                        "\"head\": {" +
-                        "\"repo\": {" +
-                        "\"fork\": true, " +
-                        "\"html_url\": \"https://github.com/o-kopysov/LPVS/tree/utests\"" +
-                        "}, " +
-                        "\"sha\": \"edde69ecb8e8a88dde09fa9789e2c9cab7cf7cf9\", " +
-                        "\"ref\": \"o-kopysov:utests\"" +
-                        "}, " +
-                        "\"url\": \"https://api.github.com/repos/Samsung/LPVS/pulls/18\"" +
-                        "}" +
-                        "}";
+        String json_to_test =
+                "{"
+                        + "\"action\": \"opened\", "
+                        + "\"repository\": {"
+                        + "\"name\": \"LPVS\", "
+                        + "\"full_name\": \"Samsung/LPVS\", "
+                        + "\"html_url\": \"https://github.com/Samsung/LPVS\""
+                        + "}, "
+                        + "\"pull_request\": {"
+                        + "\"html_url\": \"https://github.com/Samsung/LPVS/pull/18\", "
+                        + "\"head\": {"
+                        + "\"repo\": {"
+                        + "\"fork\": true, "
+                        + "\"html_url\": \"https://github.com/o-kopysov/LPVS/tree/utests\""
+                        + "}, "
+                        + "\"sha\": \"edde69ecb8e8a88dde09fa9789e2c9cab7cf7cf9\", "
+                        + "\"ref\": \"o-kopysov:utests\""
+                        + "}, "
+                        + "\"url\": \"https://api.github.com/repos/Samsung/LPVS/pulls/18\""
+                        + "}"
+                        + "}";
         try {
             gitHubWebhooksController.setProps();
             boolean secret = gitHubWebhooksController.wrongSecret(signature, json_to_test);

@@ -4,7 +4,6 @@
  * Use of this source code is governed by a MIT license that can be
  * found in the LICENSE file.
  */
-
 package com.lpvs.entity;
 
 import lombok.AllArgsConstructor;
@@ -19,7 +18,10 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "pull_requests", schema = "lpvs")
-@Getter @Setter @AllArgsConstructor @NoArgsConstructor
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class LPVSPullRequest implements Serializable {
 
     @Id
@@ -59,10 +61,10 @@ public class LPVSPullRequest implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         LPVSPullRequest that = (LPVSPullRequest) o;
-        return date.equals(that.date) &&
-                repositoryName.equals(that.repositoryName) &&
-                pullRequestUrl.equals(that.pullRequestUrl) &&
-                pullRequestFilesUrl.equals(that.pullRequestFilesUrl);
+        return date.equals(that.date)
+                && repositoryName.equals(that.repositoryName)
+                && pullRequestUrl.equals(that.pullRequestUrl)
+                && pullRequestFilesUrl.equals(that.pullRequestFilesUrl);
     }
 
     @Override

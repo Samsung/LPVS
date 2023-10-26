@@ -4,7 +4,6 @@
  * Use of this source code is governed by a MIT license that can be
  * found in the LICENSE file.
  */
-
 package com.lpvs.repository;
 
 import com.lpvs.entity.LPVSLicenseConflict;
@@ -21,7 +20,11 @@ public interface LPVSLicenseConflictRepository extends CrudRepository<LPVSLicens
     @Query(value = "SELECT * FROM license_conflicts", nativeQuery = true)
     List<LPVSLicenseConflict> takeAllLicenseConflicts();
 
-    @Query(value = "SELECT * FROM license_conflicts WHERE (license_conflicts.repository_license_id = :license1 AND license_conflicts.conflict_license_id = :license2) " +
-            "OR (license_conflicts.repository_license_id = :license2 AND license_conflicts.conflict_license_id = :license1) ORDER BY id DESC LIMIT 1", nativeQuery = true)
-    LPVSLicenseConflict findLicenseConflict(@Param("license1") Long license1, @Param("license2") Long license2);
+    @Query(
+            value =
+                    "SELECT * FROM license_conflicts WHERE (license_conflicts.repository_license_id = :license1 AND license_conflicts.conflict_license_id = :license2) "
+                            + "OR (license_conflicts.repository_license_id = :license2 AND license_conflicts.conflict_license_id = :license1) ORDER BY id DESC LIMIT 1",
+            nativeQuery = true)
+    LPVSLicenseConflict findLicenseConflict(
+            @Param("license1") Long license1, @Param("license2") Long license2);
 }

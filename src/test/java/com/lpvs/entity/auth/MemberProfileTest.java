@@ -4,7 +4,6 @@
  * Use of this source code is governed by a MIT license that can be
  * found in the LICENSE file.
  */
-
 package com.lpvs.entity.auth;
 
 import org.junit.jupiter.api.Test;
@@ -13,7 +12,6 @@ import com.lpvs.entity.LPVSMember;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
-
 
 public class MemberProfileTest {
 

@@ -132,16 +132,20 @@ public class LPVSFileTest {
         final String baseAlternativeName = "licenseNameAlternative";
         final String baseChecklistUrl = "checklistUrl";
 
-        LPVSLicense lpvsLicense = new LPVSLicense(baseLicenseId,
-                baseLicenseName,
-                baseSpdxId,
-                baseAccess,
-                baseAlternativeName,
-                baseChecklistUrl);
+        LPVSLicense lpvsLicense =
+                new LPVSLicense(
+                        baseLicenseId,
+                        baseLicenseName,
+                        baseSpdxId,
+                        baseAccess,
+                        baseAlternativeName,
+                        baseChecklistUrl);
 
         Set<LPVSLicense> licenses = new HashSet<>(Arrays.asList(lpvsLicense));
         lpvsFile.setLicenses(licenses);
-        assertEquals(lpvsFile.convertLicensesToString(LPVSVcs.GITHUB), "<a target=\"_blank\" href=\"checklistUrl\">spdxId</a> (access)");
+        assertEquals(
+                lpvsFile.convertLicensesToString(LPVSVcs.GITHUB),
+                "<a target=\"_blank\" href=\"checklistUrl\">spdxId</a> (access)");
     }
 
     @Test
@@ -152,25 +156,32 @@ public class LPVSFileTest {
         final String baseAccess = "access";
         final String baseAlternativeName = "licenseNameAlternative";
         final String baseChecklistUrl = "checklistUrl";
-        List<String> baseIncompatibleWith = Arrays.asList("incompatibleWith1", "incompatibleWith2", "incompatibleWith3");
+        List<String> baseIncompatibleWith =
+                Arrays.asList("incompatibleWith1", "incompatibleWith2", "incompatibleWith3");
 
-        LPVSLicense lpvsLicense1 = new LPVSLicense(baseLicenseId,
-                baseLicenseName,
-                baseSpdxId,
-                baseAccess,
-                baseAlternativeName,
-                null);
+        LPVSLicense lpvsLicense1 =
+                new LPVSLicense(
+                        baseLicenseId,
+                        baseLicenseName,
+                        baseSpdxId,
+                        baseAccess,
+                        baseAlternativeName,
+                        null);
 
-        LPVSLicense lpvsLicense2 = new LPVSLicense(baseLicenseId,
-                baseLicenseName,
-                baseSpdxId,
-                baseAccess,
-                baseAlternativeName,
-                null);
+        LPVSLicense lpvsLicense2 =
+                new LPVSLicense(
+                        baseLicenseId,
+                        baseLicenseName,
+                        baseSpdxId,
+                        baseAccess,
+                        baseAlternativeName,
+                        null);
 
         Set<LPVSLicense> licenses = new HashSet<>(Arrays.asList(lpvsLicense1, lpvsLicense2));
         lpvsFile.setLicenses(licenses);
-        assertEquals(lpvsFile.convertLicensesToString(LPVSVcs.GITHUB), "spdxId (access), spdxId (access)");
+        assertEquals(
+                lpvsFile.convertLicensesToString(LPVSVcs.GITHUB),
+                "spdxId (access), spdxId (access)");
     }
 
     @Test
@@ -181,24 +192,31 @@ public class LPVSFileTest {
         final String baseAccess = "access";
         final String baseAlternativeName = "licenseNameAlternative";
         final String baseChecklistUrl = "checklistUrl";
-        List<String> baseIncompatibleWith = Arrays.asList("incompatibleWith1", "incompatibleWith2", "incompatibleWith3");
+        List<String> baseIncompatibleWith =
+                Arrays.asList("incompatibleWith1", "incompatibleWith2", "incompatibleWith3");
 
-        LPVSLicense lpvsLicense1 = new LPVSLicense(baseLicenseId,
-                baseLicenseName,
-                baseSpdxId,
-                baseAccess,
-                baseAlternativeName,
-                baseChecklistUrl);
+        LPVSLicense lpvsLicense1 =
+                new LPVSLicense(
+                        baseLicenseId,
+                        baseLicenseName,
+                        baseSpdxId,
+                        baseAccess,
+                        baseAlternativeName,
+                        baseChecklistUrl);
 
-        LPVSLicense lpvsLicense2 = new LPVSLicense(baseLicenseId,
-                baseLicenseName,
-                baseSpdxId,
-                baseAccess,
-                baseAlternativeName,
-                baseChecklistUrl);
+        LPVSLicense lpvsLicense2 =
+                new LPVSLicense(
+                        baseLicenseId,
+                        baseLicenseName,
+                        baseSpdxId,
+                        baseAccess,
+                        baseAlternativeName,
+                        baseChecklistUrl);
 
         Set<LPVSLicense> licenses = new HashSet<>(Arrays.asList(lpvsLicense1, lpvsLicense2));
         lpvsFile.setLicenses(licenses);
-        assertEquals(lpvsFile.convertLicensesToString(LPVSVcs.GITHUB), "<a target=\"_blank\" href=\"checklistUrl\">spdxId</a> (access), <a target=\"_blank\" href=\"checklistUrl\">spdxId</a> (access)");
+        assertEquals(
+                lpvsFile.convertLicensesToString(LPVSVcs.GITHUB),
+                "<a target=\"_blank\" href=\"checklistUrl\">spdxId</a> (access), <a target=\"_blank\" href=\"checklistUrl\">spdxId</a> (access)");
     }
 }

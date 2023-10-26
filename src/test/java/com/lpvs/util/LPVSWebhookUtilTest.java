@@ -4,7 +4,6 @@
  * Use of this source code is governed by a MIT license that can be
  * found in the LICENSE file.
  */
-
 package com.lpvs.util;
 
 import com.lpvs.entity.LPVSQueue;
@@ -26,44 +25,45 @@ public class LPVSWebhookUtilTest {
         @BeforeEach
         void setUp() {
             json_to_test =
-                "{" +
-                    "\"action\": \"opened\", " +
-                    "\"repository\": {" +
-                        "\"name\": \"LPVS\", " +
-                        "\"full_name\": \"Samsung/LPVS\", " +
-                        "\"html_url\": \"https://github.com/Samsung/LPVS\"" +
-                    "}, " +
-                    "\"pull_request\": {" +
-                        "\"html_url\": \"https://github.com/Samsung/LPVS/pull/18\", " +
-                        "\"base\": {" +
-                            "\"repo\": {" +
-                                "\"owner\": {" +
-                                    "\"login\": \"Samsung\"" +
-                                "}" +
-                            "}" +
-                        "}, " +
-                        "\"head\": {" +
-                            "\"repo\": {" +
-                                "\"owner\": {" +
-                                    "\"login\": \"o-kopysov\"" +
-                                "}," +
-                                "\"fork\": true, " +
-                                "\"html_url\": \"https://github.com/o-kopysov/LPVS/tree/utests\"" +
-                            "}, " +
-                            "\"sha\": \"edde69ecb8e8a88dde09fa9789e2c9cab7cf7cf9\", " +
-                            "\"ref\": \"o-kopysov:utests\"" +
-                        "}, " +
-                        "\"url\": \"https://api.github.com/repos/Samsung/LPVS/pulls/18\"" +
-                    "}," +
-                    "\"sender\": {" +
-                        "\"login\": \"o-kopysov\"" +
-                    "}" +
-                "}";
+                    "{"
+                            + "\"action\": \"opened\", "
+                            + "\"repository\": {"
+                            + "\"name\": \"LPVS\", "
+                            + "\"full_name\": \"Samsung/LPVS\", "
+                            + "\"html_url\": \"https://github.com/Samsung/LPVS\""
+                            + "}, "
+                            + "\"pull_request\": {"
+                            + "\"html_url\": \"https://github.com/Samsung/LPVS/pull/18\", "
+                            + "\"base\": {"
+                            + "\"repo\": {"
+                            + "\"owner\": {"
+                            + "\"login\": \"Samsung\""
+                            + "}"
+                            + "}"
+                            + "}, "
+                            + "\"head\": {"
+                            + "\"repo\": {"
+                            + "\"owner\": {"
+                            + "\"login\": \"o-kopysov\""
+                            + "},"
+                            + "\"fork\": true, "
+                            + "\"html_url\": \"https://github.com/o-kopysov/LPVS/tree/utests\""
+                            + "}, "
+                            + "\"sha\": \"edde69ecb8e8a88dde09fa9789e2c9cab7cf7cf9\", "
+                            + "\"ref\": \"o-kopysov:utests\""
+                            + "}, "
+                            + "\"url\": \"https://api.github.com/repos/Samsung/LPVS/pulls/18\""
+                            + "},"
+                            + "\"sender\": {"
+                            + "\"login\": \"o-kopysov\""
+                            + "}"
+                            + "}";
 
             expected = new LPVSQueue();
             expected.setAction(LPVSPullRequestAction.OPEN);
             expected.setPullRequestUrl("https://github.com/Samsung/LPVS/pull/18");
-            expected.setPullRequestFilesUrl("https://github.com/o-kopysov/LPVS/tree/utests");  // fork == True
+            expected.setPullRequestFilesUrl(
+                    "https://github.com/o-kopysov/LPVS/tree/utests"); // fork == True
             expected.setPullRequestAPIUrl("https://api.github.com/repos/Samsung/LPVS/pulls/18");
             expected.setRepositoryUrl("https://github.com/Samsung/LPVS");
             expected.setUserId("GitHub hook");
@@ -81,7 +81,6 @@ public class LPVSWebhookUtilTest {
         }
     }
 
-
     @Nested
     class TestGetGitHubWebhookConfig__ForkFalse {
         String json_to_test;
@@ -90,44 +89,45 @@ public class LPVSWebhookUtilTest {
         @BeforeEach
         void setUp() {
             json_to_test =
-                "{" +
-                    "\"action\": \"opened\", " +
-                    "\"repository\": {" +
-                        "\"name\": \"LPVS\", " +
-                        "\"full_name\": \"Samsung/LPVS\", " +
-                        "\"html_url\": \"https://github.com/Samsung/LPVS\"" +
-                    "}, " +
-                    "\"pull_request\": {" +
-                        "\"html_url\": \"https://github.com/Samsung/LPVS/pull/18\", " +
-                        "\"base\": {" +
-                            "\"repo\": {" +
-                                "\"owner\": {" +
-                                    "\"login\": \"Samsung\"" +
-                                "}" +
-                            "}" +
-                        "}, " +
-                        "\"head\": {" +
-                            "\"repo\": {" +
-                                "\"owner\": {" +
-                                    "\"login\": \"o-kopysov\"" +
-                                "}," +
-                                "\"fork\": false, " +
-                                "\"html_url\": \"https://github.com/o-kopysov/LPVS/tree/utests\"" +
-                            "}, " +
-                            "\"sha\": \"edde69ecb8e8a88dde09fa9789e2c9cab7cf7cf9\", " +
-                            "\"ref\": \"o-kopysov:utests\"" +
-                        "}, " +
-                        "\"url\": \"https://api.github.com/repos/Samsung/LPVS/pulls/18\"" +
-                    "}," +
-                    "\"sender\": {" +
-                        "\"login\": \"o-kopysov\"" +
-                    "}" +
-                "}";
+                    "{"
+                            + "\"action\": \"opened\", "
+                            + "\"repository\": {"
+                            + "\"name\": \"LPVS\", "
+                            + "\"full_name\": \"Samsung/LPVS\", "
+                            + "\"html_url\": \"https://github.com/Samsung/LPVS\""
+                            + "}, "
+                            + "\"pull_request\": {"
+                            + "\"html_url\": \"https://github.com/Samsung/LPVS/pull/18\", "
+                            + "\"base\": {"
+                            + "\"repo\": {"
+                            + "\"owner\": {"
+                            + "\"login\": \"Samsung\""
+                            + "}"
+                            + "}"
+                            + "}, "
+                            + "\"head\": {"
+                            + "\"repo\": {"
+                            + "\"owner\": {"
+                            + "\"login\": \"o-kopysov\""
+                            + "},"
+                            + "\"fork\": false, "
+                            + "\"html_url\": \"https://github.com/o-kopysov/LPVS/tree/utests\""
+                            + "}, "
+                            + "\"sha\": \"edde69ecb8e8a88dde09fa9789e2c9cab7cf7cf9\", "
+                            + "\"ref\": \"o-kopysov:utests\""
+                            + "}, "
+                            + "\"url\": \"https://api.github.com/repos/Samsung/LPVS/pulls/18\""
+                            + "},"
+                            + "\"sender\": {"
+                            + "\"login\": \"o-kopysov\""
+                            + "}"
+                            + "}";
 
             expected = new LPVSQueue();
             expected.setAction(LPVSPullRequestAction.OPEN);
             expected.setPullRequestUrl("https://github.com/Samsung/LPVS/pull/18");
-            expected.setPullRequestFilesUrl("https://github.com/Samsung/LPVS/pull/18");  // fork == False
+            expected.setPullRequestFilesUrl(
+                    "https://github.com/Samsung/LPVS/pull/18"); // fork == False
             expected.setPullRequestAPIUrl("https://api.github.com/repos/Samsung/LPVS/pulls/18");
             expected.setRepositoryUrl("https://github.com/Samsung/LPVS");
             expected.setUserId("GitHub hook");
@@ -137,7 +137,6 @@ public class LPVSWebhookUtilTest {
             expected.setHeadCommitSHA("edde69ecb8e8a88dde09fa9789e2c9cab7cf7cf9");
             expected.setAttempts(0);
         }
-
 
         @Test
         public void testGetGitHubWebhookConfig__ForkFalse() {
@@ -153,11 +152,7 @@ public class LPVSWebhookUtilTest {
         @Test
         public void testCheckPayload() {
             // test initial `if`
-            json_to_test =
-                "{" +
-                    "\"action\": \"opened\", " +
-                    "\"zen\": \"test\"" +
-                "}";
+            json_to_test = "{" + "\"action\": \"opened\", " + "\"zen\": \"test\"" + "}";
             assertFalse(LPVSWebhookUtil.checkPayload(json_to_test));
 
             // test the rest 6 cases of `LPVSPullRequestAction`
@@ -184,8 +179,7 @@ public class LPVSWebhookUtilTest {
     @Nested
     public class TestGetPullRequestId {
 
-        @Mock
-        private LPVSQueue mockWebhookConfig;
+        @Mock private LPVSQueue mockWebhookConfig;
 
         @Test
         public void testGetPullRequestIdWithValidConfig() {

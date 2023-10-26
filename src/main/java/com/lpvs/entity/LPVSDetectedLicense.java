@@ -4,7 +4,6 @@
  * Use of this source code is governed by a MIT license that can be
  * found in the LICENSE file.
  */
-
 package com.lpvs.entity;
 
 import lombok.Getter;
@@ -15,7 +14,8 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "detected_license", schema = "lpvs")
-@Getter @Setter
+@Getter
+@Setter
 public class LPVSDetectedLicense implements Serializable {
 
     @Id
@@ -39,7 +39,7 @@ public class LPVSDetectedLicense implements Serializable {
     @JoinColumn(name = "repository_license_id", referencedColumnName = "id")
     private LPVSLicense repositoryLicense = null;
 
-    @Column(name = "file_path",  columnDefinition = "LONGTEXT")
+    @Column(name = "file_path", columnDefinition = "LONGTEXT")
     private String filePath = null;
 
     @Column(name = "match_type")
@@ -74,5 +74,4 @@ public class LPVSDetectedLicense implements Serializable {
 
     @Column(name = "issue")
     private Boolean issue = false;
-
 }

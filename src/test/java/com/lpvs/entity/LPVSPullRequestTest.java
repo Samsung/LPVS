@@ -4,7 +4,6 @@
  * Use of this source code is governed by a MIT license that can be
  * found in the LICENSE file.
  */
-
 package com.lpvs.entity;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -29,19 +28,20 @@ public class LPVSPullRequestTest {
     final String pullRequestHead = "user";
     final String sender = "user";
 
-
     @BeforeEach
     void setUp() {
-        lpvsPullRequest = new LPVSPullRequest(pullRequestId,
-                date,
-                user,
-                repositoryName,
-                pullRequestUrl,
-                pullRequestFilesUrl,
-                status,
-                pullRequestBase,
-                pullRequestHead,
-                sender);
+        lpvsPullRequest =
+                new LPVSPullRequest(
+                        pullRequestId,
+                        date,
+                        user,
+                        repositoryName,
+                        pullRequestUrl,
+                        pullRequestFilesUrl,
+                        status,
+                        pullRequestBase,
+                        pullRequestHead,
+                        sender);
     }
 
     @Test

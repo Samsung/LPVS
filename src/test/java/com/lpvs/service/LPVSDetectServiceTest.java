@@ -4,7 +4,6 @@
  * Use of this source code is governed by a MIT license that can be
  * found in the LICENSE file.
  */
-
 package com.lpvs.service;
 
 import com.lpvs.entity.LPVSFile;
@@ -60,17 +59,26 @@ public class LPVSDetectServiceTest {
             webhookConfig = new LPVSQueue();
             webhookConfig.setId(1L);
 
-            lpvs_file_1 = new LPVSFile(1L, null, null, null, null, null, null, null, null, null, null, null, null);
-            lpvs_file_2 = new LPVSFile(2L, null, null, null, null, null, null, null, null, null, null, null, null);
+            lpvs_file_1 =
+                    new LPVSFile(
+                            1L, null, null, null, null, null, null, null, null, null, null, null,
+                            null);
+            lpvs_file_2 =
+                    new LPVSFile(
+                            2L, null, null, null, null, null, null, null, null, null, null, null,
+                            null);
 
-            when(scanoss_mock.checkLicenses(webhookConfig)).thenReturn(List.of(lpvs_file_1, lpvs_file_2));
+            when(scanoss_mock.checkLicenses(webhookConfig))
+                    .thenReturn(List.of(lpvs_file_1, lpvs_file_2));
         }
 
         @Test
         public void testRunScan__Scanoss() {
             try {
                 // main test
-                assertEquals(List.of(lpvs_file_1, lpvs_file_2), detectService.runScan(webhookConfig, test_path));
+                assertEquals(
+                        List.of(lpvs_file_1, lpvs_file_2),
+                        detectService.runScan(webhookConfig, test_path));
             } catch (Exception e) {
                 log.error("LPVSDetectServiceTest::TestRunScan__Scanoss exception: " + e);
                 fail();
