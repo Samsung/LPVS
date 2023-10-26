@@ -4,7 +4,6 @@
  * Use of this source code is governed by a MIT license that can be
  * found in the LICENSE file.
  */
-
 package com.lpvs.service;
 
 import com.lpvs.entity.LPVSFile;
@@ -26,11 +25,11 @@ import java.util.*;
 @Slf4j
 public class LPVSLicenseService {
 
-    private final static String LICENSE_CONFLICT_SOURCE_PROP_NAME = "license_conflict";
+    private static final String LICENSE_CONFLICT_SOURCE_PROP_NAME = "license_conflict";
 
-    private final static String LICENSE_CONFLICT_SOURCE_ENV_VAR_NAME = "LPVS_LICENSE_CONFLICT";
+    private static final String LICENSE_CONFLICT_SOURCE_ENV_VAR_NAME = "LPVS_LICENSE_CONFLICT";
 
-    private final static String LICENSE_CONFLICT_SOURCE_DEFAULT = "db";
+    private static final String LICENSE_CONFLICT_SOURCE_DEFAULT = "db";
 
     public String licenseConflictsSource;
 
@@ -39,31 +38,42 @@ public class LPVSLicenseService {
     private List<Conflict<String, String>> licenseConflicts;
 
     private LPVSExitHandler exitHandler;
-    
+
     @Autowired
-    public LPVSLicenseService(@Value("${" + LICENSE_CONFLICT_SOURCE_PROP_NAME + ":" + LICENSE_CONFLICT_SOURCE_DEFAULT + "}") String licenseConflictsSource,
-                              LPVSExitHandler exitHandler) {
+    public LPVSLicenseService(
+            @Value(
+                            "${"
+                                    + LICENSE_CONFLICT_SOURCE_PROP_NAME
+                                    + ":"
+                                    + LICENSE_CONFLICT_SOURCE_DEFAULT
+                                    + "}")
+                    String licenseConflictsSource,
+            LPVSExitHandler exitHandler) {
         this.licenseConflictsSource = licenseConflictsSource;
         this.exitHandler = exitHandler;
     }
 
-    @Autowired
-    private LPVSLicenseRepository lpvsLicenseRepository;
+    @Autowired private LPVSLicenseRepository lpvsLicenseRepository;
 
-    @Autowired
-    private LPVSLicenseConflictRepository lpvsLicenseConflictRepository;
+    @Autowired private LPVSLicenseConflictRepository lpvsLicenseConflictRepository;
 
     @PostConstruct
     private void init() {
-        licenseConflictsSource = (licenseConflictsSource == null || licenseConflictsSource.equals(
-                LICENSE_CONFLICT_SOURCE_DEFAULT
-        ))
-                && System.getenv(LICENSE_CONFLICT_SOURCE_ENV_VAR_NAME) != null
-                && !System.getenv(LICENSE_CONFLICT_SOURCE_ENV_VAR_NAME).isEmpty() ?
-                System.getenv(LICENSE_CONFLICT_SOURCE_ENV_VAR_NAME) : licenseConflictsSource;
+        licenseConflictsSource =
+                (licenseConflictsSource == null
+                                        || licenseConflictsSource.equals(
+                                                LICENSE_CONFLICT_SOURCE_DEFAULT))
+                                && System.getenv(LICENSE_CONFLICT_SOURCE_ENV_VAR_NAME) != null
+                                && !System.getenv(LICENSE_CONFLICT_SOURCE_ENV_VAR_NAME).isEmpty()
+                        ? System.getenv(LICENSE_CONFLICT_SOURCE_ENV_VAR_NAME)
+                        : licenseConflictsSource;
 
         if (licenseConflictsSource == null || licenseConflictsSource.isEmpty()) {
-            log.error(LICENSE_CONFLICT_SOURCE_ENV_VAR_NAME + "(" + LICENSE_CONFLICT_SOURCE_PROP_NAME + ") is not set");
+            log.error(
+                    LICENSE_CONFLICT_SOURCE_ENV_VAR_NAME
+                            + "("
+                            + LICENSE_CONFLICT_SOURCE_PROP_NAME
+                            + ") is not set");
             exitHandler.exit(-1);
         } else {
             try {
@@ -71,22 +81,29 @@ public class LPVSLicenseService {
                 licenses = lpvsLicenseRepository.takeAllLicenses();
                 // print info
                 log.info("LICENSES: loaded " + licenses.size() + " licenses from DB.");
-    
+
                 // 2. Load license conflicts
                 licenseConflicts = new ArrayList<>();
-    
+
                 if (licenseConflictsSource.equalsIgnoreCase("db")) {
-                    List<LPVSLicenseConflict> conflicts = lpvsLicenseConflictRepository.takeAllLicenseConflicts();
+                    List<LPVSLicenseConflict> conflicts =
+                            lpvsLicenseConflictRepository.takeAllLicenseConflicts();
                     for (LPVSLicenseConflict conflict : conflicts) {
-                        Conflict<String, String> conf = new Conflict<>(conflict.getConflictLicense().getSpdxId(), conflict.getRepositoryLicense().getSpdxId());
+                        Conflict<String, String> conf =
+                                new Conflict<>(
+                                        conflict.getConflictLicense().getSpdxId(),
+                                        conflict.getRepositoryLicense().getSpdxId());
                         if (!licenseConflicts.contains(conf)) {
                             licenseConflicts.add(conf);
                         }
                     }
                     // print info
-                    log.info("LICENSE CONFLICTS: loaded " + licenseConflicts.size() + " license conflicts from DB.");
+                    log.info(
+                            "LICENSE CONFLICTS: loaded "
+                                    + licenseConflicts.size()
+                                    + " license conflicts from DB.");
                 }
-    
+
             } catch (Exception ex) {
                 log.warn("LICENSES and LICENSE CONFLICTS are not loaded.");
                 log.error(ex.toString());
@@ -97,19 +114,19 @@ public class LPVSLicenseService {
     }
 
     public LPVSLicense findLicenseBySPDX(String name) {
-       for (LPVSLicense license : licenses) {
-          if (license.getSpdxId().equalsIgnoreCase(name)) {
-              return license;
-          }
-       }
-       return null;
+        for (LPVSLicense license : licenses) {
+            if (license.getSpdxId().equalsIgnoreCase(name)) {
+                return license;
+            }
+        }
+        return null;
     }
 
     public void addLicenseToList(LPVSLicense license) {
         licenses.add(license);
     }
 
-    public LPVSLicense  findLicenseByName(String name) {
+    public LPVSLicense findLicenseByName(String name) {
         for (LPVSLicense license : licenses) {
             if (license.getLicenseName().equalsIgnoreCase(name)) {
                 return license;
@@ -125,7 +142,6 @@ public class LPVSLicenseService {
         }
     }
 
-
     public LPVSLicense checkLicense(String spdxId) {
         LPVSLicense newLicense = findLicenseBySPDX(spdxId);
         if (newLicense == null && spdxId.contains("+")) {
@@ -138,7 +154,8 @@ public class LPVSLicenseService {
     }
 
     // Changed method to never return null
-    public List<Conflict<String, String>> findConflicts(LPVSQueue webhookConfig, List<LPVSFile> scanResults) {
+    public List<Conflict<String, String>> findConflicts(
+            LPVSQueue webhookConfig, List<LPVSFile> scanResults) {
         List<Conflict<String, String>> foundConflicts = new ArrayList<>();
 
         if (scanResults.isEmpty() || licenseConflicts.isEmpty()) {
@@ -161,7 +178,8 @@ public class LPVSLicenseService {
         if (repositoryLicense != null) {
             for (String detectedLicenseUnique : detectedLicensesUnique) {
                 for (Conflict<String, String> licenseConflict : licenseConflicts) {
-                    Conflict<String, String> possibleConflict = new Conflict<>(detectedLicenseUnique, repositoryLicense);
+                    Conflict<String, String> possibleConflict =
+                            new Conflict<>(detectedLicenseUnique, repositoryLicense);
                     if (licenseConflict.equals(possibleConflict)) {
                         foundConflicts.add(possibleConflict);
                     }
@@ -176,8 +194,7 @@ public class LPVSLicenseService {
                     Conflict<String, String> possibleConflict =
                             new Conflict<>(
                                     (String) detectedLicensesUnique.toArray()[i],
-                                    (String) detectedLicensesUnique.toArray()[j]
-                            );
+                                    (String) detectedLicensesUnique.toArray()[j]);
                     if (licenseConflict.equals(possibleConflict)) {
                         foundConflicts.add(possibleConflict);
                     }
@@ -191,6 +208,7 @@ public class LPVSLicenseService {
     public static class Conflict<License1, License2> {
         public License1 l1;
         public License2 l2;
+
         Conflict(License1 l1, License2 l2) {
             this.l1 = l1;
             this.l2 = l2;
@@ -201,8 +219,8 @@ public class LPVSLicenseService {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             Conflict<?, ?> conflict = (Conflict<?, ?>) o;
-            return (l1.equals(conflict.l1) && l2.equals(conflict.l2)) ||
-                    (l1.equals(conflict.l2) && l2.equals(conflict.l1));
+            return (l1.equals(conflict.l1) && l2.equals(conflict.l2))
+                    || (l1.equals(conflict.l2) && l2.equals(conflict.l1));
         }
 
         @Override

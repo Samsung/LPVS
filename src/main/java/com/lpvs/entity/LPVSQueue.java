@@ -4,7 +4,6 @@
  * Use of this source code is governed by a MIT license that can be
  * found in the LICENSE file.
  */
-
 package com.lpvs.entity;
 
 import com.lpvs.entity.enums.LPVSPullRequestAction;
@@ -18,7 +17,8 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "queue", schema = "lpvs")
-@Getter @Setter
+@Getter
+@Setter
 public class LPVSQueue implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -65,22 +65,21 @@ public class LPVSQueue implements Serializable {
 
     @Column(name = "sender")
     private String sender;
-    @Transient
-    private String repositoryLicense;
 
-    @Transient
-    private String hubLink;
+    @Transient private String repositoryLicense;
+
+    @Transient private String hubLink;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         LPVSQueue that = (LPVSQueue) o;
-        return attempts == that.attempts &&
-                action == that.action &&
-                Objects.equals(userId, that.userId) &&
-                pullRequestUrl.equals(that.pullRequestUrl) &&
-                Objects.equals(headCommitSHA, that.headCommitSHA);
+        return attempts == that.attempts
+                && action == that.action
+                && Objects.equals(userId, that.userId)
+                && pullRequestUrl.equals(that.pullRequestUrl)
+                && Objects.equals(headCommitSHA, that.headCommitSHA);
     }
 
     @Override

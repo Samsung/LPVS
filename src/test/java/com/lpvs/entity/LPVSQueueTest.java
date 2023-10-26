@@ -4,10 +4,8 @@
  * Use of this source code is governed by a MIT license that can be
  * found in the LICENSE file.
  */
-
 package com.lpvs.entity;
 
-import com.lpvs.entity.LPVSQueue;
 import com.lpvs.entity.enums.LPVSPullRequestAction;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,7 +15,6 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.Date;
-
 
 public class LPVSQueueTest {
 
@@ -32,7 +29,8 @@ public class LPVSQueueTest {
         webhookConfig.setRepositoryLicense("MIT");
         webhookConfig.setHeadCommitSHA("2405d91eebb40e8841465908a0cd9200bba2da12");
         webhookConfig.setPullRequestUrl("https://github.com/Samsung/LPVS/pull/16");
-        webhookConfig.setPullRequestFilesUrl("https://github.com/Samsung/LPVS/pull/16/files#diff-9c5fb3d1");
+        webhookConfig.setPullRequestFilesUrl(
+                "https://github.com/Samsung/LPVS/pull/16/files#diff-9c5fb3d1");
         webhookConfig.setPullRequestAPIUrl("https://github.com/api");
         webhookConfig.setUserId("BestUser");
         webhookConfig.setAttempts(10);
@@ -48,7 +46,8 @@ public class LPVSQueueTest {
         secondWebhookConfig.setRepositoryLicense("MIT");
         secondWebhookConfig.setHeadCommitSHA("2405d91eebb40e8841465908a0cd9200bba2da12");
         secondWebhookConfig.setPullRequestUrl("https://github.com/Samsung/LPVS/pull/16");
-        secondWebhookConfig.setPullRequestFilesUrl("https://github.com/Samsung/LPVS/pull/16/files#diff-9c5fb3d1");
+        secondWebhookConfig.setPullRequestFilesUrl(
+                "https://github.com/Samsung/LPVS/pull/16/files#diff-9c5fb3d1");
         secondWebhookConfig.setPullRequestAPIUrl("https://github.com/api");
         secondWebhookConfig.setUserId("BestUser");
         secondWebhookConfig.setAttempts(10);
@@ -65,7 +64,8 @@ public class LPVSQueueTest {
         secondWebhookConfig.setRepositoryLicense("MIT");
         secondWebhookConfig.setHeadCommitSHA("2405d91eebb40e8841465908a0cd9200bba2da12");
         secondWebhookConfig.setPullRequestUrl("https://github.com/Samsung/LPVS/pull/17");
-        secondWebhookConfig.setPullRequestFilesUrl("https://github.com/Samsung/LPVS/pull/16/files#diff-9c5fb3d1");
+        secondWebhookConfig.setPullRequestFilesUrl(
+                "https://github.com/Samsung/LPVS/pull/16/files#diff-9c5fb3d1");
         secondWebhookConfig.setPullRequestAPIUrl("https://github.com/api");
         secondWebhookConfig.setUserId("BestUser");
         secondWebhookConfig.setAttempts(10);
@@ -86,7 +86,9 @@ public class LPVSQueueTest {
         assertEquals(webhookConfig.getRepositoryLicense(), "MIT");
         assertEquals(webhookConfig.getHeadCommitSHA(), "2405d91eebb40e8841465908a0cd9200bba2da12");
         assertEquals(webhookConfig.getPullRequestUrl(), "https://github.com/Samsung/LPVS/pull/16");
-        assertEquals(webhookConfig.getPullRequestFilesUrl(), "https://github.com/Samsung/LPVS/pull/16/files#diff-9c5fb3d1");
+        assertEquals(
+                webhookConfig.getPullRequestFilesUrl(),
+                "https://github.com/Samsung/LPVS/pull/16/files#diff-9c5fb3d1");
         assertEquals(webhookConfig.getPullRequestAPIUrl(), "https://github.com/api");
         assertEquals(webhookConfig.getUserId(), "BestUser");
         assertEquals(webhookConfig.getAttempts(), 10);

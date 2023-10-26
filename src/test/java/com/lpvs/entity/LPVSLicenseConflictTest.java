@@ -4,7 +4,6 @@
  * Use of this source code is governed by a MIT license that can be
  * found in the LICENSE file.
  */
-
 package com.lpvs.entity;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -33,18 +32,22 @@ public class LPVSLicenseConflictTest {
 
     @BeforeEach
     void setUp() {
-        lpvsLicense1 = new LPVSLicense(baseLicenseId1,
-                baseLicenseName1,
-                baseSpdxId1,
-                baseAccess1,
-                alternativeName1,
-                baseChecklistUrl1);
-        lpvsLicense2 = new LPVSLicense(baseLicenseId2,
-                baseLicenseName2,
-                baseSpdxId2,
-                baseAccess2,
-                alternativeName2,
-                baseChecklistUrl2);
+        lpvsLicense1 =
+                new LPVSLicense(
+                        baseLicenseId1,
+                        baseLicenseName1,
+                        baseSpdxId1,
+                        baseAccess1,
+                        alternativeName1,
+                        baseChecklistUrl1);
+        lpvsLicense2 =
+                new LPVSLicense(
+                        baseLicenseId2,
+                        baseLicenseName2,
+                        baseSpdxId2,
+                        baseAccess2,
+                        alternativeName2,
+                        baseChecklistUrl2);
         licenseConflict = new LPVSLicenseConflict();
         licenseConflict.setConflictId(1L);
         licenseConflict.setConflictLicense(lpvsLicense1);

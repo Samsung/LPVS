@@ -43,8 +43,16 @@ public class LPVSResultInfoTest {
     @Test
     public void testInequality() {
         // Test inequality when objects are not the same
-        LPVSResultInfo info1 = new LPVSResultInfo(1L, new Date(), "example/repository", "Success", Arrays.asList("LicenseA", "LicenseB"));
-        LPVSResultInfo info2 = new LPVSResultInfo(2L, new Date(), "another/repository", "Failure", Arrays.asList("LicenseC"));
+        LPVSResultInfo info1 =
+                new LPVSResultInfo(
+                        1L,
+                        new Date(),
+                        "example/repository",
+                        "Success",
+                        Arrays.asList("LicenseA", "LicenseB"));
+        LPVSResultInfo info2 =
+                new LPVSResultInfo(
+                        2L, new Date(), "another/repository", "Failure", Arrays.asList("LicenseC"));
         assertFalse(info1.equals(info2));
         assertFalse(info2.equals(info1));
     }

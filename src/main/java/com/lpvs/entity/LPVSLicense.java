@@ -4,7 +4,6 @@
  * Use of this source code is governed by a MIT license that can be
  * found in the LICENSE file.
  */
-
 package com.lpvs.entity;
 
 import lombok.AllArgsConstructor;
@@ -16,8 +15,14 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "licenses", schema = "lpvs", indexes = {@Index(name = "spdx_id", columnList = "license_spdx", unique = true)})
-@Getter @Setter @NoArgsConstructor @AllArgsConstructor
+@Table(
+        name = "licenses",
+        schema = "lpvs",
+        indexes = {@Index(name = "spdx_id", columnList = "license_spdx", unique = true)})
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class LPVSLicense implements Serializable {
 
     @Id
@@ -37,7 +42,5 @@ public class LPVSLicense implements Serializable {
     @Column(name = "license_alternative_names", columnDefinition = "LONGTEXT")
     private String alternativeNames;
 
-    @Transient
-    private String checklistUrl;
-
+    @Transient private String checklistUrl;
 }

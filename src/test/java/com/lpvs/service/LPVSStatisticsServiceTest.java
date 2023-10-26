@@ -38,20 +38,15 @@ import static org.mockito.Mockito.when;
 
 public class LPVSStatisticsServiceTest {
 
-    @InjectMocks
-    private LPVSStatisticsService statisticsService;
+    @InjectMocks private LPVSStatisticsService statisticsService;
 
-    @Mock
-    private LPVSPullRequestRepository pullRequestRepository;
+    @Mock private LPVSPullRequestRepository pullRequestRepository;
 
-    @Mock
-    private LPVSLoginCheckService loginCheckService;
+    @Mock private LPVSLoginCheckService loginCheckService;
 
-    @Mock
-    private LPVSLicenseRepository licenseRepository;
+    @Mock private LPVSLicenseRepository licenseRepository;
 
-    @Mock
-    private LPVSDetectedLicenseRepository detectedLicenseRepository;
+    @Mock private LPVSDetectedLicenseRepository detectedLicenseRepository;
 
     @BeforeEach
     public void setUp() {
@@ -64,8 +59,10 @@ public class LPVSStatisticsServiceTest {
         LPVSMember member = new LPVSMember();
         member.setNickname("testNickname");
         when(loginCheckService.getMemberFromMemberMap(authentication)).thenReturn(member);
-        when(pullRequestRepository.findByPullRequestBase("testNickname")).thenReturn(new ArrayList<>());
-        List<LPVSPullRequest> result = statisticsService.pathCheck("own", "testNickname", authentication);
+        when(pullRequestRepository.findByPullRequestBase("testNickname"))
+                .thenReturn(new ArrayList<>());
+        List<LPVSPullRequest> result =
+                statisticsService.pathCheck("own", "testNickname", authentication);
 
         assertNotNull(result);
         assertEquals(0, result.size());
@@ -77,8 +74,10 @@ public class LPVSStatisticsServiceTest {
         LPVSMember member = new LPVSMember();
         member.setOrganization("testOrganization");
         when(loginCheckService.getMemberFromMemberMap(authentication)).thenReturn(member);
-        when(pullRequestRepository.findByPullRequestBase("testOrganization")).thenReturn(Collections.emptyList());
-        List<LPVSPullRequest> result = statisticsService.pathCheck("org", "testOrganization", authentication);
+        when(pullRequestRepository.findByPullRequestBase("testOrganization"))
+                .thenReturn(Collections.emptyList());
+        List<LPVSPullRequest> result =
+                statisticsService.pathCheck("org", "testOrganization", authentication);
 
         assertNotNull(result);
         assertEquals(0, result.size());
@@ -90,8 +89,10 @@ public class LPVSStatisticsServiceTest {
         LPVSMember member = new LPVSMember();
         member.setNickname("testNickname");
         when(loginCheckService.getMemberFromMemberMap(authentication)).thenReturn(member);
-        when(pullRequestRepository.findBySenderOrPullRequestHead("testNickname")).thenReturn(Collections.emptyList());
-        List<LPVSPullRequest> result = statisticsService.pathCheck("send", "testNickname", authentication);
+        when(pullRequestRepository.findBySenderOrPullRequestHead("testNickname"))
+                .thenReturn(Collections.emptyList());
+        List<LPVSPullRequest> result =
+                statisticsService.pathCheck("send", "testNickname", authentication);
 
         assertNotNull(result);
         assertEquals(0, result.size());
@@ -103,10 +104,15 @@ public class LPVSStatisticsServiceTest {
         LPVSMember member = new LPVSMember();
         member.setNickname("testNickname");
         when(loginCheckService.getMemberFromMemberMap(authentication)).thenReturn(member);
-        when(pullRequestRepository.findBySenderOrPullRequestHead("testNickname")).thenReturn(Collections.emptyList());
-        Exception exception = assertThrows(WrongAccessException.class, () -> {
-            statisticsService.pathCheck("wrongpath", "testNickname", authentication);
-        });
+        when(pullRequestRepository.findBySenderOrPullRequestHead("testNickname"))
+                .thenReturn(Collections.emptyList());
+        Exception exception =
+                assertThrows(
+                        WrongAccessException.class,
+                        () -> {
+                            statisticsService.pathCheck(
+                                    "wrongpath", "testNickname", authentication);
+                        });
         assertEquals("WrongPathException", exception.getMessage());
     }
 
@@ -116,14 +122,25 @@ public class LPVSStatisticsServiceTest {
         Authentication authentication = mock(Authentication.class);
         LPVSMember member = new LPVSMember();
         LPVSPullRequest mockRequest = mock(LPVSPullRequest.class);
-        List<LPVSPullRequest> pullRequests = new ArrayList<>(){{ add(mockRequest); }};
-        LPVSDetectedLicense detectedLicense = new LPVSDetectedLicense(){{
-            setMatch(match);
-            setLicense(new LPVSLicense(){{
-                setSpdxId("MIT");
-            }});
-            setIssue(true);
-        }};
+        List<LPVSPullRequest> pullRequests =
+                new ArrayList<>() {
+                    {
+                        add(mockRequest);
+                    }
+                };
+        LPVSDetectedLicense detectedLicense =
+                new LPVSDetectedLicense() {
+                    {
+                        setMatch(match);
+                        setLicense(
+                                new LPVSLicense() {
+                                    {
+                                        setSpdxId("MIT");
+                                    }
+                                });
+                        setIssue(true);
+                    }
+                };
         member.setNickname("testNickname");
         when(loginCheckService.getMemberFromMemberMap(authentication)).thenReturn(member);
         when(pullRequestRepository.findByPullRequestBase("testNickname")).thenReturn(pullRequests);
@@ -131,11 +148,16 @@ public class LPVSStatisticsServiceTest {
         when(mockRequest.getDate()).thenReturn(new Date());
         when(mockRequest.getSender()).thenReturn("");
         when(mockRequest.getRepositoryName()).thenReturn("name");
-        when(detectedLicenseRepository.findNotNullDLByPR(mockRequest)).thenReturn(new ArrayList<>(){{
-            add(detectedLicense);
-        }});
+        when(detectedLicenseRepository.findNotNullDLByPR(mockRequest))
+                .thenReturn(
+                        new ArrayList<>() {
+                            {
+                                add(detectedLicense);
+                            }
+                        });
 
-        Dashboard result = statisticsService.getDashboardEntity("own", "testNickname", authentication);
+        Dashboard result =
+                statisticsService.getDashboardEntity("own", "testNickname", authentication);
         assertNotNull(result);
     }
 
@@ -148,13 +170,21 @@ public class LPVSStatisticsServiceTest {
         when(licenseRepository.takeAllSpdxId()).thenReturn(Collections.<String>emptyList());
         when(pullRequestRepository.findByPullRequestBase("testNickname")).thenReturn(prList);
         when(detectedLicenseRepository.findNotNullDLByPR(any())).thenReturn(dlList);
-        LPVSStatisticsServiceHelper statisticsServiceHelper = new LPVSStatisticsServiceHelper(pullRequestRepository, detectedLicenseRepository, loginCheckService, licenseRepository, null, prList);
+        LPVSStatisticsServiceHelper statisticsServiceHelper =
+                new LPVSStatisticsServiceHelper(
+                        pullRequestRepository,
+                        detectedLicenseRepository,
+                        loginCheckService,
+                        licenseRepository,
+                        null,
+                        prList);
 
-        Dashboard dashboard = statisticsServiceHelper.getDashboardEntity("send", "testNickname", authentication);
+        Dashboard dashboard =
+                statisticsServiceHelper.getDashboardEntity("send", "testNickname", authentication);
 
         assertNotNull(dashboard);
         assertEquals("testNickname", dashboard.getName());
-        assertEquals(1, dashboard.getDashboardElementsByDates().size());     
+        assertEquals(1, dashboard.getDashboardElementsByDates().size());
     }
 
     @Test
@@ -195,12 +225,10 @@ public class LPVSStatisticsServiceTest {
         pullRequest2.setPullRequestUrl("https://url.com/user/repo/pull/2");
         pullRequest2.setPullRequestFilesUrl("https://url.com/user/repo/pull/2/files");
 
-
         List<LPVSPullRequest> pullRequestList = Arrays.asList(pullRequest1, pullRequest2);
 
         return pullRequestList;
     }
-
 
     /**
      * Helper class to mock `LPVSStatisticsService`
@@ -209,20 +237,28 @@ public class LPVSStatisticsServiceTest {
      */
     public class LPVSStatisticsServiceHelper extends LPVSStatisticsService {
 
-    List<LPVSPullRequest> pullRequestList;
+        List<LPVSPullRequest> pullRequestList;
 
-        public LPVSStatisticsServiceHelper(LPVSPullRequestRepository lpvsPullRequestRepository,
-                LPVSDetectedLicenseRepository lpvsDetectedLicenseRepository, LPVSLoginCheckService loginCheckService,
-                LPVSLicenseRepository lpvsLicenseRepository, LPVSMemberRepository memberRepository, List<LPVSPullRequest> pullRequestList) {
-            super(lpvsPullRequestRepository, lpvsDetectedLicenseRepository, loginCheckService, lpvsLicenseRepository,
+        public LPVSStatisticsServiceHelper(
+                LPVSPullRequestRepository lpvsPullRequestRepository,
+                LPVSDetectedLicenseRepository lpvsDetectedLicenseRepository,
+                LPVSLoginCheckService loginCheckService,
+                LPVSLicenseRepository lpvsLicenseRepository,
+                LPVSMemberRepository memberRepository,
+                List<LPVSPullRequest> pullRequestList) {
+            super(
+                    lpvsPullRequestRepository,
+                    lpvsDetectedLicenseRepository,
+                    loginCheckService,
+                    lpvsLicenseRepository,
                     memberRepository);
             this.pullRequestList = pullRequestList;
         }
 
         @Override
-        public List<LPVSPullRequest> pathCheck(String type, String name, Authentication authentication) {
+        public List<LPVSPullRequest> pathCheck(
+                String type, String name, Authentication authentication) {
             return pullRequestList;
         }
-    
     }
 }

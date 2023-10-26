@@ -4,7 +4,6 @@
  * Use of this source code is governed by a MIT license that can be
  * found in the LICENSE file.
  */
-
 package com.lpvs.exception;
 
 import lombok.Getter;
@@ -18,7 +17,6 @@ public class ErrorResponse {
     private String message;
     private String code;
     private int status;
-
 
     public ErrorResponse(String message, String code, int status) {
         this.message = message;

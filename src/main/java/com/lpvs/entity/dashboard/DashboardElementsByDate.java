@@ -4,7 +4,6 @@
  * Use of this source code is governed by a MIT license that can be
  * found in the LICENSE file.
  */
-
 package com.lpvs.entity.dashboard;
 
 import com.lpvs.entity.enums.Grade;
@@ -15,7 +14,8 @@ import lombok.Getter;
 import java.time.LocalDate;
 import java.util.Map;
 
-@Getter @AllArgsConstructor
+@Getter
+@AllArgsConstructor
 @EqualsAndHashCode
 public class DashboardElementsByDate {
     private LocalDate date;

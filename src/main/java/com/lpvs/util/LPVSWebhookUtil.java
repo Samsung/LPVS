@@ -4,7 +4,6 @@
  * Use of this source code is governed by a MIT license that can be
  * found in the LICENSE file.
  */
-
 package com.lpvs.util;
 
 import com.google.gson.Gson;
@@ -24,30 +23,56 @@ public class LPVSWebhookUtil {
         LPVSQueue webhookConfig = new LPVSQueue();
 
         JsonObject json = gson.fromJson(payload, JsonObject.class);
-        webhookConfig.setAction(LPVSPullRequestAction.convertFrom(json.get("action").getAsString()));
+        webhookConfig.setAction(
+                LPVSPullRequestAction.convertFrom(json.get("action").getAsString()));
         String url = json.getAsJsonObject("pull_request").get("html_url").getAsString();
         webhookConfig.setPullRequestUrl(url);
-        if (json.getAsJsonObject("pull_request").getAsJsonObject("head").getAsJsonObject("repo").get("fork").getAsBoolean()) {
-            webhookConfig.setPullRequestFilesUrl(json.getAsJsonObject("pull_request").getAsJsonObject("head").getAsJsonObject("repo").get("html_url").getAsString());
+        if (json.getAsJsonObject("pull_request")
+                .getAsJsonObject("head")
+                .getAsJsonObject("repo")
+                .get("fork")
+                .getAsBoolean()) {
+            webhookConfig.setPullRequestFilesUrl(
+                    json.getAsJsonObject("pull_request")
+                            .getAsJsonObject("head")
+                            .getAsJsonObject("repo")
+                            .get("html_url")
+                            .getAsString());
         } else {
             webhookConfig.setPullRequestFilesUrl(webhookConfig.getPullRequestUrl());
         }
-        webhookConfig.setPullRequestAPIUrl(json.getAsJsonObject("pull_request").get("url").getAsString());
-        webhookConfig.setRepositoryUrl(json.getAsJsonObject("repository").get("html_url").getAsString());
+        webhookConfig.setPullRequestAPIUrl(
+                json.getAsJsonObject("pull_request").get("url").getAsString());
+        webhookConfig.setRepositoryUrl(
+                json.getAsJsonObject("repository").get("html_url").getAsString());
         webhookConfig.setUserId("GitHub hook");
-        webhookConfig.setHeadCommitSHA(json.getAsJsonObject("pull_request")
-                                            .getAsJsonObject("head")
-                                            .get("sha").getAsString());
+        webhookConfig.setHeadCommitSHA(
+                json.getAsJsonObject("pull_request")
+                        .getAsJsonObject("head")
+                        .get("sha")
+                        .getAsString());
 
-        webhookConfig.setPullRequestBase(json.getAsJsonObject("pull_request").getAsJsonObject("base").getAsJsonObject("repo").getAsJsonObject("owner").get("login").getAsString());
-        webhookConfig.setPullRequestHead(json.getAsJsonObject("pull_request").getAsJsonObject("head").getAsJsonObject("repo").getAsJsonObject("owner").get("login").getAsString());
+        webhookConfig.setPullRequestBase(
+                json.getAsJsonObject("pull_request")
+                        .getAsJsonObject("base")
+                        .getAsJsonObject("repo")
+                        .getAsJsonObject("owner")
+                        .get("login")
+                        .getAsString());
+        webhookConfig.setPullRequestHead(
+                json.getAsJsonObject("pull_request")
+                        .getAsJsonObject("head")
+                        .getAsJsonObject("repo")
+                        .getAsJsonObject("owner")
+                        .get("login")
+                        .getAsString());
         webhookConfig.setSender(json.getAsJsonObject("sender").get("login").getAsString());
         webhookConfig.setAttempts(0);
         return webhookConfig;
     }
 
     public static boolean checkPayload(String payload) {
-        if (payload.contains("\"zen\":")){
+        if (payload.contains("\"zen\":")) {
             log.debug("Initial webhook received");
             return false;
         }
@@ -57,8 +82,10 @@ public class LPVSWebhookUtil {
         String actionString = json.get("action").getAsString();
         log.debug("Action " + actionString);
         LPVSPullRequestAction action = LPVSPullRequestAction.convertFrom(actionString);
-        return (action != null) && (action.equals(LPVSPullRequestAction.UPDATE) || action.equals(LPVSPullRequestAction.OPEN)
-                                                                            || action.equals(LPVSPullRequestAction.REOPEN));
+        return (action != null)
+                && (action.equals(LPVSPullRequestAction.UPDATE)
+                        || action.equals(LPVSPullRequestAction.OPEN)
+                        || action.equals(LPVSPullRequestAction.REOPEN));
     }
 
     public static String getRepositoryOrganization(LPVSQueue webhookConfig) {

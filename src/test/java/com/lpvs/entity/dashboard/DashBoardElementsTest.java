@@ -22,16 +22,24 @@ public class DashBoardElementsTest {
     @BeforeEach
     public void setUp() {
         Map<LocalDate, DashboardElementsByDate> dashboardElementsMap = new HashMap<>();
-        dashboardElementsMap.put(LocalDate.of(2023, 10, 1), new DashboardElementsByDate(LocalDate.of(2023, 10, 1), 10, 2, new HashMap<>()));
-        dashboardElementsMap.put(LocalDate.of(2023, 10, 2), new DashboardElementsByDate(LocalDate.of(2023, 10, 2), 15, 5, new HashMap<>()));
+        dashboardElementsMap.put(
+                LocalDate.of(2023, 10, 1),
+                new DashboardElementsByDate(LocalDate.of(2023, 10, 1), 10, 2, new HashMap<>()));
+        dashboardElementsMap.put(
+                LocalDate.of(2023, 10, 2),
+                new DashboardElementsByDate(LocalDate.of(2023, 10, 2), 15, 5, new HashMap<>()));
         dashBoardElements = new DashBoardElements(dashboardElementsMap);
     }
 
     @Test
     public void testGetDashboardElementsMap() {
         Map<LocalDate, DashboardElementsByDate> expectedMap = new HashMap<>();
-        expectedMap.put(LocalDate.of(2023, 10, 1), new DashboardElementsByDate(LocalDate.of(2023, 10, 1), 10, 2, new HashMap<>()));
-        expectedMap.put(LocalDate.of(2023, 10, 2), new DashboardElementsByDate(LocalDate.of(2023, 10, 2), 15, 5, new HashMap<>()));
+        expectedMap.put(
+                LocalDate.of(2023, 10, 1),
+                new DashboardElementsByDate(LocalDate.of(2023, 10, 1), 10, 2, new HashMap<>()));
+        expectedMap.put(
+                LocalDate.of(2023, 10, 2),
+                new DashboardElementsByDate(LocalDate.of(2023, 10, 2), 15, 5, new HashMap<>()));
         assertEquals(expectedMap, dashBoardElements.getDashboardElementsMap());
     }
 }

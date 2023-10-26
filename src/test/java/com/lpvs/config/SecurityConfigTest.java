@@ -18,14 +18,11 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @SpringBootTest(classes = SecurityConfig.class)
 class SecurityConfigTest {
 
-    @Autowired
-    private SecurityConfig securityConfig;
+    @Autowired private SecurityConfig securityConfig;
 
-    @MockBean
-    private OAuthService oAuthService;
+    @MockBean private OAuthService oAuthService;
 
-    @MockBean
-    private ClientRegistrationRepository clientRegistrationRepository;
+    @MockBean private ClientRegistrationRepository clientRegistrationRepository;
 
     @Test
     void contextLoads() {

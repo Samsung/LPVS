@@ -3,7 +3,8 @@ package com.lpvs.entity.result;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-@Getter @AllArgsConstructor
+@Getter
+@AllArgsConstructor
 public class LPVSResultFile {
 
     private Long id;
@@ -12,6 +13,6 @@ public class LPVSResultFile {
     private String matchLine;
     private String matchValue;
 
-    private String status; //license.licenseUsage
-    private String licenseSpdx; //license
+    private String status; // license.licenseUsage
+    private String licenseSpdx; // license
 }

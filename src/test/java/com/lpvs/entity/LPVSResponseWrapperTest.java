@@ -4,14 +4,11 @@
  * Use of this source code is governed by a MIT license that can be
  * found in the LICENSE file.
  */
-
 package com.lpvs.entity;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
 
@@ -36,7 +33,7 @@ public class LPVSResponseWrapperTest {
             log.error("Java reflect exception at LPVSResponseWrapperTest: " + e);
             fail();
 
-            throw new RuntimeException();  // to get rid of "`actual` may be unassigned" warning
+            throw new RuntimeException(); // to get rid of "`actual` may be unassigned" warning
         }
 
         Assertions.assertEquals(test_value, actual);

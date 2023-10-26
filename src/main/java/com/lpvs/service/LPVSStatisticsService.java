@@ -4,7 +4,6 @@
  * Use of this source code is governed by a MIT license that can be
  * found in the LICENSE file.
  */
-
 package com.lpvs.service;
 
 import com.lpvs.entity.LPVSDetectedLicense;
@@ -35,10 +34,12 @@ public class LPVSStatisticsService {
     private LPVSLicenseRepository lpvsLicenseRepository;
     private LPVSMemberRepository memberRepository;
 
-
-    public LPVSStatisticsService(LPVSPullRequestRepository lpvsPullRequestRepository, LPVSDetectedLicenseRepository lpvsDetectedLicenseRepository,
-                                 LPVSLoginCheckService loginCheckService, LPVSLicenseRepository lpvsLicenseRepository,
-                                 LPVSMemberRepository memberRepository) {
+    public LPVSStatisticsService(
+            LPVSPullRequestRepository lpvsPullRequestRepository,
+            LPVSDetectedLicenseRepository lpvsDetectedLicenseRepository,
+            LPVSLoginCheckService loginCheckService,
+            LPVSLicenseRepository lpvsLicenseRepository,
+            LPVSMemberRepository memberRepository) {
         this.lpvsPullRequestRepository = lpvsPullRequestRepository;
         this.lpvsDetectedLicenseRepository = lpvsDetectedLicenseRepository;
         this.loginCheckService = loginCheckService;
@@ -46,7 +47,8 @@ public class LPVSStatisticsService {
         this.memberRepository = memberRepository;
     }
 
-    public List<LPVSPullRequest> pathCheck(String type, String name, Authentication authentication) {
+    public List<LPVSPullRequest> pathCheck(
+            String type, String name, Authentication authentication) {
         LPVSMember findMember = loginCheckService.getMemberFromMemberMap(authentication);
 
         String findNickName = findMember.getNickname();
@@ -54,8 +56,8 @@ public class LPVSStatisticsService {
 
         List<LPVSPullRequest> prList = new ArrayList<>();
 
-        if (type.equals("own") && findNickName.equals(name) ||
-                type.equals("org") && findOrganization.equals(findOrganization)) {
+        if (type.equals("own") && findNickName.equals(name)
+                || type.equals("org") && findOrganization.equals(findOrganization)) {
             prList = lpvsPullRequestRepository.findByPullRequestBase(name);
         } else if (type.equals("send") && findNickName.equals(name)) {
             prList = lpvsPullRequestRepository.findBySenderOrPullRequestHead(name);
@@ -65,6 +67,7 @@ public class LPVSStatisticsService {
 
         return prList;
     }
+
     public Dashboard getDashboardEntity(String type, String name, Authentication authentication) {
 
         int totalDetectionCount = 0;
@@ -73,7 +76,6 @@ public class LPVSStatisticsService {
         int totalParticipantsCount = 0;
         int totalRepositoryCount = 0;
         Set<String> participantsSet = new HashSet<>();
-
 
         List<LPVSPullRequest> prList = pathCheck(type, name, authentication);
         Map<String, Integer> licenseCountMap = new HashMap<>();
@@ -97,7 +99,7 @@ public class LPVSStatisticsService {
             datePrMapValue.add(pr);
 
             totalSenderSet.add(pr.getSender());
-            if (!(pr.getRepositoryName()==null || pr.getRepositoryName().isEmpty())) {
+            if (!(pr.getRepositoryName() == null || pr.getRepositoryName().isEmpty())) {
                 totalRepositorySet.add(pr.getRepositoryName());
             }
         }
@@ -110,8 +112,9 @@ public class LPVSStatisticsService {
             Set<String> senderSet = new HashSet<>();
             List<LPVSPullRequest> prByDate = datePrMap.get(localDate);
             for (LPVSPullRequest pr : prByDate) {
-                List<LPVSDetectedLicense> dlList = lpvsDetectedLicenseRepository.findNotNullDLByPR(pr);
-                if (!(pr.getRepositoryName()==null || pr.getRepositoryName().isEmpty())) {
+                List<LPVSDetectedLicense> dlList =
+                        lpvsDetectedLicenseRepository.findNotNullDLByPR(pr);
+                if (!(pr.getRepositoryName() == null || pr.getRepositoryName().isEmpty())) {
                     senderSet.add(pr.getSender());
                 }
                 for (LPVSDetectedLicense dl : dlList) {
@@ -121,8 +124,9 @@ public class LPVSStatisticsService {
                         riskGradeMap.put(grade, riskGradeMap.getOrDefault(grade, 0) + 1);
                     }
                     if (dl.getLicense() != null) {
-                        licenseCountMap.put(dl.getLicense().getSpdxId(), licenseCountMap.get(
-                                dl.getLicense().getSpdxId()) + 1);
+                        licenseCountMap.put(
+                                dl.getLicense().getSpdxId(),
+                                licenseCountMap.get(dl.getLicense().getSpdxId()) + 1);
                     }
 
                     if (grade == Grade.HIGH) {
@@ -136,9 +140,9 @@ public class LPVSStatisticsService {
             }
 
             senderSet.remove(null);
-            dashboardByDates.add(new DashboardElementsByDate(localDate, senderSet.size(),
-                    prByDate.size(), riskGradeMap));
-
+            dashboardByDates.add(
+                    new DashboardElementsByDate(
+                            localDate, senderSet.size(), prByDate.size(), riskGradeMap));
         }
 
         for (String s : totalSenderSet) {
@@ -147,8 +151,15 @@ public class LPVSStatisticsService {
 
         totalParticipantsCount = totalSenderSet.size();
         totalRepositoryCount = totalRepositorySet.size();
-        return new Dashboard(name, licenseCountMap, totalDetectionCount, highSimilarityCount, totalIssueCount,
-                totalParticipantsCount, totalRepositoryCount, dashboardByDates);
+        return new Dashboard(
+                name,
+                licenseCountMap,
+                totalDetectionCount,
+                highSimilarityCount,
+                totalIssueCount,
+                totalParticipantsCount,
+                totalRepositoryCount,
+                dashboardByDates);
     }
 
     public Grade getGrade(String match) {

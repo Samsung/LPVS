@@ -14,7 +14,6 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
-
 public class LPVSResultFileTest {
 
     private LPVSResultFile lpvsResultFile;
@@ -28,7 +27,9 @@ public class LPVSResultFileTest {
 
     @BeforeEach
     public void setUp() {
-        lpvsResultFile = new LPVSResultFile(id, path, componentFileUrl, matchLine, matchValue, status, licenseSpdx);
+        lpvsResultFile =
+                new LPVSResultFile(
+                        id, path, componentFileUrl, matchLine, matchValue, status, licenseSpdx);
     }
 
     @Test
@@ -46,10 +47,24 @@ public class LPVSResultFileTest {
     @Test
     public void testInequality() {
         // Test inequality when objects are not the same
-        LPVSResultFile file1 = new LPVSResultFile(1L, "example/file.txt", "https://example.com/file.txt",
-            "This is a matching line", "LicenseA", "license.licenseUsage", "LicenseA");
-        LPVSResultFile file2 = new LPVSResultFile(2L, "another/file.txt", "https://example.com/another.txt",
-            "This is not a matching line", "LicenseB", "license.licenseUsage", "LicenseB");
+        LPVSResultFile file1 =
+                new LPVSResultFile(
+                        1L,
+                        "example/file.txt",
+                        "https://example.com/file.txt",
+                        "This is a matching line",
+                        "LicenseA",
+                        "license.licenseUsage",
+                        "LicenseA");
+        LPVSResultFile file2 =
+                new LPVSResultFile(
+                        2L,
+                        "another/file.txt",
+                        "https://example.com/another.txt",
+                        "This is not a matching line",
+                        "LicenseB",
+                        "license.licenseUsage",
+                        "LicenseB");
         assertFalse(file1.equals(file2));
         assertFalse(file2.equals(file1));
     }

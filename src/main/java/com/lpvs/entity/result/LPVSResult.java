@@ -2,7 +2,6 @@ package com.lpvs.entity.result;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.util.List;
 import java.util.Map;
@@ -17,6 +16,6 @@ public class LPVSResult {
     private Map<String, Integer> licenseCountMap;
 
     private String pullNumber;
-    
+
     private Boolean hasIssue;
 }

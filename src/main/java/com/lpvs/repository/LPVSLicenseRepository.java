@@ -4,7 +4,6 @@
  * Use of this source code is governed by a MIT license that can be
  * found in the LICENSE file.
  */
-
 package com.lpvs.repository;
 
 import com.lpvs.entity.LPVSLicense;
@@ -21,13 +20,18 @@ public interface LPVSLicenseRepository extends CrudRepository<LPVSLicense, Long>
     @Query(value = "SELECT * FROM licenses", nativeQuery = true)
     List<LPVSLicense> takeAllLicenses();
 
-    @Query(value =  "SELECT * FROM licenses WHERE licenses.license_spdx = :spdxId ORDER BY id DESC LIMIT 1", nativeQuery = true)
+    @Query(
+            value =
+                    "SELECT * FROM licenses WHERE licenses.license_spdx = :spdxId ORDER BY id DESC LIMIT 1",
+            nativeQuery = true)
     LPVSLicense searchBySpdxId(@Param("spdxId") String spdxId);
 
-    @Query(value = "SELECT * FROM licenses WHERE licenses.license_alternative_names LIKE %:licenseName% ORDER BY id DESC LIMIT 1", nativeQuery = true)
+    @Query(
+            value =
+                    "SELECT * FROM licenses WHERE licenses.license_alternative_names LIKE %:licenseName% ORDER BY id DESC LIMIT 1",
+            nativeQuery = true)
     LPVSLicense searchByAlternativeLicenseNames(@Param("licenseName") String licenseName);
 
     @Query(value = "select licenses.spdxId from LPVSLicense licenses")
     List<String> takeAllSpdxId();
-
 }

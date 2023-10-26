@@ -13,7 +13,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-
 public class LPVSHistoryTest {
 
     private LPVSHistory lpvsHistory;
@@ -28,7 +27,16 @@ public class LPVSHistoryTest {
 
     @BeforeEach
     public void setUp() {
-        lpvsHistory = new LPVSHistory(scanDate, repositoryName, pullRequestId, url, status, sender, pullNumber, hasIssue);
+        lpvsHistory =
+                new LPVSHistory(
+                        scanDate,
+                        repositoryName,
+                        pullRequestId,
+                        url,
+                        status,
+                        sender,
+                        pullNumber,
+                        hasIssue);
     }
 
     @Test
@@ -47,10 +55,26 @@ public class LPVSHistoryTest {
     @Test
     public void testInequality() {
         // Test inequality when objects are not the same
-        LPVSHistory history1 = new LPVSHistory("2023-10-12", "example/repository", 1L,
-            "https://example.com/pull/1", "Success", "john.doe", "pull/1", true);
-        LPVSHistory history2 = new LPVSHistory("2023-10-13", "another/repository", 2L,
-            "https://example.com/pull/2", "Failure", "jane.doe", "pull/2", false);
+        LPVSHistory history1 =
+                new LPVSHistory(
+                        "2023-10-12",
+                        "example/repository",
+                        1L,
+                        "https://example.com/pull/1",
+                        "Success",
+                        "john.doe",
+                        "pull/1",
+                        true);
+        LPVSHistory history2 =
+                new LPVSHistory(
+                        "2023-10-13",
+                        "another/repository",
+                        2L,
+                        "https://example.com/pull/2",
+                        "Failure",
+                        "jane.doe",
+                        "pull/2",
+                        false);
         assertFalse(history1.equals(history2));
         assertFalse(history2.equals(history1));
     }

@@ -24,7 +24,10 @@ public class LPVSLoginMemberTest {
 
     @Test
     public void testLPVSLoginMemberGettersAndSetters() {
-        LPVSLoginMember loginMember = new LPVSLoginMember(false, new LPVSMember(1L, "John", "john@email.com", "provider", "nickname"));
+        LPVSLoginMember loginMember =
+                new LPVSLoginMember(
+                        false,
+                        new LPVSMember(1L, "John", "john@email.com", "provider", "nickname"));
         loginMember.setIsLoggedIn(true);
         LPVSMember newMember = new LPVSMember(1L, "John", "john@email.com", "provider", "nickname");
         loginMember.setMember(newMember);

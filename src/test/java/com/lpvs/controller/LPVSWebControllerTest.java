@@ -38,26 +38,19 @@ import static org.mockito.Mockito.when;
 
 public class LPVSWebControllerTest {
 
-    @InjectMocks
-    private LPVSWebController webController;
+    @InjectMocks private LPVSWebController webController;
 
-    @Mock
-    private LPVSMemberRepository memberRepository;
+    @Mock private LPVSMemberRepository memberRepository;
 
-    @Mock
-    private LPVSDetectedLicenseRepository detectedLicenseRepository;
+    @Mock private LPVSDetectedLicenseRepository detectedLicenseRepository;
 
-    @Mock
-    private LPVSPullRequestRepository lpvsPullRequestRepository;
+    @Mock private LPVSPullRequestRepository lpvsPullRequestRepository;
 
-    @Mock
-    private LPVSLicenseRepository licenseRepository;
+    @Mock private LPVSLicenseRepository licenseRepository;
 
-    @Mock
-    private LPVSLoginCheckService loginCheckService;
+    @Mock private LPVSLoginCheckService loginCheckService;
 
-    @Mock
-    private LPVSStatisticsService statisticsService;
+    @Mock private LPVSStatisticsService statisticsService;
 
     @BeforeEach
     public void setUp() {
@@ -67,11 +60,13 @@ public class LPVSWebControllerTest {
     @Test
     public void testPersonalInfoSettings() {
         Authentication authentication = mock(Authentication.class);
-        LPVSMember member = new LPVSMember(1L, "testUser", "test@example.com", "provider", "nickName");
+        LPVSMember member =
+                new LPVSMember(1L, "testUser", "test@example.com", "provider", "nickName");
 
         when(loginCheckService.getMemberFromMemberMap(authentication)).thenReturn(member);
 
-        LPVSMember result = webController.new PublicInterface().personalInfoSettings(authentication);
+        LPVSMember result =
+                webController.new PublicInterface().personalInfoSettings(authentication);
 
         assertNotNull(result);
         assertEquals(1L, result.getId());
@@ -88,7 +83,8 @@ public class LPVSWebControllerTest {
         Map<String, Object> oauthLoginMemberMap = new HashMap<>();
         oauthLoginMemberMap.put("email", "test@example.com");
         oauthLoginMemberMap.put("provider", "OAuth");
-        when(loginCheckService.getOauthLoginMemberMap(authentication)).thenReturn(oauthLoginMemberMap);
+        when(loginCheckService.getOauthLoginMemberMap(authentication))
+                .thenReturn(oauthLoginMemberMap);
         when(loginCheckService.getMemberFromMemberMap(authentication)).thenReturn(member);
         LPVSLoginMember result = webController.new PublicInterface().loginMember(authentication);
         assertNotNull(result);
@@ -120,7 +116,8 @@ public class LPVSWebControllerTest {
         map.put("organization", "UpdatedOrg");
         when(loginCheckService.getMemberFromMemberMap(authentication)).thenReturn(member);
         when(memberRepository.saveAndFlush(member)).thenReturn(member);
-        ResponseEntity<LPVSMember> responseEntity = webController.new PublicInterface().postSettingTest(map, authentication);
+        ResponseEntity<LPVSMember> responseEntity =
+                webController.new PublicInterface().postSettingTest(map, authentication);
         assertNotNull(responseEntity);
         assertEquals(responseEntity.getBody(), member);
         assertEquals("UpdatedUser", member.getNickname());
@@ -137,8 +134,11 @@ public class LPVSWebControllerTest {
         map.put("nickname", "UpdatedUser");
         map.put("organization", "UpdatedOrg");
         when(loginCheckService.getMemberFromMemberMap(authentication)).thenReturn(member);
-        when(memberRepository.saveAndFlush(member)).thenThrow(new DataIntegrityViolationException("DuplicatedKeyException"));
-        assertThrows(IllegalArgumentException.class, () -> webController.new PublicInterface().postSettingTest(map, authentication));
+        when(memberRepository.saveAndFlush(member))
+                .thenThrow(new DataIntegrityViolationException("DuplicatedKeyException"));
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> webController.new PublicInterface().postSettingTest(map, authentication));
     }
 
     @Test
@@ -160,10 +160,13 @@ public class LPVSWebControllerTest {
         pullRequests.add(pullRequest);
         Page<LPVSPullRequest> prPage = new PageImpl<>(pullRequests);
 
-        when(loginCheckService.pathCheck(type, name, pageable, authentication)).thenReturn(new HistoryPageEntity(prPage, 1L));
+        when(loginCheckService.pathCheck(type, name, pageable, authentication))
+                .thenReturn(new HistoryPageEntity(prPage, 1L));
         when(detectedLicenseRepository.existsIssue(pullRequest)).thenReturn(false);
 
-        HistoryEntity result = webController.new PublicInterface().newHistoryPageByUser(type, name, pageable, authentication);
+        HistoryEntity result =
+                webController.new PublicInterface()
+                        .newHistoryPageByUser(type, name, pageable, authentication);
 
         assertNotNull(result);
         assertEquals(1, result.getCount());
@@ -212,7 +215,8 @@ public class LPVSWebControllerTest {
         detectedLicenses.add(detectedLicense2);
 
         LPVSLicense lic1 = new LPVSLicense(1L, "MIT", "MIT", "PERMITTED", "mit", "");
-        LPVSLicense lic2 = new LPVSLicense(2L, "Apache-2.0", "Apache-2.0", "PERMITTED", "apache", "");
+        LPVSLicense lic2 =
+                new LPVSLicense(2L, "Apache-2.0", "Apache-2.0", "PERMITTED", "apache", "");
         List<LPVSLicense> licenses = new ArrayList<>();
         licenses.add(lic1);
         licenses.add(lic2);
@@ -221,11 +225,14 @@ public class LPVSWebControllerTest {
         when(lpvsPullRequestRepository.findById(prId)).thenReturn(Optional.of(pullRequest));
         when(detectedLicenseRepository.findDistinctByLicense(pullRequest)).thenReturn(licenses);
         when(licenseRepository.takeAllSpdxId()).thenReturn(List.of("MIT", "Apache-2.0"));
-        when(detectedLicenseRepository.findByPullRequest(pullRequest, pageable)).thenReturn(new PageImpl<>(detectedLicenses));
+        when(detectedLicenseRepository.findByPullRequest(pullRequest, pageable))
+                .thenReturn(new PageImpl<>(detectedLicenses));
         when(detectedLicenseRepository.findByPullRequest(pullRequest)).thenReturn(detectedLicenses);
-        when(detectedLicenseRepository.CountByDetectedLicenseWherePullRequestId(pullRequest)).thenReturn(1L);
+        when(detectedLicenseRepository.CountByDetectedLicenseWherePullRequestId(pullRequest))
+                .thenReturn(1L);
 
-        LPVSResult result = webController.new PublicInterface().resultPage(prId, pageable, authentication);
+        LPVSResult result =
+                webController.new PublicInterface().resultPage(prId, pageable, authentication);
 
         assertNotNull(result);
         assertNotNull(result.getLpvsResultInfo());
@@ -241,9 +248,12 @@ public class LPVSWebControllerTest {
         Map<String, Integer> licenseCountMap = new HashMap<>();
         licenseCountMap.put("License1", 10);
         licenseCountMap.put("License2", 5);
-        Dashboard mockDashboard = new Dashboard("Test Dashboard", licenseCountMap, 100, 20, 30, 50, 10, null);
-        when(statisticsService.getDashboardEntity(type, name, authentication)).thenReturn(mockDashboard);
-        Dashboard dashboard = webController.new PublicInterface().dashboardPage(type, name, authentication);
+        Dashboard mockDashboard =
+                new Dashboard("Test Dashboard", licenseCountMap, 100, 20, 30, 50, 10, null);
+        when(statisticsService.getDashboardEntity(type, name, authentication))
+                .thenReturn(mockDashboard);
+        Dashboard dashboard =
+                webController.new PublicInterface().dashboardPage(type, name, authentication);
         assertNotNull(dashboard);
     }
 

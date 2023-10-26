@@ -4,7 +4,6 @@
  * Use of this source code is governed by a MIT license that can be
  * found in the LICENSE file.
  */
-
 package com.lpvs.util;
 
 import org.junit.jupiter.api.Test;
@@ -15,17 +14,17 @@ import org.springframework.test.context.TestPropertySource;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest(classes = LPVSTableConfiguration.class)
-@TestPropertySource(properties = {
-        "app.table.detectedLicenseName=mockDetectedLicenseName",
-        "app.table.detectedLicenseSchema=mockDetectedLicenseSchema",
-        "app.table.diffFileName=mockDiffFileName",
-        "app.table.pullRequestsName=mockPullRequestsName",
-        "app.table.queueName=mockQueueName"
-})
+@TestPropertySource(
+        properties = {
+            "app.table.detectedLicenseName=mockDetectedLicenseName",
+            "app.table.detectedLicenseSchema=mockDetectedLicenseSchema",
+            "app.table.diffFileName=mockDiffFileName",
+            "app.table.pullRequestsName=mockPullRequestsName",
+            "app.table.queueName=mockQueueName"
+        })
 public class LPVSTableConfigurationTest {
 
-    @Autowired
-    private LPVSTableConfiguration config;
+    @Autowired private LPVSTableConfiguration config;
 
     @Test
     public void testGetDetectedLicenseName() {

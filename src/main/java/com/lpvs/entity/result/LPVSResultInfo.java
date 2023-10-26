@@ -2,12 +2,12 @@ package com.lpvs.entity.result;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.util.Date;
 import java.util.List;
 
-@Getter @AllArgsConstructor
+@Getter
+@AllArgsConstructor
 public class LPVSResultInfo {
 
     private Long id;

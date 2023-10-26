@@ -20,13 +20,14 @@ public class LPVSMemberTest {
         String provider = "GitHub";
         String nickname = "johndoe";
 
-        LPVSMember member = LPVSMember.builder()
-                .id(id)
-                .name(name)
-                .email(email)
-                .provider(provider)
-                .nickname(nickname)
-                .build();
+        LPVSMember member =
+                LPVSMember.builder()
+                        .id(id)
+                        .name(name)
+                        .email(email)
+                        .provider(provider)
+                        .nickname(nickname)
+                        .build();
 
         assertEquals(id, member.getId());
         assertEquals(name, member.getName());
@@ -37,13 +38,14 @@ public class LPVSMemberTest {
 
     @Test
     public void testLPVSMemberUpdate() {
-        LPVSMember member = LPVSMember.builder()
-                .id(1L)
-                .name("Alice Johnson")
-                .email("alice@example.com")
-                .provider("GitHub")
-                .nickname("alicej")
-                .build();
+        LPVSMember member =
+                LPVSMember.builder()
+                        .id(1L)
+                        .name("Alice Johnson")
+                        .email("alice@example.com")
+                        .provider("GitHub")
+                        .nickname("alicej")
+                        .build();
 
         member.update("Bob Smith", "bob@example.com");
         assertEquals("Bob Smith", member.getName());
@@ -52,13 +54,14 @@ public class LPVSMemberTest {
 
     @Test
     public void testSetNickname() {
-        LPVSMember member = LPVSMember.builder()
-                .id(1L)
-                .name("Charlie Brown")
-                .email("charlie@example.com")
-                .provider("GitHub")
-                .nickname("charlieb")
-                .build();
+        LPVSMember member =
+                LPVSMember.builder()
+                        .id(1L)
+                        .name("Charlie Brown")
+                        .email("charlie@example.com")
+                        .provider("GitHub")
+                        .nickname("charlieb")
+                        .build();
 
         member.setNickname("charliebrown");
         assertEquals("charliebrown", member.getNickname());
@@ -66,13 +69,14 @@ public class LPVSMemberTest {
 
     @Test
     public void testSetOrganization() {
-        LPVSMember member = LPVSMember.builder()
-                .id(1L)
-                .name("David Smith")
-                .email("david@example.com")
-                .provider("GitHub")
-                .nickname("charlieb")
-                .build();
+        LPVSMember member =
+                LPVSMember.builder()
+                        .id(1L)
+                        .name("David Smith")
+                        .email("david@example.com")
+                        .provider("GitHub")
+                        .nickname("charlieb")
+                        .build();
 
         member.setOrganization("Org");
         assertEquals("Org", member.getOrganization());

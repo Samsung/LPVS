@@ -4,7 +4,6 @@
  * Use of this source code is governed by a MIT license that can be
  * found in the LICENSE file.
  */
-
 package com.lpvs.util;
 
 import com.lpvs.entity.LPVSQueue;
@@ -59,7 +58,6 @@ public class LPVSFileUtil {
                     }
                     cnt = startLine;
                 }
-
             }
 
             if (fileName.contains("/")) {
@@ -78,8 +76,10 @@ public class LPVSFileUtil {
                 }
             }
             if (prettyPatch.length() > 0) {
-                try (FileWriter fileWriter = new FileWriter(directoryPath + "/" + fileName, Charset.forName("UTF8"));
-                     BufferedWriter writer = new BufferedWriter(fileWriter)) {
+                try (FileWriter fileWriter =
+                                new FileWriter(
+                                        directoryPath + "/" + fileName, Charset.forName("UTF8"));
+                        BufferedWriter writer = new BufferedWriter(fileWriter)) {
                     writer.write(prettyPatch.toString());
                 }
             }
@@ -88,7 +88,8 @@ public class LPVSFileUtil {
         }
     }
 
-    public static String saveGithubDiffs(Iterable<GHPullRequestFileDetail> files, LPVSQueue webhookConfig) {
+    public static String saveGithubDiffs(
+            Iterable<GHPullRequestFileDetail> files, LPVSQueue webhookConfig) {
         String directoryPath = LPVSFileUtil.getLocalDirectoryPath(webhookConfig);
         deleteIfExists(directoryPath);
         boolean result = new File(directoryPath).mkdirs();
@@ -105,30 +106,57 @@ public class LPVSFileUtil {
         return directoryPath;
     }
 
-    public static void deleteIfExists (String path) {
-        File dir =  new File(path);
+    public static void deleteIfExists(String path) {
+        File dir = new File(path);
         if (dir.exists()) {
             FileSystemUtils.deleteRecursively(dir);
         }
     }
 
-    public static String getLocalDirectoryPath(LPVSQueue webhookConfig){
-        if (webhookConfig.getHeadCommitSHA() == null || webhookConfig.getHeadCommitSHA().equals("")){
-            return System.getProperty("user.home") + "/" + "Projects/" + LPVSWebhookUtil.getRepositoryName(webhookConfig) + "/" + LPVSWebhookUtil.getPullRequestId(webhookConfig);
+    public static String getLocalDirectoryPath(LPVSQueue webhookConfig) {
+        if (webhookConfig.getHeadCommitSHA() == null
+                || webhookConfig.getHeadCommitSHA().equals("")) {
+            return System.getProperty("user.home")
+                    + "/"
+                    + "Projects/"
+                    + LPVSWebhookUtil.getRepositoryName(webhookConfig)
+                    + "/"
+                    + LPVSWebhookUtil.getPullRequestId(webhookConfig);
         } else {
-            return System.getProperty("user.home") + "/" + "Projects/" + LPVSWebhookUtil.getRepositoryName(webhookConfig) + "/" + webhookConfig.getHeadCommitSHA();
+            return System.getProperty("user.home")
+                    + "/"
+                    + "Projects/"
+                    + LPVSWebhookUtil.getRepositoryName(webhookConfig)
+                    + "/"
+                    + webhookConfig.getHeadCommitSHA();
         }
     }
 
-    public static String getScanResultsJsonFilePath(LPVSQueue webhookConfig){
-        if (webhookConfig.getHeadCommitSHA() == null || webhookConfig.getHeadCommitSHA().equals("")){
-            return System.getProperty("user.home") + "/" + "Results/" + LPVSWebhookUtil.getRepositoryName(webhookConfig) + "/" + LPVSWebhookUtil.getPullRequestId(webhookConfig) + ".json";
+    public static String getScanResultsJsonFilePath(LPVSQueue webhookConfig) {
+        if (webhookConfig.getHeadCommitSHA() == null
+                || webhookConfig.getHeadCommitSHA().equals("")) {
+            return System.getProperty("user.home")
+                    + "/"
+                    + "Results/"
+                    + LPVSWebhookUtil.getRepositoryName(webhookConfig)
+                    + "/"
+                    + LPVSWebhookUtil.getPullRequestId(webhookConfig)
+                    + ".json";
         } else {
-            return System.getProperty("user.home") + "/" + "Results/" + LPVSWebhookUtil.getRepositoryName(webhookConfig) + "/" + webhookConfig.getHeadCommitSHA() + ".json";
+            return System.getProperty("user.home")
+                    + "/"
+                    + "Results/"
+                    + LPVSWebhookUtil.getRepositoryName(webhookConfig)
+                    + "/"
+                    + webhookConfig.getHeadCommitSHA()
+                    + ".json";
         }
     }
 
-    public static String getScanResultsDirectoryPath(LPVSQueue webhookConfig){
-        return System.getProperty("user.home") + "/" + "Results/" + LPVSWebhookUtil.getRepositoryName(webhookConfig);
+    public static String getScanResultsDirectoryPath(LPVSQueue webhookConfig) {
+        return System.getProperty("user.home")
+                + "/"
+                + "Results/"
+                + LPVSWebhookUtil.getRepositoryName(webhookConfig);
     }
 }

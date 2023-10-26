@@ -4,7 +4,6 @@
  * Use of this source code is governed by a MIT license that can be
  * found in the LICENSE file.
  */
-
 package com.lpvs.service.scanner.scanoss;
 
 import com.google.gson.*;
@@ -34,22 +33,20 @@ import static com.lpvs.util.LPVSFileUtil.getScanResultsJsonFilePath;
 @Slf4j
 public class LPVSScanossDetectService {
 
-    @Autowired
-    private LPVSLicenseService licenseService;
+    @Autowired private LPVSLicenseService licenseService;
 
-    @Autowired
-    private LPVSGitHubService gitHubService;
+    @Autowired private LPVSGitHubService gitHubService;
 
-    @Autowired
-    private LPVSLicenseRepository lpvsLicenseRepository;
+    @Autowired private LPVSLicenseRepository lpvsLicenseRepository;
 
     private Boolean debug;
 
     @Autowired
-    public LPVSScanossDetectService(@Value("${debug:false}") Boolean debug,
-                                    LPVSLicenseService licenseService,
-                                    LPVSGitHubService gitHubService,
-                                    LPVSLicenseRepository lpvsLicenseRepository) {
+    public LPVSScanossDetectService(
+            @Value("${debug:false}") Boolean debug,
+            LPVSLicenseService licenseService,
+            LPVSGitHubService gitHubService,
+            LPVSLicenseRepository lpvsLicenseRepository) {
         this.debug = debug;
         this.licenseService = licenseService;
         this.gitHubService = gitHubService;
@@ -63,19 +60,24 @@ public class LPVSScanossDetectService {
             ProcessBuilder processBuilder;
             File resultsDir = new File(getScanResultsDirectoryPath(webhookConfig));
             if (resultsDir.mkdirs()) {
-                log.debug("Scan result directory has been created: " + resultsDir.getAbsolutePath());
+                log.debug(
+                        "Scan result directory has been created: " + resultsDir.getAbsolutePath());
             } else if (resultsDir.isDirectory()) {
-                log.debug("Scan result directory already been created: " + resultsDir.getAbsolutePath());
+                log.debug(
+                        "Scan result directory already been created: "
+                                + resultsDir.getAbsolutePath());
             } else {
                 log.error("Directory %s could not be created." + resultsDir.getAbsolutePath());
             }
-            processBuilder = new ProcessBuilder(
-                "scanoss-py", "scan",
-                debug ? "-t" : "-q",
-                "--no-wfp-output",
-                "-o", getScanResultsJsonFilePath(webhookConfig),
-                path
-            );
+            processBuilder =
+                    new ProcessBuilder(
+                            "scanoss-py",
+                            "scan",
+                            debug ? "-t" : "-q",
+                            "--no-wfp-output",
+                            "-o",
+                            getScanResultsJsonFilePath(webhookConfig),
+                            path);
             Process process = processBuilder.inheritIO().start();
 
             int status = process.waitFor();
@@ -84,13 +86,14 @@ public class LPVSScanossDetectService {
                 log.error("Scanoss scanner terminated with none-zero code. Terminating.");
                 BufferedReader output = null;
                 try {
-                    output = new BufferedReader(new InputStreamReader(process.getErrorStream(), "UTF-8"));
+                    output =
+                            new BufferedReader(
+                                    new InputStreamReader(process.getErrorStream(), "UTF-8"));
                     log.error(output.readLine());
-                    throw new Exception("Scanoss scanner terminated with none-zero code. Terminating.");
-                }
-                finally {
-                    if(output != null)
-                        output.close();
+                    throw new Exception(
+                            "Scanoss scanner terminated with none-zero code. Terminating.");
+                } finally {
+                    if (output != null) output.close();
                 }
             }
         } catch (IOException | InterruptedException ex) {
@@ -107,16 +110,34 @@ public class LPVSScanossDetectService {
         try {
             Gson gson = new Gson();
             Reader reader;
-            if (webhookConfig.getHeadCommitSHA() == null || webhookConfig.getHeadCommitSHA().equals("")){
-                reader = Files.newBufferedReader(Paths.get(System.getProperty("user.home") + "/" + "Results/" +
-                        LPVSWebhookUtil.getRepositoryName(webhookConfig) + "/" + LPVSWebhookUtil.getPullRequestId(webhookConfig) + ".json"));
+            if (webhookConfig.getHeadCommitSHA() == null
+                    || webhookConfig.getHeadCommitSHA().equals("")) {
+                reader =
+                        Files.newBufferedReader(
+                                Paths.get(
+                                        System.getProperty("user.home")
+                                                + "/"
+                                                + "Results/"
+                                                + LPVSWebhookUtil.getRepositoryName(webhookConfig)
+                                                + "/"
+                                                + LPVSWebhookUtil.getPullRequestId(webhookConfig)
+                                                + ".json"));
             } else {
-                reader = Files.newBufferedReader(Paths.get(System.getProperty("user.home") + "/" + "Results/" +
-                        LPVSWebhookUtil.getRepositoryName(webhookConfig) + "/" + webhookConfig.getHeadCommitSHA() + ".json"));
+                reader =
+                        Files.newBufferedReader(
+                                Paths.get(
+                                        System.getProperty("user.home")
+                                                + "/"
+                                                + "Results/"
+                                                + LPVSWebhookUtil.getRepositoryName(webhookConfig)
+                                                + "/"
+                                                + webhookConfig.getHeadCommitSHA()
+                                                + ".json"));
             }
             // convert JSON file to map
-            Map<String, ArrayList<Object>> map = gson.fromJson(reader,
-                    new TypeToken<Map<String, ArrayList<Object>>>() {}.getType());
+            Map<String, ArrayList<Object>> map =
+                    gson.fromJson(
+                            reader, new TypeToken<Map<String, ArrayList<Object>>>() {}.getType());
 
             // parse map entries
             long ind = 0L;
@@ -129,25 +150,27 @@ public class LPVSScanossDetectService {
                 file.setId(ind++);
                 file.setFilePath(entry.getKey().toString());
 
-                String content = entry.getValue().toString()
-                        .replaceAll("=\\[", "\" : [")
-                        .replaceAll("=", "\" : \"")
-                        .replaceAll("\\}, \\{", "\"},{")
-                        .replaceAll("\\}\\],", "\"}],")
-                        .replaceAll("\\{", "{\"")
-                        .replaceAll(", ", "\", \"")
-                        .replaceAll("\\]\"","]")
-                        .replaceAll("}\",", "\"},")
-                        .replaceAll(": \\[", ": [\"")
-                        .replaceAll("],", "\"],")
-                        .replaceAll("\"\\{\"","{\"")
-                        .replaceAll("\"}\"]", "\"}]")
-                        .replaceAll("\\[\"\"\\]", "[]")
-                        .replaceAll("incompatible_with\" : (\".*?\"), \"name", "incompatible_with\" : \\[$1\\], \"name")
-                        ;
+                String content =
+                        entry.getValue()
+                                .toString()
+                                .replaceAll("=\\[", "\" : [")
+                                .replaceAll("=", "\" : \"")
+                                .replaceAll("\\}, \\{", "\"},{")
+                                .replaceAll("\\}\\],", "\"}],")
+                                .replaceAll("\\{", "{\"")
+                                .replaceAll(", ", "\", \"")
+                                .replaceAll("\\]\"", "]")
+                                .replaceAll("}\",", "\"},")
+                                .replaceAll(": \\[", ": [\"")
+                                .replaceAll("],", "\"],")
+                                .replaceAll("\"\\{\"", "{\"")
+                                .replaceAll("\"}\"]", "\"}]")
+                                .replaceAll("\\[\"\"\\]", "[]")
+                                .replaceAll(
+                                        "incompatible_with\" : (\".*?\"), \"name",
+                                        "incompatible_with\" : \\[$1\\], \"name");
                 content = content.substring(1, content.length() - 1);
-                if(content.endsWith("}"))
-                {
+                if (content.endsWith("}")) {
                     content = content.substring(0, content.length() - 1) + "\"}";
                 }
                 content = content.replaceAll("}\"}", "\"}}");
@@ -183,11 +206,13 @@ public class LPVSScanossDetectService {
                             licenses.add(newLicense);
                         }
 
-                        // Check for the license conflicts if the property "license_conflict=scanner"
+                        // Check for the license conflicts if the property
+                        // "license_conflict=scanner"
                         if (licenseService.licenseConflictsSource.equalsIgnoreCase("scanner")) {
                             if (license.incompatible_with != null) {
                                 for (String incompatibleLicense : license.incompatible_with) {
-                                    licenseService.addLicenseConflict(incompatibleLicense, license.name);
+                                    licenseService.addLicenseConflict(
+                                            incompatibleLicense, license.name);
                                 }
                             }
                         }
@@ -206,7 +231,9 @@ public class LPVSScanossDetectService {
     }
 
     // Scanoss JSON structure
-    @SuppressFBWarnings(value = {"UUF_UNUSED_FIELD", "SIC_INNER_SHOULD_BE_STATIC"}, justification = "Parser class for Json deserialization")
+    @SuppressFBWarnings(
+            value = {"UUF_UNUSED_FIELD", "SIC_INNER_SHOULD_BE_STATIC"},
+            justification = "Parser class for Json deserialization")
     private class ScanossJsonStructure {
         private String component;
         private String file;
@@ -249,6 +276,4 @@ public class LPVSScanossDetectService {
             }
         }
     }
-
-
 }

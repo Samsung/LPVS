@@ -4,7 +4,6 @@
  * Use of this source code is governed by a MIT license that can be
  * found in the LICENSE file.
  */
-
 package com.lpvs.entity.enums;
 
 import org.junit.jupiter.api.Test;
@@ -18,17 +17,22 @@ public class LPVSPullRequestActionTest {
         assertEquals(LPVSPullRequestAction.convertFrom("opened"), LPVSPullRequestAction.OPEN);
         assertEquals(LPVSPullRequestAction.convertFrom("reopened"), LPVSPullRequestAction.REOPEN);
         assertEquals(LPVSPullRequestAction.convertFrom("closed"), LPVSPullRequestAction.CLOSE);
-        assertEquals(LPVSPullRequestAction.convertFrom("synchronize"), LPVSPullRequestAction.UPDATE);
+        assertEquals(
+                LPVSPullRequestAction.convertFrom("synchronize"), LPVSPullRequestAction.UPDATE);
         assertEquals(LPVSPullRequestAction.convertFrom("rescan"), LPVSPullRequestAction.RESCAN);
 
-        assertNotEquals(LPVSPullRequestAction.convertFrom("random_name"), LPVSPullRequestAction.OPEN);
-        assertNotEquals(LPVSPullRequestAction.convertFrom("random_name"), LPVSPullRequestAction.REOPEN);
-        assertNotEquals(LPVSPullRequestAction.convertFrom("random_name"), LPVSPullRequestAction.CLOSE);
-        assertNotEquals(LPVSPullRequestAction.convertFrom("random_name"), LPVSPullRequestAction.UPDATE);
-        assertNotEquals(LPVSPullRequestAction.convertFrom("random_name"), LPVSPullRequestAction.RESCAN);
+        assertNotEquals(
+                LPVSPullRequestAction.convertFrom("random_name"), LPVSPullRequestAction.OPEN);
+        assertNotEquals(
+                LPVSPullRequestAction.convertFrom("random_name"), LPVSPullRequestAction.REOPEN);
+        assertNotEquals(
+                LPVSPullRequestAction.convertFrom("random_name"), LPVSPullRequestAction.CLOSE);
+        assertNotEquals(
+                LPVSPullRequestAction.convertFrom("random_name"), LPVSPullRequestAction.UPDATE);
+        assertNotEquals(
+                LPVSPullRequestAction.convertFrom("random_name"), LPVSPullRequestAction.RESCAN);
 
         assertNull(LPVSPullRequestAction.convertFrom("random_name"));
-
     }
 
     @Test

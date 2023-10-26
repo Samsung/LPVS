@@ -4,7 +4,6 @@
  * Use of this source code is governed by a MIT license that can be
  * found in the LICENSE file.
  */
-
 package com.lpvs.entity;
 
 import lombok.Builder;
@@ -14,10 +13,14 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 
-@Getter @NoArgsConstructor
+@Getter
+@NoArgsConstructor
 @DynamicUpdate
 @Entity
-@Table(name = "member", schema = "lpvs", indexes = {@Index(name = "unq_member", columnList = "email, provider", unique = true)})
+@Table(
+        name = "member",
+        schema = "lpvs",
+        indexes = {@Index(name = "unq_member", columnList = "email, provider", unique = true)})
 public class LPVSMember {
 
     @Id
@@ -62,5 +65,4 @@ public class LPVSMember {
     public void setOrganization(String organization) {
         this.organization = organization;
     }
-
 }

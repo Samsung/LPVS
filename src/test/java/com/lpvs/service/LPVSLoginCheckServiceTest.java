@@ -29,14 +29,11 @@ import static org.mockito.Mockito.when;
 
 public class LPVSLoginCheckServiceTest {
 
-    @Mock
-    private LPVSPullRequestRepository lpvsPullRequestRepository;
+    @Mock private LPVSPullRequestRepository lpvsPullRequestRepository;
 
-    @Mock
-    private LPVSMemberRepository memberRepository;
+    @Mock private LPVSMemberRepository memberRepository;
 
-    @Mock
-    private Authentication authentication;
+    @Mock private Authentication authentication;
 
     private LPVSLoginCheckService loginCheckService;
 
@@ -76,7 +73,9 @@ public class LPVSLoginCheckServiceTest {
     public void testLoginVerificationWithNullPrincipal() {
         when(authentication.getPrincipal()).thenReturn(null);
 
-        assertThrows(LoginFailedException.class, () -> loginCheckService.loginVerification(authentication));
+        assertThrows(
+                LoginFailedException.class,
+                () -> loginCheckService.loginVerification(authentication));
     }
 
     @Test
@@ -89,7 +88,8 @@ public class LPVSLoginCheckServiceTest {
         when(authentication.getPrincipal()).thenReturn(oAuth2User);
         when(oAuth2User.getAttributes()).thenReturn(attributes);
 
-        when(memberRepository.findByEmailAndProvider("test@example.com", "provider")).thenReturn(Optional.of(new LPVSMember()));
+        when(memberRepository.findByEmailAndProvider("test@example.com", "provider"))
+                .thenReturn(Optional.of(new LPVSMember()));
 
         LPVSMember result = loginCheckService.getMemberFromMemberMap(authentication);
 
@@ -106,10 +106,13 @@ public class LPVSLoginCheckServiceTest {
         OAuth2User oAuth2User = mock(OAuth2User.class);
         when(oAuth2User.getAttributes()).thenReturn(attributes);
         when(authentication.getPrincipal()).thenReturn(oAuth2User);
-        when(lpvsPullRequestRepository.findByPullRequestBase("testNickname", null)).thenReturn(Page.empty());
-        when(memberRepository.findByEmailAndProvider("test@example.com", "provider")).thenReturn(Optional.of(member));
+        when(lpvsPullRequestRepository.findByPullRequestBase("testNickname", null))
+                .thenReturn(Page.empty());
+        when(memberRepository.findByEmailAndProvider("test@example.com", "provider"))
+                .thenReturn(Optional.of(member));
 
-        HistoryPageEntity result = loginCheckService.pathCheck("own", "testNickname", null, authentication);
+        HistoryPageEntity result =
+                loginCheckService.pathCheck("own", "testNickname", null, authentication);
 
         assertNotNull(result);
     }

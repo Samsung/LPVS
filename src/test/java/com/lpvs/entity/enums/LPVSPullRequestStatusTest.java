@@ -14,9 +14,15 @@ public class LPVSPullRequestStatusTest {
 
     @Test
     public void testGetPullRequestStatus() {
-        assertEquals("Cannot access the pull request", LPVSPullRequestStatus.NO_ACCESS.getPullRequestStatus());
-        assertEquals("License issues detected", LPVSPullRequestStatus.ISSUES_DETECTED.getPullRequestStatus());
-        assertEquals("Error while posting results", LPVSPullRequestStatus.INTERNAL_ERROR.getPullRequestStatus());
+        assertEquals(
+                "Cannot access the pull request",
+                LPVSPullRequestStatus.NO_ACCESS.getPullRequestStatus());
+        assertEquals(
+                "License issues detected",
+                LPVSPullRequestStatus.ISSUES_DETECTED.getPullRequestStatus());
+        assertEquals(
+                "Error while posting results",
+                LPVSPullRequestStatus.INTERNAL_ERROR.getPullRequestStatus());
         assertEquals("Scan completed", LPVSPullRequestStatus.COMPLETED.getPullRequestStatus());
         assertEquals("Scan is scheduled", LPVSPullRequestStatus.SCANNING.getPullRequestStatus());
     }
@@ -25,7 +31,8 @@ public class LPVSPullRequestStatusTest {
     public void testToString() {
         assertEquals("Cannot access the pull request", LPVSPullRequestStatus.NO_ACCESS.toString());
         assertEquals("License issues detected", LPVSPullRequestStatus.ISSUES_DETECTED.toString());
-        assertEquals("Error while posting results", LPVSPullRequestStatus.INTERNAL_ERROR.toString());
+        assertEquals(
+                "Error while posting results", LPVSPullRequestStatus.INTERNAL_ERROR.toString());
         assertEquals("Scan completed", LPVSPullRequestStatus.COMPLETED.toString());
         assertEquals("Scan is scheduled", LPVSPullRequestStatus.SCANNING.toString());
     }

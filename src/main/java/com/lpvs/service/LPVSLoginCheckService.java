@@ -4,7 +4,6 @@
  * Use of this source code is governed by a MIT license that can be
  * found in the LICENSE file.
  */
-
 package com.lpvs.service;
 
 import com.lpvs.entity.LPVSMember;
@@ -29,10 +28,13 @@ public class LPVSLoginCheckService {
     private LPVSPullRequestRepository lpvsPullRequestRepository;
     private LPVSMemberRepository memberRepository;
 
-    public LPVSLoginCheckService(LPVSPullRequestRepository lpvsPullRequestRepository, LPVSMemberRepository memberRepository) {
+    public LPVSLoginCheckService(
+            LPVSPullRequestRepository lpvsPullRequestRepository,
+            LPVSMemberRepository memberRepository) {
         this.lpvsPullRequestRepository = lpvsPullRequestRepository;
         this.memberRepository = memberRepository;
     }
+
     public Map<String, Object> getOauthLoginMemberMap(Authentication authentication) {
         try {
             OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
@@ -61,8 +63,8 @@ public class LPVSLoginCheckService {
         return findMember;
     }
 
-    public HistoryPageEntity pathCheck(String type, String name,
-                                Pageable pageable, Authentication authentication) {
+    public HistoryPageEntity pathCheck(
+            String type, String name, Pageable pageable, Authentication authentication) {
 
         loginVerification(authentication);
         LPVSMember findMember = getMemberFromMemberMap(authentication);
@@ -71,8 +73,8 @@ public class LPVSLoginCheckService {
         Page<LPVSPullRequest> prPage;
         Long count;
 
-        if ((type.equals("own") && findNickName.equals(name)) ||
-                (type.equals("org") && findOrganization.equals(name))) {
+        if ((type.equals("own") && findNickName.equals(name))
+                || (type.equals("org") && findOrganization.equals(name))) {
             prPage = lpvsPullRequestRepository.findByPullRequestBase(name, pageable);
             count = lpvsPullRequestRepository.CountByPullRequestBase(name);
         } else if (type.equals("send") && findNickName.equals(name)) {

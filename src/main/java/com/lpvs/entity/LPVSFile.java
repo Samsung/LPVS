@@ -4,7 +4,6 @@
  * Use of this source code is governed by a MIT license that can be
  * found in the LICENSE file.
  */
-
 package com.lpvs.entity;
 
 import com.lpvs.entity.enums.LPVSVcs;
@@ -15,7 +14,10 @@ import lombok.Setter;
 
 import java.util.Set;
 
-@Getter @Setter @AllArgsConstructor @NoArgsConstructor
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class LPVSFile {
 
     private Long id;
@@ -38,20 +40,39 @@ public class LPVSFile {
             String licSpdxId = license.getSpdxId();
             // Check if the license SPDX ID has scanner-specific name
             if (licSpdxId.startsWith("LicenseRef")) {
-                // Change the name of the license that will be displayed in PR comment to scanner-independent
-                licSpdxId = "UNREVIEWED LICENSE : " + licSpdxId.replaceAll("LicenseRef-scancode-", "").replaceAll("LicenseRef-scanoss-", "");
+                // Change the name of the license that will be displayed in PR comment to
+                // scanner-independent
+                licSpdxId =
+                        "UNREVIEWED LICENSE : "
+                                + licSpdxId
+                                        .replaceAll("LicenseRef-scancode-", "")
+                                        .replaceAll("LicenseRef-scanoss-", "");
             }
             if (vcs != null && vcs.equals(LPVSVcs.GITHUB)) {
-                licenseNames += (license.getChecklistUrl() != null ? "<a target=\"_blank\" href=\"" + license.getChecklistUrl() + "\">" : "") +
-                        licSpdxId +
-                        (license.getChecklistUrl() != null ? "</a>" : "") +
-                        " (" + license.getAccess().toLowerCase() + "), ";
+                licenseNames +=
+                        (license.getChecklistUrl() != null
+                                        ? "<a target=\"_blank\" href=\""
+                                                + license.getChecklistUrl()
+                                                + "\">"
+                                        : "")
+                                + licSpdxId
+                                + (license.getChecklistUrl() != null ? "</a>" : "")
+                                + " ("
+                                + license.getAccess().toLowerCase()
+                                + "), ";
             } else {
-                licenseNames += licSpdxId + (license.getChecklistUrl() != null ? " (" + license.getChecklistUrl() + ")" : "") +
-                        " - " + license.getAccess().toLowerCase() + ", ";
+                licenseNames +=
+                        licSpdxId
+                                + (license.getChecklistUrl() != null
+                                        ? " (" + license.getChecklistUrl() + ")"
+                                        : "")
+                                + " - "
+                                + license.getAccess().toLowerCase()
+                                + ", ";
             }
         }
-        if (licenseNames.endsWith(", ")) licenseNames = licenseNames.substring(0, licenseNames.length() - 2);
+        if (licenseNames.endsWith(", "))
+            licenseNames = licenseNames.substring(0, licenseNames.length() - 2);
         return licenseNames;
     }
 }

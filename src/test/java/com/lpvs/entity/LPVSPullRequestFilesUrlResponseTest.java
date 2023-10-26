@@ -4,7 +4,6 @@
  * Use of this source code is governed by a MIT license that can be
  * found in the LICENSE file.
  */
-
 package com.lpvs.entity;
 
 import org.junit.jupiter.api.Test;
@@ -16,7 +15,8 @@ public class LPVSPullRequestFilesUrlResponseTest {
 
     @Test
     public void setPullRequestIdTest() {
-        LPVSPullRequestFilesUrlResponse lpvsPullRequestFilesUrlResponse = new LPVSPullRequestFilesUrlResponse();
+        LPVSPullRequestFilesUrlResponse lpvsPullRequestFilesUrlResponse =
+                new LPVSPullRequestFilesUrlResponse();
         final String newActualValue1 = "new value 1";
         final String newActualValue2 = "new value 2";
         lpvsPullRequestFilesUrlResponse.setDiff(newActualValue1);
