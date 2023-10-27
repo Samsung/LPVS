@@ -5,7 +5,7 @@
   "proxy": "http://localhost:7896",
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
-    "@testing-library/react": "^13.4.0",
+    "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.4.0",
     "http-proxy-middleware": "^2.0.6",
