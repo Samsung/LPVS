@@ -1,4 +1,4 @@
-FROM node:18 AS frontend
+FROM node:18@sha256:a6385a6bb2fdcb7c48fc871e35e32af8daaa82c518900be49b76d10c005864c2 AS frontend
 
 WORKDIR /frontend
 COPY frontend .
@@ -6,7 +6,7 @@ RUN npm install
 RUN npm run build
 
 # Base image for building lpvs lib
-FROM openjdk:11 AS builder
+FROM openjdk:11@sha256:99bac5bf83633e3c7399aed725c8415e7b569b54e03e4599e580fc9cdb7c21ab AS builder
 
 # Install dependencies
 RUN apt-get update && \
@@ -21,7 +21,7 @@ COPY . .
 RUN mvn clean install
 
 # Base image for running lpvs container
-FROM openjdk:11
+FROM openjdk:11@sha256:99bac5bf83633e3c7399aed725c8415e7b569b54e03e4599e580fc9cdb7c21ab
 
 # Install dependencies and remove tmp files
 RUN apt-get update && \

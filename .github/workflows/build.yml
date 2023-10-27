@@ -18,6 +18,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Harden Runner
+      uses: step-security/harden-runner@1b05615854632b887b69ae1be8cbefe72d3ae423
+      with:
+        egress-policy: audit
+
     - uses: actions/checkout@d0651293c4a5a52e711f25b41b05b2212f385d28
     - name: Set up JDK 11
       uses: actions/setup-java@cd89f46ac9d01407894225f350157564c9c7cee2

@@ -1,18 +1,32 @@
 version: 2
 updates:
 # Enable version updates for maven
-  - package-ecosystem: "maven"
-    directory: "/"
+  - package-ecosystem: maven
+    directory: /
     # Check for updates once a month
     schedule:
-      interval: "monthly"
+      interval: monthly
     open-pull-requests-limit: 15
 # Enable version updates for Actions
-  - package-ecosystem: "github-actions"
+  - package-ecosystem: github-actions
     # Look for `.github/workflows` in the `root` directory
-    directory: ".github/workflows/"
+    directory: .github/workflows/
     # Check for updates once a month
     schedule:
-      interval: "monthly"
+      interval: monthly
     # Allow up to 15 open pull requests for github-actions dependencies
+    open-pull-requests-limit: 15
+# Enable version updates for Docker
+  - package-ecosystem: docker
+    directory: /
+    schedule:
+      interval: monthly
+    # Allow up to 15 open pull requests for docker dependencies
+    open-pull-requests-limit: 15
+# Enable version updates for Docker
+  - package-ecosystem: npm
+    directory: /frontend
+    schedule:
+      interval: monthly
+    # Allow up to 15 open pull requests for nmp dependencies
     open-pull-requests-limit: 15
