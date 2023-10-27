@@ -23,10 +23,3 @@ updates:
       interval: monthly
     # Allow up to 15 open pull requests for docker dependencies
     open-pull-requests-limit: 15
-# Enable version updates for Docker
-  - package-ecosystem: npm
-    directory: /frontend
-    schedule:
-      interval: monthly
-    # Allow up to 15 open pull requests for nmp dependencies
-    open-pull-requests-limit: 15
