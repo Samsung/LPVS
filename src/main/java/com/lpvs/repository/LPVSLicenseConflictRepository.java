@@ -7,15 +7,15 @@
 package com.lpvs.repository;
 
 import com.lpvs.entity.LPVSLicenseConflict;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface LPVSLicenseConflictRepository extends CrudRepository<LPVSLicenseConflict, Long> {
+public interface LPVSLicenseConflictRepository extends JpaRepository<LPVSLicenseConflict, Long> {
 
     @Query(value = "SELECT * FROM license_conflicts", nativeQuery = true)
     List<LPVSLicenseConflict> takeAllLicenseConflicts();

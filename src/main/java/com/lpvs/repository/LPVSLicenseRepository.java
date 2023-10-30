@@ -7,15 +7,15 @@
 package com.lpvs.repository;
 
 import com.lpvs.entity.LPVSLicense;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface LPVSLicenseRepository extends CrudRepository<LPVSLicense, Long> {
+public interface LPVSLicenseRepository extends JpaRepository<LPVSLicense, Long> {
 
     @Query(value = "SELECT * FROM licenses", nativeQuery = true)
     List<LPVSLicense> takeAllLicenses();
