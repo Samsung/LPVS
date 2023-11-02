@@ -31,12 +31,10 @@ public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2
 
     private LPVSMemberRepository lpvsMemberRepository;
 
-    @Setter
-    private DefaultOAuth2UserService oAuth2UserService = null;
+    @Setter private DefaultOAuth2UserService oAuth2UserService = null;
 
     @Autowired
-    public OAuthService(
-            LPVSMemberRepository lpvsMemberRepository) {
+    public OAuthService(LPVSMemberRepository lpvsMemberRepository) {
         this.lpvsMemberRepository = lpvsMemberRepository;
     }
 
