@@ -62,7 +62,8 @@ public class OAuthServiceTest {
         when(defaultUserService.loadUser(userRequest)).thenReturn(oAuth2User);
 
         // Create an instance of your OAuthService with the mocked DefaultOAuth2UserService
-        OAuthService oAuthService = new OAuthService(lpvsMemberRepository, defaultUserService);
+        OAuthService oAuthService = new OAuthService(lpvsMemberRepository);
+        oAuthService.setOAuth2UserService(defaultUserService);
 
         OAuth2User loadedUser = oAuthService.loadUser(userRequest);
 

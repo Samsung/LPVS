@@ -50,16 +50,17 @@ public class LPVSGitHubService {
     private static final String GITHUB_AUTH_TOKEN_ENV_VAR_NAME = "LPVS_GITHUB_TOKEN";
     private static final String GITHUB_API_URL_ENV_VAR_NAME = "LPVS_GITHUB_API_URL";
 
-    @Autowired private LPVSPullRequestRepository pullRequestRepository;
+    private LPVSPullRequestRepository pullRequestRepository;
 
-    @Autowired private LPVSDetectedLicenseRepository lpvsDetectedLicenseRepository;
+    private LPVSDetectedLicenseRepository lpvsDetectedLicenseRepository;
 
-    @Autowired private LPVSLicenseRepository lpvsLicenseRepository;
+    private LPVSLicenseRepository lpvsLicenseRepository;
 
-    @Autowired private LPVSLicenseConflictRepository lpvsLicenseConflictRepository;
+    private LPVSLicenseConflictRepository lpvsLicenseConflictRepository;
 
     private LPVSExitHandler exitHandler;
 
+    @Autowired
     public LPVSGitHubService(
             @Value("${" + GITHUB_LOGIN_PROP_NAME + "}") String GITHUB_LOGIN,
             @Value("${" + GITHUB_AUTH_TOKEN_PROP_NAME + "}") String GITHUB_AUTH_TOKEN,
@@ -95,7 +96,7 @@ public class LPVSGitHubService {
     }
 
     @PostConstruct
-    private void checks() throws Exception {
+    private void checks() {
         if (this.GITHUB_AUTH_TOKEN.isEmpty()) {
             log.error(
                     GITHUB_AUTH_TOKEN_ENV_VAR_NAME
