@@ -4,9 +4,10 @@
 1. [Introduction](#1-introduction)
 2. [Vulnerabilities](#2-vulnerabilities)  
     2.1 [Supported Versions](#21-supported-versions)  
-    2.2 [Vulnerability Report](#22-vulnerability-report)  
-    2.3 [Security Disclosure](#23-security-disclosure)  
-3. [Security requrements](#3-security_requirements)
+    2.2 [Private Vulnerability Reporting](#22-private-vulnerability-reporting)  
+    2.3 [Public Vulnerability Reporting](#23-public-vulnerability-reporting)  
+    2.4 [Security Disclosure](#24-security-disclosure)  
+3. [Security requirements](#3-security-requirements)  
 4. [Security Software life cycle processes](#4-security-software-life-cycle-processes)
 
 ## 1. Introduction
@@ -25,13 +26,27 @@ We provide patches to address vulnerabilities for the following versions of LPVS
 | ----------- | ------------ | ------------------ | ---------------------------------------------- |
 | 1.0.0       | N/A          |                    |                                                |
 
-### 2.2 Vulnerability Report
+### 2.2 Private Vulnerability Reporting
 
-The LPVS team takes security bugs seriously and gives them the highest priority. We appreciate your responsible disclosure of security-related information to help us address vulnerabilities.
+We take the security of LPVS seriously, and we welcome responsible disclosure of security vulnerabilities. To report security vulnerabilities, please follow these steps:
 
-To report security bugs, please email the LPVS Security Issue Review (SIR) team at _o.kopysov@samsung.com_ with the subject line "SECURITY". Our team will acknowledge your report and aim to provide recommendations for mitigation within 1 week. Throughout the process, we will keep you informed of the progress towards the fix and may request additional information or guidance.
+1. Visit the [GitHub guidance on privately reporting a security vulnerability](https://docs.github.com/en/code-security/security-advisories/guidance-on-reporting-and-writing/privately-reporting-a-security-vulnerability).
 
-### 2.3 Security Disclosure
+2. Follow the instructions provided in the guide to submit your security vulnerability report privately.
+
+3. GitHub will notify us about your report, and we will work to address the issue promptly.
+
+### 2.3 Public Vulnerability Reporting
+
+If you believe that a vulnerability can be publicly disclosed or is not critical, you can still report it using our email contact _o.kopysov@samsung.com_ with the subject line "SECURITY". 
+
+Our LPVS Security Issue Review (SIR) team will acknowledge your report and aim to provide recommendations for mitigation within 1 week. Throughout the process, we will keep you informed of the progress toward the fix and may request additional information or guidance.
+
+However, for highly sensitive or critical vulnerabilities, we encourage you to use the private reporting method described in section 3.1.
+
+We appreciate your cooperation in helping us maintain the security of LPVS.
+
+### 2.4 Security Disclosure
 
 Once a security vulnerability is reported to the LPVS team, it is treated with the highest priority. The assigned person will coordinate the patch and release process, which includes the following steps:
 
@@ -54,7 +69,7 @@ Note: This security policy is subject to change and may be updated without notic
 
 ---
 
-## 3. Security requrements
+## 3. Security requirements
 
 ```plantuml
 @startuml
