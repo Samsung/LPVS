@@ -49,4 +49,4 @@ jobs:
       uses: codecov/codecov-action@v3
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
-        files: target/site/jacoco/jacoco.csv
+        files: target/site/jacoco/jacoco.xml
