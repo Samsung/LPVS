@@ -8,6 +8,7 @@
 [![RepoSize](https://img.shields.io/github/repo-size/samsung/lpvs.svg)](https://github.com/Samsung/LPVS)
 [![Release](https://img.shields.io/github/v/release/samsung/lpvs.svg)](https://github.com/Samsung/LPVS/releases)
 [![LICENSE](https://img.shields.io/github/license/samsung/lpvs.svg)](https://github.com/Samsung/LPVS/blob/main/LICENSE)
+[![codecov](https://codecov.io/gh/Samsung/LPVS/graph/badge.svg?token=XTD749ITNF)](https://codecov.io/gh/Samsung/LPVS)
 [![Project Map](https://sourcespy.com/shield.svg)](https://sourcespy.com/github/samsunglpvs/)
 
 ## Introduction
