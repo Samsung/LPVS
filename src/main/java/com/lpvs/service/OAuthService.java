@@ -10,8 +10,8 @@ import com.lpvs.entity.LPVSMember;
 import com.lpvs.entity.auth.MemberProfile;
 import com.lpvs.entity.enums.OAuthAttributes;
 import com.lpvs.repository.LPVSMemberRepository;
-import lombok.RequiredArgsConstructor;
 
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -27,18 +27,15 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 @Service
-@RequiredArgsConstructor
 public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
-    private final LPVSMemberRepository lpvsMemberRepository;
+    private LPVSMemberRepository lpvsMemberRepository;
 
-    private DefaultOAuth2UserService oAuth2UserService = null;
+    @Setter private DefaultOAuth2UserService oAuth2UserService = null;
 
     @Autowired
-    public OAuthService(
-            LPVSMemberRepository lpvsMemberRepository, DefaultOAuth2UserService oAuth2UserService) {
+    public OAuthService(LPVSMemberRepository lpvsMemberRepository) {
         this.lpvsMemberRepository = lpvsMemberRepository;
-        this.oAuth2UserService = oAuth2UserService;
     }
 
     @Override
