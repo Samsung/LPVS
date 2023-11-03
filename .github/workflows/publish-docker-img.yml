@@ -1,4 +1,4 @@
-name: Publish Containers
+name: Publish Docker Image to ghcr.io
 on:
   push:
     tags:
@@ -6,7 +6,6 @@ on:
 
 permissions:
   contents: read
-  packages: write
 
 env:
   REGISTRY: ghcr.io
@@ -14,7 +13,10 @@ env:
 
 jobs:
   publish:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     steps:
       - name: Harden Runner
         uses: step-security/harden-runner@1b05615854632b887b69ae1be8cbefe72d3ae423 # v2.6.0
