@@ -16,19 +16,26 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.lang.reflect.Field;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Objects;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 public class LPVSScanossDetectServiceTest {
+
+    @Mock
+    private LPVSQueue lpvsQueue;
 
     @BeforeEach
     public void setUp() throws URISyntaxException, IOException {
@@ -109,5 +116,31 @@ public class LPVSScanossDetectServiceTest {
         ReflectionTestUtils.setField(
                 licenseService, "licenseConflictsSource", licenseConflictsSource);
         Assertions.assertNotNull(scanossDetectService.checkLicenses(webhookConfig));
+    }
+
+    @Test
+    public void testRunScan_StatusEqualsOne() throws Exception {
+        LPVSLicenseService licenseService = Mockito.mock(LPVSLicenseService.class);
+        LPVSGitHubService gitHubService = Mockito.mock(LPVSGitHubService.class);
+        LPVSLicenseRepository lpvsLicenseRepository = Mockito.mock(LPVSLicenseRepository.class);
+        LPVSScanossDetectService scannerService =
+                new LPVSScanossDetectService(
+                        false, licenseService, gitHubService, lpvsLicenseRepository);
+        Process process = Mockito.mock(Process.class);
+        InputStream errorStream = new ByteArrayInputStream(
+                "Scanoss scanner terminated with none-zero code. Terminating.".getBytes());
+        Mockito.when(process.getErrorStream()).thenReturn(errorStream);
+        Mockito.when(process.waitFor()).thenReturn(1);
+        ProcessBuilder mockedProcessBuilder = Mockito.mock(ProcessBuilder.class);
+        Mockito.when(mockedProcessBuilder.inheritIO()).thenReturn(mockedProcessBuilder);
+        Mockito.when(mockedProcessBuilder.start()).thenReturn(process);
+        Field field = scannerService.getClass().getDeclaredField("processBuilder");
+        field.setAccessible(true);
+        field.set(scannerService, mockedProcessBuilder);
+
+        Exception exception = assertThrows(Exception.class, () -> scannerService.runScan(lpvsQueue, "path"));
+
+        // Verify that the method throws an exception when the status is 1
+        assertEquals("Scanoss scanner terminated with none-zero code. Terminating.", exception.getMessage());
     }
 }

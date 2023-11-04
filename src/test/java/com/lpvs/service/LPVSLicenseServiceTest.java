@@ -10,14 +10,18 @@ import com.lpvs.entity.LPVSFile;
 import com.lpvs.entity.LPVSLicense;
 import com.lpvs.entity.LPVSQueue;
 import com.lpvs.util.LPVSExitHandler;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junitpioneer.jupiter.SetEnvironmentVariable;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.lang.reflect.Field;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -26,6 +30,7 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Slf4j
 public class LPVSLicenseServiceTest {
 
     private LPVSExitHandler exitHandler;
@@ -132,6 +137,24 @@ public class LPVSLicenseServiceTest {
                     }
                 });
         Assertions.assertNotNull(licenseService.findConflicts(webhookConfig, fileList));
+    }
+
+    @Nested
+    class TestInit {
+        final LPVSLicenseService licenseService = new LPVSLicenseService(null, exitHandler);
+
+        @Test
+        @SetEnvironmentVariable(key = "LPVS_LICENSE_CONFLICT", value = "scanner")
+        public void testInit() {
+            try {
+                Method init_method = licenseService.getClass().getDeclaredMethod("init");
+                init_method.setAccessible(true);
+                init_method.invoke(licenseService);
+            } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+                log.error("LPVSLicenseServiceTest::TestInit exception: " + e);
+                fail();
+            }
+        }
     }
 
     @Nested
