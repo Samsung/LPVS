@@ -31,50 +31,55 @@ import static org.mockito.Mockito.*;
 @SpringBootTest(classes = SecurityConfig.class)
 class SecurityConfigTest {
 
-        @Autowired
-        private SecurityConfig securityConfig;
+    @Autowired private SecurityConfig securityConfig;
 
-        @MockBean
-        private OAuthService oAuthService;
+    @MockBean private OAuthService oAuthService;
 
-        @MockBean
-        private ClientRegistrationRepository clientRegistrationRepository;
+    @MockBean private ClientRegistrationRepository clientRegistrationRepository;
 
-        @Test
-        void testContextLoads() {
-            // Verify that the SecurityConfig bean is created and loaded
-            assertNotNull(securityConfig);
-        }
+    @Test
+    void testContextLoads() {
+        // Verify that the SecurityConfig bean is created and loaded
+        assertNotNull(securityConfig);
+    }
 
     @Test
     public void testOnAuthenticationSuccess() throws IOException, ServletException {
         AuthenticationSuccessHandler successHandler = mock(AuthenticationSuccessHandler.class);
 
         // Configure the behavior of onAuthenticationSuccess
-        doAnswer(invocation -> {
-            HttpServletRequest request = invocation.getArgument(0);
-            HttpServletResponse response = invocation.getArgument(1);
-            Authentication authentication = invocation.getArgument(2);
-            String frontendMainPageUrl = "/frontend-main-page-url";
-            String redirectUri = frontendMainPageUrl + "/login/callback?accessToken=accessToken&" +
-                    "refreshToken=refreshToken";
-            response.sendRedirect(redirectUri);
-            return null;
-        }).when(successHandler).onAuthenticationSuccess(any(), any(), any());
+        doAnswer(
+                        invocation -> {
+                            HttpServletRequest request = invocation.getArgument(0);
+                            HttpServletResponse response = invocation.getArgument(1);
+                            Authentication authentication = invocation.getArgument(2);
+                            String frontendMainPageUrl = "/frontend-main-page-url";
+                            String redirectUri =
+                                    frontendMainPageUrl
+                                            + "/login/callback?accessToken=accessToken&"
+                                            + "refreshToken=refreshToken";
+                            response.sendRedirect(redirectUri);
+                            return null;
+                        })
+                .when(successHandler)
+                .onAuthenticationSuccess(any(), any(), any());
 
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
         Authentication authentication = mock(Authentication.class);
 
         // Set up the authentication to return an OAuth2User
-        OAuth2User oAuth2User = new DefaultOAuth2User(
-                Collections.singleton((GrantedAuthority) () -> "ROLE_USER"),
-                Collections.singletonMap("sub", "1234567890"), "sub");
+        OAuth2User oAuth2User =
+                new DefaultOAuth2User(
+                        Collections.singleton((GrantedAuthority) () -> "ROLE_USER"),
+                        Collections.singletonMap("sub", "1234567890"),
+                        "sub");
         when(authentication.getPrincipal()).thenReturn(oAuth2User);
 
         successHandler.onAuthenticationSuccess(request, response, authentication);
-        String expectedRedirectUri = "/frontend-main-page-url/login/callback?accessToken=accessToken&" +
-                "refreshToken=refreshToken";
+        String expectedRedirectUri =
+                "/frontend-main-page-url/login/callback?accessToken=accessToken&"
+                        + "refreshToken=refreshToken";
         verify(response).sendRedirect(expectedRedirectUri);
     }
 }

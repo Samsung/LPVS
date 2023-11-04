@@ -55,7 +55,8 @@ public class LPVSScanossDetectService {
         this.lpvsLicenseRepository = lpvsLicenseRepository;
     }
 
-    protected InputStreamReader createInputStreamReader(Process process) throws UnsupportedEncodingException {
+    protected InputStreamReader createInputStreamReader(Process process)
+            throws UnsupportedEncodingException {
         return new InputStreamReader(process.getErrorStream(), "UTF-8");
     }
 
@@ -79,14 +80,15 @@ public class LPVSScanossDetectService {
                 log.error("Directory %s could not be created." + resultsDir.getAbsolutePath());
             }
             if (processBuilder == null) {
-                processBuilder = new ProcessBuilder(
-                        "scanoss-py",
-                        "scan",
-                        debug ? "-t" : "-q",
-                        "--no-wfp-output",
-                        "-o",
-                        getScanResultsJsonFilePath(webhookConfig),
-                        path);
+                processBuilder =
+                        new ProcessBuilder(
+                                "scanoss-py",
+                                "scan",
+                                debug ? "-t" : "-q",
+                                "--no-wfp-output",
+                                "-o",
+                                getScanResultsJsonFilePath(webhookConfig),
+                                path);
             }
             Process process = processBuilder.inheritIO().start();
 

@@ -34,8 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class LPVSScanossDetectServiceTest {
 
-    @Mock
-    private LPVSQueue lpvsQueue;
+    @Mock private LPVSQueue lpvsQueue;
 
     @BeforeEach
     public void setUp() throws URISyntaxException, IOException {
@@ -127,8 +126,9 @@ public class LPVSScanossDetectServiceTest {
                 new LPVSScanossDetectService(
                         false, licenseService, gitHubService, lpvsLicenseRepository);
         Process process = Mockito.mock(Process.class);
-        InputStream errorStream = new ByteArrayInputStream(
-                "Scanoss scanner terminated with none-zero code. Terminating.".getBytes());
+        InputStream errorStream =
+                new ByteArrayInputStream(
+                        "Scanoss scanner terminated with none-zero code. Terminating.".getBytes());
         Mockito.when(process.getErrorStream()).thenReturn(errorStream);
         Mockito.when(process.waitFor()).thenReturn(1);
         ProcessBuilder mockedProcessBuilder = Mockito.mock(ProcessBuilder.class);
@@ -138,9 +138,12 @@ public class LPVSScanossDetectServiceTest {
         field.setAccessible(true);
         field.set(scannerService, mockedProcessBuilder);
 
-        Exception exception = assertThrows(Exception.class, () -> scannerService.runScan(lpvsQueue, "path"));
+        Exception exception =
+                assertThrows(Exception.class, () -> scannerService.runScan(lpvsQueue, "path"));
 
         // Verify that the method throws an exception when the status is 1
-        assertEquals("Scanoss scanner terminated with none-zero code. Terminating.", exception.getMessage());
+        assertEquals(
+                "Scanoss scanner terminated with none-zero code. Terminating.",
+                exception.getMessage());
     }
 }
