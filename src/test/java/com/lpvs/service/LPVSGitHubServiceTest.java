@@ -24,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junitpioneer.jupiter.SetEnvironmentVariable;
 import org.kohsuke.github.*;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
@@ -43,12 +44,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
-/**
- * todo: decide if we need extra-dependency Junit-pioneer to mock System.getenv(),
- *  and then possibly add test case for
- *  `if (GITHUB_AUTH_TOKEN.isEmpty()) setGithubTokenFromEnv();`
- *  https://stackoverflow.com/a/59635733/8463690
- */
 @Slf4j
 public class LPVSGitHubServiceTest {
 
@@ -2021,6 +2016,7 @@ public class LPVSGitHubServiceTest {
         LPVSLicense lpvs_license_1;
         final String license_name_1 = "MIT License";
         final String spdx_id_1 = "MIT";
+        final String spdx_id_2 = "GPL-2.0-only";
         final String access_1 = "PROHIBITED";
         final String alternativeName_1 = "";
         final String checklist_url_1 = "https://opensource.org/licenses/MIT";
@@ -2128,6 +2124,125 @@ public class LPVSGitHubServiceTest {
         @Test
         public void testCommentResults__ProhibitedPresentConflictsPresent() throws IOException {
             // main test
+            gh_service.commentResults(
+                    webhookConfig, List.of(lpvs_file_1), List.of(conflict_1), lpvsPullRequest);
+
+            // `mocked_instance_gh` verify
+            try {
+                verify(mocked_instance_gh, times(1))
+                        .getRepository(
+                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                        + "/"
+                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig));
+            } catch (IOException e) {
+                log.error(
+                        "TestCommentResults__ProhibitedPresentConflictsPresent.testCommentResults__ProhibitedPresentConflictsPresent() error "
+                                + e);
+                fail();
+            }
+            verifyNoMoreInteractions(mocked_instance_gh);
+
+            // `mocked_repo` verify
+            try {
+                verify(mocked_repo, times(1)).getPullRequests(GHIssueState.OPEN);
+                verify(mocked_repo, times(1))
+                        .createCommitStatus(
+                                commit_sha,
+                                GHCommitState.FAILURE,
+                                null,
+                                "Potential license problem(s) detected",
+                                "[License Pre-Validation Service]");
+            } catch (IOException e) {
+                log.error(
+                        "TestCommentResults__ProhibitedPresentConflictsPresent.testCommentResults__ProhibitedPresentConflictsPresent() error "
+                                + e);
+                fail();
+            }
+            verifyNoMoreInteractions(mocked_repo);
+
+            // `mocked_pr_2` verify
+            ((GHPullRequestOurMock) mocked_pr_2).verifyCommentCall(expected_comment);
+            ((GHPullRequestOurMock) mocked_pr_2).verifyNoMoreCommentCalls();
+        }
+
+        @Test
+        public void testCommentResults__ProhibitedPresentConflictsPresentLicensePresent()
+                throws IOException {
+            // main test
+            webhookConfig.setRepositoryLicense(spdx_id_1);
+            when(mocked_lpvsLicenseRepository.searchBySpdxId(spdx_id_1))
+                    .thenReturn(
+                            new LPVSLicense(
+                                    1L,
+                                    license_name_1,
+                                    spdx_id_1,
+                                    access_1,
+                                    alternativeName_1,
+                                    checklist_url_1));
+
+            when(mocked_lpvsLicenseRepository.saveAndFlush(Mockito.any(LPVSLicense.class)))
+                    .thenAnswer(i -> i.getArguments()[0]);
+
+            gh_service.commentResults(
+                    webhookConfig, List.of(lpvs_file_1), List.of(conflict_1), lpvsPullRequest);
+
+            // `mocked_instance_gh` verify
+            try {
+                verify(mocked_instance_gh, times(1))
+                        .getRepository(
+                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                        + "/"
+                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig));
+            } catch (IOException e) {
+                log.error(
+                        "TestCommentResults__ProhibitedPresentConflictsPresent.testCommentResults__ProhibitedPresentConflictsPresent() error "
+                                + e);
+                fail();
+            }
+            verifyNoMoreInteractions(mocked_instance_gh);
+
+            // `mocked_repo` verify
+            try {
+                verify(mocked_repo, times(1)).getPullRequests(GHIssueState.OPEN);
+                verify(mocked_repo, times(1))
+                        .createCommitStatus(
+                                commit_sha,
+                                GHCommitState.FAILURE,
+                                null,
+                                "Potential license problem(s) detected",
+                                "[License Pre-Validation Service]");
+            } catch (IOException e) {
+                log.error(
+                        "TestCommentResults__ProhibitedPresentConflictsPresent.testCommentResults__ProhibitedPresentConflictsPresent() error "
+                                + e);
+                fail();
+            }
+            verifyNoMoreInteractions(mocked_repo);
+
+            // `mocked_pr_2` verify
+            ((GHPullRequestOurMock) mocked_pr_2).verifyCommentCall(expected_comment);
+            ((GHPullRequestOurMock) mocked_pr_2).verifyNoMoreCommentCalls();
+        }
+
+        @Test
+        public void testCommentResults__ProhibitedPresentConflictsPresentLicensePresentAlt()
+                throws IOException {
+            // main test
+            webhookConfig.setRepositoryLicense(spdx_id_2);
+            when(mocked_lpvsLicenseRepository.searchBySpdxId(spdx_id_2)).thenReturn(null);
+            when(mocked_lpvsLicenseRepository.searchByAlternativeLicenseNames(spdx_id_2))
+                    .thenReturn(
+                            new LPVSLicense(
+                                    1L,
+                                    license_name_1,
+                                    spdx_id_2,
+                                    access_1,
+                                    alternativeName_1,
+                                    checklist_url_1));
+
+            when(mocked_lpvsLicenseRepository.saveAndFlush(Mockito.any(LPVSLicense.class)))
+                    .thenAnswer(i -> i.getArguments()[0]);
+
             gh_service.commentResults(
                     webhookConfig, List.of(lpvs_file_1), List.of(conflict_1), lpvsPullRequest);
 
@@ -3052,6 +3167,28 @@ public class LPVSGitHubServiceTest {
             license.setAccess("");
             gh_service.commentResults(webhookConfig, fileList, conflictList, lpvsPullRequest);
             Mockito.verify(gitHub, times(4)).getRepository(Mockito.anyString());
+        }
+
+        @Test
+        @SetEnvironmentVariable(key = "LPVS_GITHUB_TOKEN", value = "GitHubTokenValue")
+        public void testSetGithubTokenFromEnv_WhenEnvVariableIsSet()
+                throws IllegalAccessException, NoSuchFieldException {
+            String githubTokenValue = "GitHubTokenValue";
+            gh_service.setGithubTokenFromEnv();
+            Field field = gh_service.getClass().getDeclaredField("GITHUB_AUTH_TOKEN");
+            field.setAccessible(true);
+            String githubRealTokenValue = (String) field.get(gh_service);
+            assertEquals(githubTokenValue, githubRealTokenValue);
+        }
+
+        @Test
+        public void testSetGithubTokenFromEnv_WhenEnvVariableIsNotSet()
+                throws NoSuchFieldException, IllegalAccessException {
+            gh_service.setGithubTokenFromEnv();
+            Field field = gh_service.getClass().getDeclaredField("GITHUB_AUTH_TOKEN");
+            field.setAccessible(true);
+            String githubRealTokenValue = (String) field.get(gh_service);
+            assertEquals(GH_AUTH_TOKEN, githubRealTokenValue);
         }
     }
 }

@@ -8,7 +8,10 @@ package com.lpvs.service;
 
 import com.lpvs.entity.LPVSFile;
 import com.lpvs.entity.LPVSLicense;
+import com.lpvs.entity.LPVSLicenseConflict;
 import com.lpvs.entity.LPVSQueue;
+import com.lpvs.repository.LPVSLicenseConflictRepository;
+import com.lpvs.repository.LPVSLicenseRepository;
 import com.lpvs.util.LPVSExitHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
@@ -16,6 +19,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junitpioneer.jupiter.SetEnvironmentVariable;
+import org.mockito.Mockito;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.lang.reflect.Field;
@@ -143,6 +147,12 @@ public class LPVSLicenseServiceTest {
     class TestInit {
         final LPVSLicenseService licenseService = new LPVSLicenseService(null, exitHandler);
 
+        final LPVSLicenseRepository lpvsLicenseRepository =
+                Mockito.mock(LPVSLicenseRepository.class);
+
+        final LPVSLicenseConflictRepository lpvsLicenseConflictRepository =
+                Mockito.mock(LPVSLicenseConflictRepository.class);
+
         @Test
         @SetEnvironmentVariable(key = "LPVS_LICENSE_CONFLICT", value = "scanner")
         public void testInit() {
@@ -151,6 +161,63 @@ public class LPVSLicenseServiceTest {
                 init_method.setAccessible(true);
                 init_method.invoke(licenseService);
             } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+                log.error("LPVSLicenseServiceTest::TestInit exception: " + e);
+                fail();
+            }
+        }
+
+        @Test
+        @SetEnvironmentVariable(key = "LPVS_LICENSE_CONFLICT", value = "db")
+        public void testInitDB() {
+            try {
+                LPVSLicense license1 =
+                        new LPVSLicense() {
+                            {
+                                setChecklistUrl("");
+                                setAccess("unrviewed");
+                                setSpdxId("Apache-2.0");
+                            }
+                        };
+                LPVSLicense license2 =
+                        new LPVSLicense() {
+                            {
+                                setChecklistUrl("");
+                                setAccess("unrviewed");
+                                setSpdxId("MIT");
+                            }
+                        };
+                List<LPVSLicense> licenseList = new ArrayList<>();
+                licenseList.add(license1);
+                licenseList.add(license2);
+                Mockito.when(lpvsLicenseRepository.takeAllLicenses()).thenReturn(licenseList);
+
+                LPVSLicenseConflict licenseConflict = new LPVSLicenseConflict();
+                licenseConflict.setConflictId(1L);
+                licenseConflict.setConflictLicense(license1);
+                licenseConflict.setRepositoryLicense(license2);
+                List<LPVSLicenseConflict> licenseConflictList = new ArrayList<>();
+                licenseConflictList.add(licenseConflict);
+                Mockito.when(lpvsLicenseConflictRepository.takeAllLicenseConflicts())
+                        .thenReturn(licenseConflictList);
+
+                Field lpvsLicenseRepositoryField =
+                        LPVSLicenseService.class.getDeclaredField("lpvsLicenseRepository");
+                lpvsLicenseRepositoryField.setAccessible(true);
+                lpvsLicenseRepositoryField.set(licenseService, lpvsLicenseRepository);
+
+                Field lpvsLicenseConflictRepositoryField =
+                        LPVSLicenseService.class.getDeclaredField("lpvsLicenseConflictRepository");
+                lpvsLicenseConflictRepositoryField.setAccessible(true);
+                lpvsLicenseConflictRepositoryField.set(
+                        licenseService, lpvsLicenseConflictRepository);
+
+                Method init_method = licenseService.getClass().getDeclaredMethod("init");
+                init_method.setAccessible(true);
+                init_method.invoke(licenseService);
+            } catch (NoSuchMethodException
+                    | IllegalAccessException
+                    | InvocationTargetException
+                    | NoSuchFieldException e) {
                 log.error("LPVSLicenseServiceTest::TestInit exception: " + e);
                 fail();
             }
@@ -178,9 +245,8 @@ public class LPVSLicenseServiceTest {
             lpvs_license_1 = new LPVSLicense(1L, license_name_1, spdx_id_1, null, null, null);
             lpvs_license_2 = new LPVSLicense(2L, license_name_2, spdx_id_2, null, null, null);
 
-            Field conflicts_field = licenseService.getClass().getDeclaredField("licenses");
-            conflicts_field.setAccessible(true);
-            conflicts_field.set(licenseService, List.of(lpvs_license_1, lpvs_license_2));
+            licenseService.addLicenseToList(lpvs_license_1);
+            licenseService.addLicenseToList(lpvs_license_2);
         }
 
         @Test

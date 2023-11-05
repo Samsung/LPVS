@@ -33,9 +33,9 @@ public class LPVSLicenseService {
 
     public String licenseConflictsSource;
 
-    private List<LPVSLicense> licenses;
+    private List<LPVSLicense> licenses = new ArrayList<>();
 
-    private List<Conflict<String, String>> licenseConflicts;
+    private List<Conflict<String, String>> licenseConflicts = new ArrayList<>();
 
     private LPVSExitHandler exitHandler;
 
