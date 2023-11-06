@@ -21,7 +21,7 @@ public class LPVSExitHandler {
         this.applicationContext = applicationContext;
     }
 
-    public void exit(int exitCode) {
-        SpringApplication.exit(applicationContext, () -> exitCode);
+    public int exit(int exitCode) {
+        return SpringApplication.exit(applicationContext, () -> exitCode);
     }
 }

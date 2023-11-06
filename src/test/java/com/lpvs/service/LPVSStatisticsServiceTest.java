@@ -66,6 +66,9 @@ public class LPVSStatisticsServiceTest {
 
         assertNotNull(result);
         assertEquals(0, result.size());
+        result = statisticsService.pathCheck("send", "testNickname", authentication);
+        assertNotNull(result);
+        assertEquals(0, result.size());
     }
 
     @Test
