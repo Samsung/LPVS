@@ -78,10 +78,8 @@ public class LPVSDetectService {
         log.info("License detection scanner: " + scannerType);
         if (trigger != null && !trigger.equals("")) {
             try {
-                System.out.println("github.pull.request: " + trigger);
                 LPVSQueue webhookConfig = this.getInternalQueueByPullRequest(trigger);
                 this.runScan(webhookConfig, this.getPathByPullRequest(webhookConfig));
-                System.out.println("runScan mock...");
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -141,14 +139,7 @@ public class LPVSDetectService {
             else gitHub = GitHub.connectToEnterpriseWithOAuth(GITHUB_API_URL, GITHUB_LOGIN, GITHUB_AUTH_TOKEN);
             GHRepository repo = gitHub.getRepository(pullRequestRepo);
             GHPullRequest pR = repo.getPullRequest(pullRequestNum);
-            System.out.println("Repo stringification: " + repo);
-            System.out.println("Head stringification: " + pR.getHead());
-            if (pR.getHead() != null) System.out.println("Head repo stringification: " + pR.getHead().getRepository());
-            System.out.println("PR stringification: " + pR);
-            LPVSQueue webhookConfig = LPVSDetectService.getGitHubWebhookConfig(repo, pR);
-            String jsonObj = (new Gson()).toJson(webhookConfig);
-            System.out.println("Q: " + jsonObj);
-            return webhookConfig;
+            return LPVSDetectService.getGitHubWebhookConfig(repo, pR);
         } catch (IOException e){
             log.error("Can't set up github client: " + e);
         }
