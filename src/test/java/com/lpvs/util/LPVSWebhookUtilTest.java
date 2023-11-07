@@ -214,4 +214,14 @@ public class LPVSWebhookUtilTest {
             assertEquals("Pull Request URL is absent in webhook config", result);
         }
     }
+
+    @Nested
+    public class TestWebhookNull {
+
+        @Test
+        public void checkNull() {
+            assertEquals(LPVSWebhookUtil.getRepositoryOrganization(null), "Webhook is absent");
+            assertEquals(LPVSWebhookUtil.getRepositoryName(null), "Webhook is absent");
+        }
+    }
 }

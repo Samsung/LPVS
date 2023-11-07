@@ -58,6 +58,7 @@ public class LPVSStatisticsServiceTest {
         Authentication authentication = mock(Authentication.class);
         LPVSMember member = new LPVSMember();
         member.setNickname("testNickname");
+        member.setOrganization("testOrgName");
         when(loginCheckService.getMemberFromMemberMap(authentication)).thenReturn(member);
         when(pullRequestRepository.findByPullRequestBase("testNickname"))
                 .thenReturn(new ArrayList<>());
@@ -69,6 +70,13 @@ public class LPVSStatisticsServiceTest {
         result = statisticsService.pathCheck("send", "testNickname", authentication);
         assertNotNull(result);
         assertEquals(0, result.size());
+
+        result = statisticsService.pathCheck("org", "testOrgName", authentication);
+        assertNotNull(result);
+        assertEquals(0, result.size());
+
+        assertThrows(WrongAccessException.class, () -> statisticsService.pathCheck(
+                "test", "testNickname", authentication));
     }
 
     @Test
@@ -131,7 +139,7 @@ public class LPVSStatisticsServiceTest {
                         add(mockRequest);
                     }
                 };
-        LPVSDetectedLicense detectedLicense =
+        LPVSDetectedLicense detectedLicense1 =
                 new LPVSDetectedLicense() {
                     {
                         setMatch(match);
@@ -142,6 +150,12 @@ public class LPVSStatisticsServiceTest {
                                     }
                                 });
                         setIssue(true);
+                    }
+                };
+        LPVSDetectedLicense detectedLicense2 =
+                new LPVSDetectedLicense() {
+                    {
+                        setIssue(false);
                     }
                 };
         member.setNickname("testNickname");
@@ -155,7 +169,8 @@ public class LPVSStatisticsServiceTest {
                 .thenReturn(
                         new ArrayList<>() {
                             {
-                                add(detectedLicense);
+                                add(detectedLicense1);
+                                add(detectedLicense2);
                             }
                         });
 
@@ -164,6 +179,7 @@ public class LPVSStatisticsServiceTest {
         assertNotNull(result);
     }
 
+    @Test
     public void testGetDashboardEntityWithDummyPRList() {
         Authentication authentication = mock(Authentication.class);
         LPVSMember member = new LPVSMember();
@@ -218,6 +234,7 @@ public class LPVSStatisticsServiceTest {
 
         LPVSPullRequest pullRequest1 = new LPVSPullRequest();
         LPVSPullRequest pullRequest2 = new LPVSPullRequest();
+        LPVSPullRequest pullRequest3 = new LPVSPullRequest();
 
         pullRequest1.setDate(new Date());
         pullRequest1.setRepositoryName("SampleRepository1");
@@ -227,6 +244,10 @@ public class LPVSStatisticsServiceTest {
         pullRequest2.setRepositoryName("SampleRepository2");
         pullRequest2.setPullRequestUrl("https://url.com/user/repo/pull/2");
         pullRequest2.setPullRequestFilesUrl("https://url.com/user/repo/pull/2/files");
+        pullRequest3.setDate(new Date());
+        pullRequest3.setRepositoryName("");
+        pullRequest3.setPullRequestUrl("https://url.com/user/repo/pull/2");
+        pullRequest3.setPullRequestFilesUrl("https://url.com/user/repo/pull/2/files");
 
         List<LPVSPullRequest> pullRequestList = Arrays.asList(pullRequest1, pullRequest2);
 

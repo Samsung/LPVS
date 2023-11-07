@@ -18,14 +18,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class LPVSLoginCheckServiceTest {
 
@@ -72,6 +68,17 @@ public class LPVSLoginCheckServiceTest {
     @Test
     public void testLoginVerificationWithNullPrincipal() {
         when(authentication.getPrincipal()).thenReturn(null);
+
+        assertThrows(
+                LoginFailedException.class,
+                () -> loginCheckService.loginVerification(authentication));
+    }
+
+    @Test
+    public void testLoginVerificationWithEmptyPrincipal() {
+        OAuth2User oAuth2User = mock(OAuth2User.class);
+        when(authentication.getPrincipal()).thenReturn(oAuth2User);
+        when(oAuth2User.getAttributes()).thenReturn(new LinkedHashMap<>());
 
         assertThrows(
                 LoginFailedException.class,

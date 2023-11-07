@@ -28,10 +28,13 @@ import org.junitpioneer.jupiter.SetEnvironmentVariable;
 import org.kohsuke.github.*;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -311,6 +314,7 @@ public class LPVSGitHubServiceTest {
                 };
         GHPullRequest mocked_pr_1;
         GHPullRequest mocked_pr_2;
+        GHPullRequest mocked_pr_3;
         final String url_pr_1 = "https://github.com/Samsung/LPVS/pull/18";
         final String url_pr_2 = "https://github.com/Samsung/LPVS/pull/19";
         final String repo_org = "Samsung";
@@ -346,6 +350,7 @@ public class LPVSGitHubServiceTest {
                                 mocked_list_files,
                                 0,
                                 null);
+                mocked_pr_3 = new GHPullRequestOurMock(null, null, null, -1, null);
             } catch (MalformedURLException e) {
                 log.error(
                         "TestGetPullRequestFiles__ApiUrlPresentPullPresentNoRescan.setUp() error "
@@ -354,7 +359,154 @@ public class LPVSGitHubServiceTest {
             }
             try {
                 when(mocked_repo.getPullRequests(GHIssueState.OPEN))
-                        .thenReturn(Arrays.asList(mocked_pr_1, mocked_pr_2));
+                        .thenReturn(Arrays.asList(mocked_pr_1, mocked_pr_2, mocked_pr_3));
+            } catch (IOException e) {
+                log.error("mocked_repo.getPullRequests error " + e);
+            }
+        }
+
+        @Test
+        public void testGetPullRequestFiles__ApiUrlPresentPullPresentNoRescan() {
+
+            try (MockedStatic<GitHub> mocked_static_gh = mockStatic(GitHub.class);
+                    MockedStatic<LPVSFileUtil> mocked_static_file_util =
+                            mockStatic(LPVSFileUtil.class)) {
+                mocked_static_gh
+                        .when(
+                                () ->
+                                        GitHub.connectToEnterpriseWithOAuth(
+                                                GH_API_URL, GH_LOGIN, GH_AUTH_TOKEN))
+                        .thenReturn(mocked_instance_gh);
+                mocked_static_file_util
+                        .when(() -> LPVSFileUtil.saveGithubDiffs(mocked_list_files, webhookConfig))
+                        .thenReturn(githubFiles);
+
+                // main test
+                assertEquals(githubFiles, gh_service.getPullRequestFiles(webhookConfig));
+
+                // verification of calling methods on `Mock`s
+                // `mocked_static_gh` verify
+                mocked_static_gh.verify(
+                        () ->
+                                GitHub.connectToEnterpriseWithOAuth(
+                                        GH_API_URL, GH_LOGIN, GH_AUTH_TOKEN),
+                        times(1));
+                mocked_static_gh.verifyNoMoreInteractions();
+
+                // `mocked_instance_gh` verify
+                try {
+                    verify(mocked_instance_gh, times(1))
+                            .getRepository(
+                                    LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                            + "/"
+                                            + LPVSWebhookUtil.getRepositoryName(webhookConfig));
+                } catch (IOException e) {
+                    log.error(
+                            "TestGetPullRequestFiles__ApiUrlPresentPullPresentNoRescan.testGetPullRequestFiles__ApiUrlPresentPullPresentNoRescan() error "
+                                    + e);
+                    fail();
+                }
+                verifyNoMoreInteractions(mocked_instance_gh);
+
+                // `mocked_repo` verify
+                try {
+                    verify(mocked_repo, times(1)).getPullRequests(GHIssueState.OPEN);
+                } catch (IOException e) {
+                    log.error(
+                            "TestGetPullRequestFiles__ApiUrlPresentPullPresentNoRescan.testGetPullRequestFiles__ApiUrlPresentPullPresentNoRescan() error "
+                                    + e);
+                    fail();
+                }
+
+                // `mocked_static_file_util` verify
+                mocked_static_file_util.verify(
+                        () -> LPVSFileUtil.saveGithubDiffs(mocked_list_files, webhookConfig),
+                        times(1));
+                mocked_static_file_util.verifyNoMoreInteractions();
+            }
+        }
+    }
+
+    @Nested
+    class TestGetPullRequestFiles__ApiUrlPresentPullPresentNoRescanEmptyAuthToken {
+        final String GH_LOGIN = "test_login";
+        final String GH_AUTH_TOKEN = "";
+        final String GH_API_URL = "test_api_url";
+        LPVSPullRequestRepository mocked_pullRequestRepository =
+                mock(LPVSPullRequestRepository.class);
+        LPVSDetectedLicenseRepository mocked_lpvsDetectedLicenseRepository =
+                mock(LPVSDetectedLicenseRepository.class);
+        LPVSLicenseRepository mocked_lpvsLicenseRepository = mock(LPVSLicenseRepository.class);
+        LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository =
+                mock(LPVSLicenseConflictRepository.class);
+        final LPVSGitHubService gh_service =
+                new LPVSGitHubService(
+                        GH_LOGIN,
+                        GH_AUTH_TOKEN,
+                        GH_API_URL,
+                        mocked_pullRequestRepository,
+                        mocked_lpvsDetectedLicenseRepository,
+                        mocked_lpvsLicenseRepository,
+                        mocked_lpvsLicenseConflictRepository,
+                        exitHandler);
+        LPVSQueue webhookConfig;
+        GitHub mocked_instance_gh = mock(GitHub.class);
+        GHRepository mocked_repo = mock(GHRepository.class);
+        PagedIterable<GHPullRequestFileDetail> mocked_list_files =
+                new PagedIterable<GHPullRequestFileDetail>() {
+                    @Override
+                    public PagedIterator<GHPullRequestFileDetail> _iterator(int i) {
+                        return null;
+                    }
+                };
+        GHPullRequest mocked_pr_1;
+        GHPullRequest mocked_pr_2;
+        GHPullRequest mocked_pr_3;
+        final String url_pr_1 = "https://github.com/Samsung/LPVS/pull/18";
+        final String url_pr_2 = "https://github.com/Samsung/LPVS/pull/19";
+        final String repo_org = "Samsung";
+        final String repo_name = "LPVS";
+        final String githubFiles = "Projects/Samsung/LPVS/895337e89ae103ff2d18c9e0d93709f743226afa";
+        final String commit_sha = "895337e89ae103ff2d18c9e0d93709f743226afa";
+
+        @BeforeEach
+        void setUp() {
+            webhookConfig = new LPVSQueue();
+            webhookConfig.setAction(LPVSPullRequestAction.OPEN);
+            webhookConfig.setPullRequestAPIUrl(url_pr_2);
+            webhookConfig.setHeadCommitSHA(commit_sha);
+            webhookConfig.setPullRequestUrl(url_pr_2);
+            webhookConfig.setRepositoryUrl("https://github.com/Samsung/LPVS");
+            webhookConfig.setPullRequestFilesUrl(url_pr_2);
+
+            try {
+                when(mocked_instance_gh.getRepository(
+                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                        + "/"
+                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig)))
+                        .thenReturn(mocked_repo);
+            } catch (IOException e) {
+                log.error("mocked_repo.getRepository error " + e);
+            }
+            try {
+                mocked_pr_1 = new GHPullRequestOurMock(new URL(url_pr_1), null, null, -1, null);
+                mocked_pr_2 =
+                        new GHPullRequestOurMock(
+                                new URL(url_pr_2),
+                                "GithubService::getRepositoryLicense tests",
+                                mocked_list_files,
+                                0,
+                                null);
+                mocked_pr_3 = new GHPullRequestOurMock(null, null, null, -1, null);
+            } catch (MalformedURLException e) {
+                log.error(
+                        "TestGetPullRequestFiles__ApiUrlPresentPullPresentNoRescan.setUp() error "
+                                + e);
+                fail();
+            }
+            try {
+                when(mocked_repo.getPullRequests(GHIssueState.OPEN))
+                        .thenReturn(Arrays.asList(mocked_pr_1, mocked_pr_2, mocked_pr_3));
             } catch (IOException e) {
                 log.error("mocked_repo.getPullRequests error " + e);
             }
@@ -2286,6 +2438,993 @@ public class LPVSGitHubServiceTest {
     }
 
     @Nested
+    class TestCommentResults__EmptyPresentConflictsPresent {
+        LPVSPullRequestRepository mocked_pullRequestRepository =
+                mock(LPVSPullRequestRepository.class);
+        LPVSDetectedLicenseRepository mocked_lpvsDetectedLicenseRepository =
+                mock(LPVSDetectedLicenseRepository.class);
+        LPVSLicenseRepository mocked_lpvsLicenseRepository = mock(LPVSLicenseRepository.class);
+        LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository =
+                mock(LPVSLicenseConflictRepository.class);
+
+        final String GH_LOGIN = "test_login";
+        final String GH_AUTH_TOKEN = "test_auth_token";
+        final String GH_API_URL = "";
+        final LPVSGitHubService gh_service =
+                new LPVSGitHubService(
+                        GH_LOGIN,
+                        GH_AUTH_TOKEN,
+                        GH_API_URL,
+                        mocked_pullRequestRepository,
+                        mocked_lpvsDetectedLicenseRepository,
+                        mocked_lpvsLicenseRepository,
+                        mocked_lpvsLicenseConflictRepository,
+                        exitHandler);
+
+        GitHub mocked_instance_gh = mock(GitHub.class);
+        GHRepository mocked_repo = mock(GHRepository.class);
+        GHPullRequest mocked_pr_1;
+        GHPullRequest mocked_pr_2;
+        final String url_pr_1 = "https://github.com/Samsung/LPVS/pull/18";
+        final String url_pr_2 = "https://github.com/Samsung/LPVS/pull/19";
+        final String repo_url = "https://github.com/Samsung/LPVS";
+
+        LPVSPullRequest lpvsPullRequest;
+        // `webhookConfig`
+        LPVSQueue webhookConfig;
+        final String commit_sha = "895337e89ae103ff2d18c9e0d93709f743226afa";
+
+        // `lpvs_file_1`
+        LPVSFile lpvs_file_1;
+        final String file_url_1 =
+                "https://github.com/Samsung/LPVS/tree/main/src/main/java/com/lpvs/service/LPVSGitHubService.java";
+        final String file_path_1 = "src/main/java/com/lpvs/service/LPVSGitHubService.java";
+        final String snippet_type_1 = "snippet";
+        final String snippet_match_1 =
+                "/**\n"
+                        + " * Copyright (c) 2022, Samsung Electronics Co., Ltd. All rights reserved.\n"
+                        + " *\n"
+                        + " * Use of this source code is governed by a MIT license that can be\n"
+                        + " * found in the LICENSE file.\n"
+                        + " */\n";
+        final String matched_lines_1 = "1-6";
+        final String component_1 = "LPVS::Services";
+        final String component_file_path_1 =
+                "src/main/java/com/lpvs/service/LPVSGitHubService.java";
+        final String component_file_url_1 = "src/main/java/com/lpvs/service/LPVSGitHubService.java";
+
+        // `lpvs_license_1`
+        LPVSLicense lpvs_license_1;
+        final String license_name_1 = "MIT License";
+        final String spdx_id_1 = "MIT";
+        final String spdx_id_2 = "GPL-2.0-only";
+        final String access_1 = "";
+        final String alternativeName_1 = "";
+        final String checklist_url_1 = "https://opensource.org/licenses/MIT";
+
+        // `conflict_1`
+        LPVSLicenseService.Conflict<String, String> conflict_1;
+        final String conflict_1_l1 = "MIT";
+        final String conflict_1_l2 = "Apache-1.0";
+
+        final String expected_comment =
+                "**\\[License Pre-Validation Service\\]** Potential license problem(s) detected \n\n"
+                        + "**Detected licenses:**\n\n\n"
+                        + "**File:** src/main/java/com/lpvs/service/LPVSGitHubService.java\n"
+                        + "**License(s):** <a target=\"_blank\" href=\"https://opensource.org/licenses/MIT\">MIT</a> ()\n"
+                        + "**Component:** LPVS::Services (src/main/java/com/lpvs/service/LPVSGitHubService.java)\n"
+                        + "**Matched Lines:** <a target=\"_blank\" href=\"https://github.com/Samsung/LPVS/blob/895337e89ae103ff2d18c9e0d93709f743226afa/src/main/java/com/lpvs/service/LPVSGitHubService.java#L1L6\">1-6</a>\n"
+                        + "**Snippet Match:** /**\n"
+                        + " * Copyright (c) 2022, Samsung Electronics Co., Ltd. All rights reserved.\n"
+                        + " *\n"
+                        + " * Use of this source code is governed by a MIT license that can be\n"
+                        + " * found in the LICENSE file.\n"
+                        + " */\n\n\n\n\n"
+                        + "**Detected license conflicts:**\n\n\n"
+                        + "<ul><li>MIT and Apache-1.0</li></ul>()</p>";
+
+        @BeforeEach
+        void setUp() {
+            // set `private static GitHub gitHub;` value
+            try {
+                Field staticPrivateGithub = LPVSGitHubService.class.getDeclaredField("gitHub");
+                staticPrivateGithub.setAccessible(true);
+                staticPrivateGithub.set(null, mocked_instance_gh);
+            } catch (NoSuchFieldException | IllegalAccessException e) {
+                log.error("TestCommentResults__EmptyPresentConflictsPresent.setUp() error " + e);
+                fail();
+            }
+
+            lpvsPullRequest = new LPVSPullRequest();
+            webhookConfig = new LPVSQueue();
+            webhookConfig.setPullRequestAPIUrl(url_pr_2);
+            webhookConfig.setHeadCommitSHA(commit_sha);
+            webhookConfig.setPullRequestUrl(url_pr_2);
+            webhookConfig.setAttempts(0);
+            webhookConfig.setAction(LPVSPullRequestAction.OPEN);
+            webhookConfig.setUserId("user");
+            webhookConfig.setRepositoryUrl(repo_url);
+            webhookConfig.setHubLink("");
+
+            try {
+                when(mocked_instance_gh.getRepository(
+                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                        + "/"
+                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig)))
+                        .thenReturn(mocked_repo);
+            } catch (IOException e) {
+                log.error("mocked_repo.getRepository error " + e);
+            }
+            try {
+                mocked_pr_1 = new GHPullRequestOurMock(new URL(url_pr_1), null, null, -1, null);
+                mocked_pr_2 = new GHPullRequestOurMock(new URL(url_pr_2), null, null, -1, null);
+            } catch (MalformedURLException e) {
+                log.error("TestCommentResults__EmptyPresentConflictsPresent.setUp() error " + e);
+                fail();
+            }
+            try {
+                when(mocked_repo.getPullRequests(GHIssueState.OPEN))
+                        .thenReturn(Arrays.asList(mocked_pr_1, mocked_pr_2));
+            } catch (IOException e) {
+                log.error("mocked_repo.getPullRequests error " + e);
+            }
+
+            lpvs_license_1 =
+                    new LPVSLicense(
+                            1L,
+                            license_name_1,
+                            spdx_id_1,
+                            access_1,
+                            alternativeName_1,
+                            checklist_url_1);
+            lpvs_file_1 =
+                    new LPVSFile(
+                            1L,
+                            file_path_1,
+                            snippet_type_1,
+                            snippet_match_1,
+                            matched_lines_1,
+                            Set.of(lpvs_license_1),
+                            component_file_path_1,
+                            component_file_url_1,
+                            component_1,
+                            null,
+                            null,
+                            null,
+                            null);
+            conflict_1 = new LPVSLicenseService.Conflict<>(conflict_1_l1, conflict_1_l2);
+
+            when(mocked_lpvsLicenseRepository.searchBySpdxId(anyString()))
+                    .thenReturn(lpvs_license_1);
+            when(mocked_lpvsLicenseRepository.searchByAlternativeLicenseNames(anyString()))
+                    .thenReturn(null);
+        }
+
+        @Test
+        public void testCommentResults__EmptyPresentConflictsPresent() throws IOException {
+            // main test
+            gh_service.commentResults(
+                    webhookConfig, List.of(lpvs_file_1), List.of(conflict_1), lpvsPullRequest);
+
+            // `mocked_instance_gh` verify
+            try {
+                verify(mocked_instance_gh, times(1))
+                        .getRepository(
+                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                        + "/"
+                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig));
+            } catch (IOException e) {
+                log.error(
+                        "TestCommentResults__EmptyPresentConflictsPresent.testCommentResults__EmptyPresentConflictsPresent() error "
+                                + e);
+                fail();
+            }
+            verifyNoMoreInteractions(mocked_instance_gh);
+
+            // `mocked_repo` verify
+            try {
+                verify(mocked_repo, times(1)).getPullRequests(GHIssueState.OPEN);
+                verify(mocked_repo, times(1))
+                        .createCommitStatus(
+                                commit_sha,
+                                GHCommitState.FAILURE,
+                                null,
+                                "Potential license problem(s) detected",
+                                "[License Pre-Validation Service]");
+            } catch (IOException e) {
+                log.error(
+                        "TestCommentResults__EmptyPresentConflictsPresent.testCommentResults__EmptyPresentConflictsPresent() error "
+                                + e);
+                fail();
+            }
+            verifyNoMoreInteractions(mocked_repo);
+
+            // `mocked_pr_2` verify
+            ((GHPullRequestOurMock) mocked_pr_2).verifyCommentCall(expected_comment);
+            ((GHPullRequestOurMock) mocked_pr_2).verifyNoMoreCommentCalls();
+        }
+
+        @Test
+        public void testCommentResults__EmptyPresentConflictsPresentLicensePresent()
+                throws IOException {
+            // main test
+            webhookConfig.setRepositoryLicense(spdx_id_1);
+            when(mocked_lpvsLicenseRepository.searchBySpdxId(spdx_id_1))
+                    .thenReturn(
+                            new LPVSLicense(
+                                    1L,
+                                    license_name_1,
+                                    spdx_id_1,
+                                    access_1,
+                                    alternativeName_1,
+                                    checklist_url_1));
+
+            when(mocked_lpvsLicenseRepository.saveAndFlush(Mockito.any(LPVSLicense.class)))
+                    .thenAnswer(i -> i.getArguments()[0]);
+
+            gh_service.commentResults(
+                    webhookConfig, List.of(lpvs_file_1), List.of(conflict_1), lpvsPullRequest);
+
+            // `mocked_instance_gh` verify
+            try {
+                verify(mocked_instance_gh, times(1))
+                        .getRepository(
+                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                        + "/"
+                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig));
+            } catch (IOException e) {
+                log.error(
+                        "TestCommentResults__EmptyPresentConflictsPresent.testCommentResults__EmptyPresentConflictsPresent() error "
+                                + e);
+                fail();
+            }
+            verifyNoMoreInteractions(mocked_instance_gh);
+
+            // `mocked_repo` verify
+            try {
+                verify(mocked_repo, times(1)).getPullRequests(GHIssueState.OPEN);
+                verify(mocked_repo, times(1))
+                        .createCommitStatus(
+                                commit_sha,
+                                GHCommitState.FAILURE,
+                                null,
+                                "Potential license problem(s) detected",
+                                "[License Pre-Validation Service]");
+            } catch (IOException e) {
+                log.error(
+                        "TestCommentResults__EmptyPresentConflictsPresent.testCommentResults__EmptyPresentConflictsPresent() error "
+                                + e);
+                fail();
+            }
+            verifyNoMoreInteractions(mocked_repo);
+
+            // `mocked_pr_2` verify
+            ((GHPullRequestOurMock) mocked_pr_2).verifyCommentCall(expected_comment);
+            ((GHPullRequestOurMock) mocked_pr_2).verifyNoMoreCommentCalls();
+        }
+
+        @Test
+        public void testCommentResults__EmptyPresentConflictsPresentLicensePresentAlt()
+                throws IOException {
+            // main test
+            webhookConfig.setRepositoryLicense(spdx_id_2);
+            when(mocked_lpvsLicenseRepository.searchBySpdxId(spdx_id_2)).thenReturn(null);
+            when(mocked_lpvsLicenseRepository.searchByAlternativeLicenseNames(spdx_id_2))
+                    .thenReturn(
+                            new LPVSLicense(
+                                    1L,
+                                    license_name_1,
+                                    spdx_id_2,
+                                    access_1,
+                                    alternativeName_1,
+                                    checklist_url_1));
+
+            when(mocked_lpvsLicenseRepository.saveAndFlush(Mockito.any(LPVSLicense.class)))
+                    .thenAnswer(i -> i.getArguments()[0]);
+
+            gh_service.commentResults(
+                    webhookConfig, List.of(lpvs_file_1), List.of(conflict_1), lpvsPullRequest);
+
+            // `mocked_instance_gh` verify
+            try {
+                verify(mocked_instance_gh, times(1))
+                        .getRepository(
+                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                        + "/"
+                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig));
+            } catch (IOException e) {
+                log.error(
+                        "TestCommentResults__EmptyPresentConflictsPresent.testCommentResults__EmptyPresentConflictsPresent() error "
+                                + e);
+                fail();
+            }
+            verifyNoMoreInteractions(mocked_instance_gh);
+
+            // `mocked_repo` verify
+            try {
+                verify(mocked_repo, times(1)).getPullRequests(GHIssueState.OPEN);
+                verify(mocked_repo, times(1))
+                        .createCommitStatus(
+                                commit_sha,
+                                GHCommitState.FAILURE,
+                                null,
+                                "Potential license problem(s) detected",
+                                "[License Pre-Validation Service]");
+            } catch (IOException e) {
+                log.error(
+                        "TestCommentResults__EmptyPresentConflictsPresent.testCommentResults__EmptyPresentConflictsPresent() error "
+                                + e);
+                fail();
+            }
+            verifyNoMoreInteractions(mocked_repo);
+
+            // `mocked_pr_2` verify
+            ((GHPullRequestOurMock) mocked_pr_2).verifyCommentCall(expected_comment);
+            ((GHPullRequestOurMock) mocked_pr_2).verifyNoMoreCommentCalls();
+        }
+    }
+
+    @Nested
+    class TestCommentResults__UnreviewedPresentConflictsPresent {
+        LPVSPullRequestRepository mocked_pullRequestRepository =
+                mock(LPVSPullRequestRepository.class);
+        LPVSDetectedLicenseRepository mocked_lpvsDetectedLicenseRepository =
+                mock(LPVSDetectedLicenseRepository.class);
+        LPVSLicenseRepository mocked_lpvsLicenseRepository = mock(LPVSLicenseRepository.class);
+        LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository =
+                mock(LPVSLicenseConflictRepository.class);
+
+        final String GH_LOGIN = "test_login";
+        final String GH_AUTH_TOKEN = "test_auth_token";
+        final String GH_API_URL = "";
+        final LPVSGitHubService gh_service =
+                new LPVSGitHubService(
+                        GH_LOGIN,
+                        GH_AUTH_TOKEN,
+                        GH_API_URL,
+                        mocked_pullRequestRepository,
+                        mocked_lpvsDetectedLicenseRepository,
+                        mocked_lpvsLicenseRepository,
+                        mocked_lpvsLicenseConflictRepository,
+                        exitHandler);
+
+        GitHub mocked_instance_gh = mock(GitHub.class);
+        GHRepository mocked_repo = mock(GHRepository.class);
+        GHPullRequest mocked_pr_1;
+        GHPullRequest mocked_pr_2;
+        final String url_pr_1 = "https://github.com/Samsung/LPVS/pull/18";
+        final String url_pr_2 = "https://github.com/Samsung/LPVS/pull/19";
+        final String repo_url = "https://github.com/Samsung/LPVS";
+
+        LPVSPullRequest lpvsPullRequest;
+        // `webhookConfig`
+        LPVSQueue webhookConfig;
+        final String commit_sha = "895337e89ae103ff2d18c9e0d93709f743226afa";
+
+        // `lpvs_file_1`
+        LPVSFile lpvs_file_1;
+        final String file_url_1 =
+                "https://github.com/Samsung/LPVS/tree/main/src/main/java/com/lpvs/service/LPVSGitHubService.java";
+        final String file_path_1 = "src/main/java/com/lpvs/service/LPVSGitHubService.java";
+        final String snippet_type_1 = "snippet";
+        final String snippet_match_1 =
+                "/**\n"
+                        + " * Copyright (c) 2022, Samsung Electronics Co., Ltd. All rights reserved.\n"
+                        + " *\n"
+                        + " * Use of this source code is governed by a MIT license that can be\n"
+                        + " * found in the LICENSE file.\n"
+                        + " */\n";
+        final String matched_lines_1 = "1-6";
+        final String component_1 = "LPVS::Services";
+        final String component_file_path_1 =
+                "src/main/java/com/lpvs/service/LPVSGitHubService.java";
+        final String component_file_url_1 = "src/main/java/com/lpvs/service/LPVSGitHubService.java";
+
+        // `lpvs_license_1`
+        LPVSLicense lpvs_license_1;
+        final String license_name_1 = "MIT License";
+        final String spdx_id_1 = "MIT";
+        final String spdx_id_2 = "GPL-2.0-only";
+        final String alternativeName_1 = "";
+        final String checklist_url_1 = "https://opensource.org/licenses/MIT";
+
+        final String access_2 = "UNREVIEWED";
+
+        // `conflict_1`
+        LPVSLicenseService.Conflict<String, String> conflict_1;
+        final String conflict_1_l1 = "MIT";
+        final String conflict_1_l2 = "Apache-1.0";
+
+        final String expected_comment =
+                "**\\[License Pre-Validation Service\\]** Potential license problem(s) detected \n\n"
+                        + "**Detected licenses:**\n\n\n"
+                        + "**File:** src/main/java/com/lpvs/service/LPVSGitHubService.java\n"
+                        + "**License(s):** <a target=\"_blank\" href=\"https://opensource.org/licenses/MIT\">MIT</a> (unreviewed)\n"
+                        + "**Component:** LPVS::Services (src/main/java/com/lpvs/service/LPVSGitHubService.java)\n"
+                        + "**Matched Lines:** <a target=\"_blank\" href=\"https://github.com/Samsung/LPVS/blob/895337e89ae103ff2d18c9e0d93709f743226afa/src/main/java/com/lpvs/service/LPVSGitHubService.java#L1L6\">1-6</a>\n"
+                        + "**Snippet Match:** /**\n"
+                        + " * Copyright (c) 2022, Samsung Electronics Co., Ltd. All rights reserved.\n"
+                        + " *\n"
+                        + " * Use of this source code is governed by a MIT license that can be\n"
+                        + " * found in the LICENSE file.\n"
+                        + " */\n\n\n\n\n"
+                        + "**Detected license conflicts:**\n\n\n"
+                        + "<ul><li>MIT and Apache-1.0</li></ul>()</p>";
+
+        @BeforeEach
+        void setUp() {
+            // set `private static GitHub gitHub;` value
+            try {
+                Field staticPrivateGithub = LPVSGitHubService.class.getDeclaredField("gitHub");
+                staticPrivateGithub.setAccessible(true);
+                staticPrivateGithub.set(null, mocked_instance_gh);
+            } catch (NoSuchFieldException | IllegalAccessException e) {
+                log.error(
+                        "TestCommentResults__UnreviewedPresentConflictsPresent.setUp() error " + e);
+                fail();
+            }
+
+            lpvsPullRequest = new LPVSPullRequest();
+            webhookConfig = new LPVSQueue();
+            webhookConfig.setPullRequestAPIUrl(url_pr_2);
+            webhookConfig.setHeadCommitSHA(commit_sha);
+            webhookConfig.setPullRequestUrl(url_pr_2);
+            webhookConfig.setAttempts(0);
+            webhookConfig.setAction(LPVSPullRequestAction.OPEN);
+            webhookConfig.setUserId("user");
+            webhookConfig.setRepositoryUrl(repo_url);
+            webhookConfig.setHubLink("");
+
+            try {
+                when(mocked_instance_gh.getRepository(
+                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                        + "/"
+                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig)))
+                        .thenReturn(mocked_repo);
+            } catch (IOException e) {
+                log.error("mocked_repo.getRepository error " + e);
+            }
+            try {
+                mocked_pr_1 = new GHPullRequestOurMock(new URL(url_pr_1), null, null, -1, null);
+                mocked_pr_2 = new GHPullRequestOurMock(new URL(url_pr_2), null, null, -1, null);
+            } catch (MalformedURLException e) {
+                log.error(
+                        "TestCommentResults__UnreviewedPresentConflictsPresent.setUp() error " + e);
+                fail();
+            }
+            try {
+                when(mocked_repo.getPullRequests(GHIssueState.OPEN))
+                        .thenReturn(Arrays.asList(mocked_pr_1, mocked_pr_2));
+            } catch (IOException e) {
+                log.error("mocked_repo.getPullRequests error " + e);
+            }
+
+            lpvs_license_1 =
+                    new LPVSLicense(
+                            1L,
+                            license_name_1,
+                            spdx_id_1,
+                            access_2,
+                            alternativeName_1,
+                            checklist_url_1);
+            lpvs_file_1 =
+                    new LPVSFile(
+                            1L,
+                            file_path_1,
+                            snippet_type_1,
+                            snippet_match_1,
+                            matched_lines_1,
+                            Set.of(lpvs_license_1),
+                            component_file_path_1,
+                            component_file_url_1,
+                            component_1,
+                            null,
+                            null,
+                            null,
+                            null);
+            conflict_1 = new LPVSLicenseService.Conflict<>(conflict_1_l1, conflict_1_l2);
+
+            when(mocked_lpvsLicenseRepository.searchBySpdxId(anyString()))
+                    .thenReturn(lpvs_license_1);
+            when(mocked_lpvsLicenseRepository.searchByAlternativeLicenseNames(anyString()))
+                    .thenReturn(null);
+        }
+
+        @Test
+        public void testCommentResults__RestrictedPresentConflictsPresent() throws IOException {
+            // main test
+            gh_service.commentResults(
+                    webhookConfig, List.of(lpvs_file_1), List.of(conflict_1), lpvsPullRequest);
+
+            // `mocked_instance_gh` verify
+            try {
+                verify(mocked_instance_gh, times(1))
+                        .getRepository(
+                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                        + "/"
+                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig));
+            } catch (IOException e) {
+                log.error(
+                        "TestCommentResults__UnreviewedPresentConflictsPresent.testCommentResults__UnreviewedPresentConflictsPresent() error "
+                                + e);
+                fail();
+            }
+            verifyNoMoreInteractions(mocked_instance_gh);
+
+            // `mocked_repo` verify
+            try {
+                verify(mocked_repo, times(1)).getPullRequests(GHIssueState.OPEN);
+                verify(mocked_repo, times(1))
+                        .createCommitStatus(
+                                commit_sha,
+                                GHCommitState.FAILURE,
+                                null,
+                                "Potential license problem(s) detected",
+                                "[License Pre-Validation Service]");
+            } catch (IOException e) {
+                log.error(
+                        "TestCommentResults__UnreviewedPresentConflictsPresent.testCommentResults__UnreviewedPresentConflictsPresent() error "
+                                + e);
+                fail();
+            }
+            verifyNoMoreInteractions(mocked_repo);
+
+            // `mocked_pr_2` verify
+            ((GHPullRequestOurMock) mocked_pr_2).verifyCommentCall(expected_comment);
+            ((GHPullRequestOurMock) mocked_pr_2).verifyNoMoreCommentCalls();
+        }
+
+        @Test
+        public void testCommentResults__RestrictedPresentConflictsPresentLicensePresent()
+                throws IOException {
+            // main test
+            webhookConfig.setRepositoryLicense(spdx_id_1);
+            when(mocked_lpvsLicenseRepository.searchBySpdxId(spdx_id_1))
+                    .thenReturn(
+                            new LPVSLicense(
+                                    1L,
+                                    license_name_1,
+                                    spdx_id_1,
+                                    access_2,
+                                    alternativeName_1,
+                                    checklist_url_1));
+
+            when(mocked_lpvsLicenseRepository.saveAndFlush(Mockito.any(LPVSLicense.class)))
+                    .thenAnswer(i -> i.getArguments()[0]);
+
+            gh_service.commentResults(
+                    webhookConfig, List.of(lpvs_file_1), List.of(conflict_1), lpvsPullRequest);
+
+            // `mocked_instance_gh` verify
+            try {
+                verify(mocked_instance_gh, times(1))
+                        .getRepository(
+                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                        + "/"
+                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig));
+            } catch (IOException e) {
+                log.error(
+                        "TestCommentResults__UnreviewedPresentConflictsPresent.testCommentResults__UnreviewedPresentConflictsPresent() error "
+                                + e);
+                fail();
+            }
+            verifyNoMoreInteractions(mocked_instance_gh);
+
+            // `mocked_repo` verify
+            try {
+                verify(mocked_repo, times(1)).getPullRequests(GHIssueState.OPEN);
+                verify(mocked_repo, times(1))
+                        .createCommitStatus(
+                                commit_sha,
+                                GHCommitState.FAILURE,
+                                null,
+                                "Potential license problem(s) detected",
+                                "[License Pre-Validation Service]");
+            } catch (IOException e) {
+                log.error(
+                        "TestCommentResults__UnreviewedPresentConflictsPresent.testCommentResults__UnreviewedPresentConflictsPresent() error "
+                                + e);
+                fail();
+            }
+            verifyNoMoreInteractions(mocked_repo);
+
+            // `mocked_pr_2` verify
+            ((GHPullRequestOurMock) mocked_pr_2).verifyCommentCall(expected_comment);
+            ((GHPullRequestOurMock) mocked_pr_2).verifyNoMoreCommentCalls();
+        }
+
+        @Test
+        public void testCommentResults__RestrictedPresentConflictsPresentLicensePresentAlt()
+                throws IOException {
+            // main test
+            webhookConfig.setRepositoryLicense(spdx_id_2);
+            when(mocked_lpvsLicenseRepository.searchBySpdxId(spdx_id_2)).thenReturn(null);
+            when(mocked_lpvsLicenseRepository.searchByAlternativeLicenseNames(spdx_id_2))
+                    .thenReturn(
+                            new LPVSLicense(
+                                    1L,
+                                    license_name_1,
+                                    spdx_id_2,
+                                    access_2,
+                                    alternativeName_1,
+                                    checklist_url_1));
+
+            when(mocked_lpvsLicenseRepository.saveAndFlush(Mockito.any(LPVSLicense.class)))
+                    .thenAnswer(i -> i.getArguments()[0]);
+
+            gh_service.commentResults(
+                    webhookConfig, List.of(lpvs_file_1), List.of(conflict_1), lpvsPullRequest);
+
+            // `mocked_instance_gh` verify
+            try {
+                verify(mocked_instance_gh, times(1))
+                        .getRepository(
+                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                        + "/"
+                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig));
+            } catch (IOException e) {
+                log.error(
+                        "TestCommentResults__UnreviewedPresentConflictsPresent.testCommentResults__UnreviewedPresentConflictsPresent() error "
+                                + e);
+                fail();
+            }
+            verifyNoMoreInteractions(mocked_instance_gh);
+
+            // `mocked_repo` verify
+            try {
+                verify(mocked_repo, times(1)).getPullRequests(GHIssueState.OPEN);
+                verify(mocked_repo, times(1))
+                        .createCommitStatus(
+                                commit_sha,
+                                GHCommitState.FAILURE,
+                                null,
+                                "Potential license problem(s) detected",
+                                "[License Pre-Validation Service]");
+            } catch (IOException e) {
+                log.error(
+                        "TestCommentResults__UnreviewedPresentConflictsPresent.testCommentResults__UnreviewedPresentConflictsPresent() error "
+                                + e);
+                fail();
+            }
+            verifyNoMoreInteractions(mocked_repo);
+
+            // `mocked_pr_2` verify
+            ((GHPullRequestOurMock) mocked_pr_2).verifyCommentCall(expected_comment);
+            ((GHPullRequestOurMock) mocked_pr_2).verifyNoMoreCommentCalls();
+        }
+    }
+
+    @Nested
+    class TestCommentResults__RestrictedPresentConflictsPresent {
+        LPVSPullRequestRepository mocked_pullRequestRepository =
+                mock(LPVSPullRequestRepository.class);
+        LPVSDetectedLicenseRepository mocked_lpvsDetectedLicenseRepository =
+                mock(LPVSDetectedLicenseRepository.class);
+        LPVSLicenseRepository mocked_lpvsLicenseRepository = mock(LPVSLicenseRepository.class);
+        LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository =
+                mock(LPVSLicenseConflictRepository.class);
+
+        final String GH_LOGIN = "test_login";
+        final String GH_AUTH_TOKEN = "test_auth_token";
+        final String GH_API_URL = "";
+        final LPVSGitHubService gh_service =
+                new LPVSGitHubService(
+                        GH_LOGIN,
+                        GH_AUTH_TOKEN,
+                        GH_API_URL,
+                        mocked_pullRequestRepository,
+                        mocked_lpvsDetectedLicenseRepository,
+                        mocked_lpvsLicenseRepository,
+                        mocked_lpvsLicenseConflictRepository,
+                        exitHandler);
+
+        GitHub mocked_instance_gh = mock(GitHub.class);
+        GHRepository mocked_repo = mock(GHRepository.class);
+        GHPullRequest mocked_pr_1;
+        GHPullRequest mocked_pr_2;
+        final String url_pr_1 = "https://github.com/Samsung/LPVS/pull/18";
+        final String url_pr_2 = "https://github.com/Samsung/LPVS/pull/19";
+        final String repo_url = "https://github.com/Samsung/LPVS";
+
+        LPVSPullRequest lpvsPullRequest;
+        // `webhookConfig`
+        LPVSQueue webhookConfig;
+        final String commit_sha = "895337e89ae103ff2d18c9e0d93709f743226afa";
+
+        // `lpvs_file_1`
+        LPVSFile lpvs_file_1;
+        final String file_url_1 =
+                "https://github.com/Samsung/LPVS/tree/main/src/main/java/com/lpvs/service/LPVSGitHubService.java";
+        final String file_path_1 = "src/main/java/com/lpvs/service/LPVSGitHubService.java";
+        final String snippet_type_1 = "snippet";
+        final String snippet_match_1 =
+                "/**\n"
+                        + " * Copyright (c) 2022, Samsung Electronics Co., Ltd. All rights reserved.\n"
+                        + " *\n"
+                        + " * Use of this source code is governed by a MIT license that can be\n"
+                        + " * found in the LICENSE file.\n"
+                        + " */\n";
+        final String matched_lines_1 = "1-6";
+        final String component_1 = "LPVS::Services";
+        final String component_file_path_1 =
+                "src/main/java/com/lpvs/service/LPVSGitHubService.java";
+        final String component_file_url_1 = "src/main/java/com/lpvs/service/LPVSGitHubService.java";
+
+        // `lpvs_license_1`
+        LPVSLicense lpvs_license_1;
+        final String license_name_1 = "MIT License";
+        final String spdx_id_1 = "MIT";
+        final String spdx_id_2 = "GPL-2.0-only";
+        final String alternativeName_1 = "";
+        final String checklist_url_1 = "https://opensource.org/licenses/MIT";
+
+        final String access_2 = "RESTRICTED";
+
+        // `conflict_1`
+        LPVSLicenseService.Conflict<String, String> conflict_1;
+        final String conflict_1_l1 = "MIT";
+        final String conflict_1_l2 = "Apache-1.0";
+
+        final String expected_comment =
+                "**\\[License Pre-Validation Service\\]** Potential license problem(s) detected \n\n"
+                        + "**Detected licenses:**\n\n\n"
+                        + "**File:** src/main/java/com/lpvs/service/LPVSGitHubService.java\n"
+                        + "**License(s):** <a target=\"_blank\" href=\"https://opensource.org/licenses/MIT\">MIT</a> (restricted)\n"
+                        + "**Component:** LPVS::Services (src/main/java/com/lpvs/service/LPVSGitHubService.java)\n"
+                        + "**Matched Lines:** <a target=\"_blank\" href=\"https://github.com/Samsung/LPVS/blob/895337e89ae103ff2d18c9e0d93709f743226afa/src/main/java/com/lpvs/service/LPVSGitHubService.java#L1L6\">1-6</a>\n"
+                        + "**Snippet Match:** /**\n"
+                        + " * Copyright (c) 2022, Samsung Electronics Co., Ltd. All rights reserved.\n"
+                        + " *\n"
+                        + " * Use of this source code is governed by a MIT license that can be\n"
+                        + " * found in the LICENSE file.\n"
+                        + " */\n\n\n\n\n"
+                        + "**Detected license conflicts:**\n\n\n"
+                        + "<ul><li>MIT and Apache-1.0</li></ul>()</p>";
+
+        @BeforeEach
+        void setUp() {
+            // set `private static GitHub gitHub;` value
+            try {
+                Field staticPrivateGithub = LPVSGitHubService.class.getDeclaredField("gitHub");
+                staticPrivateGithub.setAccessible(true);
+                staticPrivateGithub.set(null, mocked_instance_gh);
+            } catch (NoSuchFieldException | IllegalAccessException e) {
+                log.error(
+                        "TestCommentResults__RestrictedPresentConflictsPresent.setUp() error " + e);
+                fail();
+            }
+
+            lpvsPullRequest = new LPVSPullRequest();
+            webhookConfig = new LPVSQueue();
+            webhookConfig.setPullRequestAPIUrl(url_pr_2);
+            webhookConfig.setHeadCommitSHA(commit_sha);
+            webhookConfig.setPullRequestUrl(url_pr_2);
+            webhookConfig.setAttempts(0);
+            webhookConfig.setAction(LPVSPullRequestAction.OPEN);
+            webhookConfig.setUserId("user");
+            webhookConfig.setRepositoryUrl(repo_url);
+            webhookConfig.setHubLink("");
+
+            try {
+                when(mocked_instance_gh.getRepository(
+                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                        + "/"
+                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig)))
+                        .thenReturn(mocked_repo);
+            } catch (IOException e) {
+                log.error("mocked_repo.getRepository error " + e);
+            }
+            try {
+                mocked_pr_1 = new GHPullRequestOurMock(new URL(url_pr_1), null, null, -1, null);
+                mocked_pr_2 = new GHPullRequestOurMock(new URL(url_pr_2), null, null, -1, null);
+            } catch (MalformedURLException e) {
+                log.error(
+                        "TestCommentResults__RestrictedPresentConflictsPresent.setUp() error " + e);
+                fail();
+            }
+            try {
+                when(mocked_repo.getPullRequests(GHIssueState.OPEN))
+                        .thenReturn(Arrays.asList(mocked_pr_1, mocked_pr_2));
+            } catch (IOException e) {
+                log.error("mocked_repo.getPullRequests error " + e);
+            }
+
+            lpvs_license_1 =
+                    new LPVSLicense(
+                            1L,
+                            license_name_1,
+                            spdx_id_1,
+                            access_2,
+                            alternativeName_1,
+                            checklist_url_1);
+            lpvs_file_1 =
+                    new LPVSFile(
+                            1L,
+                            file_path_1,
+                            snippet_type_1,
+                            snippet_match_1,
+                            matched_lines_1,
+                            Set.of(lpvs_license_1),
+                            component_file_path_1,
+                            component_file_url_1,
+                            component_1,
+                            null,
+                            null,
+                            null,
+                            null);
+            conflict_1 = new LPVSLicenseService.Conflict<>(conflict_1_l1, conflict_1_l2);
+
+            when(mocked_lpvsLicenseRepository.searchBySpdxId(anyString()))
+                    .thenReturn(lpvs_license_1);
+            when(mocked_lpvsLicenseRepository.searchByAlternativeLicenseNames(anyString()))
+                    .thenReturn(null);
+        }
+
+        @Test
+        public void testCommentResults__RestrictedPresentConflictsPresent() throws IOException {
+            // main test
+            gh_service.commentResults(
+                    webhookConfig, List.of(lpvs_file_1), List.of(conflict_1), lpvsPullRequest);
+
+            // `mocked_instance_gh` verify
+            try {
+                verify(mocked_instance_gh, times(1))
+                        .getRepository(
+                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                        + "/"
+                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig));
+            } catch (IOException e) {
+                log.error(
+                        "TestCommentResults__RestrictedPresentConflictsPresent.testCommentResults__RestrictedPresentConflictsPresent() error "
+                                + e);
+                fail();
+            }
+            verifyNoMoreInteractions(mocked_instance_gh);
+
+            // `mocked_repo` verify
+            try {
+                verify(mocked_repo, times(1)).getPullRequests(GHIssueState.OPEN);
+                verify(mocked_repo, times(1))
+                        .createCommitStatus(
+                                commit_sha,
+                                GHCommitState.FAILURE,
+                                null,
+                                "Potential license problem(s) detected",
+                                "[License Pre-Validation Service]");
+            } catch (IOException e) {
+                log.error(
+                        "TestCommentResults__RestrictedPresentConflictsPresent.testCommentResults__RestrictedPresentConflictsPresent() error "
+                                + e);
+                fail();
+            }
+            verifyNoMoreInteractions(mocked_repo);
+
+            // `mocked_pr_2` verify
+            ((GHPullRequestOurMock) mocked_pr_2).verifyCommentCall(expected_comment);
+            ((GHPullRequestOurMock) mocked_pr_2).verifyNoMoreCommentCalls();
+        }
+
+        @Test
+        public void testCommentResults__RestrictedPresentConflictsPresentLicensePresent()
+                throws IOException {
+            // main test
+            webhookConfig.setRepositoryLicense(spdx_id_1);
+            when(mocked_lpvsLicenseRepository.searchBySpdxId(spdx_id_1))
+                    .thenReturn(
+                            new LPVSLicense(
+                                    1L,
+                                    license_name_1,
+                                    spdx_id_1,
+                                    access_2,
+                                    alternativeName_1,
+                                    checklist_url_1));
+
+            when(mocked_lpvsLicenseRepository.saveAndFlush(Mockito.any(LPVSLicense.class)))
+                    .thenAnswer(i -> i.getArguments()[0]);
+
+            gh_service.commentResults(
+                    webhookConfig, List.of(lpvs_file_1), List.of(conflict_1), lpvsPullRequest);
+
+            // `mocked_instance_gh` verify
+            try {
+                verify(mocked_instance_gh, times(1))
+                        .getRepository(
+                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                        + "/"
+                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig));
+            } catch (IOException e) {
+                log.error(
+                        "TestCommentResults__RestrictedPresentConflictsPresent.testCommentResults__RestrictedPresentConflictsPresent() error "
+                                + e);
+                fail();
+            }
+            verifyNoMoreInteractions(mocked_instance_gh);
+
+            // `mocked_repo` verify
+            try {
+                verify(mocked_repo, times(1)).getPullRequests(GHIssueState.OPEN);
+                verify(mocked_repo, times(1))
+                        .createCommitStatus(
+                                commit_sha,
+                                GHCommitState.FAILURE,
+                                null,
+                                "Potential license problem(s) detected",
+                                "[License Pre-Validation Service]");
+            } catch (IOException e) {
+                log.error(
+                        "TestCommentResults__RestrictedPresentConflictsPresent.testCommentResults__RestrictedPresentConflictsPresent() error "
+                                + e);
+                fail();
+            }
+            verifyNoMoreInteractions(mocked_repo);
+
+            // `mocked_pr_2` verify
+            ((GHPullRequestOurMock) mocked_pr_2).verifyCommentCall(expected_comment);
+            ((GHPullRequestOurMock) mocked_pr_2).verifyNoMoreCommentCalls();
+        }
+
+        @Test
+        public void testCommentResults__RestrictedPresentConflictsPresentLicensePresentAlt()
+                throws IOException {
+            // main test
+            webhookConfig.setRepositoryLicense(spdx_id_2);
+            when(mocked_lpvsLicenseRepository.searchBySpdxId(spdx_id_2)).thenReturn(null);
+            when(mocked_lpvsLicenseRepository.searchByAlternativeLicenseNames(spdx_id_2))
+                    .thenReturn(
+                            new LPVSLicense(
+                                    1L,
+                                    license_name_1,
+                                    spdx_id_2,
+                                    access_2,
+                                    alternativeName_1,
+                                    checklist_url_1));
+
+            when(mocked_lpvsLicenseRepository.saveAndFlush(Mockito.any(LPVSLicense.class)))
+                    .thenAnswer(i -> i.getArguments()[0]);
+
+            gh_service.commentResults(
+                    webhookConfig, List.of(lpvs_file_1), List.of(conflict_1), lpvsPullRequest);
+
+            // `mocked_instance_gh` verify
+            try {
+                verify(mocked_instance_gh, times(1))
+                        .getRepository(
+                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                        + "/"
+                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig));
+            } catch (IOException e) {
+                log.error(
+                        "TestCommentResults__RestrictedPresentConflictsPresent.testCommentResults__RestrictedPresentConflictsPresent() error "
+                                + e);
+                fail();
+            }
+            verifyNoMoreInteractions(mocked_instance_gh);
+
+            // `mocked_repo` verify
+            try {
+                verify(mocked_repo, times(1)).getPullRequests(GHIssueState.OPEN);
+                verify(mocked_repo, times(1))
+                        .createCommitStatus(
+                                commit_sha,
+                                GHCommitState.FAILURE,
+                                null,
+                                "Potential license problem(s) detected",
+                                "[License Pre-Validation Service]");
+            } catch (IOException e) {
+                log.error(
+                        "TestCommentResults__RestrictedPresentConflictsPresent.testCommentResults__RestrictedPresentConflictsPresent() error "
+                                + e);
+                fail();
+            }
+            verifyNoMoreInteractions(mocked_repo);
+
+            // `mocked_pr_2` verify
+            ((GHPullRequestOurMock) mocked_pr_2).verifyCommentCall(expected_comment);
+            ((GHPullRequestOurMock) mocked_pr_2).verifyNoMoreCommentCalls();
+        }
+    }
+
+    @Nested
     class TestCommentResults__ProhibitedAbsentConflictsAbsent {
         LPVSPullRequestRepository mocked_pullRequestRepository =
                 mock(LPVSPullRequestRepository.class);
@@ -3189,6 +4328,73 @@ public class LPVSGitHubServiceTest {
             field.setAccessible(true);
             String githubRealTokenValue = (String) field.get(gh_service);
             assertEquals(GH_AUTH_TOKEN, githubRealTokenValue);
+        }
+    }
+
+    @Nested
+    class TestCheckMethod {
+
+        @BeforeEach
+        public void setUp() {
+            MockitoAnnotations.openMocks(this);
+        }
+
+        @Test
+        public void testCheckEmpty()
+                throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+            LPVSPullRequestRepository mocked_pullRequestRepository =
+                    mock(LPVSPullRequestRepository.class);
+            LPVSDetectedLicenseRepository mocked_lpvsDetectedLicenseRepository =
+                    mock(LPVSDetectedLicenseRepository.class);
+            LPVSLicenseRepository mocked_lpvsLicenseRepository = mock(LPVSLicenseRepository.class);
+            LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository =
+                    mock(LPVSLicenseConflictRepository.class);
+            LPVSExitHandler exitHandler = mock(LPVSExitHandler.class);
+
+            final LPVSGitHubService gh_service =
+                    new LPVSGitHubService(
+                            null,
+                            "",
+                            null,
+                            mocked_pullRequestRepository,
+                            mocked_lpvsDetectedLicenseRepository,
+                            mocked_lpvsLicenseRepository,
+                            mocked_lpvsLicenseConflictRepository,
+                            exitHandler);
+            Method method = gh_service.getClass().getDeclaredMethod("checks");
+            method.setAccessible(true);
+            method.invoke(gh_service);
+
+            verify(exitHandler).exit(-1);
+        }
+
+        @Test
+        public void testCheckNotEmpty()
+                throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+            LPVSPullRequestRepository mocked_pullRequestRepository =
+                    mock(LPVSPullRequestRepository.class);
+            LPVSDetectedLicenseRepository mocked_lpvsDetectedLicenseRepository =
+                    mock(LPVSDetectedLicenseRepository.class);
+            LPVSLicenseRepository mocked_lpvsLicenseRepository = mock(LPVSLicenseRepository.class);
+            LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository =
+                    mock(LPVSLicenseConflictRepository.class);
+            LPVSExitHandler exitHandler = mock(LPVSExitHandler.class);
+
+            final LPVSGitHubService gh_service =
+                    new LPVSGitHubService(
+                            null,
+                            "some_token",
+                            null,
+                            mocked_pullRequestRepository,
+                            mocked_lpvsDetectedLicenseRepository,
+                            mocked_lpvsLicenseRepository,
+                            mocked_lpvsLicenseConflictRepository,
+                            exitHandler);
+            Method method = gh_service.getClass().getDeclaredMethod("checks");
+            method.setAccessible(true);
+            method.invoke(gh_service);
+
+            verify(exitHandler, never()).exit(anyInt());
         }
     }
 }

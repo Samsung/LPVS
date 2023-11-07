@@ -42,7 +42,7 @@ public class LPVSCommentUtil {
                         matchedLines.concat(
                                 "<a target=\"_blank\" href=\"" + link + "\">" + lineInfo + "</a>");
             } else {
-                matchedLines = matchedLines.concat(lineInfo + " (" + link + ")");
+                matchedLines = matchedLines.concat(lineInfo + " (" + link + ") ");
             }
         }
         log.debug("MatchedLines: " + matchedLines);
