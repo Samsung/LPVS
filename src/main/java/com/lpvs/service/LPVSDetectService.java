@@ -62,7 +62,7 @@ public class LPVSDetectService {
         if (trigger != null && !trigger.equals("")) {
             try {
                 LPVSQueue webhookConfig = this.getInternalQueueByPullRequest(trigger);
-                this.runScan(webhookConfig, this.getPathByPullRequest(webhookConfig));
+                this.runScan(webhookConfig, LPVSDetectService.getPathByPullRequest(webhookConfig));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -117,7 +117,7 @@ public class LPVSDetectService {
         return null;
     }
 
-    private String getPathByPullRequest(LPVSQueue webhookConfig) {
+    private static String getPathByPullRequest(LPVSQueue webhookConfig) {
         if (webhookConfig == null) return null;
         return LPVSFileUtil.getLocalDirectoryPath(webhookConfig);
     }
