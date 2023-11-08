@@ -94,7 +94,8 @@ public class LPVSQueueTest {
         assertEquals(webhookConfig.getAttempts(), 10);
         assertEquals(webhookConfig.getDate(), date);
         assertEquals(webhookConfig.getReviewSystemType(), "scanner");
-        assertEquals(webhookConfig.getStatusCallbackUrl(), "https://github.com/Samsung/LPVS/pull/16");
+        assertEquals(
+                webhookConfig.getStatusCallbackUrl(), "https://github.com/Samsung/LPVS/pull/16");
     }
 
     @Test
@@ -140,7 +141,8 @@ public class LPVSQueueTest {
         queue6.setAttempts(5);
         queue6.setAction(LPVSPullRequestAction.OPEN);
         queue6.setUserId("BestUser");
-        queue6.setPullRequestUrl("https://github.com/Samsung/LPVS/pull/17"); /* initialize with different pullRequestUrl */
+        queue6.setPullRequestUrl(
+                "https://github.com/Samsung/LPVS/pull/17"); /* initialize with different pullRequestUrl */
         queue6.setHeadCommitSHA("2405d91eebb40e8841465908a0cd9200bba2da12");
 
         LPVSQueue queue7 = new LPVSQueue();
@@ -148,7 +150,8 @@ public class LPVSQueueTest {
         queue7.setAction(LPVSPullRequestAction.OPEN);
         queue7.setUserId("BestUser");
         queue7.setPullRequestUrl("https://github.com/Samsung/LPVS/pull/16");
-        queue7.setHeadCommitSHA("1111111111111111111111111111111111"); /* initialize with different headCommitSHA */
+        queue7.setHeadCommitSHA(
+                "1111111111111111111111111111111111"); /* initialize with different headCommitSHA */
 
         assertTrue(queue1.equals(queue2)); // Objects are equal
         assertFalse(queue1.equals(queue3)); // Attempts are different

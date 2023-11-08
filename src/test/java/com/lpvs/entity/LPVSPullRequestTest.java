@@ -155,7 +155,7 @@ public class LPVSPullRequestTest {
 
         // Create LPVSPullRequest objects with different values for testing inequality
         LPVSPullRequest pr3 = new LPVSPullRequest();
-        pr3.setDate(DateUtils.addDays(new Date(),-30)); /* initialize with different date */
+        pr3.setDate(DateUtils.addDays(new Date(), -30)); /* initialize with different date */
         pr3.setRepositoryName(repositoryName);
         pr3.setPullRequestUrl(pullRequestUrl);
         pr3.setPullRequestFilesUrl(pullRequestFilesUrl);
@@ -176,7 +176,8 @@ public class LPVSPullRequestTest {
         pr6.setDate(date);
         pr6.setRepositoryName(repositoryName);
         pr6.setPullRequestUrl(pullRequestUrl);
-        pr6.setPullRequestFilesUrl(pullRequestFilesUrl + "1"); /* initialize with different pullRequestFilesUrl */
+        pr6.setPullRequestFilesUrl(
+                pullRequestFilesUrl + "1"); /* initialize with different pullRequestFilesUrl */
 
         assertTrue(pr1.equals(pr2)); // Objects are equal
         assertFalse(pr1.equals(pr3)); // Date is different

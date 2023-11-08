@@ -75,14 +75,18 @@ public class LPVSStatisticsServiceTest {
         assertNotNull(result);
         assertEquals(0, result.size());
 
-        assertThrows(WrongAccessException.class, () -> statisticsService.pathCheck(
-                "test", "testNickname", authentication));
-        assertThrows(WrongAccessException.class, () -> statisticsService.pathCheck(
-                "own", "test", authentication));
-        assertThrows(WrongAccessException.class, () -> statisticsService.pathCheck(
-                "send", "test", authentication));
-        assertThrows(WrongAccessException.class, () -> statisticsService.pathCheck(
-                "org", "test", authentication));
+        assertThrows(
+                WrongAccessException.class,
+                () -> statisticsService.pathCheck("test", "testNickname", authentication));
+        assertThrows(
+                WrongAccessException.class,
+                () -> statisticsService.pathCheck("own", "test", authentication));
+        assertThrows(
+                WrongAccessException.class,
+                () -> statisticsService.pathCheck("send", "test", authentication));
+        assertThrows(
+                WrongAccessException.class,
+                () -> statisticsService.pathCheck("org", "test", authentication));
     }
 
     @Test

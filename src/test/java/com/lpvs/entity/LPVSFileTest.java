@@ -212,9 +212,7 @@ public class LPVSFileTest {
 
         licenses = new HashSet<>();
         lpvsFile.setLicenses(licenses);
-        assertEquals(
-                lpvsFile.convertLicensesToString(LPVSVcs.GERRIT),
-                "");
+        assertEquals(lpvsFile.convertLicensesToString(LPVSVcs.GERRIT), "");
     }
 
     @Test
