@@ -9,7 +9,6 @@ package com.lpvs.service.scanner.scanoss;
 import com.lpvs.entity.LPVSLicense;
 import com.lpvs.entity.LPVSQueue;
 import com.lpvs.repository.LPVSLicenseRepository;
-import com.lpvs.service.LPVSGitHubService;
 import com.lpvs.service.LPVSLicenseService;
 import com.lpvs.util.LPVSWebhookUtil;
 import org.junit.jupiter.api.AfterEach;
@@ -60,8 +59,7 @@ public class LPVSScanossDetectServiceTest {
         LPVSLicenseService licenseService = Mockito.mock(LPVSLicenseService.class);
         LPVSLicenseRepository lpvsLicenseRepository = Mockito.mock(LPVSLicenseRepository.class);
         LPVSScanossDetectService scanossDetectService =
-                new LPVSScanossDetectService(
-                        false, licenseService, lpvsLicenseRepository);
+                new LPVSScanossDetectService(false, licenseService, lpvsLicenseRepository);
         String licenseConflictsSource = "scanner";
         LPVSQueue webhookConfig = Mockito.mock(LPVSQueue.class);
         Mockito.when(LPVSWebhookUtil.getRepositoryName(webhookConfig)).thenReturn("C");
@@ -88,8 +86,7 @@ public class LPVSScanossDetectServiceTest {
         LPVSLicenseService licenseService = Mockito.mock(LPVSLicenseService.class);
         LPVSLicenseRepository lpvsLicenseRepository = Mockito.mock(LPVSLicenseRepository.class);
         LPVSScanossDetectService scanossDetectService =
-                new LPVSScanossDetectService(
-                        false, licenseService, lpvsLicenseRepository);
+                new LPVSScanossDetectService(false, licenseService, lpvsLicenseRepository);
         String licenseConflictsSource = "scanner";
         LPVSQueue webhookConfig = Mockito.mock(LPVSQueue.class);
         Mockito.when(LPVSWebhookUtil.getRepositoryName(webhookConfig)).thenReturn("A");

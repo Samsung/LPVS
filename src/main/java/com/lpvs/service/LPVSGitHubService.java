@@ -15,7 +15,6 @@ import com.lpvs.repository.LPVSLicenseConflictRepository;
 import com.lpvs.repository.LPVSLicenseRepository;
 import com.lpvs.repository.LPVSPullRequestRepository;
 import com.lpvs.util.LPVSCommentUtil;
-import com.lpvs.util.LPVSExitHandler;
 import com.lpvs.util.LPVSFileUtil;
 import com.lpvs.util.LPVSWebhookUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -26,13 +25,10 @@ import org.kohsuke.github.GHLicense;
 import org.kohsuke.github.GHIssueState;
 import org.kohsuke.github.GHCommitState;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Slf4j

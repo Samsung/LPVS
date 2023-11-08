@@ -6,11 +6,9 @@
  */
 package com.lpvs.service;
 
-import com.google.gson.Gson;
 import com.lpvs.entity.LPVSFile;
 import com.lpvs.entity.LPVSQueue;
 import com.lpvs.service.scanner.scanoss.LPVSScanossDetectService;
-import com.lpvs.util.LPVSExitHandler;
 import com.lpvs.util.LPVSFileUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.kohsuke.github.GHPullRequest;
@@ -28,7 +26,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Slf4j
@@ -92,7 +89,8 @@ public class LPVSDetectService {
             webhookConfig.setPullRequestFilesUrl(webhookConfig.getPullRequestUrl());
         }
         webhookConfig.setPullRequestAPIUrl(pR.getUrl() != null ? pR.getUrl().toString() : null);
-        webhookConfig.setRepositoryUrl(repo.getHtmlUrl() != null ? repo.getHtmlUrl().toString() : null);
+        webhookConfig.setRepositoryUrl(
+                repo.getHtmlUrl() != null ? repo.getHtmlUrl().toString() : null);
         webhookConfig.setUserId("Single scan run");
         webhookConfig.setHeadCommitSHA(pR.getHead() != null ? pR.getHead().getSha() : null);
         return webhookConfig;

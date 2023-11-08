@@ -12,7 +12,6 @@ import com.lpvs.entity.LPVSFile;
 import com.lpvs.entity.LPVSLicense;
 import com.lpvs.entity.LPVSQueue;
 import com.lpvs.repository.LPVSLicenseRepository;
-import com.lpvs.service.LPVSGitHubService;
 import com.lpvs.service.LPVSLicenseService;
 import com.lpvs.util.LPVSWebhookUtil;
 
