@@ -32,3 +32,11 @@ jobs:
         cache: maven
     - name: Build with Maven
       run: mvn -B package --file pom.xml
+      
+    - uses: actions/checkout@v4
+    - name: Install Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'   
+    - name: Install scanoss-py
+      run: pip3 install scanoss
