@@ -58,11 +58,10 @@ public class LPVSScanossDetectServiceTest {
     @Test
     public void testCheckLicense() {
         LPVSLicenseService licenseService = Mockito.mock(LPVSLicenseService.class);
-        LPVSGitHubService gitHubService = Mockito.mock(LPVSGitHubService.class);
         LPVSLicenseRepository lpvsLicenseRepository = Mockito.mock(LPVSLicenseRepository.class);
         LPVSScanossDetectService scanossDetectService =
                 new LPVSScanossDetectService(
-                        false, licenseService, gitHubService, lpvsLicenseRepository);
+                        false, licenseService, lpvsLicenseRepository);
         String licenseConflictsSource = "scanner";
         LPVSQueue webhookConfig = Mockito.mock(LPVSQueue.class);
         Mockito.when(LPVSWebhookUtil.getRepositoryName(webhookConfig)).thenReturn("C");
@@ -87,11 +86,10 @@ public class LPVSScanossDetectServiceTest {
     @Test
     public void testWithNullHeadCommitSHA() {
         LPVSLicenseService licenseService = Mockito.mock(LPVSLicenseService.class);
-        LPVSGitHubService gitHubService = Mockito.mock(LPVSGitHubService.class);
         LPVSLicenseRepository lpvsLicenseRepository = Mockito.mock(LPVSLicenseRepository.class);
         LPVSScanossDetectService scanossDetectService =
                 new LPVSScanossDetectService(
-                        false, licenseService, gitHubService, lpvsLicenseRepository);
+                        false, licenseService, lpvsLicenseRepository);
         String licenseConflictsSource = "scanner";
         LPVSQueue webhookConfig = Mockito.mock(LPVSQueue.class);
         Mockito.when(LPVSWebhookUtil.getRepositoryName(webhookConfig)).thenReturn("A");

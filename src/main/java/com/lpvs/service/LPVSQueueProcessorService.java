@@ -9,6 +9,7 @@ package com.lpvs.service;
 import com.lpvs.entity.LPVSQueue;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,9 @@ public class LPVSQueueProcessorService {
 
     private LPVSQueueService queueService;
 
+    @Value("${github.pull.request}")
+    private String trigger;
+
     @Autowired
     LPVSQueueProcessorService(LPVSQueueService queueService) {
         this.queueService = queueService;
@@ -29,7 +33,7 @@ public class LPVSQueueProcessorService {
     @EventListener(ApplicationReadyEvent.class)
     private void queueProcessor() throws Exception {
         queueService.checkForQueue();
-        while (true) {
+        while (trigger == null || trigger.equals("")) {
             LPVSQueue webhookConfig = queueService.getQueueFirstElement();
             log.info("PROCESS Webhook id = " + webhookConfig.getId());
             webhookConfig.setDate(new Date());

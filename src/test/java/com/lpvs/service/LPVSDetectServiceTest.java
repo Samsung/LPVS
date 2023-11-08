@@ -28,7 +28,7 @@ public class LPVSDetectServiceTest {
 
     @Nested
     class TestInit {
-        final LPVSDetectService detectService = new LPVSDetectService("scanoss", null);
+        final LPVSDetectService detectService = new LPVSDetectService("scanoss", null, null);
 
         @Test
         public void testInit() {
@@ -46,6 +46,7 @@ public class LPVSDetectServiceTest {
     @Nested
     class TestRunScan__Scanoss {
         LPVSDetectService detectService;
+        LPVSGitHubConnectionService github_mock = mock(LPVSGitHubConnectionService.class);
         LPVSScanossDetectService scanoss_mock = mock(LPVSScanossDetectService.class);
         LPVSQueue webhookConfig;
         final String test_path = "test_path";
@@ -54,7 +55,7 @@ public class LPVSDetectServiceTest {
 
         @BeforeEach
         void setUp() {
-            detectService = new LPVSDetectService("scanoss", scanoss_mock);
+            detectService = new LPVSDetectService("scanoss", github_mock, scanoss_mock);
 
             webhookConfig = new LPVSQueue();
             webhookConfig.setId(1L);
@@ -99,6 +100,7 @@ public class LPVSDetectServiceTest {
     @Nested
     class TestRunScan__ScanossException {
         LPVSDetectService detectService;
+        LPVSGitHubConnectionService github_mock = mock(LPVSGitHubConnectionService.class);
         LPVSScanossDetectService scanoss_mock = mock(LPVSScanossDetectService.class);
         LPVSQueue webhookConfig;
         final String test_path = "test_path";
@@ -106,7 +108,7 @@ public class LPVSDetectServiceTest {
 
         @BeforeEach
         void setUp() {
-            detectService = new LPVSDetectService("scanoss", scanoss_mock);
+            detectService = new LPVSDetectService("scanoss", github_mock, scanoss_mock);
 
             webhookConfig = new LPVSQueue();
             webhookConfig.setId(1L);
@@ -151,7 +153,7 @@ public class LPVSDetectServiceTest {
 
         @BeforeEach
         void setUp() {
-            detectService = new LPVSDetectService("not_scanoss", null);
+            detectService = new LPVSDetectService("not_scanoss", null, null);
         }
 
         @Test
