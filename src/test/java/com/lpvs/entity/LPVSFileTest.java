@@ -185,6 +185,39 @@ public class LPVSFileTest {
     }
 
     @Test
+    public void convertLicenseToStringCheckListUrlLicenseRef() {
+        final Long baseLicenseId = 1234567890L;
+        final String baseLicenseName = "licenseName";
+        final String baseSpdxId = "spdxId";
+        final String baseAccess = "access";
+        final String baseAlternativeName = "licenseNameAlternative";
+        final String baseChecklistUrl = "checklistUrl";
+        List<String> baseIncompatibleWith =
+                Arrays.asList("incompatibleWith1", "incompatibleWith2", "incompatibleWith3");
+
+        LPVSLicense lpvsLicense3 =
+                new LPVSLicense(
+                        baseLicenseId,
+                        baseLicenseName,
+                        "LicenseRef-scancode-" + baseSpdxId,
+                        baseAccess,
+                        baseAlternativeName,
+                        null);
+
+        Set<LPVSLicense> licenses = new HashSet<>(Arrays.asList(lpvsLicense3));
+        lpvsFile.setLicenses(licenses);
+        assertEquals(
+                lpvsFile.convertLicensesToString(LPVSVcs.GITHUB),
+                "UNREVIEWED LICENSE : spdxId (access)");
+
+        licenses = new HashSet<>();
+        lpvsFile.setLicenses(licenses);
+        assertEquals(
+                lpvsFile.convertLicensesToString(LPVSVcs.GERRIT),
+                "");
+    }
+
+    @Test
     public void convertLicenseToStringCheckListUrlTwoTest() {
         final Long baseLicenseId = 1234567890L;
         final String baseLicenseName = "licenseName";
