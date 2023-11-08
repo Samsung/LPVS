@@ -20,6 +20,12 @@ jobs:
       with:
         egress-policy: audit
 
+    - name: Install Python
+      uses: actions/setup-python@65d7f2d534ac1bc67fcd62888c5f4f3d2cb2b236
+      with:
+        python-version: '3.10'
+    - name: Install scanoss-py
+      run: pip3 install scanoss
 
     - uses: actions/checkout@d0651293c4a5a52e711f25b41b05b2212f385d28
     - name: Set up JDK 11
