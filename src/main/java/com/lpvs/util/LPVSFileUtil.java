@@ -27,11 +27,6 @@ public class LPVSFileUtil {
 
     public static void saveFile(String fileName, String directoryPath, List<String> patchedLines) {
         try {
-            if (patchedLines == null || patchedLines.size() == 0) {
-                log.error("NULL PATCH for file " + fileName);
-                return;
-            }
-
             int cnt = 1;
             StringBuilder prettyPatch = new StringBuilder();
             for (String patchedLine : patchedLines) {
