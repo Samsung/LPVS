@@ -114,7 +114,9 @@ public class LPVSDetectService {
                     String.join(
                             "/",
                             Arrays.asList(pullRequestSplit)
-                                    .subList(pullRequestSplit.length - 4, pullRequestSplit.length - 2));
+                                    .subList(
+                                            pullRequestSplit.length - 4,
+                                            pullRequestSplit.length - 2));
             int pullRequestNum = Integer.parseInt(pullRequestSplit[pullRequestSplit.length - 1]);
             GitHub gitHub = gitHubConnectionService.connectToGitHubApi();
             GHRepository repo = gitHub.getRepository(pullRequestRepo);
