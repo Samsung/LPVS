@@ -22,7 +22,7 @@ public class LPVSQueueProcessorService {
 
     private LPVSQueueService queueService;
 
-    @Value("${github.pull.request}")
+    @Value("${github.pull.request:}")
     private String trigger;
 
     @Autowired

@@ -37,7 +37,7 @@ public class LPVSDetectService {
 
     private LPVSGitHubConnectionService gitHubConnectionService;
 
-    @Value("${github.pull.request}")
+    @Value("${github.pull.request:}")
     private String trigger;
 
     @Autowired ApplicationContext ctx;
