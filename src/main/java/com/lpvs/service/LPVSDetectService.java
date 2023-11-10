@@ -10,6 +10,8 @@ import com.lpvs.entity.LPVSFile;
 import com.lpvs.entity.LPVSQueue;
 import com.lpvs.service.scanner.scanoss.LPVSScanossDetectService;
 import com.lpvs.util.LPVSFileUtil;
+import com.nimbusds.jose.util.IOUtils;
+
 import lombok.extern.slf4j.Slf4j;
 import org.kohsuke.github.GHPullRequest;
 import org.kohsuke.github.GHRepository;
@@ -22,6 +24,8 @@ import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
+
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -63,6 +67,11 @@ public class LPVSDetectService {
             try {
                 LPVSQueue webhookConfig = this.getInternalQueueByPullRequest(trigger);
                 this.runScan(webhookConfig, LPVSDetectService.getPathByPullRequest(webhookConfig));
+                File scanResult = new File(LPVSFileUtil.getScanResultsJsonFilePath(webhookConfig));
+                if (scanResult.exists()){
+                    String jsonTxt = IOUtils.readFileToString(scanResult);
+                    System.out.println(jsonTxt);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
