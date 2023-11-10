@@ -252,7 +252,7 @@ To build LPVS from source code and run it, follow these steps:
 
    Also, available configuration to run single scan on pull request, using following command: 
    ```bash
-   java -jar -Dgithub.token=<`my-token`> lpvs-*.jar <`PR information`>
+   java -jar -Dgithub.token=<`my-token`> lpvs-*.jar --github.pull-request=<`PR URL`>
    ```
 
 LPVS is now built and running. You can create a new pull request or update an existing one with commits, and LPVS will automatically start scanning and provide comments about the licenses found in the project.
