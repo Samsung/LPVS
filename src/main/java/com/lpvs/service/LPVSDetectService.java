@@ -68,7 +68,7 @@ public class LPVSDetectService {
                 LPVSQueue webhookConfig = this.getInternalQueueByPullRequest(trigger);
                 this.runScan(webhookConfig, LPVSDetectService.getPathByPullRequest(webhookConfig));
                 File scanResult = new File(LPVSFileUtil.getScanResultsJsonFilePath(webhookConfig));
-                if (scanResult.exists()){
+                if (scanResult.exists()) {
                     String jsonTxt = IOUtils.readFileToString(scanResult);
                     System.out.println(jsonTxt);
                 }
