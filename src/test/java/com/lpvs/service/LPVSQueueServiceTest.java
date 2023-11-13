@@ -816,7 +816,8 @@ public class LPVSQueueServiceTest {
         LPVSGitHubService mockGitHubService;
         LPVSDetectService mockDetectService;
         LPVSLicenseService mockLicenseService;
-        LPVSPullRequestRepository mocked_lpvsPullRequestRepository;
+        LPVSPullRequestRepository mocked_lpvsPullRequestRepository =
+                mock(LPVSPullRequestRepository.class);
         LPVSQueueRepository mocked_queueRepository = mock(LPVSQueueRepository.class);
 
         @BeforeEach
@@ -838,6 +839,19 @@ public class LPVSQueueServiceTest {
             webhookConfig.setAttempts(0);
             webhookConfig.setDate(new Date());
             when(mocked_queueRepository.getQueueList()).thenReturn(List.of(webhookConfig));
+            assertDoesNotThrow(() -> queueService.checkForQueue());
+            verify(mocked_queueRepository).save(webhookConfig);
+        }
+
+        @Test
+        public void testCheckForQueue__Alternative() {
+            LPVSQueue webhookConfig = new LPVSQueue();
+            webhookConfig.setAttempts(100);
+            webhookConfig.setDate(new Date());
+            webhookConfig.setUserId("id");
+            when(mocked_queueRepository.getQueueList()).thenReturn(List.of(webhookConfig));
+            when(mocked_lpvsPullRequestRepository.saveAndFlush(Mockito.any(LPVSPullRequest.class)))
+                    .thenAnswer(i -> i.getArguments()[0]);
             assertDoesNotThrow(() -> queueService.checkForQueue());
             verify(mocked_queueRepository).save(webhookConfig);
         }

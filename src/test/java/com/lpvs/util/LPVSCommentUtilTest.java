@@ -67,4 +67,20 @@ public class LPVSCommentUtilTest {
         String result = LPVSCommentUtil.getMatchedLinesAsLink(webhookConfig, file, LPVSVcs.GERRIT);
         assertEquals("all (https://gerrit.org/repo/blob/headCommitSHA/exampleFile.txt)", result);
     }
+
+    @Test
+    public void testGetMatchedLinesAsLinkWithNonGitHubVcsMultipleLines() {
+        LPVSFile file = new LPVSFile();
+        file.setFilePath("exampleFile.txt");
+        file.setMatchedLines("1-5,7,9-12");
+        Mockito.when(LPVSWebhookUtil.getRepositoryUrl(webhookConfig))
+                .thenReturn("https://gerrit.org/repo");
+        Mockito.when(webhookConfig.getHeadCommitSHA()).thenReturn("headCommitSHA");
+        String result = LPVSCommentUtil.getMatchedLinesAsLink(webhookConfig, file, LPVSVcs.GERRIT);
+        assertEquals(
+                "1-5 (https://gerrit.org/repo/blob/headCommitSHA/exampleFile.txt#L1L5) "
+                        + "7 (https://gerrit.org/repo/blob/headCommitSHA/exampleFile.txt#L7) "
+                        + "9-12 (https://gerrit.org/repo/blob/headCommitSHA/exampleFile.txt#L9L12) ",
+                result);
+    }
 }

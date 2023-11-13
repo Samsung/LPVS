@@ -53,11 +53,19 @@ public class LPVSScanossDetectService {
         this.lpvsLicenseRepository = lpvsLicenseRepository;
     }
 
+    protected InputStreamReader createInputStreamReader(Process process)
+            throws UnsupportedEncodingException {
+        return new InputStreamReader(process.getErrorStream(), "UTF-8");
+    }
+
+    protected BufferedReader createBufferReader(InputStreamReader inputStreamReader) {
+        return new BufferedReader(inputStreamReader);
+    }
+
     public void runScan(LPVSQueue webhookConfig, String path) throws Exception {
         log.debug("Starting Scanoss scanning");
 
         try {
-            ProcessBuilder processBuilder;
             File resultsDir = new File(getScanResultsDirectoryPath(webhookConfig));
             if (resultsDir.mkdirs()) {
                 log.debug(
@@ -69,7 +77,8 @@ public class LPVSScanossDetectService {
             } else {
                 log.error("Directory %s could not be created." + resultsDir.getAbsolutePath());
             }
-            processBuilder =
+
+            ProcessBuilder processBuilder =
                     new ProcessBuilder(
                             "scanoss-py",
                             "scan",
@@ -78,6 +87,7 @@ public class LPVSScanossDetectService {
                             "-o",
                             getScanResultsJsonFilePath(webhookConfig),
                             path);
+
             Process process = processBuilder.inheritIO().start();
 
             int status = process.waitFor();
@@ -86,9 +96,7 @@ public class LPVSScanossDetectService {
                 log.error("Scanoss scanner terminated with none-zero code. Terminating.");
                 BufferedReader output = null;
                 try {
-                    output =
-                            new BufferedReader(
-                                    new InputStreamReader(process.getErrorStream(), "UTF-8"));
+                    output = createBufferReader(createInputStreamReader(process));
                     log.error(output.readLine());
                     throw new Exception(
                             "Scanoss scanner terminated with none-zero code. Terminating.");
