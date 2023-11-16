@@ -252,7 +252,12 @@ To build LPVS from source code and run it, follow these steps:
 
    Also, available configuration to run single scan on pull request, using following command: 
    ```bash
-   java -jar -Dgithub.token=<`my-token`> lpvs-*.jar --github.pull-request=<`PR URL`>
+   java -jar -Dgithub.token=<`my-token`> lpvs-*.jar --github.pull.request=<`PR URL`>
+   ```
+
+   In the case of the previous command you still need to set up MySQL database beforehand for the program to work. To remove that rerquirement you can choose "singlescan" profile, like this:
+   ```bash
+   java -jar -Dspring.profiles.active=singlescan -Dgithub.token=<`my-token`> lpvs-*.jar --github.pull-request=<`PR URL`>
    ```
 
 LPVS is now built and running. You can create a new pull request or update an existing one with commits, and LPVS will automatically start scanning and provide comments about the licenses found in the project.
