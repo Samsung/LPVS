@@ -1,0 +1,14 @@
+com.lpvs
+com.lpvs.config
+com.lpvs.controller
+com.lpvs.entity
+com.lpvs.entity.auth
+com.lpvs.entity.dashboard
+com.lpvs.entity.enums
+com.lpvs.entity.history
+com.lpvs.entity.result
+com.lpvs.exception
+com.lpvs.repository
+com.lpvs.service
+com.lpvs.service.scanner.scanoss
+com.lpvs.util
