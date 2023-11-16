@@ -16,23 +16,24 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@cd89f46ac9d01407894225f350157564c9c7cee2
         with:
-          distribution: 'adopt'
           java-version: '11'
+          distribution: 'temurin'
+          cache: maven
 
       - name: Build and generate Javadoc
         run: mvn clean package javadoc:javadoc
 
       - name: Check if gh-pages branch exists
-        run: git show-ref --verify --quiet refs/heads/gh-pages
+        id: check-gh-pages
+        run: git show-ref --verify --quiet refs/heads/gh-pages || echo "Branch does not exist"
 
       - name: Create gh-pages branch if it doesn't exist
+        if: steps.check-gh-pages.outputs.exit-code
         run: |
-          if [ $? -ne 0 ]; then
-            git checkout --orphan gh-pages
-            git rm -rf .
-            git commit --allow-empty -m "Initial commit for gh-pages branch"
-            git push origin gh-pages
-          fi
+          git checkout --orphan gh-pages
+          git rm -rf .
+          git commit --allow-empty -m "Initial commit for gh-pages branch"
+          git push origin gh-pages
 
       - name: Copy Javadoc to gh-pages branch
         run: |
