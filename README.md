@@ -274,5 +274,6 @@ You are welcome to contribute to the LPVS project. Contributing is a great way t
 
 - [How to Contribute Code](.github/CONTRIBUTING.md)
 - [How to Report a Security Vulnerability](.github/SECURITY.md)
+- [Code Review Requirements](doc/code-review-requirements.md)
 
 Thank you for your interest in contributing to LPVS! Your contributions are highly appreciated.
