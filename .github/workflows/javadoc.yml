@@ -1,0 +1,42 @@
+name: Generate and Publish Javadoc
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  generate-and-publish-javadoc:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@d0651293c4a5a52e711f25b41b05b2212f385d28
+
+      - name: Set up JDK
+        uses: actions/setup-java@cd89f46ac9d01407894225f350157564c9c7cee2
+        with:
+          distribution: 'adopt'
+          java-version: '11'
+
+      - name: Build and generate Javadoc
+        run: mvn clean package javadoc:javadoc
+
+      - name: Check if gh-pages branch exists
+        run: git show-ref --verify --quiet refs/heads/gh-pages
+
+      - name: Create gh-pages branch if it doesn't exist
+        run: |
+          if [ $? -ne 0 ]; then
+            git checkout --orphan gh-pages
+            git rm -rf .
+            git commit --allow-empty -m "Initial commit for gh-pages branch"
+            git push origin gh-pages
+          fi
+
+      - name: Copy Javadoc to gh-pages branch
+        run: |
+          cp -R target/site/apidocs/. docs/
+          git add -A
+          git commit -m "Update Javadoc"
+          git push origin gh-pages
