@@ -148,7 +148,7 @@ public class GitHubWebhooksControllerTest {
                         + "}"
                         + "}";
         try {
-            gitHubWebhooksController.setProps();
+            gitHubWebhooksController.initializeGitHubSecret();
             boolean secret = gitHubWebhooksController.wrongSecret(signature, json_to_test);
             assertEquals(secret, false);
             secret = gitHubWebhooksController.wrongSecret(signature + " ", json_to_test);

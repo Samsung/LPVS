@@ -66,7 +66,7 @@ public class LPVSWebControllerTest {
         when(loginCheckService.getMemberFromMemberMap(authentication)).thenReturn(member);
 
         LPVSMember result =
-                webController.new PublicInterface().personalInfoSettings(authentication);
+                webController.new WebApiEndpoints().personalInfoSettings(authentication);
 
         assertNotNull(result);
         assertEquals(1L, result.getId());
@@ -86,7 +86,7 @@ public class LPVSWebControllerTest {
         when(loginCheckService.getOauthLoginMemberMap(authentication))
                 .thenReturn(oauthLoginMemberMap);
         when(loginCheckService.getMemberFromMemberMap(authentication)).thenReturn(member);
-        LPVSLoginMember result = webController.new PublicInterface().loginMember(authentication);
+        LPVSLoginMember result = webController.new WebApiEndpoints().loginMember(authentication);
         assertNotNull(result);
         assertNotNull(result.getMember());
         assertEquals(1L, result.getMember().getId());
@@ -100,7 +100,7 @@ public class LPVSWebControllerTest {
     public void testLoginMemberNotLoggedIn() {
         Authentication authentication = mock(Authentication.class);
         when(loginCheckService.getOauthLoginMemberMap(authentication)).thenReturn(null);
-        LPVSLoginMember result = webController.new PublicInterface().loginMember(authentication);
+        LPVSLoginMember result = webController.new WebApiEndpoints().loginMember(authentication);
         assertNotNull(result);
         assertNull(result.getMember());
     }
@@ -117,7 +117,7 @@ public class LPVSWebControllerTest {
         when(loginCheckService.getMemberFromMemberMap(authentication)).thenReturn(member);
         when(memberRepository.saveAndFlush(member)).thenReturn(member);
         ResponseEntity<LPVSMember> responseEntity =
-                webController.new PublicInterface().postSettingTest(map, authentication);
+                webController.new WebApiEndpoints().postSettingTest(map, authentication);
         assertNotNull(responseEntity);
         assertEquals(responseEntity.getBody(), member);
         assertEquals("UpdatedUser", member.getNickname());
@@ -138,7 +138,7 @@ public class LPVSWebControllerTest {
                 .thenThrow(new DataIntegrityViolationException("DuplicatedKeyException"));
         assertThrows(
                 IllegalArgumentException.class,
-                () -> webController.new PublicInterface().postSettingTest(map, authentication));
+                () -> webController.new WebApiEndpoints().postSettingTest(map, authentication));
     }
 
     @Test
@@ -165,7 +165,7 @@ public class LPVSWebControllerTest {
         when(detectedLicenseRepository.existsIssue(pullRequest)).thenReturn(false);
 
         HistoryEntity result =
-                webController.new PublicInterface()
+                webController.new WebApiEndpoints()
                         .newHistoryPageByUser(type, name, pageable, authentication);
 
         assertNotNull(result);
@@ -232,7 +232,7 @@ public class LPVSWebControllerTest {
                 .thenReturn(1L);
 
         LPVSResult result =
-                webController.new PublicInterface().resultPage(prId, pageable, authentication);
+                webController.new WebApiEndpoints().resultPage(prId, pageable, authentication);
 
         assertNotNull(result);
         assertNotNull(result.getLpvsResultInfo());
@@ -253,7 +253,7 @@ public class LPVSWebControllerTest {
         when(statisticsService.getDashboardEntity(type, name, authentication))
                 .thenReturn(mockDashboard);
         Dashboard dashboard =
-                webController.new PublicInterface().dashboardPage(type, name, authentication);
+                webController.new WebApiEndpoints().dashboardPage(type, name, authentication);
         assertNotNull(dashboard);
     }
 

@@ -15,7 +15,6 @@ import com.lpvs.util.LPVSWebhookUtil;
 import com.lpvs.entity.LPVSResponseWrapper;
 import lombok.extern.slf4j.Slf4j;
 
-import org.apache.catalina.core.ApplicationContext;
 import org.apache.commons.codec.binary.Hex;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,20 +32,26 @@ import javax.annotation.PostConstruct;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
+/**
+ * Controller class for handling GitHub webhook events.
+ * This class is responsible for processing GitHub webhook payloads and triggering relevant actions.
+ */
 @RestController
 @Slf4j
 public class GitHubWebhooksController {
 
+    /**
+     * The GitHub secret used for validating webhook payloads.
+     * It is set from the LPVS_GITHUB_SECRET environment variable or the application property.
+     */
     private String GITHUB_SECRET;
 
-    ApplicationContext applicationContext;
-
     /**
-     * Sets the GitHub secret from the LPVS_GITHUB_SECRET environment variable or the application property.
+     * Initializes the GitHub secret from the LPVS_GITHUB_SECRET environment variable or the application property.
      * Exits the application if the secret is not set.
      */
     @PostConstruct
-    public void setProps() {
+    public void initializeGitHubSecret() {
         this.GITHUB_SECRET =
                 Optional.ofNullable(this.GITHUB_SECRET)
                         .filter(s -> !s.isEmpty())
@@ -54,17 +59,29 @@ public class GitHubWebhooksController {
                                 Optional.ofNullable(System.getenv("LPVS_GITHUB_SECRET"))
                                         .orElse(""));
         if (this.GITHUB_SECRET.isEmpty()) {
-            log.error("LPVS_GITHUB_SECRET(github.secret) is not set.");
+            log.error("LPVS_GITHUB_SECRET (github.secret) is not set.");
             exitHandler.exit(-1);
         }
     }
 
+    /**
+     * LPVSQueueService for handling user-related business logic.
+     */
     @Autowired private LPVSQueueService queueService;
 
+    /**
+     * LPVSQueueRepository for accessing and managing LPVSQueue entities.
+     */
     @Autowired private LPVSQueueRepository queueRepository;
 
+    /**
+     * LPVSGitHubService for handling GitHub-related actions.
+     */
     private LPVSGitHubService gitHubService;
 
+    /**
+     * LPVSExitHandler for handling application exit scenarios.
+     */
     private LPVSExitHandler exitHandler;
 
     private static final String SIGNATURE = "X-Hub-Signature-256";
@@ -72,6 +89,16 @@ public class GitHubWebhooksController {
     private static final String ERROR = "Error";
     private static final String ALGORITHM = "HmacSHA256";
 
+    /**
+     * Constructor for GitHubWebhooksController.
+     * Initializes LPVSQueueService, LPVSGitHubService, LPVSQueueRepository, GitHub secret, and LPVSExitHandler.
+     *
+     * @param queueService      LPVSQueueService for handling user-related business logic.
+     * @param gitHubService     LPVSGitHubService for handling GitHub-related actions.
+     * @param queueRepository   LPVSQueueRepository for accessing and managing LPVSQueue entities.
+     * @param GITHUB_SECRET     The GitHub secret used for validating webhook payloads.
+     * @param exitHandler       LPVSExitHandler for handling application exit scenarios.
+     */
     public GitHubWebhooksController(
             LPVSQueueService queueService,
             LPVSGitHubService gitHubService,
@@ -86,7 +113,7 @@ public class GitHubWebhooksController {
     }
 
     /**
-     * Handles the GitHub webhook events and processes the payload.
+     * Endpoint for handling GitHub webhook events and processing the payload.
      *
      * @param signature The signature of the webhook event.
      * @param payload   The payload of the webhook event.

@@ -39,17 +39,55 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Controller class for handling web-related requests in LPVS.
+ * This class manages user information, login details, history, results, and dashboard pages.
+ */
 @Controller
 @Slf4j
 public class LPVSWebController implements ErrorController {
+
+    /**
+     * Repository for LPVS members.
+     */
     private LPVSMemberRepository memberRepository;
+
+    /**
+     * Repository for detected licenses.
+     */
     private LPVSDetectedLicenseRepository detectedLicenseRepository;
+
+    /**
+     * Repository for LPVS pull requests.
+     */
     private LPVSPullRequestRepository lpvsPullRequestRepository;
+
+    /**
+     * Repository for LPVS licenses.
+     */
     private LPVSLicenseRepository licenseRepository;
+
+    /**
+     * Service for checking user logins.
+     */
     private LPVSLoginCheckService lpvsLoginCheckService;
 
+    /**
+     * Service for generating LPVS statistics.
+     */
     private LPVSStatisticsService lpvsStatisticsService;
 
+    /**
+     * Constructor for LPVSWebController.
+     * Initializes repositories and services required for web-related functionality.
+     *
+     * @param memberRepository           Repository for LPVS members.
+     * @param detectedLicenseRepository  Repository for detected licenses.
+     * @param lpvsPullRequestRepository  Repository for LPVS pull requests.
+     * @param licenseRepository           Repository for LPVS licenses.
+     * @param lpvsLoginCheckService       Service for checking user logins.
+     * @param lpvsStatisticsService       Service for generating LPVS statistics.
+     */
     public LPVSWebController(
             LPVSMemberRepository memberRepository,
             LPVSDetectedLicenseRepository detectedLicenseRepository,
@@ -65,9 +103,20 @@ public class LPVSWebController implements ErrorController {
         this.lpvsStatisticsService = lpvsStatisticsService;
     }
 
+    /**
+     * Controller class for managing public web API endpoints in LPVS.
+     * This class provides endpoints for retrieving user information, login details, and performing user-related actions.
+     */
     @RequestMapping("/api/v1/web")
     @RestController
-    class PublicInterface {
+    class WebApiEndpoints {
+
+        /**
+         * Retrieves personal information settings for the authenticated user.
+         *
+         * @param authentication The authentication object.
+         * @return LPVSMember object representing personal information settings.
+         */
         @GetMapping("/user/info")
         @ResponseBody
         public LPVSMember personalInfoSettings(Authentication authentication) {
@@ -75,6 +124,12 @@ public class LPVSWebController implements ErrorController {
             return lpvsLoginCheckService.getMemberFromMemberMap(authentication);
         }
 
+        /**
+         * Retrieves login details for the authenticated user.
+         *
+         * @param authentication The authentication object.
+         * @return LPVSLoginMember object representing login details.
+         */
         @GetMapping("/user/login")
         @ResponseBody
         public LPVSLoginMember loginMember(Authentication authentication) {
@@ -90,6 +145,13 @@ public class LPVSWebController implements ErrorController {
             }
         }
 
+        /**
+         * Updates user settings based on the provided map.
+         *
+         * @param map             Map containing user settings.
+         * @param authentication The authentication object.
+         * @return ResponseEntity with LPVSMember representing the updated user.
+         */
         @PostMapping("/user/update")
         public ResponseEntity<LPVSMember> postSettingTest(
                 @RequestBody Map<String, String> map, Authentication authentication) {
@@ -105,6 +167,15 @@ public class LPVSWebController implements ErrorController {
             return ResponseEntity.ok().body(findMember);
         }
 
+        /**
+         * Retrieves the history page entity based on the specified type and name.
+         *
+         * @param type           The type of history (e.g., user, organization).
+         * @param name           The name of the user or organization.
+         * @param pageable       The pageable object for pagination.
+         * @param authentication The authentication object.
+         * @return HistoryEntity containing a list of LPVSHistory items and total count.
+         */
         @ResponseBody
         @GetMapping("/history/{type}/{name}")
         public HistoryEntity newHistoryPageByUser(
@@ -148,6 +219,14 @@ public class LPVSWebController implements ErrorController {
             return historyEntity;
         }
 
+        /**
+         * Retrieves the LPVSResult for a specific pull request ID.
+         *
+         * @param prId           The pull request ID.
+         * @param pageable       The pageable object for pagination.
+         * @param authentication The authentication object.
+         * @return LPVSResult containing result details for the specified pull request.
+         */
         @ResponseBody
         @GetMapping("/result/{prId}")
         public LPVSResult resultPage(
@@ -230,6 +309,14 @@ public class LPVSWebController implements ErrorController {
             return lpvsResult;
         }
 
+        /**
+         * Retrieves the Dashboard entity based on the specified type and name.
+         *
+         * @param type           The type of the dashboard (e.g., user, organization).
+         * @param name           The name of the user or organization.
+         * @param authentication The authentication object.
+         * @return Dashboard entity containing statistics and insights.
+         */
         @ResponseBody
         @GetMapping("dashboard/{type}/{name}")
         public Dashboard dashboardPage(
@@ -244,6 +331,11 @@ public class LPVSWebController implements ErrorController {
         }
     }
 
+    /**
+     * Redirects to the default error page.
+     *
+     * @return String representing the path to the error page.
+     */
     @GetMapping("/error")
     public String redirect() {
         return "index.html";
