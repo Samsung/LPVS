@@ -5,9 +5,16 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+  
 jobs:
   generate-and-publish-javadoc:
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      pages: write
 
     steps:
       - name: Harden Runner
