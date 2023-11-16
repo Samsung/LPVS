@@ -21,23 +21,13 @@ jobs:
           cache: maven
 
       - name: Build and generate Javadoc
-        run: mvn clean package javadoc:javadoc
-
-      - name: Check if gh-pages branch exists
-        id: check-gh-pages
-        run: git show-ref --verify --quiet refs/heads/gh-pages || echo "Branch does not exist"
-
-      - name: Create gh-pages branch if it doesn't exist
-        if: steps.check-gh-pages.outputs.exit-code
         run: |
-          git checkout --orphan gh-pages
-          git rm -rf .
-          git commit --allow-empty -m "Initial commit for gh-pages branch"
-          git push origin gh-pages
+          mvn clean install javadoc:javadoc
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Copy Javadoc to gh-pages branch
-        run: |
-          cp -R target/site/apidocs/. docs/
-          git add -A
-          git commit -m "Update Javadoc"
-          git push origin gh-pages
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@373f7f263a76c20808c831209c920827a82a2847
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./target/site/apidocs
