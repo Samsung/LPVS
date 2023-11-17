@@ -6,8 +6,23 @@
  */
 package com.lpvs.exception;
 
+/**
+ * Exception thrown to indicate an attempt to access a resource without proper authorization.
+ *
+ * <p>
+ * This exception is typically used when a user tries to access a resource for which they
+ * do not have the necessary permissions or authentication.
+ * </p><p>
+ * Inherits from {@link RuntimeException} for unchecked exception handling.
+ * </p>
+ */
 public class WrongAccessException extends RuntimeException {
 
+    /**
+     * Constructs a new WrongAccessException with the specified error message.
+     *
+     * @param message The detail message indicating the reason for the unauthorized access attempt.
+     */
     public WrongAccessException(String message) {
         super(message);
     }

@@ -31,19 +31,45 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.util.UriComponentsBuilder;
 
+/**
+ * Configuration class for setting up security configurations, including OAuth2 authentication
+ * and Cross-Origin Resource Sharing (CORS) support.
+ *
+ * <p>
+ * This class is responsible for configuring security settings using the provided OAuthService,
+ * frontendMainPageUrl, and corsAllowedOrigin. It orchestrates the setup of security filters,
+ * OAuth2 integration, and CORS support through Spring Security.
+ * </p>
+ */
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
 
+    /**
+     * Service for handling OAuth2 authentication.
+     */
     private final OAuthService oAuthService;
 
+    /**
+     * The URL to redirect to after a successful logout.
+     */
     @Value("${frontend.main-page.url:/}")
     private String frontendMainPageUrl;
 
+    /**
+     * The allowed origin for CORS. Defaults to an empty string.
+     */
     @Value("${cors.allowed-origin:}")
     private String corsAllowedOrigin;
 
+    /**
+     * Configures the security filter chain.
+     *
+     * @param http The HttpSecurity object to configure.
+     * @return The configured SecurityFilterChain.
+     * @throws Exception If an error occurs during configuration.
+     */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.cors()
@@ -97,6 +123,11 @@ public class SecurityConfig {
         return http.build();
     }
 
+    /**
+     * Configures the CORS (Cross-Origin Resource Sharing) support.
+     *
+     * @return The CorsConfigurationSource containing CORS configurations.
+     */
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
