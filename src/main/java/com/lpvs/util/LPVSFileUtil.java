@@ -22,9 +22,21 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Utility class providing methods for handling files, directories, and file-related operations
+ * in the context of LPVS application processing.
+ * It includes functionality to save files, generate pretty patches, and manage local directory paths.
+ */
 @Slf4j
 public class LPVSFileUtil {
 
+    /**
+     * Saves a file with the specified content in a given directory.
+     *
+     * @param fileName      The name of the file to be saved.
+     * @param directoryPath The path to the directory where the file will be saved.
+     * @param patchedLines  The content to be written to the file.
+     */
     public static void saveFile(String fileName, String directoryPath, List<String> patchedLines) {
         try {
             int cnt = 1;
@@ -83,6 +95,13 @@ public class LPVSFileUtil {
         }
     }
 
+    /**
+     * Saves the GitHub pull request file details, including the file patches, to a local directory.
+     *
+     * @param files          The iterable of GitHub pull request file details.
+     * @param webhookConfig  The {@link LPVSQueue} configuration for the webhook.
+     * @return The path to the directory where the files are saved.
+     */
     public static String saveGithubDiffs(
             Iterable<GHPullRequestFileDetail> files, LPVSQueue webhookConfig) {
         String directoryPath = LPVSFileUtil.getLocalDirectoryPath(webhookConfig);
@@ -101,6 +120,11 @@ public class LPVSFileUtil {
         return directoryPath;
     }
 
+    /**
+     * Deletes the specified directory if it exists.
+     *
+     * @param path The path of the directory to be deleted.
+     */
     public static void deleteIfExists(String path) {
         File dir = new File(path);
         if (dir.exists()) {
@@ -108,6 +132,12 @@ public class LPVSFileUtil {
         }
     }
 
+    /**
+     * Retrieves the local directory path based on the provided webhook configuration.
+     *
+     * @param webhookConfig The {@link LPVSQueue} configuration for the webhook.
+     * @return The local directory path.
+     */
     public static String getLocalDirectoryPath(LPVSQueue webhookConfig) {
         if (webhookConfig.getHeadCommitSHA() == null
                 || webhookConfig.getHeadCommitSHA().equals("")) {
@@ -127,6 +157,12 @@ public class LPVSFileUtil {
         }
     }
 
+    /**
+     * Retrieves the file path for storing scan results in JSON format based on the provided webhook configuration.
+     *
+     * @param webhookConfig The {@link LPVSQueue} configuration for the webhook.
+     * @return The file path for storing scan results in JSON format.
+     */
     public static String getScanResultsJsonFilePath(LPVSQueue webhookConfig) {
         if (webhookConfig.getHeadCommitSHA() == null
                 || webhookConfig.getHeadCommitSHA().equals("")) {
@@ -148,6 +184,12 @@ public class LPVSFileUtil {
         }
     }
 
+    /**
+     * Retrieves the directory path for storing scan results based on the provided webhook configuration.
+     *
+     * @param webhookConfig The {@link LPVSQueue} configuration for the webhook.
+     * @return The directory path for storing scan results.
+     */
     public static String getScanResultsDirectoryPath(LPVSQueue webhookConfig) {
         return System.getProperty("user.home")
                 + "/"

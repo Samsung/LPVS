@@ -11,9 +11,27 @@ import com.lpvs.entity.LPVSQueue;
 import com.lpvs.entity.enums.LPVSVcs;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Utility class providing methods for generating links and formatting matched lines in comments.
+ * It includes functionality to create links to specific lines in a file on version control platforms
+ * like GitHub, based on the provided {@link LPVSQueue} configuration, {@link LPVSFile}, and {@link LPVSVcs}.
+ *
+ * <p>
+ * This class is designed to enhance the generation of comment content by creating clickable links
+ * to specific lines in a file, making it easier for users to navigate directly to the relevant code.
+ * </p>
+ */
 @Slf4j
 public class LPVSCommentUtil {
 
+    /**
+     * Generates a formatted string containing links to matched lines in a file.
+     *
+     * @param webhookConfig The {@link LPVSQueue} configuration for the webhook.
+     * @param file           The {@link LPVSFile} representing the file with matched lines.
+     * @param vcs            The {@link LPVSVcs} representing the version control system (e.g., GitHub).
+     * @return A string containing formatted links to matched lines in the file.
+     */
     public static String getMatchedLinesAsLink(
             LPVSQueue webhookConfig, LPVSFile file, LPVSVcs vcs) {
         String prefix =

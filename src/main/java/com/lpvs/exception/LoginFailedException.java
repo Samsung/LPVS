@@ -6,8 +6,22 @@
  */
 package com.lpvs.exception;
 
+/**
+ * Exception thrown to indicate a failed login attempt.
+ *
+ * <p>
+ * This exception is typically used when authentication fails, and the application needs
+ * to communicate the failure reason to the user or handle it in a specific way.
+ * </p><p>
+ * Inherits from {@link RuntimeException} for unchecked exception handling.
+ * </p>
+ */
 public class LoginFailedException extends RuntimeException {
-
+    /**
+     * Constructs a new LoginFailedException with the specified error message.
+     *
+     * @param message The detail message indicating the reason for the login failure.
+     */
     public LoginFailedException(String message) {
         super(message);
     }
