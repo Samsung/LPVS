@@ -15,7 +15,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import com.lpvs.util.LPVSExitHandler;
 
@@ -74,18 +73,5 @@ public class LicensePreValidationSystem {
         executor.setCorePoolSize(corePoolSize);
         executor.setThreadNamePrefix("LPVS-ASYNC::");
         return executor;
-    }
-
-    /**
-     * Handles the "/exit" endpoint to exit the application with the specified exit code.
-     *
-     * @param exitCode The exit code for the application.
-     */
-    @GetMapping("/exit")
-    public static void exit(int exitCode) {
-        exitHandler.exit(exitCode);
-        if (exitCode != 0) {
-            System.exit(exitCode);
-        }
     }
 }

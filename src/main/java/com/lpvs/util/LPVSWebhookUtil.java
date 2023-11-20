@@ -11,6 +11,7 @@ import com.google.gson.JsonObject;
 import com.lpvs.entity.LPVSQueue;
 import com.lpvs.entity.enums.LPVSPullRequestAction;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 
 import java.util.Arrays;
 import java.util.List;
@@ -181,5 +182,53 @@ public class LPVSWebhookUtil {
 
         List<String> url = Arrays.asList(webhookConfig.getPullRequestUrl().split("/"));
         return url.get(url.size() - 1);
+    }
+
+    /**
+     * Generates a HttpHeaders object with a set of security headers for a web application.
+     *
+     * This method includes the following security headers:
+     * - Strict-Transport-Security: Enables HSTS for one year, including subdomains.
+     * - Content-Security-Policy: Minimal CSP allowing resources only from the same origin.
+     * - X-Content-Type-Options: Prevents browsers from MIME-sniffing a response.
+     * - X-Frame-Options: Prevents the content from being displayed in iframes.
+     * - X-XSS-Protection: Enables XSS protection in modern browsers.
+     * - Referrer-Policy: Specifies how much referrer information should be included with requests.
+     * - Feature-Policy: Disallows the use of various browser features.
+     * - Access-Control-Allow-Origin, Access-Control-Allow-Methods, Access-Control-Allow-Headers:
+     *     Headers for Cross-Origin Resource Sharing (CORS) to control which origins are permitted to access resources.
+     *
+     * @return HttpHeaders object with a set of security headers.
+     */
+    public static HttpHeaders generateSecurityHeaders() {
+        HttpHeaders headers = new HttpHeaders();
+
+        // Enables HSTS for one year, including subdomains
+        headers.add("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
+
+        // Minimal CSP allowing resources only from the same origin
+        headers.add("Content-Security-Policy", "default-src 'self'");
+
+        // Prevents browsers from MIME-sniffing a response
+        headers.add("X-Content-Type-Options", "nosniff");
+
+        // Prevents the content from being displayed in iframes
+        headers.add("X-Frame-Options", "DENY");
+
+        // Enables XSS protection in modern browsers
+        headers.add("X-XSS-Protection", "1; mode=block");
+
+        // Helps prevent clickjacking attacks by disallowing the content to be embedded in iframes
+        headers.add("Referrer-Policy", "same-origin");
+
+        // Helps mitigate the risk of cross-site scripting (XSS) attacks
+        headers.add("Feature-Policy", "none");
+
+        // Enables Cross-Origin Resource Sharing (CORS) with a restrictive policy
+        headers.add("Access-Control-Allow-Origin", "same-origin");
+        headers.add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+        headers.add("Access-Control-Allow-Headers", "Content-Type");
+
+        return headers;
     }
 }

@@ -126,19 +126,26 @@ public class GitHubWebhooksController {
             throws Exception {
         log.debug("New GitHub webhook request received");
 
-        // if signature is empty return 401
-        if (!StringUtils.hasText(signature)) {
-            return new ResponseEntity<>(new LPVSResponseWrapper(ERROR), HttpStatus.FORBIDDEN);
-        } else if (!GITHUB_SECRET.trim().isEmpty() && wrongSecret(signature, payload)) {
-            log.info("SECRET: " + GITHUB_SECRET);
-            log.info("WRONG: " + wrongSecret(signature, payload));
-            return new ResponseEntity<>(new LPVSResponseWrapper(ERROR), HttpStatus.FORBIDDEN);
+        // Validate and sanitize user inputs to prevent XSS attacks
+        // if signature is empty - return 401
+        if (!StringUtils.hasText(signature) || signature.length() > 72) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .headers(LPVSWebhookUtil.generateSecurityHeaders())
+                    .body(new LPVSResponseWrapper(ERROR));
+        }
+        if (!GITHUB_SECRET.trim().isEmpty() && wrongSecret(signature, payload)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .headers(LPVSWebhookUtil.generateSecurityHeaders())
+                    .body(new LPVSResponseWrapper(ERROR));
         }
 
         // if payload is empty, don't do anything
         if (!StringUtils.hasText(payload)) {
             log.debug("Response to empty payload sent");
-            return new ResponseEntity<>(new LPVSResponseWrapper(SUCCESS), HttpStatus.OK);
+            // Implement Content Security Policy (CSP) headers
+            return ResponseEntity.ok()
+                    .headers(LPVSWebhookUtil.generateSecurityHeaders())
+                    .body(new LPVSResponseWrapper(SUCCESS));
         } else if (LPVSWebhookUtil.checkPayload(payload)) {
             LPVSQueue webhookConfig = LPVSWebhookUtil.getGitHubWebhookConfig(payload);
             webhookConfig.setDate(new Date());
@@ -150,8 +157,11 @@ public class GitHubWebhooksController {
             queueService.addFirst(webhookConfig);
             log.debug("Put Webhook config to the queue done");
         }
+
         log.debug("Response sent");
-        return new ResponseEntity<>(new LPVSResponseWrapper(SUCCESS), HttpStatus.OK);
+        return ResponseEntity.ok()
+                .headers(LPVSWebhookUtil.generateSecurityHeaders())
+                .body(new LPVSResponseWrapper(SUCCESS));
     }
 
     /**
