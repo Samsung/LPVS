@@ -246,10 +246,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Check if there is at least one detected license associated with a specific pull request and marked as an issue.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="com/lpvs/LicensePreValidationSystem.html#exit(int)">exit(int)</a></span> - Static method in class com.lpvs.<a href="com/lpvs/LicensePreValidationSystem.html" title="class in com.lpvs">LicensePreValidationSystem</a></dt>
-<dd>
-<div class="block">Handles the "/exit" endpoint to exit the application with the specified exit code.</div>
-</dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/util/LPVSExitHandler.html#exit(int)">exit(int)</a></span> - Method in class com.lpvs.util.<a href="com/lpvs/util/LPVSExitHandler.html" title="class in com.lpvs.util">LPVSExitHandler</a></dt>
 <dd>
 <div class="block">Initiates the application exit process with the specified exit code.</div>
@@ -318,6 +314,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </a>
 <h2 class="title">G</h2>
 <dl>
+<dt><span class="memberNameLink"><a href="com/lpvs/util/LPVSWebhookUtil.html#generateSecurityHeaders()">generateSecurityHeaders()</a></span> - Static method in class com.lpvs.util.<a href="com/lpvs/util/LPVSWebhookUtil.html" title="class in com.lpvs.util">LPVSWebhookUtil</a></dt>
+<dd>
+<div class="block">Generates a HttpHeaders object with a set of security headers for a web application.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/entity/enums/LPVSVcs.html#GERRIT">GERRIT</a></span> - com.lpvs.entity.enums.<a href="com/lpvs/entity/enums/LPVSVcs.html" title="enum in com.lpvs.entity.enums">LPVSVcs</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/LicensePreValidationSystem.html#getAsyncExecutor()">getAsyncExecutor()</a></span> - Method in class com.lpvs.<a href="com/lpvs/LicensePreValidationSystem.html" title="class in com.lpvs">LicensePreValidationSystem</a></dt>
@@ -735,10 +735,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </a>
 <h2 class="title">R</h2>
 <dl>
-<dt><span class="memberNameLink"><a href="com/lpvs/controller/LPVSWebController.html#redirect()">redirect()</a></span> - Method in class com.lpvs.controller.<a href="com/lpvs/controller/LPVSWebController.html" title="class in com.lpvs.controller">LPVSWebController</a></dt>
-<dd>
-<div class="block">Redirects to the default error page.</div>
-</dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/entity/enums/LPVSPullRequestAction.html#REOPEN">REOPEN</a></span> - com.lpvs.entity.enums.<a href="com/lpvs/entity/enums/LPVSPullRequestAction.html" title="enum in com.lpvs.entity.enums">LPVSPullRequestAction</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/entity/enums/LPVSPullRequestAction.html#RESCAN">RESCAN</a></span> - com.lpvs.entity.enums.<a href="com/lpvs/entity/enums/LPVSPullRequestAction.html" title="enum in com.lpvs.entity.enums">LPVSPullRequestAction</a></dt>
@@ -753,6 +749,14 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </a>
 <h2 class="title">S</h2>
 <dl>
+<dt><span class="memberNameLink"><a href="com/lpvs/controller/LPVSWebController.html#sanitizeUserInputs(com.lpvs.entity.LPVSMember)">sanitizeUserInputs(LPVSMember)</a></span> - Static method in class com.lpvs.controller.<a href="com/lpvs/controller/LPVSWebController.html" title="class in com.lpvs.controller">LPVSWebController</a></dt>
+<dd>
+<div class="block">Validate and sanitize user inputs to prevent XSS attacks.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/lpvs/controller/LPVSWebController.html#sanitizeUserInputs(com.lpvs.entity.LPVSPullRequest)">sanitizeUserInputs(LPVSPullRequest)</a></span> - Static method in class com.lpvs.controller.<a href="com/lpvs/controller/LPVSWebController.html" title="class in com.lpvs.controller">LPVSWebController</a></dt>
+<dd>
+<div class="block">Validate and sanitize user inputs to prevent XSS attacks.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/util/LPVSFileUtil.html#saveFile(java.lang.String,java.lang.String,java.util.List)">saveFile(String, String, List&lt;String&gt;)</a></span> - Static method in class com.lpvs.util.<a href="com/lpvs/util/LPVSFileUtil.html" title="class in com.lpvs.util">LPVSFileUtil</a></dt>
 <dd>
 <div class="block">Saves a file with the specified content in a given directory.</div>

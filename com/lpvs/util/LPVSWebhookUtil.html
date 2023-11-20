@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9};
+var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -186,34 +186,41 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code>static org.springframework.http.HttpHeaders</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#generateSecurityHeaders()">generateSecurityHeaders</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Generates a HttpHeaders object with a set of security headers for a web application.</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>static <a href="../entity/LPVSQueue.html" title="class in com.lpvs.entity">LPVSQueue</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getGitHubWebhookConfig(java.lang.String)">getGitHubWebhookConfig</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;payload)</code></th>
 <td class="colLast">
 <div class="block">Parses the GitHub webhook payload and extracts relevant information to create an LPVSQueue object.</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>static <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPullRequestId(com.lpvs.entity.LPVSQueue)">getPullRequestId</a></span>&#8203;(<a href="../entity/LPVSQueue.html" title="class in com.lpvs.entity">LPVSQueue</a>&nbsp;webhookConfig)</code></th>
 <td class="colLast">
 <div class="block">Retrieves the pull request ID from the pull request URL in the LPVSQueue object.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>static <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getRepositoryName(com.lpvs.entity.LPVSQueue)">getRepositoryName</a></span>&#8203;(<a href="../entity/LPVSQueue.html" title="class in com.lpvs.entity">LPVSQueue</a>&nbsp;webhookConfig)</code></th>
 <td class="colLast">
 <div class="block">Retrieves the repository name from the repository URL in the LPVSQueue object.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>static <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getRepositoryOrganization(com.lpvs.entity.LPVSQueue)">getRepositoryOrganization</a></span>&#8203;(<a href="../entity/LPVSQueue.html" title="class in com.lpvs.entity">LPVSQueue</a>&nbsp;webhookConfig)</code></th>
 <td class="colLast">
 <div class="block">Retrieves the organization name from the repository URL in the LPVSQueue object.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>static <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getRepositoryUrl(com.lpvs.entity.LPVSQueue)">getRepositoryUrl</a></span>&#8203;(<a href="../entity/LPVSQueue.html" title="class in com.lpvs.entity">LPVSQueue</a>&nbsp;webhookConfig)</code></th>
 <td class="colLast">
@@ -346,7 +353,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <a id="getPullRequestId(com.lpvs.entity.LPVSQueue)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>getPullRequestId</h4>
 <pre class="methodSignature">public static&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;getPullRequestId&#8203;(<a href="../entity/LPVSQueue.html" title="class in com.lpvs.entity">LPVSQueue</a>&nbsp;webhookConfig)</pre>
@@ -356,6 +363,31 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <dd><code>webhookConfig</code> - LPVSQueue object containing pull request information.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The pull request ID.</dd>
+</dl>
+</li>
+</ul>
+<a id="generateSecurityHeaders()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>generateSecurityHeaders</h4>
+<pre class="methodSignature">public static&nbsp;org.springframework.http.HttpHeaders&nbsp;generateSecurityHeaders()</pre>
+<div class="block">Generates a HttpHeaders object with a set of security headers for a web application.
+
+ This method includes the following security headers:
+ - Strict-Transport-Security: Enables HSTS for one year, including subdomains.
+ - Content-Security-Policy: Minimal CSP allowing resources only from the same origin.
+ - X-Content-Type-Options: Prevents browsers from MIME-sniffing a response.
+ - X-Frame-Options: Prevents the content from being displayed in iframes.
+ - X-XSS-Protection: Enables XSS protection in modern browsers.
+ - Referrer-Policy: Specifies how much referrer information should be included with requests.
+ - Feature-Policy: Disallows the use of various browser features.
+ - Access-Control-Allow-Origin, Access-Control-Allow-Methods, Access-Control-Allow-Headers:
+     Headers for Cross-Origin Resource Sharing (CORS) to control which origins are permitted to access resources.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>HttpHeaders object with a set of security headers.</dd>
 </dl>
 </li>
 </ul>
