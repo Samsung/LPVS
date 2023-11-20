@@ -12,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
+import org.springframework.http.HttpHeaders;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -222,6 +223,30 @@ public class LPVSWebhookUtilTest {
         public void checkNull() {
             assertEquals(LPVSWebhookUtil.getRepositoryOrganization(null), "Webhook is absent");
             assertEquals(LPVSWebhookUtil.getRepositoryName(null), "Webhook is absent");
+        }
+    }
+
+    @Nested
+    public class TestHttpHeaders {
+
+        @Test
+        void generateSecurityHeadersTest() {
+            HttpHeaders headers = LPVSWebhookUtil.generateSecurityHeaders();
+
+            // Assert the presence of each expected header
+            assertEquals(
+                    "max-age=31536000; includeSubDomains",
+                    headers.getFirst("Strict-Transport-Security"));
+            assertEquals("default-src 'self'", headers.getFirst("Content-Security-Policy"));
+            assertEquals("nosniff", headers.getFirst("X-Content-Type-Options"));
+            assertEquals("DENY", headers.getFirst("X-Frame-Options"));
+            assertEquals("1; mode=block", headers.getFirst("X-XSS-Protection"));
+            assertEquals("same-origin", headers.getFirst("Referrer-Policy"));
+            assertEquals("none", headers.getFirst("Feature-Policy"));
+            assertEquals("same-origin", headers.getFirst("Access-Control-Allow-Origin"));
+            assertEquals(
+                    "GET, POST, PUT, DELETE", headers.getFirst("Access-Control-Allow-Methods"));
+            assertEquals("Content-Type", headers.getFirst("Access-Control-Allow-Headers"));
         }
     }
 }
