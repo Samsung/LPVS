@@ -37,10 +37,7 @@ import org.springframework.web.util.HtmlUtils;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Controller class for handling web-related requests in LPVS.
@@ -275,10 +272,12 @@ public class LPVSWebController implements ErrorController {
             lpvsLoginCheckService.loginVerification(authentication);
             HttpHeaders headers = LPVSWebhookUtil.generateSecurityHeaders();
 
-            LPVSPullRequest pr = lpvsPullRequestRepository.findById(prId).get();
-            if (pr == null) {
+            Optional<LPVSPullRequest> prOpt = lpvsPullRequestRepository.findById(prId);
+            if (!prOpt.isPresent()) {
                 return ResponseEntity.notFound().headers(headers).build();
             }
+            LPVSPullRequest pr = prOpt.get();
+
             List<LPVSLicense> distinctByLicense =
                     detectedLicenseRepository.findDistinctByLicense(pr);
             List<String> detectedLicenses = new ArrayList<>();

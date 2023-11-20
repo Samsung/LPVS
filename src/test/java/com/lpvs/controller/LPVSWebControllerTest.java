@@ -25,6 +25,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.*;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 
@@ -246,6 +247,21 @@ public class LPVSWebControllerTest {
     }
 
     @Test
+    public void testResultPageNull() {
+        Authentication authentication = mock(Authentication.class);
+        Pageable pageable = PageRequest.of(0, 5, Sort.by(Sort.Order.asc("id")));
+
+        when(loginCheckService.getMemberFromMemberMap(authentication)).thenReturn(new LPVSMember());
+        when(lpvsPullRequestRepository.findById(1L)).thenReturn(Optional.empty());
+
+        ResponseEntity<LPVSResult> responseEntity =
+                webController.new WebApiEndpoints().resultPage(1L, pageable, authentication);
+
+        assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+        assertNull(responseEntity.getBody());
+    }
+
+    @Test
     public void testDashboardPage() {
         Authentication authentication = mock(Authentication.class);
         String type = "own";
@@ -277,6 +293,19 @@ public class LPVSWebControllerTest {
     }
 
     @Test
+    void testSanitizeUserInputsForMemberWithNullValues() {
+        LPVSMember member = new LPVSMember();
+        LPVSWebController.sanitizeUserInputs(member);
+
+        assertNull(member.getNickname());
+        assertNull(member.getOrganization());
+
+        LPVSMember memberNull = null;
+        LPVSWebController.sanitizeUserInputs(memberNull);
+        assertNull(memberNull);
+    }
+
+    @Test
     void testSanitizeUserInputsForPullRequest() {
         LPVSPullRequest pr = new LPVSPullRequest();
         pr.setRepositoryName("<script>alert('XSS')</script>");
@@ -294,5 +323,20 @@ public class LPVSWebControllerTest {
                 "&lt;img src=&#39;invalid-image&#39; onerror=&#39;alert(&quot;XSS&quot;)&#39;&gt;",
                 pr.getStatus());
         assertEquals("&lt;iframe src=&#39;malicious-site&#39;&gt;&lt;/iframe&gt;", pr.getSender());
+    }
+
+    @Test
+    void testSanitizeUserInputsForPullRequestWithNullValues() {
+        LPVSPullRequest pr = new LPVSPullRequest();
+        LPVSWebController.sanitizeUserInputs(pr);
+
+        assertNull(pr.getRepositoryName());
+        assertNull(pr.getPullRequestUrl());
+        assertNull(pr.getStatus());
+        assertNull(pr.getSender());
+
+        LPVSPullRequest prNull = null;
+        LPVSWebController.sanitizeUserInputs(prNull);
+        assertNull(prNull);
     }
 }
