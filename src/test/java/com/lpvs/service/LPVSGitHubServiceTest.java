@@ -2405,7 +2405,8 @@ public class LPVSGitHubServiceTest {
         LPVSLicenseRepository mocked_lpvsLicenseRepository = mock(LPVSLicenseRepository.class);
         LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository =
                 mock(LPVSLicenseConflictRepository.class);
-        LPVSGitHubConnectionService lpvsGitHubConnectionService = mock(LPVSGitHubConnectionService.class);
+        LPVSGitHubConnectionService lpvsGitHubConnectionService =
+                mock(LPVSGitHubConnectionService.class);
 
         final String GH_LOGIN = "test_login";
         final String GH_AUTH_TOKEN = "test_auth_token";
@@ -2730,7 +2731,8 @@ public class LPVSGitHubServiceTest {
         LPVSLicenseRepository mocked_lpvsLicenseRepository = mock(LPVSLicenseRepository.class);
         LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository =
                 mock(LPVSLicenseConflictRepository.class);
-        LPVSGitHubConnectionService lpvsGitHubConnectionService = mock(LPVSGitHubConnectionService.class);
+        LPVSGitHubConnectionService lpvsGitHubConnectionService =
+                mock(LPVSGitHubConnectionService.class);
 
         final String GH_LOGIN = "test_login";
         final String GH_AUTH_TOKEN = "test_auth_token";
@@ -3058,7 +3060,8 @@ public class LPVSGitHubServiceTest {
         LPVSLicenseRepository mocked_lpvsLicenseRepository = mock(LPVSLicenseRepository.class);
         LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository =
                 mock(LPVSLicenseConflictRepository.class);
-        LPVSGitHubConnectionService lpvsGitHubConnectionService = mock(LPVSGitHubConnectionService.class);
+        LPVSGitHubConnectionService lpvsGitHubConnectionService =
+                mock(LPVSGitHubConnectionService.class);
 
         final String GH_LOGIN = "test_login";
         final String GH_AUTH_TOKEN = "test_auth_token";
@@ -4164,8 +4167,8 @@ public class LPVSGitHubServiceTest {
         LPVSLicenseRepository mocked_lpvsLicenseRepository = mock(LPVSLicenseRepository.class);
         LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository =
                 mock(LPVSLicenseConflictRepository.class);
-        LPVSGitHubConnectionService lpvsGitHubConnectionService = new LPVSGitHubConnectionService(
-                GH_LOGIN, GH_AUTH_TOKEN, GH_API_URL, exitHandler);
+        LPVSGitHubConnectionService lpvsGitHubConnectionService =
+                new LPVSGitHubConnectionService(GH_LOGIN, GH_AUTH_TOKEN, GH_API_URL, exitHandler);
         final LPVSGitHubService gh_service =
                 new LPVSGitHubService(
                         mocked_pullRequestRepository,
@@ -4251,7 +4254,8 @@ public class LPVSGitHubServiceTest {
                 throws IllegalAccessException, NoSuchFieldException {
             String githubTokenValue = "GitHubTokenValue";
             lpvsGitHubConnectionService.setGithubTokenFromEnv();
-            Field field = lpvsGitHubConnectionService.getClass().getDeclaredField("GITHUB_AUTH_TOKEN");
+            Field field =
+                    lpvsGitHubConnectionService.getClass().getDeclaredField("GITHUB_AUTH_TOKEN");
             field.setAccessible(true);
             String githubRealTokenValue = (String) field.get(lpvsGitHubConnectionService);
             assertEquals(githubTokenValue, githubRealTokenValue);
@@ -4261,7 +4265,8 @@ public class LPVSGitHubServiceTest {
         public void testSetGithubTokenFromEnv_WhenEnvVariableIsNotSet()
                 throws NoSuchFieldException, IllegalAccessException {
             lpvsGitHubConnectionService.setGithubTokenFromEnv();
-            Field field = lpvsGitHubConnectionService.getClass().getDeclaredField("GITHUB_AUTH_TOKEN");
+            Field field =
+                    lpvsGitHubConnectionService.getClass().getDeclaredField("GITHUB_AUTH_TOKEN");
             field.setAccessible(true);
             String githubRealTokenValue = (String) field.get(lpvsGitHubConnectionService);
             assertEquals(GH_AUTH_TOKEN, githubRealTokenValue);
@@ -4274,7 +4279,6 @@ public class LPVSGitHubServiceTest {
         @BeforeEach
         public void setUp() {
             MockitoAnnotations.openMocks(this);
-
         }
 
         @Test
@@ -4321,7 +4325,8 @@ public class LPVSGitHubServiceTest {
                     mock(LPVSLicenseConflictRepository.class);
             LPVSExitHandler exitHandler = mock(LPVSExitHandler.class);
             LPVSGitHubConnectionService lpvsGitHubConnectionService =
-                    new LPVSGitHubConnectionService(GH_LOGIN, GH_AUTH_TOKEN, GH_API_URL, exitHandler);
+                    new LPVSGitHubConnectionService(
+                            GH_LOGIN, GH_AUTH_TOKEN, GH_API_URL, exitHandler);
 
             final LPVSGitHubService gh_service =
                     new LPVSGitHubService(

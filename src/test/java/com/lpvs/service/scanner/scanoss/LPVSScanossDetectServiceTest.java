@@ -71,8 +71,7 @@ public class LPVSScanossDetectServiceTest {
                             }
                         });
         scanossDetectService =
-                new LPVSScanossDetectService(
-                        false, licenseService, lpvsLicenseRepository);
+                new LPVSScanossDetectService(false, licenseService, lpvsLicenseRepository);
     }
 
     @AfterEach
