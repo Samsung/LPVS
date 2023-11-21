@@ -70,10 +70,11 @@ public class LPVSDetectService {
                 File scanResult = new File(LPVSFileUtil.getScanResultsJsonFilePath(webhookConfig));
                 if (scanResult.exists()) {
                     String jsonTxt = IOUtils.readFileToString(scanResult);
+                    //ToDo: form html report and console output
                     System.out.println(jsonTxt);
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
+            } catch (Exception ex) {
+                log.error("Can't triger single scan " + ex);
             }
             doThisStuffToExit();
         }
@@ -81,6 +82,7 @@ public class LPVSDetectService {
 
     @Async("threadPoolTaskExecutor")
     public void doThisStuffToExit() {
+        //ToDo: add exit handler to this class
         System.out.println("Exiting...");
         System.exit(0);
     }
