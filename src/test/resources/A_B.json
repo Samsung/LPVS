@@ -1,4 +1,46 @@
 {
+  "test - Copy2.c": [
+    {
+      "file_hash": "4e64eb106ffa63ca7f6cc8c988f1cb10",
+      "latest": "5.1.r105571",
+      "licenses": [
+        {
+          "checklist_url": "https://www.osadl.org/fileadmin/checklists/unreflicenses/LGPL-2.1-or-later.txt",
+          "copyleft": "yes",
+          "incompatible_with": "Apache-1.0, Apache-1.1, Apache-2.0, BSD-4-Clause, BSD-4-Clause-UC, FTL, IJG, OpenSSL, Python-2.0, zlib-acknowledgement, XFree86-1.1",
+          "name": "LGPL-2.1-or-later",
+          "osadl_updated": "2022-05-13 08:48",
+          "patent_hints": "yes",
+          "source": "file_header",
+          "url": "https://spdx.org/licenses/LGPL-2.1-or-later.html"
+        },
+        {
+          "checklist_url": "https://www.osadl.org/fileadmin/checklists/unreflicenses/LGPL-2.1-or-later.txt",
+          "copyleft": "yes",
+          "incompatible_with": "Apache-1.0, Apache-1.1, Apache-2.0, BSD-4-Clause, BSD-4-Clause-UC, FTL, IJG, OpenSSL, Python-2.0, zlib-acknowledgement, XFree86-1.1",
+          "name": "LGPL-2.1-or-later",
+          "osadl_updated": "2022-05-13 08:48",
+          "patent_hints": "yes",
+          "source": "scancode",
+          "url": "https://spdx.org/licenses/LGPL-2.1-or-later.html"
+        }
+      ],
+      "purl": [
+        "pkg:github/shiftmediaproject/ffmpeg"
+      ],
+      "release_date": "2021-08-08",
+      "server": {
+        "kb_version": {
+          "daily": "22.06.10",
+          "monthly": "22.05"
+        },
+        "version": "4.5.2"
+      },
+      "source_hash": "c27aa06008779ad2da604cd30c588ea4",
+      "status": "pending",
+      "url_hash": "cf73511d784cddc8b080c199948c98dd"
+    }
+  ],
   "test - Copy.c": [
     {
       "component": "FFmpeg",

@@ -45,6 +45,59 @@ public class LPVSFileUtilTest {
     }
 
     @Test
+    public void testSaveGithubDiffsFileNameWithSlash() {
+        GHPullRequestFileDetail detail = new GHPullRequestFileDetail();
+        LPVSQueue webhookConfig = new LPVSQueue();
+        webhookConfig.setHeadCommitSHA("aaaa");
+        webhookConfig.setRepositoryUrl("http://test.com/test/test");
+        ReflectionTestUtils.setField(detail, "filename", "dir/I_am_a_file");
+        LPVSFileUtil.saveGithubDiffs(
+                new ArrayList<GHPullRequestFileDetail>() {
+                    {
+                        add(detail);
+                    }
+                },
+                webhookConfig);
+
+        ReflectionTestUtils.setField(detail, "patch", "+ a\n- b\n@@ -8,7 +8,6 @@\n c");
+        Assertions.assertFalse(
+                LPVSFileUtil.saveGithubDiffs(
+                                new ArrayList<GHPullRequestFileDetail>() {
+                                    {
+                                        add(detail);
+                                    }
+                                },
+                                webhookConfig)
+                        .contains("Projects//aaaa"));
+    }
+
+    @Test
+    public void testSaveGithubDiffsEmptyPatchLines() {
+        GHPullRequestFileDetail detail = new GHPullRequestFileDetail();
+        LPVSQueue webhookConfig = new LPVSQueue();
+        webhookConfig.setHeadCommitSHA("aaaa");
+        webhookConfig.setRepositoryUrl("http://test.com/test/test");
+        ReflectionTestUtils.setField(detail, "filename", "I_am_a_file");
+        LPVSFileUtil.saveGithubDiffs(
+                new ArrayList<GHPullRequestFileDetail>() {
+                    {
+                        add(detail);
+                    }
+                },
+                webhookConfig);
+        ReflectionTestUtils.setField(detail, "patch", "");
+        Assertions.assertFalse(
+                LPVSFileUtil.saveGithubDiffs(
+                                new ArrayList<GHPullRequestFileDetail>() {
+                                    {
+                                        add(detail);
+                                    }
+                                },
+                                webhookConfig)
+                        .contains("Projects//aaaa"));
+    }
+
+    @Test
     public void testGetLocalDirectoryPathWithHeadCommitSHA() {
         LPVSQueue mockWebhookConfig = Mockito.mock(LPVSQueue.class);
         Mockito.when(mockWebhookConfig.getHeadCommitSHA()).thenReturn("abcdef123");
@@ -57,6 +110,26 @@ public class LPVSFileUtilTest {
 
             String result = LPVSFileUtil.getLocalDirectoryPath(mockWebhookConfig);
             String expectedPath = System.getProperty("user.home") + "/Projects/repoName/abcdef123";
+            assert (result.equals(expectedPath));
+        }
+    }
+
+    @Test
+    public void testGetLocalDirectoryPathWithHeadCommitSHAEmpty() {
+        LPVSQueue mockWebhookConfig = Mockito.mock(LPVSQueue.class);
+        Mockito.when(mockWebhookConfig.getHeadCommitSHA()).thenReturn("");
+
+        try (MockedStatic<LPVSWebhookUtil> mocked_static_file_util =
+                mockStatic(LPVSWebhookUtil.class)) {
+            mocked_static_file_util
+                    .when(() -> LPVSWebhookUtil.getRepositoryName(Mockito.any()))
+                    .thenReturn("repoName");
+            mocked_static_file_util
+                    .when(() -> LPVSWebhookUtil.getPullRequestId(Mockito.any()))
+                    .thenReturn("1");
+
+            String result = LPVSFileUtil.getLocalDirectoryPath(mockWebhookConfig);
+            String expectedPath = System.getProperty("user.home") + "/Projects/repoName/1";
             assert (result.equals(expectedPath));
         }
     }
@@ -96,6 +169,26 @@ public class LPVSFileUtilTest {
             String result = LPVSFileUtil.getScanResultsJsonFilePath(mockWebhookConfig);
             String expectedPath =
                     System.getProperty("user.home") + "/Results/repoName/abcdef123.json";
+            assert (result.equals(expectedPath));
+        }
+    }
+
+    @Test
+    public void testGetScanResultsJsonFilePathWithHeadCommitSHAEmpty() {
+        LPVSQueue mockWebhookConfig = Mockito.mock(LPVSQueue.class);
+        Mockito.when(mockWebhookConfig.getHeadCommitSHA()).thenReturn("");
+
+        try (MockedStatic<LPVSWebhookUtil> mocked_static_file_util =
+                mockStatic(LPVSWebhookUtil.class)) {
+            mocked_static_file_util
+                    .when(() -> LPVSWebhookUtil.getRepositoryName(Mockito.any()))
+                    .thenReturn("repoName");
+            mocked_static_file_util
+                    .when(() -> LPVSWebhookUtil.getPullRequestId(Mockito.any()))
+                    .thenReturn("1");
+
+            String result = LPVSFileUtil.getScanResultsJsonFilePath(mockWebhookConfig);
+            String expectedPath = System.getProperty("user.home") + "/Results/repoName/1.json";
             assert (result.equals(expectedPath));
         }
     }

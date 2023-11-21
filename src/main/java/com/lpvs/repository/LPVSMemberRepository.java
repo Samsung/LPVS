@@ -8,14 +8,20 @@ package com.lpvs.repository;
 
 import com.lpvs.entity.LPVSMember;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 
+/**
+ * Repository interface for managing {@link LPVSMember} entities.
+ * Extends {@link org.springframework.data.jpa.repository.JpaRepository} for basic CRUD operations.
+ */
 public interface LPVSMemberRepository extends JpaRepository<LPVSMember, Long> {
+    /**
+     * Find a member by email and provider.
+     *
+     * @param email    The email address of the member.
+     * @param provider The provider associated with the member.
+     * @return An {@link Optional} containing the {@link LPVSMember} entity if found, otherwise an empty {@link Optional}.
+     */
     Optional<LPVSMember> findByEmailAndProvider(String email, String provider);
-
-    @Query(value = "select m.nickname from LPVSMember m where m.email= :email")
-    String findNicknameByEmail(@Param("email") String Email);
 }

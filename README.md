@@ -264,6 +264,14 @@ LPVS is now built and running. You can create a new pull request or update an ex
 
 ---
 
+## Frontend Source Code (React)
+
+The frontend of the LPVS project is implemented using React. The corresponding code can be found in the `frontend` folder.
+
+For detailed information about the frontend, please refer to the [Frontend README](frontend/README.md).
+
+---
+
 ## License
 
 The LPVS source code is distributed under the [MIT](https://opensource.org/licenses/MIT) open source license.
@@ -276,5 +284,6 @@ You are welcome to contribute to the LPVS project. Contributing is a great way t
 
 - [How to Contribute Code](.github/CONTRIBUTING.md)
 - [How to Report a Security Vulnerability](.github/SECURITY.md)
+- [Code Review Requirements](doc/code-review-requirements.md)
 
 Thank you for your interest in contributing to LPVS! Your contributions are highly appreciated.

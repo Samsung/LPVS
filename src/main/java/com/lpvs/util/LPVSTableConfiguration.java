@@ -6,48 +6,44 @@
  */
 package com.lpvs.util;
 
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+/**
+ * Component class providing configuration values for various database table names in the LPVS application.
+ * This class is responsible for managing configuration properties related to database tables.
+ */
 @Component
+@Getter
 public class LPVSTableConfiguration {
+    /**
+     * Configuration property for the detected license table.
+     */
     @Value("${app.table.detectedLicenseName}")
     private String detectedLicenseName;
 
+    /**
+     * Configuration property for the detected license schema table.
+     */
     @Value("${app.table.detectedLicenseSchema}")
     private String detectedLicenseSchema;
 
+    /**
+     * Configuration property for the diff file table.
+     */
     @Value("${app.table.diffFileName}")
     private String diffFileName;
 
+    /**
+     * Configuration property for the pull request table.
+     */
     @Value("${app.table.pullRequestsName}")
-    private String pulLRequestsName;
+    private String pullRequestsName;
 
+    /**
+     * Configuration property for the queue name table.
+     */
     @Value("${app.table.queueName}")
     private String queueName;
-
-    // Configuration for detected license name
-    public String getDetectedLicenseName() {
-        return detectedLicenseName;
-    }
-
-    // Configuration for detected license schema
-    public String getDetectedLicenseSchema() {
-        return detectedLicenseSchema;
-    }
-
-    // Configuration for diff file name table
-    public String getDiffFileName() {
-        return diffFileName;
-    }
-
-    // Configuration for pull request name table
-    public String getPullRequestsName() {
-        return pulLRequestsName;
-    }
-
-    // Configurations for queue name
-    public String getQueueName() {
-        return queueName;
-    }
 }

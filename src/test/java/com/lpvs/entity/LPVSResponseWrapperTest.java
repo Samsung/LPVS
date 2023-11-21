@@ -37,5 +37,6 @@ public class LPVSResponseWrapperTest {
         }
 
         Assertions.assertEquals(test_value, actual);
+        Assertions.assertEquals(test_value, responseWrapper.getMessage());
     }
 }

@@ -56,8 +56,8 @@ public class LPVSStatisticsService {
 
         List<LPVSPullRequest> prList = new ArrayList<>();
 
-        if (type.equals("own") && findNickName.equals(name)
-                || type.equals("org") && findOrganization.equals(findOrganization)) {
+        if ((type.equals("own") && findNickName.equals(name))
+                || (type.equals("org") && findOrganization.equals(name))) {
             prList = lpvsPullRequestRepository.findByPullRequestBase(name);
         } else if (type.equals("send") && findNickName.equals(name)) {
             prList = lpvsPullRequestRepository.findBySenderOrPullRequestHead(name);
