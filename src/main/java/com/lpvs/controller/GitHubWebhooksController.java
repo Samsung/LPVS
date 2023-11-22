@@ -129,11 +129,13 @@ public class GitHubWebhooksController {
         // Validate and sanitize user inputs to prevent XSS attacks
         // if signature is empty - return 401
         if (!StringUtils.hasText(signature) || signature.length() > 72) {
+            log.error("Received empty or too long signature");
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
                     .headers(LPVSWebhookUtil.generateSecurityHeaders())
                     .body(new LPVSResponseWrapper(ERROR));
         }
         if (!GITHUB_SECRET.trim().isEmpty() && wrongSecret(signature, payload)) {
+            log.error("Received empty or incorrect GITHUB_SECRET");
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
                     .headers(LPVSWebhookUtil.generateSecurityHeaders())
                     .body(new LPVSResponseWrapper(ERROR));
