@@ -208,7 +208,7 @@
                 <version>3.3.1</version>
                 <configuration>
                     <overview>${basedir}/doc/overview.html</overview>
-                    <docTitle>${project.name} ${project.version} API</docTitle>
+                    <doctitle>${project.name} ${project.version} API</doctitle>
                     <notimestamp>true</notimestamp>
                 </configuration>
             </plugin>
