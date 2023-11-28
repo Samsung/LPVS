@@ -32,7 +32,7 @@ public class LPVSPullRequest implements Serializable {
     @Column(name = "scan_date")
     private Date date;
 
-    @Column(name = "user_string")
+    @Column(name = "user")
     private String user;
 
     @Column(name = "repository_name")

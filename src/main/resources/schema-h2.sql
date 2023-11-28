@@ -27,7 +27,7 @@ CREATE TABLE license_conflicts (
 CREATE TABLE pull_requests (
   id bigint NOT NULL AUTO_INCREMENT,
   scan_date datetime NOT NULL,
-  user_string varchar DEFAULT NULL,
+  user varchar DEFAULT NULL,
   repository_name varchar NOT NULL,
   url longtext NOT NULL,
   diff_url longtext,
