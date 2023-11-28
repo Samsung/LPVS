@@ -107,7 +107,7 @@ public class LPVSDetectService {
         return webhookConfig;
     }
 
-    private LPVSQueue getInternalQueueByPullRequest(String pullRequest) {
+    public LPVSQueue getInternalQueueByPullRequest(String pullRequest) {
         try {
             if (pullRequest == null) return null;
             String[] pullRequestSplit = pullRequest.split("/");
@@ -130,7 +130,7 @@ public class LPVSDetectService {
         return null;
     }
 
-    private static String getPathByPullRequest(LPVSQueue webhookConfig) {
+    public static String getPathByPullRequest(LPVSQueue webhookConfig) {
         if (webhookConfig == null) return null;
         return LPVSFileUtil.getLocalDirectoryPath(webhookConfig);
     }

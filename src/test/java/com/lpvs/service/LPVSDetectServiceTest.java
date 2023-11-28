@@ -9,22 +9,62 @@ package com.lpvs.service;
 import com.lpvs.entity.LPVSFile;
 import com.lpvs.entity.LPVSQueue;
 import com.lpvs.service.scanner.scanoss.LPVSScanossDetectService;
+
 import lombok.extern.slf4j.Slf4j;
+
+import org.apache.catalina.core.ApplicationContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.kohsuke.github.GHPullRequest;
+import org.kohsuke.github.GHRepository;
+import org.kohsuke.github.GitHub;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.*;
 
 @Slf4j
+@ExtendWith(MockitoExtension.class)
 public class LPVSDetectServiceTest {
+
+    @Mock
+    private LPVSGitHubConnectionService gitHubConnectionService;
+
+    @Mock
+    private GitHub gitHub;
+
+    @Mock
+    private GHRepository ghRepository;
+
+    @Mock
+    private GHPullRequest ghPullRequest;
+
+    @Mock
+    private LPVSScanossDetectService scanossDetectService;
+
+    @Mock
+    private ApplicationContext applicationContext;
+
+    @Mock
+    private ApplicationReadyEvent applicationReadyEvent;
+
+    @InjectMocks
+    private LPVSDetectService lpvsDetectService;
 
     @Nested
     class TestInit {
@@ -72,6 +112,32 @@ public class LPVSDetectServiceTest {
             when(scanoss_mock.checkLicenses(webhookConfig))
                     .thenReturn(List.of(lpvs_file_1, lpvs_file_2));
         }
+
+        @Test
+        void runOneScan() {
+
+            lpvsDetectService = spy(new LPVSDetectService("scanoss", null, scanossDetectService));
+
+            lpvsDetectService.runOneScan();
+    
+            assertDoesNotThrow(() -> lpvsDetectService.runOneScan());
+        }
+
+
+        @Test
+        void getInternalQueueByPullRequest() throws IOException {
+            String pullRequest = "github/owner/repo/branch/123";
+            when(gitHubConnectionService.connectToGitHubApi()).thenReturn(gitHub);
+            when(gitHub.getRepository("owner/repo")).thenReturn(ghRepository);
+            when(ghRepository.getPullRequest(123)).thenReturn(ghPullRequest);
+
+            LPVSQueue result = lpvsDetectService.getInternalQueueByPullRequest(pullRequest);
+
+            assertNotNull(result);
+            assertEquals(result.getUserId(), "Single scan run");
+
+        }
+
 
         @Test
         public void testRunScan__Scanoss() {
