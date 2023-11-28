@@ -25,7 +25,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 
-import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -42,29 +41,21 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 public class LPVSDetectServiceTest {
 
-    @Mock
-    private LPVSGitHubConnectionService gitHubConnectionService;
+    @Mock private LPVSGitHubConnectionService gitHubConnectionService;
 
-    @Mock
-    private GitHub gitHub;
+    @Mock private GitHub gitHub;
 
-    @Mock
-    private GHRepository ghRepository;
+    @Mock private GHRepository ghRepository;
 
-    @Mock
-    private GHPullRequest ghPullRequest;
+    @Mock private GHPullRequest ghPullRequest;
 
-    @Mock
-    private LPVSScanossDetectService scanossDetectService;
+    @Mock private LPVSScanossDetectService scanossDetectService;
 
-    @Mock
-    private ApplicationContext applicationContext;
+    @Mock private ApplicationContext applicationContext;
 
-    @Mock
-    private ApplicationReadyEvent applicationReadyEvent;
+    @Mock private ApplicationReadyEvent applicationReadyEvent;
 
-    @InjectMocks
-    private LPVSDetectService lpvsDetectService;
+    @InjectMocks private LPVSDetectService lpvsDetectService;
 
     @Nested
     class TestInit {
@@ -119,10 +110,9 @@ public class LPVSDetectServiceTest {
             lpvsDetectService = spy(new LPVSDetectService("scanoss", null, scanossDetectService));
 
             lpvsDetectService.runOneScan();
-    
+
             assertDoesNotThrow(() -> lpvsDetectService.runOneScan());
         }
-
 
         @Test
         void getInternalQueueByPullRequest() throws IOException {
@@ -135,9 +125,7 @@ public class LPVSDetectServiceTest {
 
             assertNotNull(result);
             assertEquals(result.getUserId(), "Single scan run");
-
         }
-
 
         @Test
         public void testRunScan__Scanoss() {
