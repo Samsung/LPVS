@@ -12,7 +12,6 @@ import com.lpvs.service.scanner.scanoss.LPVSScanossDetectService;
 
 import lombok.extern.slf4j.Slf4j;
 
-import org.apache.catalina.core.ApplicationContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -24,8 +23,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -35,11 +37,14 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @Slf4j
 @ExtendWith(MockitoExtension.class)
 public class LPVSDetectServiceTest {
+
+    @Mock private ApplicationEventPublisher mockEventPublisher;
 
     @Mock private LPVSGitHubConnectionService gitHubConnectionService;
 
@@ -105,11 +110,13 @@ public class LPVSDetectServiceTest {
         }
 
         @Test
-        void testRunOneScan_Default() {
+        void testRunOneScan_Default() throws NoSuchFieldException, IllegalAccessException {
 
             lpvsDetectService = spy(new LPVSDetectService("scanoss", null, scanossDetectService));
 
-            lpvsDetectService.runOneScan();
+            setPrivateField(lpvsDetectService, "trigger", "fake-trigger-value");
+            setPrivateField(lpvsDetectService, "eventPublisher",mockEventPublisher);
+            doNothing().when(mockEventPublisher).publishEvent(any());
 
             assertDoesNotThrow(() -> lpvsDetectService.runOneScan());
         }
@@ -230,5 +237,12 @@ public class LPVSDetectServiceTest {
                 fail();
             }
         }
+    }
+
+    private void setPrivateField(Object target, String fieldName, Object value) throws NoSuchFieldException, IllegalAccessException {
+        Field field = target.getClass().getDeclaredField(fieldName);
+        field.setAccessible(true);
+        field.set(target, value);
+        field.setAccessible(false);
     }
 }

@@ -18,8 +18,11 @@ import org.kohsuke.github.GHRepository;
 import org.kohsuke.github.GitHub;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.ExitCodeEvent;
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -40,6 +43,9 @@ public class LPVSDetectService {
     private LPVSScanossDetectService scanossDetectService;
 
     private LPVSGitHubConnectionService gitHubConnectionService;
+
+    @Autowired
+    private ApplicationEventPublisher eventPublisher;
 
     @Value("${github.pull.request:}")
     private String trigger;
@@ -78,15 +84,9 @@ public class LPVSDetectService {
                 System.out.println("\n\n\n Single scan finished with errors \n\n\n");
                 log.error("Can't triger single scan " + ex);
             }
-            doThisStuffToExit();
+            // exiting application
+            eventPublisher.publishEvent(new ExitCodeEvent(new Object(), 0));
         }
-    }
-
-    @Async("threadPoolTaskExecutor")
-    public void doThisStuffToExit() {
-        // ToDo: add exit handler to this class
-        System.out.println("Exiting...");
-        System.exit(0);
     }
 
     private static LPVSQueue getGitHubWebhookConfig(GHRepository repo, GHPullRequest pR) {
