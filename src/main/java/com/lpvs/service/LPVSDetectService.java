@@ -19,12 +19,10 @@ import org.kohsuke.github.GitHub;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ExitCodeEvent;
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 
@@ -44,8 +42,7 @@ public class LPVSDetectService {
 
     private LPVSGitHubConnectionService gitHubConnectionService;
 
-    @Autowired
-    private ApplicationEventPublisher eventPublisher;
+    @Autowired private ApplicationEventPublisher eventPublisher;
 
     @Value("${github.pull.request:}")
     private String trigger;

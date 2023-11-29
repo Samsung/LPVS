@@ -16,6 +16,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.kohsuke.github.GHCommitPointer;
 import org.kohsuke.github.GHPullRequest;
 import org.kohsuke.github.GHRepository;
 import org.kohsuke.github.GitHub;
@@ -30,6 +31,7 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,6 +40,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 @Slf4j
@@ -115,8 +119,55 @@ public class LPVSDetectServiceTest {
             lpvsDetectService = spy(new LPVSDetectService("scanoss", null, scanossDetectService));
 
             setPrivateField(lpvsDetectService, "trigger", "fake-trigger-value");
-            setPrivateField(lpvsDetectService, "eventPublisher",mockEventPublisher);
+            setPrivateField(lpvsDetectService, "eventPublisher", mockEventPublisher);
             doNothing().when(mockEventPublisher).publishEvent(any());
+
+            assertDoesNotThrow(() -> lpvsDetectService.runOneScan());
+        }
+
+        @Test
+        void testRunOneScan_trigerInternalQueueException()
+                throws NoSuchFieldException, IllegalAccessException {
+
+            setPrivateField(lpvsDetectService, "trigger", "fake-trigger-value");
+            setPrivateField(lpvsDetectService, "eventPublisher", mockEventPublisher);
+            doNothing().when(mockEventPublisher).publishEvent(any());
+
+            assertDoesNotThrow(() -> lpvsDetectService.runOneScan());
+        }
+
+        @Test
+        void testRunOneScan_TriggerNotNull() throws Exception {
+
+            // Arrange
+            GitHub mockGitHub = mock(GitHub.class);
+            GHCommitPointer mockCommitPointer = mock(GHCommitPointer.class);
+            when(gitHubConnectionService.connectToGitHubApi()).thenReturn(mockGitHub);
+
+            setPrivateField(lpvsDetectService, "trigger", "github/owner/repo/branch/123");
+            setPrivateField(lpvsDetectService, "scannerType", "scanoss");
+            setPrivateField(lpvsDetectService, "eventPublisher", mockEventPublisher);
+
+            // Mock the necessary GitHub objects for LPVSQueue
+            GHRepository mockRepository = mock(GHRepository.class);
+            GHPullRequest mockPullRequest = mock(GHPullRequest.class);
+            when(mockGitHub.getRepository(any())).thenReturn(mockRepository);
+            when(mockRepository.getPullRequest(anyInt())).thenReturn(mockPullRequest);
+            when(mockRepository.getPullRequest(anyInt())).thenReturn(mockPullRequest);
+            when(mockPullRequest.getHead()).thenReturn(mockCommitPointer);
+
+            GHRepository mockHeadRepository = mock(GHRepository.class);
+            when(mockCommitPointer.getRepository()).thenReturn(mockHeadRepository);
+            when(mockHeadRepository.getHtmlUrl())
+                    .thenReturn(new URL("https://example.com/repo/files"));
+
+            // Set up expected values
+            String expectedPullRequestUrl = "https://example.com/pull/1";
+            when(mockPullRequest.getHtmlUrl()).thenReturn(new URL(expectedPullRequestUrl));
+
+            doNothing().when(scanossDetectService).runScan(any(), anyString());
+
+            lpvsDetectService.runOneScan();
 
             assertDoesNotThrow(() -> lpvsDetectService.runOneScan());
         }
@@ -239,7 +290,8 @@ public class LPVSDetectServiceTest {
         }
     }
 
-    private void setPrivateField(Object target, String fieldName, Object value) throws NoSuchFieldException, IllegalAccessException {
+    private void setPrivateField(Object target, String fieldName, Object value)
+            throws NoSuchFieldException, IllegalAccessException {
         Field field = target.getClass().getDeclaredField(fieldName);
         field.setAccessible(true);
         field.set(target, value);
