@@ -9,7 +9,6 @@ package com.lpvs.service;
 import com.lpvs.entity.LPVSFile;
 import com.lpvs.entity.LPVSQueue;
 import com.lpvs.service.scanner.scanoss.LPVSScanossDetectService;
-import com.lpvs.util.LPVSFileUtil;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,9 +23,7 @@ import org.kohsuke.github.GitHub;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.test.context.TestPropertySource;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
