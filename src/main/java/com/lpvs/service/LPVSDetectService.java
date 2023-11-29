@@ -72,8 +72,10 @@ public class LPVSDetectService {
                     String jsonTxt = IOUtils.readFileToString(scanResult);
                     // ToDo: form html report and console output
                     System.out.println(jsonTxt);
+                    System.out.println("\n\n\n Single scan finished successfully \n\n\n");
                 }
             } catch (Exception ex) {
+                System.out.println("\n\n\n Single scan finished with errors \n\n\n");
                 log.error("Can't triger single scan " + ex);
             }
             doThisStuffToExit();
