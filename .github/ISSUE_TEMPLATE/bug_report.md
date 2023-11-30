@@ -1,30 +1,31 @@
 ---
-name: Bug report
+name: Bug Report
 about: Create a report to help us improve
 title: ''
-labels: ''
+labels: bug
 assignees: ''
 
 ---
 
-**Describe the bug**
-A clear and concise description of what the bug is.
+## Bug Report
 
-**To Reproduce**
-Steps to reproduce the behavior:
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+**Description:**
+A clear and concise description of the issue you are experiencing.
 
-**Expected behavior**
+**Steps to Reproduce:**
+1. Step 1
+2. Step 2
+3. ...
+
+**Expected Behavior:**
 A clear and concise description of what you expected to happen.
 
-**Screenshots**
+**Screenshots:**
 If applicable, add screenshots to help explain your problem.
 
-**Test environment configuration (please complete the following information):**
-* Java: (e.g., Docker and Go versions)
+**Test Environment Configuration:**
+Please complete the following information):
+* Java: (e.g., Docker version)
 * LPVS Release: (e.g., 1.0.0)
 
 **Additional context**
