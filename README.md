@@ -269,12 +269,12 @@ Another configuration is available to run a one-time scan on a single pull reque
 
    Then you can run a single scan using the following command:
    ```bash
-   java -jar -Dgithub.token=<`my-token`> lpvs-*.jar --github.pull.request=<`PR URL`>
+   java -jar -Dgithub.token=<my-token> lpvs-*.jar --github.pull.request=<PR URL>
    ```
 
    In the case of the previous command you still need to set up MySQL database beforehand for the program to work, which can be inconvenient. In order to not have to set up the database you should choose "singlescan" profile, like this:
    ```bash
-   java -jar -Dspring.profiles.active=singlescan -Dgithub.token=<`my-token`> lpvs-*.jar --github.pull-request=<`PR URL`>
+   java -jar -Dspring.profiles.active=singlescan -Dgithub.token=<my-token> lpvs-*.jar --github.pull-request=<PR URL>
    ```
 
 ---
