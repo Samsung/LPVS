@@ -24,6 +24,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.HtmlUtils;
+
 import javax.annotation.PostConstruct;
 
 import java.io.File;
@@ -66,7 +68,7 @@ public class LPVSDetectService {
 
     @EventListener(ApplicationReadyEvent.class)
     public void runOneScan() {
-        if (trigger != null && !trigger.equals("")) {
+        if (trigger != null && !HtmlUtils.htmlEscape(trigger).equals("")) {
             try {
                 LPVSQueue webhookConfig = this.getInternalQueueByPullRequest(trigger);
                 this.runScan(webhookConfig, LPVSDetectService.getPathByPullRequest(webhookConfig));
@@ -74,11 +76,11 @@ public class LPVSDetectService {
                 if (scanResult.exists()) {
                     String jsonTxt = IOUtils.readFileToString(scanResult);
                     // ToDo: form html report and console output
-                    System.out.println(jsonTxt);
-                    System.out.println("\n\n\n Single scan finished successfully \n\n\n");
+                    log.info(jsonTxt);
+                    log.info("\n\n\n Single scan finished successfully \n\n\n");
                 }
             } catch (Exception ex) {
-                System.out.println("\n\n\n Single scan finished with errors \n\n\n");
+                log.info("\n\n\n Single scan finished with errors \n\n\n");
                 log.error("Can't triger single scan " + ex);
             }
             // exiting application
