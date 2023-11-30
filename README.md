@@ -232,17 +232,17 @@ Alternatively, you can provide the necessary values using the following environm
 
 To build LPVS from source code and run it in the default service mode, follow these steps:
 
-4.1 Build the LPVS application using Maven:
+4.a.1 Build the LPVS application using Maven:
    ```bash
    mvn clean install
    ```
 
-4.2 Navigate to the target directory:
+4.a.2 Navigate to the target directory:
    ```bash
    cd target/
    ```
 
-4.3. Run the LPVS application.
+4.a.3. Run the LPVS application.
 
    Service is run using the following command:
    ```bash
@@ -259,23 +259,27 @@ LPVS is now built and running. You can create a new pull request or update an ex
 
 #### 4.b Single scan mode
 
-Another configuration is available to run a one-time scan on a single pull request.
+Alternatively, you can perform a one-time scan on a specific pull request using the single scan mode. Follow these steps:
 
-   To access it first you run installation and navigate to the target directory the same way you do for the service mode (following steps 4.1 and 4.2):
+4.b.1. Begin by running the installation and navigating to the target directory, similar to the process in service mode (refer to steps 4.a.1 and 4.a.2):
+
    ```bash
    mvn clean install
    cd target/
    ```
 
-   Then you can run a single scan using the following command:
+4.b.2. Execute the single scan with the following command:
+
    ```bash
    java -jar -Dgithub.token=<my-token> lpvs-*.jar --github.pull.request=<PR URL>
    ```
 
-   In the case of the previous command you still need to set up MySQL database beforehand for the program to work, which can be inconvenient. In order to not have to set up the database you should choose "singlescan" profile, like this:
+4.b.3. By default, the above command requires a pre-configured MySQL database. To avoid setting up the database, use the "singlescan" profile:
    ```bash
    java -jar -Dspring.profiles.active=singlescan -Dgithub.token=<my-token> lpvs-*.jar --github.pull-request=<PR URL>
    ```
+
+These steps streamline the process, allowing you to run a scan on a single pull request without the need for a preconfigured database.
 
 ---
 
