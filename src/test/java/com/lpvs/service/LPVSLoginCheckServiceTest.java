@@ -9,6 +9,7 @@ package com.lpvs.service;
 import com.lpvs.entity.LPVSMember;
 import com.lpvs.entity.history.HistoryPageEntity;
 import com.lpvs.exception.LoginFailedException;
+import com.lpvs.exception.WrongAccessException;
 import com.lpvs.repository.LPVSMemberRepository;
 import com.lpvs.repository.LPVSPullRequestRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -104,7 +105,7 @@ public class LPVSLoginCheckServiceTest {
     }
 
     @Test
-    public void testPathCheckOwnType() {
+    public void testPathCheckAllTypes() {
         LPVSMember member = new LPVSMember();
         member.setNickname("testNickname");
         Map<String, Object> attributes = new HashMap<>();
@@ -120,7 +121,15 @@ public class LPVSLoginCheckServiceTest {
 
         HistoryPageEntity result =
                 loginCheckService.pathCheck("own", "testNickname", null, authentication);
-
         assertNotNull(result);
+
+        result = loginCheckService.pathCheck("send", "testNickname", null, authentication);
+        assertNotNull(result);
+
+        assertThrows(
+                WrongAccessException.class,
+                () -> {
+                    loginCheckService.pathCheck("test", "testNickname", null, authentication);
+                });
     }
 }
