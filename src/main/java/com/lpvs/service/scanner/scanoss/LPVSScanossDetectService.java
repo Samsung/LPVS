@@ -79,6 +79,7 @@ public class LPVSScanossDetectService {
                             "scan",
                             debug ? "-t" : "-q",
                             "--no-wfp-output",
+                            "--all-extensions",
                             "-o",
                             getScanResultsJsonFilePath(webhookConfig),
                             path);
