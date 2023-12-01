@@ -33,7 +33,7 @@ public class LPVSQueue implements Serializable {
     @Column(name = "scan_date")
     private Date date;
 
-    @Column(name = "user")
+    @Column(name = "user_id")
     private String userId;
 
     @Column(name = "review_system_type")

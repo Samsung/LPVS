@@ -15,7 +15,6 @@ import com.lpvs.repository.LPVSLicenseConflictRepository;
 import com.lpvs.repository.LPVSLicenseRepository;
 import com.lpvs.repository.LPVSPullRequestRepository;
 import com.lpvs.util.LPVSCommentUtil;
-import com.lpvs.util.LPVSExitHandler;
 import com.lpvs.util.LPVSFileUtil;
 import com.lpvs.util.LPVSWebhookUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -26,29 +25,14 @@ import org.kohsuke.github.GHLicense;
 import org.kohsuke.github.GHIssueState;
 import org.kohsuke.github.GHCommitState;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Slf4j
 public class LPVSGitHubService {
-
-    private String GITHUB_LOGIN;
-    private String GITHUB_AUTH_TOKEN;
-    private String GITHUB_API_URL;
-
-    private static final String GITHUB_LOGIN_PROP_NAME = "github.login";
-    private static final String GITHUB_AUTH_TOKEN_PROP_NAME = "github.token";
-    private static final String GITHUB_API_URL_PROP_NAME = "github.api.url";
-
-    private static final String GITHUB_LOGIN_ENV_VAR_NAME = "LPVS_GITHUB_LOGIN";
-    private static final String GITHUB_AUTH_TOKEN_ENV_VAR_NAME = "LPVS_GITHUB_TOKEN";
-    private static final String GITHUB_API_URL_ENV_VAR_NAME = "LPVS_GITHUB_API_URL";
 
     private LPVSPullRequestRepository pullRequestRepository;
 
@@ -58,65 +42,27 @@ public class LPVSGitHubService {
 
     private LPVSLicenseConflictRepository lpvsLicenseConflictRepository;
 
-    private LPVSExitHandler exitHandler;
+    private LPVSGitHubConnectionService gitHubConnectionService;
 
     @Autowired
     public LPVSGitHubService(
-            @Value("${" + GITHUB_LOGIN_PROP_NAME + "}") String GITHUB_LOGIN,
-            @Value("${" + GITHUB_AUTH_TOKEN_PROP_NAME + "}") String GITHUB_AUTH_TOKEN,
-            @Value("${" + GITHUB_API_URL_PROP_NAME + "}") String GITHUB_API_URL,
             LPVSPullRequestRepository pullRequestRepository,
             LPVSDetectedLicenseRepository lpvsDetectedLicenseRepository,
             LPVSLicenseRepository lpvsLicenseRepository,
             LPVSLicenseConflictRepository lpvsLicenseConflictRepository,
-            LPVSExitHandler exitHandler) {
-        this.GITHUB_LOGIN =
-                Optional.ofNullable(GITHUB_LOGIN)
-                        .filter(s -> !s.isEmpty())
-                        .orElse(
-                                Optional.ofNullable(System.getenv(GITHUB_LOGIN_ENV_VAR_NAME))
-                                        .orElse(""));
-        this.GITHUB_AUTH_TOKEN =
-                Optional.ofNullable(GITHUB_AUTH_TOKEN)
-                        .filter(s -> !s.isEmpty())
-                        .orElse(
-                                Optional.ofNullable(System.getenv(GITHUB_AUTH_TOKEN_ENV_VAR_NAME))
-                                        .orElse(""));
-        this.GITHUB_API_URL =
-                Optional.ofNullable(GITHUB_API_URL)
-                        .filter(s -> !s.isEmpty())
-                        .orElse(
-                                Optional.ofNullable(System.getenv(GITHUB_API_URL_ENV_VAR_NAME))
-                                        .orElse(""));
-        this.exitHandler = exitHandler;
+            LPVSGitHubConnectionService gitHubConnectionService) {
         this.pullRequestRepository = pullRequestRepository;
         this.lpvsDetectedLicenseRepository = lpvsDetectedLicenseRepository;
         this.lpvsLicenseRepository = lpvsLicenseRepository;
         this.lpvsLicenseConflictRepository = lpvsLicenseConflictRepository;
-    }
-
-    @PostConstruct
-    private void checks() {
-        if (this.GITHUB_AUTH_TOKEN.isEmpty()) {
-            log.error(
-                    GITHUB_AUTH_TOKEN_ENV_VAR_NAME
-                            + "("
-                            + GITHUB_AUTH_TOKEN_PROP_NAME
-                            + ") is not set.");
-            exitHandler.exit(-1);
-        }
+        this.gitHubConnectionService = gitHubConnectionService;
     }
 
     private static GitHub gitHub;
 
     public String getPullRequestFiles(LPVSQueue webhookConfig) {
         try {
-            if (GITHUB_AUTH_TOKEN.isEmpty()) setGithubTokenFromEnv();
-            if (GITHUB_API_URL.isEmpty()) gitHub = GitHub.connect(GITHUB_LOGIN, GITHUB_AUTH_TOKEN);
-            else
-                gitHub =
-                        GitHub.connectToEnterpriseWithOAuth(
-                                GITHUB_API_URL, GITHUB_LOGIN, GITHUB_AUTH_TOKEN);
+            gitHub = gitHubConnectionService.connectToGitHubApi();
             log.debug(
                     "Repository Info: "
                             + LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
@@ -170,12 +116,7 @@ public class LPVSGitHubService {
 
     public void setPendingCheck(LPVSQueue webhookConfig) {
         try {
-            if (GITHUB_AUTH_TOKEN.isEmpty()) setGithubTokenFromEnv();
-            if (GITHUB_API_URL.isEmpty()) gitHub = GitHub.connect(GITHUB_LOGIN, GITHUB_AUTH_TOKEN);
-            else
-                gitHub =
-                        GitHub.connectToEnterpriseWithOAuth(
-                                GITHUB_API_URL, GITHUB_LOGIN, GITHUB_AUTH_TOKEN);
+            gitHub = gitHubConnectionService.connectToGitHubApi();
             GHRepository repository =
                     gitHub.getRepository(
                             LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
@@ -194,12 +135,7 @@ public class LPVSGitHubService {
 
     public void setErrorCheck(LPVSQueue webhookConfig) {
         try {
-            if (GITHUB_AUTH_TOKEN.isEmpty()) setGithubTokenFromEnv();
-            if (GITHUB_API_URL.isEmpty()) gitHub = GitHub.connect(GITHUB_LOGIN, GITHUB_AUTH_TOKEN);
-            else
-                gitHub =
-                        GitHub.connectToEnterpriseWithOAuth(
-                                GITHUB_API_URL, GITHUB_LOGIN, GITHUB_AUTH_TOKEN);
+            gitHub = gitHubConnectionService.connectToGitHubApi();
             GHRepository repository =
                     gitHub.getRepository(
                             LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
@@ -395,12 +331,7 @@ public class LPVSGitHubService {
             String repositoryName = LPVSWebhookUtil.getRepositoryName(webhookConfig);
             String repositoryOrganization =
                     LPVSWebhookUtil.getRepositoryOrganization(webhookConfig);
-            if (GITHUB_AUTH_TOKEN.isEmpty()) setGithubTokenFromEnv();
-            if (GITHUB_API_URL.isEmpty()) gitHub = GitHub.connect(GITHUB_LOGIN, GITHUB_AUTH_TOKEN);
-            else
-                gitHub =
-                        GitHub.connectToEnterpriseWithOAuth(
-                                GITHUB_API_URL, GITHUB_LOGIN, GITHUB_AUTH_TOKEN);
+            gitHub = gitHubConnectionService.connectToGitHubApi();
             GHRepository repository =
                     gitHub.getRepository(repositoryOrganization + "/" + repositoryName);
             GHLicense license = repository.getLicense();
@@ -413,10 +344,5 @@ public class LPVSGitHubService {
             log.error("Can't authorize getRepositoryLicense() " + e);
         }
         return "Proprietary";
-    }
-
-    public void setGithubTokenFromEnv() {
-        if (System.getenv("LPVS_GITHUB_TOKEN") != null)
-            GITHUB_AUTH_TOKEN = System.getenv("LPVS_GITHUB_TOKEN");
     }
 }

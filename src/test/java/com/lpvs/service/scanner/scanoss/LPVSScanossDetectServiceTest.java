@@ -71,8 +71,7 @@ public class LPVSScanossDetectServiceTest {
                             }
                         });
         scanossDetectService =
-                new LPVSScanossDetectService(
-                        false, licenseService, gitHubService, lpvsLicenseRepository);
+                new LPVSScanossDetectService(false, licenseService, lpvsLicenseRepository);
     }
 
     @AfterEach
@@ -84,6 +83,10 @@ public class LPVSScanossDetectServiceTest {
 
     @Test
     public void testCheckLicense() {
+        LPVSLicenseService licenseService = Mockito.mock(LPVSLicenseService.class);
+        LPVSLicenseRepository lpvsLicenseRepository = Mockito.mock(LPVSLicenseRepository.class);
+        LPVSScanossDetectService scanossDetectService =
+                new LPVSScanossDetectService(false, licenseService, lpvsLicenseRepository);
         String licenseConflictsSource = "scanner";
         Mockito.when(LPVSWebhookUtil.getRepositoryName(lpvsQueue)).thenReturn("C");
         Mockito.when(lpvsQueue.getHeadCommitSHA()).thenReturn("A_B");
@@ -97,6 +100,10 @@ public class LPVSScanossDetectServiceTest {
 
     @Test
     public void testCheckLicenseHeadCommitSHA() {
+        LPVSLicenseService licenseService = Mockito.mock(LPVSLicenseService.class);
+        LPVSLicenseRepository lpvsLicenseRepository = Mockito.mock(LPVSLicenseRepository.class);
+        LPVSScanossDetectService scanossDetectService =
+                new LPVSScanossDetectService(false, licenseService, lpvsLicenseRepository);
         String licenseConflictsSource = "scanner";
         LPVSQueue webhookConfig = Mockito.mock(LPVSQueue.class);
         Mockito.when(LPVSWebhookUtil.getRepositoryName(webhookConfig)).thenReturn("C");
@@ -112,6 +119,10 @@ public class LPVSScanossDetectServiceTest {
 
     @Test
     public void testWithNullHeadCommitSHA() {
+        LPVSLicenseService licenseService = Mockito.mock(LPVSLicenseService.class);
+        LPVSLicenseRepository lpvsLicenseRepository = Mockito.mock(LPVSLicenseRepository.class);
+        LPVSScanossDetectService scanossDetectService =
+                new LPVSScanossDetectService(false, licenseService, lpvsLicenseRepository);
         String licenseConflictsSource = "scanner";
         LPVSQueue webhookConfig = Mockito.mock(LPVSQueue.class);
         Mockito.when(LPVSWebhookUtil.getRepositoryName(webhookConfig)).thenReturn("A");
@@ -156,7 +167,7 @@ public class LPVSScanossDetectServiceTest {
 
             // Verify that the method throws an exception when the status is 1
             assertEquals(
-                    "Scanoss scanner terminated with none-zero code. Terminating.",
+                    "Scanoss scanner terminated with non-zero code. Terminating.",
                     exception.getMessage());
 
             verify(mockedPb.constructed().get(0)).start();

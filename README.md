@@ -142,7 +142,7 @@ You can now create a new pull request or update an existing one with commits. LP
    
 ## How to Build and Run _LPVS_ from Source Code
 
-#### 1. Build Prerequisites
+### 1. Build Prerequisites
 
 Before building LPVS from source code, ensure that you have the following prerequisites installed:
 
@@ -160,7 +160,7 @@ Before building LPVS from source code, ensure that you have the following prereq
   sudo apt install mysql-server
   ```
 
-#### 2. Create Necessary MySQL Database and User (optional if not using a database)
+### 2. Create Necessary MySQL Database and User (optional if not using a database)
 
 2.1 Start the MySQL server:
    ```bash
@@ -194,7 +194,7 @@ Before building LPVS from source code, ensure that you have the following prereq
    spring.datasource.password=password
    ```
 
-#### 3. Setting up _LPVS_ `application.properties`
+### 3. Setting up _LPVS_ `application.properties`
 
 Fill in the following lines in the [`src/main/resources/application.properties`](src/main/resources/application.properties) file:
 
@@ -226,20 +226,25 @@ spring.datasource.password=
 
 Alternatively, you can provide the necessary values using the following environment variables: `LPVS_GITHUB_LOGIN`, `LPVS_GITHUB_TOKEN`, `LPVS_GITHUB_API_URL`, `LPVS_GITHUB_SECRET`, and `LPVS_LICENSE_CONFLICT`.
 
-#### 4. Build LPVS Application with Maven and Run it
-To build LPVS from source code and run it, follow these steps:
+### 4. Build LPVS Application with Maven and Run it
 
-4.1 Build the LPVS application using Maven:
+#### 4.a Service mode (default)
+
+To build LPVS from source code and run it in the default service mode, follow these steps:
+
+4.a.1 Build the LPVS application using Maven:
    ```bash
    mvn clean install
    ```
 
-4.2 Navigate to the target directory:
+4.a.2 Navigate to the target directory:
    ```bash
    cd target/
    ```
 
-4.3 Run the LPVS application using the following command:
+4.a.3. Run the LPVS application.
+
+   Service is run using the following command:
    ```bash
    java -jar lpvs-*.jar
    ```
@@ -251,6 +256,30 @@ To build LPVS from source code and run it, follow these steps:
    > Note: Use `LPVS` as the value for the `-Dgithub.secret=` parameter.
 
 LPVS is now built and running. You can create a new pull request or update an existing one with commits, and LPVS will automatically start scanning and provide comments about the licenses found in the project.
+
+#### 4.b Single scan mode
+
+Alternatively, you can perform a one-time scan on a specific pull request using the single scan mode. Follow these steps:
+
+4.b.1. Begin by running the installation and navigating to the target directory, similar to the process in service mode (refer to steps 4.a.1 and 4.a.2):
+
+   ```bash
+   mvn clean install
+   cd target/
+   ```
+
+4.b.2. Execute the single scan with the following command:
+
+   ```bash
+   java -jar -Dgithub.token=<my-token> lpvs-*.jar --github.pull.request=<PR URL>
+   ```
+
+4.b.3. By default, the above command requires a pre-configured MySQL database. To avoid setting up the database, use the "singlescan" profile:
+   ```bash
+   java -jar -Dspring.profiles.active=singlescan -Dgithub.token=<my-token> lpvs-*.jar --github.pull-request=<PR URL>
+   ```
+
+These steps streamline the process, allowing you to run a scan on a single pull request without the need for a preconfigured database.
 
 ---
 

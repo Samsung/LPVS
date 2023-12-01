@@ -12,7 +12,6 @@ import com.lpvs.entity.LPVSFile;
 import com.lpvs.entity.LPVSLicense;
 import com.lpvs.entity.LPVSQueue;
 import com.lpvs.repository.LPVSLicenseRepository;
-import com.lpvs.service.LPVSGitHubService;
 import com.lpvs.service.LPVSLicenseService;
 import com.lpvs.util.LPVSWebhookUtil;
 
@@ -35,8 +34,6 @@ public class LPVSScanossDetectService {
 
     @Autowired private LPVSLicenseService licenseService;
 
-    @Autowired private LPVSGitHubService gitHubService;
-
     @Autowired private LPVSLicenseRepository lpvsLicenseRepository;
 
     private Boolean debug;
@@ -45,11 +42,9 @@ public class LPVSScanossDetectService {
     public LPVSScanossDetectService(
             @Value("${debug:false}") Boolean debug,
             LPVSLicenseService licenseService,
-            LPVSGitHubService gitHubService,
             LPVSLicenseRepository lpvsLicenseRepository) {
         this.debug = debug;
         this.licenseService = licenseService;
-        this.gitHubService = gitHubService;
         this.lpvsLicenseRepository = lpvsLicenseRepository;
     }
 
@@ -93,19 +88,19 @@ public class LPVSScanossDetectService {
             int status = process.waitFor();
 
             if (status == 1) {
-                log.error("Scanoss scanner terminated with none-zero code. Terminating.");
+                log.error("Scanoss scanner terminated with non-zero code. Terminating.");
                 BufferedReader output = null;
                 try {
                     output = createBufferReader(createInputStreamReader(process));
                     log.error(output.readLine());
                     throw new Exception(
-                            "Scanoss scanner terminated with none-zero code. Terminating.");
+                            "Scanoss scanner terminated with non-zero code. Terminating.");
                 } finally {
                     if (output != null) output.close();
                 }
             }
         } catch (IOException | InterruptedException ex) {
-            log.error("Scanoss scanner terminated with none-zero code. Terminating.");
+            log.error("Scanoss scanner terminated with non-zero code. Terminating.");
             throw ex;
         }
 

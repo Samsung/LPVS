@@ -159,14 +159,12 @@ public class LPVSGitHubServiceTest {
                 mock(LPVSLicenseConflictRepository.class);
         final LPVSGitHubService gh_service =
                 new LPVSGitHubService(
-                        GH_LOGIN,
-                        GH_AUTH_TOKEN,
-                        GH_API_URL,
                         mocked_pullRequestRepository,
                         mocked_lpvsDetectedLicenseRepository,
                         mocked_lpvsLicenseRepository,
                         mocked_lpvsLicenseConflictRepository,
-                        exitHandler);
+                        new LPVSGitHubConnectionService(
+                                GH_LOGIN, GH_AUTH_TOKEN, GH_API_URL, exitHandler));
         LPVSQueue webhookConfig;
         GitHub mocked_instance_gh = mock(GitHub.class);
         GHRepository mocked_repo = mock(GHRepository.class);
@@ -294,14 +292,12 @@ public class LPVSGitHubServiceTest {
                 mock(LPVSLicenseConflictRepository.class);
         final LPVSGitHubService gh_service =
                 new LPVSGitHubService(
-                        GH_LOGIN,
-                        GH_AUTH_TOKEN,
-                        GH_API_URL,
                         mocked_pullRequestRepository,
                         mocked_lpvsDetectedLicenseRepository,
                         mocked_lpvsLicenseRepository,
                         mocked_lpvsLicenseConflictRepository,
-                        exitHandler);
+                        new LPVSGitHubConnectionService(
+                                GH_LOGIN, GH_AUTH_TOKEN, GH_API_URL, exitHandler));
         LPVSQueue webhookConfig;
         GitHub mocked_instance_gh = mock(GitHub.class);
         GHRepository mocked_repo = mock(GHRepository.class);
@@ -430,7 +426,7 @@ public class LPVSGitHubServiceTest {
     @Nested
     class TestGetPullRequestFiles__ApiUrlPresentPullPresentNoRescanEmptyAuthToken {
         final String GH_LOGIN = "test_login";
-        final String GH_AUTH_TOKEN = "";
+        final String GH_AUTH_TOKEN = "test_auth_token";
         final String GH_API_URL = "test_api_url";
         LPVSPullRequestRepository mocked_pullRequestRepository =
                 mock(LPVSPullRequestRepository.class);
@@ -439,16 +435,16 @@ public class LPVSGitHubServiceTest {
         LPVSLicenseRepository mocked_lpvsLicenseRepository = mock(LPVSLicenseRepository.class);
         LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository =
                 mock(LPVSLicenseConflictRepository.class);
+        LPVSGitHubConnectionService lpvsGitHubConnectionService =
+                new LPVSGitHubConnectionService(GH_LOGIN, GH_AUTH_TOKEN, GH_API_URL, exitHandler);
+
         final LPVSGitHubService gh_service =
                 new LPVSGitHubService(
-                        GH_LOGIN,
-                        GH_AUTH_TOKEN,
-                        GH_API_URL,
                         mocked_pullRequestRepository,
                         mocked_lpvsDetectedLicenseRepository,
                         mocked_lpvsLicenseRepository,
                         mocked_lpvsLicenseConflictRepository,
-                        exitHandler);
+                        lpvsGitHubConnectionService);
         LPVSQueue webhookConfig;
         GitHub mocked_instance_gh = mock(GitHub.class);
         GHRepository mocked_repo = mock(GHRepository.class);
@@ -588,14 +584,12 @@ public class LPVSGitHubServiceTest {
                 mock(LPVSLicenseConflictRepository.class);
         final LPVSGitHubService gh_service =
                 new LPVSGitHubService(
-                        GH_LOGIN,
-                        GH_AUTH_TOKEN,
-                        GH_API_URL,
                         mocked_pullRequestRepository,
                         mocked_lpvsDetectedLicenseRepository,
                         mocked_lpvsLicenseRepository,
                         mocked_lpvsLicenseConflictRepository,
-                        exitHandler);
+                        new LPVSGitHubConnectionService(
+                                GH_LOGIN, GH_AUTH_TOKEN, GH_API_URL, exitHandler));
         LPVSQueue webhookConfig;
         GitHub mocked_instance_gh = mock(GitHub.class);
         GHRepository mocked_repo = mock(GHRepository.class);
@@ -698,14 +692,12 @@ public class LPVSGitHubServiceTest {
                 mock(LPVSLicenseConflictRepository.class);
         final LPVSGitHubService gh_service =
                 new LPVSGitHubService(
-                        GH_LOGIN,
-                        GH_AUTH_TOKEN,
-                        GH_API_URL,
                         mocked_pullRequestRepository,
                         mocked_lpvsDetectedLicenseRepository,
                         mocked_lpvsLicenseRepository,
                         mocked_lpvsLicenseConflictRepository,
-                        exitHandler);
+                        new LPVSGitHubConnectionService(
+                                GH_LOGIN, GH_AUTH_TOKEN, GH_API_URL, exitHandler));
         LPVSQueue webhookConfig;
         GitHub mocked_instance_gh = mock(GitHub.class);
         GHRepository mocked_repo = mock(GHRepository.class);
@@ -815,14 +807,12 @@ public class LPVSGitHubServiceTest {
                 mock(LPVSLicenseConflictRepository.class);
         final LPVSGitHubService gh_service =
                 new LPVSGitHubService(
-                        GH_LOGIN,
-                        GH_AUTH_TOKEN,
-                        GH_API_URL,
                         mocked_pullRequestRepository,
                         mocked_lpvsDetectedLicenseRepository,
                         mocked_lpvsLicenseRepository,
                         mocked_lpvsLicenseConflictRepository,
-                        exitHandler);
+                        new LPVSGitHubConnectionService(
+                                GH_LOGIN, GH_AUTH_TOKEN, GH_API_URL, exitHandler));
         LPVSQueue webhookConfig;
         GitHub mocked_instance_gh = mock(GitHub.class);
         GHRepository mocked_repo = mock(GHRepository.class);
@@ -914,14 +904,12 @@ public class LPVSGitHubServiceTest {
                 mock(LPVSLicenseConflictRepository.class);
         final LPVSGitHubService gh_service =
                 new LPVSGitHubService(
-                        GH_LOGIN,
-                        GH_AUTH_TOKEN,
-                        GH_API_URL,
                         mocked_pullRequestRepository,
                         mocked_lpvsDetectedLicenseRepository,
                         mocked_lpvsLicenseRepository,
                         mocked_lpvsLicenseConflictRepository,
-                        exitHandler);
+                        new LPVSGitHubConnectionService(
+                                GH_LOGIN, GH_AUTH_TOKEN, GH_API_URL, exitHandler));
         LPVSQueue webhookConfig;
         GitHub mocked_instance_gh = mock(GitHub.class);
         GHRepository mocked_repo = mock(GHRepository.class);
@@ -1019,14 +1007,12 @@ public class LPVSGitHubServiceTest {
                 mock(LPVSLicenseConflictRepository.class);
         final LPVSGitHubService gh_service =
                 new LPVSGitHubService(
-                        GH_LOGIN,
-                        GH_AUTH_TOKEN,
-                        GH_API_URL,
                         mocked_pullRequestRepository,
                         mocked_lpvsDetectedLicenseRepository,
                         mocked_lpvsLicenseRepository,
                         mocked_lpvsLicenseConflictRepository,
-                        exitHandler);
+                        new LPVSGitHubConnectionService(
+                                GH_LOGIN, GH_AUTH_TOKEN, GH_API_URL, exitHandler));
         LPVSQueue webhookConfig;
         GitHub mocked_instance_gh = mock(GitHub.class);
         GHRepository mocked_repo = mock(GHRepository.class);
@@ -1171,14 +1157,12 @@ public class LPVSGitHubServiceTest {
                 mock(LPVSLicenseConflictRepository.class);
         final LPVSGitHubService gh_service =
                 new LPVSGitHubService(
-                        GH_LOGIN,
-                        GH_AUTH_TOKEN,
-                        GH_API_URL,
                         mocked_pullRequestRepository,
                         mocked_lpvsDetectedLicenseRepository,
                         mocked_lpvsLicenseRepository,
                         mocked_lpvsLicenseConflictRepository,
-                        exitHandler);
+                        new LPVSGitHubConnectionService(
+                                GH_LOGIN, GH_AUTH_TOKEN, GH_API_URL, exitHandler));
         GitHub mocked_instance_gh = mock(GitHub.class);
         GHRepository mocked_repo = mock(GHRepository.class);
         LPVSQueue webhookConfig;
@@ -1280,14 +1264,12 @@ public class LPVSGitHubServiceTest {
                 mock(LPVSLicenseConflictRepository.class);
         final LPVSGitHubService gh_service =
                 new LPVSGitHubService(
-                        GH_LOGIN,
-                        GH_AUTH_TOKEN,
-                        GH_API_URL,
                         mocked_pullRequestRepository,
                         mocked_lpvsDetectedLicenseRepository,
                         mocked_lpvsLicenseRepository,
                         mocked_lpvsLicenseConflictRepository,
-                        exitHandler);
+                        new LPVSGitHubConnectionService(
+                                GH_LOGIN, GH_AUTH_TOKEN, GH_API_URL, exitHandler));
         GitHub mocked_instance_gh = mock(GitHub.class);
         GHRepository mocked_repo = mock(GHRepository.class);
         LPVSQueue webhookConfig;
@@ -1396,14 +1378,12 @@ public class LPVSGitHubServiceTest {
                 mock(LPVSLicenseConflictRepository.class);
         final LPVSGitHubService gh_service =
                 new LPVSGitHubService(
-                        GH_LOGIN,
-                        GH_AUTH_TOKEN,
-                        GH_API_URL,
                         mocked_pullRequestRepository,
                         mocked_lpvsDetectedLicenseRepository,
                         mocked_lpvsLicenseRepository,
                         mocked_lpvsLicenseConflictRepository,
-                        exitHandler);
+                        new LPVSGitHubConnectionService(
+                                GH_LOGIN, GH_AUTH_TOKEN, GH_API_URL, exitHandler));
         LPVSQueue webhookConfig;
 
         @BeforeEach
@@ -1445,14 +1425,12 @@ public class LPVSGitHubServiceTest {
                 mock(LPVSLicenseConflictRepository.class);
         final LPVSGitHubService gh_service =
                 new LPVSGitHubService(
-                        GH_LOGIN,
-                        GH_AUTH_TOKEN,
-                        GH_API_URL,
                         mocked_pullRequestRepository,
                         mocked_lpvsDetectedLicenseRepository,
                         mocked_lpvsLicenseRepository,
                         mocked_lpvsLicenseConflictRepository,
-                        exitHandler);
+                        new LPVSGitHubConnectionService(
+                                GH_LOGIN, GH_AUTH_TOKEN, GH_API_URL, exitHandler));
         LPVSQueue webhookConfig;
 
         @BeforeEach
@@ -1501,14 +1479,12 @@ public class LPVSGitHubServiceTest {
                 mock(LPVSLicenseConflictRepository.class);
         final LPVSGitHubService gh_service =
                 new LPVSGitHubService(
-                        GH_LOGIN,
-                        GH_AUTH_TOKEN,
-                        GH_API_URL,
                         mocked_pullRequestRepository,
                         mocked_lpvsDetectedLicenseRepository,
                         mocked_lpvsLicenseRepository,
                         mocked_lpvsLicenseConflictRepository,
-                        exitHandler);
+                        new LPVSGitHubConnectionService(
+                                GH_LOGIN, GH_AUTH_TOKEN, GH_API_URL, exitHandler));
         GitHub mocked_instance_gh = mock(GitHub.class);
         GHRepository mocked_repo = mock(GHRepository.class);
         LPVSQueue webhookConfig;
@@ -1610,14 +1586,12 @@ public class LPVSGitHubServiceTest {
                 mock(LPVSLicenseConflictRepository.class);
         final LPVSGitHubService gh_service =
                 new LPVSGitHubService(
-                        GH_LOGIN,
-                        GH_AUTH_TOKEN,
-                        GH_API_URL,
                         mocked_pullRequestRepository,
                         mocked_lpvsDetectedLicenseRepository,
                         mocked_lpvsLicenseRepository,
                         mocked_lpvsLicenseConflictRepository,
-                        exitHandler);
+                        new LPVSGitHubConnectionService(
+                                GH_LOGIN, GH_AUTH_TOKEN, GH_API_URL, exitHandler));
         GitHub mocked_instance_gh = mock(GitHub.class);
         GHRepository mocked_repo = mock(GHRepository.class);
         LPVSQueue webhookConfig;
@@ -1726,14 +1700,12 @@ public class LPVSGitHubServiceTest {
                 mock(LPVSLicenseConflictRepository.class);
         final LPVSGitHubService gh_service =
                 new LPVSGitHubService(
-                        GH_LOGIN,
-                        GH_AUTH_TOKEN,
-                        GH_API_URL,
                         mocked_pullRequestRepository,
                         mocked_lpvsDetectedLicenseRepository,
                         mocked_lpvsLicenseRepository,
                         mocked_lpvsLicenseConflictRepository,
-                        exitHandler);
+                        new LPVSGitHubConnectionService(
+                                GH_LOGIN, GH_AUTH_TOKEN, GH_API_URL, exitHandler));
         LPVSQueue webhookConfig;
 
         @BeforeEach
@@ -1775,14 +1747,12 @@ public class LPVSGitHubServiceTest {
                 mock(LPVSLicenseConflictRepository.class);
         final LPVSGitHubService gh_service =
                 new LPVSGitHubService(
-                        GH_LOGIN,
-                        GH_AUTH_TOKEN,
-                        GH_API_URL,
                         mocked_pullRequestRepository,
                         mocked_lpvsDetectedLicenseRepository,
                         mocked_lpvsLicenseRepository,
                         mocked_lpvsLicenseConflictRepository,
-                        exitHandler);
+                        new LPVSGitHubConnectionService(
+                                GH_LOGIN, GH_AUTH_TOKEN, GH_API_URL, exitHandler));
         LPVSQueue webhookConfig;
 
         @BeforeEach
@@ -1828,14 +1798,11 @@ public class LPVSGitHubServiceTest {
                 mock(LPVSLicenseConflictRepository.class);
         final LPVSGitHubService gh_service =
                 new LPVSGitHubService(
-                        null,
-                        null,
-                        null,
                         mocked_pullRequestRepository,
                         mocked_lpvsDetectedLicenseRepository,
                         mocked_lpvsLicenseRepository,
                         mocked_lpvsLicenseConflictRepository,
-                        exitHandler);
+                        null);
         GitHub mocked_instance_gh = mock(GitHub.class);
         GHRepository mocked_repo = mock(GHRepository.class);
         GHPullRequest mocked_pr_1;
@@ -1927,14 +1894,11 @@ public class LPVSGitHubServiceTest {
                 mock(LPVSLicenseConflictRepository.class);
         final LPVSGitHubService gh_service =
                 new LPVSGitHubService(
-                        null,
-                        null,
-                        null,
                         mocked_pullRequestRepository,
                         mocked_lpvsDetectedLicenseRepository,
                         mocked_lpvsLicenseRepository,
                         mocked_lpvsLicenseConflictRepository,
-                        exitHandler);
+                        null);
         GitHub mocked_instance_gh = mock(GitHub.class);
         LPVSQueue webhookConfig;
         LPVSPullRequest lpvsPullRequest;
@@ -2008,14 +1972,11 @@ public class LPVSGitHubServiceTest {
                 mock(LPVSLicenseConflictRepository.class);
         final LPVSGitHubService gh_service =
                 new LPVSGitHubService(
-                        null,
-                        null,
-                        null,
                         mocked_pullRequestRepository,
                         mocked_lpvsDetectedLicenseRepository,
                         mocked_lpvsLicenseRepository,
                         mocked_lpvsLicenseConflictRepository,
-                        exitHandler);
+                        null);
         GitHub mocked_instance_gh = mock(GitHub.class);
         GHRepository mocked_repo = mock(GHRepository.class);
         GHPullRequest mocked_pr_1;
@@ -2123,14 +2084,12 @@ public class LPVSGitHubServiceTest {
         final String GH_API_URL = "";
         final LPVSGitHubService gh_service =
                 new LPVSGitHubService(
-                        GH_LOGIN,
-                        GH_AUTH_TOKEN,
-                        GH_API_URL,
                         mocked_pullRequestRepository,
                         mocked_lpvsDetectedLicenseRepository,
                         mocked_lpvsLicenseRepository,
                         mocked_lpvsLicenseConflictRepository,
-                        exitHandler);
+                        new LPVSGitHubConnectionService(
+                                GH_LOGIN, GH_AUTH_TOKEN, GH_API_URL, exitHandler));
 
         GitHub mocked_instance_gh = mock(GitHub.class);
         GHRepository mocked_repo = mock(GHRepository.class);
@@ -2446,20 +2405,19 @@ public class LPVSGitHubServiceTest {
         LPVSLicenseRepository mocked_lpvsLicenseRepository = mock(LPVSLicenseRepository.class);
         LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository =
                 mock(LPVSLicenseConflictRepository.class);
+        LPVSGitHubConnectionService lpvsGitHubConnectionService =
+                mock(LPVSGitHubConnectionService.class);
 
         final String GH_LOGIN = "test_login";
         final String GH_AUTH_TOKEN = "test_auth_token";
         final String GH_API_URL = "";
         final LPVSGitHubService gh_service =
                 new LPVSGitHubService(
-                        GH_LOGIN,
-                        GH_AUTH_TOKEN,
-                        GH_API_URL,
                         mocked_pullRequestRepository,
                         mocked_lpvsDetectedLicenseRepository,
                         mocked_lpvsLicenseRepository,
                         mocked_lpvsLicenseConflictRepository,
-                        exitHandler);
+                        lpvsGitHubConnectionService);
 
         GitHub mocked_instance_gh = mock(GitHub.class);
         GHRepository mocked_repo = mock(GHRepository.class);
@@ -2773,20 +2731,19 @@ public class LPVSGitHubServiceTest {
         LPVSLicenseRepository mocked_lpvsLicenseRepository = mock(LPVSLicenseRepository.class);
         LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository =
                 mock(LPVSLicenseConflictRepository.class);
+        LPVSGitHubConnectionService lpvsGitHubConnectionService =
+                mock(LPVSGitHubConnectionService.class);
 
         final String GH_LOGIN = "test_login";
         final String GH_AUTH_TOKEN = "test_auth_token";
         final String GH_API_URL = "";
         final LPVSGitHubService gh_service =
                 new LPVSGitHubService(
-                        GH_LOGIN,
-                        GH_AUTH_TOKEN,
-                        GH_API_URL,
                         mocked_pullRequestRepository,
                         mocked_lpvsDetectedLicenseRepository,
                         mocked_lpvsLicenseRepository,
                         mocked_lpvsLicenseConflictRepository,
-                        exitHandler);
+                        lpvsGitHubConnectionService);
 
         GitHub mocked_instance_gh = mock(GitHub.class);
         GHRepository mocked_repo = mock(GHRepository.class);
@@ -3103,20 +3060,19 @@ public class LPVSGitHubServiceTest {
         LPVSLicenseRepository mocked_lpvsLicenseRepository = mock(LPVSLicenseRepository.class);
         LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository =
                 mock(LPVSLicenseConflictRepository.class);
+        LPVSGitHubConnectionService lpvsGitHubConnectionService =
+                mock(LPVSGitHubConnectionService.class);
 
         final String GH_LOGIN = "test_login";
         final String GH_AUTH_TOKEN = "test_auth_token";
         final String GH_API_URL = "";
         final LPVSGitHubService gh_service =
                 new LPVSGitHubService(
-                        GH_LOGIN,
-                        GH_AUTH_TOKEN,
-                        GH_API_URL,
                         mocked_pullRequestRepository,
                         mocked_lpvsDetectedLicenseRepository,
                         mocked_lpvsLicenseRepository,
                         mocked_lpvsLicenseConflictRepository,
-                        exitHandler);
+                        lpvsGitHubConnectionService);
 
         GitHub mocked_instance_gh = mock(GitHub.class);
         GHRepository mocked_repo = mock(GHRepository.class);
@@ -3435,14 +3391,11 @@ public class LPVSGitHubServiceTest {
                 mock(LPVSLicenseConflictRepository.class);
         final LPVSGitHubService gh_service =
                 new LPVSGitHubService(
-                        null,
-                        null,
-                        null,
                         mocked_pullRequestRepository,
                         mocked_lpvsDetectedLicenseRepository,
                         mocked_lpvsLicenseRepository,
                         mocked_lpvsLicenseConflictRepository,
-                        exitHandler);
+                        null);
         GitHub mocked_instance_gh = mock(GitHub.class);
         GHRepository mocked_repo = mock(GHRepository.class);
         GHPullRequest mocked_pr_1;
@@ -3626,14 +3579,12 @@ public class LPVSGitHubServiceTest {
                 mock(LPVSLicenseConflictRepository.class);
         final LPVSGitHubService gh_service =
                 new LPVSGitHubService(
-                        GH_LOGIN,
-                        GH_AUTH_TOKEN,
-                        GH_API_URL,
                         mocked_pullRequestRepository,
                         mocked_lpvsDetectedLicenseRepository,
                         mocked_lpvsLicenseRepository,
                         mocked_lpvsLicenseConflictRepository,
-                        exitHandler);
+                        new LPVSGitHubConnectionService(
+                                GH_LOGIN, GH_AUTH_TOKEN, GH_API_URL, exitHandler));
         LPVSQueue webhookConfig;
         GitHub mocked_instance_gh = mock(GitHub.class);
         GHRepository mocked_repo = mock(GHRepository.class);
@@ -3721,14 +3672,12 @@ public class LPVSGitHubServiceTest {
                 mock(LPVSLicenseConflictRepository.class);
         final LPVSGitHubService gh_service =
                 new LPVSGitHubService(
-                        GH_LOGIN,
-                        GH_AUTH_TOKEN,
-                        GH_API_URL,
                         mocked_pullRequestRepository,
                         mocked_lpvsDetectedLicenseRepository,
                         mocked_lpvsLicenseRepository,
                         mocked_lpvsLicenseConflictRepository,
-                        exitHandler);
+                        new LPVSGitHubConnectionService(
+                                GH_LOGIN, GH_AUTH_TOKEN, GH_API_URL, exitHandler));
         LPVSQueue webhookConfig;
         GitHub mocked_instance_gh = mock(GitHub.class);
         GHRepository mocked_repo = mock(GHRepository.class);
@@ -3816,14 +3765,12 @@ public class LPVSGitHubServiceTest {
                 mock(LPVSLicenseConflictRepository.class);
         final LPVSGitHubService gh_service =
                 new LPVSGitHubService(
-                        GH_LOGIN,
-                        GH_AUTH_TOKEN,
-                        GH_API_URL,
                         mocked_pullRequestRepository,
                         mocked_lpvsDetectedLicenseRepository,
                         mocked_lpvsLicenseRepository,
                         mocked_lpvsLicenseConflictRepository,
-                        exitHandler);
+                        new LPVSGitHubConnectionService(
+                                GH_LOGIN, GH_AUTH_TOKEN, GH_API_URL, exitHandler));
         LPVSQueue webhookConfig;
         GitHub mocked_instance_gh = mock(GitHub.class);
         GHRepository mocked_repo = mock(GHRepository.class);
@@ -3918,14 +3865,12 @@ public class LPVSGitHubServiceTest {
                 mock(LPVSLicenseConflictRepository.class);
         final LPVSGitHubService gh_service =
                 new LPVSGitHubService(
-                        GH_LOGIN,
-                        GH_AUTH_TOKEN,
-                        GH_API_URL,
                         mocked_pullRequestRepository,
                         mocked_lpvsDetectedLicenseRepository,
                         mocked_lpvsLicenseRepository,
                         mocked_lpvsLicenseConflictRepository,
-                        exitHandler);
+                        new LPVSGitHubConnectionService(
+                                GH_LOGIN, GH_AUTH_TOKEN, GH_API_URL, exitHandler));
         LPVSQueue webhookConfig;
         GitHub mocked_instance_gh = mock(GitHub.class);
         GHRepository mocked_repo = mock(GHRepository.class);
@@ -4020,14 +3965,12 @@ public class LPVSGitHubServiceTest {
                 mock(LPVSLicenseConflictRepository.class);
         final LPVSGitHubService gh_service =
                 new LPVSGitHubService(
-                        GH_LOGIN,
-                        GH_AUTH_TOKEN,
-                        GH_API_URL,
                         mocked_pullRequestRepository,
                         mocked_lpvsDetectedLicenseRepository,
                         mocked_lpvsLicenseRepository,
                         mocked_lpvsLicenseConflictRepository,
-                        exitHandler);
+                        new LPVSGitHubConnectionService(
+                                GH_LOGIN, GH_AUTH_TOKEN, GH_API_URL, exitHandler));
         final String url_pr_1 = "https://github.com/Samsung/LPVS/pull/18";
         LPVSQueue webhookConfig;
 
@@ -4071,14 +4014,12 @@ public class LPVSGitHubServiceTest {
                 mock(LPVSLicenseConflictRepository.class);
         final LPVSGitHubService gh_service =
                 new LPVSGitHubService(
-                        GH_LOGIN,
-                        GH_AUTH_TOKEN,
-                        GH_API_URL,
                         mocked_pullRequestRepository,
                         mocked_lpvsDetectedLicenseRepository,
                         mocked_lpvsLicenseRepository,
                         mocked_lpvsLicenseConflictRepository,
-                        exitHandler);
+                        new LPVSGitHubConnectionService(
+                                GH_LOGIN, GH_AUTH_TOKEN, GH_API_URL, exitHandler));
         final String url_pr_1 = "https://github.com/Samsung/LPVS/pull/18";
         LPVSQueue webhookConfig;
 
@@ -4217,7 +4158,7 @@ public class LPVSGitHubServiceTest {
     class TestCommentResults {
 
         final String GH_LOGIN = "test_login";
-        final String GH_AUTH_TOKEN = "test_auth_token";
+        final String GH_AUTH_TOKEN = "my-token";
         final String GH_API_URL = "test_api_url";
         LPVSPullRequestRepository mocked_pullRequestRepository =
                 mock(LPVSPullRequestRepository.class);
@@ -4226,16 +4167,15 @@ public class LPVSGitHubServiceTest {
         LPVSLicenseRepository mocked_lpvsLicenseRepository = mock(LPVSLicenseRepository.class);
         LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository =
                 mock(LPVSLicenseConflictRepository.class);
+        LPVSGitHubConnectionService lpvsGitHubConnectionService =
+                new LPVSGitHubConnectionService(GH_LOGIN, GH_AUTH_TOKEN, GH_API_URL, exitHandler);
         final LPVSGitHubService gh_service =
                 new LPVSGitHubService(
-                        GH_LOGIN,
-                        GH_AUTH_TOKEN,
-                        GH_API_URL,
                         mocked_pullRequestRepository,
                         mocked_lpvsDetectedLicenseRepository,
                         mocked_lpvsLicenseRepository,
                         mocked_lpvsLicenseConflictRepository,
-                        exitHandler);
+                        lpvsGitHubConnectionService);
         final String url_pr_1 = "https://github.com/Samsung/LPVS/pull/18";
         LPVSQueue webhookConfig;
         LPVSPullRequest lpvsPullRequest;
@@ -4313,20 +4253,22 @@ public class LPVSGitHubServiceTest {
         public void testSetGithubTokenFromEnv_WhenEnvVariableIsSet()
                 throws IllegalAccessException, NoSuchFieldException {
             String githubTokenValue = "GitHubTokenValue";
-            gh_service.setGithubTokenFromEnv();
-            Field field = gh_service.getClass().getDeclaredField("GITHUB_AUTH_TOKEN");
+            lpvsGitHubConnectionService.setGithubTokenFromEnv();
+            Field field =
+                    lpvsGitHubConnectionService.getClass().getDeclaredField("GITHUB_AUTH_TOKEN");
             field.setAccessible(true);
-            String githubRealTokenValue = (String) field.get(gh_service);
+            String githubRealTokenValue = (String) field.get(lpvsGitHubConnectionService);
             assertEquals(githubTokenValue, githubRealTokenValue);
         }
 
         @Test
         public void testSetGithubTokenFromEnv_WhenEnvVariableIsNotSet()
                 throws NoSuchFieldException, IllegalAccessException {
-            gh_service.setGithubTokenFromEnv();
-            Field field = gh_service.getClass().getDeclaredField("GITHUB_AUTH_TOKEN");
+            lpvsGitHubConnectionService.setGithubTokenFromEnv();
+            Field field =
+                    lpvsGitHubConnectionService.getClass().getDeclaredField("GITHUB_AUTH_TOKEN");
             field.setAccessible(true);
-            String githubRealTokenValue = (String) field.get(gh_service);
+            String githubRealTokenValue = (String) field.get(lpvsGitHubConnectionService);
             assertEquals(GH_AUTH_TOKEN, githubRealTokenValue);
         }
     }
@@ -4340,6 +4282,7 @@ public class LPVSGitHubServiceTest {
         }
 
         @Test
+        @SetEnvironmentVariable(key = "LPVS_GITHUB_TOKEN", value = "")
         public void testCheckEmpty()
                 throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
             LPVSPullRequestRepository mocked_pullRequestRepository =
@@ -4350,20 +4293,19 @@ public class LPVSGitHubServiceTest {
             LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository =
                     mock(LPVSLicenseConflictRepository.class);
             LPVSExitHandler exitHandler = mock(LPVSExitHandler.class);
+            LPVSGitHubConnectionService lpvsGitHubConnectionService =
+                    new LPVSGitHubConnectionService("", "", "", exitHandler);
 
             final LPVSGitHubService gh_service =
                     new LPVSGitHubService(
-                            null,
-                            "",
-                            null,
                             mocked_pullRequestRepository,
                             mocked_lpvsDetectedLicenseRepository,
                             mocked_lpvsLicenseRepository,
                             mocked_lpvsLicenseConflictRepository,
-                            exitHandler);
-            Method method = gh_service.getClass().getDeclaredMethod("checks");
+                            lpvsGitHubConnectionService);
+            Method method = lpvsGitHubConnectionService.getClass().getDeclaredMethod("checks");
             method.setAccessible(true);
-            method.invoke(gh_service);
+            method.invoke(lpvsGitHubConnectionService);
 
             verify(exitHandler).exit(-1);
         }
@@ -4371,6 +4313,9 @@ public class LPVSGitHubServiceTest {
         @Test
         public void testCheckNotEmpty()
                 throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+            String GH_LOGIN = "";
+            String GH_AUTH_TOKEN = "non-empty";
+            String GH_API_URL = "";
             LPVSPullRequestRepository mocked_pullRequestRepository =
                     mock(LPVSPullRequestRepository.class);
             LPVSDetectedLicenseRepository mocked_lpvsDetectedLicenseRepository =
@@ -4379,20 +4324,20 @@ public class LPVSGitHubServiceTest {
             LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository =
                     mock(LPVSLicenseConflictRepository.class);
             LPVSExitHandler exitHandler = mock(LPVSExitHandler.class);
+            LPVSGitHubConnectionService lpvsGitHubConnectionService =
+                    new LPVSGitHubConnectionService(
+                            GH_LOGIN, GH_AUTH_TOKEN, GH_API_URL, exitHandler);
 
             final LPVSGitHubService gh_service =
                     new LPVSGitHubService(
-                            null,
-                            "some_token",
-                            null,
                             mocked_pullRequestRepository,
                             mocked_lpvsDetectedLicenseRepository,
                             mocked_lpvsLicenseRepository,
                             mocked_lpvsLicenseConflictRepository,
-                            exitHandler);
-            Method method = gh_service.getClass().getDeclaredMethod("checks");
+                            lpvsGitHubConnectionService);
+            Method method = lpvsGitHubConnectionService.getClass().getDeclaredMethod("checks");
             method.setAccessible(true);
-            method.invoke(gh_service);
+            method.invoke(lpvsGitHubConnectionService);
 
             verify(exitHandler, never()).exit(anyInt());
         }
