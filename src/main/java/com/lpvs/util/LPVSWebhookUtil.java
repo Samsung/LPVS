@@ -115,12 +115,12 @@ public class LPVSWebhookUtil {
     public static String getRepositoryOrganization(LPVSQueue webhookConfig) {
         if (null == webhookConfig) {
             log.error("Webhook Config is absent");
-            return "Webhook is absent";
+            throw new IllegalArgumentException("Webhook is absent");
         }
 
         if (null == webhookConfig.getRepositoryUrl()) {
             log.error("No repository URL info in webhook config");
-            return "No repository URL info in webhook config";
+            throw new IllegalArgumentException("No repository URL info in webhook config");
         }
 
         List<String> url = Arrays.asList(webhookConfig.getRepositoryUrl().split("/"));
@@ -136,12 +136,12 @@ public class LPVSWebhookUtil {
     public static String getRepositoryName(LPVSQueue webhookConfig) {
         if (null == webhookConfig) {
             log.error("Webhook Config is absent");
-            return "Webhook is absent";
+            throw new IllegalArgumentException("Webhook is absent");
         }
 
         if (null == webhookConfig.getRepositoryUrl()) {
             log.error("No repository URL info in webhook config");
-            return "No repository URL info in webhook config";
+            throw new IllegalArgumentException("No repository URL info in webhook config");
         }
 
         List<String> url = Arrays.asList(webhookConfig.getRepositoryUrl().split("/"));
@@ -167,17 +167,17 @@ public class LPVSWebhookUtil {
     public static String getPullRequestId(LPVSQueue webhookConfig) {
         if (null == webhookConfig) {
             log.error("Webhook Config is absent");
-            return "Webhook is absent";
+            throw new IllegalArgumentException("Webhook is absent");
         }
 
         if (null == webhookConfig.getRepositoryUrl()) {
             log.error("No repository URL info in webhook config");
-            return "No repository URL info in webhook config";
+            throw new IllegalArgumentException("No repository URL info in webhook config");
         }
 
         if (null == webhookConfig.getPullRequestUrl()) {
             log.error("Pull Request URL is absent in webhook config");
-            return "Pull Request URL is absent in webhook config";
+            throw new IllegalArgumentException("Pull Request URL is absent in webhook config");
         }
 
         List<String> url = Arrays.asList(webhookConfig.getPullRequestUrl().split("/"));
