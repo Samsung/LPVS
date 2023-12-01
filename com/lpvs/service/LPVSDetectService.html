@@ -27,8 +27,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10};
-var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
+var data = {"i0":10,"i1":9,"i2":10,"i3":10};
+var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -155,7 +155,8 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.String,com.lpvs.service.scanner.scanoss.LPVSScanossDetectService)">LPVSDetectService</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;scannerType,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.String,com.lpvs.service.LPVSGitHubConnectionService,com.lpvs.service.scanner.scanoss.LPVSScanossDetectService)">LPVSDetectService</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;scannerType,
+                 <a href="LPVSGitHubConnectionService.html" title="class in com.lpvs.service">LPVSGitHubConnectionService</a>&nbsp;gitHubConnectionService,
                  <a href="scanner/scanoss/LPVSScanossDetectService.html" title="class in com.lpvs.service.scanner.scanoss">LPVSScanossDetectService</a>&nbsp;scanossDetectService)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -171,13 +172,28 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code><a href="../entity/LPVSQueue.html" title="class in com.lpvs.entity">LPVSQueue</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getInternalQueueByPullRequest(java.lang.String)">getInternalQueueByPullRequest</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;pullRequest)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code>static <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPathByPullRequest(com.lpvs.entity.LPVSQueue)">getPathByPullRequest</a></span>&#8203;(<a href="../entity/LPVSQueue.html" title="class in com.lpvs.entity">LPVSQueue</a>&nbsp;webhookConfig)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#runOneScan()">runOneScan</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../entity/LPVSFile.html" title="class in com.lpvs.entity">LPVSFile</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#runScan(com.lpvs.entity.LPVSQueue,java.lang.String)">runScan</a></span>&#8203;(<a href="../entity/LPVSQueue.html" title="class in com.lpvs.entity">LPVSQueue</a>&nbsp;webhookConfig,
        <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;path)</code></th>
@@ -207,7 +223,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(java.lang.String,com.lpvs.service.scanner.scanoss.LPVSScanossDetectService)">
+<a id="&lt;init&gt;(java.lang.String,com.lpvs.service.LPVSGitHubConnectionService,com.lpvs.service.scanner.scanoss.LPVSScanossDetectService)">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -216,6 +232,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <pre>@Autowired
 public&nbsp;LPVSDetectService&#8203;(@Value("${scanner:scanoss}")
                          <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;scannerType,
+                         <a href="LPVSGitHubConnectionService.html" title="class in com.lpvs.service">LPVSGitHubConnectionService</a>&nbsp;gitHubConnectionService,
                          <a href="scanner/scanoss/LPVSScanossDetectService.html" title="class in com.lpvs.service.scanner.scanoss">LPVSScanossDetectService</a>&nbsp;scanossDetectService)</pre>
 </li>
 </ul>
@@ -229,6 +246,34 @@ public&nbsp;LPVSDetectService&#8203;(@Value("${scanner:scanoss}")
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a id="runOneScan()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>runOneScan</h4>
+<pre class="methodSignature">@EventListener(org.springframework.boot.context.event.ApplicationReadyEvent.class)
+public&nbsp;void&nbsp;runOneScan()</pre>
+</li>
+</ul>
+<a id="getInternalQueueByPullRequest(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getInternalQueueByPullRequest</h4>
+<pre class="methodSignature">public&nbsp;<a href="../entity/LPVSQueue.html" title="class in com.lpvs.entity">LPVSQueue</a>&nbsp;getInternalQueueByPullRequest&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;pullRequest)</pre>
+</li>
+</ul>
+<a id="getPathByPullRequest(com.lpvs.entity.LPVSQueue)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getPathByPullRequest</h4>
+<pre class="methodSignature">public static&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;getPathByPullRequest&#8203;(<a href="../entity/LPVSQueue.html" title="class in com.lpvs.entity">LPVSQueue</a>&nbsp;webhookConfig)</pre>
+</li>
+</ul>
 <a id="runScan(com.lpvs.entity.LPVSQueue,java.lang.String)">
 <!--   -->
 </a>

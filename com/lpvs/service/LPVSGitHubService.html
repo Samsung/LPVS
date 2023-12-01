@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -155,14 +155,11 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.String,java.lang.String,java.lang.String,com.lpvs.repository.LPVSPullRequestRepository,com.lpvs.repository.LPVSDetectedLicenseRepository,com.lpvs.repository.LPVSLicenseRepository,com.lpvs.repository.LPVSLicenseConflictRepository,com.lpvs.util.LPVSExitHandler)">LPVSGitHubService</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;GITHUB_LOGIN,
-                 <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;GITHUB_AUTH_TOKEN,
-                 <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;GITHUB_API_URL,
-                 <a href="../repository/LPVSPullRequestRepository.html" title="interface in com.lpvs.repository">LPVSPullRequestRepository</a>&nbsp;pullRequestRepository,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(com.lpvs.repository.LPVSPullRequestRepository,com.lpvs.repository.LPVSDetectedLicenseRepository,com.lpvs.repository.LPVSLicenseRepository,com.lpvs.repository.LPVSLicenseConflictRepository,com.lpvs.service.LPVSGitHubConnectionService)">LPVSGitHubService</a></span>&#8203;(<a href="../repository/LPVSPullRequestRepository.html" title="interface in com.lpvs.repository">LPVSPullRequestRepository</a>&nbsp;pullRequestRepository,
                  <a href="../repository/LPVSDetectedLicenseRepository.html" title="interface in com.lpvs.repository">LPVSDetectedLicenseRepository</a>&nbsp;lpvsDetectedLicenseRepository,
                  <a href="../repository/LPVSLicenseRepository.html" title="interface in com.lpvs.repository">LPVSLicenseRepository</a>&nbsp;lpvsLicenseRepository,
                  <a href="../repository/LPVSLicenseConflictRepository.html" title="interface in com.lpvs.repository">LPVSLicenseConflictRepository</a>&nbsp;lpvsLicenseConflictRepository,
-                 <a href="../util/LPVSExitHandler.html" title="class in com.lpvs.util">LPVSExitHandler</a>&nbsp;exitHandler)</code></th>
+                 <a href="LPVSGitHubConnectionService.html" title="class in com.lpvs.service">LPVSGitHubConnectionService</a>&nbsp;gitHubConnectionService)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -208,11 +205,6 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setGithubTokenFromEnv()">setGithubTokenFromEnv</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr id="i5" class="rowColor">
-<td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setPendingCheck(com.lpvs.entity.LPVSQueue)">setPendingCheck</a></span>&#8203;(<a href="../entity/LPVSQueue.html" title="class in com.lpvs.entity">LPVSQueue</a>&nbsp;webhookConfig)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -240,24 +232,18 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(java.lang.String,java.lang.String,java.lang.String,com.lpvs.repository.LPVSPullRequestRepository,com.lpvs.repository.LPVSDetectedLicenseRepository,com.lpvs.repository.LPVSLicenseRepository,com.lpvs.repository.LPVSLicenseConflictRepository,com.lpvs.util.LPVSExitHandler)">
+<a id="&lt;init&gt;(com.lpvs.repository.LPVSPullRequestRepository,com.lpvs.repository.LPVSDetectedLicenseRepository,com.lpvs.repository.LPVSLicenseRepository,com.lpvs.repository.LPVSLicenseConflictRepository,com.lpvs.service.LPVSGitHubConnectionService)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>LPVSGitHubService</h4>
 <pre>@Autowired
-public&nbsp;LPVSGitHubService&#8203;(@Value("${github.login}")
-                         <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;GITHUB_LOGIN,
-                         @Value("${github.token}")
-                         <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;GITHUB_AUTH_TOKEN,
-                         @Value("${github.api.url}")
-                         <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;GITHUB_API_URL,
-                         <a href="../repository/LPVSPullRequestRepository.html" title="interface in com.lpvs.repository">LPVSPullRequestRepository</a>&nbsp;pullRequestRepository,
+public&nbsp;LPVSGitHubService&#8203;(<a href="../repository/LPVSPullRequestRepository.html" title="interface in com.lpvs.repository">LPVSPullRequestRepository</a>&nbsp;pullRequestRepository,
                          <a href="../repository/LPVSDetectedLicenseRepository.html" title="interface in com.lpvs.repository">LPVSDetectedLicenseRepository</a>&nbsp;lpvsDetectedLicenseRepository,
                          <a href="../repository/LPVSLicenseRepository.html" title="interface in com.lpvs.repository">LPVSLicenseRepository</a>&nbsp;lpvsLicenseRepository,
                          <a href="../repository/LPVSLicenseConflictRepository.html" title="interface in com.lpvs.repository">LPVSLicenseConflictRepository</a>&nbsp;lpvsLicenseConflictRepository,
-                         <a href="../util/LPVSExitHandler.html" title="class in com.lpvs.util">LPVSExitHandler</a>&nbsp;exitHandler)</pre>
+                         <a href="LPVSGitHubConnectionService.html" title="class in com.lpvs.service">LPVSGitHubConnectionService</a>&nbsp;gitHubConnectionService)</pre>
 </li>
 </ul>
 </li>
@@ -317,19 +303,10 @@ public&nbsp;LPVSGitHubService&#8203;(@Value("${github.login}")
 <a id="getRepositoryLicense(com.lpvs.entity.LPVSQueue)">
 <!--   -->
 </a>
-<ul class="blockList">
+<ul class="blockListLast">
 <li class="blockList">
 <h4>getRepositoryLicense</h4>
 <pre class="methodSignature">public&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;getRepositoryLicense&#8203;(<a href="../entity/LPVSQueue.html" title="class in com.lpvs.entity">LPVSQueue</a>&nbsp;webhookConfig)</pre>
-</li>
-</ul>
-<a id="setGithubTokenFromEnv()">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>setGithubTokenFromEnv</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;setGithubTokenFromEnv()</pre>
 </li>
 </ul>
 </li>
