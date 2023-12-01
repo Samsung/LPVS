@@ -1,6 +1,8 @@
-# Description
+# Pull Request
 
-Please include a summary of the change and which issue is fixed. Please also include relevant motivation and context. List any dependencies that are required for this change.
+## Description
+
+Please include a summary of the change and which issue is fixed. Also, provide relevant motivation and context. List any dependencies that are required for this change.
 
 Fixes # (issue)
 
@@ -17,8 +19,9 @@ Please delete options that are not relevant.
 - [ ] CI system update
 - [ ] Test Coverage update
 
-# How Has This Been Tested?
-Please describe the tests that you ran to verify your changes. Provide instructions so we can reproduce. Please also list any relevant details for your test configuration. Below is just an example and you can delete it when you contribute.
+## Testing
+
+Please describe the tests that you ran to verify your changes. Provide instructions so we can reproduce. Please also list any relevant details for your test configuration.
 
 **Test Configuration**:
 * Java: v11
@@ -27,6 +30,8 @@ Please describe the tests that you ran to verify your changes. Provide instructi
 # Checklist:
 
 - [ ] My code follows the style guidelines of this project
+- [ ] My code meets the required code coverage for lines (90% and above)
+- [ ] My code meets the required code coverage for branches (80% and above)
 - [ ] I have performed a self-review of my own code
 - [ ] I have commented my code, particularly in hard-to-understand areas
 - [ ] I have made corresponding changes to the documentation
