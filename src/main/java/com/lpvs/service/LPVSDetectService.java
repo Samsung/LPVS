@@ -70,7 +70,7 @@ public class LPVSDetectService {
     public void runOneScan() {
         if (trigger != null && !HtmlUtils.htmlEscape(trigger).equals("")) {
             try {
-                LPVSQueue webhookConfig = this.getInternalQueueByPullRequest(trigger);
+                LPVSQueue webhookConfig = this.getInternalQueueByPullRequest(HtmlUtils.htmlEscape(trigger));
                 this.runScan(webhookConfig, LPVSDetectService.getPathByPullRequest(webhookConfig));
                 File scanResult = new File(LPVSFileUtil.getScanResultsJsonFilePath(webhookConfig));
                 if (scanResult.exists()) {
