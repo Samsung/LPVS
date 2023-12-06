@@ -7,7 +7,8 @@ CREATE TABLE IF NOT EXISTS licenses (
   license_name varchar(255) NOT NULL,
   license_spdx varchar(255) NOT NULL,
   license_alternative_names longtext DEFAULT NULL,
-  PRIMARY KEY (id)
+  PRIMARY KEY (id),
+  UNIQUE (license_spdx)
 );
 
 CREATE TABLE IF NOT EXISTS license_conflicts (
@@ -78,11 +79,11 @@ CREATE TABLE IF NOT EXISTS member (
   UNIQUE (email,provider)
 );
 
-INSERT INTO licenses (id, license_alternative_names, license_name, license_spdx, license_usage) VALUES
-(2,NULL,'GNU General Public License v3.0 only','GPL-3.0-only','PROHIBITED'),
-(3,NULL,'OpenSSL License','OpenSSL','PERMITTED'),
-(4,NULL,'GNU Lesser General Public License v2.1 or later','GPL-2.0-or-later','RESTRICTED'),
-(531, NULL, 'MIT License', 'MIT', 'PERMITTED'),
-(529, NULL, 'Apache License 2.0', 'Apache-2.0', 'PERMITTED'),
-(257, NULL, 'GNU General Public License v2.0 only', 'GPL-2.0-only', 'RESTRICTED'),
-(289, NULL, 'GNU Lesser General Public License v3.0 or later', 'LGPL-3.0-or-later', 'PROHIBITED');
+INSERT INTO licenses (license_name, license_spdx, license_usage) VALUES
+('GNU General Public License v3.0 only','GPL-3.0-only','PROHIBITED'),
+('OpenSSL License','OpenSSL','PERMITTED'),
+('GNU Lesser General Public License v2.0 or later','GPL-2.0-or-later','RESTRICTED'),
+('MIT License', 'MIT', 'PERMITTED'),
+('Apache License 2.0', 'Apache-2.0', 'PERMITTED'),
+('GNU General Public License v2.0 only', 'GPL-2.0-only', 'RESTRICTED'),
+('GNU Lesser General Public License v3.0 or later', 'LGPL-3.0-or-later', 'PROHIBITED');
