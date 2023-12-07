@@ -15,7 +15,11 @@ CREATE TABLE IF NOT EXISTS license_conflicts (
   id bigint NOT NULL AUTO_INCREMENT,
   conflict_license_id bigint NOT NULL,
   repository_license_id bigint NOT NULL,
-  PRIMARY KEY (id)
+  PRIMARY KEY (id),
+  KEY (conflict_license_id),
+  KEY (repository_license_id),
+  FOREIGN KEY (conflict_license_id) REFERENCES licenses (id),
+  FOREIGN KEY (repository_license_id) REFERENCES licenses (id)
 );
 
 CREATE TABLE IF NOT EXISTS pull_requests (
@@ -50,7 +54,15 @@ CREATE TABLE IF NOT EXISTS detected_license (
   component_version varchar(255) DEFAULT NULL,
   component_vendor varchar(255) DEFAULT NULL,
   issue bit DEFAULT NULL,
-  PRIMARY KEY (id)
+  PRIMARY KEY (id),
+  KEY (pull_request_id),
+  KEY (license_id),
+  KEY (repository_license_id),
+  KEY (conflict_id),
+  FOREIGN KEY (conflict_id) REFERENCES license_conflicts (id),
+  FOREIGN KEY (license_id) REFERENCES licenses (id),
+  FOREIGN KEY (pull_request_id) REFERENCES pull_requests (id),
+  FOREIGN KEY (repository_license_id) REFERENCES licenses (id)
 );
 
 CREATE TABLE IF NOT EXISTS queue (
