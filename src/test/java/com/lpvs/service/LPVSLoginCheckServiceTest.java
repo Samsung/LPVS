@@ -6,7 +6,7 @@
  */
 package com.lpvs.service;
 
-import com.lpvs.entity.LPVSMember;
+import com.lpvs.entity.auth.LPVSMember;
 import com.lpvs.entity.history.HistoryPageEntity;
 import com.lpvs.exception.LoginFailedException;
 import com.lpvs.exception.WrongAccessException;

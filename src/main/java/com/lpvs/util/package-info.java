@@ -13,17 +13,6 @@
  * The classes in this package are designed to encapsulate reusable and often-used functionality
  * that doesn't fit into the primary business logic of the application but supports it.
  * They aim to enhance code organization, maintainability, and reusability.
- * <p>
- * List of classes in this package:
- * <ul>
- *     <li>{@link com.lpvs.util.LPVSCommentUtil} - Utility methods for generating links and handling comments.</li>
- *     <li>{@link com.lpvs.util.LPVSExitHandler} - Utility for gracefully exiting the application.</li>
- *     <li>{@link com.lpvs.util.LPVSFileUtil} - Utility methods for file-related operations.</li>
- *     <li>{@link com.lpvs.util.LPVSWebhookUtil} - Utility methods for processing GitHub webhook payloads.</li>
- *     <li>{@link com.lpvs.util.LPVSTableConfiguration} - Configuration settings for database tables.</li>
- * </ul>
- * <p>
- * These utility classes are organized to promote modularity and ease of maintenance within the LPVS application.
  * </p>
  */
 package com.lpvs.util;
