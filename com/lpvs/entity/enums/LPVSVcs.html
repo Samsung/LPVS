@@ -143,6 +143,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <hr>
 <pre>public enum <span class="typeNameLabel">LPVSVcs</span>
 extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Enum.html?is-external=true" title="class or interface in java.lang" class="externalLink">Enum</a>&lt;<a href="LPVSVcs.html" title="enum in com.lpvs.entity.enums">LPVSVcs</a>&gt;</pre>
+<div class="block">Represents the version control systems (VCS) supported by the LPVS system.
+ Each VCS corresponds to a specific type of version control platform.</div>
 </li>
 </ul>
 </div>
@@ -164,19 +166,27 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </tr>
 <tr class="altColor">
 <th class="colFirst" scope="row"><code><span class="memberNameLink"><a href="#GERRIT">GERRIT</a></span></code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Represents the Gerrit version control system.</div>
+</td>
 </tr>
 <tr class="rowColor">
 <th class="colFirst" scope="row"><code><span class="memberNameLink"><a href="#GITHUB">GITHUB</a></span></code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Represents the GitHub version control system.</div>
+</td>
 </tr>
 <tr class="altColor">
 <th class="colFirst" scope="row"><code><span class="memberNameLink"><a href="#GITLAB">GITLAB</a></span></code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Represents the GitLab version control system.</div>
+</td>
 </tr>
 <tr class="rowColor">
 <th class="colFirst" scope="row"><code><span class="memberNameLink"><a href="#SWARM">SWARM</a></span></code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Represents the Swarm version control system.</div>
+</td>
 </tr>
 </table>
 </li>
@@ -199,17 +209,23 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>static <a href="LPVSVcs.html" title="enum in com.lpvs.entity.enums">LPVSVcs</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#convertFrom(java.lang.String)">convertFrom</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;action)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Converts a string representation of a version control system to the corresponding enum constant.</div>
+</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getVcs()">getVcs</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Gets the string representation of the version control system.</div>
+</td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toString()">toString</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Returns a string representation of the version control system.</div>
+</td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>static <a href="LPVSVcs.html" title="enum in com.lpvs.entity.enums">LPVSVcs</a></code></td>
@@ -264,6 +280,7 @@ the order they are declared.</div>
 <li class="blockList">
 <h4>GITHUB</h4>
 <pre>public static final&nbsp;<a href="LPVSVcs.html" title="enum in com.lpvs.entity.enums">LPVSVcs</a> GITHUB</pre>
+<div class="block">Represents the GitHub version control system.</div>
 </li>
 </ul>
 <a id="SWARM">
@@ -273,6 +290,7 @@ the order they are declared.</div>
 <li class="blockList">
 <h4>SWARM</h4>
 <pre>public static final&nbsp;<a href="LPVSVcs.html" title="enum in com.lpvs.entity.enums">LPVSVcs</a> SWARM</pre>
+<div class="block">Represents the Swarm version control system.</div>
 </li>
 </ul>
 <a id="GERRIT">
@@ -282,6 +300,7 @@ the order they are declared.</div>
 <li class="blockList">
 <h4>GERRIT</h4>
 <pre>public static final&nbsp;<a href="LPVSVcs.html" title="enum in com.lpvs.entity.enums">LPVSVcs</a> GERRIT</pre>
+<div class="block">Represents the Gerrit version control system.</div>
 </li>
 </ul>
 <a id="GITLAB">
@@ -291,6 +310,7 @@ the order they are declared.</div>
 <li class="blockList">
 <h4>GITLAB</h4>
 <pre>public static final&nbsp;<a href="LPVSVcs.html" title="enum in com.lpvs.entity.enums">LPVSVcs</a> GITLAB</pre>
+<div class="block">Represents the GitLab version control system.</div>
 </li>
 </ul>
 </li>
@@ -352,6 +372,11 @@ not permitted.)</div>
 <li class="blockList">
 <h4>getVcs</h4>
 <pre class="methodSignature">public&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;getVcs()</pre>
+<div class="block">Gets the string representation of the version control system.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The string representation of the version control system.</dd>
+</dl>
 </li>
 </ul>
 <a id="toString()">
@@ -361,9 +386,12 @@ not permitted.)</div>
 <li class="blockList">
 <h4>toString</h4>
 <pre class="methodSignature">public&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;toString()</pre>
+<div class="block">Returns a string representation of the version control system.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Enum.html?is-external=true#toString()" title="class or interface in java.lang" class="externalLink">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Enum.html?is-external=true" title="class or interface in java.lang" class="externalLink">Enum</a>&lt;<a href="LPVSVcs.html" title="enum in com.lpvs.entity.enums">LPVSVcs</a>&gt;</code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The string representation of the version control system.</dd>
 </dl>
 </li>
 </ul>
@@ -374,6 +402,13 @@ not permitted.)</div>
 <li class="blockList">
 <h4>convertFrom</h4>
 <pre class="methodSignature">public static&nbsp;<a href="LPVSVcs.html" title="enum in com.lpvs.entity.enums">LPVSVcs</a>&nbsp;convertFrom&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;action)</pre>
+<div class="block">Converts a string representation of a version control system to the corresponding enum constant.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>action</code> - The string representation of the version control system.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The corresponding LPVSVcs enum constant, or null if not found.</dd>
+</dl>
 </li>
 </ul>
 </li>
