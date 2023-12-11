@@ -13,9 +13,17 @@ import lombok.Getter;
 import java.time.LocalDate;
 import java.util.Map;
 
+/**
+ * Represents a collection of dashboard elements in the LPVS system.
+ * This class includes a map associating each date with corresponding {@link DashboardElementsByDate}.
+ */
 @Getter
 @AllArgsConstructor
 @EqualsAndHashCode
 public class DashBoardElements {
+
+    /**
+     * The map associating each date with corresponding dashboard elements.
+     */
     private Map<LocalDate, DashboardElementsByDate> dashboardElementsMap;
 }
