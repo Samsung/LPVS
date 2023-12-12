@@ -94,7 +94,7 @@ CREATE TABLE IF NOT EXISTS member (
 INSERT INTO licenses (license_name, license_spdx, license_usage) VALUES
 ('GNU General Public License v3.0 only','GPL-3.0-only','PROHIBITED'),
 ('OpenSSL License','OpenSSL','PERMITTED'),
-('GNU Lesser General Public License v2.0 or later','GPL-2.0-or-later','RESTRICTED'),
+('GNU Lesser General Public License v2.0 or later','LGPL-2.0-or-later','RESTRICTED'),
 ('MIT License', 'MIT', 'PERMITTED'),
 ('Apache License 2.0', 'Apache-2.0', 'PERMITTED'),
 ('GNU General Public License v2.0 only', 'GPL-2.0-only', 'RESTRICTED'),
