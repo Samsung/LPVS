@@ -6,6 +6,8 @@
  */
 package com.lpvs.entity;
 
+import com.lpvs.entity.auth.LPVSLoginMember;
+import com.lpvs.entity.auth.LPVSMember;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

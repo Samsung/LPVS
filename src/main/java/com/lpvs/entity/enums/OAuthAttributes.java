@@ -12,8 +12,17 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.function.Function;
 
+/**
+ * Enum representing OAuth attributes for various providers.
+ * Each constant in this enum corresponds to an OAuth provider, providing a way to extract
+ * attributes and create a {@link com.lpvs.entity.auth.MemberProfile}.
+ */
 @SuppressWarnings("unchecked")
 public enum OAuthAttributes {
+
+    /**
+     * Represents OAuth attributes for Google authentication.
+     */
     GOOGLE(
             "google",
             (attributes) -> {
@@ -23,6 +32,9 @@ public enum OAuthAttributes {
                 return memberProfile;
             }),
 
+    /**
+     * Represents OAuth attributes for Naver authentication.
+     */
     NAVER(
             "naver",
             (attributes) -> {
@@ -33,6 +45,9 @@ public enum OAuthAttributes {
                 return memberProfile;
             }),
 
+    /**
+     * Represents OAuth attributes for Kakao authentication.
+     */
     KAKAO(
             "kakao",
             (attributes) -> {
@@ -47,6 +62,9 @@ public enum OAuthAttributes {
                 return memberProfile;
             }),
 
+    /**
+     * Represents OAuth attributes for GitHub authentication.
+     */
     GITHUB(
             "github",
             (attributes) -> {
@@ -58,14 +76,35 @@ public enum OAuthAttributes {
                 return memberProfile;
             });
 
+    /**
+     * The registration ID associated with the OAuth provider.
+     */
     private final String registrationId;
+
+    /**
+     * The function to extract OAuth attributes and create a MemberProfile.
+     */
     private final Function<Map<String, Object>, MemberProfile> of;
 
+    /**
+     * Constructs an OAuthAttributes with the specified registration ID and extraction function.
+     *
+     * @param registrationId The registration ID associated with the OAuth provider.
+     * @param of             The function to extract OAuth attributes and create a MemberProfile.
+     */
     OAuthAttributes(String registrationId, Function<Map<String, Object>, MemberProfile> of) {
         this.registrationId = registrationId;
         this.of = of;
     }
 
+    /**
+     * Extracts OAuth attributes based on the registration ID and creates a MemberProfile.
+     *
+     * @param registrationId The registration ID associated with the OAuth provider.
+     * @param attributes     The map of OAuth attributes.
+     * @return A MemberProfile created from the extracted OAuth attributes.
+     * @throws IllegalArgumentException if no matching OAuthAttributes is found for the given registrationId.
+     */
     public static MemberProfile extract(String registrationId, Map<String, Object> attributes) {
         return Arrays.stream(values())
                 .filter(provider -> registrationId.equals(provider.registrationId))

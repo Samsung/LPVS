@@ -6,7 +6,7 @@
  */
 package com.lpvs.service;
 
-import com.lpvs.entity.LPVSMember;
+import com.lpvs.entity.auth.LPVSMember;
 import com.lpvs.entity.auth.MemberProfile;
 import com.lpvs.entity.enums.OAuthAttributes;
 import com.lpvs.repository.LPVSMemberRepository;

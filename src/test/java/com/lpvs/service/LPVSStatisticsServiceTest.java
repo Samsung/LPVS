@@ -8,7 +8,7 @@ package com.lpvs.service;
 
 import com.lpvs.entity.LPVSDetectedLicense;
 import com.lpvs.entity.LPVSLicense;
-import com.lpvs.entity.LPVSMember;
+import com.lpvs.entity.auth.LPVSMember;
 import com.lpvs.entity.LPVSPullRequest;
 import com.lpvs.entity.dashboard.Dashboard;
 import com.lpvs.entity.enums.Grade;
