@@ -271,12 +271,19 @@ Alternatively, you can perform a one-time scan on a specific pull request using 
 4.b.2. Execute the single scan with the following command:
 
    ```bash
-   java -jar -Dgithub.token=<my-token> lpvs-*.jar --github.pull.request=<PR URL> --build.html.report=<Path to report folder>
+   java -jar -Dgithub.token=<my-token> lpvs-*.jar --github.pull.request=<PR URL>
    ```
 
 4.b.3. By default, the above command requires a pre-configured MySQL database. To avoid setting up the database, use the "singlescan" profile:
    ```bash
    java -jar -Dspring.profiles.active=singlescan -Dgithub.token=<my-token> lpvs-*.jar --github.pull-request=<PR URL>
+   ```
+
+These steps streamline the process, allowing you to run a scan on a single pull request without the need for a preconfigured database.
+
+4.b.4. Available option to generate an HTML report and save it in a specified folder. Replace `/path/to/your/folder` with the full path to the folder where you want to save the HTML report, and `your_report_filename.html` with the desired filename for the report.
+   ```bash
+   java -jar -Dgithub.token=<my-token> lpvs-*.jar --github.pull.request=<PR URL> --build.html.report=</path/to/your/folder/your_report_filename.html>
    ```
 
 These steps streamline the process, allowing you to run a scan on a single pull request without the need for a preconfigured database.

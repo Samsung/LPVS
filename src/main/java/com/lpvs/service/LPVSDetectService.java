@@ -30,6 +30,7 @@ import javax.annotation.PostConstruct;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -82,20 +83,27 @@ public class LPVSDetectService {
                 LPVSQueue webhookConfig =
                         this.getInternalQueueByPullRequest(HtmlUtils.htmlEscape(trigger));
 
-                scanossDetectService.runScan(
-                        webhookConfig, LPVSDetectService.getPathByPullRequest(webhookConfig));
+                this.runScan(webhookConfig, LPVSDetectService.getPathByPullRequest(webhookConfig));
                 List<LPVSFile> scanResult = scanossDetectService.checkLicenses(webhookConfig);
 
                 List<LPVSLicenseService.Conflict<String, String>> detectedConflicts =
                         licenseService.findConflicts(webhookConfig, scanResult);
 
-                if (buildReport != null
-                        && !HtmlUtils.htmlEscape(buildReport).equals("")
-                        && Files.exists(Paths.get(buildReport))) {
-                    String report =
-                            LPVSCommentUtil.buildHTMLComment(
-                                    webhookConfig, scanResult, detectedConflicts);
-                    LPVSCommentUtil.saveHTMLToFile(report, buildReport + "/LPVSreport.html");
+                if (buildReport != null && !HtmlUtils.htmlEscape(buildReport).equals("")) {
+                    Path buildReportPath = Paths.get(buildReport);
+                    Path parentDirectory = buildReportPath.getParent();
+
+                    if (parentDirectory != null && Files.isDirectory(parentDirectory)) {
+                        String report =
+                                LPVSCommentUtil.buildHTMLComment(
+                                        webhookConfig, scanResult, detectedConflicts);
+                        LPVSCommentUtil.saveHTMLToFile(report, buildReportPath.toString());
+                    } else {
+                        log.error(
+                                "Error: The parent directory '"
+                                        + parentDirectory
+                                        + "' does not exist.");
+                    }
                 } else {
                     String report =
                             LPVSCommentUtil.reportCommentBuilder(
@@ -103,7 +111,7 @@ public class LPVSDetectService {
                     log.info(report);
                 }
             } catch (Exception ex) {
-                log.info("\n\n\n Single scan finished with errors \n\n\n");
+                log.error("\n\n\n Single scan finished with errors \n\n\n");
                 log.error("Can't triger single scan " + ex);
             }
             // exiting application
