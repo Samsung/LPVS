@@ -9,6 +9,7 @@ package com.lpvs.service;
 import com.lpvs.entity.LPVSFile;
 import com.lpvs.entity.LPVSQueue;
 import com.lpvs.service.scanner.scanoss.LPVSScanossDetectService;
+import com.lpvs.util.LPVSCommentUtil;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -38,10 +39,10 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 @Slf4j
@@ -89,13 +90,19 @@ public class LPVSDetectServiceTest {
         LPVSGitHubConnectionService github_mock = mock(LPVSGitHubConnectionService.class);
         LPVSScanossDetectService scanoss_mock = mock(LPVSScanossDetectService.class);
         LPVSLicenseService licenseservice_mock = mock(LPVSLicenseService.class);
+        GitHub mockGitHub = mock(GitHub.class);
+        GHCommitPointer mockCommitPointer = mock(GHCommitPointer.class);
+        GHRepository mockRepository = mock(GHRepository.class);
+        GHPullRequest mockPullRequest = mock(GHPullRequest.class);
+        GHRepository mockHeadRepository = mock(GHRepository.class);
+
         LPVSQueue webhookConfig;
         final String test_path = "test_path";
 
         LPVSFile lpvs_file_1, lpvs_file_2;
 
         @BeforeEach
-        void setUp() {
+        void setUp() throws IOException {
             detectService =
                     new LPVSDetectService(
                             "scanoss", github_mock, scanoss_mock, licenseservice_mock);
@@ -114,6 +121,7 @@ public class LPVSDetectServiceTest {
 
             when(scanoss_mock.checkLicenses(webhookConfig))
                     .thenReturn(List.of(lpvs_file_1, lpvs_file_2));
+            when(github_mock.connectToGitHubApi()).thenReturn(mockGitHub);
         }
 
         @Test
@@ -143,24 +151,23 @@ public class LPVSDetectServiceTest {
         @Test
         void testRunOneScan_TriggerNotNull() throws Exception {
 
-            // Arrange
-            GitHub mockGitHub = mock(GitHub.class);
-            GHCommitPointer mockCommitPointer = mock(GHCommitPointer.class);
-            when(gitHubConnectionService.connectToGitHubApi()).thenReturn(mockGitHub);
+            LPVSLicenseService.Conflict<String, String> conflict_1 =
+                    new LPVSLicenseService.Conflict<>("MIT", "Apache-2.0");
 
-            setPrivateField(lpvsDetectService, "trigger", "github/owner/repo/branch/123");
-            setPrivateField(lpvsDetectService, "scannerType", "scanoss");
-            setPrivateField(lpvsDetectService, "eventPublisher", mockEventPublisher);
+            List<LPVSLicenseService.Conflict<String, String>> expected =
+                    List.of(conflict_1, conflict_1);
+
+            setPrivateField(detectService, "trigger", "github/owner/repo/branch/123");
+            setPrivateField(detectService, "scannerType", "scanoss");
+            setPrivateField(detectService, "buildReport", "build/report/test.html");
+            setPrivateField(detectService, "eventPublisher", mockEventPublisher);
 
             // Mock the necessary GitHub objects for LPVSQueue
-            GHRepository mockRepository = mock(GHRepository.class);
-            GHPullRequest mockPullRequest = mock(GHPullRequest.class);
             when(mockGitHub.getRepository(any())).thenReturn(mockRepository);
             when(mockRepository.getPullRequest(anyInt())).thenReturn(mockPullRequest);
             when(mockRepository.getPullRequest(anyInt())).thenReturn(mockPullRequest);
             when(mockPullRequest.getHead()).thenReturn(mockCommitPointer);
-
-            GHRepository mockHeadRepository = mock(GHRepository.class);
+            when(licenseservice_mock.findConflicts(webhookConfig, null)).thenReturn(expected);
             when(mockCommitPointer.getRepository()).thenReturn(mockHeadRepository);
             when(mockHeadRepository.getHtmlUrl())
                     .thenReturn(new URL("https://example.com/repo/files"));
@@ -169,11 +176,29 @@ public class LPVSDetectServiceTest {
             String expectedPullRequestUrl = "https://example.com/pull/1";
             when(mockPullRequest.getHtmlUrl()).thenReturn(new URL(expectedPullRequestUrl));
 
-            doNothing().when(scanossDetectService).runScan(any(), anyString());
+            detectService.runOneScan();
 
-            lpvsDetectService.runOneScan();
+            assertDoesNotThrow(() -> detectService.runOneScan());
+        }
 
-            assertDoesNotThrow(() -> lpvsDetectService.runOneScan());
+        @Test
+        void testCommentBuilder_ConflictFilePresent() throws Exception {
+
+            LPVSLicenseService.Conflict<String, String> conflict_1 =
+                    new LPVSLicenseService.Conflict<>("MIT", "Apache-2.0");
+
+            List<LPVSLicenseService.Conflict<String, String>> expected =
+                    List.of(conflict_1, conflict_1);
+
+            LPVSQueue webhookConfig = new LPVSQueue();
+            List<LPVSFile> scanResults = new ArrayList<>();
+            String commentGitHub =
+                    LPVSCommentUtil.reportCommentBuilder(webhookConfig, scanResults, expected);
+            String commentHTML =
+                    LPVSCommentUtil.buildHTMLComment(webhookConfig, scanResults, expected);
+
+            assertNotNull(commentGitHub);
+            assertNotNull(commentHTML);
         }
 
         @Test
@@ -187,6 +212,20 @@ public class LPVSDetectServiceTest {
 
             assertNotNull(result);
             assertEquals(result.getUserId(), "Single scan run");
+        }
+
+        @Test
+        void testGetInternalQueueByPullRequestError() throws IOException {
+            String pullRequest = "github/owner/repo/branch/123";
+
+            when(gitHubConnectionService.connectToGitHubApi()).thenThrow(IOException.class);
+
+            try {
+                LPVSQueue result = lpvsDetectService.getInternalQueueByPullRequest(pullRequest);
+                assertNull(result, "Expected result to be null");
+            } catch (Exception e) {
+                fail("Exception not expected to be thrown here");
+            }
         }
 
         @Test
