@@ -271,7 +271,7 @@ Alternatively, you can perform a one-time scan on a specific pull request using 
 4.b.2. Execute the single scan with the following command:
 
    ```bash
-   java -jar -Dgithub.token=<my-token> lpvs-*.jar --github.pull.request=<PR URL>
+   java -jar -Dgithub.token=<my-token> lpvs-*.jar --github.pull.request=<PR URL> --build.html.report=<Path to report folder>
    ```
 
 4.b.3. By default, the above command requires a pre-configured MySQL database. To avoid setting up the database, use the "singlescan" profile:
