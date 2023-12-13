@@ -9,6 +9,7 @@ package com.lpvs.service;
 import com.lpvs.entity.LPVSFile;
 import com.lpvs.entity.LPVSQueue;
 import com.lpvs.service.scanner.scanoss.LPVSScanossDetectService;
+import com.lpvs.util.LPVSCommentUtil;
 import com.lpvs.util.LPVSFileUtil;
 import com.nimbusds.jose.util.IOUtils;
 
@@ -30,8 +31,11 @@ import javax.annotation.PostConstruct;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -44,10 +48,15 @@ public class LPVSDetectService {
 
     private LPVSGitHubConnectionService gitHubConnectionService;
 
+    private LPVSLicenseService licenseService;
+
     @Autowired private ApplicationEventPublisher eventPublisher;
 
     @Value("${github.pull.request:}")
     private String trigger;
+
+    @Value("${build.html.report:}")
+    private String buildReport;
 
     @Autowired ApplicationContext ctx;
 
@@ -55,10 +64,12 @@ public class LPVSDetectService {
     public LPVSDetectService(
             @Value("${scanner:scanoss}") String scannerType,
             LPVSGitHubConnectionService gitHubConnectionService,
-            LPVSScanossDetectService scanossDetectService) {
+            LPVSScanossDetectService scanossDetectService,
+            LPVSLicenseService licenseService) {
         this.scannerType = scannerType;
         this.gitHubConnectionService = gitHubConnectionService;
         this.scanossDetectService = scanossDetectService;
+        this.licenseService = licenseService;
     }
 
     @PostConstruct
@@ -68,17 +79,24 @@ public class LPVSDetectService {
 
     @EventListener(ApplicationReadyEvent.class)
     public void runOneScan() {
+        log.info("Triggered signle scan operation");
         if (trigger != null && !HtmlUtils.htmlEscape(trigger).equals("")) {
             try {
                 LPVSQueue webhookConfig =
                         this.getInternalQueueByPullRequest(HtmlUtils.htmlEscape(trigger));
-                this.runScan(webhookConfig, LPVSDetectService.getPathByPullRequest(webhookConfig));
-                File scanResult = new File(LPVSFileUtil.getScanResultsJsonFilePath(webhookConfig));
-                if (scanResult.exists()) {
-                    String jsonTxt = IOUtils.readFileToString(scanResult);
-                    // ToDo: form html report and console output
-                    log.info(jsonTxt);
-                    log.info("\n\n\n Single scan finished successfully \n\n\n");
+
+                scanossDetectService.runScan(webhookConfig, LPVSDetectService.getPathByPullRequest(webhookConfig));
+                List<LPVSFile> scanResult = scanossDetectService.checkLicenses(webhookConfig);
+
+                List<LPVSLicenseService.Conflict<String, String>> detectedConflicts =
+                    licenseService.findConflicts(webhookConfig, scanResult);
+
+                if (buildReport != null && !HtmlUtils.htmlEscape(buildReport).equals("") && Files.exists(Paths.get(buildReport))) {
+                    String report = LPVSCommentUtil.buildHTMLComment(webhookConfig, scanResult, detectedConflicts);
+                    LPVSCommentUtil.saveHTMLToFile(report, buildReport + "/LPVSreport.html");                   
+                } else {
+                    String report = LPVSCommentUtil.reportCommentBuilder(webhookConfig, scanResult, detectedConflicts);
+                    log.info(report);
                 }
             } catch (Exception ex) {
                 log.info("\n\n\n Single scan finished with errors \n\n\n");

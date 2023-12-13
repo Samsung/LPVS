@@ -68,7 +68,7 @@ public class LPVSDetectServiceTest {
 
     @Nested
     class TestInit {
-        final LPVSDetectService detectService = new LPVSDetectService("scanoss", null, null);
+        final LPVSDetectService detectService = new LPVSDetectService("scanoss", null, null, null);
 
         @Test
         public void testInit() {
@@ -88,6 +88,7 @@ public class LPVSDetectServiceTest {
         LPVSDetectService detectService;
         LPVSGitHubConnectionService github_mock = mock(LPVSGitHubConnectionService.class);
         LPVSScanossDetectService scanoss_mock = mock(LPVSScanossDetectService.class);
+        LPVSLicenseService licenseservice_mock = mock(LPVSLicenseService.class);
         LPVSQueue webhookConfig;
         final String test_path = "test_path";
 
@@ -95,7 +96,7 @@ public class LPVSDetectServiceTest {
 
         @BeforeEach
         void setUp() {
-            detectService = new LPVSDetectService("scanoss", github_mock, scanoss_mock);
+            detectService = new LPVSDetectService("scanoss", github_mock, scanoss_mock, licenseservice_mock);
 
             webhookConfig = new LPVSQueue();
             webhookConfig.setId(1L);
@@ -116,7 +117,7 @@ public class LPVSDetectServiceTest {
         @Test
         void testRunOneScan_Default() throws NoSuchFieldException, IllegalAccessException {
 
-            lpvsDetectService = spy(new LPVSDetectService("scanoss", null, scanossDetectService));
+            lpvsDetectService = spy(new LPVSDetectService("scanoss", null, scanossDetectService, null));
 
             setPrivateField(lpvsDetectService, "trigger", "fake-trigger-value");
             setPrivateField(lpvsDetectService, "eventPublisher", mockEventPublisher);
@@ -224,13 +225,15 @@ public class LPVSDetectServiceTest {
         LPVSDetectService detectService;
         LPVSGitHubConnectionService github_mock = mock(LPVSGitHubConnectionService.class);
         LPVSScanossDetectService scanoss_mock = mock(LPVSScanossDetectService.class);
+        LPVSLicenseService licenseservice_mock = mock(LPVSLicenseService.class);
+
         LPVSQueue webhookConfig;
         final String test_path = "test_path";
         final String exc_msg = "Test exception for TestRunScan__ScanossException. Normal behavior.";
 
         @BeforeEach
         void setUp() {
-            detectService = new LPVSDetectService("scanoss", github_mock, scanoss_mock);
+            detectService = new LPVSDetectService("scanoss", github_mock, scanoss_mock, licenseservice_mock);
 
             webhookConfig = new LPVSQueue();
             webhookConfig.setId(1L);
@@ -275,7 +278,7 @@ public class LPVSDetectServiceTest {
 
         @BeforeEach
         void setUp() {
-            detectService = new LPVSDetectService("not_scanoss", null, null);
+            detectService = new LPVSDetectService("not_scanoss", null, null, null);
         }
 
         @Test
