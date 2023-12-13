@@ -96,7 +96,9 @@ public class LPVSDetectServiceTest {
 
         @BeforeEach
         void setUp() {
-            detectService = new LPVSDetectService("scanoss", github_mock, scanoss_mock, licenseservice_mock);
+            detectService =
+                    new LPVSDetectService(
+                            "scanoss", github_mock, scanoss_mock, licenseservice_mock);
 
             webhookConfig = new LPVSQueue();
             webhookConfig.setId(1L);
@@ -117,7 +119,8 @@ public class LPVSDetectServiceTest {
         @Test
         void testRunOneScan_Default() throws NoSuchFieldException, IllegalAccessException {
 
-            lpvsDetectService = spy(new LPVSDetectService("scanoss", null, scanossDetectService, null));
+            lpvsDetectService =
+                    spy(new LPVSDetectService("scanoss", null, scanossDetectService, null));
 
             setPrivateField(lpvsDetectService, "trigger", "fake-trigger-value");
             setPrivateField(lpvsDetectService, "eventPublisher", mockEventPublisher);
@@ -233,7 +236,9 @@ public class LPVSDetectServiceTest {
 
         @BeforeEach
         void setUp() {
-            detectService = new LPVSDetectService("scanoss", github_mock, scanoss_mock, licenseservice_mock);
+            detectService =
+                    new LPVSDetectService(
+                            "scanoss", github_mock, scanoss_mock, licenseservice_mock);
 
             webhookConfig = new LPVSQueue();
             webhookConfig.setId(1L);

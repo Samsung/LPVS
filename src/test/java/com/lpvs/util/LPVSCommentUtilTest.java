@@ -96,49 +96,41 @@ public class LPVSCommentUtilTest {
 
     @Test
     void testReportCommentBuilder() {
-        // Mock data for testing
-        LPVSQueue webhookConfig = new LPVSQueue(/* provide necessary parameters */);
+        LPVSQueue webhookConfig = new LPVSQueue();
         List<LPVSFile> scanResults = new ArrayList<>();
         List<LPVSLicenseService.Conflict<String, String>> conflicts = new ArrayList<>();
 
-        // Call the method
-        String comment = LPVSCommentUtil.reportCommentBuilder(webhookConfig, scanResults, conflicts);
+        String comment =
+                LPVSCommentUtil.reportCommentBuilder(webhookConfig, scanResults, conflicts);
 
-        // Assert the result
         assertNotNull(comment);
-        // Add more specific assertions based on the expected behavior of the method
     }
 
     @Test
     void testBuildHTMLComment() {
-        // Mock data for testing
-        LPVSQueue webhookConfig = new LPVSQueue(/* provide necessary parameters */);
+        LPVSQueue webhookConfig = new LPVSQueue();
         List<LPVSFile> scanResults = new ArrayList<>();
         List<LPVSLicenseService.Conflict<String, String>> conflicts = new ArrayList<>();
 
-        // Call the method
-        String htmlComment = LPVSCommentUtil.buildHTMLComment(webhookConfig, scanResults, conflicts);
+        String htmlComment =
+                LPVSCommentUtil.buildHTMLComment(webhookConfig, scanResults, conflicts);
 
-        // Assert the result
         assertNotNull(htmlComment);
-        // Add more specific assertions based on the expected behavior of the method
     }
-    
+
     @Test
     void testSaveHTMLToFile() throws IOException {
-        // Mock data for testing
         String htmlContent = "<html><body><p>Test HTML</p></body></html>";
         String filePath = "test-output.html";
 
-        // Call the method
         LPVSCommentUtil.saveHTMLToFile(htmlContent, filePath);
 
-        // Assert that the file was created and contains the expected content
         assertTrue(Files.exists(Paths.get(filePath)));
         String fileContent = Files.readString(Paths.get(filePath));
         assertEquals(htmlContent, fileContent);
 
         // Clean up: delete the created file
+        // TODO: need to switch to temp folder option
         Files.deleteIfExists(Paths.get(filePath));
     }
 }

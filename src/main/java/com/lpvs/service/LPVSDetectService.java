@@ -11,7 +11,6 @@ import com.lpvs.entity.LPVSQueue;
 import com.lpvs.service.scanner.scanoss.LPVSScanossDetectService;
 import com.lpvs.util.LPVSCommentUtil;
 import com.lpvs.util.LPVSFileUtil;
-import com.nimbusds.jose.util.IOUtils;
 
 import lombok.extern.slf4j.Slf4j;
 import org.kohsuke.github.GHPullRequest;
@@ -29,13 +28,11 @@ import org.springframework.web.util.HtmlUtils;
 
 import javax.annotation.PostConstruct;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -85,17 +82,24 @@ public class LPVSDetectService {
                 LPVSQueue webhookConfig =
                         this.getInternalQueueByPullRequest(HtmlUtils.htmlEscape(trigger));
 
-                scanossDetectService.runScan(webhookConfig, LPVSDetectService.getPathByPullRequest(webhookConfig));
+                scanossDetectService.runScan(
+                        webhookConfig, LPVSDetectService.getPathByPullRequest(webhookConfig));
                 List<LPVSFile> scanResult = scanossDetectService.checkLicenses(webhookConfig);
 
                 List<LPVSLicenseService.Conflict<String, String>> detectedConflicts =
-                    licenseService.findConflicts(webhookConfig, scanResult);
+                        licenseService.findConflicts(webhookConfig, scanResult);
 
-                if (buildReport != null && !HtmlUtils.htmlEscape(buildReport).equals("") && Files.exists(Paths.get(buildReport))) {
-                    String report = LPVSCommentUtil.buildHTMLComment(webhookConfig, scanResult, detectedConflicts);
-                    LPVSCommentUtil.saveHTMLToFile(report, buildReport + "/LPVSreport.html");                   
+                if (buildReport != null
+                        && !HtmlUtils.htmlEscape(buildReport).equals("")
+                        && Files.exists(Paths.get(buildReport))) {
+                    String report =
+                            LPVSCommentUtil.buildHTMLComment(
+                                    webhookConfig, scanResult, detectedConflicts);
+                    LPVSCommentUtil.saveHTMLToFile(report, buildReport + "/LPVSreport.html");
                 } else {
-                    String report = LPVSCommentUtil.reportCommentBuilder(webhookConfig, scanResult, detectedConflicts);
+                    String report =
+                            LPVSCommentUtil.reportCommentBuilder(
+                                    webhookConfig, scanResult, detectedConflicts);
                     log.info(report);
                 }
             } catch (Exception ex) {
