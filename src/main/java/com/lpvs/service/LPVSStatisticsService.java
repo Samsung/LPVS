@@ -25,15 +25,46 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.*;
 
+/**
+ * Service for managing statistics related to LPVSPullRequest entities.
+ */
 @Service
 @Slf4j
 public class LPVSStatisticsService {
+    /**
+     * Repository for storing LPVSPullRequest entities.
+     */
     private LPVSPullRequestRepository lpvsPullRequestRepository;
+
+    /**
+     * Repository for storing LPVSDetectedLicense entities.
+     */
     private LPVSDetectedLicenseRepository lpvsDetectedLicenseRepository;
+
+    /**
+     * Service for checking user authentication and obtaining LPVSMember.
+     */
     private LPVSLoginCheckService loginCheckService;
+
+    /**
+     * Repository for storing LPVSLicense entities.
+     */
     private LPVSLicenseRepository lpvsLicenseRepository;
+
+    /**
+     * Repository for storing LPVSMember entities.
+     */
     private LPVSMemberRepository memberRepository;
 
+    /**
+     * Constructor for LPVSStatisticsService.
+     *
+     * @param lpvsPullRequestRepository      Repository for storing LPVSPullRequest entities.
+     * @param lpvsDetectedLicenseRepository  Repository for storing LPVSDetectedLicense entities.
+     * @param loginCheckService              Service for checking user authentication and obtaining LPVSMember.
+     * @param lpvsLicenseRepository          Repository for storing LPVSLicense entities.
+     * @param memberRepository               Repository for storing LPVSMember entities.
+     */
     public LPVSStatisticsService(
             LPVSPullRequestRepository lpvsPullRequestRepository,
             LPVSDetectedLicenseRepository lpvsDetectedLicenseRepository,
@@ -47,6 +78,14 @@ public class LPVSStatisticsService {
         this.memberRepository = memberRepository;
     }
 
+    /**
+     * Performs a path check based on the specified type and name.
+     *
+     * @param type           The type ("own", "org", or "send").
+     * @param name           The name associated with the path.
+     * @param authentication The authentication details.
+     * @return A list of LPVSPullRequest entities based on the path check.
+     */
     public List<LPVSPullRequest> pathCheck(
             String type, String name, Authentication authentication) {
         LPVSMember findMember = loginCheckService.getMemberFromMemberMap(authentication);
@@ -68,6 +107,14 @@ public class LPVSStatisticsService {
         return prList;
     }
 
+    /**
+     * Retrieves a Dashboard entity based on the specified type, name, and authentication details.
+     *
+     * @param type           The type ("own", "org", or "send").
+     * @param name           The name associated with the path.
+     * @param authentication The authentication details.
+     * @return A Dashboard entity with statistical information.
+     */
     public Dashboard getDashboardEntity(String type, String name, Authentication authentication) {
 
         int totalDetectionCount = 0;
@@ -162,6 +209,12 @@ public class LPVSStatisticsService {
                 dashboardByDates);
     }
 
+    /**
+     * Retrieves the Grade enum based on the specified match value.
+     *
+     * @param match The match value.
+     * @return The Grade enum.
+     */
     public Grade getGrade(String match) {
         int matchValue = Integer.parseInt(match.substring(0, match.length() - 1));
 
@@ -176,6 +229,12 @@ public class LPVSStatisticsService {
         }
     }
 
+    /**
+     * Initializes and returns a default risk grade map with Grade enums as keys and 0 as values.
+     *
+     * @param riskGradeMap The risk grade map to be initialized.
+     * @return The initialized risk grade map.
+     */
     public Map<Grade, Integer> putDefaultriskGradeMap(Map<Grade, Integer> riskGradeMap) {
         riskGradeMap.put(Grade.HIGH, 0);
         riskGradeMap.put(Grade.MIDDLE, 0);

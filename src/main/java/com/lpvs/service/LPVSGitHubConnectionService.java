@@ -17,24 +17,73 @@ import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.util.Optional;
 
+/**
+ * Service class for managing connections to the GitHub API.
+ *
+ * It provides methods to connect to the GitHub API with the specified login and authentication token.
+ */
 @Service
 @Slf4j
 public class LPVSGitHubConnectionService {
 
+    /**
+     * GitHub login username.
+     */
     private String GITHUB_LOGIN;
+
+    /**
+     * GitHub authentication token.
+     */
     private String GITHUB_AUTH_TOKEN;
+
+    /**
+     * GitHub API URL for connecting to a GitHub instance.
+     */
     private String GITHUB_API_URL;
 
+    /**
+     * Name of the GitHub login property.
+     */
     private static final String GITHUB_LOGIN_PROP_NAME = "github.login";
+
+    /**
+     * Name of the GitHub authentication token property.
+     */
     private static final String GITHUB_AUTH_TOKEN_PROP_NAME = "github.token";
+
+    /**
+     * Name of the GitHub API URL property.
+     */
     private static final String GITHUB_API_URL_PROP_NAME = "github.api.url";
 
+    /**
+     * Name of the GitHub login environment variable.
+     */
     private static final String GITHUB_LOGIN_ENV_VAR_NAME = "LPVS_GITHUB_LOGIN";
+
+    /**
+     * Name of the GitHub authentication token environment variable.
+     */
     private static final String GITHUB_AUTH_TOKEN_ENV_VAR_NAME = "LPVS_GITHUB_TOKEN";
+
+    /**
+     * Name of the GitHub API URL environment variable.
+     */
     private static final String GITHUB_API_URL_ENV_VAR_NAME = "LPVS_GITHUB_API_URL";
 
+    /**
+     * Handler for exiting the application.
+     */
     private LPVSExitHandler exitHandler;
 
+    /**
+     * Constructs an instance of LPVSGitHubConnectionService with the specified properties and exit handler.
+     *
+     * @param GITHUB_LOGIN       GitHub login username.
+     * @param GITHUB_AUTH_TOKEN  GitHub authentication token.
+     * @param GITHUB_API_URL     GitHub API URL for connecting to a GitHub Enterprise instance.
+     * @param exitHandler        Handler for exiting the application.
+     */
     @Autowired
     public LPVSGitHubConnectionService(
             @Value("${" + GITHUB_LOGIN_PROP_NAME + "}") String GITHUB_LOGIN,
@@ -62,6 +111,9 @@ public class LPVSGitHubConnectionService {
         this.exitHandler = exitHandler;
     }
 
+    /**
+     * Checks if the GitHub authentication token is set and exits the application if not.
+     */
     @PostConstruct
     private void checks() {
         if (this.GITHUB_AUTH_TOKEN.isEmpty()) {
@@ -74,6 +126,12 @@ public class LPVSGitHubConnectionService {
         }
     }
 
+    /**
+     * Connects to the GitHub API based on the configured login, authentication token, and API URL.
+     *
+     * @return GitHub instance for interacting with the GitHub API.
+     * @throws IOException if an error occurs during the GitHub connection.
+     */
     public GitHub connectToGitHubApi() throws IOException {
         GitHub gH;
         if (GITHUB_AUTH_TOKEN.isEmpty()) setGithubTokenFromEnv();
@@ -85,6 +143,9 @@ public class LPVSGitHubConnectionService {
         return gH;
     }
 
+    /**
+     * Sets the GitHub authentication token from the environment variable if available.
+     */
     public void setGithubTokenFromEnv() {
         if (System.getenv("LPVS_GITHUB_TOKEN") != null)
             GITHUB_AUTH_TOKEN = System.getenv("LPVS_GITHUB_TOKEN");
