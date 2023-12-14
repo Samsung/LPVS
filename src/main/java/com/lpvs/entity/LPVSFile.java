@@ -14,26 +14,86 @@ import lombok.Setter;
 
 import java.util.Set;
 
+/**
+ * Represents a file in the LPVS system.
+ */
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class LPVSFile {
 
+    /**
+     * The unique identifier for the file.
+     */
     private Long id;
+
+    /**
+     * The path of the file.
+     */
     private String filePath;
+
+    /**
+     * The type of snippet in the file.
+     */
     private String snippetType;
-    private String snippetMatch; // in %
+
+    /**
+     * The percentage match of the snippet in the file.
+     */
+    private String snippetMatch;
+
+    /**
+     * The matched lines in the file.
+     */
     private String matchedLines;
+
+    /**
+     * Set of licenses associated with the file.
+     */
     private Set<LPVSLicense> licenses;
+
+    /**
+     * The file path associated with the component.
+     */
     private String componentFilePath;
+
+    /**
+     * The URL of the file path associated with the component.
+     */
     private String componentFileUrl;
+
+    /**
+     * The name of the component.
+     */
     private String componentName;
+
+    /**
+     * The lines associated with the component.
+     */
     private String componentLines;
+
+    /**
+     * The URL associated with the component.
+     */
     private String componentUrl;
+
+    /**
+     * The version of the component.
+     */
     private String componentVersion;
+
+    /**
+     * The vendor of the component.
+     */
     private String componentVendor;
 
+    /**
+     * Converts the set of licenses to a formatted string.
+     *
+     * @param vcs The version control system.
+     * @return A formatted string representing the licenses.
+     */
     public String convertLicensesToString(LPVSVcs vcs) {
         String licenseNames = "";
         for (LPVSLicense license : this.licenses) {

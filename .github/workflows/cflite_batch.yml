@@ -1,4 +1,4 @@
-name: ClusterFuzzLite PR fuzzing
+name: ClusterFuzzLite fuzzing
 
 on:
   push:
@@ -13,7 +13,7 @@ jobs:
       group: ${{ github.workflow }}-${{ matrix.sanitizer }}-${{ github.ref }}
       cancel-in-progress: true
     strategy:
-      fail-fast: false
+      fail-fast: true
       matrix:
         sanitizer:
         - address
@@ -45,7 +45,7 @@ jobs:
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         fuzz-seconds: 60
-        mode: 'code-change'
+        mode: 'batch'
         sanitizer: ${{ matrix.sanitizer }}
         output-sarif: true
         # Optional but recommended: used to download the corpus produced by

@@ -12,10 +12,11 @@ MAVEN_ARGS="-Djavac.src.version=11 -Djavac.target.version=11 -Denforcer.skip=tru
   (cd $PROJECT && $MVN install $MAVEN_ARGS -Dmaven.repo.local=$OUT/m2)
 
   # build classpath
-  $MVN dependency:build-classpath -Dmdep.outputFile=cp.txt -Dmaven.repo.local=$OUT/m2
+  $MVN dependency:build-classpath -DskipTests -Dmdep.outputFile=cp.txt -Dmaven.repo.local=$OUT/m2
 
   cp -r $SRC/lpvs/target/test-classes/ $OUT/
-  RUNTIME_CLASSPATH_ABSOLUTE="$(cat cp.txt):$OUT/test-classes"
+  cp -r $SRC/lpvs/target/classes/ $OUT/
+  RUNTIME_CLASSPATH_ABSOLUTE="$(cat cp.txt):$OUT/test-classes:$OUT/classes"
   RUNTIME_CLASSPATH=$(echo $RUNTIME_CLASSPATH_ABSOLUTE | sed "s|$OUT|\$this_dir|g")
 
   for fuzzer in $(find $SRC -name '*Fuzzer.java'); do
@@ -33,7 +34,7 @@ MAVEN_ARGS="-Djavac.src.version=11 -Djavac.target.version=11 -Denforcer.skip=tru
     LD_LIBRARY_PATH=\"$JVM_LD_LIBRARY_PATH\":\$this_dir \
     \$this_dir/jazzer_driver --agent_path=\$this_dir/jazzer_agent_deploy.jar \
     --cp=$RUNTIME_CLASSPATH \
-    --target_class=com.lpvs.entity.$fuzzer_basename \
+    --target_class=com.lpvs.util.$fuzzer_basename \
     --jvm_args=\"\$mem_settings\" \
     --instrumentation_includes=\"com.**:org.**\" \
     \$@" > $OUT/$fuzzer_basename

@@ -6,7 +6,7 @@
  */
 package com.lpvs.repository;
 
-import com.lpvs.entity.LPVSMember;
+import com.lpvs.entity.auth.LPVSMember;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

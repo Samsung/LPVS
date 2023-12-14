@@ -7,6 +7,8 @@
 package com.lpvs.controller;
 
 import com.lpvs.entity.*;
+import com.lpvs.entity.auth.LPVSLoginMember;
+import com.lpvs.entity.auth.LPVSMember;
 import com.lpvs.entity.dashboard.Dashboard;
 import com.lpvs.entity.history.HistoryEntity;
 import com.lpvs.entity.history.HistoryPageEntity;

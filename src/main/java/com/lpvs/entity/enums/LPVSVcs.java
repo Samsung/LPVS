@@ -6,27 +6,71 @@
  */
 package com.lpvs.entity.enums;
 
+/**
+ * Represents the version control systems (VCS) supported by the LPVS system.
+ * Each VCS corresponds to a specific type of version control platform.
+ */
 public enum LPVSVcs {
+
+    /**
+     * Represents the GitHub version control system.
+     */
     GITHUB("github"),
+
+    /**
+     * Represents the Swarm version control system.
+     */
     SWARM("swarm"),
+
+    /**
+     * Represents the Gerrit version control system.
+     */
     GERRIT("gerrit"),
+
+    /**
+     * Represents the GitLab version control system.
+     */
     GITLAB("gitlab");
 
+    /**
+     * The string representation of the version control system.
+     */
     private final String vcs;
 
+    /**
+     * Constructs an LPVSVcs with the specified VCS type.
+     *
+     * @param vcs The string representation of the version control system.
+     */
     LPVSVcs(final String vcs) {
         this.vcs = vcs;
     }
 
+    /**
+     * Gets the string representation of the version control system.
+     *
+     * @return The string representation of the version control system.
+     */
     public String getVcs() {
         return vcs;
     }
 
+    /**
+     * Returns a string representation of the version control system.
+     *
+     * @return The string representation of the version control system.
+     */
     @Override
     public String toString() {
         return getVcs();
     }
 
+    /**
+     * Converts a string representation of a version control system to the corresponding enum constant.
+     *
+     * @param action The string representation of the version control system.
+     * @return The corresponding LPVSVcs enum constant, or null if not found.
+     */
     public static LPVSVcs convertFrom(String action) {
         if (action.equals(GITHUB.getVcs())) {
             return GITHUB;
