@@ -75,6 +75,14 @@ public class LPVSCommentUtil {
         return matchedLines;
     }
 
+    /**
+     * Generates a formatted string for LPVS github comment.
+     *
+     * @param webhookConfig The {@link LPVSQueue} configuration for the webhook.
+     * @param scanResults   The List<{@link LPVSFile}> contain preformatted scan results.
+     * @param conflicts     The List<{@link LPVSLicenseService}.Conflict<String, String>> contain license conflict information.
+     * @return A string containing scan result in github friendly format.
+     */
     public static String reportCommentBuilder(
             LPVSQueue webhookConfig,
             List<LPVSFile> scanResults,
@@ -123,6 +131,14 @@ public class LPVSCommentUtil {
         return commitComment;
     }
 
+    /**
+     * Generates a formatted string for html report with scan results.
+     *
+     * @param webhookConfig The {@link LPVSQueue} configuration for the webhook.
+     * @param scanResults   The List<{@link LPVSFile}> contain preformatted scan results.
+     * @param conflicts     The List<{@link LPVSLicenseService}.Conflict<String, String>> contain license conflict information.
+     * @return A string containing scan result in html format.
+     */
     public static String buildHTMLComment(
             LPVSQueue webhookConfig,
             List<LPVSFile> scanResults,
@@ -184,6 +200,12 @@ public class LPVSCommentUtil {
         return htmlBuilder.toString();
     }
 
+    /**
+     * Saves HTML report to given location.
+     *
+     * @param htmlContent   The string, containing report in HTML format.
+     * @param scanResults   The path to expected html report file.
+     */
     public static void saveHTMLToFile(String htmlContent, String filePath) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
             writer.write(htmlContent);

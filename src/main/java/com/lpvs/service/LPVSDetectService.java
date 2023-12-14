@@ -54,7 +54,7 @@ public class LPVSDetectService {
     private String trigger;
 
     @Value("${build.html.report:}")
-    private String buildReport;
+    private String htmlReport;
 
     @Autowired ApplicationContext ctx;
 
@@ -83,14 +83,16 @@ public class LPVSDetectService {
                 LPVSQueue webhookConfig =
                         this.getInternalQueueByPullRequest(HtmlUtils.htmlEscape(trigger));
 
-                this.runScan(webhookConfig, LPVSDetectService.getPathByPullRequest(webhookConfig));
-                List<LPVSFile> scanResult = scanossDetectService.checkLicenses(webhookConfig);
+                List<LPVSFile> scanResult =
+                        this.runScan(
+                                webhookConfig,
+                                LPVSDetectService.getPathByPullRequest(webhookConfig));
 
                 List<LPVSLicenseService.Conflict<String, String>> detectedConflicts =
                         licenseService.findConflicts(webhookConfig, scanResult);
 
-                if (buildReport != null && !HtmlUtils.htmlEscape(buildReport).equals("")) {
-                    Path buildReportPath = Paths.get(buildReport);
+                if (htmlReport != null && !HtmlUtils.htmlEscape(htmlReport).equals("")) {
+                    Path buildReportPath = Paths.get(htmlReport);
                     Path parentDirectory = buildReportPath.getParent();
 
                     if (parentDirectory != null && Files.isDirectory(parentDirectory)) {

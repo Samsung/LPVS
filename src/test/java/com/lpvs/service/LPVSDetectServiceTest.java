@@ -159,7 +159,7 @@ public class LPVSDetectServiceTest {
 
             setPrivateField(detectService, "trigger", "github/owner/repo/branch/123");
             setPrivateField(detectService, "scannerType", "scanoss");
-            setPrivateField(detectService, "buildReport", "build/report/test.html");
+            setPrivateField(detectService, "htmlReport", "build/report/test.html");
             setPrivateField(detectService, "eventPublisher", mockEventPublisher);
 
             // Mock the necessary GitHub objects for LPVSQueue
