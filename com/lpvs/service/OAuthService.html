@@ -140,6 +140,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 public class <span class="typeNameLabel">OAuthService</span>
 extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>
 implements org.springframework.security.oauth2.client.userinfo.OAuth2UserService&lt;org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest,&#8203;org.springframework.security.oauth2.core.user.OAuth2User&gt;</pre>
+<div class="block">Service for handling OAuth2 user information.</div>
 </li>
 </ul>
 </div>
@@ -161,7 +162,9 @@ implements org.springframework.security.oauth2.client.userinfo.OAuth2UserService
 </tr>
 <tr class="altColor">
 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(com.lpvs.repository.LPVSMemberRepository)">OAuthService</a></span>&#8203;(<a href="../repository/LPVSMemberRepository.html" title="interface in com.lpvs.repository">LPVSMemberRepository</a>&nbsp;lpvsMemberRepository)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Constructor for OAuthService.</div>
+</td>
 </tr>
 </table>
 </li>
@@ -184,7 +187,9 @@ implements org.springframework.security.oauth2.client.userinfo.OAuth2UserService
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>org.springframework.security.oauth2.core.user.OAuth2User</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#loadUser(org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest)">loadUser</a></span>&#8203;(org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest&nbsp;userRequest)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Loads user information from the OAuth2 provider.</div>
+</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -218,6 +223,11 @@ implements org.springframework.security.oauth2.client.userinfo.OAuth2UserService
 <h4>OAuthService</h4>
 <pre>@Autowired
 public&nbsp;OAuthService&#8203;(<a href="../repository/LPVSMemberRepository.html" title="interface in com.lpvs.repository">LPVSMemberRepository</a>&nbsp;lpvsMemberRepository)</pre>
+<div class="block">Constructor for OAuthService.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>lpvsMemberRepository</code> - Repository for storing LPVSMember entities.</dd>
+</dl>
 </li>
 </ul>
 </li>
@@ -238,11 +248,16 @@ public&nbsp;OAuthService&#8203;(<a href="../repository/LPVSMemberRepository.html
 <h4>loadUser</h4>
 <pre class="methodSignature">public&nbsp;org.springframework.security.oauth2.core.user.OAuth2User&nbsp;loadUser&#8203;(org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest&nbsp;userRequest)
                                                                   throws org.springframework.security.oauth2.core.OAuth2AuthenticationException</pre>
+<div class="block">Loads user information from the OAuth2 provider.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>loadUser</code>&nbsp;in interface&nbsp;<code>org.springframework.security.oauth2.client.userinfo.OAuth2UserService&lt;org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest,&#8203;org.springframework.security.oauth2.core.user.OAuth2User&gt;</code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>userRequest</code> - The OAuth2 user request.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>OAuth2User with custom attributes.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code>org.springframework.security.oauth2.core.OAuth2AuthenticationException</code></dd>
+<dd><code>org.springframework.security.oauth2.core.OAuth2AuthenticationException</code> - If an OAuth2 authentication error occurs.</dd>
 </dl>
 </li>
 </ul>

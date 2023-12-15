@@ -135,6 +135,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <pre>@Service
 public class <span class="typeNameLabel">LPVSStatisticsService</span>
 extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></pre>
+<div class="block">Service for managing statistics related to LPVSPullRequest entities.</div>
 </li>
 </ul>
 </div>
@@ -160,7 +161,9 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
                      <a href="LPVSLoginCheckService.html" title="class in com.lpvs.service">LPVSLoginCheckService</a>&nbsp;loginCheckService,
                      <a href="../repository/LPVSLicenseRepository.html" title="interface in com.lpvs.repository">LPVSLicenseRepository</a>&nbsp;lpvsLicenseRepository,
                      <a href="../repository/LPVSMemberRepository.html" title="interface in com.lpvs.repository">LPVSMemberRepository</a>&nbsp;memberRepository)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Constructor for LPVSStatisticsService.</div>
+</td>
 </tr>
 </table>
 </li>
@@ -185,24 +188,32 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getDashboardEntity(java.lang.String,java.lang.String,org.springframework.security.core.Authentication)">getDashboardEntity</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;type,
                   <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;name,
                   org.springframework.security.core.Authentication&nbsp;authentication)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Retrieves a Dashboard entity based on the specified type, name, and authentication details.</div>
+</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="../entity/enums/Grade.html" title="enum in com.lpvs.entity.enums">Grade</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getGrade(java.lang.String)">getGrade</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;match)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Retrieves the Grade enum based on the specified match value.</div>
+</td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../entity/LPVSPullRequest.html" title="class in com.lpvs.entity">LPVSPullRequest</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#pathCheck(java.lang.String,java.lang.String,org.springframework.security.core.Authentication)">pathCheck</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;type,
          <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;name,
          org.springframework.security.core.Authentication&nbsp;authentication)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Performs a path check based on the specified type and name.</div>
+</td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Map.html?is-external=true" title="class or interface in java.util" class="externalLink">Map</a>&lt;<a href="../entity/enums/Grade.html" title="enum in com.lpvs.entity.enums">Grade</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#putDefaultriskGradeMap(java.util.Map)">putDefaultriskGradeMap</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Map.html?is-external=true" title="class or interface in java.util" class="externalLink">Map</a>&lt;<a href="../entity/enums/Grade.html" title="enum in com.lpvs.entity.enums">Grade</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>&gt;&nbsp;riskGradeMap)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Initializes and returns a default risk grade map with Grade enums as keys and 0 as values.</div>
+</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -239,6 +250,15 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
                              <a href="LPVSLoginCheckService.html" title="class in com.lpvs.service">LPVSLoginCheckService</a>&nbsp;loginCheckService,
                              <a href="../repository/LPVSLicenseRepository.html" title="interface in com.lpvs.repository">LPVSLicenseRepository</a>&nbsp;lpvsLicenseRepository,
                              <a href="../repository/LPVSMemberRepository.html" title="interface in com.lpvs.repository">LPVSMemberRepository</a>&nbsp;memberRepository)</pre>
+<div class="block">Constructor for LPVSStatisticsService.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>lpvsPullRequestRepository</code> - Repository for storing LPVSPullRequest entities.</dd>
+<dd><code>lpvsDetectedLicenseRepository</code> - Repository for storing LPVSDetectedLicense entities.</dd>
+<dd><code>loginCheckService</code> - Service for checking user authentication and obtaining LPVSMember.</dd>
+<dd><code>lpvsLicenseRepository</code> - Repository for storing LPVSLicense entities.</dd>
+<dd><code>memberRepository</code> - Repository for storing LPVSMember entities.</dd>
+</dl>
 </li>
 </ul>
 </li>
@@ -260,6 +280,15 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <pre class="methodSignature">public&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../entity/LPVSPullRequest.html" title="class in com.lpvs.entity">LPVSPullRequest</a>&gt;&nbsp;pathCheck&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;type,
                                        <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;name,
                                        org.springframework.security.core.Authentication&nbsp;authentication)</pre>
+<div class="block">Performs a path check based on the specified type and name.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>type</code> - The type ("own", "org", or "send").</dd>
+<dd><code>name</code> - The name associated with the path.</dd>
+<dd><code>authentication</code> - The authentication details.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>A list of LPVSPullRequest entities based on the path check.</dd>
+</dl>
 </li>
 </ul>
 <a id="getDashboardEntity(java.lang.String,java.lang.String,org.springframework.security.core.Authentication)">
@@ -271,6 +300,15 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <pre class="methodSignature">public&nbsp;<a href="../entity/dashboard/Dashboard.html" title="class in com.lpvs.entity.dashboard">Dashboard</a>&nbsp;getDashboardEntity&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;type,
                                     <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;name,
                                     org.springframework.security.core.Authentication&nbsp;authentication)</pre>
+<div class="block">Retrieves a Dashboard entity based on the specified type, name, and authentication details.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>type</code> - The type ("own", "org", or "send").</dd>
+<dd><code>name</code> - The name associated with the path.</dd>
+<dd><code>authentication</code> - The authentication details.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>A Dashboard entity with statistical information.</dd>
+</dl>
 </li>
 </ul>
 <a id="getGrade(java.lang.String)">
@@ -280,6 +318,13 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <li class="blockList">
 <h4>getGrade</h4>
 <pre class="methodSignature">public&nbsp;<a href="../entity/enums/Grade.html" title="enum in com.lpvs.entity.enums">Grade</a>&nbsp;getGrade&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;match)</pre>
+<div class="block">Retrieves the Grade enum based on the specified match value.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>match</code> - The match value.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The Grade enum.</dd>
+</dl>
 </li>
 </ul>
 <a id="putDefaultriskGradeMap(java.util.Map)">
@@ -289,6 +334,13 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <li class="blockList">
 <h4>putDefaultriskGradeMap</h4>
 <pre class="methodSignature">public&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Map.html?is-external=true" title="class or interface in java.util" class="externalLink">Map</a>&lt;<a href="../entity/enums/Grade.html" title="enum in com.lpvs.entity.enums">Grade</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>&gt;&nbsp;putDefaultriskGradeMap&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Map.html?is-external=true" title="class or interface in java.util" class="externalLink">Map</a>&lt;<a href="../entity/enums/Grade.html" title="enum in com.lpvs.entity.enums">Grade</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>&gt;&nbsp;riskGradeMap)</pre>
+<div class="block">Initializes and returns a default risk grade map with Grade enums as keys and 0 as values.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>riskGradeMap</code> - The risk grade map to be initialized.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The initialized risk grade map.</dd>
+</dl>
 </li>
 </ul>
 </li>

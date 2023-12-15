@@ -132,12 +132,18 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <ul class="blockList">
 <li class="blockList">
 <dl>
+<dt><span class="paramLabel">Type Parameters:</span></dt>
+<dd><code>License1</code> - Type of the first license.</dd>
+<dd><code>License2</code> - Type of the second license.</dd>
+</dl>
+<dl>
 <dt>Enclosing class:</dt>
 <dd><a href="LPVSLicenseService.html" title="class in com.lpvs.service">LPVSLicenseService</a></dd>
 </dl>
 <hr>
 <pre>public static class <span class="typeNameLabel">LPVSLicenseService.Conflict&lt;License1,&#8203;License2&gt;</span>
 extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></pre>
+<div class="block">Represents a license conflict between two licenses.</div>
 </li>
 </ul>
 </div>
@@ -161,12 +167,16 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <tr class="altColor">
 <td class="colFirst"><code><a href="LPVSLicenseService.Conflict.html" title="type parameter in LPVSLicenseService.Conflict">License1</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#l1">l1</a></span></code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">The first license in the conflict.</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="LPVSLicenseService.Conflict.html" title="type parameter in LPVSLicenseService.Conflict">License2</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#l2">l2</a></span></code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">The second license in the conflict.</div>
+</td>
 </tr>
 </table>
 </li>
@@ -189,12 +199,16 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#equals(java.lang.Object)">equals</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;o)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Compares this Conflict object with another object for equality.</div>
+</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hashCode()">hashCode</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Generates a hash code value for this Conflict object.</div>
+</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -227,6 +241,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <li class="blockList">
 <h4>l1</h4>
 <pre>public&nbsp;<a href="LPVSLicenseService.Conflict.html" title="type parameter in LPVSLicenseService.Conflict">License1</a> l1</pre>
+<div class="block">The first license in the conflict.</div>
 </li>
 </ul>
 <a id="l2">
@@ -236,6 +251,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <li class="blockList">
 <h4>l2</h4>
 <pre>public&nbsp;<a href="LPVSLicenseService.Conflict.html" title="type parameter in LPVSLicenseService.Conflict">License2</a> l2</pre>
+<div class="block">The second license in the conflict.</div>
 </li>
 </ul>
 </li>
@@ -255,9 +271,14 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <li class="blockList">
 <h4>equals</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;equals&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;o)</pre>
+<div class="block">Compares this Conflict object with another object for equality.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang" class="externalLink">equals</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>o</code> - The object to compare with this Conflict.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd><code>true</code> if the objects are equal, <code>false</code> otherwise.</dd>
 </dl>
 </li>
 </ul>
@@ -268,9 +289,13 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <li class="blockList">
 <h4>hashCode</h4>
 <pre class="methodSignature">public&nbsp;int&nbsp;hashCode()</pre>
+<div class="block">Generates a hash code value for this Conflict object.
+ The hash code is computed based on the hash codes of the two licenses.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang" class="externalLink">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>A hash code value for this Conflict object.</dd>
 </dl>
 </li>
 </ul>

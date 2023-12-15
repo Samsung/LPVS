@@ -108,11 +108,16 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <tbody>
 <tr class="altColor">
 <th class="colFirst" scope="row"><a href="#com.lpvs.service">com.lpvs.service</a></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">This package contains services responsible for various business logic and functionality
+ within the LPVS application.</div>
+</td>
 </tr>
 <tr class="rowColor">
 <th class="colFirst" scope="row"><a href="#com.lpvs.service.scanner.scanoss">com.lpvs.service.scanner.scanoss</a></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">The <code>scanoss</code> package contains services and utilities related to the Scanoss scanner integration.</div>
+</td>
 </tr>
 <tr class="altColor">
 <th class="colFirst" scope="row"><a href="#com.lpvs.util">com.lpvs.util</a></th>
@@ -142,7 +147,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../LPVSFile.html" title="class in com.lpvs.entity">LPVSFile</a>&gt;</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">LPVSDetectService.</span><code><span class="memberNameLink"><a href="../../service/LPVSDetectService.html#runScan(com.lpvs.entity.LPVSQueue,java.lang.String)">runScan</a></span>&#8203;(<a href="../LPVSQueue.html" title="class in com.lpvs.entity">LPVSQueue</a>&nbsp;webhookConfig,
        <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;path)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Runs a license scan based on the selected scanner type.</div>
+</td>
 </tr>
 </tbody>
 </table>
@@ -160,13 +167,17 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
               <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../LPVSFile.html" title="class in com.lpvs.entity">LPVSFile</a>&gt;&nbsp;scanResults,
               <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../../service/LPVSLicenseService.Conflict.html" title="class in com.lpvs.service">LPVSLicenseService.Conflict</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt;&gt;&nbsp;conflicts,
               <a href="../LPVSPullRequest.html" title="class in com.lpvs.entity">LPVSPullRequest</a>&nbsp;lpvsPullRequest)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Comments on the pull request with the scan results and detected issues.</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../../service/LPVSLicenseService.Conflict.html" title="class in com.lpvs.service">LPVSLicenseService.Conflict</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt;&gt;</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">LPVSLicenseService.</span><code><span class="memberNameLink"><a href="../../service/LPVSLicenseService.html#findConflicts(com.lpvs.entity.LPVSQueue,java.util.List)">findConflicts</a></span>&#8203;(<a href="../LPVSQueue.html" title="class in com.lpvs.entity">LPVSQueue</a>&nbsp;webhookConfig,
              <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../LPVSFile.html" title="class in com.lpvs.entity">LPVSFile</a>&gt;&nbsp;scanResults)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Finds license conflicts based on the provided scan results and repository information.</div>
+</td>
 </tr>
 </tbody>
 </table>
@@ -188,7 +199,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <tr class="altColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../LPVSFile.html" title="class in com.lpvs.entity">LPVSFile</a>&gt;</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">LPVSScanossDetectService.</span><code><span class="memberNameLink"><a href="../../service/scanner/scanoss/LPVSScanossDetectService.html#checkLicenses(com.lpvs.entity.LPVSQueue)">checkLicenses</a></span>&#8203;(<a href="../LPVSQueue.html" title="class in com.lpvs.entity">LPVSQueue</a>&nbsp;webhookConfig)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Checks the licenses detected by Scanoss and returns a list of LPVSFile entities.</div>
+</td>
 </tr>
 </tbody>
 </table>

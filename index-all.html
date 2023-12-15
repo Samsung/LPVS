@@ -99,13 +99,21 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <h2 class="title">A</h2>
 <dl>
 <dt><span class="memberNameLink"><a href="com/lpvs/service/LPVSQueueService.html#add(com.lpvs.entity.LPVSQueue)">add(LPVSQueue)</a></span> - Method in class com.lpvs.service.<a href="com/lpvs/service/LPVSQueueService.html" title="class in com.lpvs.service">LPVSQueueService</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Adds the LPVSQueue element to the end of the queue.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/service/LPVSQueueService.html#addFirst(com.lpvs.entity.LPVSQueue)">addFirst(LPVSQueue)</a></span> - Method in class com.lpvs.service.<a href="com/lpvs/service/LPVSQueueService.html" title="class in com.lpvs.service">LPVSQueueService</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Adds the LPVSQueue element to the front of the queue.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/service/LPVSLicenseService.html#addLicenseConflict(java.lang.String,java.lang.String)">addLicenseConflict(String, String)</a></span> - Method in class com.lpvs.service.<a href="com/lpvs/service/LPVSLicenseService.html" title="class in com.lpvs.service">LPVSLicenseService</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Adds a license conflict to the list of conflicts.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/service/LPVSLicenseService.html#addLicenseToList(com.lpvs.entity.LPVSLicense)">addLicenseToList(LPVSLicense)</a></span> - Method in class com.lpvs.service.<a href="com/lpvs/service/LPVSLicenseService.html" title="class in com.lpvs.service">LPVSLicenseService</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Adds a license to the list of licenses.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/entity/LPVSDiffFile.html#appendPatchedLine(java.lang.String)">appendPatchedLine(String)</a></span> - Method in class com.lpvs.entity.<a href="com/lpvs/entity/LPVSDiffFile.html" title="class in com.lpvs.entity">LPVSDiffFile</a></dt>
 <dd>
 <div class="block">Appends a patched line to the list of changed lines.</div>
@@ -117,11 +125,17 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <h2 class="title">C</h2>
 <dl>
 <dt><span class="memberNameLink"><a href="com/lpvs/service/LPVSQueueService.html#checkForQueue()">checkForQueue()</a></span> - Method in class com.lpvs.service.<a href="com/lpvs/service/LPVSQueueService.html" title="class in com.lpvs.service">LPVSQueueService</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Checks for any previous LPVSQueue elements and processes them.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/service/LPVSLicenseService.html#checkLicense(java.lang.String)">checkLicense(String)</a></span> - Method in class com.lpvs.service.<a href="com/lpvs/service/LPVSLicenseService.html" title="class in com.lpvs.service">LPVSLicenseService</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Checks a license by SPDX identifier and returns the corresponding license object.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/service/scanner/scanoss/LPVSScanossDetectService.html#checkLicenses(com.lpvs.entity.LPVSQueue)">checkLicenses(LPVSQueue)</a></span> - Method in class com.lpvs.service.scanner.scanoss.<a href="com/lpvs/service/scanner/scanoss/LPVSScanossDetectService.html" title="class in com.lpvs.service.scanner.scanoss">LPVSScanossDetectService</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Checks the licenses detected by Scanoss and returns a list of LPVSFile entities.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/util/LPVSWebhookUtil.html#checkPayload(java.lang.String)">checkPayload(String)</a></span> - Static method in class com.lpvs.util.<a href="com/lpvs/util/LPVSWebhookUtil.html" title="class in com.lpvs.util">LPVSWebhookUtil</a></dt>
 <dd>
 <div class="block">Checks if the provided payload represents a valid GitHub webhook event that LPVS can handle.</div>
@@ -175,21 +189,30 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">This package contains repository interfaces responsible for managing data access and persistence for the application.</div>
 </dd>
 <dt><a href="com/lpvs/service/package-summary.html">com.lpvs.service</a> - package com.lpvs.service</dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">This package contains services responsible for various business logic and functionality
+ within the LPVS application.</div>
+</dd>
 <dt><a href="com/lpvs/service/scanner/scanoss/package-summary.html">com.lpvs.service.scanner.scanoss</a> - package com.lpvs.service.scanner.scanoss</dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">The <code>scanoss</code> package contains services and utilities related to the Scanoss scanner integration.</div>
+</dd>
 <dt><a href="com/lpvs/util/package-summary.html">com.lpvs.util</a> - package com.lpvs.util</dt>
 <dd>
 <div class="block">This package contains utility classes used across the LPVS (License Plate Verification Service) application.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/service/LPVSGitHubService.html#commentResults(com.lpvs.entity.LPVSQueue,java.util.List,java.util.List,com.lpvs.entity.LPVSPullRequest)">commentResults(LPVSQueue, List&lt;LPVSFile&gt;, List&lt;LPVSLicenseService.Conflict&lt;String, String&gt;&gt;, LPVSPullRequest)</a></span> - Method in class com.lpvs.service.<a href="com/lpvs/service/LPVSGitHubService.html" title="class in com.lpvs.service">LPVSGitHubService</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Comments on the pull request with the scan results and detected issues.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/entity/enums/LPVSPullRequestStatus.html#COMPLETED">COMPLETED</a></span> - com.lpvs.entity.enums.<a href="com/lpvs/entity/enums/LPVSPullRequestStatus.html" title="enum in com.lpvs.entity.enums">LPVSPullRequestStatus</a></dt>
 <dd>
 <div class="block">Indicates that the scan of the pull request has been completed.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/service/LPVSGitHubConnectionService.html#connectToGitHubApi()">connectToGitHubApi()</a></span> - Method in class com.lpvs.service.<a href="com/lpvs/service/LPVSGitHubConnectionService.html" title="class in com.lpvs.service">LPVSGitHubConnectionService</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Connects to the GitHub API based on the configured login, authentication token, and API URL.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/entity/enums/LPVSPullRequestAction.html#convertFrom(java.lang.String)">convertFrom(String)</a></span> - Static method in enum com.lpvs.entity.enums.<a href="com/lpvs/entity/enums/LPVSPullRequestAction.html" title="enum in com.lpvs.entity.enums">LPVSPullRequestAction</a></dt>
 <dd>
 <div class="block">Converts a string representation of a pull request action to the corresponding enum constant.</div>
@@ -219,9 +242,13 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">Count the number of pull requests with the specified sender or pull request head.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/service/scanner/scanoss/LPVSScanossDetectService.html#createBufferReader(java.io.InputStreamReader)">createBufferReader(InputStreamReader)</a></span> - Method in class com.lpvs.service.scanner.scanoss.<a href="com/lpvs/service/scanner/scanoss/LPVSScanossDetectService.html" title="class in com.lpvs.service.scanner.scanoss">LPVSScanossDetectService</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Creates a BufferedReader for the given InputStreamReader.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/service/scanner/scanoss/LPVSScanossDetectService.html#createInputStreamReader(java.lang.Process)">createInputStreamReader(Process)</a></span> - Method in class com.lpvs.service.scanner.scanoss.<a href="com/lpvs/service/scanner/scanoss/LPVSScanossDetectService.html" title="class in com.lpvs.service.scanner.scanoss">LPVSScanossDetectService</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Creates an InputStreamReader for the given process, handling UTF-8 encoding.</div>
+</dd>
 </dl>
 <a id="I:D">
 <!--   -->
@@ -247,9 +274,13 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="com/lpvs/entity/dashboard/DashboardElementsByDate.html#%3Cinit%3E()">DashboardElementsByDate()</a></span> - Constructor for class com.lpvs.entity.dashboard.<a href="com/lpvs/entity/dashboard/DashboardElementsByDate.html" title="class in com.lpvs.entity.dashboard">DashboardElementsByDate</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/service/LPVSLoginCheckService.html#dateTimeFormatting(java.time.LocalDateTime)">dateTimeFormatting(LocalDateTime)</a></span> - Method in class com.lpvs.service.<a href="com/lpvs/service/LPVSLoginCheckService.html" title="class in com.lpvs.service">LPVSLoginCheckService</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Format LocalDateTime object as a string.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/service/LPVSQueueService.html#delete(com.lpvs.entity.LPVSQueue)">delete(LPVSQueue)</a></span> - Method in class com.lpvs.service.<a href="com/lpvs/service/LPVSQueueService.html" title="class in com.lpvs.service">LPVSQueueService</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Deletes the LPVSQueue element from the repository and the queue.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/util/LPVSFileUtil.html#deleteIfExists(java.lang.String)">deleteIfExists(String)</a></span> - Static method in class com.lpvs.util.<a href="com/lpvs/util/LPVSFileUtil.html" title="class in com.lpvs.util">LPVSFileUtil</a></dt>
 <dd>
 <div class="block">Deletes the specified directory if it exists.</div>
@@ -269,7 +300,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">Checks if this queue item is equal to another object based on specific criteria.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/service/LPVSLicenseService.Conflict.html#equals(java.lang.Object)">equals(Object)</a></span> - Method in class com.lpvs.service.<a href="com/lpvs/service/LPVSLicenseService.Conflict.html" title="class in com.lpvs.service">LPVSLicenseService.Conflict</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Compares this Conflict object with another object for equality.</div>
+</dd>
 <dt><a href="com/lpvs/exception/ErrorResponse.html" title="class in com.lpvs.exception"><span class="typeNameLink">ErrorResponse</span></a> - Class in <a href="com/lpvs/exception/package-summary.html">com.lpvs.exception</a></dt>
 <dd>
 <div class="block">Represents an error response containing details about an encountered exception.</div>
@@ -329,15 +362,21 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">Find all pull requests with the specified sender or pull request head, paginated.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/service/LPVSLicenseService.html#findConflicts(com.lpvs.entity.LPVSQueue,java.util.List)">findConflicts(LPVSQueue, List&lt;LPVSFile&gt;)</a></span> - Method in class com.lpvs.service.<a href="com/lpvs/service/LPVSLicenseService.html" title="class in com.lpvs.service">LPVSLicenseService</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Finds license conflicts based on the provided scan results and repository information.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/repository/LPVSDetectedLicenseRepository.html#findDistinctByLicense(com.lpvs.entity.LPVSPullRequest)">findDistinctByLicense(LPVSPullRequest)</a></span> - Method in interface com.lpvs.repository.<a href="com/lpvs/repository/LPVSDetectedLicenseRepository.html" title="interface in com.lpvs.repository">LPVSDetectedLicenseRepository</a></dt>
 <dd>
 <div class="block">Find distinct licenses associated with a specific pull request.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/service/LPVSLicenseService.html#findLicenseByName(java.lang.String)">findLicenseByName(String)</a></span> - Method in class com.lpvs.service.<a href="com/lpvs/service/LPVSLicenseService.html" title="class in com.lpvs.service">LPVSLicenseService</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Finds a license by its name.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/service/LPVSLicenseService.html#findLicenseBySPDX(java.lang.String)">findLicenseBySPDX(String)</a></span> - Method in class com.lpvs.service.<a href="com/lpvs/service/LPVSLicenseService.html" title="class in com.lpvs.service">LPVSLicenseService</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Finds a license by SPDX identifier.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/repository/LPVSLicenseConflictRepository.html#findLicenseConflict(java.lang.Long,java.lang.Long)">findLicenseConflict(Long, Long)</a></span> - Method in interface com.lpvs.repository.<a href="com/lpvs/repository/LPVSLicenseConflictRepository.html" title="interface in com.lpvs.repository">LPVSLicenseConflictRepository</a></dt>
 <dd>
 <div class="block">Find a specific license conflict between two licenses.</div>
@@ -365,17 +404,25 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">Configures and retrieves an asynchronous task executor bean.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/service/LPVSStatisticsService.html#getDashboardEntity(java.lang.String,java.lang.String,org.springframework.security.core.Authentication)">getDashboardEntity(String, String, Authentication)</a></span> - Method in class com.lpvs.service.<a href="com/lpvs/service/LPVSStatisticsService.html" title="class in com.lpvs.service">LPVSStatisticsService</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Retrieves a Dashboard entity based on the specified type, name, and authentication details.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/util/LPVSWebhookUtil.html#getGitHubWebhookConfig(java.lang.String)">getGitHubWebhookConfig(String)</a></span> - Static method in class com.lpvs.util.<a href="com/lpvs/util/LPVSWebhookUtil.html" title="class in com.lpvs.util">LPVSWebhookUtil</a></dt>
 <dd>
 <div class="block">Parses the GitHub webhook payload and extracts relevant information to create an LPVSQueue object.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/service/LPVSStatisticsService.html#getGrade(java.lang.String)">getGrade(String)</a></span> - Method in class com.lpvs.service.<a href="com/lpvs/service/LPVSStatisticsService.html" title="class in com.lpvs.service">LPVSStatisticsService</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Retrieves the Grade enum based on the specified match value.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/service/LPVSDetectService.html#getInternalQueueByPullRequest(java.lang.String)">getInternalQueueByPullRequest(String)</a></span> - Method in class com.lpvs.service.<a href="com/lpvs/service/LPVSDetectService.html" title="class in com.lpvs.service">LPVSDetectService</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Retrieves the LPVSQueue configuration for a given GitHub pull request URL.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/service/LPVSQueueService.html#getLatestScan(java.util.List)">getLatestScan(List&lt;LPVSQueue&gt;)</a></span> - Method in class com.lpvs.service.<a href="com/lpvs/service/LPVSQueueService.html" title="class in com.lpvs.service">LPVSQueueService</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Gets the LPVSQueue element with the latest scan date.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/util/LPVSFileUtil.html#getLocalDirectoryPath(com.lpvs.entity.LPVSQueue)">getLocalDirectoryPath(LPVSQueue)</a></span> - Static method in class com.lpvs.util.<a href="com/lpvs/util/LPVSFileUtil.html" title="class in com.lpvs.util">LPVSFileUtil</a></dt>
 <dd>
 <div class="block">Retrieves the local directory path based on the provided webhook configuration.</div>
@@ -385,7 +432,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">Generates a formatted string containing links to matched lines in a file.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/service/LPVSLoginCheckService.html#getMemberFromMemberMap(org.springframework.security.core.Authentication)">getMemberFromMemberMap(Authentication)</a></span> - Method in class com.lpvs.service.<a href="com/lpvs/service/LPVSLoginCheckService.html" title="class in com.lpvs.service">LPVSLoginCheckService</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Get an LPVSMember from the OAuth login member map.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/entity/LPVSResponseWrapper.html#getMessage()">getMessage()</a></span> - Method in class com.lpvs.entity.<a href="com/lpvs/entity/LPVSResponseWrapper.html" title="class in com.lpvs.entity">LPVSResponseWrapper</a></dt>
 <dd>
 <div class="block">Retrieves the message from the response wrapper.</div>
@@ -395,15 +444,21 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">Get the current date and time from the database.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/service/LPVSLoginCheckService.html#getOauthLoginMemberMap(org.springframework.security.core.Authentication)">getOauthLoginMemberMap(Authentication)</a></span> - Method in class com.lpvs.service.<a href="com/lpvs/service/LPVSLoginCheckService.html" title="class in com.lpvs.service">LPVSLoginCheckService</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Get OAuth login member map from the authentication object.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/service/LPVSDetectService.html#getPathByPullRequest(com.lpvs.entity.LPVSQueue)">getPathByPullRequest(LPVSQueue)</a></span> - Static method in class com.lpvs.service.<a href="com/lpvs/service/LPVSDetectService.html" title="class in com.lpvs.service">LPVSDetectService</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Retrieves the local directory path for a given LPVSQueue configuration.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/entity/enums/LPVSPullRequestAction.html#getPullRequestAction()">getPullRequestAction()</a></span> - Method in enum com.lpvs.entity.enums.<a href="com/lpvs/entity/enums/LPVSPullRequestAction.html" title="enum in com.lpvs.entity.enums">LPVSPullRequestAction</a></dt>
 <dd>
 <div class="block">Gets the string representation of the pull request action.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/service/LPVSGitHubService.html#getPullRequestFiles(com.lpvs.entity.LPVSQueue)">getPullRequestFiles(LPVSQueue)</a></span> - Method in class com.lpvs.service.<a href="com/lpvs/service/LPVSGitHubService.html" title="class in com.lpvs.service">LPVSGitHubService</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Retrieves the file differences for a given pull request from GitHub.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/util/LPVSWebhookUtil.html#getPullRequestId(com.lpvs.entity.LPVSQueue)">getPullRequestId(LPVSQueue)</a></span> - Static method in class com.lpvs.util.<a href="com/lpvs/util/LPVSWebhookUtil.html" title="class in com.lpvs.util">LPVSWebhookUtil</a></dt>
 <dd>
 <div class="block">Retrieves the pull request ID from the pull request URL in the LPVSQueue object.</div>
@@ -413,15 +468,21 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">Gets the string representation of the pull request status.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/service/LPVSQueueService.html#getQueue()">getQueue()</a></span> - Method in class com.lpvs.service.<a href="com/lpvs/service/LPVSQueueService.html" title="class in com.lpvs.service">LPVSQueueService</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Gets the entire LPVSQueue.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/service/LPVSQueueService.html#getQueueFirstElement()">getQueueFirstElement()</a></span> - Method in class com.lpvs.service.<a href="com/lpvs/service/LPVSQueueService.html" title="class in com.lpvs.service">LPVSQueueService</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Gets the first element from the LPVSQueue.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/repository/LPVSQueueRepository.html#getQueueList()">getQueueList()</a></span> - Method in interface com.lpvs.repository.<a href="com/lpvs/repository/LPVSQueueRepository.html" title="interface in com.lpvs.repository">LPVSQueueRepository</a></dt>
 <dd>
 <div class="block">Retrieve the list of all entities from the "queue" table.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/service/LPVSGitHubService.html#getRepositoryLicense(com.lpvs.entity.LPVSQueue)">getRepositoryLicense(LPVSQueue)</a></span> - Method in class com.lpvs.service.<a href="com/lpvs/service/LPVSGitHubService.html" title="class in com.lpvs.service">LPVSGitHubService</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Retrieves the license of the GitHub repository associated with the pull request.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/util/LPVSWebhookUtil.html#getRepositoryName(com.lpvs.entity.LPVSQueue)">getRepositoryName(LPVSQueue)</a></span> - Static method in class com.lpvs.util.<a href="com/lpvs/util/LPVSWebhookUtil.html" title="class in com.lpvs.util">LPVSWebhookUtil</a></dt>
 <dd>
 <div class="block">Retrieves the repository name from the repository URL in the LPVSQueue object.</div>
@@ -498,7 +559,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">Generates a hash code for the queue item based on specific attributes.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/service/LPVSLicenseService.Conflict.html#hashCode()">hashCode()</a></span> - Method in class com.lpvs.service.<a href="com/lpvs/service/LPVSLicenseService.Conflict.html" title="class in com.lpvs.service">LPVSLicenseService.Conflict</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Generates a hash code value for this Conflict object.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/entity/enums/Grade.html#HIGH">HIGH</a></span> - com.lpvs.entity.enums.<a href="com/lpvs/entity/enums/Grade.html" title="enum in com.lpvs.entity.enums">Grade</a></dt>
 <dd>
 <div class="block">Represents a high severity license violation.</div>
@@ -550,11 +613,17 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <h2 class="title">L</h2>
 <dl>
 <dt><span class="memberNameLink"><a href="com/lpvs/service/LPVSLicenseService.Conflict.html#l1">l1</a></span> - Variable in class com.lpvs.service.<a href="com/lpvs/service/LPVSLicenseService.Conflict.html" title="class in com.lpvs.service">LPVSLicenseService.Conflict</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">The first license in the conflict.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/service/LPVSLicenseService.Conflict.html#l2">l2</a></span> - Variable in class com.lpvs.service.<a href="com/lpvs/service/LPVSLicenseService.Conflict.html" title="class in com.lpvs.service">LPVSLicenseService.Conflict</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">The second license in the conflict.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/service/LPVSLicenseService.html#licenseConflictsSource">licenseConflictsSource</a></span> - Variable in class com.lpvs.service.<a href="com/lpvs/service/LPVSLicenseService.html" title="class in com.lpvs.service">LPVSLicenseService</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Source of license conflicts.</div>
+</dd>
 <dt><a href="com/lpvs/LicensePreValidationSystem.html" title="class in com.lpvs"><span class="typeNameLink">LicensePreValidationSystem</span></a> - Class in <a href="com/lpvs/package-summary.html">com.lpvs</a></dt>
 <dd>
 <div class="block">The main class for the License Pre-Validation Service (LPVS) application.</div>
@@ -564,7 +633,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">Constructs a new LicensePreValidationSystem with the specified core pool size.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/service/OAuthService.html#loadUser(org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest)">loadUser(OAuth2UserRequest)</a></span> - Method in class com.lpvs.service.<a href="com/lpvs/service/OAuthService.html" title="class in com.lpvs.service">OAuthService</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Loads user information from the OAuth2 provider.</div>
+</dd>
 <dt><a href="com/lpvs/exception/LoginFailedException.html" title="class in com.lpvs.exception"><span class="typeNameLink">LoginFailedException</span></a> - Exception in <a href="com/lpvs/exception/package-summary.html">com.lpvs.exception</a></dt>
 <dd>
 <div class="block">Exception thrown to indicate a failed login attempt.</div>
@@ -579,7 +650,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
  <code>errorResponse</code> with UNAUTHORIZED status.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/service/LPVSLoginCheckService.html#loginVerification(org.springframework.security.core.Authentication)">loginVerification(Authentication)</a></span> - Method in class com.lpvs.service.<a href="com/lpvs/service/LPVSLoginCheckService.html" title="class in com.lpvs.service">LPVSLoginCheckService</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Perform login verification using the authentication object.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/entity/enums/Grade.html#LOW">LOW</a></span> - com.lpvs.entity.enums.<a href="com/lpvs/entity/enums/Grade.html" title="enum in com.lpvs.entity.enums">Grade</a></dt>
 <dd>
 <div class="block">Represents a license violation with low severity.</div>
@@ -601,9 +674,13 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">Repository interface for managing <a href="com/lpvs/entity/LPVSDetectedLicense.html" title="class in com.lpvs.entity"><code>LPVSDetectedLicense</code></a> entities.</div>
 </dd>
 <dt><a href="com/lpvs/service/LPVSDetectService.html" title="class in com.lpvs.service"><span class="typeNameLink">LPVSDetectService</span></a> - Class in <a href="com/lpvs/service/package-summary.html">com.lpvs.service</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Service class for detecting licenses in GitHub pull requests using a specified scanner.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/service/LPVSDetectService.html#%3Cinit%3E(java.lang.String,com.lpvs.service.LPVSGitHubConnectionService,com.lpvs.service.scanner.scanoss.LPVSScanossDetectService)">LPVSDetectService(String, LPVSGitHubConnectionService, LPVSScanossDetectService)</a></span> - Constructor for class com.lpvs.service.<a href="com/lpvs/service/LPVSDetectService.html" title="class in com.lpvs.service">LPVSDetectService</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Constructs an instance of LPVSDetectService with the specified parameters.</div>
+</dd>
 <dt><a href="com/lpvs/entity/LPVSDiffFile.html" title="class in com.lpvs.entity"><span class="typeNameLink">LPVSDiffFile</span></a> - Class in <a href="com/lpvs/entity/package-summary.html">com.lpvs.entity</a></dt>
 <dd>
 <div class="block">Represents a file diff in the LPVS system.</div>
@@ -632,13 +709,21 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="com/lpvs/util/LPVSFileUtil.html#%3Cinit%3E()">LPVSFileUtil()</a></span> - Constructor for class com.lpvs.util.<a href="com/lpvs/util/LPVSFileUtil.html" title="class in com.lpvs.util">LPVSFileUtil</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/lpvs/service/LPVSGitHubConnectionService.html" title="class in com.lpvs.service"><span class="typeNameLink">LPVSGitHubConnectionService</span></a> - Class in <a href="com/lpvs/service/package-summary.html">com.lpvs.service</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Service class for managing connections to the GitHub API.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/service/LPVSGitHubConnectionService.html#%3Cinit%3E(java.lang.String,java.lang.String,java.lang.String,com.lpvs.util.LPVSExitHandler)">LPVSGitHubConnectionService(String, String, String, LPVSExitHandler)</a></span> - Constructor for class com.lpvs.service.<a href="com/lpvs/service/LPVSGitHubConnectionService.html" title="class in com.lpvs.service">LPVSGitHubConnectionService</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Constructs an instance of LPVSGitHubConnectionService with the specified properties and exit handler.</div>
+</dd>
 <dt><a href="com/lpvs/service/LPVSGitHubService.html" title="class in com.lpvs.service"><span class="typeNameLink">LPVSGitHubService</span></a> - Class in <a href="com/lpvs/service/package-summary.html">com.lpvs.service</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Service class for interacting with GitHub repositories and managing license-related actions.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/service/LPVSGitHubService.html#%3Cinit%3E(com.lpvs.repository.LPVSPullRequestRepository,com.lpvs.repository.LPVSDetectedLicenseRepository,com.lpvs.repository.LPVSLicenseRepository,com.lpvs.repository.LPVSLicenseConflictRepository,com.lpvs.service.LPVSGitHubConnectionService)">LPVSGitHubService(LPVSPullRequestRepository, LPVSDetectedLicenseRepository, LPVSLicenseRepository, LPVSLicenseConflictRepository, LPVSGitHubConnectionService)</a></span> - Constructor for class com.lpvs.service.<a href="com/lpvs/service/LPVSGitHubService.html" title="class in com.lpvs.service">LPVSGitHubService</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Constructs an instance of LPVSGitHubService with the specified repositories and connection service.</div>
+</dd>
 <dt><a href="com/lpvs/entity/history/LPVSHistory.html" title="class in com.lpvs.entity.history"><span class="typeNameLink">LPVSHistory</span></a> - Class in <a href="com/lpvs/entity/history/package-summary.html">com.lpvs.entity.history</a></dt>
 <dd>
 <div class="block">Represents a historical record in the LPVS system.</div>
@@ -668,15 +753,25 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">Repository interface for managing <a href="com/lpvs/entity/LPVSLicense.html" title="class in com.lpvs.entity"><code>LPVSLicense</code></a> entities.</div>
 </dd>
 <dt><a href="com/lpvs/service/LPVSLicenseService.html" title="class in com.lpvs.service"><span class="typeNameLink">LPVSLicenseService</span></a> - Class in <a href="com/lpvs/service/package-summary.html">com.lpvs.service</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Service class for managing licenses and license conflicts.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/service/LPVSLicenseService.html#%3Cinit%3E(java.lang.String,com.lpvs.util.LPVSExitHandler)">LPVSLicenseService(String, LPVSExitHandler)</a></span> - Constructor for class com.lpvs.service.<a href="com/lpvs/service/LPVSLicenseService.html" title="class in com.lpvs.service">LPVSLicenseService</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Constructs an instance of LPVSLicenseService with the specified license conflicts source and exit handler.</div>
+</dd>
 <dt><a href="com/lpvs/service/LPVSLicenseService.Conflict.html" title="class in com.lpvs.service"><span class="typeNameLink">LPVSLicenseService.Conflict</span></a>&lt;<a href="com/lpvs/service/LPVSLicenseService.Conflict.html" title="type parameter in LPVSLicenseService.Conflict">License1</a>,&#8203;<a href="com/lpvs/service/LPVSLicenseService.Conflict.html" title="type parameter in LPVSLicenseService.Conflict">License2</a>&gt; - Class in <a href="com/lpvs/service/package-summary.html">com.lpvs.service</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Represents a license conflict between two licenses.</div>
+</dd>
 <dt><a href="com/lpvs/service/LPVSLoginCheckService.html" title="class in com.lpvs.service"><span class="typeNameLink">LPVSLoginCheckService</span></a> - Class in <a href="com/lpvs/service/package-summary.html">com.lpvs.service</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Service class for handling login-related operations in LPVS.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/service/LPVSLoginCheckService.html#%3Cinit%3E(com.lpvs.repository.LPVSPullRequestRepository,com.lpvs.repository.LPVSMemberRepository)">LPVSLoginCheckService(LPVSPullRequestRepository, LPVSMemberRepository)</a></span> - Constructor for class com.lpvs.service.<a href="com/lpvs/service/LPVSLoginCheckService.html" title="class in com.lpvs.service">LPVSLoginCheckService</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Constructor for LPVSLoginCheckService.</div>
+</dd>
 <dt><a href="com/lpvs/entity/auth/LPVSLoginMember.html" title="class in com.lpvs.entity.auth"><span class="typeNameLink">LPVSLoginMember</span></a> - Class in <a href="com/lpvs/entity/auth/package-summary.html">com.lpvs.entity.auth</a></dt>
 <dd>
 <div class="block">Represents the login status and associated member information in the LPVS system.</div>
@@ -720,15 +815,21 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="com/lpvs/entity/LPVSQueue.html#%3Cinit%3E()">LPVSQueue()</a></span> - Constructor for class com.lpvs.entity.<a href="com/lpvs/entity/LPVSQueue.html" title="class in com.lpvs.entity">LPVSQueue</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/lpvs/service/LPVSQueueProcessorService.html" title="class in com.lpvs.service"><span class="typeNameLink">LPVSQueueProcessorService</span></a> - Class in <a href="com/lpvs/service/package-summary.html">com.lpvs.service</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Service responsible for processing LPVSQueue elements.</div>
+</dd>
 <dt><a href="com/lpvs/repository/LPVSQueueRepository.html" title="interface in com.lpvs.repository"><span class="typeNameLink">LPVSQueueRepository</span></a> - Interface in <a href="com/lpvs/repository/package-summary.html">com.lpvs.repository</a></dt>
 <dd>
 <div class="block">Repository interface for managing <a href="com/lpvs/entity/LPVSQueue.html" title="class in com.lpvs.entity"><code>LPVSQueue</code></a> entities.</div>
 </dd>
 <dt><a href="com/lpvs/service/LPVSQueueService.html" title="class in com.lpvs.service"><span class="typeNameLink">LPVSQueueService</span></a> - Class in <a href="com/lpvs/service/package-summary.html">com.lpvs.service</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Service for managing LPVSQueue elements and processing webhooks.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/service/LPVSQueueService.html#%3Cinit%3E(com.lpvs.service.LPVSGitHubService,com.lpvs.service.LPVSDetectService,com.lpvs.service.LPVSLicenseService,com.lpvs.repository.LPVSPullRequestRepository,com.lpvs.repository.LPVSQueueRepository,int)">LPVSQueueService(LPVSGitHubService, LPVSDetectService, LPVSLicenseService, LPVSPullRequestRepository, LPVSQueueRepository, int)</a></span> - Constructor for class com.lpvs.service.<a href="com/lpvs/service/LPVSQueueService.html" title="class in com.lpvs.service">LPVSQueueService</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Constructor for LPVSQueueService.</div>
+</dd>
 <dt><a href="com/lpvs/entity/LPVSResponseWrapper.html" title="class in com.lpvs.entity"><span class="typeNameLink">LPVSResponseWrapper</span></a> - Class in <a href="com/lpvs/entity/package-summary.html">com.lpvs.entity</a></dt>
 <dd>
 <div class="block">Represents a response wrapper in the LPVS system.</div>
@@ -757,13 +858,21 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="com/lpvs/entity/result/LPVSResultInfo.html#%3Cinit%3E()">LPVSResultInfo()</a></span> - Constructor for class com.lpvs.entity.result.<a href="com/lpvs/entity/result/LPVSResultInfo.html" title="class in com.lpvs.entity.result">LPVSResultInfo</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/lpvs/service/scanner/scanoss/LPVSScanossDetectService.html" title="class in com.lpvs.service.scanner.scanoss"><span class="typeNameLink">LPVSScanossDetectService</span></a> - Class in <a href="com/lpvs/service/scanner/scanoss/package-summary.html">com.lpvs.service.scanner.scanoss</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Service class responsible for interacting with the Scanoss scanner to detect licenses in files.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/service/scanner/scanoss/LPVSScanossDetectService.html#%3Cinit%3E(java.lang.Boolean,com.lpvs.service.LPVSLicenseService,com.lpvs.repository.LPVSLicenseRepository)">LPVSScanossDetectService(Boolean, LPVSLicenseService, LPVSLicenseRepository)</a></span> - Constructor for class com.lpvs.service.scanner.scanoss.<a href="com/lpvs/service/scanner/scanoss/LPVSScanossDetectService.html" title="class in com.lpvs.service.scanner.scanoss">LPVSScanossDetectService</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Constructor for LPVSScanossDetectService.</div>
+</dd>
 <dt><a href="com/lpvs/service/LPVSStatisticsService.html" title="class in com.lpvs.service"><span class="typeNameLink">LPVSStatisticsService</span></a> - Class in <a href="com/lpvs/service/package-summary.html">com.lpvs.service</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Service for managing statistics related to LPVSPullRequest entities.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/service/LPVSStatisticsService.html#%3Cinit%3E(com.lpvs.repository.LPVSPullRequestRepository,com.lpvs.repository.LPVSDetectedLicenseRepository,com.lpvs.service.LPVSLoginCheckService,com.lpvs.repository.LPVSLicenseRepository,com.lpvs.repository.LPVSMemberRepository)">LPVSStatisticsService(LPVSPullRequestRepository, LPVSDetectedLicenseRepository, LPVSLoginCheckService, LPVSLicenseRepository, LPVSMemberRepository)</a></span> - Constructor for class com.lpvs.service.<a href="com/lpvs/service/LPVSStatisticsService.html" title="class in com.lpvs.service">LPVSStatisticsService</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Constructor for LPVSStatisticsService.</div>
+</dd>
 <dt><a href="com/lpvs/util/LPVSTableConfiguration.html" title="class in com.lpvs.util"><span class="typeNameLink">LPVSTableConfiguration</span></a> - Class in <a href="com/lpvs/util/package-summary.html">com.lpvs.util</a></dt>
 <dd>
 <div class="block">Component class providing configuration values for various database table names in the LPVS application.</div>
@@ -837,9 +946,13 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">Enum representing OAuth attributes for various providers.</div>
 </dd>
 <dt><a href="com/lpvs/service/OAuthService.html" title="class in com.lpvs.service"><span class="typeNameLink">OAuthService</span></a> - Class in <a href="com/lpvs/service/package-summary.html">com.lpvs.service</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Service for handling OAuth2 user information.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/service/OAuthService.html#%3Cinit%3E(com.lpvs.repository.LPVSMemberRepository)">OAuthService(LPVSMemberRepository)</a></span> - Constructor for class com.lpvs.service.<a href="com/lpvs/service/OAuthService.html" title="class in com.lpvs.service">OAuthService</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Constructor for OAuthService.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/entity/enums/LPVSPullRequestAction.html#OPEN">OPEN</a></span> - com.lpvs.entity.enums.<a href="com/lpvs/entity/enums/LPVSPullRequestAction.html" title="enum in com.lpvs.entity.enums">LPVSPullRequestAction</a></dt>
 <dd>
 <div class="block">Represents the action of opening a pull request.</div>
@@ -857,13 +970,21 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="com/lpvs/exception/PageControllerAdvice.html#%3Cinit%3E()">PageControllerAdvice()</a></span> - Constructor for class com.lpvs.exception.<a href="com/lpvs/exception/PageControllerAdvice.html" title="class in com.lpvs.exception">PageControllerAdvice</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/service/LPVSLoginCheckService.html#pathCheck(java.lang.String,java.lang.String,org.springframework.data.domain.Pageable,org.springframework.security.core.Authentication)">pathCheck(String, String, Pageable, Authentication)</a></span> - Method in class com.lpvs.service.<a href="com/lpvs/service/LPVSLoginCheckService.html" title="class in com.lpvs.service">LPVSLoginCheckService</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Check access based on type, name, pageable, and authentication.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/service/LPVSStatisticsService.html#pathCheck(java.lang.String,java.lang.String,org.springframework.security.core.Authentication)">pathCheck(String, String, Authentication)</a></span> - Method in class com.lpvs.service.<a href="com/lpvs/service/LPVSStatisticsService.html" title="class in com.lpvs.service">LPVSStatisticsService</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Performs a path check based on the specified type and name.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/service/LPVSQueueService.html#processWebHook(com.lpvs.entity.LPVSQueue)">processWebHook(LPVSQueue)</a></span> - Method in class com.lpvs.service.<a href="com/lpvs/service/LPVSQueueService.html" title="class in com.lpvs.service">LPVSQueueService</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Asynchronously processes the LPVSQueue element, handling GitHub webhook events.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/service/LPVSStatisticsService.html#putDefaultriskGradeMap(java.util.Map)">putDefaultriskGradeMap(Map&lt;Grade, Integer&gt;)</a></span> - Method in class com.lpvs.service.<a href="com/lpvs/service/LPVSStatisticsService.html" title="class in com.lpvs.service">LPVSStatisticsService</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Initializes and returns a default risk grade map with Grade enums as keys and 0 as values.</div>
+</dd>
 </dl>
 <a id="I:R">
 <!--   -->
@@ -879,11 +1000,17 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">Represents the action of triggering a rescan of a pull request.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/service/LPVSDetectService.html#runOneScan()">runOneScan()</a></span> - Method in class com.lpvs.service.<a href="com/lpvs/service/LPVSDetectService.html" title="class in com.lpvs.service">LPVSDetectService</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Event listener method triggered when the application is ready, runs a single license scan if triggered.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/service/LPVSDetectService.html#runScan(com.lpvs.entity.LPVSQueue,java.lang.String)">runScan(LPVSQueue, String)</a></span> - Method in class com.lpvs.service.<a href="com/lpvs/service/LPVSDetectService.html" title="class in com.lpvs.service">LPVSDetectService</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Runs a license scan based on the selected scanner type.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/service/scanner/scanoss/LPVSScanossDetectService.html#runScan(com.lpvs.entity.LPVSQueue,java.lang.String)">runScan(LPVSQueue, String)</a></span> - Method in class com.lpvs.service.scanner.scanoss.<a href="com/lpvs/service/scanner/scanoss/LPVSScanossDetectService.html" title="class in com.lpvs.service.scanner.scanoss">LPVSScanossDetectService</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Initiates the Scanoss scan for the specified LPVSQueue and file path.</div>
+</dd>
 </dl>
 <a id="I:S">
 <!--   -->
@@ -930,9 +1057,13 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">Represents a serious license violation with high impact.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/service/LPVSGitHubService.html#setErrorCheck(com.lpvs.entity.LPVSQueue)">setErrorCheck(LPVSQueue)</a></span> - Method in class com.lpvs.service.<a href="com/lpvs/service/LPVSGitHubService.html" title="class in com.lpvs.service">LPVSGitHubService</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Sets the commit status to error for the specified pull request.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/service/LPVSGitHubConnectionService.html#setGithubTokenFromEnv()">setGithubTokenFromEnv()</a></span> - Method in class com.lpvs.service.<a href="com/lpvs/service/LPVSGitHubConnectionService.html" title="class in com.lpvs.service">LPVSGitHubConnectionService</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Sets the GitHub authentication token from the environment variable if available.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/entity/auth/LPVSMember.html#setNickname(java.lang.String)">setNickname(String)</a></span> - Method in class com.lpvs.entity.auth.<a href="com/lpvs/entity/auth/LPVSMember.html" title="class in com.lpvs.entity.auth">LPVSMember</a></dt>
 <dd>
 <div class="block">Sets the nickname of the member.</div>
@@ -942,7 +1073,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">Sets the organization of the member.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/service/LPVSGitHubService.html#setPendingCheck(com.lpvs.entity.LPVSQueue)">setPendingCheck(LPVSQueue)</a></span> - Method in class com.lpvs.service.<a href="com/lpvs/service/LPVSGitHubService.html" title="class in com.lpvs.service">LPVSGitHubService</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Sets the commit status to pending for the specified pull request.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/lpvs/entity/enums/LPVSVcs.html#SWARM">SWARM</a></span> - com.lpvs.entity.enums.<a href="com/lpvs/entity/enums/LPVSVcs.html" title="enum in com.lpvs.entity.enums">LPVSVcs</a></dt>
 <dd>
 <div class="block">Represents the Swarm version control system.</div>

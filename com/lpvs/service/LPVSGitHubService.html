@@ -135,6 +135,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <pre>@Service
 public class <span class="typeNameLabel">LPVSGitHubService</span>
 extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></pre>
+<div class="block">Service class for interacting with GitHub repositories and managing license-related actions.</div>
 </li>
 </ul>
 </div>
@@ -160,7 +161,9 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
                  <a href="../repository/LPVSLicenseRepository.html" title="interface in com.lpvs.repository">LPVSLicenseRepository</a>&nbsp;lpvsLicenseRepository,
                  <a href="../repository/LPVSLicenseConflictRepository.html" title="interface in com.lpvs.repository">LPVSLicenseConflictRepository</a>&nbsp;lpvsLicenseConflictRepository,
                  <a href="LPVSGitHubConnectionService.html" title="class in com.lpvs.service">LPVSGitHubConnectionService</a>&nbsp;gitHubConnectionService)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Constructs an instance of LPVSGitHubService with the specified repositories and connection service.</div>
+</td>
 </tr>
 </table>
 </li>
@@ -186,27 +189,37 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
               <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../entity/LPVSFile.html" title="class in com.lpvs.entity">LPVSFile</a>&gt;&nbsp;scanResults,
               <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="LPVSLicenseService.Conflict.html" title="class in com.lpvs.service">LPVSLicenseService.Conflict</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt;&gt;&nbsp;conflicts,
               <a href="../entity/LPVSPullRequest.html" title="class in com.lpvs.entity">LPVSPullRequest</a>&nbsp;lpvsPullRequest)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Comments on the pull request with the scan results and detected issues.</div>
+</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPullRequestFiles(com.lpvs.entity.LPVSQueue)">getPullRequestFiles</a></span>&#8203;(<a href="../entity/LPVSQueue.html" title="class in com.lpvs.entity">LPVSQueue</a>&nbsp;webhookConfig)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Retrieves the file differences for a given pull request from GitHub.</div>
+</td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getRepositoryLicense(com.lpvs.entity.LPVSQueue)">getRepositoryLicense</a></span>&#8203;(<a href="../entity/LPVSQueue.html" title="class in com.lpvs.entity">LPVSQueue</a>&nbsp;webhookConfig)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Retrieves the license of the GitHub repository associated with the pull request.</div>
+</td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setErrorCheck(com.lpvs.entity.LPVSQueue)">setErrorCheck</a></span>&#8203;(<a href="../entity/LPVSQueue.html" title="class in com.lpvs.entity">LPVSQueue</a>&nbsp;webhookConfig)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Sets the commit status to error for the specified pull request.</div>
+</td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setPendingCheck(com.lpvs.entity.LPVSQueue)">setPendingCheck</a></span>&#8203;(<a href="../entity/LPVSQueue.html" title="class in com.lpvs.entity">LPVSQueue</a>&nbsp;webhookConfig)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Sets the commit status to pending for the specified pull request.</div>
+</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -244,6 +257,15 @@ public&nbsp;LPVSGitHubService&#8203;(<a href="../repository/LPVSPullRequestRepos
                          <a href="../repository/LPVSLicenseRepository.html" title="interface in com.lpvs.repository">LPVSLicenseRepository</a>&nbsp;lpvsLicenseRepository,
                          <a href="../repository/LPVSLicenseConflictRepository.html" title="interface in com.lpvs.repository">LPVSLicenseConflictRepository</a>&nbsp;lpvsLicenseConflictRepository,
                          <a href="LPVSGitHubConnectionService.html" title="class in com.lpvs.service">LPVSGitHubConnectionService</a>&nbsp;gitHubConnectionService)</pre>
+<div class="block">Constructs an instance of LPVSGitHubService with the specified repositories and connection service.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>pullRequestRepository</code> - Repository for managing LPVS pull requests.</dd>
+<dd><code>lpvsDetectedLicenseRepository</code> - Repository for managing detected licenses.</dd>
+<dd><code>lpvsLicenseRepository</code> - Repository for managing licenses.</dd>
+<dd><code>lpvsLicenseConflictRepository</code> - Repository for managing license conflicts.</dd>
+<dd><code>gitHubConnectionService</code> - Service for establishing and managing connections to the GitHub API.</dd>
+</dl>
 </li>
 </ul>
 </li>
@@ -263,6 +285,13 @@ public&nbsp;LPVSGitHubService&#8203;(<a href="../repository/LPVSPullRequestRepos
 <li class="blockList">
 <h4>getPullRequestFiles</h4>
 <pre class="methodSignature">public&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;getPullRequestFiles&#8203;(<a href="../entity/LPVSQueue.html" title="class in com.lpvs.entity">LPVSQueue</a>&nbsp;webhookConfig)</pre>
+<div class="block">Retrieves the file differences for a given pull request from GitHub.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>webhookConfig</code> - LPVSQueue configuration for the pull request.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>String representation of the pull request files or null if an error occurs.</dd>
+</dl>
 </li>
 </ul>
 <a id="setPendingCheck(com.lpvs.entity.LPVSQueue)">
@@ -272,6 +301,11 @@ public&nbsp;LPVSGitHubService&#8203;(<a href="../repository/LPVSPullRequestRepos
 <li class="blockList">
 <h4>setPendingCheck</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setPendingCheck&#8203;(<a href="../entity/LPVSQueue.html" title="class in com.lpvs.entity">LPVSQueue</a>&nbsp;webhookConfig)</pre>
+<div class="block">Sets the commit status to pending for the specified pull request.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>webhookConfig</code> - LPVSQueue configuration for the pull request.</dd>
+</dl>
 </li>
 </ul>
 <a id="setErrorCheck(com.lpvs.entity.LPVSQueue)">
@@ -281,6 +315,11 @@ public&nbsp;LPVSGitHubService&#8203;(<a href="../repository/LPVSPullRequestRepos
 <li class="blockList">
 <h4>setErrorCheck</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setErrorCheck&#8203;(<a href="../entity/LPVSQueue.html" title="class in com.lpvs.entity">LPVSQueue</a>&nbsp;webhookConfig)</pre>
+<div class="block">Sets the commit status to error for the specified pull request.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>webhookConfig</code> - LPVSQueue configuration for the pull request.</dd>
+</dl>
 </li>
 </ul>
 <a id="commentResults(com.lpvs.entity.LPVSQueue,java.util.List,java.util.List,com.lpvs.entity.LPVSPullRequest)">
@@ -294,9 +333,15 @@ public&nbsp;LPVSGitHubService&#8203;(<a href="../repository/LPVSPullRequestRepos
                            <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="LPVSLicenseService.Conflict.html" title="class in com.lpvs.service">LPVSLicenseService.Conflict</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt;&gt;&nbsp;conflicts,
                            <a href="../entity/LPVSPullRequest.html" title="class in com.lpvs.entity">LPVSPullRequest</a>&nbsp;lpvsPullRequest)
                     throws <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/IOException.html?is-external=true" title="class or interface in java.io" class="externalLink">IOException</a></pre>
+<div class="block">Comments on the pull request with the scan results and detected issues.</div>
 <dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>webhookConfig</code> - LPVSQueue configuration for the pull request.</dd>
+<dd><code>scanResults</code> - List of detected files and licenses.</dd>
+<dd><code>conflicts</code> - List of license conflicts.</dd>
+<dd><code>lpvsPullRequest</code> - LPVS entity representing the pull request.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/IOException.html?is-external=true" title="class or interface in java.io" class="externalLink">IOException</a></code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/IOException.html?is-external=true" title="class or interface in java.io" class="externalLink">IOException</a></code> - if an error occurs during GitHub interaction.</dd>
 </dl>
 </li>
 </ul>
@@ -307,6 +352,13 @@ public&nbsp;LPVSGitHubService&#8203;(<a href="../repository/LPVSPullRequestRepos
 <li class="blockList">
 <h4>getRepositoryLicense</h4>
 <pre class="methodSignature">public&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;getRepositoryLicense&#8203;(<a href="../entity/LPVSQueue.html" title="class in com.lpvs.entity">LPVSQueue</a>&nbsp;webhookConfig)</pre>
+<div class="block">Retrieves the license of the GitHub repository associated with the pull request.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>webhookConfig</code> - LPVSQueue configuration for the pull request.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>License key of the GitHub repository or "Proprietary" if not available.</dd>
+</dl>
 </li>
 </ul>
 </li>

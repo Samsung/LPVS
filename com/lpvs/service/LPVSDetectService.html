@@ -135,6 +135,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <pre>@Service
 public class <span class="typeNameLabel">LPVSDetectService</span>
 extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></pre>
+<div class="block">Service class for detecting licenses in GitHub pull requests using a specified scanner.</div>
 </li>
 </ul>
 </div>
@@ -158,7 +159,9 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.String,com.lpvs.service.LPVSGitHubConnectionService,com.lpvs.service.scanner.scanoss.LPVSScanossDetectService)">LPVSDetectService</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;scannerType,
                  <a href="LPVSGitHubConnectionService.html" title="class in com.lpvs.service">LPVSGitHubConnectionService</a>&nbsp;gitHubConnectionService,
                  <a href="scanner/scanoss/LPVSScanossDetectService.html" title="class in com.lpvs.service.scanner.scanoss">LPVSScanossDetectService</a>&nbsp;scanossDetectService)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Constructs an instance of LPVSDetectService with the specified parameters.</div>
+</td>
 </tr>
 </table>
 </li>
@@ -181,23 +184,31 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <tr id="i0" class="altColor">
 <td class="colFirst"><code><a href="../entity/LPVSQueue.html" title="class in com.lpvs.entity">LPVSQueue</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getInternalQueueByPullRequest(java.lang.String)">getInternalQueueByPullRequest</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;pullRequest)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Retrieves the LPVSQueue configuration for a given GitHub pull request URL.</div>
+</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>static <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPathByPullRequest(com.lpvs.entity.LPVSQueue)">getPathByPullRequest</a></span>&#8203;(<a href="../entity/LPVSQueue.html" title="class in com.lpvs.entity">LPVSQueue</a>&nbsp;webhookConfig)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Retrieves the local directory path for a given LPVSQueue configuration.</div>
+</td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#runOneScan()">runOneScan</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Event listener method triggered when the application is ready, runs a single license scan if triggered.</div>
+</td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../entity/LPVSFile.html" title="class in com.lpvs.entity">LPVSFile</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#runScan(com.lpvs.entity.LPVSQueue,java.lang.String)">runScan</a></span>&#8203;(<a href="../entity/LPVSQueue.html" title="class in com.lpvs.entity">LPVSQueue</a>&nbsp;webhookConfig,
        <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;path)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Runs a license scan based on the selected scanner type.</div>
+</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -234,6 +245,13 @@ public&nbsp;LPVSDetectService&#8203;(@Value("${scanner:scanoss}")
                          <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;scannerType,
                          <a href="LPVSGitHubConnectionService.html" title="class in com.lpvs.service">LPVSGitHubConnectionService</a>&nbsp;gitHubConnectionService,
                          <a href="scanner/scanoss/LPVSScanossDetectService.html" title="class in com.lpvs.service.scanner.scanoss">LPVSScanossDetectService</a>&nbsp;scanossDetectService)</pre>
+<div class="block">Constructs an instance of LPVSDetectService with the specified parameters.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>scannerType</code> - The type of license detection scanner.</dd>
+<dd><code>gitHubConnectionService</code> - Service for connecting to the GitHub API.</dd>
+<dd><code>scanossDetectService</code> - Service for license detection using ScanOSS.</dd>
+</dl>
 </li>
 </ul>
 </li>
@@ -254,6 +272,7 @@ public&nbsp;LPVSDetectService&#8203;(@Value("${scanner:scanoss}")
 <h4>runOneScan</h4>
 <pre class="methodSignature">@EventListener(org.springframework.boot.context.event.ApplicationReadyEvent.class)
 public&nbsp;void&nbsp;runOneScan()</pre>
+<div class="block">Event listener method triggered when the application is ready, runs a single license scan if triggered.</div>
 </li>
 </ul>
 <a id="getInternalQueueByPullRequest(java.lang.String)">
@@ -263,6 +282,13 @@ public&nbsp;void&nbsp;runOneScan()</pre>
 <li class="blockList">
 <h4>getInternalQueueByPullRequest</h4>
 <pre class="methodSignature">public&nbsp;<a href="../entity/LPVSQueue.html" title="class in com.lpvs.entity">LPVSQueue</a>&nbsp;getInternalQueueByPullRequest&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;pullRequest)</pre>
+<div class="block">Retrieves the LPVSQueue configuration for a given GitHub pull request URL.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>pullRequest</code> - The GitHub pull request URL.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>LPVSQueue configuration for the given pull request.</dd>
+</dl>
 </li>
 </ul>
 <a id="getPathByPullRequest(com.lpvs.entity.LPVSQueue)">
@@ -272,6 +298,13 @@ public&nbsp;void&nbsp;runOneScan()</pre>
 <li class="blockList">
 <h4>getPathByPullRequest</h4>
 <pre class="methodSignature">public static&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;getPathByPullRequest&#8203;(<a href="../entity/LPVSQueue.html" title="class in com.lpvs.entity">LPVSQueue</a>&nbsp;webhookConfig)</pre>
+<div class="block">Retrieves the local directory path for a given LPVSQueue configuration.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>webhookConfig</code> - LPVSQueue configuration.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>Local directory path for the given LPVSQueue.</dd>
+</dl>
 </li>
 </ul>
 <a id="runScan(com.lpvs.entity.LPVSQueue,java.lang.String)">
@@ -283,9 +316,15 @@ public&nbsp;void&nbsp;runOneScan()</pre>
 <pre class="methodSignature">public&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../entity/LPVSFile.html" title="class in com.lpvs.entity">LPVSFile</a>&gt;&nbsp;runScan&#8203;(<a href="../entity/LPVSQueue.html" title="class in com.lpvs.entity">LPVSQueue</a>&nbsp;webhookConfig,
                               <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;path)
                        throws <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Exception.html?is-external=true" title="class or interface in java.lang" class="externalLink">Exception</a></pre>
+<div class="block">Runs a license scan based on the selected scanner type.</div>
 <dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>webhookConfig</code> - LPVSQueue configuration for the scan.</dd>
+<dd><code>path</code> - Local directory path for the scan.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>List of LPVSFile objects representing the scan results.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Exception.html?is-external=true" title="class or interface in java.lang" class="externalLink">Exception</a></code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Exception.html?is-external=true" title="class or interface in java.lang" class="externalLink">Exception</a></code> - if an error occurs during the scan.</dd>
 </dl>
 </li>
 </ul>

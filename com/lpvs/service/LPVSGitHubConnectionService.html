@@ -135,6 +135,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <pre>@Service
 public class <span class="typeNameLabel">LPVSGitHubConnectionService</span>
 extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></pre>
+<div class="block">Service class for managing connections to the GitHub API.
+
+ It provides methods to connect to the GitHub API with the specified login and authentication token.</div>
 </li>
 </ul>
 </div>
@@ -159,7 +162,9 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
                            <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;GITHUB_AUTH_TOKEN,
                            <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;GITHUB_API_URL,
                            <a href="../util/LPVSExitHandler.html" title="class in com.lpvs.util">LPVSExitHandler</a>&nbsp;exitHandler)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Constructs an instance of LPVSGitHubConnectionService with the specified properties and exit handler.</div>
+</td>
 </tr>
 </table>
 </li>
@@ -182,12 +187,16 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>org.kohsuke.github.GitHub</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#connectToGitHubApi()">connectToGitHubApi</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Connects to the GitHub API based on the configured login, authentication token, and API URL.</div>
+</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setGithubTokenFromEnv()">setGithubTokenFromEnv</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Sets the GitHub authentication token from the environment variable if available.</div>
+</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -227,6 +236,14 @@ public&nbsp;LPVSGitHubConnectionService&#8203;(@Value("${github.login}")
                                    @Value("${github.api.url}")
                                    <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;GITHUB_API_URL,
                                    <a href="../util/LPVSExitHandler.html" title="class in com.lpvs.util">LPVSExitHandler</a>&nbsp;exitHandler)</pre>
+<div class="block">Constructs an instance of LPVSGitHubConnectionService with the specified properties and exit handler.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>GITHUB_LOGIN</code> - GitHub login username.</dd>
+<dd><code>GITHUB_AUTH_TOKEN</code> - GitHub authentication token.</dd>
+<dd><code>GITHUB_API_URL</code> - GitHub API URL for connecting to a GitHub Enterprise instance.</dd>
+<dd><code>exitHandler</code> - Handler for exiting the application.</dd>
+</dl>
 </li>
 </ul>
 </li>
@@ -247,9 +264,12 @@ public&nbsp;LPVSGitHubConnectionService&#8203;(@Value("${github.login}")
 <h4>connectToGitHubApi</h4>
 <pre class="methodSignature">public&nbsp;org.kohsuke.github.GitHub&nbsp;connectToGitHubApi()
                                              throws <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/IOException.html?is-external=true" title="class or interface in java.io" class="externalLink">IOException</a></pre>
+<div class="block">Connects to the GitHub API based on the configured login, authentication token, and API URL.</div>
 <dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>GitHub instance for interacting with the GitHub API.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/IOException.html?is-external=true" title="class or interface in java.io" class="externalLink">IOException</a></code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/IOException.html?is-external=true" title="class or interface in java.io" class="externalLink">IOException</a></code> - if an error occurs during the GitHub connection.</dd>
 </dl>
 </li>
 </ul>
@@ -260,6 +280,7 @@ public&nbsp;LPVSGitHubConnectionService&#8203;(@Value("${github.login}")
 <li class="blockList">
 <h4>setGithubTokenFromEnv</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setGithubTokenFromEnv()</pre>
+<div class="block">Sets the GitHub authentication token from the environment variable if available.</div>
 </li>
 </ul>
 </li>

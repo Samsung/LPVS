@@ -135,6 +135,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <pre>@Service
 public class <span class="typeNameLabel">LPVSLoginCheckService</span>
 extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></pre>
+<div class="block">Service class for handling login-related operations in LPVS.</div>
 </li>
 </ul>
 </div>
@@ -157,7 +158,9 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <tr class="altColor">
 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(com.lpvs.repository.LPVSPullRequestRepository,com.lpvs.repository.LPVSMemberRepository)">LPVSLoginCheckService</a></span>&#8203;(<a href="../repository/LPVSPullRequestRepository.html" title="interface in com.lpvs.repository">LPVSPullRequestRepository</a>&nbsp;lpvsPullRequestRepository,
                      <a href="../repository/LPVSMemberRepository.html" title="interface in com.lpvs.repository">LPVSMemberRepository</a>&nbsp;memberRepository)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Constructor for LPVSLoginCheckService.</div>
+</td>
 </tr>
 </table>
 </li>
@@ -180,22 +183,30 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <tr id="i0" class="altColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#dateTimeFormatting(java.time.LocalDateTime)">dateTimeFormatting</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/LocalDateTime.html?is-external=true" title="class or interface in java.time" class="externalLink">LocalDateTime</a>&nbsp;localDateTime)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Format LocalDateTime object as a string.</div>
+</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="../entity/auth/LPVSMember.html" title="class in com.lpvs.entity.auth">LPVSMember</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getMemberFromMemberMap(org.springframework.security.core.Authentication)">getMemberFromMemberMap</a></span>&#8203;(org.springframework.security.core.Authentication&nbsp;authentication)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Get an LPVSMember from the OAuth login member map.</div>
+</td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Map.html?is-external=true" title="class or interface in java.util" class="externalLink">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getOauthLoginMemberMap(org.springframework.security.core.Authentication)">getOauthLoginMemberMap</a></span>&#8203;(org.springframework.security.core.Authentication&nbsp;authentication)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Get OAuth login member map from the authentication object.</div>
+</td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#loginVerification(org.springframework.security.core.Authentication)">loginVerification</a></span>&#8203;(org.springframework.security.core.Authentication&nbsp;authentication)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Perform login verification using the authentication object.</div>
+</td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="../entity/history/HistoryPageEntity.html" title="class in com.lpvs.entity.history">HistoryPageEntity</a></code></td>
@@ -203,7 +214,9 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
          <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;name,
          org.springframework.data.domain.Pageable&nbsp;pageable,
          org.springframework.security.core.Authentication&nbsp;authentication)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Check access based on type, name, pageable, and authentication.</div>
+</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -237,6 +250,12 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <h4>LPVSLoginCheckService</h4>
 <pre>public&nbsp;LPVSLoginCheckService&#8203;(<a href="../repository/LPVSPullRequestRepository.html" title="interface in com.lpvs.repository">LPVSPullRequestRepository</a>&nbsp;lpvsPullRequestRepository,
                              <a href="../repository/LPVSMemberRepository.html" title="interface in com.lpvs.repository">LPVSMemberRepository</a>&nbsp;memberRepository)</pre>
+<div class="block">Constructor for LPVSLoginCheckService.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>lpvsPullRequestRepository</code> - Repository for LPVS pull requests.</dd>
+<dd><code>memberRepository</code> - Repository for LPVS members.</dd>
+</dl>
 </li>
 </ul>
 </li>
@@ -256,6 +275,13 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <li class="blockList">
 <h4>getOauthLoginMemberMap</h4>
 <pre class="methodSignature">public&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Map.html?is-external=true" title="class or interface in java.util" class="externalLink">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&gt;&nbsp;getOauthLoginMemberMap&#8203;(org.springframework.security.core.Authentication&nbsp;authentication)</pre>
+<div class="block">Get OAuth login member map from the authentication object.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>authentication</code> - The authentication object.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>Map representing the attributes of the OAuth login member.</dd>
+</dl>
 </li>
 </ul>
 <a id="loginVerification(org.springframework.security.core.Authentication)">
@@ -265,6 +291,13 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <li class="blockList">
 <h4>loginVerification</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;loginVerification&#8203;(org.springframework.security.core.Authentication&nbsp;authentication)</pre>
+<div class="block">Perform login verification using the authentication object.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>authentication</code> - The authentication object.</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="../exception/LoginFailedException.html" title="class in com.lpvs.exception">LoginFailedException</a></code> - If login verification fails.</dd>
+</dl>
 </li>
 </ul>
 <a id="getMemberFromMemberMap(org.springframework.security.core.Authentication)">
@@ -274,6 +307,13 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <li class="blockList">
 <h4>getMemberFromMemberMap</h4>
 <pre class="methodSignature">public&nbsp;<a href="../entity/auth/LPVSMember.html" title="class in com.lpvs.entity.auth">LPVSMember</a>&nbsp;getMemberFromMemberMap&#8203;(org.springframework.security.core.Authentication&nbsp;authentication)</pre>
+<div class="block">Get an LPVSMember from the OAuth login member map.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>authentication</code> - The authentication object.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>LPVSMember extracted from the OAuth login member map.</dd>
+</dl>
 </li>
 </ul>
 <a id="pathCheck(java.lang.String,java.lang.String,org.springframework.data.domain.Pageable,org.springframework.security.core.Authentication)">
@@ -286,6 +326,18 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
                                    <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;name,
                                    org.springframework.data.domain.Pageable&nbsp;pageable,
                                    org.springframework.security.core.Authentication&nbsp;authentication)</pre>
+<div class="block">Check access based on type, name, pageable, and authentication.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>type</code> - The type of access.</dd>
+<dd><code>name</code> - The name associated with access.</dd>
+<dd><code>pageable</code> - Pageable object for pagination.</dd>
+<dd><code>authentication</code> - The authentication object.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>HistoryPageEntity representing the results of access verification.</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="../exception/WrongAccessException.html" title="class in com.lpvs.exception">WrongAccessException</a></code> - If access verification fails.</dd>
+</dl>
 </li>
 </ul>
 <a id="dateTimeFormatting(java.time.LocalDateTime)">
@@ -295,6 +347,13 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <li class="blockList">
 <h4>dateTimeFormatting</h4>
 <pre class="methodSignature">public&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;dateTimeFormatting&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/LocalDateTime.html?is-external=true" title="class or interface in java.time" class="externalLink">LocalDateTime</a>&nbsp;localDateTime)</pre>
+<div class="block">Format LocalDateTime object as a string.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>localDateTime</code> - The LocalDateTime object to format.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>String representation of the formatted LocalDateTime.</dd>
+</dl>
 </li>
 </ul>
 </li>

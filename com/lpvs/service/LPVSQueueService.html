@@ -135,6 +135,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <pre>@Service
 public class <span class="typeNameLabel">LPVSQueueService</span>
 extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></pre>
+<div class="block">Service for managing LPVSQueue elements and processing webhooks.</div>
 </li>
 </ul>
 </div>
@@ -161,7 +162,9 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
                 <a href="../repository/LPVSPullRequestRepository.html" title="interface in com.lpvs.repository">LPVSPullRequestRepository</a>&nbsp;lpvsPullRequestRepository,
                 <a href="../repository/LPVSQueueRepository.html" title="interface in com.lpvs.repository">LPVSQueueRepository</a>&nbsp;queueRepository,
                 int&nbsp;maxAttempts)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Constructor for LPVSQueueService.</div>
+</td>
 </tr>
 </table>
 </li>
@@ -184,42 +187,58 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#add(com.lpvs.entity.LPVSQueue)">add</a></span>&#8203;(<a href="../entity/LPVSQueue.html" title="class in com.lpvs.entity">LPVSQueue</a>&nbsp;webhookConfig)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Adds the LPVSQueue element to the end of the queue.</div>
+</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addFirst(com.lpvs.entity.LPVSQueue)">addFirst</a></span>&#8203;(<a href="../entity/LPVSQueue.html" title="class in com.lpvs.entity">LPVSQueue</a>&nbsp;webhookConfig)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Adds the LPVSQueue element to the front of the queue.</div>
+</td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#checkForQueue()">checkForQueue</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Checks for any previous LPVSQueue elements and processes them.</div>
+</td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#delete(com.lpvs.entity.LPVSQueue)">delete</a></span>&#8203;(<a href="../entity/LPVSQueue.html" title="class in com.lpvs.entity">LPVSQueue</a>&nbsp;webhookConfig)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Deletes the LPVSQueue element from the repository and the queue.</div>
+</td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="../entity/LPVSQueue.html" title="class in com.lpvs.entity">LPVSQueue</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getLatestScan(java.util.List)">getLatestScan</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../entity/LPVSQueue.html" title="class in com.lpvs.entity">LPVSQueue</a>&gt;&nbsp;webhookConfigList)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Gets the LPVSQueue element with the latest scan date.</div>
+</td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/BlockingDeque.html?is-external=true" title="class or interface in java.util.concurrent" class="externalLink">BlockingDeque</a>&lt;<a href="../entity/LPVSQueue.html" title="class in com.lpvs.entity">LPVSQueue</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getQueue()">getQueue</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Gets the entire LPVSQueue.</div>
+</td>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="../entity/LPVSQueue.html" title="class in com.lpvs.entity">LPVSQueue</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getQueueFirstElement()">getQueueFirstElement</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Gets the first element from the LPVSQueue.</div>
+</td>
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#processWebHook(com.lpvs.entity.LPVSQueue)">processWebHook</a></span>&#8203;(<a href="../entity/LPVSQueue.html" title="class in com.lpvs.entity">LPVSQueue</a>&nbsp;webhookConfig)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Asynchronously processes the LPVSQueue element, handling GitHub webhook events.</div>
+</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -259,6 +278,16 @@ public&nbsp;LPVSQueueService&#8203;(<a href="LPVSGitHubService.html" title="clas
                         <a href="../repository/LPVSQueueRepository.html" title="interface in com.lpvs.repository">LPVSQueueRepository</a>&nbsp;queueRepository,
                         @Value("${lpvs.attempts:4}")
                         int&nbsp;maxAttempts)</pre>
+<div class="block">Constructor for LPVSQueueService.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>gitHubService</code> - Service for interacting with GitHub.</dd>
+<dd><code>detectService</code> - Service for detecting licenses in scanned files.</dd>
+<dd><code>licenseService</code> - Service for managing licenses and license conflicts.</dd>
+<dd><code>lpvsPullRequestRepository</code> - Repository for storing LPVSPullRequest entities.</dd>
+<dd><code>queueRepository</code> - Repository for storing LPVSQueue entities.</dd>
+<dd><code>maxAttempts</code> - Maximum attempts for processing LPVSQueue elements.</dd>
+</dl>
 </li>
 </ul>
 </li>
@@ -279,9 +308,12 @@ public&nbsp;LPVSQueueService&#8203;(<a href="LPVSGitHubService.html" title="clas
 <h4>getQueueFirstElement</h4>
 <pre class="methodSignature">public&nbsp;<a href="../entity/LPVSQueue.html" title="class in com.lpvs.entity">LPVSQueue</a>&nbsp;getQueueFirstElement()
                                throws <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang" class="externalLink">InterruptedException</a></pre>
+<div class="block">Gets the first element from the LPVSQueue.</div>
 <dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The first LPVSQueue element.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang" class="externalLink">InterruptedException</a></code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang" class="externalLink">InterruptedException</a></code> - If interrupted while waiting for the element.</dd>
 </dl>
 </li>
 </ul>
@@ -293,9 +325,12 @@ public&nbsp;LPVSQueueService&#8203;(<a href="LPVSGitHubService.html" title="clas
 <h4>addFirst</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;addFirst&#8203;(<a href="../entity/LPVSQueue.html" title="class in com.lpvs.entity">LPVSQueue</a>&nbsp;webhookConfig)
               throws <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang" class="externalLink">InterruptedException</a></pre>
+<div class="block">Adds the LPVSQueue element to the front of the queue.</div>
 <dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>webhookConfig</code> - The LPVSQueue element to be added.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang" class="externalLink">InterruptedException</a></code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang" class="externalLink">InterruptedException</a></code> - If interrupted while waiting to add the element.</dd>
 </dl>
 </li>
 </ul>
@@ -307,9 +342,12 @@ public&nbsp;LPVSQueueService&#8203;(<a href="LPVSGitHubService.html" title="clas
 <h4>add</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;add&#8203;(<a href="../entity/LPVSQueue.html" title="class in com.lpvs.entity">LPVSQueue</a>&nbsp;webhookConfig)
          throws <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang" class="externalLink">InterruptedException</a></pre>
+<div class="block">Adds the LPVSQueue element to the end of the queue.</div>
 <dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>webhookConfig</code> - The LPVSQueue element to be added.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang" class="externalLink">InterruptedException</a></code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang" class="externalLink">InterruptedException</a></code> - If interrupted while waiting to add the element.</dd>
 </dl>
 </li>
 </ul>
@@ -320,6 +358,11 @@ public&nbsp;LPVSQueueService&#8203;(<a href="LPVSGitHubService.html" title="clas
 <li class="blockList">
 <h4>delete</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;delete&#8203;(<a href="../entity/LPVSQueue.html" title="class in com.lpvs.entity">LPVSQueue</a>&nbsp;webhookConfig)</pre>
+<div class="block">Deletes the LPVSQueue element from the repository and the queue.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>webhookConfig</code> - The LPVSQueue element to be deleted.</dd>
+</dl>
 </li>
 </ul>
 <a id="getQueue()">
@@ -329,6 +372,11 @@ public&nbsp;LPVSQueueService&#8203;(<a href="LPVSGitHubService.html" title="clas
 <li class="blockList">
 <h4>getQueue</h4>
 <pre class="methodSignature">public&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/BlockingDeque.html?is-external=true" title="class or interface in java.util.concurrent" class="externalLink">BlockingDeque</a>&lt;<a href="../entity/LPVSQueue.html" title="class in com.lpvs.entity">LPVSQueue</a>&gt;&nbsp;getQueue()</pre>
+<div class="block">Gets the entire LPVSQueue.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The BlockingDeque containing LPVSQueue elements.</dd>
+</dl>
 </li>
 </ul>
 <a id="checkForQueue()">
@@ -339,9 +387,10 @@ public&nbsp;LPVSQueueService&#8203;(<a href="LPVSGitHubService.html" title="clas
 <h4>checkForQueue</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;checkForQueue()
                    throws <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang" class="externalLink">InterruptedException</a></pre>
+<div class="block">Checks for any previous LPVSQueue elements and processes them.</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang" class="externalLink">InterruptedException</a></code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang" class="externalLink">InterruptedException</a></code> - If interrupted while processing the queue.</dd>
 </dl>
 </li>
 </ul>
@@ -352,6 +401,13 @@ public&nbsp;LPVSQueueService&#8203;(<a href="LPVSGitHubService.html" title="clas
 <li class="blockList">
 <h4>getLatestScan</h4>
 <pre class="methodSignature">public&nbsp;<a href="../entity/LPVSQueue.html" title="class in com.lpvs.entity">LPVSQueue</a>&nbsp;getLatestScan&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../entity/LPVSQueue.html" title="class in com.lpvs.entity">LPVSQueue</a>&gt;&nbsp;webhookConfigList)</pre>
+<div class="block">Gets the LPVSQueue element with the latest scan date.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>webhookConfigList</code> - The list of LPVSQueue elements.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The LPVSQueue element with the latest scan date.</dd>
+</dl>
 </li>
 </ul>
 <a id="processWebHook(com.lpvs.entity.LPVSQueue)">
@@ -363,9 +419,12 @@ public&nbsp;LPVSQueueService&#8203;(<a href="LPVSGitHubService.html" title="clas
 <pre class="methodSignature">@Async("threadPoolTaskExecutor")
 public&nbsp;void&nbsp;processWebHook&#8203;(<a href="../entity/LPVSQueue.html" title="class in com.lpvs.entity">LPVSQueue</a>&nbsp;webhookConfig)
                     throws <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/IOException.html?is-external=true" title="class or interface in java.io" class="externalLink">IOException</a></pre>
+<div class="block">Asynchronously processes the LPVSQueue element, handling GitHub webhook events.</div>
 <dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>webhookConfig</code> - The LPVSQueue element to be processed.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/IOException.html?is-external=true" title="class or interface in java.io" class="externalLink">IOException</a></code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/IOException.html?is-external=true" title="class or interface in java.io" class="externalLink">IOException</a></code> - If an I/O error occurs.</dd>
 </dl>
 </li>
 </ul>
