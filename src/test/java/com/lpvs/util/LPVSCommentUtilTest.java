@@ -7,8 +7,11 @@
 package com.lpvs.util;
 
 import com.lpvs.entity.LPVSFile;
+import com.lpvs.entity.LPVSLicense;
 import com.lpvs.entity.LPVSQueue;
 import com.lpvs.entity.enums.LPVSVcs;
+import com.lpvs.service.LPVSLicenseService;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -16,6 +19,17 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class LPVSCommentUtilTest {
 
@@ -24,6 +38,33 @@ public class LPVSCommentUtilTest {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
+    }
+
+    private LPVSFile createSampleFile(String filePath, String matchedLines) {
+        final Long baseLicenseId = 1234567890L;
+        final String baseLicenseName = "licenseName";
+        final String baseSpdxId = "spdxId";
+        final String baseAccess = "access";
+        final String baseAlternativeName = "licenseNameAlternative";
+        final String baseChecklistUrl = "checklistUrl";
+        List<String> baseIncompatibleWith =
+                Arrays.asList("incompatibleWith1", "incompatibleWith2", "incompatibleWith3");
+
+        LPVSLicense lpvsLicense3 =
+                new LPVSLicense(
+                        baseLicenseId,
+                        baseLicenseName,
+                        "LicenseRef-scancode-" + baseSpdxId,
+                        baseAccess,
+                        baseAlternativeName,
+                        null);
+
+        Set<LPVSLicense> licenses = new HashSet<>(Arrays.asList(lpvsLicense3));
+        LPVSFile file = new LPVSFile();
+        file.setFilePath(filePath);
+        file.setMatchedLines(matchedLines);
+        file.setLicenses(licenses);
+        return file;
     }
 
     @Test
@@ -82,5 +123,46 @@ public class LPVSCommentUtilTest {
                         + "7 (https://gerrit.org/repo/blob/headCommitSHA/exampleFile.txt#L7) "
                         + "9-12 (https://gerrit.org/repo/blob/headCommitSHA/exampleFile.txt#L9L12) ",
                 result);
+    }
+
+    @Test
+    void testReportCommentBuilder() {
+        LPVSQueue webhookConfig = new LPVSQueue();
+        List<LPVSFile> scanResults = new ArrayList<>();
+        scanResults.add(createSampleFile("testPath1", "test1"));
+        List<LPVSLicenseService.Conflict<String, String>> conflicts = new ArrayList<>();
+        String comment =
+                LPVSCommentUtil.reportCommentBuilder(webhookConfig, scanResults, conflicts);
+
+        assertNotNull(comment);
+    }
+
+    @Test
+    void testBuildHTMLComment() {
+        LPVSQueue webhookConfig = new LPVSQueue();
+        List<LPVSFile> scanResults = new ArrayList<>();
+        scanResults.add(createSampleFile("testPath1", "test1"));
+        List<LPVSLicenseService.Conflict<String, String>> conflicts = new ArrayList<>();
+
+        String htmlComment =
+                LPVSCommentUtil.buildHTMLComment(webhookConfig, scanResults, conflicts);
+
+        assertNotNull(htmlComment);
+    }
+
+    @Test
+    void testSaveHTMLToFile() throws IOException {
+        String htmlContent = "<html><body><p>Test HTML</p></body></html>";
+        String filePath = "test-output.html";
+
+        LPVSCommentUtil.saveHTMLToFile(htmlContent, filePath);
+
+        assertTrue(Files.exists(Paths.get(filePath)));
+        String fileContent = Files.readString(Paths.get(filePath));
+        assertEquals(htmlContent, fileContent);
+
+        // Clean up: delete the created file
+        // TODO: need to switch to temp folder option
+        Files.deleteIfExists(Paths.get(filePath));
     }
 }

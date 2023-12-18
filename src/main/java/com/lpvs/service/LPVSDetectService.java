@@ -9,8 +9,8 @@ package com.lpvs.service;
 import com.lpvs.entity.LPVSFile;
 import com.lpvs.entity.LPVSQueue;
 import com.lpvs.service.scanner.scanoss.LPVSScanossDetectService;
+import com.lpvs.util.LPVSCommentUtil;
 import com.lpvs.util.LPVSFileUtil;
-import com.nimbusds.jose.util.IOUtils;
 
 import lombok.extern.slf4j.Slf4j;
 import org.kohsuke.github.GHPullRequest;
@@ -28,8 +28,10 @@ import org.springframework.web.util.HtmlUtils;
 
 import javax.annotation.PostConstruct;
 
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -57,6 +59,11 @@ public class LPVSDetectService {
     private LPVSGitHubConnectionService gitHubConnectionService;
 
     /**
+     * Service responsible for license conflict analysis.
+     */
+    private LPVSLicenseService licenseService;
+
+    /**
      * Event publisher for triggering application events.
      */
     @Autowired private ApplicationEventPublisher eventPublisher;
@@ -66,6 +73,12 @@ public class LPVSDetectService {
      */
     @Value("${github.pull.request:}")
     private String trigger;
+
+    /**
+     * Optional parameter to save html report to specified location.
+     */
+    @Value("${build.html.report:}")
+    private String htmlReport;
 
     /**
      * Spring application context.
@@ -83,10 +96,12 @@ public class LPVSDetectService {
     public LPVSDetectService(
             @Value("${scanner:scanoss}") String scannerType,
             LPVSGitHubConnectionService gitHubConnectionService,
-            LPVSScanossDetectService scanossDetectService) {
+            LPVSScanossDetectService scanossDetectService,
+            LPVSLicenseService licenseService) {
         this.scannerType = scannerType;
         this.gitHubConnectionService = gitHubConnectionService;
         this.scanossDetectService = scanossDetectService;
+        this.licenseService = licenseService;
     }
 
     /**
@@ -102,20 +117,43 @@ public class LPVSDetectService {
      */
     @EventListener(ApplicationReadyEvent.class)
     public void runOneScan() {
+        log.info("Triggered signle scan operation");
         if (trigger != null && !HtmlUtils.htmlEscape(trigger).equals("")) {
             try {
                 LPVSQueue webhookConfig =
                         this.getInternalQueueByPullRequest(HtmlUtils.htmlEscape(trigger));
-                this.runScan(webhookConfig, LPVSDetectService.getPathByPullRequest(webhookConfig));
-                File scanResult = new File(LPVSFileUtil.getScanResultsJsonFilePath(webhookConfig));
-                if (scanResult.exists()) {
-                    String jsonTxt = IOUtils.readFileToString(scanResult);
-                    // ToDo: form html report and console output
-                    log.info(jsonTxt);
-                    log.info("\n\n\n Single scan finished successfully \n\n\n");
+
+                List<LPVSFile> scanResult =
+                        this.runScan(
+                                webhookConfig,
+                                LPVSDetectService.getPathByPullRequest(webhookConfig));
+
+                List<LPVSLicenseService.Conflict<String, String>> detectedConflicts =
+                        licenseService.findConflicts(webhookConfig, scanResult);
+
+                if (htmlReport != null && !HtmlUtils.htmlEscape(htmlReport).equals("")) {
+                    Path buildReportPath = Paths.get(htmlReport);
+                    Path parentDirectory = buildReportPath.getParent();
+
+                    if (parentDirectory != null && Files.isDirectory(parentDirectory)) {
+                        String report =
+                                LPVSCommentUtil.buildHTMLComment(
+                                        webhookConfig, scanResult, detectedConflicts);
+                        LPVSCommentUtil.saveHTMLToFile(report, buildReportPath.toString());
+                    } else {
+                        log.error(
+                                "Error: The parent directory '"
+                                        + parentDirectory
+                                        + "' does not exist.");
+                    }
+                } else {
+                    String report =
+                            LPVSCommentUtil.reportCommentBuilder(
+                                    webhookConfig, scanResult, detectedConflicts);
+                    log.info(report);
                 }
             } catch (Exception ex) {
-                log.info("\n\n\n Single scan finished with errors \n\n\n");
+                log.error("\n\n\n Single scan finished with errors \n\n\n");
                 log.error("Can't triger single scan " + ex);
             }
             // exiting application
