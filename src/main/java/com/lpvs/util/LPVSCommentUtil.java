@@ -76,12 +76,12 @@ public class LPVSCommentUtil {
     }
 
     /**
-     * Generates a formatted string for LPVS github comment.
+     * Generates a formatted string for an LPVS GitHub comment.
      *
      * @param webhookConfig The {@link LPVSQueue} configuration for the webhook.
-     * @param scanResults   The List<{@link LPVSFile}> contain preformatted scan results.
-     * @param conflicts     The List<{@link LPVSLicenseService}.Conflict<String, String>> contain license conflict information.
-     * @return A string containing scan result in github friendly format.
+     * @param scanResults   List containing preformatted scan results.
+     * @param conflicts     List of conflicts, containing license conflict information.
+     * @return A string containing scan results in GitHub-friendly format.
      */
     public static String reportCommentBuilder(
             LPVSQueue webhookConfig,
@@ -132,12 +132,12 @@ public class LPVSCommentUtil {
     }
 
     /**
-     * Generates a formatted string for html report with scan results.
+     * Generates a formatted string for an HTML report with scan results.
      *
      * @param webhookConfig The {@link LPVSQueue} configuration for the webhook.
-     * @param scanResults   The List<{@link LPVSFile}> contain preformatted scan results.
-     * @param conflicts     The List<{@link LPVSLicenseService}.Conflict<String, String>> contain license conflict information.
-     * @return A string containing scan result in html format.
+     * @param scanResults   List containing preformatted scan results.
+     * @param conflicts     List containing license conflict information.
+     * @return A string containing scan results in HTML format.
      */
     public static String buildHTMLComment(
             LPVSQueue webhookConfig,
@@ -204,7 +204,7 @@ public class LPVSCommentUtil {
      * Saves HTML report to given location.
      *
      * @param htmlContent   The string, containing report in HTML format.
-     * @param scanResults   The path to expected html report file.
+     * @param filePath      The path to expected html report file.
      */
     public static void saveHTMLToFile(String htmlContent, String filePath) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {

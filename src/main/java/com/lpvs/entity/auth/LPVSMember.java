@@ -66,7 +66,13 @@ public class LPVSMember {
     private String organization;
 
     /**
-     * Builder pattern for creating instances of LPVSMember.
+     * Constructs instances of LPVSMember using the Builder pattern.
+     *
+     * @param id       The identifier for the LPVSMember.
+     * @param name     The name associated with the LPVSMember.
+     * @param email    The email address of the LPVSMember.
+     * @param provider The provider associated with the LPVSMember.
+     * @param nickname The nickname of the LPVSMember.
      */
     @Builder
     public LPVSMember(Long id, String name, String email, String provider, String nickname) {
