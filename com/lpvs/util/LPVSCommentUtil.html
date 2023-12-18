@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":9};
+var data = {"i0":9,"i1":9,"i2":9,"i3":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -185,11 +185,37 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>static <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#buildHTMLComment(com.lpvs.entity.LPVSQueue,java.util.List,java.util.List)">buildHTMLComment</a></span>&#8203;(<a href="../entity/LPVSQueue.html" title="class in com.lpvs.entity">LPVSQueue</a>&nbsp;webhookConfig,
+                <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../entity/LPVSFile.html" title="class in com.lpvs.entity">LPVSFile</a>&gt;&nbsp;scanResults,
+                <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../service/LPVSLicenseService.Conflict.html" title="class in com.lpvs.service">LPVSLicenseService.Conflict</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt;&gt;&nbsp;conflicts)</code></th>
+<td class="colLast">
+<div class="block">Generates a formatted string for an HTML report with scan results.</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code>static <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getMatchedLinesAsLink(com.lpvs.entity.LPVSQueue,com.lpvs.entity.LPVSFile,com.lpvs.entity.enums.LPVSVcs)">getMatchedLinesAsLink</a></span>&#8203;(<a href="../entity/LPVSQueue.html" title="class in com.lpvs.entity">LPVSQueue</a>&nbsp;webhookConfig,
                      <a href="../entity/LPVSFile.html" title="class in com.lpvs.entity">LPVSFile</a>&nbsp;file,
                      <a href="../entity/enums/LPVSVcs.html" title="enum in com.lpvs.entity.enums">LPVSVcs</a>&nbsp;vcs)</code></th>
 <td class="colLast">
 <div class="block">Generates a formatted string containing links to matched lines in a file.</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>static <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#reportCommentBuilder(com.lpvs.entity.LPVSQueue,java.util.List,java.util.List)">reportCommentBuilder</a></span>&#8203;(<a href="../entity/LPVSQueue.html" title="class in com.lpvs.entity">LPVSQueue</a>&nbsp;webhookConfig,
+                    <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../entity/LPVSFile.html" title="class in com.lpvs.entity">LPVSFile</a>&gt;&nbsp;scanResults,
+                    <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../service/LPVSLicenseService.Conflict.html" title="class in com.lpvs.service">LPVSLicenseService.Conflict</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt;&gt;&nbsp;conflicts)</code></th>
+<td class="colLast">
+<div class="block">Generates a formatted string for an LPVS GitHub comment.</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>static void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#saveHTMLToFile(java.lang.String,java.lang.String)">saveHTMLToFile</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;htmlContent,
+              <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;filePath)</code></th>
+<td class="colLast">
+<div class="block">Saves HTML report to given location.</div>
 </td>
 </tr>
 </table>
@@ -238,7 +264,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <a id="getMatchedLinesAsLink(com.lpvs.entity.LPVSQueue,com.lpvs.entity.LPVSFile,com.lpvs.entity.enums.LPVSVcs)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>getMatchedLinesAsLink</h4>
 <pre class="methodSignature">public static&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;getMatchedLinesAsLink&#8203;(<a href="../entity/LPVSQueue.html" title="class in com.lpvs.entity">LPVSQueue</a>&nbsp;webhookConfig,
@@ -252,6 +278,62 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <dd><code>vcs</code> - The <a href="../entity/enums/LPVSVcs.html" title="enum in com.lpvs.entity.enums"><code>LPVSVcs</code></a> representing the version control system (e.g., GitHub).</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>A string containing formatted links to matched lines in the file.</dd>
+</dl>
+</li>
+</ul>
+<a id="reportCommentBuilder(com.lpvs.entity.LPVSQueue,java.util.List,java.util.List)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>reportCommentBuilder</h4>
+<pre class="methodSignature">public static&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;reportCommentBuilder&#8203;(<a href="../entity/LPVSQueue.html" title="class in com.lpvs.entity">LPVSQueue</a>&nbsp;webhookConfig,
+                                          <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../entity/LPVSFile.html" title="class in com.lpvs.entity">LPVSFile</a>&gt;&nbsp;scanResults,
+                                          <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../service/LPVSLicenseService.Conflict.html" title="class in com.lpvs.service">LPVSLicenseService.Conflict</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt;&gt;&nbsp;conflicts)</pre>
+<div class="block">Generates a formatted string for an LPVS GitHub comment.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>webhookConfig</code> - The <a href="../entity/LPVSQueue.html" title="class in com.lpvs.entity"><code>LPVSQueue</code></a> configuration for the webhook.</dd>
+<dd><code>scanResults</code> - List containing preformatted scan results.</dd>
+<dd><code>conflicts</code> - List of conflicts, containing license conflict information.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>A string containing scan results in GitHub-friendly format.</dd>
+</dl>
+</li>
+</ul>
+<a id="buildHTMLComment(com.lpvs.entity.LPVSQueue,java.util.List,java.util.List)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>buildHTMLComment</h4>
+<pre class="methodSignature">public static&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;buildHTMLComment&#8203;(<a href="../entity/LPVSQueue.html" title="class in com.lpvs.entity">LPVSQueue</a>&nbsp;webhookConfig,
+                                      <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../entity/LPVSFile.html" title="class in com.lpvs.entity">LPVSFile</a>&gt;&nbsp;scanResults,
+                                      <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../service/LPVSLicenseService.Conflict.html" title="class in com.lpvs.service">LPVSLicenseService.Conflict</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt;&gt;&nbsp;conflicts)</pre>
+<div class="block">Generates a formatted string for an HTML report with scan results.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>webhookConfig</code> - The <a href="../entity/LPVSQueue.html" title="class in com.lpvs.entity"><code>LPVSQueue</code></a> configuration for the webhook.</dd>
+<dd><code>scanResults</code> - List containing preformatted scan results.</dd>
+<dd><code>conflicts</code> - List containing license conflict information.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>A string containing scan results in HTML format.</dd>
+</dl>
+</li>
+</ul>
+<a id="saveHTMLToFile(java.lang.String,java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>saveHTMLToFile</h4>
+<pre class="methodSignature">public static&nbsp;void&nbsp;saveHTMLToFile&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;htmlContent,
+                                  <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;filePath)</pre>
+<div class="block">Saves HTML report to given location.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>htmlContent</code> - The string, containing report in HTML format.</dd>
+<dd><code>filePath</code> - The path to expected html report file.</dd>
 </dl>
 </li>
 </ul>

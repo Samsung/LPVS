@@ -156,9 +156,10 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.String,com.lpvs.service.LPVSGitHubConnectionService,com.lpvs.service.scanner.scanoss.LPVSScanossDetectService)">LPVSDetectService</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;scannerType,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.String,com.lpvs.service.LPVSGitHubConnectionService,com.lpvs.service.scanner.scanoss.LPVSScanossDetectService,com.lpvs.service.LPVSLicenseService)">LPVSDetectService</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;scannerType,
                  <a href="LPVSGitHubConnectionService.html" title="class in com.lpvs.service">LPVSGitHubConnectionService</a>&nbsp;gitHubConnectionService,
-                 <a href="scanner/scanoss/LPVSScanossDetectService.html" title="class in com.lpvs.service.scanner.scanoss">LPVSScanossDetectService</a>&nbsp;scanossDetectService)</code></th>
+                 <a href="scanner/scanoss/LPVSScanossDetectService.html" title="class in com.lpvs.service.scanner.scanoss">LPVSScanossDetectService</a>&nbsp;scanossDetectService,
+                 <a href="LPVSLicenseService.html" title="class in com.lpvs.service">LPVSLicenseService</a>&nbsp;licenseService)</code></th>
 <td class="colLast">
 <div class="block">Constructs an instance of LPVSDetectService with the specified parameters.</div>
 </td>
@@ -234,7 +235,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(java.lang.String,com.lpvs.service.LPVSGitHubConnectionService,com.lpvs.service.scanner.scanoss.LPVSScanossDetectService)">
+<a id="&lt;init&gt;(java.lang.String,com.lpvs.service.LPVSGitHubConnectionService,com.lpvs.service.scanner.scanoss.LPVSScanossDetectService,com.lpvs.service.LPVSLicenseService)">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -244,13 +245,15 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 public&nbsp;LPVSDetectService&#8203;(@Value("${scanner:scanoss}")
                          <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;scannerType,
                          <a href="LPVSGitHubConnectionService.html" title="class in com.lpvs.service">LPVSGitHubConnectionService</a>&nbsp;gitHubConnectionService,
-                         <a href="scanner/scanoss/LPVSScanossDetectService.html" title="class in com.lpvs.service.scanner.scanoss">LPVSScanossDetectService</a>&nbsp;scanossDetectService)</pre>
+                         <a href="scanner/scanoss/LPVSScanossDetectService.html" title="class in com.lpvs.service.scanner.scanoss">LPVSScanossDetectService</a>&nbsp;scanossDetectService,
+                         <a href="LPVSLicenseService.html" title="class in com.lpvs.service">LPVSLicenseService</a>&nbsp;licenseService)</pre>
 <div class="block">Constructs an instance of LPVSDetectService with the specified parameters.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>scannerType</code> - The type of license detection scanner.</dd>
 <dd><code>gitHubConnectionService</code> - Service for connecting to the GitHub API.</dd>
 <dd><code>scanossDetectService</code> - Service for license detection using ScanOSS.</dd>
+<dd><code>licenseService</code> - Service for license conflict analysis.</dd>
 </dl>
 </li>
 </ul>

@@ -395,12 +395,21 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>static <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
+<th class="colSecond" scope="row"><span class="typeNameLabel">LPVSCommentUtil.</span><code><span class="memberNameLink"><a href="../../util/LPVSCommentUtil.html#buildHTMLComment(com.lpvs.entity.LPVSQueue,java.util.List,java.util.List)">buildHTMLComment</a></span>&#8203;(<a href="../LPVSQueue.html" title="class in com.lpvs.entity">LPVSQueue</a>&nbsp;webhookConfig,
+                <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../LPVSFile.html" title="class in com.lpvs.entity">LPVSFile</a>&gt;&nbsp;scanResults,
+                <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../../service/LPVSLicenseService.Conflict.html" title="class in com.lpvs.service">LPVSLicenseService.Conflict</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt;&gt;&nbsp;conflicts)</code></th>
+<td class="colLast">
+<div class="block">Generates a formatted string for an HTML report with scan results.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">LPVSFileUtil.</span><code><span class="memberNameLink"><a href="../../util/LPVSFileUtil.html#getLocalDirectoryPath(com.lpvs.entity.LPVSQueue)">getLocalDirectoryPath</a></span>&#8203;(<a href="../LPVSQueue.html" title="class in com.lpvs.entity">LPVSQueue</a>&nbsp;webhookConfig)</code></th>
 <td class="colLast">
 <div class="block">Retrieves the local directory path based on the provided webhook configuration.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">LPVSCommentUtil.</span><code><span class="memberNameLink"><a href="../../util/LPVSCommentUtil.html#getMatchedLinesAsLink(com.lpvs.entity.LPVSQueue,com.lpvs.entity.LPVSFile,com.lpvs.entity.enums.LPVSVcs)">getMatchedLinesAsLink</a></span>&#8203;(<a href="../LPVSQueue.html" title="class in com.lpvs.entity">LPVSQueue</a>&nbsp;webhookConfig,
                      <a href="../LPVSFile.html" title="class in com.lpvs.entity">LPVSFile</a>&nbsp;file,
@@ -409,46 +418,55 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">Generates a formatted string containing links to matched lines in a file.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">LPVSWebhookUtil.</span><code><span class="memberNameLink"><a href="../../util/LPVSWebhookUtil.html#getPullRequestId(com.lpvs.entity.LPVSQueue)">getPullRequestId</a></span>&#8203;(<a href="../LPVSQueue.html" title="class in com.lpvs.entity">LPVSQueue</a>&nbsp;webhookConfig)</code></th>
 <td class="colLast">
 <div class="block">Retrieves the pull request ID from the pull request URL in the LPVSQueue object.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">LPVSWebhookUtil.</span><code><span class="memberNameLink"><a href="../../util/LPVSWebhookUtil.html#getRepositoryName(com.lpvs.entity.LPVSQueue)">getRepositoryName</a></span>&#8203;(<a href="../LPVSQueue.html" title="class in com.lpvs.entity">LPVSQueue</a>&nbsp;webhookConfig)</code></th>
 <td class="colLast">
 <div class="block">Retrieves the repository name from the repository URL in the LPVSQueue object.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">LPVSWebhookUtil.</span><code><span class="memberNameLink"><a href="../../util/LPVSWebhookUtil.html#getRepositoryOrganization(com.lpvs.entity.LPVSQueue)">getRepositoryOrganization</a></span>&#8203;(<a href="../LPVSQueue.html" title="class in com.lpvs.entity">LPVSQueue</a>&nbsp;webhookConfig)</code></th>
 <td class="colLast">
 <div class="block">Retrieves the organization name from the repository URL in the LPVSQueue object.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">LPVSWebhookUtil.</span><code><span class="memberNameLink"><a href="../../util/LPVSWebhookUtil.html#getRepositoryUrl(com.lpvs.entity.LPVSQueue)">getRepositoryUrl</a></span>&#8203;(<a href="../LPVSQueue.html" title="class in com.lpvs.entity">LPVSQueue</a>&nbsp;webhookConfig)</code></th>
 <td class="colLast">
 <div class="block">Retrieves the repository URL from the LPVSQueue object.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">LPVSFileUtil.</span><code><span class="memberNameLink"><a href="../../util/LPVSFileUtil.html#getScanResultsDirectoryPath(com.lpvs.entity.LPVSQueue)">getScanResultsDirectoryPath</a></span>&#8203;(<a href="../LPVSQueue.html" title="class in com.lpvs.entity">LPVSQueue</a>&nbsp;webhookConfig)</code></th>
 <td class="colLast">
 <div class="block">Retrieves the directory path for storing scan results based on the provided webhook configuration.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">LPVSFileUtil.</span><code><span class="memberNameLink"><a href="../../util/LPVSFileUtil.html#getScanResultsJsonFilePath(com.lpvs.entity.LPVSQueue)">getScanResultsJsonFilePath</a></span>&#8203;(<a href="../LPVSQueue.html" title="class in com.lpvs.entity">LPVSQueue</a>&nbsp;webhookConfig)</code></th>
 <td class="colLast">
 <div class="block">Retrieves the file path for storing scan results in JSON format based on the provided webhook configuration.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
+<th class="colSecond" scope="row"><span class="typeNameLabel">LPVSCommentUtil.</span><code><span class="memberNameLink"><a href="../../util/LPVSCommentUtil.html#reportCommentBuilder(com.lpvs.entity.LPVSQueue,java.util.List,java.util.List)">reportCommentBuilder</a></span>&#8203;(<a href="../LPVSQueue.html" title="class in com.lpvs.entity">LPVSQueue</a>&nbsp;webhookConfig,
+                    <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../LPVSFile.html" title="class in com.lpvs.entity">LPVSFile</a>&gt;&nbsp;scanResults,
+                    <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../../service/LPVSLicenseService.Conflict.html" title="class in com.lpvs.service">LPVSLicenseService.Conflict</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt;&gt;&nbsp;conflicts)</code></th>
+<td class="colLast">
+<div class="block">Generates a formatted string for an LPVS GitHub comment.</div>
 </td>
 </tr>
 <tr class="altColor">
