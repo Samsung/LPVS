@@ -88,9 +88,10 @@ public class LPVSDetectService {
     /**
      * Constructs an instance of LPVSDetectService with the specified parameters.
      *
-     * @param scannerType            The type of license detection scanner.
+     * @param scannerType             The type of license detection scanner.
      * @param gitHubConnectionService Service for connecting to the GitHub API.
-     * @param scanossDetectService   Service for license detection using ScanOSS.
+     * @param scanossDetectService    Service for license detection using ScanOSS.
+     * @param licenseService          Service for license conflict analysis.
      */
     @Autowired
     public LPVSDetectService(
