@@ -36,28 +36,62 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Service class for detecting licenses in GitHub pull requests using a specified scanner.
+ */
 @Service
 @Slf4j
 public class LPVSDetectService {
 
+    /**
+     * The type of license detection scanner.
+     */
     private String scannerType;
 
+    /**
+     * Service responsible for performing license detection using the ScanOSS scanner.
+     */
     private LPVSScanossDetectService scanossDetectService;
 
+    /**
+     * Service responsible for establishing and managing connections to the GitHub API.
+     */
     private LPVSGitHubConnectionService gitHubConnectionService;
 
+    /**
+     * Service responsible for license conflict analysis.
+     */
     private LPVSLicenseService licenseService;
 
+    /**
+     * Event publisher for triggering application events.
+     */
     @Autowired private ApplicationEventPublisher eventPublisher;
 
+    /**
+     * GitHub pull request used to trigger a single license scan (optional).
+     */
     @Value("${github.pull.request:}")
     private String trigger;
 
+    /**
+     * Optional parameter to save html report to specified location.
+     */
     @Value("${build.html.report:}")
     private String htmlReport;
 
+    /**
+     * Spring application context.
+     */
     @Autowired ApplicationContext ctx;
 
+    /**
+     * Constructs an instance of LPVSDetectService with the specified parameters.
+     *
+     * @param scannerType            The type of license detection scanner.
+     * @param gitHubConnectionService Service for connecting to the GitHub API.
+     * @param scanossDetectService   Service for license detection using ScanOSS.
+     */
     @Autowired
     public LPVSDetectService(
             @Value("${scanner:scanoss}") String scannerType,
@@ -70,11 +104,17 @@ public class LPVSDetectService {
         this.licenseService = licenseService;
     }
 
+    /**
+     * Initializes the LPVSDetectService bean and logs the selected license detection scanner.
+     */
     @PostConstruct
     private void init() {
         log.info("License detection scanner: " + scannerType);
     }
 
+    /**
+     * Event listener method triggered when the application is ready, runs a single license scan if triggered.
+     */
     @EventListener(ApplicationReadyEvent.class)
     public void runOneScan() {
         log.info("Triggered signle scan operation");
@@ -121,6 +161,13 @@ public class LPVSDetectService {
         }
     }
 
+    /**
+     * Retrieves an LPVSQueue configuration based on the GitHub repository and pull request.
+     *
+     * @param repo The GitHub repository.
+     * @param pR   The GitHub pull request.
+     * @return LPVSQueue configuration for the given GitHub repository and pull request.
+     */
     private static LPVSQueue getGitHubWebhookConfig(GHRepository repo, GHPullRequest pR) {
         LPVSQueue webhookConfig = new LPVSQueue();
         webhookConfig.setPullRequestUrl(
@@ -141,6 +188,12 @@ public class LPVSDetectService {
         return webhookConfig;
     }
 
+    /**
+     * Retrieves the LPVSQueue configuration for a given GitHub pull request URL.
+     *
+     * @param pullRequest The GitHub pull request URL.
+     * @return LPVSQueue configuration for the given pull request.
+     */
     public LPVSQueue getInternalQueueByPullRequest(String pullRequest) {
         try {
             if (pullRequest == null) return null;
@@ -164,11 +217,25 @@ public class LPVSDetectService {
         return null;
     }
 
+    /**
+     * Retrieves the local directory path for a given LPVSQueue configuration.
+     *
+     * @param webhookConfig LPVSQueue configuration.
+     * @return Local directory path for the given LPVSQueue.
+     */
     public static String getPathByPullRequest(LPVSQueue webhookConfig) {
         if (webhookConfig == null) return null;
         return LPVSFileUtil.getLocalDirectoryPath(webhookConfig);
     }
 
+    /**
+     * Runs a license scan based on the selected scanner type.
+     *
+     * @param webhookConfig LPVSQueue configuration for the scan.
+     * @param path          Local directory path for the scan.
+     * @return List of LPVSFile objects representing the scan results.
+     * @throws Exception if an error occurs during the scan.
+     */
     public List<LPVSFile> runScan(LPVSQueue webhookConfig, String path) throws Exception {
         if (scannerType.equals("scanoss")) {
             scanossDetectService.runScan(webhookConfig, path);

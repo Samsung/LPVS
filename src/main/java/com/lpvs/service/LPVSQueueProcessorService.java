@@ -16,27 +16,55 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
+/**
+ * Service responsible for processing LPVSQueue elements.
+ */
 @Service
 @Slf4j
 public class LPVSQueueProcessorService {
 
+    /**
+     * Service for managing LPVSQueue elements.
+     */
     private LPVSQueueService queueService;
 
+    /**
+     * Trigger value obtained from application properties.
+     */
     @Value("${github.pull.request:}")
     private String trigger;
 
+    /**
+     * Constructor for LPVSQueueProcessorService.
+     *
+     * @param queueService The LPVSQueueService to be injected.
+     */
     @Autowired
     LPVSQueueProcessorService(LPVSQueueService queueService) {
         this.queueService = queueService;
     }
 
+    /**
+     * Event listener method triggered when the application is ready.
+     * It initiates the queue processing loop.
+     *
+     * @throws Exception If an exception occurs during queue processing.
+     */
     @EventListener(ApplicationReadyEvent.class)
     private void queueProcessor() throws Exception {
+        // Check for any pending elements in the LPVSQueue.
         queueService.checkForQueue();
+
+        // Process LPVSQueue elements until the trigger is set.
         while (trigger == null || trigger.equals("")) {
+            // Get the first element from the LPVSQueue.
             LPVSQueue webhookConfig = queueService.getQueueFirstElement();
             log.info("PROCESS Webhook id = " + webhookConfig.getId());
+
+            // Set the date of the LPVSQueue element.
             webhookConfig.setDate(new Date());
+
+            // Process the LPVSQueue element.
             queueService.processWebHook(webhookConfig);
         }
     }

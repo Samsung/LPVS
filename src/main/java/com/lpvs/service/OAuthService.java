@@ -26,18 +26,39 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * Service for handling OAuth2 user information.
+ */
 @Service
 public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
+    /**
+     * Repository for storing LPVSMember entities.
+     */
     private LPVSMemberRepository lpvsMemberRepository;
 
+    /**
+     * Default OAuth2 user service.
+     */
     @Setter private DefaultOAuth2UserService oAuth2UserService = null;
 
+    /**
+     * Constructor for OAuthService.
+     *
+     * @param lpvsMemberRepository Repository for storing LPVSMember entities.
+     */
     @Autowired
     public OAuthService(LPVSMemberRepository lpvsMemberRepository) {
         this.lpvsMemberRepository = lpvsMemberRepository;
     }
 
+    /**
+     * Loads user information from the OAuth2 provider.
+     *
+     * @param userRequest The OAuth2 user request.
+     * @return OAuth2User with custom attributes.
+     * @throws OAuth2AuthenticationException If an OAuth2 authentication error occurs.
+     */
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2UserService<OAuth2UserRequest, OAuth2User> delegate =
@@ -68,6 +89,15 @@ public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2
                 userNameAttributeName);
     }
 
+    /**
+     * Creates a custom attribute map based on the provided attributes and member profile.
+     *
+     * @param attributes            OAuth2 user attributes.
+     * @param userNameAttributeName The user name attribute name.
+     * @param memberProfile         The member profile.
+     * @param registrationId        The registration ID.
+     * @return Custom attribute map.
+     */
     private Map<String, Object> customAttribute(
             Map<String, Object> attributes,
             String userNameAttributeName,
@@ -81,6 +111,12 @@ public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2
         return customAttribute;
     }
 
+    /**
+     * Saves or updates the LPVSMember entity based on the provided member profile.
+     *
+     * @param memberProfile The member profile to be saved or updated.
+     * @return The saved or updated LPVSMember entity.
+     */
     private LPVSMember saveOrUpdate(MemberProfile memberProfile) {
 
         LPVSMember lpvsMember =

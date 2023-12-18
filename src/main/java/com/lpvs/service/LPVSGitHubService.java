@@ -30,20 +30,52 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Service class for interacting with GitHub repositories and managing license-related actions.
+ */
 @Service
 @Slf4j
 public class LPVSGitHubService {
 
+    /**
+     * Repository for managing LPVS pull requests.
+     */
     private LPVSPullRequestRepository pullRequestRepository;
 
+    /**
+     * Repository for managing detected licenses.
+     */
     private LPVSDetectedLicenseRepository lpvsDetectedLicenseRepository;
 
+    /**
+     * Repository for managing licenses.
+     */
     private LPVSLicenseRepository lpvsLicenseRepository;
 
+    /**
+     * Repository for managing license conflicts.
+     */
     private LPVSLicenseConflictRepository lpvsLicenseConflictRepository;
 
+    /**
+     * Service for establishing and managing connections to the GitHub API.
+     */
     private LPVSGitHubConnectionService gitHubConnectionService;
 
+    /**
+     * The GitHub instance for interacting with the GitHub API.
+     */
+    private static GitHub gitHub;
+
+    /**
+     * Constructs an instance of LPVSGitHubService with the specified repositories and connection service.
+     *
+     * @param pullRequestRepository         Repository for managing LPVS pull requests.
+     * @param lpvsDetectedLicenseRepository Repository for managing detected licenses.
+     * @param lpvsLicenseRepository         Repository for managing licenses.
+     * @param lpvsLicenseConflictRepository Repository for managing license conflicts.
+     * @param gitHubConnectionService        Service for establishing and managing connections to the GitHub API.
+     */
     @Autowired
     public LPVSGitHubService(
             LPVSPullRequestRepository pullRequestRepository,
@@ -58,8 +90,12 @@ public class LPVSGitHubService {
         this.gitHubConnectionService = gitHubConnectionService;
     }
 
-    private static GitHub gitHub;
-
+    /**
+     * Retrieves the file differences for a given pull request from GitHub.
+     *
+     * @param webhookConfig LPVSQueue configuration for the pull request.
+     * @return String representation of the pull request files or null if an error occurs.
+     */
     public String getPullRequestFiles(LPVSQueue webhookConfig) {
         try {
             gitHub = gitHubConnectionService.connectToGitHubApi();
@@ -87,6 +123,13 @@ public class LPVSGitHubService {
         return null;
     }
 
+    /**
+     * Retrieves the GitHub pull request associated with the provided LPVSQueue configuration.
+     *
+     * @param webhookConfig LPVSQueue configuration for the pull request.
+     * @param repository    The GitHub repository.
+     * @return The GitHub pull request or null if not found or an error occurs.
+     */
     private GHPullRequest getPullRequest(LPVSQueue webhookConfig, GHRepository repository) {
         try {
             List<GHPullRequest> pullRequests = repository.getPullRequests(GHIssueState.OPEN);
@@ -114,6 +157,11 @@ public class LPVSGitHubService {
         return null;
     }
 
+    /**
+     * Sets the commit status to pending for the specified pull request.
+     *
+     * @param webhookConfig LPVSQueue configuration for the pull request.
+     */
     public void setPendingCheck(LPVSQueue webhookConfig) {
         try {
             gitHub = gitHubConnectionService.connectToGitHubApi();
@@ -133,6 +181,11 @@ public class LPVSGitHubService {
         }
     }
 
+    /**
+     * Sets the commit status to error for the specified pull request.
+     *
+     * @param webhookConfig LPVSQueue configuration for the pull request.
+     */
     public void setErrorCheck(LPVSQueue webhookConfig) {
         try {
             gitHub = gitHubConnectionService.connectToGitHubApi();
@@ -152,6 +205,15 @@ public class LPVSGitHubService {
         }
     }
 
+    /**
+     * Comments on the pull request with the scan results and detected issues.
+     *
+     * @param webhookConfig  LPVSQueue configuration for the pull request.
+     * @param scanResults    List of detected files and licenses.
+     * @param conflicts      List of license conflicts.
+     * @param lpvsPullRequest LPVS entity representing the pull request.
+     * @throws IOException if an error occurs during GitHub interaction.
+     */
     public void commentResults(
             LPVSQueue webhookConfig,
             List<LPVSFile> scanResults,
@@ -326,6 +388,12 @@ public class LPVSGitHubService {
         }
     }
 
+    /**
+     * Retrieves the license of the GitHub repository associated with the pull request.
+     *
+     * @param webhookConfig LPVSQueue configuration for the pull request.
+     * @return License key of the GitHub repository or "Proprietary" if not available.
+     */
     public String getRepositoryLicense(LPVSQueue webhookConfig) {
         try {
             String repositoryName = LPVSWebhookUtil.getRepositoryName(webhookConfig);

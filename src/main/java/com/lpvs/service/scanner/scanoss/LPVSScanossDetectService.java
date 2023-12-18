@@ -28,16 +28,36 @@ import java.util.*;
 import static com.lpvs.util.LPVSFileUtil.getScanResultsDirectoryPath;
 import static com.lpvs.util.LPVSFileUtil.getScanResultsJsonFilePath;
 
+/**
+ * Service class responsible for interacting with the Scanoss scanner to detect licenses in files.
+ * It handles the initiation of the scan, processing scan results, and checking for license conflicts.
+ */
 @Service
 @Slf4j
 public class LPVSScanossDetectService {
 
+    /**
+     * The service for managing licenses, providing operations related to licenses.
+     */
     @Autowired private LPVSLicenseService licenseService;
 
+    /**
+     * The repository for LPVSLicense entities, allowing database interactions for licenses.
+     */
     @Autowired private LPVSLicenseRepository lpvsLicenseRepository;
 
+    /**
+     * Flag indicating whether the application is in debug mode.
+     */
     private Boolean debug;
 
+    /**
+     * Constructor for LPVSScanossDetectService.
+     *
+     * @param debug                 Flag indicating whether the application is in debug mode.
+     * @param licenseService        The LPVSLicenseService for license-related operations.
+     * @param lpvsLicenseRepository The repository for LPVSLicense entities.
+     */
     @Autowired
     public LPVSScanossDetectService(
             @Value("${debug:false}") Boolean debug,
@@ -48,15 +68,35 @@ public class LPVSScanossDetectService {
         this.lpvsLicenseRepository = lpvsLicenseRepository;
     }
 
+    /**
+     * Creates an InputStreamReader for the given process, handling UTF-8 encoding.
+     *
+     * @param process The process whose error stream InputStreamReader is to be created.
+     * @return An InputStreamReader for the error stream of the process.
+     * @throws UnsupportedEncodingException If UTF-8 encoding is not supported.
+     */
     protected InputStreamReader createInputStreamReader(Process process)
             throws UnsupportedEncodingException {
         return new InputStreamReader(process.getErrorStream(), "UTF-8");
     }
 
+    /**
+     * Creates a BufferedReader for the given InputStreamReader.
+     *
+     * @param inputStreamReader The InputStreamReader to create a BufferedReader from.
+     * @return A BufferedReader for the given InputStreamReader.
+     */
     protected BufferedReader createBufferReader(InputStreamReader inputStreamReader) {
         return new BufferedReader(inputStreamReader);
     }
 
+    /**
+     * Initiates the Scanoss scan for the specified LPVSQueue and file path.
+     *
+     * @param webhookConfig The LPVSQueue representing the GitHub webhook configuration.
+     * @param path           The file path to be scanned.
+     * @throws Exception If an error occurs during the scanning process.
+     */
     public void runScan(LPVSQueue webhookConfig, String path) throws Exception {
         log.debug("Starting Scanoss scanning");
 
@@ -108,6 +148,12 @@ public class LPVSScanossDetectService {
         log.debug("Scanoss scan done");
     }
 
+    /**
+     * Checks the licenses detected by Scanoss and returns a list of LPVSFile entities.
+     *
+     * @param webhookConfig The LPVSQueue representing the GitHub webhook configuration.
+     * @return A list of LPVSFile entities representing detected files and their licenses.
+     */
     @SuppressFBWarnings("UWF_UNWRITTEN_FIELD")
     public List<LPVSFile> checkLicenses(LPVSQueue webhookConfig) {
         List<LPVSFile> detectedFiles = new ArrayList<>();
@@ -234,7 +280,9 @@ public class LPVSScanossDetectService {
         return detectedFiles;
     }
 
-    // Scanoss JSON structure
+    /**
+     * Represents the JSON structure of Scanoss scan results.
+     */
     @SuppressFBWarnings(
             value = {"UUF_UNUSED_FIELD", "SIC_INNER_SHOULD_BE_STATIC"},
             justification = "Parser class for Json deserialization")
