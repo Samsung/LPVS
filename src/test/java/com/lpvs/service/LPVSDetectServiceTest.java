@@ -182,6 +182,74 @@ public class LPVSDetectServiceTest {
         }
 
         @Test
+        void testRunOneScan_TriggerNotNull_Branch2() throws Exception {
+
+            LPVSLicenseService.Conflict<String, String> conflict_1 =
+                    new LPVSLicenseService.Conflict<>("MIT", "Apache-2.0");
+
+            List<LPVSLicenseService.Conflict<String, String>> expected =
+                    List.of(conflict_1, conflict_1);
+
+            setPrivateField(detectService, "trigger", "github/owner/repo/branch/123");
+            setPrivateField(detectService, "scannerType", "scanoss");
+            setPrivateField(detectService, "htmlReport", "build/report/test.html");
+            setPrivateField(detectService, "eventPublisher", mockEventPublisher);
+
+            // Mock the necessary GitHub objects for LPVSQueue
+            when(mockGitHub.getRepository(any())).thenReturn(mockRepository);
+            when(mockRepository.getPullRequest(anyInt())).thenReturn(mockPullRequest);
+            when(mockRepository.getPullRequest(anyInt())).thenReturn(mockPullRequest);
+            when(mockPullRequest.getHead()).thenReturn(mockCommitPointer);
+            when(licenseservice_mock.findConflicts(webhookConfig, null)).thenReturn(expected);
+            when(mockCommitPointer.getRepository()).thenReturn(null);
+            when(mockHeadRepository.getHtmlUrl())
+                    .thenReturn(new URL("https://example.com/repo/files"));
+
+            // Set up expected values
+            String expectedPullRequestUrl = "https://example.com/pull/1";
+            when(mockPullRequest.getHtmlUrl()).thenReturn(new URL(expectedPullRequestUrl));
+
+            detectService.runOneScan();
+
+            assertDoesNotThrow(() -> detectService.runOneScan());
+        }
+
+        @Test
+        void testRunOneScan_TriggerNotNull_Branch3() throws Exception {
+            GHRepository mockHeadRepository2 = mock(GHRepository.class);
+
+            LPVSLicenseService.Conflict<String, String> conflict_1 =
+                    new LPVSLicenseService.Conflict<>("MIT", "Apache-2.0");
+
+            List<LPVSLicenseService.Conflict<String, String>> expected =
+                    List.of(conflict_1, conflict_1);
+
+            setPrivateField(detectService, "trigger", "github/owner/repo/branch/123");
+            setPrivateField(detectService, "scannerType", "scanoss");
+            setPrivateField(detectService, "htmlReport", "build/report/test.html");
+            setPrivateField(detectService, "eventPublisher", mockEventPublisher);
+
+            // Mock the necessary GitHub objects for LPVSQueue
+            when(mockGitHub.getRepository(any())).thenReturn(mockRepository);
+            when(mockRepository.getPullRequest(anyInt())).thenReturn(mockPullRequest);
+            when(mockRepository.getPullRequest(anyInt())).thenReturn(mockPullRequest);
+            when(mockPullRequest.getHead()).thenReturn(mockCommitPointer);
+            when(licenseservice_mock.findConflicts(webhookConfig, null)).thenReturn(expected);
+            when(mockCommitPointer.getRepository()).thenReturn(mockHeadRepository2);
+            when(mockHeadRepository2.getHtmlUrl())
+                    .thenReturn(null);
+
+            // Set up expected values
+            String expectedPullRequestUrl = "https://example.com/pull/1";
+            when(mockRepository.getHtmlUrl()).thenReturn(new URL(expectedPullRequestUrl));
+            when(mockPullRequest.getUrl()).thenReturn(new URL(expectedPullRequestUrl));
+
+            detectService.runOneScan();
+
+            assertDoesNotThrow(() -> detectService.runOneScan());
+        }
+
+        @Test
         void testCommentBuilder_ConflictFilePresent() throws Exception {
 
             LPVSLicenseService.Conflict<String, String> conflict_1 =
