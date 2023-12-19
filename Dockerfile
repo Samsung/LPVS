@@ -31,7 +31,8 @@ RUN apt-get update && \
 RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Install SCANOSS
-RUN pip3 install scanoss --require-hashes
+RUN echo "scanoss==1.8.0 --hash=sha256:5d7d3c5dcff799155b72eaf3c88385a5f3e5fbb887afcffed42c9bd87f0b66f3" > requirements.txt
+RUN pip3 install --require-hashes --no-deps -r requirements.txt
 
 # Allow to listen port 7896
 EXPOSE 7896
