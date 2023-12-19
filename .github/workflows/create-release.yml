@@ -1,0 +1,111 @@
+name: Create Release & Upload Asset
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: "Build LPVS"
+    outputs:
+      artifacts: ${{ steps.build.outputs.artifacts }}
+      hashes: ${{ steps.hash.outputs.hashes }}
+      version:  ${{ steps.lpvs_version.outputs.version }}
+
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@eb238b55efaa70779f274895e782ed17c84f2895 # v2.6.1
+        with:
+          egress-policy: audit
+
+      - name: Checkout repository
+        uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b # tag=v3
+
+      - name: Build using maven
+        id: build
+        run: |
+          # Your normal build workflow targets here
+          # mvn clean package
+          mvn -B package --file pom.xml
+
+          # Save the location of the maven output files for easier reference
+          ARTIFACT_PATTERN=./target/$(mvn help:evaluate -Dexpression=project.artifactId -q -DforceStdout)-$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)*.jar
+          echo "artifact_pattern=$ARTIFACT_PATTERN" >> "$GITHUB_OUTPUT"
+
+      - name: Generate subject
+        id: hash
+        run: |
+          echo "hashes=$(sha256sum ${{ steps.build.outputs.artifact_pattern }} | base64 -w0)" >> "$GITHUB_OUTPUT"
+    
+      - name: Get LPVS version
+        id: lpvs_version
+        run: |
+          VERSION=${{ github.ref_name }}
+          echo "version=lpvs-${VERSION:1}.jar" >> "$GITHUB_OUTPUT"
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@3cea5372237819ed00197afe530f5a7ea3e805c8 # tag=v3
+        with:
+          name: ${{ steps.lpvs_version.outputs.version }}
+          path: ./target/${{ steps.lpvs_version.outputs.version }}
+          if-no-files-found: error
+
+  create-release:
+    permissions:
+      contents: write  # for marvinpinto/action-automatic-releases to generate pre-release
+    needs: [build]
+    name: "Create Release"
+    runs-on: "ubuntu-latest"
+
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@eb238b55efaa70779f274895e782ed17c84f2895 # v2.6.1
+        with:
+          egress-policy: audit
+
+      - uses: marvinpinto/action-automatic-releases@d68defdd11f9dcc7f52f35c1b7c236ee7513bcc1
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          prerelease: false
+          title: "LPVS ${{ github.ref_name }}"
+
+  provenance:
+    needs: [build, create-release]
+    name: "Generate Provenance"
+    permissions:
+      actions: read # To read the workflow path.
+      id-token: write # To sign the provenance.
+      contents: write # To add assets to a release.
+    uses: slsa-framework/slsa-github-generator/.github/workflows/generator_generic_slsa3.yml@v1.9.0
+    with:
+      base64-subjects: "${{ needs.build.outputs.hashes }}"
+      upload-assets: true # Optional: Upload to a new release
+
+  release:
+    permissions:
+      contents: write  # for softprops/action-gh-release to create GitHub release  
+    needs: [build, create-release, provenance]
+    name: "Upload Assets"
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@eb238b55efaa70779f274895e782ed17c84f2895 # v2.6.1
+        with:
+          egress-policy: audit
+
+      - name: Download ${{ needs.build.outputs.version }}
+        uses: actions/download-artifact@fb598a63ae348fa914e94cd0ff38f362e927b741 # tag=v2.1.0
+        with:
+          name: ${{ needs.build.outputs.version }}
+
+      - name: Upload assets
+        uses: softprops/action-gh-release@1e07f4398721186383de40550babbdf2b84acfc5 # v0.1.14
+        with:
+          files: |
+            ${{ needs.build.outputs.version }}
