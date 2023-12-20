@@ -153,7 +153,8 @@ public class LPVSDetectServiceTest {
         }
 
         @Test
-        void testRunOneScan_Branch2() throws NoSuchFieldException, IllegalAccessException, IOException {
+        void testRunOneScan_Branch2()
+                throws NoSuchFieldException, IllegalAccessException, IOException {
             LPVSLicenseService.Conflict<String, String> conflict_1 =
                     new LPVSLicenseService.Conflict<>("MIT", "Apache-2.0");
 
@@ -192,7 +193,8 @@ public class LPVSDetectServiceTest {
         }
 
         @Test
-        void testRunOneScan_Branch3() throws NoSuchFieldException, IllegalAccessException, IOException {
+        void testRunOneScan_Branch3()
+                throws NoSuchFieldException, IllegalAccessException, IOException {
             LPVSLicenseService.Conflict<String, String> conflict_1 =
                     new LPVSLicenseService.Conflict<>("MIT", "Apache-2.0");
 
@@ -327,8 +329,7 @@ public class LPVSDetectServiceTest {
             when(mockPullRequest.getHead()).thenReturn(mockCommitPointer);
             when(licenseservice_mock.findConflicts(webhookConfig, null)).thenReturn(expected);
             when(mockCommitPointer.getRepository()).thenReturn(mockHeadRepository2);
-            when(mockHeadRepository2.getHtmlUrl())
-                    .thenReturn(null);
+            when(mockHeadRepository2.getHtmlUrl()).thenReturn(null);
 
             // Set up expected values
             String expectedPullRequestUrl = "https://example.com/pull/1";
