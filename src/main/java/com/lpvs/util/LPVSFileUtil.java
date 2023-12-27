@@ -196,4 +196,15 @@ public class LPVSFileUtil {
                 + "Results/"
                 + LPVSWebhookUtil.getRepositoryName(webhookConfig);
     }
+
+    /**
+     * Retrieves the local directory path for a given LPVSQueue configuration.
+     *
+     * @param webhookConfig LPVSQueue configuration.
+     * @return Local directory path for the given LPVSQueue.
+     */
+    public static String getPathByPullRequest(LPVSQueue webhookConfig) {
+        if (webhookConfig == null) return null;
+        return getLocalDirectoryPath(webhookConfig);
+    }
 }

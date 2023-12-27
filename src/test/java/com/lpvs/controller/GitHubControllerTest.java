@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.mock;
 
 @Slf4j
-public class GitHubWebhooksControllerTest {
+public class GitHubControllerTest {
 
     private static final String SIGNATURE = "X-Hub-Signature-256";
     private static final String SUCCESS = "Success";
@@ -34,8 +34,8 @@ public class GitHubWebhooksControllerTest {
     LPVSQueueService mocked_instance_queueServ = mock(LPVSQueueService.class);
     LPVSGitHubService mocked_instance_ghServ = mock(LPVSGitHubService.class);
     LPVSQueueRepository mocked_queueRepo = mock(LPVSQueueRepository.class);
-    GitHubWebhooksController gitHubWebhooksController =
-            new GitHubWebhooksController(
+    GitHubController gitHubController =
+            new GitHubController(
                     mocked_instance_queueServ,
                     mocked_instance_ghServ,
                     mocked_queueRepo,
@@ -46,7 +46,7 @@ public class GitHubWebhooksControllerTest {
     public void noSignatureTest() {
         ResponseEntity<LPVSResponseWrapper> actual;
         try {
-            actual = gitHubWebhooksController.gitHubWebhooks(null, null);
+            actual = gitHubController.gitHubWebhooks(null, null);
         } catch (Exception e) {
             actual = null;
         }
@@ -59,7 +59,7 @@ public class GitHubWebhooksControllerTest {
     public void noPayloadTest() {
         ResponseEntity<LPVSResponseWrapper> actual;
         try {
-            actual = gitHubWebhooksController.gitHubWebhooks(SIGNATURE, null);
+            actual = gitHubController.gitHubWebhooks(SIGNATURE, null);
         } catch (Exception e) {
             actual = null;
         }
@@ -109,7 +109,7 @@ public class GitHubWebhooksControllerTest {
                         + "}";
 
         try {
-            actual = gitHubWebhooksController.gitHubWebhooks(SIGNATURE, json_to_test);
+            actual = gitHubController.gitHubWebhooks(SIGNATURE, json_to_test);
         } catch (Exception e) {
             log.error(e.getMessage());
             actual = null;
@@ -148,13 +148,13 @@ public class GitHubWebhooksControllerTest {
                         + "}"
                         + "}";
         try {
-            gitHubWebhooksController.initializeGitHubSecret();
-            boolean secret = gitHubWebhooksController.wrongSecret(signature, json_to_test);
+            gitHubController.initializeGitHubSecret();
+            boolean secret = gitHubController.wrongSecret(signature, json_to_test);
             assertEquals(secret, false);
-            secret = gitHubWebhooksController.wrongSecret(signature + " ", json_to_test);
+            secret = gitHubController.wrongSecret(signature + " ", json_to_test);
             assertEquals(secret, true);
         } catch (Exception e) {
-            log.error("GitHubWebhooksControllerTest::wrongSecretTest exception: " + e);
+            log.error("GitHubControllerTest::wrongSecretTest exception: " + e);
             fail();
         }
     }
