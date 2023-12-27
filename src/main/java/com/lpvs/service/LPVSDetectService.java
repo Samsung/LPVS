@@ -13,9 +13,6 @@ import com.lpvs.util.LPVSCommentUtil;
 import com.lpvs.util.LPVSFileUtil;
 
 import lombok.extern.slf4j.Slf4j;
-import org.kohsuke.github.GHPullRequest;
-import org.kohsuke.github.GHRepository;
-import org.kohsuke.github.GitHub;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ExitCodeEvent;
@@ -28,12 +25,10 @@ import org.springframework.web.util.HtmlUtils;
 
 import javax.annotation.PostConstruct;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -64,6 +59,11 @@ public class LPVSDetectService {
     private LPVSLicenseService licenseService;
 
     /**
+     * Service responsible for GitHub connection and operation.
+     */
+    private LPVSGitHubService gitHubService;
+
+    /**
      * Event publisher for triggering application events.
      */
     @Autowired private ApplicationEventPublisher eventPublisher;
@@ -92,17 +92,20 @@ public class LPVSDetectService {
      * @param gitHubConnectionService Service for connecting to the GitHub API.
      * @param scanossDetectService    Service for license detection using ScanOSS.
      * @param licenseService          Service for license conflict analysis.
+     * @param gitHubService           Service for GitHub connection and operation.
      */
     @Autowired
     public LPVSDetectService(
             @Value("${scanner:scanoss}") String scannerType,
             LPVSGitHubConnectionService gitHubConnectionService,
             LPVSScanossDetectService scanossDetectService,
-            LPVSLicenseService licenseService) {
+            LPVSLicenseService licenseService,
+            LPVSGitHubService gitHubService) {
         this.scannerType = scannerType;
         this.gitHubConnectionService = gitHubConnectionService;
         this.scanossDetectService = scanossDetectService;
         this.licenseService = licenseService;
+        this.gitHubService = gitHubService;
     }
 
     /**
@@ -122,12 +125,11 @@ public class LPVSDetectService {
         if (trigger != null && !HtmlUtils.htmlEscape(trigger).equals("")) {
             try {
                 LPVSQueue webhookConfig =
-                        this.getInternalQueueByPullRequest(HtmlUtils.htmlEscape(trigger));
+                        gitHubService.getInternalQueueByPullRequest(HtmlUtils.htmlEscape(trigger));
 
                 List<LPVSFile> scanResult =
                         this.runScan(
-                                webhookConfig,
-                                LPVSDetectService.getPathByPullRequest(webhookConfig));
+                                webhookConfig, LPVSFileUtil.getPathByPullRequest(webhookConfig));
 
                 List<LPVSLicenseService.Conflict<String, String>> detectedConflicts =
                         licenseService.findConflicts(webhookConfig, scanResult);
@@ -160,73 +162,6 @@ public class LPVSDetectService {
             // exiting application
             eventPublisher.publishEvent(new ExitCodeEvent(new Object(), 0));
         }
-    }
-
-    /**
-     * Retrieves an LPVSQueue configuration based on the GitHub repository and pull request.
-     *
-     * @param repo The GitHub repository.
-     * @param pR   The GitHub pull request.
-     * @return LPVSQueue configuration for the given GitHub repository and pull request.
-     */
-    private static LPVSQueue getGitHubWebhookConfig(GHRepository repo, GHPullRequest pR) {
-        LPVSQueue webhookConfig = new LPVSQueue();
-        webhookConfig.setPullRequestUrl(
-                pR.getHtmlUrl() != null ? pR.getHtmlUrl().toString() : null);
-        if (pR.getHead() != null
-                && pR.getHead().getRepository() != null
-                && pR.getHead().getRepository().getHtmlUrl() != null) {
-            webhookConfig.setPullRequestFilesUrl(
-                    pR.getHead().getRepository().getHtmlUrl().toString());
-        } else {
-            webhookConfig.setPullRequestFilesUrl(webhookConfig.getPullRequestUrl());
-        }
-        webhookConfig.setPullRequestAPIUrl(pR.getUrl() != null ? pR.getUrl().toString() : null);
-        webhookConfig.setRepositoryUrl(
-                repo.getHtmlUrl() != null ? repo.getHtmlUrl().toString() : null);
-        webhookConfig.setUserId("Single scan run");
-        webhookConfig.setHeadCommitSHA(pR.getHead() != null ? pR.getHead().getSha() : null);
-        return webhookConfig;
-    }
-
-    /**
-     * Retrieves the LPVSQueue configuration for a given GitHub pull request URL.
-     *
-     * @param pullRequest The GitHub pull request URL.
-     * @return LPVSQueue configuration for the given pull request.
-     */
-    public LPVSQueue getInternalQueueByPullRequest(String pullRequest) {
-        try {
-            if (pullRequest == null) return null;
-            String[] pullRequestSplit = pullRequest.split("/");
-            if (pullRequestSplit.length < 5) return null;
-            String pullRequestRepo =
-                    String.join(
-                            "/",
-                            Arrays.asList(pullRequestSplit)
-                                    .subList(
-                                            pullRequestSplit.length - 4,
-                                            pullRequestSplit.length - 2));
-            int pullRequestNum = Integer.parseInt(pullRequestSplit[pullRequestSplit.length - 1]);
-            GitHub gitHub = gitHubConnectionService.connectToGitHubApi();
-            GHRepository repo = gitHub.getRepository(pullRequestRepo);
-            GHPullRequest pR = repo.getPullRequest(pullRequestNum);
-            return LPVSDetectService.getGitHubWebhookConfig(repo, pR);
-        } catch (IOException e) {
-            log.error("Can't set up github client: " + e);
-        }
-        return null;
-    }
-
-    /**
-     * Retrieves the local directory path for a given LPVSQueue configuration.
-     *
-     * @param webhookConfig LPVSQueue configuration.
-     * @return Local directory path for the given LPVSQueue.
-     */
-    public static String getPathByPullRequest(LPVSQueue webhookConfig) {
-        if (webhookConfig == null) return null;
-        return LPVSFileUtil.getLocalDirectoryPath(webhookConfig);
     }
 
     /**

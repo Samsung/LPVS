@@ -214,8 +214,8 @@ public class LPVSQueueService {
     public void processWebHook(LPVSQueue webhookConfig) throws IOException {
         LPVSPullRequest pullRequest = new LPVSPullRequest();
         try {
-            log.info("GitHub Webhook processing...");
-            log.info(webhookConfig.toString());
+            log.info("GitHub queue processing...");
+            log.debug(webhookConfig.toString());
 
             String filePath = gitHubService.getPullRequestFiles(webhookConfig);
 

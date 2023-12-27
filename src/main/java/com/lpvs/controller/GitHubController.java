@@ -7,6 +7,7 @@
 package com.lpvs.controller;
 
 import com.lpvs.entity.LPVSQueue;
+import com.lpvs.entity.enums.LPVSPullRequestAction;
 import com.lpvs.repository.LPVSQueueRepository;
 import com.lpvs.service.LPVSGitHubService;
 import com.lpvs.service.LPVSQueueService;
@@ -15,17 +16,18 @@ import com.lpvs.util.LPVSWebhookUtil;
 import com.lpvs.entity.LPVSResponseWrapper;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
 import org.apache.commons.codec.binary.Hex;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.HtmlUtils;
+
 import java.util.Date;
 import java.util.Optional;
 import javax.annotation.PostConstruct;
@@ -38,7 +40,7 @@ import javax.crypto.spec.SecretKeySpec;
  */
 @RestController
 @Slf4j
-public class GitHubWebhooksController {
+public class GitHubController {
 
     /**
      * The GitHub secret used for validating webhook payloads.
@@ -90,7 +92,7 @@ public class GitHubWebhooksController {
     private static final String ALGORITHM = "HmacSHA256";
 
     /**
-     * Constructor for GitHubWebhooksController.
+     * Constructor for GitHubController.
      * Initializes LPVSQueueService, LPVSGitHubService, LPVSQueueRepository, GitHub secret, and LPVSExitHandler.
      *
      * @param queueService      LPVSQueueService for handling user-related business logic.
@@ -99,7 +101,7 @@ public class GitHubWebhooksController {
      * @param GITHUB_SECRET     The GitHub secret used for validating webhook payloads.
      * @param exitHandler       LPVSExitHandler for handling application exit scenarios.
      */
-    public GitHubWebhooksController(
+    public GitHubController(
             LPVSQueueService queueService,
             LPVSGitHubService gitHubService,
             LPVSQueueRepository queueRepository,
@@ -160,6 +162,69 @@ public class GitHubWebhooksController {
             log.debug("Put Webhook config to the queue done");
         }
 
+        log.debug("Response sent");
+        return ResponseEntity.ok()
+                .headers(LPVSWebhookUtil.generateSecurityHeaders())
+                .body(new LPVSResponseWrapper(SUCCESS));
+    }
+
+    /**
+     * Handles a GitHub single scan request.
+     *
+     * This endpoint performs a single scan operation based on the GitHub organization, repository,
+     * and pull request number provided in the path variables. The method validates
+     * the input parameters and performs necessary security checks.
+     *
+     * @param gitHubOrg The GitHub organization name. Must not be empty and should be a valid string.
+     * @param gitHubRepo The GitHub repository name. Must not be empty and should be a valid string.
+     * @param prNumber The pull request number. Must be a positive integer greater than or equal to 1.
+     * @return ResponseEntity with LPVSResponseWrapper containing the result of the scan.
+     *         If successful, returns HTTP 200 OK with the success message.
+     *         If there are validation errors or security issues, returns HTTP 403 FORBIDDEN.
+     */
+    @RequestMapping(
+            value = "/scan/{gitHubUrl}/{gitHubOrg}/{gitHubRepo}/{prNumber}",
+            method = RequestMethod.POST)
+    public ResponseEntity<LPVSResponseWrapper> gitHubSingleScan(
+            @PathVariable("gitHubUrl") @NotEmpty @Valid String gitHubUrl,
+            @PathVariable("gitHubOrg") @NotEmpty @Valid String gitHubOrg,
+            @PathVariable("gitHubRepo") @NotEmpty @Valid String gitHubRepo,
+            @PathVariable("prNumber") @Min(1) @Valid Integer prNumber)
+            throws InterruptedException {
+        log.debug("New GitHub single scan request received");
+
+        if (GITHUB_SECRET.trim().isEmpty()) {
+            log.error("Received empty GITHUB_SECRET");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .headers(LPVSWebhookUtil.generateSecurityHeaders())
+                    .body(new LPVSResponseWrapper(ERROR));
+        }
+
+        // Validate and sanitize user inputs to prevent XSS attacks
+        gitHubUrl = HtmlUtils.htmlEscape(gitHubUrl);
+        gitHubOrg = HtmlUtils.htmlEscape(gitHubOrg);
+        gitHubRepo = HtmlUtils.htmlEscape(gitHubRepo);
+
+        String prUrl =
+                "https://" + gitHubUrl + "/" + gitHubOrg + "/" + gitHubRepo + "/pull/" + prNumber;
+        LPVSQueue scanConfig =
+                gitHubService.getInternalQueueByPullRequest(HtmlUtils.htmlEscape(prUrl));
+        if (scanConfig == null) {
+            log.error("Error with connection to GitHub.");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .headers(LPVSWebhookUtil.generateSecurityHeaders())
+                    .body(new LPVSResponseWrapper(ERROR));
+        }
+        scanConfig.setAction(LPVSPullRequestAction.SINGLE_SCAN);
+        scanConfig.setAttempts(0);
+        scanConfig.setDate(new Date());
+        scanConfig.setReviewSystemType("github");
+        queueRepository.save(scanConfig);
+        log.debug("Pull request scanning is enabled");
+        gitHubService.setPendingCheck(scanConfig);
+        log.debug("Set status to Pending done");
+        queueService.addFirst(scanConfig);
+        log.debug("Put Scan config to the queue done");
         log.debug("Response sent");
         return ResponseEntity.ok()
                 .headers(LPVSWebhookUtil.generateSecurityHeaders())
