@@ -207,7 +207,14 @@ public class GitHubController {
         gitHubRepo = HtmlUtils.htmlEscape(gitHubRepo);
 
         String prUrl =
-                "https://" + gitHubDomain + "/" + gitHubOrg + "/" + gitHubRepo + "/pull/" + prNumber;
+                "https://"
+                        + gitHubDomain
+                        + "/"
+                        + gitHubOrg
+                        + "/"
+                        + gitHubRepo
+                        + "/pull/"
+                        + prNumber;
         LPVSQueue scanConfig =
                 gitHubService.getInternalQueueByPullRequest(HtmlUtils.htmlEscape(prUrl));
         if (scanConfig == null) {

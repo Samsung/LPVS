@@ -6,6 +6,7 @@
  */
 package com.lpvs.controller;
 
+import com.lpvs.entity.LPVSQueue;
 import com.lpvs.entity.LPVSResponseWrapper;
 import com.lpvs.repository.LPVSQueueRepository;
 import com.lpvs.service.LPVSGitHubService;
@@ -18,9 +19,11 @@ import org.junitpioneer.jupiter.SetEnvironmentVariable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.lang.reflect.Method;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.*;
 
 @Slf4j
 public class GitHubControllerTest {
@@ -71,7 +74,6 @@ public class GitHubControllerTest {
     @Test
     public void okTest() {
         ResponseEntity<LPVSResponseWrapper> actual;
-        LPVSQueueRepository queueRepository;
 
         String json_to_test =
                 "{"
@@ -157,5 +159,43 @@ public class GitHubControllerTest {
             log.error("GitHubControllerTest::wrongSecretTest exception: " + e);
             fail();
         }
+    }
+
+    @Test
+    @SetEnvironmentVariable(key = "LPVS_GITHUB_SECRET", value = "LPVS")
+    public void testGitHubSingleScan_Success() throws Exception {
+        Method method = gitHubController.getClass().getDeclaredMethod("initializeGitHubSecret");
+        method.setAccessible(true);
+        method.invoke(gitHubController);
+        LPVSQueue mockScanConfig = new LPVSQueue();
+        when(mocked_instance_ghServ.getInternalQueueByPullRequest(anyString()))
+                .thenReturn(mockScanConfig);
+        when(mocked_queueRepo.save(any())).thenReturn(mockScanConfig);
+        doNothing().when(mocked_instance_queueServ).addFirst(any());
+        ResponseEntity<LPVSResponseWrapper> responseEntity =
+                gitHubController.gitHubSingleScan("github.com", "org", "repo", 1);
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+    }
+
+    @Test
+    @SetEnvironmentVariable(key = "LPVS_GITHUB_SECRET", value = "LPVS")
+    public void testGitHubSingleScan_InvalidSecret() throws Exception {
+        when(mocked_instance_ghServ.getInternalQueueByPullRequest(anyString())).thenReturn(null);
+        ResponseEntity<LPVSResponseWrapper> responseEntity =
+                gitHubController.gitHubSingleScan("", "org", "repo", 1);
+
+        assertEquals(HttpStatus.FORBIDDEN, responseEntity.getStatusCode());
+    }
+
+    @Test
+    @SetEnvironmentVariable(key = "LPVS_GITHUB_SECRET", value = "LPVS")
+    public void testGitHubSingleScan_ConnectionError() throws Exception {
+        when(mocked_instance_ghServ.getInternalQueueByPullRequest(anyString()))
+                .thenThrow(new RuntimeException("Connection error"));
+        ResponseEntity<LPVSResponseWrapper> responseEntity =
+                gitHubController.gitHubSingleScan("github.com", "org", "repo", 1);
+
+        assertEquals(HttpStatus.FORBIDDEN, responseEntity.getStatusCode());
     }
 }

@@ -61,24 +61,28 @@ paths:
           schema:
             type: string
           description: GitHub domain name
+          example: 'github.com'
         - in: path
           name: gitHubOrg
           required: true
           schema:
             type: string
           description: GitHub organization name
+          example: 'Samsung'
         - in: path
           name: gitHubRepo
           required: true
           schema:
             type: string
           description: GitHub repository name
+          example: 'LPVS'
         - in: path
           name: prNumber
           required: true
           schema:
             type: integer
           description: Pull request number
+          example: 100
       responses:
         '200':
           description: 200 OK
