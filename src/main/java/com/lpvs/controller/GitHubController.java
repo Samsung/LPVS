@@ -175,6 +175,7 @@ public class GitHubController {
      * and pull request number provided in the path variables. The method validates
      * the input parameters and performs necessary security checks.
      *
+     * @param gitHubDomain The GitHub domain name.
      * @param gitHubOrg The GitHub organization name. Must not be empty and should be a valid string.
      * @param gitHubRepo The GitHub repository name. Must not be empty and should be a valid string.
      * @param prNumber The pull request number. Must be a positive integer greater than or equal to 1.
@@ -183,10 +184,10 @@ public class GitHubController {
      *         If there are validation errors or security issues, returns HTTP 403 FORBIDDEN.
      */
     @RequestMapping(
-            value = "/scan/{gitHubUrl}/{gitHubOrg}/{gitHubRepo}/{prNumber}",
+            value = "/scan/{gitHubDomain}/{gitHubOrg}/{gitHubRepo}/{prNumber}",
             method = RequestMethod.POST)
     public ResponseEntity<LPVSResponseWrapper> gitHubSingleScan(
-            @PathVariable("gitHubUrl") @NotEmpty @Valid String gitHubUrl,
+            @PathVariable("gitHubDomain") @NotEmpty @Valid String gitHubDomain,
             @PathVariable("gitHubOrg") @NotEmpty @Valid String gitHubOrg,
             @PathVariable("gitHubRepo") @NotEmpty @Valid String gitHubRepo,
             @PathVariable("prNumber") @Min(1) @Valid Integer prNumber)
@@ -201,12 +202,12 @@ public class GitHubController {
         }
 
         // Validate and sanitize user inputs to prevent XSS attacks
-        gitHubUrl = HtmlUtils.htmlEscape(gitHubUrl);
+        gitHubDomain = HtmlUtils.htmlEscape(gitHubDomain);
         gitHubOrg = HtmlUtils.htmlEscape(gitHubOrg);
         gitHubRepo = HtmlUtils.htmlEscape(gitHubRepo);
 
         String prUrl =
-                "https://" + gitHubUrl + "/" + gitHubOrg + "/" + gitHubRepo + "/pull/" + prNumber;
+                "https://" + gitHubDomain + "/" + gitHubOrg + "/" + gitHubRepo + "/pull/" + prNumber;
         LPVSQueue scanConfig =
                 gitHubService.getInternalQueueByPullRequest(HtmlUtils.htmlEscape(prUrl));
         if (scanConfig == null) {
