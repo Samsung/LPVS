@@ -100,7 +100,7 @@ jobs:
           egress-policy: audit
 
       - name: Download ${{ needs.build.outputs.version }}
-        uses: actions/download-artifact@fb598a63ae348fa914e94cd0ff38f362e927b741 # tag=v2.1.0
+        uses: actions/download-artifact@f44cd7b40bfd40b6aa1cc1b9b5b7bf03d3c67110 # tag=v2.1.0
         with:
           name: ${{ needs.build.outputs.version }}
 
