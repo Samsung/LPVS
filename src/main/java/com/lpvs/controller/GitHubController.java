@@ -35,7 +35,7 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
 /**
- * Controller class for handling GitHub webhook events.
+ * Controller class for handling GitHub webhook events and single scan requests.
  * This class is responsible for processing GitHub webhook payloads and triggering relevant actions.
  */
 @RestController
@@ -49,11 +49,17 @@ public class GitHubController {
     private String GITHUB_SECRET;
 
     /**
+     * Name of the GitHub API URL.
+     * It is set from the LPVS_GITHUB_API_URL environment variable or the application property.
+     */
+    private String GITHUB_API_URL;
+
+    /**
      * Initializes the GitHub secret from the LPVS_GITHUB_SECRET environment variable or the application property.
      * Exits the application if the secret is not set.
      */
     @PostConstruct
-    public void initializeGitHubSecret() {
+    public void initializeGitHubController() {
         this.GITHUB_SECRET =
                 Optional.ofNullable(this.GITHUB_SECRET)
                         .filter(s -> !s.isEmpty())
@@ -63,6 +69,17 @@ public class GitHubController {
         if (this.GITHUB_SECRET.isEmpty()) {
             log.error("LPVS_GITHUB_SECRET (github.secret) is not set.");
             exitHandler.exit(-1);
+        }
+
+        this.GITHUB_API_URL =
+                Optional.ofNullable(this.GITHUB_API_URL)
+                        .filter(s -> !s.isEmpty())
+                        .orElse(
+                                Optional.ofNullable(System.getenv("LPVS_GITHUB_API_URL"))
+                                        .orElse(""));
+        if (this.GITHUB_API_URL.isEmpty()) {
+            log.info(
+                    "LPVS_GITHUB_API_URL (github.api.url) is not set. Default domain \"github.com\" will be used.");
         }
     }
 
@@ -175,7 +192,6 @@ public class GitHubController {
      * and pull request number provided in the path variables. The method validates
      * the input parameters and performs necessary security checks.
      *
-     * @param gitHubDomain The GitHub domain name.
      * @param gitHubOrg The GitHub organization name. Must not be empty and should be a valid string.
      * @param gitHubRepo The GitHub repository name. Must not be empty and should be a valid string.
      * @param prNumber The pull request number. Must be a positive integer greater than or equal to 1.
@@ -184,10 +200,9 @@ public class GitHubController {
      *         If there are validation errors or security issues, returns HTTP 403 FORBIDDEN.
      */
     @RequestMapping(
-            value = "/scan/{gitHubDomain}/{gitHubOrg}/{gitHubRepo}/{prNumber}",
+            value = "/scan/{gitHubOrg}/{gitHubRepo}/{prNumber}",
             method = RequestMethod.POST)
     public ResponseEntity<LPVSResponseWrapper> gitHubSingleScan(
-            @PathVariable("gitHubDomain") @NotEmpty @Valid String gitHubDomain,
             @PathVariable("gitHubOrg") @NotEmpty @Valid String gitHubOrg,
             @PathVariable("gitHubRepo") @NotEmpty @Valid String gitHubRepo,
             @PathVariable("prNumber") @Min(1) @Valid Integer prNumber)
@@ -202,9 +217,22 @@ public class GitHubController {
         }
 
         // Validate and sanitize user inputs to prevent XSS attacks
-        gitHubDomain = HtmlUtils.htmlEscape(gitHubDomain);
         gitHubOrg = HtmlUtils.htmlEscape(gitHubOrg);
         gitHubRepo = HtmlUtils.htmlEscape(gitHubRepo);
+
+        String gitHubDomain;
+        if (!GITHUB_API_URL.isEmpty()) {
+            gitHubDomain =
+                    GITHUB_API_URL
+                            .trim()
+                            .substring(
+                                    GITHUB_API_URL.indexOf("https://api.")
+                                            + "https://api.".length())
+                            .replaceAll("/", "");
+        } else {
+            gitHubDomain = "github.com";
+        }
+        log.debug("GitHub domain name is \"" + GITHUB_API_URL + "\"");
 
         String prUrl =
                 "https://"

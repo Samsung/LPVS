@@ -48,20 +48,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/WebhookResponseForbidden'
 
-  /scan/{gitHubDomain}/{gitHubOrg}/{gitHubRepo}/{prNumber}:
+  /scan/{gitHubOrg}/{gitHubRepo}/{prNumber}:
     post:
       tags:
         - GitHub Pull Request Single Scan API
       summary: GitHub Pull Request Single Scan
       description: Endpoint for performing a single scan operation based on GitHub organization, repository, and pull request number.
       parameters:
-        - in: path
-          name: gitHubDomain
-          required: true
-          schema:
-            type: string
-          description: GitHub domain name
-          example: 'github.com'
         - in: path
           name: gitHubOrg
           required: true
