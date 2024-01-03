@@ -19,7 +19,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.LinkedBlockingDeque;
@@ -208,10 +207,9 @@ public class LPVSQueueService {
      * Asynchronously processes the LPVSQueue element, handling GitHub webhook events.
      *
      * @param webhookConfig The LPVSQueue element to be processed.
-     * @throws IOException If an I/O error occurs.
      */
     @Async("threadPoolTaskExecutor")
-    public void processWebHook(LPVSQueue webhookConfig) throws IOException {
+    public void processWebHook(LPVSQueue webhookConfig) {
         LPVSPullRequest pullRequest = new LPVSPullRequest();
         try {
             log.info("GitHub Webhook processing...");

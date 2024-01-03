@@ -117,8 +117,8 @@ public class LPVSGitHubService {
             }
             log.debug("Saving files...");
             return LPVSFileUtil.saveGithubDiffs(pullRequest.listFiles(), webhookConfig);
-        } catch (IOException e) {
-            log.error("Can't authorize getPullRequestFiles() " + e);
+        } catch (IOException | IllegalArgumentException e) {
+            log.error("Can't authorize getPullRequestFiles(): " + e.getMessage());
         }
         return null;
     }
@@ -176,8 +176,8 @@ public class LPVSGitHubService {
                     null,
                     "Scanning opensource licenses",
                     "[License Pre-Validation Service]");
-        } catch (IOException e) {
-            log.error("Can't authorize setPendingCheck()" + e);
+        } catch (IOException | IllegalArgumentException e) {
+            log.error("Can't authorize setPendingCheck(): " + e.getMessage());
         }
     }
 
@@ -200,8 +200,8 @@ public class LPVSGitHubService {
                     null,
                     "Scanning process failed",
                     "[License Pre-Validation Service]");
-        } catch (IOException e) {
-            log.error("Can't authorize setErrorCheck() " + e);
+        } catch (IOException | IllegalArgumentException e) {
+            log.error("Can't authorize setErrorCheck(): " + e.getMessage());
         }
     }
 
@@ -366,10 +366,10 @@ public class LPVSGitHubService {
                         "No license issue detected",
                         "[License Pre-Validation Service]");
             }
-        } catch (IOException | NullPointerException e) {
+        } catch (IOException | NullPointerException | IllegalArgumentException e) {
             lpvsPullRequest.setStatus(LPVSPullRequestStatus.INTERNAL_ERROR.toString());
             pullRequestRepository.saveAndFlush(lpvsPullRequest);
-            log.error("Can't authorize commentResults() " + e);
+            log.error("Can't authorize commentResults(): " + e.getMessage());
             try {
                 GHRepository repository =
                         gitHub.getRepository(
@@ -408,8 +408,8 @@ public class LPVSGitHubService {
             } else {
                 return license.getKey();
             }
-        } catch (IOException e) {
-            log.error("Can't authorize getRepositoryLicense() " + e);
+        } catch (IOException | IllegalArgumentException e) {
+            log.error("Can't authorize getRepositoryLicense(): " + e.getMessage());
         }
         return "Proprietary";
     }
