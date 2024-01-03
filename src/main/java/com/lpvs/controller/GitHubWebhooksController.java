@@ -28,9 +28,11 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestBody;
 import java.util.Date;
 import java.util.Optional;
-import javax.annotation.PostConstruct;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+
+//import javax.annotation.PostConstruct; // Spring 2.7
+import jakarta.annotation.PostConstruct; // Spring 3.2
 
 /**
  * Controller class for handling GitHub webhook events.

@@ -11,13 +11,13 @@
 [![Project Map](https://sourcespy.com/shield.svg)](https://sourcespy.com/github/samsunglpvs/)
 
 ## Introduction
-Open-source code [refers](https://en.wikipedia.org/wiki/Open-source_software) to software that is freely available for use, study, modification, and distribution, subject to meeting the conditions of the corresponding license. Failure to comply with the license conditions can lead to legal disputes, financial liabilities, the requirement to disclose intellectual property, and reputational damage.
+Open-source code [refers](https://en.wikipedia.org/wiki/Open-source_software) (that is a software that is freely available for use, study, modification, and distribution) must meet the conditions of the respective license(s) of all of its dependencies. Miscompliance may lead to legal disputes, financial liabilities, obligation to disclose proprietary intellectual property, as well as reputational damage.
 
-In projects with numerous external dependencies, it can be challenging to track license obligations accurately. Additionally, when multiple collaborators are involved, the risk of unintentional license violations, such as through copy-pasting code snippets, increases. Furthermore, there are nuanced situations like dependencies with dual licensing or licenses that may change due to ownership, purpose, or legislative alterations. These factors can potentially turn previously safe dependencies into unsafe ones over time.
+In projects with numerous external dependencies, it becomes challenging to track license obligations accurately. Also, when many collaborators are involved, the risk of unintentional license violations, such as through copy-pasting code snippets, increases. Furthermore, there are nuanced situations like dependencies with dual licensing or licenses that may change due to ownership, purpose, or legislative alterations. These factors can potentially turn previously safe dependencies into unsafe ones over time.
 
-To address these license-related risks for open-source code, we have developed the _License Pre-Validation Service (LPVS)_. This tool provides a solution to mitigate potential license issues. By analyzing the project, LPVS identifies its components and their respective licenses at every commit. It then generates a list of potential issue cases, which are communicated as comments on GitHub. LPVS offers a comprehensive description of possible license violations, including details on the location of risky code and an overview of the specific license-related issues.
+To address these license-related risks for open-source code, we have developed the _License Pre-Validation Service (LPVS)_. This tool provides a solution to mitigate potential license issues. By analyzing the project, LPVS identifies its components and their respective licenses at every commit. Then it generates a list of potential issue cases, and communicates them to the developers as comments on GitHub. LPVS offers a comprehensive description of possible license violations, including the details on the location of risky code and an overview of the specific license-related issues.
 
-With LPVS, we aim to assist developers and project teams in ensuring license compliance for their open-source code. By providing insights into potential license violations and their implications, LPVS enables proactive management of license-related risks throughout the development process.
+With LPVS, we aim at assisting developers and project teams with ensuring license compliance for their open-source code. By providing insights into the potential license violations and their implications, LPVS enables proactive management of license-related risks throughout the development process.
 
 We believe that LPVS will be an invaluable tool for maintaining the integrity of open-source projects and safeguarding against license infringements.
 
@@ -25,15 +25,15 @@ We believe that LPVS will be an invaluable tool for maintaining the integrity of
 
 - License Scanners:
 
-    LPVS integrates with the [SCANOSS](https://www.scanoss.com) license scanner, allowing for comprehensive license analysis of the project's components. SCANOSS helps identify the licenses associated with the codebase, ensuring compliance with open-source license requirements. By leveraging SCANOSS, LPVS provides accurate and up-to-date information on the licenses used in the project.
+    LPVS integrates with the [SCANOSS](https://www.scanoss.com) license scanner, allowing for comprehensive license analysis of the project's components. SCANOSS helps to identify the licenses associated with the codebase, ensuring the compliance with open-source license requirements. By leveraging SCANOSS, LPVS provides accurate and up-to-date information on the licenses used in the project.
 
 - GitHub Review System Integration:
 
-    LPVS seamlessly integrates with the GitHub review system, enhancing the collaboration and code review process. LPVS automatically generates comments on GitHub, highlighting potential license violations or issues within the codebase. This integration streamlines the review process, making it easier for developers and collaborators to identify and address license-related concerns directly within the GitHub environment.
+    LPVS seamlessly integrates with the GitHub review system, enhancing the collaboration and code review process. LPVS automatically generates comments on GitHub, highlighting potential license violations or issues within the codebase. This integration streamlines the review process, making it easier for the developers and collaborators to identify and address license-related concerns directly within the GitHub environment.
 
 - Comprehensive Issue Description:
 
-    LPVS provides a detailed and comprehensive description of possible license violations within the project. This includes specific information on the location of potentially risky code and an overview of the license-related issues at hand. By offering this comprehensive insight, LPVS enables developers to have a clear understanding of the license-related risks within their codebase and take appropriate action to mitigate them.
+    LPVS provides a detailed and comprehensive description of possible license violations within the project. This includes specific information on the location of potentially risky code and an overview of the license-related issues at hand. By offering this comprehensive insight, LPVS enables the developers to have a clear understanding of license-related risks within their codebase and to take appropriate steps to mitigate them.
 
 - Continuous Monitoring:
 
@@ -41,9 +41,9 @@ We believe that LPVS will be an invaluable tool for maintaining the integrity of
 
 - Risk Mitigation:
 
-    LPVS aims to mitigate license-related risks by providing early detection and identification of potential violations. By alerting developers to potential issues and providing the necessary information to understand and address them, LPVS empowers teams to take proactive steps to ensure compliance with open-source licenses. This helps mitigate the risk of legal disputes, financial liabilities, and reputational damage associated with license violations.
+    LPVS aims at mitigating license-related risks by providing early detection and identification of potential violations. By alerting developers about potential issues and by providing the necessary information to understand and address them, LPVS empowers teams to take proactive steps to ensure compliance with open-source licenses. This helps mitigate the risk of legal disputes, financial liabilities, and reputational damage associated with license violations.
 
-With these features, LPVS assists developers in effectively managing license compliance for their open-source projects. By integrating with license scanning tools, supporting the GitHub review system, and providing comprehensive issue descriptions, LPVS offers a robust solution for identifying and addressing license-related risks in the software development lifecycle.
+With these features, LPVS assists developers to manage license compliance for their open-source projects effectively. By integration with license scanning tools, supporting the GitHub review system, and providing comprehensive issue descriptions, LPVS offers a robust solution for identifying and addressing license-related risks in the software development lifecycle.
 
 ---
 

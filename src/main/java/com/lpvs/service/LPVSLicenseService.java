@@ -18,7 +18,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import javax.annotation.PostConstruct;
+//import javax.annotation.PostConstruct; // Spring 2.7
+import jakarta.annotation.PostConstruct; // Spring 3.2
+
 import java.util.*;
 
 /**

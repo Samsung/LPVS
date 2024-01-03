@@ -9,7 +9,8 @@ package com.lpvs.entity;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
+//import javax.persistence.*; // Spring 2.7
+import jakarta.persistence.*; // Spring 3.2
 import java.io.Serializable;
 
 /**

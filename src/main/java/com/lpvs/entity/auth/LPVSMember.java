@@ -11,7 +11,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
 
-import javax.persistence.*;
+//import javax.persistence.*; // Spring 2.7
+import jakarta.persistence.*; // Spring 3.2
 
 /**
  * Represents a member in the LPVS system.

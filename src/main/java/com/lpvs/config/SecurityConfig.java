@@ -12,9 +12,14 @@ import lombok.RequiredArgsConstructor;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+//import javax.servlet.ServletException; // Spring 2.7
+import jakarta.servlet.ServletException; // Spring 3.2
+
+//import javax.servlet.http.HttpServletRequest; // Spring 2.7
+import jakarta.servlet.http.HttpServletRequest; // Spring 3.2
+
+//import javax.servlet.http.HttpServletResponse; // Spring 2.7
+import jakarta.servlet.http.HttpServletResponse; // Spring 3.2
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

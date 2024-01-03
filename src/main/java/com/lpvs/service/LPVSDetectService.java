@@ -26,7 +26,9 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.HtmlUtils;
 
-import javax.annotation.PostConstruct;
+//import javax.annotation.PostConstruct; // Spring 2.7
+import jakarta.annotation.PostConstruct; // Spring 3.2
+
 
 import java.io.IOException;
 import java.nio.file.Files;
