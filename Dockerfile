@@ -2,7 +2,7 @@ FROM node:18@sha256:a6385a6bb2fdcb7c48fc871e35e32af8daaa82c518900be49b76d10c0058
 
 WORKDIR /frontend
 COPY frontend .
-RUN npm install
+RUN npm ci
 RUN npm run build
 
 # Base image for building lpvs lib
