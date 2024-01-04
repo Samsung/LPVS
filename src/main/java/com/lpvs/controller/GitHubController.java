@@ -9,6 +9,7 @@ package com.lpvs.controller;
 import com.lpvs.entity.LPVSQueue;
 import com.lpvs.entity.enums.LPVSPullRequestAction;
 import com.lpvs.repository.LPVSQueueRepository;
+import com.lpvs.service.LPVSGitHubConnectionService;
 import com.lpvs.service.LPVSGitHubService;
 import com.lpvs.service.LPVSQueueService;
 import com.lpvs.util.LPVSExitHandler;
@@ -20,6 +21,9 @@ import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import org.apache.commons.codec.binary.Hex;
+import org.kohsuke.github.GHPullRequest;
+import org.kohsuke.github.GHRepository;
+import org.kohsuke.github.GitHub;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -28,6 +32,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.HtmlUtils;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.Optional;
 import javax.annotation.PostConstruct;
@@ -49,12 +54,6 @@ public class GitHubController {
     private String GITHUB_SECRET;
 
     /**
-     * Name of the GitHub API URL.
-     * It is set from the LPVS_GITHUB_API_URL environment variable or the application property.
-     */
-    private String GITHUB_API_URL;
-
-    /**
      * Initializes the GitHub secret from the LPVS_GITHUB_SECRET environment variable or the application property.
      * Exits the application if the secret is not set.
      */
@@ -69,17 +68,6 @@ public class GitHubController {
         if (this.GITHUB_SECRET.isEmpty()) {
             log.error("LPVS_GITHUB_SECRET (github.secret) is not set.");
             exitHandler.exit(-1);
-        }
-
-        this.GITHUB_API_URL =
-                Optional.ofNullable(this.GITHUB_API_URL)
-                        .filter(s -> !s.isEmpty())
-                        .orElse(
-                                Optional.ofNullable(System.getenv("LPVS_GITHUB_API_URL"))
-                                        .orElse(""));
-        if (this.GITHUB_API_URL.isEmpty()) {
-            log.info(
-                    "LPVS_GITHUB_API_URL (github.api.url) is not set. Default domain \"github.com\" will be used.");
         }
     }
 
@@ -99,6 +87,11 @@ public class GitHubController {
     private LPVSGitHubService gitHubService;
 
     /**
+     * Service for establishing and managing connections to the GitHub API.
+     */
+    private LPVSGitHubConnectionService gitHubConnectionService;
+
+    /**
      * LPVSExitHandler for handling application exit scenarios.
      */
     private LPVSExitHandler exitHandler;
@@ -114,6 +107,7 @@ public class GitHubController {
      *
      * @param queueService      LPVSQueueService for handling user-related business logic.
      * @param gitHubService     LPVSGitHubService for handling GitHub-related actions.
+     * @param gitHubConnectionService        Service for establishing and managing connections to the GitHub API.
      * @param queueRepository   LPVSQueueRepository for accessing and managing LPVSQueue entities.
      * @param GITHUB_SECRET     The GitHub secret used for validating webhook payloads.
      * @param exitHandler       LPVSExitHandler for handling application exit scenarios.
@@ -121,11 +115,13 @@ public class GitHubController {
     public GitHubController(
             LPVSQueueService queueService,
             LPVSGitHubService gitHubService,
+            LPVSGitHubConnectionService gitHubConnectionService,
             LPVSQueueRepository queueRepository,
             @Value("${github.secret:}") String GITHUB_SECRET,
             LPVSExitHandler exitHandler) {
         this.queueService = queueService;
         this.gitHubService = gitHubService;
+        this.gitHubConnectionService = gitHubConnectionService;
         this.queueRepository = queueRepository;
         this.GITHUB_SECRET = GITHUB_SECRET;
         this.exitHandler = exitHandler;
@@ -206,7 +202,7 @@ public class GitHubController {
             @PathVariable("gitHubOrg") @NotEmpty @Valid String gitHubOrg,
             @PathVariable("gitHubRepo") @NotEmpty @Valid String gitHubRepo,
             @PathVariable("prNumber") @Min(1) @Valid Integer prNumber)
-            throws InterruptedException {
+            throws InterruptedException, IOException {
         log.debug("New GitHub single scan request received");
 
         if (GITHUB_SECRET.trim().isEmpty()) {
@@ -220,31 +216,11 @@ public class GitHubController {
         gitHubOrg = HtmlUtils.htmlEscape(gitHubOrg);
         gitHubRepo = HtmlUtils.htmlEscape(gitHubRepo);
 
-        String gitHubDomain;
-        if (!GITHUB_API_URL.isEmpty()) {
-            gitHubDomain =
-                    GITHUB_API_URL
-                            .trim()
-                            .substring(
-                                    GITHUB_API_URL.indexOf("https://api.")
-                                            + "https://api.".length())
-                            .replaceAll("/", "");
-        } else {
-            gitHubDomain = "github.com";
-        }
-        log.debug("GitHub domain name is \"" + GITHUB_API_URL + "\"");
+        GitHub gitHub = gitHubConnectionService.connectToGitHubApi();
+        GHRepository repository = gitHub.getRepository(gitHubOrg + "/" + gitHubRepo);
+        GHPullRequest pullRequest = repository.getPullRequest(prNumber);
+        LPVSQueue scanConfig = LPVSWebhookUtil.getGitHubWebhookConfig(repository, pullRequest);
 
-        String prUrl =
-                "https://"
-                        + gitHubDomain
-                        + "/"
-                        + gitHubOrg
-                        + "/"
-                        + gitHubRepo
-                        + "/pull/"
-                        + prNumber;
-        LPVSQueue scanConfig =
-                gitHubService.getInternalQueueByPullRequest(HtmlUtils.htmlEscape(prUrl));
         if (scanConfig == null) {
             log.error("Error with connection to GitHub.");
             return ResponseEntity.status(HttpStatus.FORBIDDEN)

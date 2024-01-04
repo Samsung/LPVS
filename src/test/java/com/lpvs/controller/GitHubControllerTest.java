@@ -9,6 +9,7 @@ package com.lpvs.controller;
 import com.lpvs.entity.LPVSQueue;
 import com.lpvs.entity.LPVSResponseWrapper;
 import com.lpvs.repository.LPVSQueueRepository;
+import com.lpvs.service.LPVSGitHubConnectionService;
 import com.lpvs.service.LPVSGitHubService;
 import com.lpvs.service.LPVSQueueService;
 
@@ -16,6 +17,9 @@ import com.lpvs.util.LPVSExitHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.junitpioneer.jupiter.SetEnvironmentVariable;
+import org.kohsuke.github.GHPullRequest;
+import org.kohsuke.github.GHRepository;
+import org.kohsuke.github.GitHub;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -34,13 +38,18 @@ public class GitHubControllerTest {
 
     private LPVSExitHandler exitHandler;
 
+    GitHub gitHub = mock(GitHub.class);
+    GHRepository ghRepository = mock(GHRepository.class);
+    GHPullRequest ghPullRequest = mock(GHPullRequest.class);
     LPVSQueueService mocked_instance_queueServ = mock(LPVSQueueService.class);
     LPVSGitHubService mocked_instance_ghServ = mock(LPVSGitHubService.class);
     LPVSQueueRepository mocked_queueRepo = mock(LPVSQueueRepository.class);
+    LPVSGitHubConnectionService mocked_ghConnServ = mock(LPVSGitHubConnectionService.class);
     GitHubController gitHubController =
             new GitHubController(
                     mocked_instance_queueServ,
                     mocked_instance_ghServ,
+                    mocked_ghConnServ,
                     mocked_queueRepo,
                     "",
                     exitHandler);
@@ -172,24 +181,11 @@ public class GitHubControllerTest {
                 .thenReturn(mockScanConfig);
         when(mocked_queueRepo.save(any())).thenReturn(mockScanConfig);
         doNothing().when(mocked_instance_queueServ).addFirst(any());
-        ResponseEntity<LPVSResponseWrapper> responseEntity =
-                gitHubController.gitHubSingleScan("org", "repo", 1);
 
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-    }
+        when(mocked_ghConnServ.connectToGitHubApi()).thenReturn(gitHub);
+        when(gitHub.getRepository("org/repo")).thenReturn(ghRepository);
+        when(ghRepository.getPullRequest(1)).thenReturn(ghPullRequest);
 
-    @Test
-    @SetEnvironmentVariable(key = "LPVS_GITHUB_SECRET", value = "LPVS")
-    @SetEnvironmentVariable(key = "LPVS_GITHUB_API_URL", value = "https://api.github.com")
-    public void testGitHubSingleScan_SuccessSetEnvironment() throws Exception {
-        Method method = gitHubController.getClass().getDeclaredMethod("initializeGitHubController");
-        method.setAccessible(true);
-        method.invoke(gitHubController);
-        LPVSQueue mockScanConfig = new LPVSQueue();
-        when(mocked_instance_ghServ.getInternalQueueByPullRequest(anyString()))
-                .thenReturn(mockScanConfig);
-        when(mocked_queueRepo.save(any())).thenReturn(mockScanConfig);
-        doNothing().when(mocked_instance_queueServ).addFirst(any());
         ResponseEntity<LPVSResponseWrapper> responseEntity =
                 gitHubController.gitHubSingleScan("org", "repo", 1);
 
