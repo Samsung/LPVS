@@ -113,16 +113,17 @@ public class LPVSWebhookUtil {
      *
      * @param webhookConfig LPVSQueue object containing repository information.
      * @return The organization name.
+     * @throws IllegalArgumentException If the provided LPVSQueue object is null or if the repository URL is absent.
      */
     public static String getRepositoryOrganization(LPVSQueue webhookConfig) {
         if (null == webhookConfig) {
             log.error("Webhook Config is absent");
-            return "Webhook is absent";
+            throw new IllegalArgumentException("Webhook is absent");
         }
 
         if (null == webhookConfig.getRepositoryUrl()) {
             log.error("No repository URL info in webhook config");
-            return "No repository URL info in webhook config";
+            throw new IllegalArgumentException("No repository URL info in webhook config");
         }
 
         List<String> url = Arrays.asList(webhookConfig.getRepositoryUrl().split("/"));
@@ -134,16 +135,17 @@ public class LPVSWebhookUtil {
      *
      * @param webhookConfig LPVSQueue object containing repository information.
      * @return The repository name.
+     * @throws IllegalArgumentException If the provided LPVSQueue object is null or if the repository URL is absent.
      */
     public static String getRepositoryName(LPVSQueue webhookConfig) {
         if (null == webhookConfig) {
             log.error("Webhook Config is absent");
-            return "Webhook is absent";
+            throw new IllegalArgumentException("Webhook is absent");
         }
 
         if (null == webhookConfig.getRepositoryUrl()) {
             log.error("No repository URL info in webhook config");
-            return "No repository URL info in webhook config";
+            throw new IllegalArgumentException("No repository URL info in webhook config");
         }
 
         List<String> url = Arrays.asList(webhookConfig.getRepositoryUrl().split("/"));
@@ -155,8 +157,13 @@ public class LPVSWebhookUtil {
      *
      * @param webhookConfig LPVSQueue object containing repository information.
      * @return The repository URL.
+     * @throws IllegalArgumentException If the provided LPVSQueue object is null.
      */
     public static String getRepositoryUrl(LPVSQueue webhookConfig) {
+        if (null == webhookConfig) {
+            log.error("Webhook Config is absent");
+            throw new IllegalArgumentException("Webhook is absent");
+        }
         return webhookConfig.getRepositoryUrl();
     }
 
@@ -165,21 +172,22 @@ public class LPVSWebhookUtil {
      *
      * @param webhookConfig LPVSQueue object containing pull request information.
      * @return The pull request ID.
+     * @throws IllegalArgumentException If the provided LPVSQueue object is null or if the pull request URL is absent.
      */
     public static String getPullRequestId(LPVSQueue webhookConfig) {
         if (null == webhookConfig) {
             log.error("Webhook Config is absent");
-            return "Webhook is absent";
+            throw new IllegalArgumentException("Webhook is absent");
         }
 
         if (null == webhookConfig.getRepositoryUrl()) {
             log.error("No repository URL info in webhook config");
-            return "No repository URL info in webhook config";
+            throw new IllegalArgumentException("No repository URL info in webhook config");
         }
 
         if (null == webhookConfig.getPullRequestUrl()) {
             log.error("Pull Request URL is absent in webhook config");
-            return "Pull Request URL is absent in webhook config";
+            throw new IllegalArgumentException("Pull Request URL is absent in webhook config");
         }
 
         List<String> url = Arrays.asList(webhookConfig.getPullRequestUrl().split("/"));

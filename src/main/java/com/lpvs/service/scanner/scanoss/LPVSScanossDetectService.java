@@ -274,7 +274,7 @@ public class LPVSScanossDetectService {
 
             // close reader
             reader.close();
-        } catch (IOException ex) {
+        } catch (IOException | IllegalArgumentException ex) {
             log.error(ex.toString());
         }
         return detectedFiles;

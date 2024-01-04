@@ -101,6 +101,7 @@ public class LPVSDetectServiceTest {
 
             webhookConfig = new LPVSQueue();
             webhookConfig.setId(1L);
+            webhookConfig.setRepositoryUrl("https://github.com/Samsung/LPVS");
 
             lpvs_file_1 =
                     new LPVSFile(
@@ -357,7 +358,13 @@ public class LPVSDetectServiceTest {
 
             LPVSQueue mockWebhookConfig = mock(LPVSQueue.class);
 
-            String result = LPVSFileUtil.getPathByPullRequest(mockWebhookConfig);
+            when(mockWebhookConfig.getRepositoryUrl())
+                    .thenReturn("https://github.com/Samsung/LPVS");
+
+            when(mockWebhookConfig.getPullRequestUrl())
+                    .thenReturn("https://github.com/Samsung/LPVS/pull/1");
+
+            String result = LPVSDetectService.getPathByPullRequest(mockWebhookConfig);
 
             assertNotNull(result);
         }
