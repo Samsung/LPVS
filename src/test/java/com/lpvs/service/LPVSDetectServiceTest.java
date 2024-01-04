@@ -364,7 +364,7 @@ public class LPVSDetectServiceTest {
             when(mockWebhookConfig.getPullRequestUrl())
                     .thenReturn("https://github.com/Samsung/LPVS/pull/1");
 
-            String result = LPVSDetectService.getPathByPullRequest(mockWebhookConfig);
+            String result = LPVSFileUtil.getPathByPullRequest(mockWebhookConfig);
 
             assertNotNull(result);
         }
