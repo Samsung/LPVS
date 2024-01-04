@@ -190,30 +190,6 @@ public class LPVSWebhookUtilTest {
             String result = LPVSWebhookUtil.getPullRequestId(mockWebhookConfig);
             assertEquals("123", result);
         }
-
-        @Test
-        public void testGetPullRequestIdWithNullConfig() {
-            mockWebhookConfig = null;
-            String result = LPVSWebhookUtil.getPullRequestId(mockWebhookConfig);
-            assertEquals("Webhook is absent", result);
-        }
-
-        @Test
-        public void testGetPullRequestIdWithNullRepositoryUrl() {
-            mockWebhookConfig = new LPVSQueue();
-            mockWebhookConfig.setRepositoryUrl(null);
-            String result = LPVSWebhookUtil.getPullRequestId(mockWebhookConfig);
-            assertEquals("No repository URL info in webhook config", result);
-        }
-
-        @Test
-        public void testGetPullRequestIdWithNullPullRequestUrl() {
-            mockWebhookConfig = new LPVSQueue();
-            mockWebhookConfig.setRepositoryUrl("https://github.com/repo");
-            mockWebhookConfig.setPullRequestUrl(null);
-            String result = LPVSWebhookUtil.getPullRequestId(mockWebhookConfig);
-            assertEquals("Pull Request URL is absent in webhook config", result);
-        }
     }
 
     @Nested
@@ -221,8 +197,72 @@ public class LPVSWebhookUtilTest {
 
         @Test
         public void checkNull() {
-            assertEquals(LPVSWebhookUtil.getRepositoryOrganization(null), "Webhook is absent");
-            assertEquals(LPVSWebhookUtil.getRepositoryName(null), "Webhook is absent");
+            LPVSQueue mockWebhookConfig = new LPVSQueue();
+
+            IllegalArgumentException exception =
+                    assertThrows(
+                            IllegalArgumentException.class,
+                            () -> {
+                                LPVSWebhookUtil.getRepositoryOrganization(null);
+                            });
+            assertEquals("Webhook is absent", exception.getMessage());
+
+            exception =
+                    assertThrows(
+                            IllegalArgumentException.class,
+                            () -> {
+                                LPVSWebhookUtil.getRepositoryOrganization(mockWebhookConfig);
+                            });
+            assertEquals("No repository URL info in webhook config", exception.getMessage());
+
+            exception =
+                    assertThrows(
+                            IllegalArgumentException.class,
+                            () -> {
+                                LPVSWebhookUtil.getRepositoryName(null);
+                            });
+            assertEquals("Webhook is absent", exception.getMessage());
+
+            exception =
+                    assertThrows(
+                            IllegalArgumentException.class,
+                            () -> {
+                                LPVSWebhookUtil.getRepositoryName(mockWebhookConfig);
+                            });
+            assertEquals("No repository URL info in webhook config", exception.getMessage());
+
+            exception =
+                    assertThrows(
+                            IllegalArgumentException.class,
+                            () -> {
+                                LPVSWebhookUtil.getRepositoryUrl(null);
+                            });
+            assertEquals("Webhook is absent", exception.getMessage());
+
+            exception =
+                    assertThrows(
+                            IllegalArgumentException.class,
+                            () -> {
+                                LPVSWebhookUtil.getPullRequestId(null);
+                            });
+            assertEquals("Webhook is absent", exception.getMessage());
+
+            exception =
+                    assertThrows(
+                            IllegalArgumentException.class,
+                            () -> {
+                                LPVSWebhookUtil.getPullRequestId(mockWebhookConfig);
+                            });
+            assertEquals("No repository URL info in webhook config", exception.getMessage());
+
+            mockWebhookConfig.setRepositoryUrl("https://github.com/Samsung/LPVS");
+            exception =
+                    assertThrows(
+                            IllegalArgumentException.class,
+                            () -> {
+                                LPVSWebhookUtil.getPullRequestId(mockWebhookConfig);
+                            });
+            assertEquals("Pull Request URL is absent in webhook config", exception.getMessage());
         }
     }
 

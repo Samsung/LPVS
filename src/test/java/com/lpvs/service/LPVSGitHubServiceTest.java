@@ -200,6 +200,7 @@ public class LPVSGitHubServiceTest {
             webhookConfig.setPullRequestAPIUrl(url_pr_2);
             webhookConfig.setHeadCommitSHA(commit_sha);
             webhookConfig.setPullRequestUrl(url_pr_2);
+            webhookConfig.setRepositoryUrl("https://github.com/Samsung/LPVS");
 
             try {
                 when(mocked_instance_gh.getRepository(
@@ -617,6 +618,7 @@ public class LPVSGitHubServiceTest {
             webhookConfig.setAction(LPVSPullRequestAction.OPEN);
             webhookConfig.setPullRequestAPIUrl(url_pr_3);
             webhookConfig.setPullRequestUrl(url_pr_3);
+            webhookConfig.setRepositoryUrl("https://github.com/Samsung/LPVS");
 
             try {
                 when(mocked_instance_gh.getRepository(
@@ -725,6 +727,7 @@ public class LPVSGitHubServiceTest {
             webhookConfig.setAction(LPVSPullRequestAction.OPEN);
             webhookConfig.setPullRequestAPIUrl(url_pr_3);
             webhookConfig.setPullRequestUrl(url_pr_3);
+            webhookConfig.setRepositoryUrl("https://github.com/Samsung/LPVS");
 
             try {
                 when(mocked_instance_gh.getRepository(
@@ -835,6 +838,7 @@ public class LPVSGitHubServiceTest {
             webhookConfig.setAction(LPVSPullRequestAction.OPEN);
             webhookConfig.setPullRequestAPIUrl(url_pr_3);
             webhookConfig.setPullRequestUrl(url_pr_3);
+            webhookConfig.setRepositoryUrl("https://github.com/Samsung/LPVS");
 
             try {
                 when(mocked_instance_gh.getRepository(
@@ -932,6 +936,7 @@ public class LPVSGitHubServiceTest {
             webhookConfig.setAction(LPVSPullRequestAction.OPEN);
             webhookConfig.setPullRequestAPIUrl(url_pr_3);
             webhookConfig.setPullRequestUrl(url_pr_3);
+            webhookConfig.setRepositoryUrl("https://github.com/Samsung/LPVS");
 
             try {
                 when(mocked_instance_gh.getRepository(
@@ -1185,6 +1190,7 @@ public class LPVSGitHubServiceTest {
             webhookConfig = new LPVSQueue();
             webhookConfig.setHeadCommitSHA(head_commit_sha);
             webhookConfig.setPullRequestUrl(url_pr_1);
+            webhookConfig.setRepositoryUrl("https://github.com/Samsung/LPVS");
 
             try {
                 when(mocked_instance_gh.getRepository(
@@ -1292,6 +1298,7 @@ public class LPVSGitHubServiceTest {
             webhookConfig = new LPVSQueue();
             webhookConfig.setHeadCommitSHA(head_commit_sha);
             webhookConfig.setPullRequestUrl(url_pr_1);
+            webhookConfig.setRepositoryUrl("https://github.com/Samsung/LPVS");
 
             try {
                 when(mocked_instance_gh.getRepository(
@@ -1507,6 +1514,7 @@ public class LPVSGitHubServiceTest {
             webhookConfig = new LPVSQueue();
             webhookConfig.setHeadCommitSHA(head_commit_sha);
             webhookConfig.setPullRequestUrl(url_pr_1);
+            webhookConfig.setRepositoryUrl("https://github.com/Samsung/LPVS");
 
             try {
                 when(mocked_instance_gh.getRepository(
@@ -1614,6 +1622,7 @@ public class LPVSGitHubServiceTest {
             webhookConfig = new LPVSQueue();
             webhookConfig.setHeadCommitSHA(head_commit_sha);
             webhookConfig.setPullRequestUrl(url_pr_1);
+            webhookConfig.setRepositoryUrl("https://github.com/Samsung/LPVS");
 
             try {
                 when(mocked_instance_gh.getRepository(
@@ -1840,6 +1849,7 @@ public class LPVSGitHubServiceTest {
             webhookConfig = new LPVSQueue();
             webhookConfig.setPullRequestAPIUrl(url_pr_3);
             webhookConfig.setPullRequestUrl(url_pr_3);
+            webhookConfig.setRepositoryUrl("https://github.com/Samsung/LPVS");
 
             try {
                 when(mocked_instance_gh.getRepository(
@@ -2015,6 +2025,7 @@ public class LPVSGitHubServiceTest {
             webhookConfig.setPullRequestAPIUrl(url_pr_2);
             webhookConfig.setHeadCommitSHA(commit_sha);
             webhookConfig.setPullRequestUrl(url_pr_2);
+            webhookConfig.setRepositoryUrl("https://github.com/Samsung/LPVS");
 
             try {
                 when(mocked_instance_gh.getRepository(
@@ -3607,6 +3618,7 @@ public class LPVSGitHubServiceTest {
         void setUp() {
             webhookConfig = new LPVSQueue();
             webhookConfig.setPullRequestUrl(url_pr);
+            webhookConfig.setRepositoryUrl("https://github.com/Samsung/LPVS");
 
             try {
                 when(mocked_instance_gh.getRepository(
@@ -3701,6 +3713,7 @@ public class LPVSGitHubServiceTest {
         void setUp() {
             webhookConfig = new LPVSQueue();
             webhookConfig.setPullRequestUrl(url_pr_1);
+            webhookConfig.setRepositoryUrl("https://github.com/Samsung/LPVS");
             try {
                 when(mocked_instance_gh.getRepository(
                                 LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
@@ -3793,6 +3806,7 @@ public class LPVSGitHubServiceTest {
         void setUp() {
             webhookConfig = new LPVSQueue();
             webhookConfig.setPullRequestUrl(url_pr_1);
+            webhookConfig.setRepositoryUrl("https://github.com/Samsung/LPVS");
 
             try {
                 when(mocked_instance_gh.getRepository(
@@ -3893,6 +3907,7 @@ public class LPVSGitHubServiceTest {
         void setUp() {
             webhookConfig = new LPVSQueue();
             webhookConfig.setPullRequestUrl(url_pr_1);
+            webhookConfig.setRepositoryUrl("https://github.com/Samsung/LPVS");
 
             try {
                 when(mocked_instance_gh.getRepository(
@@ -3989,6 +4004,7 @@ public class LPVSGitHubServiceTest {
         void setUp() {
             webhookConfig = new LPVSQueue();
             webhookConfig.setPullRequestUrl(url_pr_1);
+            webhookConfig.setRepositoryUrl("https://github.com/Samsung/LPVS");
         }
 
         @Test
@@ -4038,6 +4054,7 @@ public class LPVSGitHubServiceTest {
         void setUp() {
             webhookConfig = new LPVSQueue();
             webhookConfig.setPullRequestUrl(url_pr_1);
+            webhookConfig.setRepositoryUrl("https://github.com/Samsung/LPVS");
         }
 
         @Test
@@ -4196,6 +4213,7 @@ public class LPVSGitHubServiceTest {
             webhookConfig = new LPVSQueue();
             webhookConfig.setPullRequestUrl(url_pr_1);
             webhookConfig.setPullRequestAPIUrl("http://url.com");
+            webhookConfig.setRepositoryUrl("https://github.com/Samsung/LPVS");
             lpvsPullRequest = new LPVSPullRequest();
         }
 
