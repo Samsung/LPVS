@@ -849,6 +849,7 @@ public class LPVSQueueServiceTest {
             webhookConfig.setAttempts(100);
             webhookConfig.setDate(new Date());
             webhookConfig.setUserId("id");
+            webhookConfig.setRepositoryUrl("https://github.com/Samsung/LPVS");
             when(mocked_queueRepository.getQueueList()).thenReturn(List.of(webhookConfig));
             when(mocked_lpvsPullRequestRepository.saveAndFlush(Mockito.any(LPVSPullRequest.class)))
                     .thenAnswer(i -> i.getArguments()[0]);
