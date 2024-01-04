@@ -14,15 +14,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 
-//import javax.servlet.ServletException; // Spring 2.7
-import jakarta.servlet.ServletException; // Spring 3.2
-
-//import javax.servlet.http.HttpServletRequest; // Spring 2.7
-import jakarta.servlet.http.HttpServletRequest; // Spring 3.2
-
-//import javax.servlet.http.HttpServletResponse; // Spring 2.7
-import jakarta.servlet.http.HttpServletResponse; // Spring 3.2
-
+import jakarta.servlet.ServletException; 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse; 
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;

@@ -30,9 +30,7 @@ import java.util.Date;
 import java.util.Optional;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
-
-//import javax.annotation.PostConstruct; // Spring 2.7
-import jakarta.annotation.PostConstruct; // Spring 3.2
+import jakarta.annotation.PostConstruct; 
 
 /**
  * Controller class for handling GitHub webhook events.

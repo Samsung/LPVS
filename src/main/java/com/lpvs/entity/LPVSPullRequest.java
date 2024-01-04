@@ -11,8 +11,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-//import javax.persistence.*; // Spring 2.7
-import jakarta.persistence.*; // Spring 3.2
+import jakarta.persistence.*; 
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;

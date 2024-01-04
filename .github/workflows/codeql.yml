@@ -38,3 +38,6 @@ jobs:
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@012739e5082ff0c22ca6d6ab32e07c36df03c4a4 
+
+    - name: Build Java
+      run: mvn -B -DskipTests -Pcompile-jdk17 clean install --file pom.xml
