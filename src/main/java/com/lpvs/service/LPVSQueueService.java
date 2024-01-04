@@ -76,7 +76,6 @@ public class LPVSQueueService {
      * @param queueRepository           Repository for storing LPVSQueue entities.
      * @param maxAttempts               Maximum attempts for processing LPVSQueue elements.
      */
-    @Autowired
     public LPVSQueueService(
             LPVSGitHubService gitHubService,
             LPVSDetectService detectService,
@@ -267,7 +266,7 @@ public class LPVSQueueService {
                 gitHubService.commentResults(webhookConfig, null, null, pullRequest);
                 delete(webhookConfig);
                 throw new Exception(
-                        "Files are not found. Probably pull request is not exists. Terminating.");
+                        "Files are not found. Probably pull request does not exist. Terminating.");
             }
             delete(webhookConfig);
         } catch (Exception | Error e) {

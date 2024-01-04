@@ -13,8 +13,12 @@ import com.lpvs.service.LPVSQueueService;
 
 import com.lpvs.util.LPVSExitHandler;
 import lombok.extern.slf4j.Slf4j;
+import uk.org.webcompere.systemstubs.environment.EnvironmentVariables;
+import uk.org.webcompere.systemstubs.jupiter.SystemStub;
+import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
+
 import org.junit.jupiter.api.Test;
-import org.junitpioneer.jupiter.SetEnvironmentVariable;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -23,7 +27,11 @@ import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.mock;
 
 @Slf4j
+@ExtendWith(SystemStubsExtension.class)
 public class GitHubWebhooksControllerTest {
+
+    @SystemStub
+    private EnvironmentVariables environmentVars;
 
     private static final String SIGNATURE = "X-Hub-Signature-256";
     private static final String SUCCESS = "Success";
@@ -71,7 +79,6 @@ public class GitHubWebhooksControllerTest {
     @Test
     public void okTest() {
         ResponseEntity<LPVSResponseWrapper> actual;
-        LPVSQueueRepository queueRepository;
 
         String json_to_test =
                 "{"
@@ -113,6 +120,7 @@ public class GitHubWebhooksControllerTest {
         } catch (Exception e) {
             log.error(e.getMessage());
             actual = null;
+            fail();
         }
         ResponseEntity<LPVSResponseWrapper> expected =
                 new ResponseEntity<>(new LPVSResponseWrapper(SUCCESS), HttpStatus.OK);
@@ -120,11 +128,11 @@ public class GitHubWebhooksControllerTest {
     }
 
     @Test
-    @SetEnvironmentVariable(key = "LPVS_GITHUB_SECRET", value = "LPVS")
     public void wrongSecretTest() {
 
-        String signature =
-                "sha256=c0ca451d2e2a7ea7d50bb29383996a35f43c7a9df0810bd6ffc45cefc8d1ce42";
+        environmentVars.set("LPVS_GITHUB_SECRET", "LPVS");
+
+        String signature = "sha256=c0ca451d2e2a7ea7d50bb29383996a35f43c7a9df0810bd6ffc45cefc8d1ce42";
 
         String json_to_test =
                 "{"
