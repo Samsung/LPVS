@@ -72,6 +72,9 @@ To enable _LPVS_ license scanning for your project, you need to set up GitHub We
 
 Configuration from your project side is now complete!
 
+Alternatively, you can use the Pull Request Single Scan API to analyze the code of a specific pull request.
+Please refer to the  [API Documentation](doc/lpvs-api.yaml) for more information.
+
 ---
 
 ### 2. Using pre-built LPVS Docker images

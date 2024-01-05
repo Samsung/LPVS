@@ -30,9 +30,8 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.kohsuke.github.*;
-import org.mockito.MockedStatic;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
+import org.mockito.*;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.io.IOException;
@@ -54,10 +53,10 @@ import static org.mockito.Mockito.*;
 
 @Slf4j
 @ExtendWith(SystemStubsExtension.class)
+@ExtendWith(MockitoExtension.class)
 public class LPVSGitHubServiceTest {
 
-    @SystemStub
-    private EnvironmentVariables environmentVars;        
+    @SystemStub private EnvironmentVariables environmentVars;
 
     /**
      * Helper class to mock `GHPullRequest`, because we cannot mock it via Mockito.
@@ -68,6 +67,16 @@ public class LPVSGitHubServiceTest {
      *    getUrl() should return String
      */
     private LPVSExitHandler exitHandler;
+
+    @Mock private GitHub gitHub;
+
+    @Mock private GHRepository ghRepository;
+
+    @Mock private GHPullRequest ghPullRequest;
+
+    @Mock private LPVSGitHubConnectionService gitHubConnectionService;
+
+    @InjectMocks private LPVSGitHubService gitHubService;
 
     static class GHPullRequestOurMock extends GHPullRequest {
         private final URL mockedGetUrl;
@@ -4347,30 +4356,53 @@ public class LPVSGitHubServiceTest {
             String GH_LOGIN = "";
             String GH_AUTH_TOKEN = "non-empty";
             String GH_API_URL = "";
-            LPVSPullRequestRepository mocked_pullRequestRepository =
-                    mock(LPVSPullRequestRepository.class);
-            LPVSDetectedLicenseRepository mocked_lpvsDetectedLicenseRepository =
-                    mock(LPVSDetectedLicenseRepository.class);
-            LPVSLicenseRepository mocked_lpvsLicenseRepository = mock(LPVSLicenseRepository.class);
-            LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository =
-                    mock(LPVSLicenseConflictRepository.class);
             LPVSExitHandler exitHandler = mock(LPVSExitHandler.class);
             LPVSGitHubConnectionService lpvsGitHubConnectionService =
                     new LPVSGitHubConnectionService(
                             GH_LOGIN, GH_AUTH_TOKEN, GH_API_URL, exitHandler);
-
-            final LPVSGitHubService gh_service =
-                    new LPVSGitHubService(
-                            mocked_pullRequestRepository,
-                            mocked_lpvsDetectedLicenseRepository,
-                            mocked_lpvsLicenseRepository,
-                            mocked_lpvsLicenseConflictRepository,
-                            lpvsGitHubConnectionService);
             Method method = lpvsGitHubConnectionService.getClass().getDeclaredMethod("checks");
             method.setAccessible(true);
             method.invoke(lpvsGitHubConnectionService);
 
             verify(exitHandler, never()).exit(anyInt());
+        }
+    }
+
+    @Nested
+    class getInternalQueueByPullRequests {
+
+        @Test
+        void testGetInternalQueueByPullRequestWithNull() {
+            LPVSQueue result = gitHubService.getInternalQueueByPullRequest(null);
+            assertNull(result);
+        }
+
+        @Test
+        void testGetInternalQueueByPullRequest() throws IOException {
+            String pullRequest = "github/owner/repo/branch/123";
+
+            when(gitHubConnectionService.connectToGitHubApi()).thenReturn(gitHub);
+            when(gitHub.getRepository("owner/repo")).thenReturn(ghRepository);
+            when(ghRepository.getPullRequest(123)).thenReturn(ghPullRequest);
+
+            LPVSQueue result = gitHubService.getInternalQueueByPullRequest(pullRequest);
+
+            assertNotNull(result);
+            assertEquals(result.getUserId(), "Single scan run");
+        }
+
+        @Test
+        void testGetInternalQueueByPullRequestError() throws IOException {
+            String pullRequest = "github/owner/repo/branch/123";
+
+            when(gitHubConnectionService.connectToGitHubApi()).thenThrow(IOException.class);
+
+            try {
+                LPVSQueue result = gitHubService.getInternalQueueByPullRequest(pullRequest);
+                assertNull(result, "Expected result to be null");
+            } catch (Exception e) {
+                fail("Exception not expected to be thrown here");
+            }
         }
     }
 }

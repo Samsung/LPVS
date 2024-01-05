@@ -14,7 +14,6 @@ import com.lpvs.repository.LPVSPullRequestRepository;
 import com.lpvs.repository.LPVSQueueRepository;
 import com.lpvs.util.LPVSWebhookUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -211,8 +210,8 @@ public class LPVSQueueService {
     public void processWebHook(LPVSQueue webhookConfig) {
         LPVSPullRequest pullRequest = new LPVSPullRequest();
         try {
-            log.info("GitHub Webhook processing...");
-            log.info(webhookConfig.toString());
+            log.info("GitHub queue processing...");
+            log.debug(webhookConfig.toString());
 
             String filePath = gitHubService.getPullRequestFiles(webhookConfig);
 

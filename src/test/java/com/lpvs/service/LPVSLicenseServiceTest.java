@@ -42,8 +42,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(SystemStubsExtension.class)
 public class LPVSLicenseServiceTest {
 
-    @SystemStub
-    private EnvironmentVariables environmentVars;        
+    @SystemStub private EnvironmentVariables environmentVars;
 
     private LPVSExitHandler exitHandler;
 

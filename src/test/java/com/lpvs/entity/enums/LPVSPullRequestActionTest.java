@@ -20,6 +20,9 @@ public class LPVSPullRequestActionTest {
         assertEquals(
                 LPVSPullRequestAction.convertFrom("synchronize"), LPVSPullRequestAction.UPDATE);
         assertEquals(LPVSPullRequestAction.convertFrom("rescan"), LPVSPullRequestAction.RESCAN);
+        assertEquals(
+                LPVSPullRequestAction.convertFrom("single-scan"),
+                LPVSPullRequestAction.SINGLE_SCAN);
 
         assertNotEquals(
                 LPVSPullRequestAction.convertFrom("random_name"), LPVSPullRequestAction.OPEN);
@@ -31,6 +34,9 @@ public class LPVSPullRequestActionTest {
                 LPVSPullRequestAction.convertFrom("random_name"), LPVSPullRequestAction.UPDATE);
         assertNotEquals(
                 LPVSPullRequestAction.convertFrom("random_name"), LPVSPullRequestAction.RESCAN);
+        assertNotEquals(
+                LPVSPullRequestAction.convertFrom("random_name"),
+                LPVSPullRequestAction.SINGLE_SCAN);
 
         assertNull(LPVSPullRequestAction.convertFrom("random_name"));
     }
@@ -42,5 +48,6 @@ public class LPVSPullRequestActionTest {
         assertEquals(LPVSPullRequestAction.CLOSE.getPullRequestAction(), "closed");
         assertEquals(LPVSPullRequestAction.UPDATE.getPullRequestAction(), "synchronize");
         assertEquals(LPVSPullRequestAction.RESCAN.getPullRequestAction(), "rescan");
+        assertEquals(LPVSPullRequestAction.SINGLE_SCAN.getPullRequestAction(), "single-scan");
     }
 }

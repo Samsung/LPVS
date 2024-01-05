@@ -16,11 +16,11 @@ import uk.org.webcompere.systemstubs.jupiter.SystemStub;
 import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 @ExtendWith(SystemStubsExtension.class)
 public class LPVSWebhookUtilTestFuzzer {
 
-    @SystemStub
-    private EnvironmentVariables environmentVars;  
+    @SystemStub private EnvironmentVariables environmentVars;
 
     @FuzzTest(maxDuration = "60s")
     public void fuzzTestGetPullRequestId(FuzzedDataProvider data) {

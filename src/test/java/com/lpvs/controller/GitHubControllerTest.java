@@ -6,8 +6,10 @@
  */
 package com.lpvs.controller;
 
+import com.lpvs.entity.LPVSQueue;
 import com.lpvs.entity.LPVSResponseWrapper;
 import com.lpvs.repository.LPVSQueueRepository;
+import com.lpvs.service.LPVSGitHubConnectionService;
 import com.lpvs.service.LPVSGitHubService;
 import com.lpvs.service.LPVSQueueService;
 
@@ -19,19 +21,23 @@ import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.kohsuke.github.GHPullRequest;
+import org.kohsuke.github.GHRepository;
+import org.kohsuke.github.GitHub;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.lang.reflect.Method;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.*;
 
 @Slf4j
 @ExtendWith(SystemStubsExtension.class)
-public class GitHubWebhooksControllerTest {
+public class GitHubControllerTest {
 
-    @SystemStub
-    private EnvironmentVariables environmentVars;
+    @SystemStub private EnvironmentVariables environmentVars;
 
     private static final String SIGNATURE = "X-Hub-Signature-256";
     private static final String SUCCESS = "Success";
@@ -39,13 +45,18 @@ public class GitHubWebhooksControllerTest {
 
     private LPVSExitHandler exitHandler;
 
+    GitHub gitHub = mock(GitHub.class);
+    GHRepository ghRepository = mock(GHRepository.class);
+    GHPullRequest ghPullRequest = mock(GHPullRequest.class);
     LPVSQueueService mocked_instance_queueServ = mock(LPVSQueueService.class);
     LPVSGitHubService mocked_instance_ghServ = mock(LPVSGitHubService.class);
     LPVSQueueRepository mocked_queueRepo = mock(LPVSQueueRepository.class);
-    GitHubWebhooksController gitHubWebhooksController =
-            new GitHubWebhooksController(
+    LPVSGitHubConnectionService mocked_ghConnServ = mock(LPVSGitHubConnectionService.class);
+    GitHubController gitHubController =
+            new GitHubController(
                     mocked_instance_queueServ,
                     mocked_instance_ghServ,
+                    mocked_ghConnServ,
                     mocked_queueRepo,
                     "",
                     exitHandler);
@@ -54,7 +65,7 @@ public class GitHubWebhooksControllerTest {
     public void noSignatureTest() {
         ResponseEntity<LPVSResponseWrapper> actual;
         try {
-            actual = gitHubWebhooksController.gitHubWebhooks(null, null);
+            actual = gitHubController.gitHubWebhooks(null, null);
         } catch (Exception e) {
             actual = null;
         }
@@ -67,7 +78,7 @@ public class GitHubWebhooksControllerTest {
     public void noPayloadTest() {
         ResponseEntity<LPVSResponseWrapper> actual;
         try {
-            actual = gitHubWebhooksController.gitHubWebhooks(SIGNATURE, null);
+            actual = gitHubController.gitHubWebhooks(SIGNATURE, null);
         } catch (Exception e) {
             actual = null;
         }
@@ -116,7 +127,7 @@ public class GitHubWebhooksControllerTest {
                         + "}";
 
         try {
-            actual = gitHubWebhooksController.gitHubWebhooks(SIGNATURE, json_to_test);
+            actual = gitHubController.gitHubWebhooks(SIGNATURE, json_to_test);
         } catch (Exception e) {
             log.error(e.getMessage());
             actual = null;
@@ -132,7 +143,8 @@ public class GitHubWebhooksControllerTest {
 
         environmentVars.set("LPVS_GITHUB_SECRET", "LPVS");
 
-        String signature = "sha256=c0ca451d2e2a7ea7d50bb29383996a35f43c7a9df0810bd6ffc45cefc8d1ce42";
+        String signature =
+                "sha256=c0ca451d2e2a7ea7d50bb29383996a35f43c7a9df0810bd6ffc45cefc8d1ce42";
 
         String json_to_test =
                 "{"
@@ -156,14 +168,57 @@ public class GitHubWebhooksControllerTest {
                         + "}"
                         + "}";
         try {
-            gitHubWebhooksController.initializeGitHubSecret();
-            boolean secret = gitHubWebhooksController.wrongSecret(signature, json_to_test);
+            gitHubController.initializeGitHubController();
+            boolean secret = gitHubController.wrongSecret(signature, json_to_test);
             assertEquals(secret, false);
-            secret = gitHubWebhooksController.wrongSecret(signature + " ", json_to_test);
+            secret = gitHubController.wrongSecret(signature + " ", json_to_test);
             assertEquals(secret, true);
         } catch (Exception e) {
-            log.error("GitHubWebhooksControllerTest::wrongSecretTest exception: " + e);
+            log.error("GitHubControllerTest::wrongSecretTest exception: " + e);
             fail();
         }
+    }
+
+    @Test
+    public void testGitHubSingleScan_Success() throws Exception {
+        environmentVars.set("LPVS_GITHUB_SECRET", "LPVS");
+        Method method = gitHubController.getClass().getDeclaredMethod("initializeGitHubController");
+        method.setAccessible(true);
+        method.invoke(gitHubController);
+        LPVSQueue mockScanConfig = new LPVSQueue();
+        when(mocked_instance_ghServ.getInternalQueueByPullRequest(anyString()))
+                .thenReturn(mockScanConfig);
+        when(mocked_queueRepo.save(any())).thenReturn(mockScanConfig);
+        doNothing().when(mocked_instance_queueServ).addFirst(any());
+
+        when(mocked_ghConnServ.connectToGitHubApi()).thenReturn(gitHub);
+        when(gitHub.getRepository("org/repo")).thenReturn(ghRepository);
+        when(ghRepository.getPullRequest(1)).thenReturn(ghPullRequest);
+
+        ResponseEntity<LPVSResponseWrapper> responseEntity =
+                gitHubController.gitHubSingleScan("org", "repo", 1);
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+    }
+
+    @Test
+    public void testGitHubSingleScan_InvalidSecret() throws Exception {
+        environmentVars.set("LPVS_GITHUB_SECRET", "LPVS");
+        when(mocked_instance_ghServ.getInternalQueueByPullRequest(anyString())).thenReturn(null);
+        ResponseEntity<LPVSResponseWrapper> responseEntity =
+                gitHubController.gitHubSingleScan("org", "repo", 1);
+
+        assertEquals(HttpStatus.FORBIDDEN, responseEntity.getStatusCode());
+    }
+
+    @Test
+    public void testGitHubSingleScan_ConnectionError() throws Exception {
+        environmentVars.set("LPVS_GITHUB_SECRET", "LPVS");
+        when(mocked_instance_ghServ.getInternalQueueByPullRequest(anyString()))
+                .thenThrow(new RuntimeException("Connection error"));
+        ResponseEntity<LPVSResponseWrapper> responseEntity =
+                gitHubController.gitHubSingleScan("org", "repo", 1);
+
+        assertEquals(HttpStatus.FORBIDDEN, responseEntity.getStatusCode());
     }
 }

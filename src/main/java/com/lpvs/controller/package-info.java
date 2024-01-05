@@ -9,7 +9,7 @@
  * This package contains the controller classes for handling various aspects of the License Pre-Validation Service (LPVS).
  * Controllers in this package manage interactions related to GitHub webhooks, user interfaces, and API endpoints.
  * <p>
- * - {@link com.lpvs.controller.GitHubWebhooksController}: Manages GitHub webhook events, processes payloads, and interacts
+ * - {@link com.lpvs.controller.GitHubController}: Manages GitHub webhook events, processes payloads, and interacts
  *   with LPVS services for queue handling and GitHub operations.
  * </p><p>
  * - {@link com.lpvs.controller.LPVSWebController}: Controls the web interface and API endpoints for LPVS, including user
