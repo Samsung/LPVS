@@ -10,7 +10,7 @@ import com.lpvs.entity.enums.LPVSPullRequestAction;
 import lombok.Getter;
 import lombok.Setter;
 
-import jakarta.persistence.*; // Spring 3.2
+import jakarta.persistence.*; 
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;

@@ -11,7 +11,7 @@
 [![Project Map](https://sourcespy.com/shield.svg)](https://sourcespy.com/github/samsunglpvs/)
 
 ## Introduction
-Open-source code [refers](https://en.wikipedia.org/wiki/Open-source_software) (that is a software that is freely available for use, study, modification, and distribution) must meet the conditions of the respective license(s) of all of its dependencies. Miscompliance may lead to legal disputes, financial liabilities, obligation to disclose proprietary intellectual property, as well as reputational damage.
+[Open-source code](https://en.wikipedia.org/wiki/Open-source_software) (that is a software that is freely available for use, study, modification, and distribution) must meet conditions of the respective license(s) of all of its dependencies. Miscompliance may lead to legal disputes, fines, obligation to disclose intellectual property, as well as reputational damage.
 
 In projects with numerous external dependencies, it becomes challenging to track license obligations accurately. Also, when many collaborators are involved, the risk of unintentional license violations, such as through copy-pasting code snippets, increases. Furthermore, there are nuanced situations like dependencies with dual licensing or licenses that may change due to ownership, purpose, or legislative alterations. These factors can potentially turn previously safe dependencies into unsafe ones over time.
 
