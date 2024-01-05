@@ -28,6 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -412,5 +413,36 @@ public class LPVSGitHubService {
             log.error("Can't authorize getRepositoryLicense(): " + e.getMessage());
         }
         return "Proprietary";
+    }
+
+    /**
+     * Retrieves the LPVSQueue configuration for a given GitHub pull request URL.
+     *
+     * @param pullRequest The GitHub pull request URL.
+     * @return LPVSQueue configuration for the given pull request.
+     */
+    public LPVSQueue getInternalQueueByPullRequest(String pullRequest) {
+        try {
+            if (pullRequest == null) {
+                return null;
+            }
+            String[] pullRequestSplit = pullRequest.split("/");
+            if (pullRequestSplit.length < 5) return null;
+            String pullRequestRepo =
+                    String.join(
+                            "/",
+                            Arrays.asList(pullRequestSplit)
+                                    .subList(
+                                            pullRequestSplit.length - 4,
+                                            pullRequestSplit.length - 2));
+            int pullRequestNum = Integer.parseInt(pullRequestSplit[pullRequestSplit.length - 1]);
+            GitHub gitHub = gitHubConnectionService.connectToGitHubApi();
+            GHRepository repo = gitHub.getRepository(pullRequestRepo);
+            GHPullRequest pR = repo.getPullRequest(pullRequestNum);
+            return LPVSWebhookUtil.getGitHubWebhookConfig(repo, pR);
+        } catch (IOException e) {
+            log.error("Can't set up github client: " + e);
+        }
+        return null;
     }
 }

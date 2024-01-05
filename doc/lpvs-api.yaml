@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: LPVS API
-  version: v2-20231124
+  version: v2-20231228
   description: >-
     License Pre-Validation Service (LPVS) is a tool designed to proactively manage
     license-related risks in Open Source code. It conducts in-depth analysis of your
@@ -34,6 +34,48 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/WebhookRequest'
+      responses:
+        '200':
+          description: 200 OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookResponseOK'
+        '403':
+          description: 403 Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookResponseForbidden'
+
+  /scan/{gitHubOrg}/{gitHubRepo}/{prNumber}:
+    post:
+      tags:
+        - GitHub Pull Request Single Scan API
+      summary: GitHub Pull Request Single Scan
+      description: Endpoint for performing a single scan operation based on GitHub organization, repository, and pull request number.
+      parameters:
+        - in: path
+          name: gitHubOrg
+          required: true
+          schema:
+            type: string
+          description: GitHub organization name
+          example: 'Samsung'
+        - in: path
+          name: gitHubRepo
+          required: true
+          schema:
+            type: string
+          description: GitHub repository name
+          example: 'LPVS'
+        - in: path
+          name: prNumber
+          required: true
+          schema:
+            type: integer
+          description: Pull request number
+          example: 100
       responses:
         '200':
           description: 200 OK

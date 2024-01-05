@@ -11,6 +11,8 @@ import com.google.gson.JsonObject;
 import com.lpvs.entity.LPVSQueue;
 import com.lpvs.entity.enums.LPVSPullRequestAction;
 import lombok.extern.slf4j.Slf4j;
+import org.kohsuke.github.GHPullRequest;
+import org.kohsuke.github.GHRepository;
 import org.springframework.http.HttpHeaders;
 
 import java.util.Arrays;
@@ -238,5 +240,32 @@ public class LPVSWebhookUtil {
         headers.add("Access-Control-Allow-Headers", "Content-Type");
 
         return headers;
+    }
+
+    /**
+     * Retrieves an LPVSQueue configuration based on the GitHub repository and pull request.
+     *
+     * @param repo The GitHub repository.
+     * @param pR   The GitHub pull request.
+     * @return LPVSQueue configuration for the given GitHub repository and pull request.
+     */
+    public static LPVSQueue getGitHubWebhookConfig(GHRepository repo, GHPullRequest pR) {
+        LPVSQueue webhookConfig = new LPVSQueue();
+        webhookConfig.setPullRequestUrl(
+                pR.getHtmlUrl() != null ? pR.getHtmlUrl().toString() : null);
+        if (pR.getHead() != null
+                && pR.getHead().getRepository() != null
+                && pR.getHead().getRepository().getHtmlUrl() != null) {
+            webhookConfig.setPullRequestFilesUrl(
+                    pR.getHead().getRepository().getHtmlUrl().toString());
+        } else {
+            webhookConfig.setPullRequestFilesUrl(webhookConfig.getPullRequestUrl());
+        }
+        webhookConfig.setPullRequestAPIUrl(pR.getUrl() != null ? pR.getUrl().toString() : null);
+        webhookConfig.setRepositoryUrl(
+                repo.getHtmlUrl() != null ? repo.getHtmlUrl().toString() : null);
+        webhookConfig.setUserId("Single scan run");
+        webhookConfig.setHeadCommitSHA(pR.getHead() != null ? pR.getHead().getSha() : null);
+        return webhookConfig;
     }
 }
