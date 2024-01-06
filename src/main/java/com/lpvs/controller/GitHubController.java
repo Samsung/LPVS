@@ -17,9 +17,9 @@ import com.lpvs.util.LPVSWebhookUtil;
 import com.lpvs.entity.LPVSResponseWrapper;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.validation.Valid;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
 import org.apache.commons.codec.binary.Hex;
 import org.kohsuke.github.GHPullRequest;
 import org.kohsuke.github.GHRepository;
