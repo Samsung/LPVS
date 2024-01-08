@@ -53,15 +53,18 @@ With these features, LPVS assists developers in effectively managing license com
 
 To enable _LPVS_ license scanning for your project, you need to set up GitHub Webhooks:
 
-1. Create a personal access token (`github.token`):
+1. Create a personal github access token (`personal-token`):
    - Follow the instructions [here](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token#creating-a-fine-grained-personal-access-token) to create a personal access token with the necessary permissions.
+
+   > [!NOTE]  
+   > Pay attention that the token must be copied immediately after creation, because you will not be able to see it later!!
 
 2. Configure the webhook in your GitHub repository settings:
    - Go to `Settings` -> `Webhooks`.
    - Click on `Add webhook`.
    - Fill in the `Payload URL` with: `http://<IP where LPVS is running>:7896/webhooks`.
      > If you're using ngrok, the `Payload URL` should be like `https://50be-62-205-136-206.ngrok-free.app/webhooks`.
-     - Install ngrok from [here](https://ngrok.com/docs/getting-started/#step-2-install-the-ngrok-agent) (follow steps 1 and 2).
+     - Install ngrok and connect your account from [here](https://ngrok.com/docs/getting-started/#step-2-install-the-ngrok-agent) (follow steps 1 and 2).
      - Run ngrok using the command: `ngrok http 7896`.
    - Specify the content type as `application/json`.
    - Fill in the `Secret` field with the passphrase: `LPVS`.
@@ -85,13 +88,23 @@ For the Docker deployment scenario, you may need to fill in the environment vari
 
 #### 2.1 Setting up LPVS Docker environment variables
 
-In the case where you plan to use a database user other than `root` that reflects in files `application.properties` or `docker-compose.yml` as:
-```
- spring.datasource.username=user
- spring.datasource.password=password  
+1. Open `docker-compose.yml` file.
+
+2. In the `environment` part of the `lpvs` service, find `## Github data for fetching code` and fill in the github `login` and personal `token` that was generated earlier
+
+```yaml
+- github.login=<github-login>
+- github.token=<personal-token>
 ```
 
-make the following changes in the `docker-compose.yml` file in section `environment` near `MYSQL_ROOT_PASSWORD` value:
+3. In case you plan to use a database user other than `root` reflect this in the appropriate lines in the `## Database Configuration` part of the `lpvs` service in `environment` section:
+
+```yaml
+- spring.datasource.username=user
+- spring.datasource.password=password  
+```
+
+4. Make the following changes in the `environment` section of `mysqldb` service near `MYSQL_ROOT_PASSWORD` value:
 
 ```yaml
 - MYSQL_USER: user
@@ -101,12 +114,16 @@ make the following changes in the `docker-compose.yml` file in section `environm
 If you are using only the `root` user, make the following change:
 
 ```yaml
+- spring.datasource.username=root
+- spring.datasource.password=rootpassword
+```
+```yaml 
 - MYSQL_ROOT_PASSWORD: rootpassword
 ```
 
 In both cases, ensure that the `MYSQL_ROOT_PASSWORD` field is filled.
 
-You can also change the directory for storing MySQL data by modifying the following line:
+5. You can also change the directory for storing MySQL data by modifying the following line:
 
 ```yaml
 - ./mysql-lpvs-data:/var/lib/mysql # db storage by default it is a directory in the root of the repository with the name mysql-lpvs-data
