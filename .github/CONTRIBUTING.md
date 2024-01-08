@@ -53,6 +53,11 @@ To make a clean pull request, follow the steps below:
    - **docs**: Make changes to documentation.
    - **style**: Implement code style changes (e.g., formatting).
    - **test**: Modify or add tests.
+   - **refactor**: Implement code refactoring.
+   - **perf**: Performance Improvements.
+   - **build**: Any changes in build conditions.
+   - **ci**: Implement any continuous integration changes.
+   - **revert**: Revert to previous code state.
 
    For example:
 
@@ -64,6 +69,11 @@ To make a clean pull request, follow the steps below:
    git commit -m "docs: A brief description of documentation changes" --signoff
    git commit -m "style: A brief description of code style changes (e.g., formatting)" --signoff
    git commit -m "test: A brief description of changes related to testing" --signoff
+   git commit -m "refactor: A brief description of code refactoring" --signoff
+   git commit -m "perf: A brief description of performance improvements" --signoff
+   git commit -m "build: A brief description of build conditions" --signoff
+   git commit -m "ci: A brief description of continuous integration changes" --signoff
+   git commit -m "revert: A brief description of revert previous code state" --signoff
    ```
 
 8. Pull the latest LPVS code from upstream into your branch:
