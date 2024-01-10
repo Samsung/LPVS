@@ -15,8 +15,12 @@ import com.lpvs.service.LPVSQueueService;
 
 import com.lpvs.util.LPVSExitHandler;
 import lombok.extern.slf4j.Slf4j;
+import uk.org.webcompere.systemstubs.environment.EnvironmentVariables;
+import uk.org.webcompere.systemstubs.jupiter.SystemStub;
+import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
+
 import org.junit.jupiter.api.Test;
-import org.junitpioneer.jupiter.SetEnvironmentVariable;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.kohsuke.github.GHPullRequest;
 import org.kohsuke.github.GHRepository;
 import org.kohsuke.github.GitHub;
@@ -30,7 +34,10 @@ import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.*;
 
 @Slf4j
+@ExtendWith(SystemStubsExtension.class)
 public class GitHubControllerTest {
+
+    @SystemStub private EnvironmentVariables environmentVars;
 
     private static final String SIGNATURE = "X-Hub-Signature-256";
     private static final String SUCCESS = "Success";
@@ -124,6 +131,7 @@ public class GitHubControllerTest {
         } catch (Exception e) {
             log.error(e.getMessage());
             actual = null;
+            fail();
         }
         ResponseEntity<LPVSResponseWrapper> expected =
                 new ResponseEntity<>(new LPVSResponseWrapper(SUCCESS), HttpStatus.OK);
@@ -131,8 +139,9 @@ public class GitHubControllerTest {
     }
 
     @Test
-    @SetEnvironmentVariable(key = "LPVS_GITHUB_SECRET", value = "LPVS")
     public void wrongSecretTest() {
+
+        environmentVars.set("LPVS_GITHUB_SECRET", "LPVS");
 
         String signature =
                 "sha256=c0ca451d2e2a7ea7d50bb29383996a35f43c7a9df0810bd6ffc45cefc8d1ce42";
@@ -171,8 +180,8 @@ public class GitHubControllerTest {
     }
 
     @Test
-    @SetEnvironmentVariable(key = "LPVS_GITHUB_SECRET", value = "LPVS")
     public void testGitHubSingleScan_Success() throws Exception {
+        environmentVars.set("LPVS_GITHUB_SECRET", "LPVS");
         Method method = gitHubController.getClass().getDeclaredMethod("initializeGitHubController");
         method.setAccessible(true);
         method.invoke(gitHubController);
@@ -193,8 +202,8 @@ public class GitHubControllerTest {
     }
 
     @Test
-    @SetEnvironmentVariable(key = "LPVS_GITHUB_SECRET", value = "LPVS")
     public void testGitHubSingleScan_InvalidSecret() throws Exception {
+        environmentVars.set("LPVS_GITHUB_SECRET", "LPVS");
         when(mocked_instance_ghServ.getInternalQueueByPullRequest(anyString())).thenReturn(null);
         ResponseEntity<LPVSResponseWrapper> responseEntity =
                 gitHubController.gitHubSingleScan("org", "repo", 1);
@@ -203,8 +212,8 @@ public class GitHubControllerTest {
     }
 
     @Test
-    @SetEnvironmentVariable(key = "LPVS_GITHUB_SECRET", value = "LPVS")
     public void testGitHubSingleScan_ConnectionError() throws Exception {
+        environmentVars.set("LPVS_GITHUB_SECRET", "LPVS");
         when(mocked_instance_ghServ.getInternalQueueByPullRequest(anyString()))
                 .thenThrow(new RuntimeException("Connection error"));
         ResponseEntity<LPVSResponseWrapper> responseEntity =

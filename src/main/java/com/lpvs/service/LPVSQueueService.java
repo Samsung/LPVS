@@ -14,7 +14,6 @@ import com.lpvs.repository.LPVSPullRequestRepository;
 import com.lpvs.repository.LPVSQueueRepository;
 import com.lpvs.util.LPVSWebhookUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -75,7 +74,6 @@ public class LPVSQueueService {
      * @param queueRepository           Repository for storing LPVSQueue entities.
      * @param maxAttempts               Maximum attempts for processing LPVSQueue elements.
      */
-    @Autowired
     public LPVSQueueService(
             LPVSGitHubService gitHubService,
             LPVSDetectService detectService,
@@ -265,7 +263,7 @@ public class LPVSQueueService {
                 gitHubService.commentResults(webhookConfig, null, null, pullRequest);
                 delete(webhookConfig);
                 throw new Exception(
-                        "Files are not found. Probably pull request is not exists. Terminating.");
+                        "Files are not found. Probably pull request does not exist. Terminating.");
             }
             delete(webhookConfig);
         } catch (Exception | Error e) {

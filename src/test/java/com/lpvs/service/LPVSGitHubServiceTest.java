@@ -21,11 +21,14 @@ import com.lpvs.util.LPVSExitHandler;
 import com.lpvs.util.LPVSFileUtil;
 import com.lpvs.util.LPVSWebhookUtil;
 import lombok.extern.slf4j.Slf4j;
+import uk.org.webcompere.systemstubs.environment.EnvironmentVariables;
+import uk.org.webcompere.systemstubs.jupiter.SystemStub;
+import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junitpioneer.jupiter.SetEnvironmentVariable;
 import org.kohsuke.github.*;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -44,12 +47,16 @@ import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 @Slf4j
+@ExtendWith(SystemStubsExtension.class)
 @ExtendWith(MockitoExtension.class)
 public class LPVSGitHubServiceTest {
+
+    @SystemStub private EnvironmentVariables environmentVars;
 
     /**
      * Helper class to mock `GHPullRequest`, because we cannot mock it via Mockito.
@@ -4278,9 +4285,10 @@ public class LPVSGitHubServiceTest {
         }
 
         @Test
-        @SetEnvironmentVariable(key = "LPVS_GITHUB_TOKEN", value = "GitHubTokenValue")
         public void testSetGithubTokenFromEnv_WhenEnvVariableIsSet()
                 throws IllegalAccessException, NoSuchFieldException {
+
+            environmentVars.set("LPVS_GITHUB_TOKEN", "GitHubTokenValue");
             String githubTokenValue = "GitHubTokenValue";
             lpvsGitHubConnectionService.setGithubTokenFromEnv();
             Field field =
@@ -4293,6 +4301,7 @@ public class LPVSGitHubServiceTest {
         @Test
         public void testSetGithubTokenFromEnv_WhenEnvVariableIsNotSet()
                 throws NoSuchFieldException, IllegalAccessException {
+            environmentVars.remove("LPVS_GITHUB_TOKEN");
             lpvsGitHubConnectionService.setGithubTokenFromEnv();
             Field field =
                     lpvsGitHubConnectionService.getClass().getDeclaredField("GITHUB_AUTH_TOKEN");
@@ -4311,9 +4320,11 @@ public class LPVSGitHubServiceTest {
         }
 
         @Test
-        @SetEnvironmentVariable(key = "LPVS_GITHUB_TOKEN", value = "")
         public void testCheckEmpty()
                 throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+
+            environmentVars.set("LPVS_GITHUB_TOKEN", "");
+
             LPVSPullRequestRepository mocked_pullRequestRepository =
                     mock(LPVSPullRequestRepository.class);
             LPVSDetectedLicenseRepository mocked_lpvsDetectedLicenseRepository =
