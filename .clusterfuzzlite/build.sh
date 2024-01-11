@@ -2,7 +2,7 @@ PROJECT=lpvs
 PROJECT_GROUP_ID=com.lpvs
 PROJECT_ARTIFACT_ID=lpvs
 MAIN_REPOSITORY=https://github.com/samsung/lpvs
-MAVEN_ARGS="-Djavac.src.version=11 -Djavac.target.version=11 -Denforcer.skip=true -DskipTests -Dgpg.skip"
+MAVEN_ARGS="-Djavac.src.version=17 -Djavac.target.version=17 -Denforcer.skip=true -DskipTests -Dgpg.skip"
 
   # Move seed corpus and dictionary.
   # mv $SRC/{*.zip,*.dict} $OUT
