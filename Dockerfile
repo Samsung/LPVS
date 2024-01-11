@@ -6,7 +6,7 @@ RUN npm ci
 RUN npm run build
 
 # Base image for building lpvs lib
-FROM openjdk:11@sha256:99bac5bf83633e3c7399aed725c8415e7b569b54e03e4599e580fc9cdb7c21ab AS builder
+FROM openjdk:17-slim@sha256:aaa3b3cb27e3e520b8f116863d0580c438ed55ecfa0bc126b41f68c3f62f9774 AS builder
 
 # Install dependencies
 RUN apt-get update && \
@@ -21,7 +21,7 @@ COPY . .
 RUN mvn clean install
 
 # Base image for running lpvs container
-FROM openjdk:11@sha256:99bac5bf83633e3c7399aed725c8415e7b569b54e03e4599e580fc9cdb7c21ab
+FROM openjdk:17-slim@sha256:aaa3b3cb27e3e520b8f116863d0580c438ed55ecfa0bc126b41f68c3f62f9774
 
 # Install dependencies and remove tmp files
 RUN apt-get update && \
