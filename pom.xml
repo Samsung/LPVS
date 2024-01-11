@@ -26,23 +26,17 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.15</version>
+        <version>3.2.1</version>
     </parent>
-
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
         <project.build.outputTimestamp>2023-11-18T00:00:00Z</project.build.outputTimestamp>
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot.experimental</groupId>
-            <artifactId>spring-boot-thin-layout</artifactId>
-            <version>1.0.31.RELEASE</version>
-        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -62,7 +56,6 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-core</artifactId>
-            <version>5.3.27</version>
         </dependency>
         <dependency>
             <groupId>com.google.code.gson</groupId>
@@ -75,15 +68,9 @@
             <version>1.318</version>
         </dependency>
         <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <version>5.9.1</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit-pioneer</groupId>
-            <artifactId>junit-pioneer</artifactId>
-            <version>2.0.0</version>
+            <groupId>uk.org.webcompere</groupId>
+            <artifactId>system-stubs-jupiter</artifactId>
+            <version>2.1.5</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -96,14 +83,6 @@
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
             <version>1.15</version>
-        </dependency>
-
-        <!-- Support of static mocks present only in mockito-inline, not mockito-core -->
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-inline</artifactId>
-            <version>5.2.0</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.google.code.findbugs</groupId>
@@ -148,7 +127,6 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>2.7.9</version>
                 <dependencies>
                     <!-- The following enables the "thin jar" deployment option. -->
                     <dependency>
@@ -157,11 +135,6 @@
                         <version>1.0.31.RELEASE</version>
                     </dependency>
                 </dependencies>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.2.1</version>
             </plugin>
             <plugin>
                 <groupId>org.jacoco</groupId>
@@ -188,7 +161,7 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.12.1</version>
                 <configuration>
-                    <release>11</release>
+                    <release>17</release>
                     <showWarnings>true</showWarnings>
                     <showDeprecation>true</showDeprecation>
                     <compilerArgs>

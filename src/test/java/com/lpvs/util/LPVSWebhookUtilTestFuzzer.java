@@ -9,15 +9,24 @@ package com.lpvs.util;
 import com.code_intelligence.jazzer.api.FuzzedDataProvider;
 import com.code_intelligence.jazzer.junit.FuzzTest;
 import com.lpvs.entity.LPVSQueue;
-import org.junitpioneer.jupiter.SetEnvironmentVariable;
+import org.junit.jupiter.api.extension.ExtendWith;
+
+import uk.org.webcompere.systemstubs.environment.EnvironmentVariables;
+import uk.org.webcompere.systemstubs.jupiter.SystemStub;
+import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@ExtendWith(SystemStubsExtension.class)
 public class LPVSWebhookUtilTestFuzzer {
 
+    @SystemStub private EnvironmentVariables environmentVars;
+
     @FuzzTest(maxDuration = "60s")
-    @SetEnvironmentVariable(key = "JAZZER_FUZZ", value = "1")
     public void fuzzTestGetPullRequestId(FuzzedDataProvider data) {
+
+        environmentVars.set("JAZZER_FUZZ", "1");
+
         System.setProperty("JAZZER_FUZZ", "1");
 
         LPVSQueue webhookConfig = new LPVSQueue();

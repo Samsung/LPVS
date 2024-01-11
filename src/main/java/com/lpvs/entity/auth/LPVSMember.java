@@ -10,8 +10,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
-
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 /**
  * Represents a member in the LPVS system.

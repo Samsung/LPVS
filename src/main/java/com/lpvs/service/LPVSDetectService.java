@@ -22,9 +22,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.HtmlUtils;
-
-import javax.annotation.PostConstruct;
-
+import jakarta.annotation.PostConstruct;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -94,7 +92,6 @@ public class LPVSDetectService {
      * @param licenseService          Service for license conflict analysis.
      * @param gitHubService           Service for GitHub connection and operation.
      */
-    @Autowired
     public LPVSDetectService(
             @Value("${scanner:scanoss}") String scannerType,
             LPVSGitHubConnectionService gitHubConnectionService,

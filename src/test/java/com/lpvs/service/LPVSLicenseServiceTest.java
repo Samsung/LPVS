@@ -14,11 +14,15 @@ import com.lpvs.repository.LPVSLicenseConflictRepository;
 import com.lpvs.repository.LPVSLicenseRepository;
 import com.lpvs.util.LPVSExitHandler;
 import lombok.extern.slf4j.Slf4j;
+import uk.org.webcompere.systemstubs.environment.EnvironmentVariables;
+import uk.org.webcompere.systemstubs.jupiter.SystemStub;
+import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junitpioneer.jupiter.SetEnvironmentVariable;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -35,7 +39,10 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Slf4j
+@ExtendWith(SystemStubsExtension.class)
 public class LPVSLicenseServiceTest {
+
+    @SystemStub private EnvironmentVariables environmentVars;
 
     private LPVSExitHandler exitHandler;
 
@@ -154,8 +161,8 @@ public class LPVSLicenseServiceTest {
                 Mockito.mock(LPVSLicenseConflictRepository.class);
 
         @Test
-        @SetEnvironmentVariable(key = "LPVS_LICENSE_CONFLICT", value = "scanner")
         public void testInit() {
+            environmentVars.set("LPVS_LICENSE_CONFLICT", "scanner");
             try {
                 Method init_method = licenseService.getClass().getDeclaredMethod("init");
                 init_method.setAccessible(true);
@@ -167,8 +174,8 @@ public class LPVSLicenseServiceTest {
         }
 
         @Test
-        @SetEnvironmentVariable(key = "LPVS_LICENSE_CONFLICT", value = "db")
         public void testInitDB() {
+            environmentVars.set("LPVS_LICENSE_CONFLICT", "db");
             try {
                 LPVSLicense license1 =
                         new LPVSLicense() {
