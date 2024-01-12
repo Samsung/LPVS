@@ -17,6 +17,10 @@
     "recharts": "^2.7.3",
     "web-vitals": "^2.1.4"
   },
+  "overrides": {
+    "nth-check": "2.1.1",
+    "postcss": "8.4.33"
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
