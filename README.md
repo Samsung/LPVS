@@ -247,21 +247,21 @@ Alternatively, you can provide the necessary values using the following environm
 
 ### 4. Build LPVS Application with Maven and Run it
 
-#### 4.a Service mode (default)
+#### 4.1 Service mode (default)
 
 To build LPVS from source code and run it in the default service mode, follow these steps:
 
-4.a.1 Build the LPVS application using Maven:
+4.1.1 Build the LPVS application using Maven:
    ```bash
    mvn clean install
    ```
 
-4.a.2 Navigate to the target directory:
+4.1.2 Navigate to the target directory:
    ```bash
    cd target/
    ```
 
-4.a.3. Run the LPVS application.
+4.1.3 Run the LPVS application.
 
    Service is run using the following command:
    ```bash
@@ -276,37 +276,102 @@ To build LPVS from source code and run it in the default service mode, follow th
 
 LPVS is now built and running. You can create a new pull request or update an existing one with commits, and LPVS will automatically start scanning and provide comments about the licenses found in the project.
 
-#### 4.b Single scan mode
+#### 4.2 Single scan mode
 
 Alternatively, you can perform a one-time scan on a specific pull request using the single scan mode. Follow these steps:
 
-4.b.1. Begin by running the installation and navigating to the target directory, similar to the process in service mode (refer to steps 4.a.1 and 4.a.2):
+4.2.1 Begin by running the installation and navigating to the target directory, similar to the process in service mode (refer to steps 4.1.1 and 4.1.2):
 
    ```bash
    mvn clean install
    cd target/
    ```
 
-4.b.2. Execute the single scan with the following command:
+4.2.2 Execute the single scan with the following command:
 
    ```bash
    java -jar -Dgithub.token=<my-token> lpvs-*.jar --github.pull.request=<PR URL>
    ```
 
-4.b.3. By default, the above command requires a pre-configured MySQL database. To avoid setting up the database, use the "singlescan" profile:
+4.2.3 By default, the above command requires a pre-configured MySQL database. To avoid setting up the database, use the "singlescan" profile:
    ```bash
    java -jar -Dspring.profiles.active=singlescan -Dgithub.token=<my-token> lpvs-*.jar --github.pull-request=<PR URL>
    ```
 
 These steps streamline the process, allowing you to run a scan on a single pull request without the need for a preconfigured database.
 
-4.b.4. Available option to generate an HTML report and save it in a specified folder. Replace `/path/to/your/folder` with the full path to the folder where you want to save the HTML report, and `your_report_filename.html` with the desired filename for the report.
+4.2.4 Available option to generate an HTML report and save it in a specified folder. Replace `/path/to/your/folder` with the full path to the folder where you want to save the HTML report, and `your_report_filename.html` with the desired filename for the report.
    ```bash
    java -jar -Dgithub.token=<my-token> lpvs-*.jar --github.pull.request=<PR URL> --build.html.report=</path/to/your/folder/your_report_filename.html>
    ```
 
 These steps streamline the process, allowing you to run a scan on a single pull request without the need for a preconfigured database.
 
+#### 4.3 Use of LPVS JAR `lpvs-x.y.z.jar` in your project
+
+4.3.1 Authenticating with a personal access token
+
+You can authenticate to GitHub Packages with Apache Maven by editing your `~/.m2/settings.xml` file to include your personal access token
+> Create a token with minimally sufficient rights:
+>  - Fine-grained tokens **(recommended)**  
+      _Only select repositories -> Permissions -> Repository permissions -> Metadata -> Read-only_
+>  - Tokens (classic)  
+      _Select scopes -> read:packages_
+
+Create a new `~/.m2/settings.xml` file if one doesn't exist.
+
+Example `settings.xml`
+```
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
+                      http://maven.apache.org/xsd/settings-1.0.0.xsd">
+
+  <activeProfiles>
+    <activeProfile>github</activeProfile>
+  </activeProfiles>
+
+  <profiles>
+    <profile>
+      <id>github</id>
+      <repositories>
+         <repository>
+          <id>github</id>
+          <url>https://maven.pkg.github.com/samsung/lpvs</url>
+          <snapshots>
+            <enabled>true</enabled>
+          </snapshots>
+        </repository>
+      </repositories>
+    </profile>
+  </profiles>
+
+  <servers>
+    <server>
+      <id>github</id>
+      <username>USERNAME</username>
+      <password>TOKEN</password>
+    </server>
+  </servers>
+</settings>
+```
+> if your `settings.xml` file is not located in `~/.m2/settings.xml`, then you need to add the `-s path/to/file/settings.xml` option to `mvn` command
+
+4.3.2 Installing a package
+
+Edit the `<dependencies>` element of the `pom.xml` file located in your project directory.
+
+```
+...
+    <dependencies>
+        <dependency>
+            <groupId>com.lpvs</groupId>
+            <artifactId>lpvs</artifactId>
+            <version>x.y.z</version>
+        </dependency>
+    </dependencies>
+...
+```
 ---
 
 ## Frontend Source Code (React)
