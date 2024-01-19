@@ -2180,7 +2180,8 @@ public class LPVSGitHubServiceTest {
                         + " * found in the LICENSE file.\n"
                         + " */\n\n\n\n\n"
                         + "**Detected license conflicts:**\n\n\n"
-                        + "<ul><li>MIT and Apache-1.0</li></ul>()</p>";
+                        + "<ul><li>MIT and Apache-1.0</li></ul>"
+                        + "\n\n###### <p align='right'>Check the validation details at the link()</p>";
 
         @BeforeEach
         void setUp() {
@@ -2508,7 +2509,8 @@ public class LPVSGitHubServiceTest {
                         + " * found in the LICENSE file.\n"
                         + " */\n\n\n\n\n"
                         + "**Detected license conflicts:**\n\n\n"
-                        + "<ul><li>MIT and Apache-1.0</li></ul>()</p>";
+                        + "<ul><li>MIT and Apache-1.0</li></ul>"
+                        + "\n\n###### <p align='right'>Check the validation details at the link()</p>";
 
         @BeforeEach
         void setUp() {
@@ -2661,7 +2663,7 @@ public class LPVSGitHubServiceTest {
                                         + LPVSWebhookUtil.getRepositoryName(webhookConfig));
             } catch (IOException e) {
                 log.error(
-                        "TestCommentResults__EmptyPresentConflictsPresent.testCommentResults__EmptyPresentConflictsPresent() error "
+                        "TestCommentResults__EmptyPresentConflictsPresent.testCommentResults__EmptyPresentConflictsPresentLicensePresent() error "
                                 + e);
                 fail();
             }
@@ -2679,7 +2681,7 @@ public class LPVSGitHubServiceTest {
                                 "[License Pre-Validation Service]");
             } catch (IOException e) {
                 log.error(
-                        "TestCommentResults__EmptyPresentConflictsPresent.testCommentResults__EmptyPresentConflictsPresent() error "
+                        "TestCommentResults__EmptyPresentConflictsPresent.testCommentResults__EmptyPresentConflictsPresentLicensePresent() error "
                                 + e);
                 fail();
             }
@@ -2721,7 +2723,7 @@ public class LPVSGitHubServiceTest {
                                         + LPVSWebhookUtil.getRepositoryName(webhookConfig));
             } catch (IOException e) {
                 log.error(
-                        "TestCommentResults__EmptyPresentConflictsPresent.testCommentResults__EmptyPresentConflictsPresent() error "
+                        "TestCommentResults__EmptyPresentConflictsPresent.testCommentResults__EmptyPresentConflictsPresentLicensePresentAlt() error "
                                 + e);
                 fail();
             }
@@ -2739,7 +2741,7 @@ public class LPVSGitHubServiceTest {
                                 "[License Pre-Validation Service]");
             } catch (IOException e) {
                 log.error(
-                        "TestCommentResults__EmptyPresentConflictsPresent.testCommentResults__EmptyPresentConflictsPresent() error "
+                        "TestCommentResults__EmptyPresentConflictsPresent.testCommentResults__EmptyPresentConflictsPresentLicensePresentAlt() error "
                                 + e);
                 fail();
             }
@@ -2835,7 +2837,8 @@ public class LPVSGitHubServiceTest {
                         + " * found in the LICENSE file.\n"
                         + " */\n\n\n\n\n"
                         + "**Detected license conflicts:**\n\n\n"
-                        + "<ul><li>MIT and Apache-1.0</li></ul>()</p>";
+                        + "<ul><li>MIT and Apache-1.0</li></ul>"
+                        + "\n\n###### <p align='right'>Check the validation details at the link()</p>";
 
         @BeforeEach
         void setUp() {
@@ -2931,7 +2934,7 @@ public class LPVSGitHubServiceTest {
                                         + LPVSWebhookUtil.getRepositoryName(webhookConfig));
             } catch (IOException e) {
                 log.error(
-                        "TestCommentResults__UnreviewedPresentConflictsPresent.testCommentResults__UnreviewedPresentConflictsPresent() error "
+                        "TestCommentResults__UnreviewedPresentConflictsPresent.testCommentResults__RestrictedPresentConflictsPresent() error "
                                 + e);
                 fail();
             }
@@ -2949,7 +2952,7 @@ public class LPVSGitHubServiceTest {
                                 "[License Pre-Validation Service]");
             } catch (IOException e) {
                 log.error(
-                        "TestCommentResults__UnreviewedPresentConflictsPresent.testCommentResults__UnreviewedPresentConflictsPresent() error "
+                        "TestCommentResults__UnreviewedPresentConflictsPresent.testCommentResults__RestrictedPresentConflictsPresent() error "
                                 + e);
                 fail();
             }
@@ -2990,7 +2993,7 @@ public class LPVSGitHubServiceTest {
                                         + LPVSWebhookUtil.getRepositoryName(webhookConfig));
             } catch (IOException e) {
                 log.error(
-                        "TestCommentResults__UnreviewedPresentConflictsPresent.testCommentResults__UnreviewedPresentConflictsPresent() error "
+                        "TestCommentResults__UnreviewedPresentConflictsPresent.testCommentResults__RestrictedPresentConflictsPresentLicensePresent() error "
                                 + e);
                 fail();
             }
@@ -3008,7 +3011,7 @@ public class LPVSGitHubServiceTest {
                                 "[License Pre-Validation Service]");
             } catch (IOException e) {
                 log.error(
-                        "TestCommentResults__UnreviewedPresentConflictsPresent.testCommentResults__UnreviewedPresentConflictsPresent() error "
+                        "TestCommentResults__UnreviewedPresentConflictsPresent.testCommentResults__RestrictedPresentConflictsPresentLicensePresent() error "
                                 + e);
                 fail();
             }
@@ -3050,7 +3053,7 @@ public class LPVSGitHubServiceTest {
                                         + LPVSWebhookUtil.getRepositoryName(webhookConfig));
             } catch (IOException e) {
                 log.error(
-                        "TestCommentResults__UnreviewedPresentConflictsPresent.testCommentResults__UnreviewedPresentConflictsPresent() error "
+                        "TestCommentResults__UnreviewedPresentConflictsPresent.testCommentResults__RestrictedPresentConflictsPresentLicensePresentAlt() error "
                                 + e);
                 fail();
             }
@@ -3068,7 +3071,7 @@ public class LPVSGitHubServiceTest {
                                 "[License Pre-Validation Service]");
             } catch (IOException e) {
                 log.error(
-                        "TestCommentResults__UnreviewedPresentConflictsPresent.testCommentResults__UnreviewedPresentConflictsPresent() error "
+                        "TestCommentResults__UnreviewedPresentConflictsPresent.testCommentResults__RestrictedPresentConflictsPresentLicensePresentAlt() error "
                                 + e);
                 fail();
             }
@@ -3164,7 +3167,8 @@ public class LPVSGitHubServiceTest {
                         + " * found in the LICENSE file.\n"
                         + " */\n\n\n\n\n"
                         + "**Detected license conflicts:**\n\n\n"
-                        + "<ul><li>MIT and Apache-1.0</li></ul>()</p>";
+                        + "<ul><li>MIT and Apache-1.0</li></ul>"
+                        + "\n\n###### <p align='right'>Check the validation details at the link()</p>";
 
         @BeforeEach
         void setUp() {
@@ -3319,7 +3323,7 @@ public class LPVSGitHubServiceTest {
                                         + LPVSWebhookUtil.getRepositoryName(webhookConfig));
             } catch (IOException e) {
                 log.error(
-                        "TestCommentResults__RestrictedPresentConflictsPresent.testCommentResults__RestrictedPresentConflictsPresent() error "
+                        "TestCommentResults__RestrictedPresentConflictsPresent.testCommentResults__RestrictedPresentConflictsPresentLicensePresent() error "
                                 + e);
                 fail();
             }
@@ -3337,7 +3341,7 @@ public class LPVSGitHubServiceTest {
                                 "[License Pre-Validation Service]");
             } catch (IOException e) {
                 log.error(
-                        "TestCommentResults__RestrictedPresentConflictsPresent.testCommentResults__RestrictedPresentConflictsPresent() error "
+                        "TestCommentResults__RestrictedPresentConflictsPresent.testCommentResults__RestrictedPresentConflictsPresentLicensePresent() error "
                                 + e);
                 fail();
             }
@@ -3379,7 +3383,7 @@ public class LPVSGitHubServiceTest {
                                         + LPVSWebhookUtil.getRepositoryName(webhookConfig));
             } catch (IOException e) {
                 log.error(
-                        "TestCommentResults__RestrictedPresentConflictsPresent.testCommentResults__RestrictedPresentConflictsPresent() error "
+                        "TestCommentResults__RestrictedPresentConflictsPresent.testCommentResults__RestrictedPresentConflictsPresentLicensePresentAlt() error "
                                 + e);
                 fail();
             }
@@ -3397,7 +3401,7 @@ public class LPVSGitHubServiceTest {
                                 "[License Pre-Validation Service]");
             } catch (IOException e) {
                 log.error(
-                        "TestCommentResults__RestrictedPresentConflictsPresent.testCommentResults__RestrictedPresentConflictsPresent() error "
+                        "TestCommentResults__RestrictedPresentConflictsPresent.testCommentResults__RestrictedPresentConflictsPresentLicensePresentAlt() error "
                                 + e);
                 fail();
             }
@@ -3476,8 +3480,7 @@ public class LPVSGitHubServiceTest {
                         + " *\n"
                         + " * Use of this source code is governed by a MIT license that can be\n"
                         + " * found in the LICENSE file.\n"
-                        + " */\n\n\n\n\n"
-                        + "</p>";
+                        + " */\n\n\n\n\n";
 
         @BeforeEach
         void setUp() {

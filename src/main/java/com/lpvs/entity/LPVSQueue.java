@@ -20,7 +20,7 @@ import java.util.Objects;
  * This class is mapped to the "queue" table in the "lpvs" schema.
  */
 @Entity
-@Table(name = "queue", schema = "lpvs")
+@Table(name = "queue", schema = "${lpvs.schema}")
 @Getter
 @Setter
 public class LPVSQueue implements Serializable {

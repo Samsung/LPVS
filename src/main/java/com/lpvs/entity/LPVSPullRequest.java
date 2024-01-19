@@ -21,7 +21,7 @@ import java.util.Objects;
  * This class is mapped to the "pull_requests" table in the "lpvs" schema.
  */
 @Entity
-@Table(name = "pull_requests", schema = "lpvs")
+@Table(name = "pull_requests", schema = "${lpvs.schema}")
 @Getter
 @Setter
 @AllArgsConstructor

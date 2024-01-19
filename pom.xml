@@ -26,7 +26,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.2.1</version>
+        <version>3.2.2</version>
     </parent>
 
     <properties>
@@ -82,7 +82,7 @@
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
-            <version>1.15</version>
+            <version>1.16.0</version>
         </dependency>
         <dependency>
             <groupId>com.google.code.findbugs</groupId>
@@ -159,7 +159,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.12.1</version>
+                <version>3.10.0</version>
                 <configuration>
                     <release>17</release>
                     <showWarnings>true</showWarnings>
@@ -167,6 +167,9 @@
                     <compilerArgs>
                         <arg>-Xlint:all,-serial,-processing</arg>
                     </compilerArgs>
+                    <excludes>
+                        <exclude>**/package-info.java</exclude>
+                    </excludes>
                 </configuration>
             </plugin>
             <plugin>

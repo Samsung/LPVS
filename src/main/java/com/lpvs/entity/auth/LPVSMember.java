@@ -22,7 +22,7 @@ import jakarta.persistence.*;
 @Entity
 @Table(
         name = "member",
-        schema = "lpvs",
+        schema = "${lpvs.schema}",
         indexes = {@Index(name = "unq_member", columnList = "email, provider", unique = true)})
 public class LPVSMember {
 

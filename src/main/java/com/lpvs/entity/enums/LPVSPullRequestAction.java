@@ -40,7 +40,12 @@ public enum LPVSPullRequestAction {
     /**
      * Represents the action of triggering a manual single scan of a pull request.
      */
-    SINGLE_SCAN("single-scan");
+    SINGLE_SCAN("single-scan"),
+
+    /**
+     * Represents the action of triggering a scan of a pull request by automation bot.
+     */
+    BOT_SCAN("bot-scan");
 
     /**
      * The string representation of the pull request action.
@@ -84,6 +89,8 @@ public enum LPVSPullRequestAction {
             return RESCAN;
         } else if (action.equals(SINGLE_SCAN.getPullRequestAction())) {
             return SINGLE_SCAN;
+        } else if (action.equals(BOT_SCAN.getPullRequestAction())) {
+            return BOT_SCAN;
         } else {
             return null;
         }

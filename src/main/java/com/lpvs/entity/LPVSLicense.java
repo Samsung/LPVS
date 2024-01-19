@@ -21,7 +21,7 @@ import java.io.Serializable;
 @Entity
 @Table(
         name = "licenses",
-        schema = "lpvs",
+        schema = "${lpvs.schema}",
         indexes = {@Index(name = "spdx_id", columnList = "license_spdx", unique = true)})
 @Getter
 @Setter
