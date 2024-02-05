@@ -13,7 +13,12 @@ import org.kohsuke.github.GHPullRequestFileDetail;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.springframework.test.util.ReflectionTestUtils;
+
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
+
 import static org.mockito.Mockito.*;
 
 public class LPVSFileUtilTest {
@@ -226,5 +231,20 @@ public class LPVSFileUtilTest {
             String expectedPath = System.getProperty("user.home") + "/Results/repoName";
             assert (result.equals(expectedPath));
         }
+    }
+
+    @Test
+    public void testSaveFileWithEmptyPatchedLines() {
+        String fileName = "testFile.txt";
+        String directoryPath = "testDirectory";
+        List<String> patchedLines = new ArrayList<>();
+
+        LPVSFileUtil.saveFile(fileName, directoryPath, patchedLines);
+        Boolean result1 = Files.exists(Paths.get(directoryPath, fileName));
+        assert (result1.equals(false));
+
+        LPVSFileUtil.saveFile(fileName, directoryPath, null);
+        Boolean result2 = Files.exists(Paths.get(directoryPath, fileName));
+        assert (result2.equals(false));
     }
 }

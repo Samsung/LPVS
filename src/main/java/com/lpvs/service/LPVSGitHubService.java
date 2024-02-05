@@ -333,9 +333,10 @@ public class LPVSGitHubService {
                 }
                 commitCommentBuilder.append("</ul>");
                 if (null != webhookConfig.getHubLink()) {
-                    commitCommentBuilder.append("(");
+                    commitCommentBuilder.append(
+                            "\n\n###### <p align='right'>Check the validation details at the link(");
                     commitCommentBuilder.append(webhookConfig.getHubLink());
-                    commitCommentBuilder.append(")");
+                    commitCommentBuilder.append(")</p>");
                 }
                 commitComment += commitCommentBuilder.toString();
             }
@@ -345,8 +346,7 @@ public class LPVSGitHubService {
                 pullRequestRepository.save(lpvsPullRequest);
                 pullRequest.comment(
                         "**\\[License Pre-Validation Service\\]** Potential license problem(s) detected \n\n"
-                                + commitComment
-                                + "</p>");
+                                + commitComment);
                 repository.createCommitStatus(
                         webhookConfig.getHeadCommitSHA(),
                         GHCommitState.FAILURE,
@@ -358,8 +358,7 @@ public class LPVSGitHubService {
                 pullRequestRepository.save(lpvsPullRequest);
                 pullRequest.comment(
                         "**\\[License Pre-Validation Service\\]**  No license issue detected \n\n"
-                                + commitComment
-                                + "</p>");
+                                + commitComment);
                 repository.createCommitStatus(
                         webhookConfig.getHeadCommitSHA(),
                         GHCommitState.SUCCESS,

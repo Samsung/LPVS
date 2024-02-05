@@ -17,7 +17,7 @@ import java.io.Serializable;
  * This class is mapped to the "detected_license" table in the "lpvs" schema.
  */
 @Entity
-@Table(name = "detected_license", schema = "lpvs")
+@Table(name = "detected_license", schema = "${lpvs.schema:lpvs}")
 @Getter
 @Setter
 public class LPVSDetectedLicense implements Serializable {
