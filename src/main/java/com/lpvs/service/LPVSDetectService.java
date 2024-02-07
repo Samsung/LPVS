@@ -118,8 +118,8 @@ public class LPVSDetectService {
      */
     @EventListener(ApplicationReadyEvent.class)
     public void runOneScan() {
-        log.info("Triggered signle scan operation");
         if (trigger != null && !HtmlUtils.htmlEscape(trigger).equals("")) {
+            log.info("Triggered signle scan operation");
             try {
                 LPVSQueue webhookConfig =
                         gitHubService.getInternalQueueByPullRequest(HtmlUtils.htmlEscape(trigger));
