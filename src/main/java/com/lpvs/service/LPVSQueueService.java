@@ -271,7 +271,23 @@ public class LPVSQueueService {
             pullRequest = lpvsPullRequestRepository.saveAndFlush(pullRequest);
             log.error("Can't authorize commentResults() " + e);
             e.printStackTrace();
-            delete(webhookConfig);
+            int currentAttempts = webhookConfig.getAttempts();
+            if (currentAttempts < maxAttempts) {
+                webhookConfig.setAttempts(currentAttempts++);
+                try {
+                    addFirst(webhookConfig);
+                } catch (InterruptedException e1) {
+                    log.warn("Failed to update Queue element");
+                }
+                queueRepository.save(webhookConfig);
+            } else {
+                log.warn(
+                        "Maximum amount of processing webhook reached for pull request: "
+                                + pullRequest.getId()
+                                + " "
+                                + pullRequest.getPullRequestUrl());
+                delete(webhookConfig);
+            }
         }
     }
 }
