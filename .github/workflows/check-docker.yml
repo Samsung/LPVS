@@ -1,0 +1,25 @@
+name: Check build of docker container
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+
+jobs:
+  building:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Harden Runner
+      uses: step-security/harden-runner@1b05615854632b887b69ae1be8cbefe72d3ae423
+      with:
+        egress-policy: audit
+
+    - uses: actions/checkout@d0651293c4a5a52e711f25b41b05b2212f385d28
+
+    - name: Build docker container
+      run: docker image build --no-cache --progress=plain .
