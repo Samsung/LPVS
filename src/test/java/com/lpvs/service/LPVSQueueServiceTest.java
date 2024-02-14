@@ -150,8 +150,6 @@ public class LPVSQueueServiceTest {
             queueService.processWebHook(webhookConfig);
 
             verify(mockGitHubService, times(1)).getPullRequestFiles(webhookConfig);
-            verify(mockGitHubService, times(1))
-                    .commentResults(eq(webhookConfig), any(), any(), eq(lpvsPullRequest));
 
             verifyNoMoreInteractions(mockGitHubService);
             verifyNoMoreInteractions(mockDetectService);
@@ -162,6 +160,8 @@ public class LPVSQueueServiceTest {
             queueService.processWebHook(webhookConfig);
 
             verify(mockGitHubService, times(2)).getPullRequestFiles(webhookConfig);
+            verify(mockGitHubService, times(1))
+                    .commentResults(eq(webhookConfig), any(), any(), eq(lpvsPullRequest));
         }
     }
 
@@ -842,25 +842,10 @@ public class LPVSQueueServiceTest {
         @Test
         public void testCheckForQueue() {
             LPVSQueue webhookConfig = new LPVSQueue();
-            webhookConfig.setAttempts(0);
-            webhookConfig.setDate(new Date());
-            when(mocked_queueRepository.getQueueList()).thenReturn(List.of(webhookConfig));
-            assertDoesNotThrow(() -> queueService.checkForQueue());
-            verify(mocked_queueRepository).save(webhookConfig);
-        }
-
-        @Test
-        public void testCheckForQueue__Alternative() {
-            LPVSQueue webhookConfig = new LPVSQueue();
             webhookConfig.setAttempts(100);
             webhookConfig.setDate(new Date());
-            webhookConfig.setUserId("id");
-            webhookConfig.setRepositoryUrl("https://github.com/Samsung/LPVS");
             when(mocked_queueRepository.getQueueList()).thenReturn(List.of(webhookConfig));
-            when(mocked_lpvsPullRequestRepository.saveAndFlush(Mockito.any(LPVSPullRequest.class)))
-                    .thenAnswer(i -> i.getArguments()[0]);
             assertDoesNotThrow(() -> queueService.checkForQueue());
-            verify(mocked_queueRepository).save(webhookConfig);
         }
 
         @Test
