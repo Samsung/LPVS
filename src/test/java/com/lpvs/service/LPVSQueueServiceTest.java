@@ -156,6 +156,12 @@ public class LPVSQueueServiceTest {
             verifyNoMoreInteractions(mockGitHubService);
             verifyNoMoreInteractions(mockDetectService);
             verifyNoMoreInteractions(mockLicenseService);
+
+            // test when max attempts reached
+            webhookConfig.setAttempts(maxAttempts);
+            queueService.processWebHook(webhookConfig);
+
+            verify(mockGitHubService, times(2)).getPullRequestFiles(webhookConfig);
         }
     }
 
