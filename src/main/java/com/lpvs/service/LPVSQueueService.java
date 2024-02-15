@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.LinkedBlockingDeque;
@@ -146,40 +147,7 @@ public class LPVSQueueService {
     public void checkForQueue() throws InterruptedException {
         log.debug("Checking for previous queue");
         List<LPVSQueue> webhookConfigList = queueRepository.getQueueList();
-        if (webhookConfigList.size() > 0) {
-            LPVSQueue webhookConfig = getLatestScan(webhookConfigList);
-            webhookConfig.setAttempts(webhookConfig.getAttempts() + 1);
-            queueRepository.save(webhookConfig);
-        }
         for (LPVSQueue webhook : webhookConfigList) {
-            log.info("PROCESSING WebHook id = " + webhook.getId());
-            if (webhook.getAttempts() > maxAttempts) {
-                LPVSPullRequest pullRequest = new LPVSPullRequest();
-                pullRequest.setPullRequestUrl(webhook.getPullRequestUrl());
-                pullRequest.setUser(webhook.getUserId());
-                pullRequest.setPullRequestFilesUrl(webhook.getPullRequestFilesUrl());
-                pullRequest.setRepositoryName(
-                        LPVSWebhookUtil.getRepositoryOrganization(webhook)
-                                + "/"
-                                + LPVSWebhookUtil.getRepositoryName(webhook));
-                pullRequest.setDate(webhook.getDate());
-                pullRequest.setStatus(LPVSPullRequestStatus.NO_ACCESS.toString());
-                pullRequest.setPullRequestHead(webhook.getPullRequestHead());
-                pullRequest.setPullRequestBase(webhook.getPullRequestBase());
-                pullRequest.setSender(webhook.getSender());
-                pullRequest = lpvsPullRequestRepository.saveAndFlush(pullRequest);
-
-                if (webhook.getUserId().equals("GitHub hook")) {
-                    gitHubService.setErrorCheck(webhook);
-                }
-                queueRepository.deleteById(webhook.getId());
-                log.info(
-                        "Webhook id = "
-                                + webhook.getId()
-                                + " is deleted. Details on PR #"
-                                + pullRequest.getId());
-                continue;
-            }
             log.info("Add WebHook id = " + webhook.getId() + " to the queue.");
             QUEUE.putFirst(webhook);
         }
@@ -210,8 +178,13 @@ public class LPVSQueueService {
     public void processWebHook(LPVSQueue webhookConfig) {
         LPVSPullRequest pullRequest = new LPVSPullRequest();
         try {
-            log.info("GitHub queue processing...");
-            log.debug(webhookConfig.toString());
+            log.info(
+                    "Processing webhook ID: "
+                            + webhookConfig.getId()
+                            + ", attempt: "
+                            + webhookConfig.getAttempts()
+                            + " for PR: "
+                            + webhookConfig.getPullRequestUrl());
 
             String filePath = gitHubService.getPullRequestFiles(webhookConfig);
 
@@ -258,20 +231,38 @@ public class LPVSQueueService {
                 log.debug("Creating comment");
                 gitHubService.commentResults(webhookConfig, files, detectedConflicts, pullRequest);
                 log.debug("Results posted on GitHub");
+                delete(webhookConfig);
             } else {
                 log.warn("Files are not found. Probably pull request is not exists.");
-                gitHubService.commentResults(webhookConfig, null, null, pullRequest);
-                delete(webhookConfig);
                 throw new Exception(
                         "Files are not found. Probably pull request does not exist. Terminating.");
             }
-            delete(webhookConfig);
         } catch (Exception | Error e) {
             pullRequest.setStatus(LPVSPullRequestStatus.INTERNAL_ERROR.toString());
             pullRequest = lpvsPullRequestRepository.saveAndFlush(pullRequest);
-            log.error("Can't authorize commentResults() " + e);
-            e.printStackTrace();
-            delete(webhookConfig);
+            log.error("Can't authorize commentResults() " + e.getMessage());
+            int currentAttempts = webhookConfig.getAttempts();
+            if (currentAttempts < maxAttempts) {
+                webhookConfig.setAttempts(currentAttempts + 1);
+                try {
+                    addFirst(webhookConfig);
+                } catch (InterruptedException e1) {
+                    log.warn("Failed to update Queue element");
+                }
+                queueRepository.save(webhookConfig);
+            } else {
+                log.warn(
+                        "Maximum amount of processing webhook reached for pull request: "
+                                + pullRequest.getId()
+                                + " "
+                                + pullRequest.getPullRequestUrl());
+                try {
+                    gitHubService.commentResults(webhookConfig, null, null, pullRequest);
+                } catch (IOException e1) {
+                    log.warn("Failed to post FAIL result " + e.getMessage());
+                }
+                delete(webhookConfig);
+            }
         }
     }
 }
