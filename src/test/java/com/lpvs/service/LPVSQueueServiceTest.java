@@ -15,13 +15,19 @@ import com.lpvs.entity.enums.LPVSPullRequestStatus;
 import com.lpvs.repository.LPVSPullRequestRepository;
 import com.lpvs.repository.LPVSQueueRepository;
 import lombok.extern.slf4j.Slf4j;
+
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -168,14 +174,19 @@ public class LPVSQueueServiceTest {
     // ==== constants common for next 6 tests ====
 
     // case DeletionAbsent
-    static final String filePathTestNoDeletion =
-            "Projects/Samsung/LPVS/3c688f5caa42b936cd6bea04c1dc3f732364250b";
+    static String filePathTestNoDeletion =
+            System.getProperty("user.dir")
+                    + "/Projects/Samsung/LPVS/3c688f5caa42b936cd6bea04c1dc3f732364250b";
 
     // case DeletionPresent
-    static final String filePathTestWithDeletion =
-            "Projects/Samsung/LPVS/3c688f5caa42b936cd6bea04c1dc3f732364250b";
-    static final String filePathTestWithDeletionTruncated =
-            "Projects/Samsung/LPVS/3c688f5caa42b936cd6bea04c1dc3f732364250b";
+    static String filePathTestWithDeletion =
+            System.getProperty("user.dir")
+                    + "/Projects/Samsung/LPVS/3c688f5caa42b936cd6bea04c1dc3f732364250b";
+    static String filePathTestWithDeletionTruncated =
+            System.getProperty("user.dir")
+                    + "/Projects/Samsung/LPVS/3c688f5caa42b936cd6bea04c1dc3f732364250b";
+
+    private Path tempFolderPath;
 
     // LPVSLicense
     static final String licenseNameTest = "test_license_name";
@@ -245,6 +256,32 @@ public class LPVSQueueServiceTest {
                     null);
 
     static final List<LPVSFile> LPVSFilesTest = Arrays.asList(lpvsFileTest_1, lpvsFileTest_2);
+
+    @BeforeEach
+    void setUp() {
+        // for next tests, create temp dir with temp file
+        tempFolderPath = Paths.get(filePathTestNoDeletion);
+        try {
+            if (!Files.exists(tempFolderPath)) {
+                Files.createDirectories(tempFolderPath);
+            }
+            Path emptyFilePath = tempFolderPath.resolve("dummyFile");
+            if (!Files.exists(emptyFilePath)) {
+                Files.createFile(emptyFilePath);
+            }
+        } catch (IOException e) {
+            log.warn("error creating temp folder/file " + e.getMessage());
+        }
+    }
+
+    @AfterEach
+    public void tearDown() throws IOException {
+        // Clean up the temporary folder after each test
+        Files.walk(tempFolderPath)
+                .sorted(Comparator.reverseOrder())
+                .map(Path::toFile)
+                .forEach(File::delete);
+    }
 
     @Nested
     class TestProcessWebHook__DeletionAbsentLicensePresent {
