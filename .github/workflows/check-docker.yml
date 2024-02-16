@@ -19,7 +19,7 @@ jobs:
       with:
         egress-policy: audit
 
-    - uses: actions/checkout@d0651293c4a5a52e711f25b41b05b2212f385d28
+    - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
     - name: Build docker container
       run: docker image build --no-cache --progress=plain .
