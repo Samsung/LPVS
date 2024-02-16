@@ -19,6 +19,8 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.LinkedBlockingDeque;
@@ -203,7 +205,7 @@ public class LPVSQueueService {
             pullRequest = lpvsPullRequestRepository.saveAndFlush(pullRequest);
             log.debug("ID: " + pullRequest.getId() + " " + pullRequest.toString());
 
-            if (filePath != null) {
+            if (filePath != null && Files.list(Paths.get(filePath)).count() != 0) {
                 log.debug("Successfully downloaded files");
 
                 if (filePath.contains(":::::")) {
