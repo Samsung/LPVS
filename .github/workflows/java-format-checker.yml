@@ -15,7 +15,7 @@ jobs:
         with:
           egress-policy: audit
 
-      - uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
       - uses: axel-op/googlejavaformat-action@dbff853fb823671ec5781365233bf86543b13215 # v3
         with:
           args: "--aosp --skip-javadoc-formatting --skip-reflowing-long-strings --skip-sorting-imports --replace"
