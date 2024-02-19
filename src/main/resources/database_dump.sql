@@ -1,7 +1,7 @@
 CREATE SCHEMA IF NOT EXISTS lpvs;
 USE lpvs;
 
-CREATE TABLE IF NOT EXISTS licenses (
+CREATE TABLE IF NOT EXISTS license_list (
   id bigint NOT NULL AUTO_INCREMENT,
   license_usage varchar(255) DEFAULT NULL,
   license_name varchar(255) NOT NULL,
@@ -18,8 +18,8 @@ CREATE TABLE IF NOT EXISTS license_conflicts (
   PRIMARY KEY (id),
   KEY (conflict_license_id),
   KEY (repository_license_id),
-  FOREIGN KEY (conflict_license_id) REFERENCES licenses (id),
-  FOREIGN KEY (repository_license_id) REFERENCES licenses (id)
+  FOREIGN KEY (conflict_license_id) REFERENCES license_list (id),
+  FOREIGN KEY (repository_license_id) REFERENCES license_list (id)
 );
 
 CREATE TABLE IF NOT EXISTS pull_requests (
@@ -60,9 +60,9 @@ CREATE TABLE IF NOT EXISTS detected_license (
   KEY (repository_license_id),
   KEY (conflict_id),
   FOREIGN KEY (conflict_id) REFERENCES license_conflicts (id),
-  FOREIGN KEY (license_id) REFERENCES licenses (id),
+  FOREIGN KEY (license_id) REFERENCES license_list (id),
   FOREIGN KEY (pull_request_id) REFERENCES pull_requests (id),
-  FOREIGN KEY (repository_license_id) REFERENCES licenses (id)
+  FOREIGN KEY (repository_license_id) REFERENCES license_list (id)
 );
 
 CREATE TABLE IF NOT EXISTS queue (
@@ -91,7 +91,7 @@ CREATE TABLE IF NOT EXISTS member (
   UNIQUE (email,provider)
 );
 
-INSERT INTO licenses (license_name, license_spdx, license_usage) VALUES
+INSERT INTO license_list (license_name, license_spdx, license_usage) VALUES
 ('GNU General Public License v3.0 only','GPL-3.0-only','PROHIBITED'),
 ('OpenSSL License','OpenSSL','PERMITTED'),
 ('GNU Lesser General Public License v2.0 or later','LGPL-2.0-or-later','RESTRICTED'),

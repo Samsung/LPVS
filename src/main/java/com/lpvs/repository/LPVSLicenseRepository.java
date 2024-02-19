@@ -26,7 +26,7 @@ public interface LPVSLicenseRepository extends JpaRepository<LPVSLicense, Long> 
      *
      * @return List of {@link LPVSLicense} entities representing licenses.
      */
-    @Query(value = "SELECT * FROM licenses", nativeQuery = true)
+    @Query(value = "SELECT * FROM license_list", nativeQuery = true)
     List<LPVSLicense> takeAllLicenses();
 
     /**
@@ -37,7 +37,7 @@ public interface LPVSLicenseRepository extends JpaRepository<LPVSLicense, Long> 
      */
     @Query(
             value =
-                    "SELECT * FROM licenses WHERE licenses.license_spdx = :spdxId ORDER BY id DESC LIMIT 1",
+                    "SELECT * FROM license_list WHERE license_list.license_spdx = :spdxId ORDER BY id DESC LIMIT 1",
             nativeQuery = true)
     LPVSLicense searchBySpdxId(@Param("spdxId") String spdxId);
 
@@ -49,7 +49,7 @@ public interface LPVSLicenseRepository extends JpaRepository<LPVSLicense, Long> 
      */
     @Query(
             value =
-                    "SELECT * FROM licenses WHERE licenses.license_alternative_names LIKE %:licenseName% ORDER BY id DESC LIMIT 1",
+                    "SELECT * FROM license_list WHERE license_list.license_alternative_names LIKE %:licenseName% ORDER BY id DESC LIMIT 1",
             nativeQuery = true)
     LPVSLicense searchByAlternativeLicenseNames(@Param("licenseName") String licenseName);
 
@@ -58,6 +58,6 @@ public interface LPVSLicenseRepository extends JpaRepository<LPVSLicense, Long> 
      *
      * @return List of SPDX identifiers as Strings.
      */
-    @Query(value = "select licenses.spdxId from LPVSLicense licenses")
+    @Query(value = "select license_list.spdxId from LPVSLicense license_list")
     List<String> takeAllSpdxId();
 }
