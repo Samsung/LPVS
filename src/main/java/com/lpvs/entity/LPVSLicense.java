@@ -16,11 +16,11 @@ import java.io.Serializable;
 
 /**
  * Entity class representing licenses in the LPVS system.
- * This class is mapped to the "licenses" table in the "lpvs" schema.
+ * This class is mapped to the "license_list" table in the "lpvs" schema.
  */
 @Entity
 @Table(
-        name = "licenses",
+        name = "license_list",
         schema = "${lpvs.schema:lpvs}",
         indexes = {@Index(name = "spdx_id", columnList = "license_spdx", unique = true)})
 @Getter
