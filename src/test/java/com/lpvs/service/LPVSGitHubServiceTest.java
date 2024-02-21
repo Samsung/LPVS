@@ -2170,7 +2170,7 @@ public class LPVSGitHubServiceTest {
                         + "**File:** src/main/java/com/lpvs/service/LPVSGitHubService.java\n"
                         + "**License(s):** <a target=\"_blank\" href=\"https://opensource.org/licenses/MIT\">MIT</a> (prohibited)\n"
                         + "**Component:** LPVS::Services (src/main/java/com/lpvs/service/LPVSGitHubService.java)\n"
-                        + "**Matched Lines:** <a target=\"_blank\" href=\"https://github.com/Samsung/LPVS/blob/895337e89ae103ff2d18c9e0d93709f743226afa/src/main/java/com/lpvs/service/LPVSGitHubService.java#L1L6\">1-6</a>\n"
+                        + "**Matched Lines:** <a target=\"_blank\" href=\"https://github.com/Samsung/LPVS/blob/895337e89ae103ff2d18c9e0d93709f743226afa/src/main/java/com/lpvs/service/LPVSGitHubService.java#L1L6\">1-6</a>  \n"
                         + "**Snippet Match:** /**\n"
                         + " * Copyright (c) 2022, Samsung Electronics Co., Ltd. All rights reserved.\n"
                         + " *\n"
@@ -2499,7 +2499,7 @@ public class LPVSGitHubServiceTest {
                         + "**File:** src/main/java/com/lpvs/service/LPVSGitHubService.java\n"
                         + "**License(s):** <a target=\"_blank\" href=\"https://opensource.org/licenses/MIT\">MIT</a> ()\n"
                         + "**Component:** LPVS::Services (src/main/java/com/lpvs/service/LPVSGitHubService.java)\n"
-                        + "**Matched Lines:** <a target=\"_blank\" href=\"https://github.com/Samsung/LPVS/blob/895337e89ae103ff2d18c9e0d93709f743226afa/src/main/java/com/lpvs/service/LPVSGitHubService.java#L1L6\">1-6</a>\n"
+                        + "**Matched Lines:** <a target=\"_blank\" href=\"https://github.com/Samsung/LPVS/blob/895337e89ae103ff2d18c9e0d93709f743226afa/src/main/java/com/lpvs/service/LPVSGitHubService.java#L1L6\">1-6</a>  \n"
                         + "**Snippet Match:** /**\n"
                         + " * Copyright (c) 2022, Samsung Electronics Co., Ltd. All rights reserved.\n"
                         + " *\n"
@@ -2827,7 +2827,7 @@ public class LPVSGitHubServiceTest {
                         + "**File:** src/main/java/com/lpvs/service/LPVSGitHubService.java\n"
                         + "**License(s):** <a target=\"_blank\" href=\"https://opensource.org/licenses/MIT\">MIT</a> (unreviewed)\n"
                         + "**Component:** LPVS::Services (src/main/java/com/lpvs/service/LPVSGitHubService.java)\n"
-                        + "**Matched Lines:** <a target=\"_blank\" href=\"https://github.com/Samsung/LPVS/blob/895337e89ae103ff2d18c9e0d93709f743226afa/src/main/java/com/lpvs/service/LPVSGitHubService.java#L1L6\">1-6</a>\n"
+                        + "**Matched Lines:** <a target=\"_blank\" href=\"https://github.com/Samsung/LPVS/blob/895337e89ae103ff2d18c9e0d93709f743226afa/src/main/java/com/lpvs/service/LPVSGitHubService.java#L1L6\">1-6</a>  \n"
                         + "**Snippet Match:** /**\n"
                         + " * Copyright (c) 2022, Samsung Electronics Co., Ltd. All rights reserved.\n"
                         + " *\n"
@@ -3157,7 +3157,7 @@ public class LPVSGitHubServiceTest {
                         + "**File:** src/main/java/com/lpvs/service/LPVSGitHubService.java\n"
                         + "**License(s):** <a target=\"_blank\" href=\"https://opensource.org/licenses/MIT\">MIT</a> (restricted)\n"
                         + "**Component:** LPVS::Services (src/main/java/com/lpvs/service/LPVSGitHubService.java)\n"
-                        + "**Matched Lines:** <a target=\"_blank\" href=\"https://github.com/Samsung/LPVS/blob/895337e89ae103ff2d18c9e0d93709f743226afa/src/main/java/com/lpvs/service/LPVSGitHubService.java#L1L6\">1-6</a>\n"
+                        + "**Matched Lines:** <a target=\"_blank\" href=\"https://github.com/Samsung/LPVS/blob/895337e89ae103ff2d18c9e0d93709f743226afa/src/main/java/com/lpvs/service/LPVSGitHubService.java#L1L6\">1-6</a>  \n"
                         + "**Snippet Match:** /**\n"
                         + " * Copyright (c) 2022, Samsung Electronics Co., Ltd. All rights reserved.\n"
                         + " *\n"
@@ -3472,7 +3472,7 @@ public class LPVSGitHubServiceTest {
                         + "**File:** src/main/java/com/lpvs/service/LPVSGitHubService.java\n"
                         + "**License(s):** <a target=\"_blank\" href=\"https://opensource.org/licenses/MIT\">MIT</a> (permitted)\n"
                         + "**Component:** LPVS::Services (src/main/java/com/lpvs/service/LPVSGitHubService.java)\n"
-                        + "**Matched Lines:** <a target=\"_blank\" href=\"https://github.com/Samsung/LPVS/blob/895337e89ae103ff2d18c9e0d93709f743226afa/src/main/java/com/lpvs/service/LPVSGitHubService.java#L1L6\">1-6</a>\n"
+                        + "**Matched Lines:** <a target=\"_blank\" href=\"https://github.com/Samsung/LPVS/blob/895337e89ae103ff2d18c9e0d93709f743226afa/src/main/java/com/lpvs/service/LPVSGitHubService.java#L1L6\">1-6</a>  \n"
                         + "**Snippet Match:** /**\n"
                         + " * Copyright (c) 2022, Samsung Electronics Co., Ltd. All rights reserved.\n"
                         + " *\n"
@@ -4105,7 +4105,7 @@ public class LPVSGitHubServiceTest {
         final String matched_lines_1 = "1-6";
 
         final String expected_result =
-                "<a target=\"_blank\" href=\"https://github.com/Samsung/LPVS/blob/895337e89ae103ff2d18c9e0d93709f743226afa/src/main/java/com/lpvs/service/LPVSGitHubService.java#L1L6\">1-6</a>";
+                "<a target=\"_blank\" href=\"https://github.com/Samsung/LPVS/blob/895337e89ae103ff2d18c9e0d93709f743226afa/src/main/java/com/lpvs/service/LPVSGitHubService.java#L1L6\">1-6</a>  ";
 
         @BeforeEach
         void setUp() {

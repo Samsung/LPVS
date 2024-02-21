@@ -37,7 +37,7 @@ public class LicensePreValidationSystemTest {
             assertEquals(executor, mocked_constructed_executor);
 
             verify(mocked_constructed_executor, times(1)).setCorePoolSize(testNumCores);
-            verify(mocked_constructed_executor, times(1)).setThreadNamePrefix("LPVS-ASYNC::");
+            verify(mocked_constructed_executor, times(1)).setThreadNamePrefix("LPVS::");
             verifyNoMoreInteractions(mocked_constructed_executor);
         }
     }
