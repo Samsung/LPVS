@@ -66,7 +66,11 @@ public class LPVSCommentUtil {
             if (vcs != null && vcs.equals(LPVSVcs.GITHUB)) {
                 matchedLines =
                         matchedLines.concat(
-                                "<a target=\"_blank\" href=\"" + link + "\">" + lineInfo + "</a>");
+                                "<a target=\"_blank\" href=\""
+                                        + link
+                                        + "\">"
+                                        + lineInfo
+                                        + "</a>  ");
             } else {
                 matchedLines = matchedLines.concat(lineInfo + " (" + link + ") ");
             }

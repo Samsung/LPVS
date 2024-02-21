@@ -71,7 +71,7 @@ public class LicensePreValidationSystem {
     public TaskExecutor getAsyncExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.setCorePoolSize(corePoolSize);
-        executor.setThreadNamePrefix("LPVS-ASYNC::");
+        executor.setThreadNamePrefix("LPVS::");
         return executor;
     }
 }

@@ -147,6 +147,7 @@ public class LPVSQueueService {
      * @throws InterruptedException If interrupted while processing the queue.
      */
     public void checkForQueue() throws InterruptedException {
+        QUEUE.clear();
         log.debug("Checking for previous queue");
         List<LPVSQueue> webhookConfigList = queueRepository.getQueueList();
         for (LPVSQueue webhook : webhookConfigList) {
