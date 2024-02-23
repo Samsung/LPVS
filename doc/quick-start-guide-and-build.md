@@ -203,9 +203,8 @@ scanner=scanoss
 # > option "scanner": take conflicts from the scanner response
   license_conflict=db
 
-# DB configuration (URL, username and password) - example
+# DB configuration (username and password)
 ...
-spring.datasource.url=jdbc:mysql://localhost:3306/lpvs
 spring.datasource.username=
 spring.datasource.password=
 ```
