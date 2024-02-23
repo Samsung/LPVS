@@ -25,6 +25,7 @@ import com.lpvs.service.LPVSStatisticsService;
 import com.lpvs.util.LPVSWebhookUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.servlet.error.ErrorController;
+import org.springframework.context.annotation.Profile;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -113,8 +114,9 @@ public class LPVSWebController implements ErrorController {
      * Controller class for managing public web API endpoints in LPVS.
      * This class provides endpoints for retrieving user information, login details, and performing user-related actions.
      */
-    @RequestMapping("/api/v1/web")
     @RestController
+    @Profile("web")
+    @RequestMapping("/api/v1/web")
     class WebApiEndpoints {
 
         /**

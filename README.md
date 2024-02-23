@@ -58,6 +58,8 @@ With these features, _LPVS_ assists developers to manage license compliance for 
 
 The frontend of the _LPVS_ project is implemented using React. The corresponding code can be found in the `frontend` folder. For detailed information about the frontend, please refer to the [Frontend README](frontend/README.md).
 
+To ensure compatibility between the LPVS frontend and backend, it's important to build the backend with the _"web"_ profile.
+
 ---
 
 ## License
