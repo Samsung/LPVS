@@ -244,9 +244,9 @@ public class LPVSQueueService {
             pullRequest.setStatus(LPVSPullRequestStatus.INTERNAL_ERROR.toString());
             pullRequest = lpvsPullRequestRepository.saveAndFlush(pullRequest);
             log.error("Can't authorize commentResults() " + e.getMessage());
-            int currentAttempts = webhookConfig.getAttempts();
+            int currentAttempts = webhookConfig.getAttempts() + 1;
             if (currentAttempts < maxAttempts) {
-                webhookConfig.setAttempts(currentAttempts + 1);
+                webhookConfig.setAttempts(currentAttempts);
                 try {
                     addFirst(webhookConfig);
                 } catch (InterruptedException e1) {
