@@ -153,7 +153,7 @@
                             <archive>
                                 <manifest>
                                     <addClasspath>true</addClasspath>
-                                    <mainClass>com.lpvs.LicensePreValidationSystem</mainClass>
+                                    <mainClass>com.lpvs.LicensePreValidationService</mainClass>
                                 </manifest>
                             </archive>
                             <appendAssemblyId>false</appendAssemblyId>

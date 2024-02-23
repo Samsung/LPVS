@@ -15,20 +15,20 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
-public class LicensePreValidationSystemTest {
+public class LicensePreValidationServiceTest {
     final int testNumCores = 42;
-    LicensePreValidationSystem licensePreValidationSystem;
+    LicensePreValidationService licensePreValidationService;
 
     @BeforeEach
     void setUp() {
-        licensePreValidationSystem = new LicensePreValidationSystem(42);
+        licensePreValidationService = new LicensePreValidationService(42);
     }
 
     @Test
     public void testGetAsyncExecutor() {
         try (MockedConstruction<ThreadPoolTaskExecutor> mocked =
                 mockConstruction(ThreadPoolTaskExecutor.class)) {
-            TaskExecutor executor = licensePreValidationSystem.getAsyncExecutor();
+            TaskExecutor executor = licensePreValidationService.getAsyncExecutor();
 
             assertEquals(1, mocked.constructed().size());
             ThreadPoolTaskExecutor mocked_constructed_executor = mocked.constructed().get(0);

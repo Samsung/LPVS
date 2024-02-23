@@ -25,7 +25,7 @@ import com.lpvs.util.LPVSExitHandler;
 @SpringBootApplication(scanBasePackages = {"com.lpvs"})
 @EnableAutoConfiguration
 @EnableAsync
-public class LicensePreValidationSystem {
+public class LicensePreValidationService {
 
     /**
      * The core pool size for the asynchronous task executor.
@@ -38,11 +38,11 @@ public class LicensePreValidationSystem {
     private static LPVSExitHandler exitHandler;
 
     /**
-     * Constructs a new LicensePreValidationSystem with the specified core pool size.
+     * Constructs a new LicensePreValidationService with the specified core pool size.
      *
      * @param corePoolSize The core pool size for the asynchronous task executor.
      */
-    public LicensePreValidationSystem(@Value("${lpvs.cores:8}") int corePoolSize) {
+    public LicensePreValidationService(@Value("${lpvs.cores:8}") int corePoolSize) {
         this.corePoolSize = corePoolSize;
     }
 
@@ -54,7 +54,7 @@ public class LicensePreValidationSystem {
     public static void main(String[] args) {
         try {
             ApplicationContext applicationContext =
-                    SpringApplication.run(LicensePreValidationSystem.class, args);
+                    SpringApplication.run(LicensePreValidationService.class, args);
             exitHandler = applicationContext.getBean(LPVSExitHandler.class);
         } catch (IllegalArgumentException e) {
             System.err.println("An IllegalArgumentException occurred: " + e.getMessage());
