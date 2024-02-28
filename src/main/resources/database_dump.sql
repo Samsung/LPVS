@@ -30,9 +30,9 @@ CREATE TABLE IF NOT EXISTS pull_requests (
   url longtext NOT NULL,
   diff_url longtext,
   status varchar(255) DEFAULT NULL,
-  pull_request_head varchar(255) NOT NULL,
-  pull_request_base varchar(255) NOT NULL,
-  sender varchar(255) NOT NULL,
+  pull_request_head varchar(255) DEFAULT NULL,
+  pull_request_base varchar(255) DEFAULT NULL,
+  sender varchar(255) DEFAULT NULL,
   PRIMARY KEY (id)
 );
 
@@ -78,6 +78,9 @@ CREATE TABLE IF NOT EXISTS queue (
   pull_request_diff_url longtext,
   status_callback_url longtext,
   commit_sha varchar(255) DEFAULT NULL,
+  pull_request_base varchar(255) DEFAULT NULL,
+  pull_request_head varchar(255) DEFAULT NULL,
+  sender varchar(255) DEFAULT NULL,
   PRIMARY KEY (id)
 );
 

@@ -179,34 +179,47 @@ public class LPVSQueueService {
      */
     @Async("threadPoolTaskExecutor")
     public void processWebHook(LPVSQueue webhookConfig) {
-        LPVSPullRequest pullRequest = new LPVSPullRequest();
-        try {
-            log.info(
-                    "Processing webhook ID: "
-                            + webhookConfig.getId()
-                            + ", attempt: "
-                            + webhookConfig.getAttempts()
-                            + 1
-                            + " for PR: "
-                            + webhookConfig.getPullRequestUrl());
+        Long id = webhookConfig.getId();
+        log.info(
+                "Processing webhook ID: "
+                        + id
+                        + ", attempt: "
+                        + (webhookConfig.getAttempts() + 1)
+                        + " for PR: "
+                        + webhookConfig.getPullRequestUrl());
+        LPVSPullRequest pullRequest =
+                lpvsPullRequestRepository.findLatestByPullRequestInfo(
+                        webhookConfig.getUserId(),
+                        LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                + "/"
+                                + LPVSWebhookUtil.getRepositoryName(webhookConfig),
+                        webhookConfig.getPullRequestFilesUrl(),
+                        webhookConfig.getPullRequestHead(),
+                        webhookConfig.getPullRequestBase(),
+                        webhookConfig.getSender(),
+                        LPVSPullRequestStatus.INTERNAL_ERROR.getPullRequestStatus());
 
-            String filePath = gitHubService.getPullRequestFiles(webhookConfig);
-
-            pullRequest.setPullRequestUrl(webhookConfig.getPullRequestUrl());
+        if (pullRequest == null) {
+            pullRequest = new LPVSPullRequest();
             pullRequest.setUser(webhookConfig.getUserId());
-            pullRequest.setPullRequestFilesUrl(webhookConfig.getPullRequestFilesUrl());
             pullRequest.setRepositoryName(
                     LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
                             + "/"
                             + LPVSWebhookUtil.getRepositoryName(webhookConfig));
-            pullRequest.setDate(webhookConfig.getDate());
-            pullRequest.setStatus(LPVSPullRequestStatus.SCANNING.toString());
+            pullRequest.setPullRequestUrl(webhookConfig.getPullRequestUrl());
+            pullRequest.setPullRequestFilesUrl(webhookConfig.getPullRequestFilesUrl());
             pullRequest.setPullRequestHead(webhookConfig.getPullRequestHead());
             pullRequest.setPullRequestBase(webhookConfig.getPullRequestBase());
             pullRequest.setSender(webhookConfig.getSender());
-            pullRequest = lpvsPullRequestRepository.saveAndFlush(pullRequest);
-            log.debug("ID: " + pullRequest.getId() + " " + pullRequest.toString());
+        }
 
+        try {
+
+            pullRequest.setDate(webhookConfig.getDate());
+            pullRequest.setStatus(LPVSPullRequestStatus.SCANNING.toString());
+            pullRequest = lpvsPullRequestRepository.saveAndFlush(pullRequest);
+
+            String filePath = gitHubService.getPullRequestFiles(webhookConfig);
             if (filePath != null && Files.list(Paths.get(filePath)).count() != 0) {
                 log.debug("Successfully downloaded files");
 
@@ -266,6 +279,10 @@ public class LPVSQueueService {
                     log.warn("Failed to post FAIL result " + e.getMessage());
                 }
                 delete(webhookConfig);
+                log.info(
+                        "Webhook ID: "
+                                + id
+                                + " - removed from the queue because the number of attempts exceeded the max value");
             }
         }
     }
