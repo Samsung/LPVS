@@ -58,6 +58,6 @@ public interface LPVSLicenseRepository extends JpaRepository<LPVSLicense, Long> 
      *
      * @return List of SPDX identifiers as Strings.
      */
-    @Query(value = "select license_list.spdxId from LPVSLicense license_list")
+    @Query(value = "select licenses.spdxId from LPVSLicense licenses")
     List<String> takeAllSpdxId();
 }

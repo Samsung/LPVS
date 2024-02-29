@@ -18,7 +18,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
@@ -275,8 +274,8 @@ public class LPVSQueueService {
                                 + pullRequest.getPullRequestUrl());
                 try {
                     gitHubService.commentResults(webhookConfig, null, null, pullRequest);
-                } catch (IOException e1) {
-                    log.warn("Failed to post FAIL result " + e.getMessage());
+                } catch (Exception ex) {
+                    log.warn("Failed to post FAIL result " + ex.getMessage());
                 }
                 delete(webhookConfig);
                 log.info(

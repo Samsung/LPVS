@@ -24,7 +24,6 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -151,7 +150,7 @@ public class LPVSQueueServiceTest {
         }
 
         @Test
-        public void testProcessWebHook__NoPRDownloaded() throws IOException {
+        public void testProcessWebHook__NoPRDownloaded() throws Exception {
             // main test
             queueService.processWebHook(webhookConfig);
 
@@ -269,13 +268,13 @@ public class LPVSQueueServiceTest {
             if (!Files.exists(emptyFilePath)) {
                 Files.createFile(emptyFilePath);
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             log.warn("error creating temp folder/file " + e.getMessage());
         }
     }
 
     @AfterEach
-    public void tearDown() throws IOException {
+    public void tearDown() throws Exception {
         // Clean up the temporary folder after each test
         Files.walk(tempFolderPath)
                 .sorted(Comparator.reverseOrder())
@@ -348,7 +347,7 @@ public class LPVSQueueServiceTest {
         }
 
         @Test
-        public void testProcessWebHook____DeletionAbsentLicensePresent() throws IOException {
+        public void testProcessWebHook____DeletionAbsentLicensePresent() throws Exception {
             // main test
             queueService.processWebHook(webhookConfigMain);
 
@@ -442,7 +441,7 @@ public class LPVSQueueServiceTest {
         }
 
         @Test
-        public void testProcessWebHook____DeletionPresentLicensePresent() throws IOException {
+        public void testProcessWebHook____DeletionPresentLicensePresent() throws Exception {
             // main test
             queueService.processWebHook(webhookConfigMain);
 
@@ -536,7 +535,7 @@ public class LPVSQueueServiceTest {
         }
 
         @Test
-        public void testProcessWebHook__DeletionAbsentLicenseFound() throws IOException {
+        public void testProcessWebHook__DeletionAbsentLicenseFound() throws Exception {
             // main test
             queueService.processWebHook(webhookConfigMain);
 
@@ -632,7 +631,7 @@ public class LPVSQueueServiceTest {
         }
 
         @Test
-        public void testProcessWebHook__DeletionPresentLicenseFound() throws IOException {
+        public void testProcessWebHook__DeletionPresentLicenseFound() throws Exception {
             // main test
             queueService.processWebHook(webhookConfigMain);
 
@@ -727,7 +726,7 @@ public class LPVSQueueServiceTest {
         }
 
         @Test
-        public void testProcessWebHook__DeletionAbsentLicenseNull() throws IOException {
+        public void testProcessWebHook__DeletionAbsentLicenseNull() throws Exception {
             // main test
             queueService.processWebHook(webhookConfigMain);
 
@@ -823,7 +822,7 @@ public class LPVSQueueServiceTest {
         }
 
         @Test
-        public void testProcessWebHook__DeletionAbsentLicenseNull() throws IOException {
+        public void testProcessWebHook__DeletionAbsentLicenseNull() throws Exception {
             // main test
             queueService.processWebHook(webhookConfigMain);
 
