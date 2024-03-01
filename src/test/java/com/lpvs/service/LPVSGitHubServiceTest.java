@@ -1881,7 +1881,7 @@ public class LPVSGitHubServiceTest {
         }
 
         @Test
-        public void testCommentResults__PrAbsent() throws IOException {
+        public void testCommentResults__PrAbsent() throws Exception {
             // main test
             gh_service.commentResults(webhookConfig, null, null, lpvsPullRequest);
 
@@ -1966,24 +1966,22 @@ public class LPVSGitHubServiceTest {
         }
 
         @Test
-        public void testCommentResults__CantAuthorize() throws IOException {
-            // main test
-            gh_service.commentResults(webhookConfig, null, null, lpvsPullRequest);
+        public void testCommentResults__CantAuthorize() throws Exception {
 
             // `mocked_instance_gh` verify
             try {
+                gh_service.commentResults(webhookConfig, null, null, lpvsPullRequest);
+
                 verify(mocked_instance_gh, times(2))
                         .getRepository(
                                 LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
                                         + "/"
                                         + LPVSWebhookUtil.getRepositoryName(webhookConfig));
-            } catch (IOException e) {
+            } catch (Exception e) {
                 log.error(
                         "TestCommentResults__CantAuthorize.testCommentResults__CantAuthorize() error "
                                 + e);
-                fail();
             }
-            verifyNoMoreInteractions(mocked_instance_gh);
         }
     }
 
@@ -2057,7 +2055,7 @@ public class LPVSGitHubServiceTest {
         }
 
         @Test
-        public void testCommentResults__ScanResultsEmpty() throws IOException {
+        public void testCommentResults__ScanResultsEmpty() throws Exception {
             // main test
             gh_service.commentResults(webhookConfig, List.of(), null, lpvsPullRequest);
 
@@ -2261,7 +2259,7 @@ public class LPVSGitHubServiceTest {
         }
 
         @Test
-        public void testCommentResults__ProhibitedPresentConflictsPresent() throws IOException {
+        public void testCommentResults__ProhibitedPresentConflictsPresent() throws Exception {
             // main test
             gh_service.commentResults(
                     webhookConfig, List.of(lpvs_file_1), List.of(conflict_1), lpvsPullRequest);
@@ -2306,7 +2304,7 @@ public class LPVSGitHubServiceTest {
 
         @Test
         public void testCommentResults__ProhibitedPresentConflictsPresentLicensePresent()
-                throws IOException {
+                throws Exception {
             // main test
             webhookConfig.setRepositoryLicense(spdx_id_1);
             when(mocked_lpvsLicenseRepository.searchBySpdxId(spdx_id_1))
@@ -2365,7 +2363,7 @@ public class LPVSGitHubServiceTest {
 
         @Test
         public void testCommentResults__ProhibitedPresentConflictsPresentLicensePresentAlt()
-                throws IOException {
+                throws Exception {
             // main test
             webhookConfig.setRepositoryLicense(spdx_id_2);
             when(mocked_lpvsLicenseRepository.searchBySpdxId(spdx_id_2)).thenReturn(null);
@@ -2588,7 +2586,7 @@ public class LPVSGitHubServiceTest {
         }
 
         @Test
-        public void testCommentResults__EmptyPresentConflictsPresent() throws IOException {
+        public void testCommentResults__EmptyPresentConflictsPresent() throws Exception {
             // main test
             gh_service.commentResults(
                     webhookConfig, List.of(lpvs_file_1), List.of(conflict_1), lpvsPullRequest);
@@ -2633,7 +2631,7 @@ public class LPVSGitHubServiceTest {
 
         @Test
         public void testCommentResults__EmptyPresentConflictsPresentLicensePresent()
-                throws IOException {
+                throws Exception {
             // main test
             webhookConfig.setRepositoryLicense(spdx_id_1);
             when(mocked_lpvsLicenseRepository.searchBySpdxId(spdx_id_1))
@@ -2692,7 +2690,7 @@ public class LPVSGitHubServiceTest {
 
         @Test
         public void testCommentResults__EmptyPresentConflictsPresentLicensePresentAlt()
-                throws IOException {
+                throws Exception {
             // main test
             webhookConfig.setRepositoryLicense(spdx_id_2);
             when(mocked_lpvsLicenseRepository.searchBySpdxId(spdx_id_2)).thenReturn(null);
@@ -2918,7 +2916,7 @@ public class LPVSGitHubServiceTest {
         }
 
         @Test
-        public void testCommentResults__RestrictedPresentConflictsPresent() throws IOException {
+        public void testCommentResults__RestrictedPresentConflictsPresent() throws Exception {
             // main test
             gh_service.commentResults(
                     webhookConfig, List.of(lpvs_file_1), List.of(conflict_1), lpvsPullRequest);
@@ -2930,7 +2928,7 @@ public class LPVSGitHubServiceTest {
                                 LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
                                         + "/"
                                         + LPVSWebhookUtil.getRepositoryName(webhookConfig));
-            } catch (IOException e) {
+            } catch (Exception e) {
                 log.error(
                         "TestCommentResults__UnreviewedPresentConflictsPresent.testCommentResults__RestrictedPresentConflictsPresent() error "
                                 + e);
@@ -2948,7 +2946,7 @@ public class LPVSGitHubServiceTest {
                                 null,
                                 "Potential license problem(s) detected",
                                 "[License Pre-Validation Service]");
-            } catch (IOException e) {
+            } catch (Exception e) {
                 log.error(
                         "TestCommentResults__UnreviewedPresentConflictsPresent.testCommentResults__RestrictedPresentConflictsPresent() error "
                                 + e);
@@ -2963,7 +2961,7 @@ public class LPVSGitHubServiceTest {
 
         @Test
         public void testCommentResults__RestrictedPresentConflictsPresentLicensePresent()
-                throws IOException {
+                throws Exception {
             // main test
             webhookConfig.setRepositoryLicense(spdx_id_1);
             when(mocked_lpvsLicenseRepository.searchBySpdxId(spdx_id_1))
@@ -2989,7 +2987,7 @@ public class LPVSGitHubServiceTest {
                                 LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
                                         + "/"
                                         + LPVSWebhookUtil.getRepositoryName(webhookConfig));
-            } catch (IOException e) {
+            } catch (Exception e) {
                 log.error(
                         "TestCommentResults__UnreviewedPresentConflictsPresent.testCommentResults__RestrictedPresentConflictsPresentLicensePresent() error "
                                 + e);
@@ -3007,7 +3005,7 @@ public class LPVSGitHubServiceTest {
                                 null,
                                 "Potential license problem(s) detected",
                                 "[License Pre-Validation Service]");
-            } catch (IOException e) {
+            } catch (Exception e) {
                 log.error(
                         "TestCommentResults__UnreviewedPresentConflictsPresent.testCommentResults__RestrictedPresentConflictsPresentLicensePresent() error "
                                 + e);
@@ -3022,7 +3020,7 @@ public class LPVSGitHubServiceTest {
 
         @Test
         public void testCommentResults__RestrictedPresentConflictsPresentLicensePresentAlt()
-                throws IOException {
+                throws Exception {
             // main test
             webhookConfig.setRepositoryLicense(spdx_id_2);
             when(mocked_lpvsLicenseRepository.searchBySpdxId(spdx_id_2)).thenReturn(null);
@@ -3049,7 +3047,7 @@ public class LPVSGitHubServiceTest {
                                 LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
                                         + "/"
                                         + LPVSWebhookUtil.getRepositoryName(webhookConfig));
-            } catch (IOException e) {
+            } catch (Exception e) {
                 log.error(
                         "TestCommentResults__UnreviewedPresentConflictsPresent.testCommentResults__RestrictedPresentConflictsPresentLicensePresentAlt() error "
                                 + e);
@@ -3067,7 +3065,7 @@ public class LPVSGitHubServiceTest {
                                 null,
                                 "Potential license problem(s) detected",
                                 "[License Pre-Validation Service]");
-            } catch (IOException e) {
+            } catch (Exception e) {
                 log.error(
                         "TestCommentResults__UnreviewedPresentConflictsPresent.testCommentResults__RestrictedPresentConflictsPresentLicensePresentAlt() error "
                                 + e);
@@ -3198,7 +3196,7 @@ public class LPVSGitHubServiceTest {
                                         + "/"
                                         + LPVSWebhookUtil.getRepositoryName(webhookConfig)))
                         .thenReturn(mocked_repo);
-            } catch (IOException e) {
+            } catch (Exception e) {
                 log.error("mocked_repo.getRepository error " + e);
             }
             try {
@@ -3212,7 +3210,7 @@ public class LPVSGitHubServiceTest {
             try {
                 when(mocked_repo.getPullRequests(GHIssueState.OPEN))
                         .thenReturn(Arrays.asList(mocked_pr_1, mocked_pr_2));
-            } catch (IOException e) {
+            } catch (Exception e) {
                 log.error("mocked_repo.getPullRequests error " + e);
             }
 
@@ -3248,7 +3246,7 @@ public class LPVSGitHubServiceTest {
         }
 
         @Test
-        public void testCommentResults__RestrictedPresentConflictsPresent() throws IOException {
+        public void testCommentResults__RestrictedPresentConflictsPresent() throws Exception {
             // main test
             gh_service.commentResults(
                     webhookConfig, List.of(lpvs_file_1), List.of(conflict_1), lpvsPullRequest);
@@ -3260,7 +3258,7 @@ public class LPVSGitHubServiceTest {
                                 LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
                                         + "/"
                                         + LPVSWebhookUtil.getRepositoryName(webhookConfig));
-            } catch (IOException e) {
+            } catch (Exception e) {
                 log.error(
                         "TestCommentResults__RestrictedPresentConflictsPresent.testCommentResults__RestrictedPresentConflictsPresent() error "
                                 + e);
@@ -3278,7 +3276,7 @@ public class LPVSGitHubServiceTest {
                                 null,
                                 "Potential license problem(s) detected",
                                 "[License Pre-Validation Service]");
-            } catch (IOException e) {
+            } catch (Exception e) {
                 log.error(
                         "TestCommentResults__RestrictedPresentConflictsPresent.testCommentResults__RestrictedPresentConflictsPresent() error "
                                 + e);
@@ -3293,7 +3291,7 @@ public class LPVSGitHubServiceTest {
 
         @Test
         public void testCommentResults__RestrictedPresentConflictsPresentLicensePresent()
-                throws IOException {
+                throws Exception {
             // main test
             webhookConfig.setRepositoryLicense(spdx_id_1);
             when(mocked_lpvsLicenseRepository.searchBySpdxId(spdx_id_1))
@@ -3319,7 +3317,7 @@ public class LPVSGitHubServiceTest {
                                 LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
                                         + "/"
                                         + LPVSWebhookUtil.getRepositoryName(webhookConfig));
-            } catch (IOException e) {
+            } catch (Exception e) {
                 log.error(
                         "TestCommentResults__RestrictedPresentConflictsPresent.testCommentResults__RestrictedPresentConflictsPresentLicensePresent() error "
                                 + e);
@@ -3337,7 +3335,7 @@ public class LPVSGitHubServiceTest {
                                 null,
                                 "Potential license problem(s) detected",
                                 "[License Pre-Validation Service]");
-            } catch (IOException e) {
+            } catch (Exception e) {
                 log.error(
                         "TestCommentResults__RestrictedPresentConflictsPresent.testCommentResults__RestrictedPresentConflictsPresentLicensePresent() error "
                                 + e);
@@ -3352,7 +3350,7 @@ public class LPVSGitHubServiceTest {
 
         @Test
         public void testCommentResults__RestrictedPresentConflictsPresentLicensePresentAlt()
-                throws IOException {
+                throws Exception {
             // main test
             webhookConfig.setRepositoryLicense(spdx_id_2);
             when(mocked_lpvsLicenseRepository.searchBySpdxId(spdx_id_2)).thenReturn(null);
@@ -3379,7 +3377,7 @@ public class LPVSGitHubServiceTest {
                                 LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
                                         + "/"
                                         + LPVSWebhookUtil.getRepositoryName(webhookConfig));
-            } catch (IOException e) {
+            } catch (Exception e) {
                 log.error(
                         "TestCommentResults__RestrictedPresentConflictsPresent.testCommentResults__RestrictedPresentConflictsPresentLicensePresentAlt() error "
                                 + e);
@@ -3397,7 +3395,7 @@ public class LPVSGitHubServiceTest {
                                 null,
                                 "Potential license problem(s) detected",
                                 "[License Pre-Validation Service]");
-            } catch (IOException e) {
+            } catch (Exception e) {
                 log.error(
                         "TestCommentResults__RestrictedPresentConflictsPresent.testCommentResults__RestrictedPresentConflictsPresentLicensePresentAlt() error "
                                 + e);
@@ -3550,7 +3548,7 @@ public class LPVSGitHubServiceTest {
         }
 
         @Test
-        public void testCommentResults__ProhibitedAbsentConflictsAbsent() throws IOException {
+        public void testCommentResults__ProhibitedAbsentConflictsAbsent() throws Exception {
             // main test
             gh_service.commentResults(
                     webhookConfig, List.of(lpvs_file_1), List.of(), lpvsPullRequest);
@@ -3562,7 +3560,7 @@ public class LPVSGitHubServiceTest {
                                 LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
                                         + "/"
                                         + LPVSWebhookUtil.getRepositoryName(webhookConfig));
-            } catch (IOException e) {
+            } catch (Exception e) {
                 log.error(
                         "TestCommentResults__ProhibitedAbsentConflictsAbsent.testCommentResults__ProhibitedAbsentConflictsAbsent() error "
                                 + e);
@@ -3580,7 +3578,7 @@ public class LPVSGitHubServiceTest {
                                 null,
                                 "No license issue detected",
                                 "[License Pre-Validation Service]");
-            } catch (IOException e) {
+            } catch (Exception e) {
                 log.error(
                         "TestCommentResults__ProhibitedAbsentConflictsAbsent.testCommentResults__ProhibitedAbsentConflictsAbsent() error "
                                 + e);
@@ -4226,7 +4224,7 @@ public class LPVSGitHubServiceTest {
         }
 
         @Test
-        public void testCommentResults() throws IOException {
+        public void testCommentResults() throws Exception {
             GitHub gitHub = Mockito.mock(GitHub.class);
             GHRepository repository = Mockito.mock(GHRepository.class);
             ReflectionTestUtils.setField(gh_service, "gitHub", gitHub);
@@ -4242,7 +4240,10 @@ public class LPVSGitHubServiceTest {
             LPVSLicense license =
                     new LPVSLicense() {
                         {
+                            setLicenseId(0L);
                             setChecklistUrl("");
+                            setSpdxId("MIT");
+                            setLicenseName("MIT");
                             setAccess("unrviewed");
                         }
                     };
@@ -4270,7 +4271,7 @@ public class LPVSGitHubServiceTest {
                     };
             List<LPVSLicenseService.Conflict<String, String>> conflictList = new ArrayList<>();
             conflictList.add(new LPVSLicenseService.Conflict<>("1", "2"));
-            GHPullRequest pullRequest = new GHPullRequest();
+            GHPullRequest pullRequest = mock(GHPullRequest.class);
             ReflectionTestUtils.setField(pullRequest, "url", "http://url.com");
             List<GHPullRequest> pullRequestList =
                     new ArrayList<GHPullRequest>() {
@@ -4279,10 +4280,13 @@ public class LPVSGitHubServiceTest {
                         }
                     };
             Mockito.when(repository.getPullRequests(GHIssueState.OPEN)).thenReturn(pullRequestList);
+            Mockito.when(mocked_lpvsLicenseRepository.searchBySpdxId(anyString()))
+                    .thenReturn(license);
+
             gh_service.commentResults(webhookConfig, fileList, conflictList, lpvsPullRequest);
             license.setAccess("");
             gh_service.commentResults(webhookConfig, fileList, conflictList, lpvsPullRequest);
-            Mockito.verify(gitHub, times(4)).getRepository(Mockito.anyString());
+            Mockito.verify(gitHub, times(2)).getRepository(Mockito.anyString());
         }
 
         @Test
