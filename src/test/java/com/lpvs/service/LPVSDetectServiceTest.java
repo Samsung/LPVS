@@ -25,7 +25,6 @@ import org.kohsuke.github.GitHub;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.context.ApplicationEventPublisher;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -46,8 +45,6 @@ import static org.mockito.Mockito.*;
 @Slf4j
 @ExtendWith(MockitoExtension.class)
 public class LPVSDetectServiceTest {
-
-    @Mock private ApplicationEventPublisher mockEventPublisher;
 
     @Mock private LPVSScanossDetectService scanossDetectService;
 
@@ -123,7 +120,6 @@ public class LPVSDetectServiceTest {
                     spy(new LPVSDetectService("scanoss", null, scanossDetectService, null, null));
 
             setPrivateField(lpvsDetectService, "trigger", null);
-            setPrivateField(lpvsDetectService, "eventPublisher", mockEventPublisher);
 
             assertDoesNotThrow(() -> lpvsDetectService.runOneScan());
 
@@ -139,8 +135,6 @@ public class LPVSDetectServiceTest {
                     spy(new LPVSDetectService("scanoss", null, scanossDetectService, null, null));
 
             setPrivateField(lpvsDetectService, "trigger", "fake-trigger-value");
-            setPrivateField(lpvsDetectService, "eventPublisher", mockEventPublisher);
-            doNothing().when(mockEventPublisher).publishEvent(any());
 
             assertDoesNotThrow(() -> lpvsDetectService.runOneScan());
         }
@@ -173,10 +167,7 @@ public class LPVSDetectServiceTest {
 
             setPrivateField(detectService, "trigger", "github/owner/repo/branch/123");
             setPrivateField(detectService, "scannerType", "scanoss");
-            setPrivateField(detectService, "eventPublisher", mockEventPublisher);
             setPrivateField(detectService, "htmlReport", null);
-
-            doNothing().when(mockEventPublisher).publishEvent(any());
 
             detectService.runOneScan();
 
@@ -194,15 +185,12 @@ public class LPVSDetectServiceTest {
             List<LPVSLicenseService.Conflict<String, String>> expected =
                     List.of(conflict_1, conflict_1);
 
-            doNothing().when(mockEventPublisher).publishEvent(any());
-
             lpvsDetectService =
                     spy(new LPVSDetectService("scanoss", null, scanossDetectService, null, null));
 
             setPrivateField(detectService, "trigger", "github/owner/repo/branch/123");
             setPrivateField(detectService, "scannerType", "scanoss");
             setPrivateField(detectService, "htmlReport", "build");
-            setPrivateField(detectService, "eventPublisher", mockEventPublisher);
 
             // Mock the necessary GitHub objects for LPVSQueue
             when(mockGitHub.getRepository(any())).thenReturn(mockRepository);
@@ -228,8 +216,6 @@ public class LPVSDetectServiceTest {
                 throws NoSuchFieldException, IllegalAccessException {
 
             setPrivateField(lpvsDetectService, "trigger", "fake-trigger-value");
-            setPrivateField(lpvsDetectService, "eventPublisher", mockEventPublisher);
-            doNothing().when(mockEventPublisher).publishEvent(any());
 
             assertDoesNotThrow(() -> lpvsDetectService.runOneScan());
         }
@@ -246,7 +232,6 @@ public class LPVSDetectServiceTest {
             setPrivateField(detectService, "trigger", "github/owner/repo/branch/123");
             setPrivateField(detectService, "scannerType", "scanoss");
             setPrivateField(detectService, "htmlReport", "build/report/test.html");
-            setPrivateField(detectService, "eventPublisher", mockEventPublisher);
 
             // Mock the necessary GitHub objects for LPVSQueue
             when(mockGitHub.getRepository(any())).thenReturn(mockRepository);
@@ -279,7 +264,6 @@ public class LPVSDetectServiceTest {
             setPrivateField(detectService, "trigger", "github/owner/repo/branch/123");
             setPrivateField(detectService, "scannerType", "scanoss");
             setPrivateField(detectService, "htmlReport", "build/report/test.html");
-            setPrivateField(detectService, "eventPublisher", mockEventPublisher);
 
             // Mock the necessary GitHub objects for LPVSQueue
             when(mockGitHub.getRepository(any())).thenReturn(mockRepository);
@@ -313,7 +297,6 @@ public class LPVSDetectServiceTest {
             setPrivateField(detectService, "trigger", "github/owner/repo/branch/123");
             setPrivateField(detectService, "scannerType", "scanoss");
             setPrivateField(detectService, "htmlReport", "build/report/test.html");
-            setPrivateField(detectService, "eventPublisher", mockEventPublisher);
 
             // Mock the necessary GitHub objects for LPVSQueue
             when(mockGitHub.getRepository(any())).thenReturn(mockRepository);

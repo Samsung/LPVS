@@ -10,15 +10,10 @@ import com.lpvs.entity.LPVSFile;
 import com.lpvs.entity.LPVSQueue;
 import com.lpvs.service.scanner.scanoss.LPVSScanossDetectService;
 import com.lpvs.util.LPVSCommentUtil;
-import com.lpvs.util.LPVSFileUtil;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.ExitCodeEvent;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.HtmlUtils;
@@ -62,11 +57,6 @@ public class LPVSDetectService {
     private LPVSGitHubService gitHubService;
 
     /**
-     * Event publisher for triggering application events.
-     */
-    @Autowired private ApplicationEventPublisher eventPublisher;
-
-    /**
      * GitHub pull request used to trigger a single license scan (optional).
      */
     @Value("${github.pull.request:}")
@@ -77,11 +67,6 @@ public class LPVSDetectService {
      */
     @Value("${build.html.report:}")
     private String htmlReport;
-
-    /**
-     * Spring application context.
-     */
-    @Autowired ApplicationContext ctx;
 
     /**
      * Constructs an instance of LPVSDetectService with the specified parameters.
@@ -119,14 +104,15 @@ public class LPVSDetectService {
     @EventListener(ApplicationReadyEvent.class)
     public void runOneScan() {
         if (trigger != null && !HtmlUtils.htmlEscape(trigger).equals("")) {
-            log.info("Triggered signle scan operation");
+            log.info("Triggered single scan operation");
             try {
+                licenseService.reloadFromTables();
                 LPVSQueue webhookConfig =
                         gitHubService.getInternalQueueByPullRequest(HtmlUtils.htmlEscape(trigger));
 
                 List<LPVSFile> scanResult =
                         this.runScan(
-                                webhookConfig, LPVSFileUtil.getPathByPullRequest(webhookConfig));
+                                webhookConfig, gitHubService.getPullRequestFiles(webhookConfig));
 
                 List<LPVSLicenseService.Conflict<String, String>> detectedConflicts =
                         licenseService.findConflicts(webhookConfig, scanResult);
@@ -152,12 +138,11 @@ public class LPVSDetectService {
                                     webhookConfig, scanResult, detectedConflicts);
                     log.info(report);
                 }
+                log.info("Single scan completed.");
             } catch (Exception ex) {
                 log.error("\n\n\n Single scan finished with errors \n\n\n");
-                log.error("Can't triger single scan " + ex);
+                log.error("Can't trigger single scan: " + ex.getMessage());
             }
-            // exiting application
-            eventPublisher.publishEvent(new ExitCodeEvent(new Object(), 0));
         }
     }
 
