@@ -18,7 +18,7 @@ import java.io.Serializable;
  * This class is mapped to the "license_conflicts" table in the "lpvs" schema.
  */
 @Entity
-@Table(name = "license_conflicts", schema = "${lpvs.schema:lpvs}")
+@Table(name = "license_conflicts")
 @Getter
 @Setter
 @NoArgsConstructor

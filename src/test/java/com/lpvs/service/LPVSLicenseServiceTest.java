@@ -6,17 +6,22 @@
  */
 package com.lpvs.service;
 
-import com.lpvs.entity.LPVSFile;
-import com.lpvs.entity.LPVSLicense;
-import com.lpvs.entity.LPVSLicenseConflict;
-import com.lpvs.entity.LPVSQueue;
-import com.lpvs.repository.LPVSLicenseConflictRepository;
-import com.lpvs.repository.LPVSLicenseRepository;
-import com.lpvs.util.LPVSExitHandler;
-import lombok.extern.slf4j.Slf4j;
-import uk.org.webcompere.systemstubs.environment.EnvironmentVariables;
-import uk.org.webcompere.systemstubs.jupiter.SystemStub;
-import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.Mockito.when;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,17 +31,18 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import java.lang.reflect.Field;
+import com.lpvs.entity.LPVSFile;
+import com.lpvs.entity.LPVSLicense;
+import com.lpvs.entity.LPVSLicenseConflict;
+import com.lpvs.entity.LPVSQueue;
+import com.lpvs.repository.LPVSLicenseConflictRepository;
+import com.lpvs.repository.LPVSLicenseRepository;
+import com.lpvs.util.LPVSExitHandler;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-
-import static org.junit.jupiter.api.Assertions.*;
+import lombok.extern.slf4j.Slf4j;
+import uk.org.webcompere.systemstubs.environment.EnvironmentVariables;
+import uk.org.webcompere.systemstubs.jupiter.SystemStub;
+import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
 
 @Slf4j
 @ExtendWith(SystemStubsExtension.class)
@@ -227,6 +233,65 @@ public class LPVSLicenseServiceTest {
                     | NoSuchFieldException e) {
                 log.error("LPVSLicenseServiceTest::TestInit exception: " + e);
                 fail();
+            }
+        }
+
+        @Test
+        public void testReloadFromTables()
+                throws NoSuchFieldException,
+                        SecurityException,
+                        IllegalArgumentException,
+                        IllegalAccessException {
+
+            List<LPVSLicense> licenseList = new ArrayList<>();
+
+            LPVSLicense license1 =
+                    new LPVSLicense() {
+                        {
+                            setChecklistUrl("");
+                            setAccess("unrviewed");
+                            setSpdxId("Apache-2.0");
+                        }
+                    };
+            LPVSLicense license2 =
+                    new LPVSLicense() {
+                        {
+                            setChecklistUrl("");
+                            setAccess("unrviewed");
+                            setSpdxId("MIT");
+                        }
+                    };
+
+            licenseList.add(license1);
+            licenseList.add(license2);
+
+            when(lpvsLicenseRepository.takeAllLicenses()).thenReturn(licenseList);
+
+            LPVSLicenseConflict licenseConflict = new LPVSLicenseConflict();
+            licenseConflict.setConflictId(1L);
+            licenseConflict.setConflictLicense(license1);
+            licenseConflict.setRepositoryLicense(license2);
+            List<LPVSLicenseConflict> licenseConflictList = new ArrayList<>();
+            licenseConflictList.add(licenseConflict);
+
+            when(lpvsLicenseConflictRepository.takeAllLicenseConflicts())
+                    .thenReturn(licenseConflictList);
+
+            Field lpvsLicenseRepositoryField =
+                    LPVSLicenseService.class.getDeclaredField("lpvsLicenseRepository");
+            lpvsLicenseRepositoryField.setAccessible(true);
+            lpvsLicenseRepositoryField.set(licenseService, lpvsLicenseRepository);
+
+            Field lpvsLicenseConflictRepositoryField =
+                    LPVSLicenseService.class.getDeclaredField("lpvsLicenseConflictRepository");
+            lpvsLicenseConflictRepositoryField.setAccessible(true);
+            lpvsLicenseConflictRepositoryField.set(licenseService, lpvsLicenseConflictRepository);
+
+            try {
+                licenseService.reloadFromTables();
+            } catch (Exception e) {
+                e.printStackTrace();
+                fail("Exception occurred: " + e.getMessage());
             }
         }
     }

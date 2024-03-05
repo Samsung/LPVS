@@ -149,10 +149,34 @@ public class LPVSLicenseService {
 
             } catch (Exception ex) {
                 log.warn("LICENSES and LICENSE CONFLICTS are not loaded.");
-                log.error(ex.toString());
+                log.error(ex.getMessage());
                 licenses = new ArrayList<>();
                 licenseConflicts = new ArrayList<>();
             }
+        }
+    }
+
+    /**
+     * This method reloads licenses and license conflicts from database tables if the
+     * licenses list in case of single scan triggered and used in memory database.
+     */
+    public void reloadFromTables() {
+        if (licenses.isEmpty()) {
+            licenses = lpvsLicenseRepository.takeAllLicenses();
+            log.info("LOADED " + licenses.size() + " licenses from DB.");
+
+            List<LPVSLicenseConflict> conflicts =
+                    lpvsLicenseConflictRepository.takeAllLicenseConflicts();
+            for (LPVSLicenseConflict conflict : conflicts) {
+                Conflict<String, String> conf =
+                        new Conflict<>(
+                                conflict.getConflictLicense().getSpdxId(),
+                                conflict.getRepositoryLicense().getSpdxId());
+                if (!licenseConflicts.contains(conf)) {
+                    licenseConflicts.add(conf);
+                }
+            }
+            log.info("LOADED " + licenseConflicts.size() + " license conflicts from DB.");
         }
     }
 
