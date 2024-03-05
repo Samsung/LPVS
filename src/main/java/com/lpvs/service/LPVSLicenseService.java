@@ -156,6 +156,10 @@ public class LPVSLicenseService {
         }
     }
 
+    /**
+     * This method reloads licenses and license conflicts from database tables if the
+     * licenses list in case of single scan triggered and used in memory database.
+     */
     public void reloadFromTables() {
         if (licenses.isEmpty()) {
             licenses = lpvsLicenseRepository.takeAllLicenses();
