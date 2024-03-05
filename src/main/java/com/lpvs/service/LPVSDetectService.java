@@ -6,23 +6,28 @@
  */
 package com.lpvs.service;
 
-import com.lpvs.entity.LPVSFile;
-import com.lpvs.entity.LPVSQueue;
-import com.lpvs.service.scanner.scanoss.LPVSScanossDetectService;
-import com.lpvs.util.LPVSCommentUtil;
-
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Service;
-import org.springframework.web.util.HtmlUtils;
-import jakarta.annotation.PostConstruct;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Service;
+import org.springframework.web.util.HtmlUtils;
+
+import com.lpvs.entity.LPVSFile;
+import com.lpvs.entity.LPVSQueue;
+import com.lpvs.service.scanner.scanoss.LPVSScanossDetectService;
+import com.lpvs.util.LPVSCommentUtil;
+
+import jakarta.annotation.PostConstruct;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Service class for detecting licenses in GitHub pull requests using a specified scanner.
@@ -67,6 +72,11 @@ public class LPVSDetectService {
      */
     @Value("${build.html.report:}")
     private String htmlReport;
+
+    /**
+     * Spring application context.
+     */
+    @Autowired ApplicationContext ctx;
 
     /**
      * Constructs an instance of LPVSDetectService with the specified parameters.
@@ -143,6 +153,7 @@ public class LPVSDetectService {
                 log.error("\n\n\n Single scan finished with errors \n\n\n");
                 log.error("Can't trigger single scan: " + ex.getMessage());
             }
+            SpringApplication.exit(ctx, () -> 0);
         }
     }
 
