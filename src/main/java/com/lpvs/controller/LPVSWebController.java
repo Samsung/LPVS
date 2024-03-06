@@ -38,8 +38,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.HtmlUtils;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -234,7 +234,7 @@ public class LPVSWebController implements ErrorController {
             for (LPVSPullRequest pr : lpvsPullRequests) {
                 String[] pullNumberTemp = pr.getPullRequestUrl().split("/");
                 LocalDateTime localDateTime =
-                        new Timestamp(pr.getDate().getTime()).toLocalDateTime();
+                        pr.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
                 String formattingDateTime = lpvsLoginCheckService.dateTimeFormatting(localDateTime);
 
                 // Validate and sanitize user inputs to prevent XSS attacks

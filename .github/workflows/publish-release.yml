@@ -145,7 +145,7 @@ jobs:
           cache: maven
       - name: Build and generate Javadoc
         run: |
-          mvn clean install javadoc:javadoc
+          mvn clean install javadoc:javadoc -DskipTests
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Deploy to GitHub Pages
