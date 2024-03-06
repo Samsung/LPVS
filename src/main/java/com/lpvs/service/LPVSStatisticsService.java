@@ -21,8 +21,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-import java.sql.Date;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
 
 /**
@@ -122,7 +122,6 @@ public class LPVSStatisticsService {
         int totalIssueCount = 0;
         int totalParticipantsCount = 0;
         int totalRepositoryCount = 0;
-        Set<String> participantsSet = new HashSet<>();
 
         List<LPVSPullRequest> prList = pathCheck(type, name, authentication);
         Map<String, Integer> licenseCountMap = new HashMap<>();
@@ -137,7 +136,8 @@ public class LPVSStatisticsService {
         Set<String> totalSenderSet = new HashSet<>();
         Set<String> totalRepositorySet = new HashSet<>();
         for (LPVSPullRequest pr : prList) {
-            LocalDate localDate = new Date(pr.getDate().getTime()).toLocalDate();
+            LocalDate localDate =
+                    pr.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
             List<LPVSPullRequest> datePrMapValue = datePrMap.get(localDate);
             if (datePrMapValue == null) {
                 datePrMapValue = new ArrayList<>();
