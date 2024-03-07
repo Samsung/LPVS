@@ -93,7 +93,7 @@ public class LPVSStatisticsService {
         String findNickName = findMember.getNickname();
         String findOrganization = findMember.getOrganization();
 
-        List<LPVSPullRequest> prList = new ArrayList<>();
+        List<LPVSPullRequest> prList;
 
         if ((type.equals("own") && findNickName.equals(name))
                 || (type.equals("org") && findOrganization.equals(name))) {
@@ -152,13 +152,12 @@ public class LPVSStatisticsService {
         }
         totalSenderSet.remove(null);
 
-        for (LocalDate localDate : datePrMap.keySet()) {
+        for (Map.Entry<LocalDate, List<LPVSPullRequest>> entry : datePrMap.entrySet()) {
             Map<Grade, Integer> riskGradeMap = new HashMap<>();
             riskGradeMap = putDefaultriskGradeMap(riskGradeMap);
 
             Set<String> senderSet = new HashSet<>();
-            List<LPVSPullRequest> prByDate = datePrMap.get(localDate);
-            for (LPVSPullRequest pr : prByDate) {
+            for (LPVSPullRequest pr : entry.getValue()) {
                 List<LPVSDetectedLicense> dlList =
                         lpvsDetectedLicenseRepository.findNotNullDLByPR(pr);
                 if (!(pr.getRepositoryName() == null || pr.getRepositoryName().isEmpty())) {
@@ -189,7 +188,10 @@ public class LPVSStatisticsService {
             senderSet.remove(null);
             dashboardByDates.add(
                     new DashboardElementsByDate(
-                            localDate, senderSet.size(), prByDate.size(), riskGradeMap));
+                            entry.getKey(),
+                            senderSet.size(),
+                            entry.getValue().size(),
+                            riskGradeMap));
         }
 
         for (String s : totalSenderSet) {
