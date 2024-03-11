@@ -7,8 +7,10 @@
 package com.lpvs.util;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import com.lpvs.entity.LPVSDetectedLicense;
@@ -91,31 +93,34 @@ public class LPVSCommentUtil {
             LPVSQueue webhookConfig,
             List<LPVSFile> scanResults,
             List<LPVSLicenseService.Conflict<String, String>> conflicts) {
-        String commitComment = "";
+
+        StringBuilder commitCommentBuilder = new StringBuilder();
 
         if (scanResults != null && scanResults.size() != 0) {
-            commitComment = "**Detected licenses:**\n\n\n";
+            commitCommentBuilder.append("**Detected licenses:**\n\n\n");
             for (LPVSFile file : scanResults) {
-                commitComment += "**File:** " + file.getFilePath() + "\n";
-                commitComment +=
-                        "**License(s):** " + file.convertLicensesToString(LPVSVcs.GITHUB) + "\n";
-                commitComment +=
-                        "**Component:** "
-                                + file.getComponentName()
-                                + " ("
-                                + file.getComponentFilePath()
-                                + ")\n";
-                commitComment +=
-                        "**Matched Lines:** "
-                                + LPVSCommentUtil.getMatchedLinesAsLink(
-                                        webhookConfig, file, LPVSVcs.GITHUB)
-                                + "\n";
-                commitComment += "**Snippet Match:** " + file.getSnippetMatch() + "\n\n\n\n";
+                commitCommentBuilder.append("**File:** ");
+                commitCommentBuilder.append(file.getFilePath());
+                commitCommentBuilder.append("\n");
+                commitCommentBuilder.append("**License(s):** ");
+                commitCommentBuilder.append(file.convertLicensesToString(LPVSVcs.GITHUB));
+                commitCommentBuilder.append("\n");
+                commitCommentBuilder.append("**Component:** ");
+                commitCommentBuilder.append(file.getComponentName());
+                commitCommentBuilder.append(" (");
+                commitCommentBuilder.append(file.getComponentFilePath());
+                commitCommentBuilder.append(")\n");
+                commitCommentBuilder.append("**Matched Lines:** ");
+                commitCommentBuilder.append(
+                        LPVSCommentUtil.getMatchedLinesAsLink(webhookConfig, file, LPVSVcs.GITHUB));
+                commitCommentBuilder.append("\n");
+                commitCommentBuilder.append("**Snippet Match:** ");
+                commitCommentBuilder.append(file.getSnippetMatch());
+                commitCommentBuilder.append("\n\n\n\n");
             }
         }
 
         if (conflicts != null && conflicts.size() > 0) {
-            StringBuilder commitCommentBuilder = new StringBuilder();
             commitCommentBuilder.append("**Detected license conflicts:**\n\n\n");
             commitCommentBuilder.append("<ul>");
             for (LPVSLicenseService.Conflict<String, String> conflict : conflicts) {
@@ -129,10 +134,9 @@ public class LPVSCommentUtil {
                 commitCommentBuilder.append(webhookConfig.getHubLink());
                 commitCommentBuilder.append(")");
             }
-            commitComment += commitCommentBuilder.toString();
         }
 
-        return commitComment;
+        return commitCommentBuilder.toString();
     }
 
     /**
@@ -211,11 +215,13 @@ public class LPVSCommentUtil {
      * @param filePath      The path to expected html report file.
      */
     public static void saveHTMLToFile(String htmlContent, String filePath) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+        File file = new File(filePath);
+        try (BufferedWriter writer =
+                new BufferedWriter(new FileWriter(file, StandardCharsets.UTF_8))) {
             writer.write(htmlContent);
             log.info("LPVS report saved to: " + filePath);
         } catch (IOException ex) {
-            log.error("error during saving HTML report: " + ex);
+            log.error("error during saving HTML report: " + ex.getMessage());
         }
     }
 }

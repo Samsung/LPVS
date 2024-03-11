@@ -220,13 +220,6 @@ public class GitHubController {
         GHRepository repository = gitHub.getRepository(gitHubOrg + "/" + gitHubRepo);
         GHPullRequest pullRequest = repository.getPullRequest(prNumber);
         LPVSQueue scanConfig = LPVSWebhookUtil.getGitHubWebhookConfig(repository, pullRequest);
-
-        if (scanConfig == null) {
-            log.error("Error with connection to GitHub.");
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .headers(LPVSWebhookUtil.generateSecurityHeaders())
-                    .body(new LPVSResponseWrapper(ERROR));
-        }
         scanConfig.setAction(LPVSPullRequestAction.SINGLE_SCAN);
         scanConfig.setAttempts(0);
         scanConfig.setDate(new Date());

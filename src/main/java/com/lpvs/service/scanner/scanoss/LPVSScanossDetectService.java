@@ -99,7 +99,7 @@ public class LPVSScanossDetectService {
      */
     public void runScan(LPVSQueue webhookConfig, String path) throws Exception {
         log.debug("Starting Scanoss scanning");
-
+        Process process = null;
         try {
             File resultsDir = new File(getScanResultsDirectoryPath(webhookConfig));
             if (resultsDir.mkdirs()) {
@@ -124,7 +124,7 @@ public class LPVSScanossDetectService {
                             getScanResultsJsonFilePath(webhookConfig),
                             path);
 
-            Process process = processBuilder.inheritIO().start();
+            process = processBuilder.inheritIO().start();
 
             int status = process.waitFor();
 
@@ -143,8 +143,11 @@ public class LPVSScanossDetectService {
         } catch (IOException | InterruptedException ex) {
             log.error("Scanoss scanner terminated with non-zero code. Terminating.");
             throw ex;
+        } finally {
+            if (process != null) {
+                process.destroy();
+            }
         }
-
         log.debug("Scanoss scan done");
     }
 
