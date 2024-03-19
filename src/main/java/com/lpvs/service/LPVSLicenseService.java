@@ -331,7 +331,7 @@ public class LPVSLicenseService {
          * @param l1 The first license.
          * @param l2 The second license.
          */
-        Conflict(License1 l1, License2 l2) {
+        public Conflict(License1 l1, License2 l2) {
             this.l1 = l1;
             this.l2 = l2;
         }
