@@ -8,7 +8,9 @@ package com.lpvs.service;
 
 import com.lpvs.entity.LPVSFile;
 import com.lpvs.entity.LPVSQueue;
-import com.lpvs.service.scanner.scanoss.LPVSScanossDetectService;
+import com.lpvs.service.scan.LPVSDetectService;
+import com.lpvs.service.scan.LPVSScanServiceFactory;
+import com.lpvs.service.scan.scanner.LPVSScanossDetectService;
 import com.lpvs.util.LPVSCommentUtil;
 
 import com.lpvs.util.LPVSFileUtil;
@@ -52,30 +54,13 @@ public class LPVSDetectServiceTest {
     @InjectMocks private LPVSDetectService lpvsDetectService;
 
     @Nested
-    class TestInit {
-        final LPVSDetectService detectService =
-                new LPVSDetectService("scanoss", null, null, null, null);
-
-        @Test
-        public void testInit() {
-            try {
-                Method init_method = detectService.getClass().getDeclaredMethod("init");
-                init_method.setAccessible(true);
-                init_method.invoke(detectService);
-            } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-                log.error("LPVSDetectServiceTest::TestInit exception: " + e);
-                fail();
-            }
-        }
-    }
-
-    @Nested
     class TestRunScan__Scanoss {
         LPVSDetectService detectService;
         LPVSGitHubConnectionService github_mock = mock(LPVSGitHubConnectionService.class);
         LPVSScanossDetectService scanoss_mock = mock(LPVSScanossDetectService.class);
         LPVSLicenseService licenseservice_mock = mock(LPVSLicenseService.class);
         LPVSGitHubService githubservice_mock = mock(LPVSGitHubService.class);
+        LPVSScanServiceFactory scanServiceFactory_mock = mock(LPVSScanServiceFactory.class);
         GitHub mockGitHub = mock(GitHub.class);
         GHCommitPointer mockCommitPointer = mock(GHCommitPointer.class);
         GHRepository mockRepository = mock(GHRepository.class);
@@ -93,10 +78,11 @@ public class LPVSDetectServiceTest {
             detectService =
                     new LPVSDetectService(
                             "scanoss",
+                            false,
                             github_mock,
-                            scanoss_mock,
                             licenseservice_mock,
-                            githubservice_mock);
+                            githubservice_mock,
+                            scanServiceFactory_mock);
 
             webhookConfig = new LPVSQueue();
             webhookConfig.setId(1L);
@@ -117,9 +103,9 @@ public class LPVSDetectServiceTest {
         }
 
         @Test
-        void testRunOneScanWithNullTriger() throws NoSuchFieldException, IllegalAccessException {
+        void testRunOneScanWithNullTrigger() throws NoSuchFieldException, IllegalAccessException {
             lpvsDetectService =
-                    spy(new LPVSDetectService("scanoss", null, scanossDetectService, null, null));
+                    spy(new LPVSDetectService("scanoss", false,null, null, null, null));
 
             setPrivateField(lpvsDetectService, "trigger", null);
 
@@ -134,7 +120,7 @@ public class LPVSDetectServiceTest {
         void testRunOneScan_Default() throws NoSuchFieldException, IllegalAccessException {
 
             lpvsDetectService =
-                    spy(new LPVSDetectService("scanoss", null, scanossDetectService, null, null));
+                    spy(new LPVSDetectService("scanoss", false, null, null, null, null));
 
             setPrivateField(lpvsDetectService, "trigger", "fake-trigger-value");
             setPrivateField(lpvsDetectService, "ctx", mockApplicationContext);
@@ -152,7 +138,7 @@ public class LPVSDetectServiceTest {
                     List.of(conflict_1, conflict_1);
 
             lpvsDetectService =
-                    spy(new LPVSDetectService("scanoss", null, scanossDetectService, null, null));
+                    spy(new LPVSDetectService("scanoss", false, null, null, null, null));
 
             // Mock the necessary GitHub objects for LPVSQueue
             when(mockGitHub.getRepository(any())).thenReturn(mockRepository);
@@ -190,7 +176,7 @@ public class LPVSDetectServiceTest {
                     List.of(conflict_1, conflict_1);
 
             lpvsDetectService =
-                    spy(new LPVSDetectService("scanoss", null, scanossDetectService, null, null));
+                    spy(new LPVSDetectService("scanoss", false, null, null, null, null));
 
             setPrivateField(detectService, "trigger", "github/owner/repo/branch/123");
             setPrivateField(detectService, "scannerType", "scanoss");
@@ -392,6 +378,7 @@ public class LPVSDetectServiceTest {
         LPVSScanossDetectService scanoss_mock = mock(LPVSScanossDetectService.class);
         LPVSLicenseService licenseservice_mock = mock(LPVSLicenseService.class);
         LPVSGitHubService githubservice_mock = mock(LPVSGitHubService.class);
+        LPVSScanServiceFactory scanServiceFactory_mock = mock(LPVSScanServiceFactory.class);
 
         LPVSQueue webhookConfig;
         final String test_path = "test_path";
@@ -402,10 +389,11 @@ public class LPVSDetectServiceTest {
             detectService =
                     new LPVSDetectService(
                             "scanoss",
+                            false,
                             github_mock,
-                            scanoss_mock,
                             licenseservice_mock,
-                            githubservice_mock);
+                            githubservice_mock,
+                            scanServiceFactory_mock);
 
             webhookConfig = new LPVSQueue();
             webhookConfig.setId(1L);
@@ -450,7 +438,7 @@ public class LPVSDetectServiceTest {
 
         @BeforeEach
         void setUp() {
-            detectService = new LPVSDetectService("not_scanoss", null, null, null, null);
+            detectService = new LPVSDetectService("not_scanoss", false, null, null, null, null);
         }
 
         @Test

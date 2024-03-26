@@ -12,6 +12,7 @@ import com.lpvs.entity.LPVSQueue;
 import com.lpvs.entity.enums.LPVSPullRequestStatus;
 import com.lpvs.repository.LPVSPullRequestRepository;
 import com.lpvs.repository.LPVSQueueRepository;
+import com.lpvs.service.scan.LPVSDetectService;
 import com.lpvs.util.LPVSWebhookUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

@@ -4,7 +4,7 @@
  * Use of this source code is governed by a MIT license that can be
  * found in the LICENSE file.
  */
-package com.lpvs.service.scanner.scanoss;
+package com.lpvs.service.scan.scanner;
 
 import com.lpvs.entity.LPVSLicense;
 import com.lpvs.entity.LPVSQueue;

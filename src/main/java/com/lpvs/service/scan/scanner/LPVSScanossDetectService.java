@@ -4,7 +4,7 @@
  * Use of this source code is governed by a MIT license that can be
  * found in the LICENSE file.
  */
-package com.lpvs.service.scanner.scanoss;
+package com.lpvs.service.scan.scanner;
 
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
@@ -13,6 +13,7 @@ import com.lpvs.entity.LPVSLicense;
 import com.lpvs.entity.LPVSQueue;
 import com.lpvs.repository.LPVSLicenseRepository;
 import com.lpvs.service.LPVSLicenseService;
+import com.lpvs.service.scan.LPVSScanService;
 import com.lpvs.util.LPVSWebhookUtil;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -29,12 +30,12 @@ import static com.lpvs.util.LPVSFileUtil.getScanResultsDirectoryPath;
 import static com.lpvs.util.LPVSFileUtil.getScanResultsJsonFilePath;
 
 /**
- * Service class responsible for interacting with the Scanoss scanner to detect licenses in files.
+ * Service class responsible for interacting with the Scanoss scanner to scan licenses in files.
  * It handles the initiation of the scan, processing scan results, and checking for license conflicts.
  */
 @Service
 @Slf4j
-public class LPVSScanossDetectService {
+public class LPVSScanossDetectService implements LPVSScanService {
 
     /**
      * The service for managing licenses, providing operations related to licenses.
@@ -301,16 +302,16 @@ public class LPVSScanossDetectService {
         private String matched;
         private String oss_lines;
         private ArrayList<String> purl;
-        private String release_date;
-        private ScanossServer server;
-        private String source_hash;
-        private String status;
-        private String url;
-        private String url_hash;
-        private String vendor;
-        private String version;
+            private String release_date;
+            private ScanossServer server;
+            private String source_hash;
+            private String status;
+            private String url;
+            private String url_hash;
+            private String vendor;
+            private String version;
 
-        private class ScanossLicense {
+            private class ScanossLicense {
             private String checklist_url;
             private String copyleft;
             private ArrayList<String> incompatible_with;

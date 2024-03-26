@@ -7,9 +7,9 @@
 
 /**
  * The {@code scanoss} package contains services and utilities related to the Scanoss scanner integration.
- * Scanoss is a tool used for scanning and analyzing open source software components to detect licenses,
+ * Scanoss is a tool used for scanning and analyzing open source software components to scan licenses,
  * vulnerabilities, and other relevant information. This package encapsulates functionality for running
  * Scanoss scans, processing scan results, and handling license-related operations.
  * The package also contains utility classes for handling file paths, reading scan results, and managing licenses.
  */
-package com.lpvs.service.scanner.scanoss;
+package com.lpvs.service.scan.scanner;
