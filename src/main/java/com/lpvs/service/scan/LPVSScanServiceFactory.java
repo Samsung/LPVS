@@ -6,12 +6,35 @@
  */
 package com.lpvs.service.scan;
 
+import com.lpvs.repository.LPVSLicenseRepository;
+import com.lpvs.service.LPVSLicenseService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
 import java.lang.reflect.Constructor;
 
 /**
  * Factory class for creating instances of {@link LPVSScanService}.
  */
+@Service
 public class LPVSScanServiceFactory {
+
+    /**
+     * Flag indicating whether the application is in debug mode.
+     */
+    @Value("${debug:false}")
+    Boolean debug;
+
+    /**
+     * The service for managing licenses, providing operations related to licenses.
+     */
+    @Autowired LPVSLicenseService licenseService;
+
+    /**
+     * The repository for LPVSLicense entities, allowing database interactions for licenses.
+     */
+    @Autowired LPVSLicenseRepository lpvsLicenseRepository;
 
     /**
      * Creates a scan service based on the specified scanner type and configuration.
@@ -25,10 +48,14 @@ public class LPVSScanServiceFactory {
     public LPVSScanService createScanService(String scannerType, boolean isInternal) {
         try {
             Class<?> serviceClass = Class.forName(getServiceClassName(scannerType, isInternal));
-            Constructor<?> constructor = serviceClass.getDeclaredConstructor();
-            return (LPVSScanService) constructor.newInstance();
+            Constructor<?> constructor =
+                    serviceClass.getDeclaredConstructor(
+                            Boolean.class, LPVSLicenseService.class, LPVSLicenseRepository.class);
+            return (LPVSScanService)
+                    constructor.newInstance(debug, licenseService, lpvsLicenseRepository);
         } catch (Exception e) {
-            throw new IllegalArgumentException("Error creating scan service for type: " + scannerType, e);
+            throw new IllegalArgumentException(
+                    "Error creating scan service for type: " + scannerType, e);
         }
     }
 
@@ -40,9 +67,14 @@ public class LPVSScanServiceFactory {
      * @return The fully qualified class name of the scan service.
      * @throws IllegalArgumentException if the specified scanner type is null or empty string.
      */
-    private String getServiceClassName(String scannerType, boolean isInternal) {
+    protected String getServiceClassName(String scannerType, boolean isInternal) {
         if (scannerType != null && !scannerType.isEmpty()) {
-            return "com.lpvs." + (isInternal ? "internal." : "") + "service.scan.scanner.LPVS" + scannerType.substring(0, 1).toUpperCase() + scannerType.substring(1) + "DetectService";
+            return "com.lpvs."
+                    + (isInternal ? "internal." : "")
+                    + "service.scan.scanner.LPVS"
+                    + scannerType.substring(0, 1).toUpperCase()
+                    + scannerType.substring(1)
+                    + "DetectService";
         } else {
             throw new IllegalArgumentException("Scanner type cannot be null or empty.");
         }

@@ -302,16 +302,16 @@ public class LPVSScanossDetectService implements LPVSScanService {
         private String matched;
         private String oss_lines;
         private ArrayList<String> purl;
-            private String release_date;
-            private ScanossServer server;
-            private String source_hash;
-            private String status;
-            private String url;
-            private String url_hash;
-            private String vendor;
-            private String version;
+        private String release_date;
+        private ScanossServer server;
+        private String source_hash;
+        private String status;
+        private String url;
+        private String url_hash;
+        private String vendor;
+        private String version;
 
-            private class ScanossLicense {
+        private class ScanossLicense {
             private String checklist_url;
             private String copyleft;
             private ArrayList<String> incompatible_with;

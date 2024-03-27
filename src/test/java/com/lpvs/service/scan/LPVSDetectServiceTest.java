@@ -4,12 +4,13 @@
  * Use of this source code is governed by a MIT license that can be
  * found in the LICENSE file.
  */
-package com.lpvs.service;
+package com.lpvs.service.scan;
 
 import com.lpvs.entity.LPVSFile;
 import com.lpvs.entity.LPVSQueue;
-import com.lpvs.service.scan.LPVSDetectService;
-import com.lpvs.service.scan.LPVSScanServiceFactory;
+import com.lpvs.service.LPVSGitHubConnectionService;
+import com.lpvs.service.LPVSGitHubService;
+import com.lpvs.service.LPVSLicenseService;
 import com.lpvs.service.scan.scanner.LPVSScanossDetectService;
 import com.lpvs.util.LPVSCommentUtil;
 
@@ -25,14 +26,10 @@ import org.kohsuke.github.GHCommitPointer;
 import org.kohsuke.github.GHPullRequest;
 import org.kohsuke.github.GHRepository;
 import org.kohsuke.github.GitHub;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,9 +46,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 public class LPVSDetectServiceTest {
 
-    @Mock private LPVSScanossDetectService scanossDetectService;
-
-    @InjectMocks private LPVSDetectService lpvsDetectService;
+    private LPVSDetectService lpvsDetectService;
 
     @Nested
     class TestRunScan__Scanoss {
@@ -105,7 +100,9 @@ public class LPVSDetectServiceTest {
         @Test
         void testRunOneScanWithNullTrigger() throws NoSuchFieldException, IllegalAccessException {
             lpvsDetectService =
-                    spy(new LPVSDetectService("scanoss", false,null, null, null, null));
+                    spy(
+                            new LPVSDetectService(
+                                    "scanoss", false, null, null, null, scanServiceFactory_mock));
 
             setPrivateField(lpvsDetectService, "trigger", null);
 
@@ -120,7 +117,9 @@ public class LPVSDetectServiceTest {
         void testRunOneScan_Default() throws NoSuchFieldException, IllegalAccessException {
 
             lpvsDetectService =
-                    spy(new LPVSDetectService("scanoss", false, null, null, null, null));
+                    spy(
+                            new LPVSDetectService(
+                                    "scanoss", false, null, null, null, scanServiceFactory_mock));
 
             setPrivateField(lpvsDetectService, "trigger", "fake-trigger-value");
             setPrivateField(lpvsDetectService, "ctx", mockApplicationContext);
@@ -138,7 +137,9 @@ public class LPVSDetectServiceTest {
                     List.of(conflict_1, conflict_1);
 
             lpvsDetectService =
-                    spy(new LPVSDetectService("scanoss", false, null, null, null, null));
+                    spy(
+                            new LPVSDetectService(
+                                    "scanoss", false, null, null, null, scanServiceFactory_mock));
 
             // Mock the necessary GitHub objects for LPVSQueue
             when(mockGitHub.getRepository(any())).thenReturn(mockRepository);
@@ -155,7 +156,6 @@ public class LPVSDetectServiceTest {
             when(mockPullRequest.getHtmlUrl()).thenReturn(new URL(expectedPullRequestUrl));
 
             setPrivateField(detectService, "trigger", "github/owner/repo/branch/123");
-            setPrivateField(detectService, "scannerType", "scanoss");
             setPrivateField(detectService, "htmlReport", null);
             setPrivateField(detectService, "ctx", mockApplicationContext);
 
@@ -176,10 +176,11 @@ public class LPVSDetectServiceTest {
                     List.of(conflict_1, conflict_1);
 
             lpvsDetectService =
-                    spy(new LPVSDetectService("scanoss", false, null, null, null, null));
+                    spy(
+                            new LPVSDetectService(
+                                    "scanoss", false, null, null, null, scanServiceFactory_mock));
 
             setPrivateField(detectService, "trigger", "github/owner/repo/branch/123");
-            setPrivateField(detectService, "scannerType", "scanoss");
             setPrivateField(detectService, "htmlReport", "build");
             setPrivateField(detectService, "ctx", mockApplicationContext);
 
@@ -206,10 +207,10 @@ public class LPVSDetectServiceTest {
         void testRunOneScan_trigerInternalQueueException()
                 throws NoSuchFieldException, IllegalAccessException {
 
-            setPrivateField(lpvsDetectService, "trigger", "fake-trigger-value");
-            setPrivateField(lpvsDetectService, "ctx", mockApplicationContext);
+            setPrivateField(detectService, "trigger", "fake-trigger-value");
+            setPrivateField(detectService, "ctx", mockApplicationContext);
 
-            assertDoesNotThrow(() -> lpvsDetectService.runOneScan());
+            assertDoesNotThrow(() -> detectService.runOneScan());
         }
 
         @Test
@@ -222,7 +223,6 @@ public class LPVSDetectServiceTest {
                     List.of(conflict_1, conflict_1);
 
             setPrivateField(detectService, "trigger", "github/owner/repo/branch/123");
-            setPrivateField(detectService, "scannerType", "scanoss");
             setPrivateField(detectService, "htmlReport", "build/report/test.html");
             setPrivateField(detectService, "ctx", mockApplicationContext);
 
@@ -255,7 +255,6 @@ public class LPVSDetectServiceTest {
                     List.of(conflict_1, conflict_1);
 
             setPrivateField(detectService, "trigger", "github/owner/repo/branch/123");
-            setPrivateField(detectService, "scannerType", "scanoss");
             setPrivateField(detectService, "htmlReport", "build/report/test.html");
             setPrivateField(detectService, "ctx", mockApplicationContext);
 
@@ -289,7 +288,6 @@ public class LPVSDetectServiceTest {
                     List.of(conflict_1, conflict_1);
 
             setPrivateField(detectService, "trigger", "github/owner/repo/branch/123");
-            setPrivateField(detectService, "scannerType", "scanoss");
             setPrivateField(detectService, "htmlReport", "build/report/test.html");
             setPrivateField(detectService, "ctx", mockApplicationContext);
 
@@ -304,7 +302,6 @@ public class LPVSDetectServiceTest {
             // Set up expected values
             String expectedPullRequestUrl = "https://example.com/pull/1";
             when(mockRepository.getHtmlUrl()).thenReturn(new URL(expectedPullRequestUrl));
-            // setPrivateField(mockPullRequest, "url", expectedPullRequestUrl);
 
             detectService.runOneScan();
 
@@ -350,6 +347,7 @@ public class LPVSDetectServiceTest {
         @Test
         public void testRunScan__Scanoss() {
             try {
+                setPrivateField(detectService, "scanService", scanoss_mock);
                 // main test
                 assertEquals(
                         List.of(lpvs_file_1, lpvs_file_2),
@@ -399,6 +397,7 @@ public class LPVSDetectServiceTest {
             webhookConfig.setId(1L);
 
             try {
+                setPrivateField(detectService, "scanService", scanoss_mock);
                 doThrow(new Exception(exc_msg))
                         .when(scanoss_mock)
                         .runScan(webhookConfig, test_path);
@@ -436,9 +435,13 @@ public class LPVSDetectServiceTest {
     class TestRunScan__NotScanoss {
         LPVSDetectService detectService;
 
+        LPVSScanServiceFactory scanServiceFactory_mock = mock(LPVSScanServiceFactory.class);
+
         @BeforeEach
         void setUp() {
-            detectService = new LPVSDetectService("not_scanoss", false, null, null, null, null);
+            detectService =
+                    new LPVSDetectService(
+                            "not_scanoss", false, null, null, null, scanServiceFactory_mock);
         }
 
         @Test
