@@ -4,7 +4,7 @@
  * Use of this source code is governed by a MIT license that can be
  * found in the LICENSE file.
  */
-package com.lpvs.service;
+package com.lpvs.service.scan;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -12,6 +12,9 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.lpvs.service.LPVSGitHubConnectionService;
+import com.lpvs.service.LPVSGitHubService;
+import com.lpvs.service.LPVSLicenseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
@@ -23,10 +26,8 @@ import org.springframework.web.util.HtmlUtils;
 
 import com.lpvs.entity.LPVSFile;
 import com.lpvs.entity.LPVSQueue;
-import com.lpvs.service.scanner.scanoss.LPVSScanossDetectService;
 import com.lpvs.util.LPVSCommentUtil;
 
-import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -35,16 +36,6 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Slf4j
 public class LPVSDetectService {
-
-    /**
-     * The type of license detection scanner.
-     */
-    private String scannerType;
-
-    /**
-     * Service responsible for performing license detection using the ScanOSS scanner.
-     */
-    private LPVSScanossDetectService scanossDetectService;
 
     /**
      * Service responsible for establishing and managing connections to the GitHub API.
@@ -60,6 +51,11 @@ public class LPVSDetectService {
      * Service responsible for GitHub connection and operation.
      */
     private LPVSGitHubService gitHubService;
+
+    /**
+     * Service responsible for initialization of the scanner.
+     */
+    private LPVSScanService scanService;
 
     /**
      * GitHub pull request used to trigger a single license scan (optional).
@@ -82,29 +78,24 @@ public class LPVSDetectService {
      * Constructs an instance of LPVSDetectService with the specified parameters.
      *
      * @param scannerType             The type of license detection scanner.
+     * @param isInternal              Flag indicating whether the scanner is internal or not.
      * @param gitHubConnectionService Service for connecting to the GitHub API.
-     * @param scanossDetectService    Service for license detection using ScanOSS.
      * @param licenseService          Service for license conflict analysis.
      * @param gitHubService           Service for GitHub connection and operation.
+     * @param scanServiceFactory      Service for creating instance of the scanner.
      */
+    @Autowired
     public LPVSDetectService(
             @Value("${scanner:scanoss}") String scannerType,
+            @Value("${internal:false}") boolean isInternal,
             LPVSGitHubConnectionService gitHubConnectionService,
-            LPVSScanossDetectService scanossDetectService,
             LPVSLicenseService licenseService,
-            LPVSGitHubService gitHubService) {
-        this.scannerType = scannerType;
+            LPVSGitHubService gitHubService,
+            LPVSScanServiceFactory scanServiceFactory) {
         this.gitHubConnectionService = gitHubConnectionService;
-        this.scanossDetectService = scanossDetectService;
         this.licenseService = licenseService;
         this.gitHubService = gitHubService;
-    }
-
-    /**
-     * Initializes the LPVSDetectService bean and logs the selected license detection scanner.
-     */
-    @PostConstruct
-    private void init() {
+        this.scanService = scanServiceFactory.createScanService(scannerType, isInternal);
         log.info("License detection scanner: " + scannerType);
     }
 
@@ -166,10 +157,12 @@ public class LPVSDetectService {
      * @throws Exception if an error occurs during the scan.
      */
     public List<LPVSFile> runScan(LPVSQueue webhookConfig, String path) throws Exception {
-        if (scannerType.equals("scanoss")) {
-            scanossDetectService.runScan(webhookConfig, path);
-            return scanossDetectService.checkLicenses(webhookConfig);
+        try {
+            scanService.runScan(webhookConfig, path);
+            return scanService.checkLicenses(webhookConfig);
+        } catch (IllegalArgumentException | NullPointerException ex) {
+            log.error(ex.getMessage());
+            return new ArrayList<>();
         }
-        return new ArrayList<>();
     }
 }
