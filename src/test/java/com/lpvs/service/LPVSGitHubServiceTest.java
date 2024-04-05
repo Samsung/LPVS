@@ -2134,6 +2134,8 @@ public class LPVSGitHubServiceTest {
         final String file_url_1 =
                 "https://github.com/Samsung/LPVS/tree/main/src/main/java/com/lpvs/service/LPVSGitHubService.java";
         final String file_path_1 = "src/main/java/com/lpvs/service/LPVSGitHubService.java";
+
+        final String absolute_file_path_1 = "src/main/java/com/lpvs/service/LPVSGitHubService.java";
         final String snippet_type_1 = "snippet";
         final String snippet_match_1 =
                 "/**\n"
@@ -2239,6 +2241,7 @@ public class LPVSGitHubServiceTest {
                     new LPVSFile(
                             1L,
                             file_path_1,
+                            absolute_file_path_1,
                             snippet_type_1,
                             snippet_match_1,
                             matched_lines_1,
@@ -2463,6 +2466,7 @@ public class LPVSGitHubServiceTest {
         final String file_url_1 =
                 "https://github.com/Samsung/LPVS/tree/main/src/main/java/com/lpvs/service/LPVSGitHubService.java";
         final String file_path_1 = "src/main/java/com/lpvs/service/LPVSGitHubService.java";
+        final String absolute_file_path_1 = "src/main/java/com/lpvs/service/LPVSGitHubService.java";
         final String snippet_type_1 = "snippet";
         final String snippet_match_1 =
                 "/**\n"
@@ -2566,6 +2570,7 @@ public class LPVSGitHubServiceTest {
                     new LPVSFile(
                             1L,
                             file_path_1,
+                            absolute_file_path_1,
                             snippet_type_1,
                             snippet_match_1,
                             matched_lines_1,
@@ -2790,6 +2795,7 @@ public class LPVSGitHubServiceTest {
         final String file_url_1 =
                 "https://github.com/Samsung/LPVS/tree/main/src/main/java/com/lpvs/service/LPVSGitHubService.java";
         final String file_path_1 = "src/main/java/com/lpvs/service/LPVSGitHubService.java";
+        final String absolute_file_path_1 = "src/main/java/com/lpvs/service/LPVSGitHubService.java";
         final String snippet_type_1 = "snippet";
         final String snippet_match_1 =
                 "/**\n"
@@ -2896,6 +2902,7 @@ public class LPVSGitHubServiceTest {
                     new LPVSFile(
                             1L,
                             file_path_1,
+                            absolute_file_path_1,
                             snippet_type_1,
                             snippet_match_1,
                             matched_lines_1,
@@ -3120,6 +3127,7 @@ public class LPVSGitHubServiceTest {
         final String file_url_1 =
                 "https://github.com/Samsung/LPVS/tree/main/src/main/java/com/lpvs/service/LPVSGitHubService.java";
         final String file_path_1 = "src/main/java/com/lpvs/service/LPVSGitHubService.java";
+        final String absolute_file_path_1 = "src/main/java/com/lpvs/service/LPVSGitHubService.java";
         final String snippet_type_1 = "snippet";
         final String snippet_match_1 =
                 "/**\n"
@@ -3226,6 +3234,7 @@ public class LPVSGitHubServiceTest {
                     new LPVSFile(
                             1L,
                             file_path_1,
+                            absolute_file_path_1,
                             snippet_type_1,
                             snippet_match_1,
                             matched_lines_1,
@@ -3442,6 +3451,7 @@ public class LPVSGitHubServiceTest {
         final String file_url_1 =
                 "https://github.com/Samsung/LPVS/tree/main/src/main/java/com/lpvs/service/LPVSGitHubService.java";
         final String file_path_1 = "src/main/java/com/lpvs/service/LPVSGitHubService.java";
+        final String absolute_file_path_1 = "src/main/java/com/lpvs/service/LPVSGitHubService.java";
         final String snippet_type_1 = "snippet";
         final String snippet_match_1 =
                 "/**\n"
@@ -3534,6 +3544,7 @@ public class LPVSGitHubServiceTest {
                     new LPVSFile(
                             1L,
                             file_path_1,
+                            absolute_file_path_1,
                             snippet_type_1,
                             snippet_match_1,
                             matched_lines_1,
@@ -4100,6 +4111,7 @@ public class LPVSGitHubServiceTest {
         // `lpvs_file_1`
         LPVSFile lpvs_file_1;
         final String file_path_1 = "src/main/java/com/lpvs/service/LPVSGitHubService.java";
+        final String absolute_file_path_1 = "src/main/java/com/lpvs/service/LPVSGitHubService.java";
         final String matched_lines_1 = "1-6";
 
         final String expected_result =
@@ -4116,6 +4128,7 @@ public class LPVSGitHubServiceTest {
                     new LPVSFile(
                             1L,
                             file_path_1,
+                            absolute_file_path_1,
                             "snippet",
                             null,
                             matched_lines_1,
@@ -4149,6 +4162,7 @@ public class LPVSGitHubServiceTest {
         // `lpvs_file_1`
         LPVSFile lpvs_file_1;
         final String file_path_1 = "LICENSE";
+        final String absolute_file_path_1 = "LICENSE";
         final String matched_lines_1 = "all";
 
         final String expected_result =
@@ -4165,6 +4179,7 @@ public class LPVSGitHubServiceTest {
                     new LPVSFile(
                             1L,
                             file_path_1,
+                            absolute_file_path_1,
                             "snippet",
                             null,
                             matched_lines_1,
@@ -4254,6 +4269,7 @@ public class LPVSGitHubServiceTest {
                         }
                     });
             file.setFilePath("");
+            file.setAbsoluteFilePath("");
             file.setComponentFilePath("");
             file.setComponentName("");
             file.setComponentLines("");
@@ -4340,14 +4356,6 @@ public class LPVSGitHubServiceTest {
             LPVSExitHandler exitHandler = mock(LPVSExitHandler.class);
             LPVSGitHubConnectionService lpvsGitHubConnectionService =
                     new LPVSGitHubConnectionService("", "", "", exitHandler);
-
-            final LPVSGitHubService gh_service =
-                    new LPVSGitHubService(
-                            mocked_pullRequestRepository,
-                            mocked_lpvsDetectedLicenseRepository,
-                            mocked_lpvsLicenseRepository,
-                            mocked_lpvsLicenseConflictRepository,
-                            lpvsGitHubConnectionService);
             Method method = lpvsGitHubConnectionService.getClass().getDeclaredMethod("checks");
             method.setAccessible(true);
             method.invoke(lpvsGitHubConnectionService);

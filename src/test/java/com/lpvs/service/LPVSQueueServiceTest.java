@@ -207,6 +207,7 @@ public class LPVSQueueServiceTest {
     static final Long id_1 = 1L;
     static final String fileUrl_1 = "test_file_url_1";
     static final String filePath_1 = "test_file_path_1";
+    static final String absolute_filePath_1 = "test_file_path_1";
     static final String snippetType_1 = "test_snippet_type_1";
     static final String snippetMatch_1 = "test_snippet_match_1";
     static final String matchedLines_1 = "test_matched_lines_1";
@@ -217,6 +218,7 @@ public class LPVSQueueServiceTest {
             new LPVSFile(
                     id_1,
                     filePath_1,
+                    absolute_filePath_1,
                     snippetType_1,
                     snippetMatch_1,
                     matchedLines_1,
@@ -233,6 +235,7 @@ public class LPVSQueueServiceTest {
     static final Long id_2 = 2L;
     static final String fileUrl_2 = "test_file_url_2";
     static final String filePath_2 = "test_file_path_2";
+    static final String absoluteFilePath_2 = "test_file_path_2";
     static final String snippetType_2 = "test_snippet_type_2";
     static final String snippetMatch_2 = "test_snippet_match_2";
     static final String matchedLines_2 = "test_matched_lines_2";
@@ -243,6 +246,7 @@ public class LPVSQueueServiceTest {
             new LPVSFile(
                     id_2,
                     filePath_2,
+                    absoluteFilePath_2,
                     snippetType_2,
                     snippetMatch_2,
                     matchedLines_2,

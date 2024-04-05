@@ -80,10 +80,6 @@ public class LPVSScanossDetectServiceTest {
 
     @Test
     public void testCheckLicense() {
-        LPVSLicenseService licenseService = Mockito.mock(LPVSLicenseService.class);
-        LPVSLicenseRepository lpvsLicenseRepository = Mockito.mock(LPVSLicenseRepository.class);
-        LPVSScanossDetectService scanossDetectService =
-                new LPVSScanossDetectService(false, licenseService, lpvsLicenseRepository);
         String licenseConflictsSource = "scanner";
         Mockito.when(lpvsQueue.getHeadCommitSHA()).thenReturn("A_B");
         Mockito.when(lpvsQueue.getRepositoryUrl()).thenReturn("https://github.com/Samsung/LPVS");
@@ -92,16 +88,11 @@ public class LPVSScanossDetectServiceTest {
                 .thenAnswer(i -> i.getArguments()[0]);
         ReflectionTestUtils.setField(
                 licenseService, "licenseConflictsSource", licenseConflictsSource);
-        scanossDetectService.checkLicenses(lpvsQueue);
         Assertions.assertNotNull(scanossDetectService.checkLicenses(lpvsQueue));
     }
 
     @Test
     public void testCheckLicenseHeadCommitSHA() {
-        LPVSLicenseService licenseService = Mockito.mock(LPVSLicenseService.class);
-        LPVSLicenseRepository lpvsLicenseRepository = Mockito.mock(LPVSLicenseRepository.class);
-        LPVSScanossDetectService scanossDetectService =
-                new LPVSScanossDetectService(false, licenseService, lpvsLicenseRepository);
         String licenseConflictsSource = "scanner";
         LPVSQueue webhookConfig = Mockito.mock(LPVSQueue.class);
         Mockito.when(webhookConfig.getHeadCommitSHA()).thenReturn("A_B");
@@ -113,16 +104,11 @@ public class LPVSScanossDetectServiceTest {
         ReflectionTestUtils.setField(
                 licenseService, "licenseConflictsSource", licenseConflictsSource);
         webhookConfig.setHeadCommitSHA("");
-        scanossDetectService.checkLicenses(webhookConfig);
         Assertions.assertNotNull(scanossDetectService.checkLicenses(webhookConfig));
     }
 
     @Test
     public void testWithNullHeadCommitSHA() {
-        LPVSLicenseService licenseService = Mockito.mock(LPVSLicenseService.class);
-        LPVSLicenseRepository lpvsLicenseRepository = Mockito.mock(LPVSLicenseRepository.class);
-        LPVSScanossDetectService scanossDetectService =
-                new LPVSScanossDetectService(false, licenseService, lpvsLicenseRepository);
         String licenseConflictsSource = "scanner";
         LPVSQueue webhookConfig = Mockito.mock(LPVSQueue.class);
         Mockito.when(webhookConfig.getHeadCommitSHA()).thenReturn(null);
@@ -157,7 +143,7 @@ public class LPVSScanossDetectServiceTest {
         Process process = Mockito.mock(Process.class);
         InputStream errorStream =
                 new ByteArrayInputStream(
-                        "Scanoss scanner terminated with none-zero code. Terminating.".getBytes());
+                        "Scanoss scanner terminated with non-zero code. Terminating.".getBytes());
 
         try (MockedConstruction<ProcessBuilder> mockedPb =
                 Mockito.mockConstruction(

@@ -6,6 +6,8 @@
  */
 package com.lpvs.entity;
 
+import java.net.URISyntaxException;
+import java.nio.file.Paths;
 import java.util.*;
 
 import com.lpvs.entity.enums.LPVSVcs;
@@ -20,6 +22,7 @@ public class LPVSFileTest {
     LPVSFile lpvsFile;
     final long baseId = 1L;
     final String baseFilePath = "baseFilePath";
+    final String baseAbsoluteFilePath = "baseAbsoluteFilePath";
     final String baseSnippetType = "baseSnippetType";
     final String baseSnippetMatch = "baseSnippetMatch";
     final String baseMatchedLines = "baseMatchedLines";
@@ -49,6 +52,14 @@ public class LPVSFileTest {
         lpvsFile.setFilePath(baseFilePath);
         assertNotEquals(lpvsFile.getFilePath(), null);
         assertEquals(lpvsFile.getFilePath(), baseFilePath);
+    }
+
+    @Test
+    public void getterSetterAbsoluteFilePathTest() {
+        assertEquals(lpvsFile.getAbsoluteFilePath(), null);
+        lpvsFile.setAbsoluteFilePath(baseAbsoluteFilePath);
+        assertNotEquals(lpvsFile.getAbsoluteFilePath(), null);
+        assertEquals(lpvsFile.getAbsoluteFilePath(), baseAbsoluteFilePath);
     }
 
     @Test
@@ -155,9 +166,6 @@ public class LPVSFileTest {
         final String baseSpdxId = "spdxId";
         final String baseAccess = "access";
         final String baseAlternativeName = "licenseNameAlternative";
-        final String baseChecklistUrl = "checklistUrl";
-        List<String> baseIncompatibleWith =
-                Arrays.asList("incompatibleWith1", "incompatibleWith2", "incompatibleWith3");
 
         LPVSLicense lpvsLicense1 =
                 new LPVSLicense(
@@ -191,9 +199,6 @@ public class LPVSFileTest {
         final String baseSpdxId = "spdxId";
         final String baseAccess = "access";
         final String baseAlternativeName = "licenseNameAlternative";
-        final String baseChecklistUrl = "checklistUrl";
-        List<String> baseIncompatibleWith =
-                Arrays.asList("incompatibleWith1", "incompatibleWith2", "incompatibleWith3");
 
         LPVSLicense lpvsLicense3 =
                 new LPVSLicense(
@@ -223,8 +228,6 @@ public class LPVSFileTest {
         final String baseAccess = "access";
         final String baseAlternativeName = "licenseNameAlternative";
         final String baseChecklistUrl = "checklistUrl";
-        List<String> baseIncompatibleWith =
-                Arrays.asList("incompatibleWith1", "incompatibleWith2", "incompatibleWith3");
 
         LPVSLicense lpvsLicense1 =
                 new LPVSLicense(
@@ -249,5 +252,38 @@ public class LPVSFileTest {
         assertEquals(
                 lpvsFile.convertLicensesToString(LPVSVcs.GITHUB),
                 "<a target=\"_blank\" href=\"checklistUrl\">spdxId</a> (access), <a target=\"_blank\" href=\"checklistUrl\">spdxId</a> (access)");
+    }
+
+    @Test
+    public void testConvertBytesToLinesNumbers() throws URISyntaxException {
+        // Test when matchedLines starts with "BYTES:"
+        LPVSFile validFile = new LPVSFile();
+
+        validFile.setAbsoluteFilePath(
+                Paths.get(
+                                Objects.requireNonNull(
+                                                getClass()
+                                                        .getClassLoader()
+                                                        .getResource("convert1.txt"))
+                                        .toURI())
+                        .toString());
+        validFile.setMatchedLines("BYTES:0-3709:6492-7819");
+        String result = validFile.convertBytesToLinesNumbers();
+        assertEquals("1-107,208-248", result);
+
+        // Test when matchedLines does not start with "BYTES:"
+        validFile.setMatchedLines("5-10,15-20");
+        result = validFile.convertBytesToLinesNumbers();
+        assertEquals("5-10,15-20", result);
+    }
+
+    @Test
+    public void testConvertBytesToLinesNumbers_N() throws URISyntaxException {
+        LPVSFile invalidFile = new LPVSFile();
+        // File does not exist
+        invalidFile.setAbsoluteFilePath("convertX.txt");
+        invalidFile.setMatchedLines("BYTES:0-3709:6492-7819");
+        String result = invalidFile.convertBytesToLinesNumbers();
+        assertEquals("", result);
     }
 }

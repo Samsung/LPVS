@@ -433,6 +433,7 @@ public class LPVSLicenseServiceTest {
                             null,
                             null,
                             null,
+                            null,
                             Set.of(lpvs_license_1),
                             null,
                             null,
@@ -446,6 +447,7 @@ public class LPVSLicenseServiceTest {
             lpvs_file_2 =
                     new LPVSFile(
                             2L,
+                            null,
                             null,
                             null,
                             null,

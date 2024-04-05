@@ -11,7 +11,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
+import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.util.Set;
 
 /**
@@ -21,6 +24,7 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Slf4j
 public class LPVSFile {
 
     /**
@@ -32,6 +36,11 @@ public class LPVSFile {
      * The path of the file.
      */
     private String filePath;
+
+    /**
+     * The absolute path to the file on the server.
+     */
+    private String absoluteFilePath;
 
     /**
      * The type of snippet in the file.
@@ -134,5 +143,70 @@ public class LPVSFile {
         if (licenseNames.endsWith(", "))
             licenseNames = licenseNames.substring(0, licenseNames.length() - 2);
         return licenseNames;
+    }
+
+    /**
+     * Converts byte ranges to line numbers in a file.
+     *
+     * @return A string representing the start and end line numbers corresponding to the byte ranges.
+     *         Returns an empty string if the input does not start with "BYTES:" or if an error occurs.
+     */
+    public String convertBytesToLinesNumbers() {
+
+        if (matchedLines != null && !matchedLines.startsWith("BYTES:")) {
+            return matchedLines;
+        }
+
+        StringBuilder result = new StringBuilder();
+
+        try (RandomAccessFile sourceFile = new RandomAccessFile(absoluteFilePath, "r")) {
+            // Skip "BYTES:" before splitting
+            String[] byteRangeTokens = matchedLines.substring(6).split(":");
+
+            for (String byteRangeToken : byteRangeTokens) {
+                String[] range = byteRangeToken.split("-");
+                int startByte = Integer.parseInt(range[0]);
+                int endByte = Integer.parseInt(range[1]);
+
+                // Read lines until reaching the end byte
+                long byteCounter = 0;
+                long currentLine = 1;
+                long startLine = 0;
+                long endLine = 0;
+
+                // Reset file pointer to the beginning of the file
+                sourceFile.seek(0);
+
+                while (byteCounter < endByte) {
+                    String line = sourceFile.readLine();
+                    if (line == null) {
+                        if (startLine > 0 && endLine == 0) endLine = currentLine;
+                        break;
+                    }
+                    byteCounter += line.getBytes().length + 1;
+                    if (byteCounter > startByte && startLine == 0) {
+                        startLine = currentLine;
+                    }
+                    if (byteCounter >= endByte) {
+                        endLine = currentLine;
+                        break;
+                    }
+                    currentLine++;
+                }
+
+                // Construct the string representing start and end line numbers in the range
+                if (result.length() > 0) {
+                    result.append(",");
+                }
+                result.append(startLine);
+                result.append("-");
+                result.append(endLine);
+            }
+        } catch (IOException e) {
+            log.error(e.getMessage());
+            return "";
+        }
+
+        return result.toString();
     }
 }
