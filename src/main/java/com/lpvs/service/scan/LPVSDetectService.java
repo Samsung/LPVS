@@ -6,6 +6,7 @@
  */
 package com.lpvs.service.scan;
 
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -159,7 +160,12 @@ public class LPVSDetectService {
     public List<LPVSFile> runScan(LPVSQueue webhookConfig, String path) throws Exception {
         try {
             scanService.runScan(webhookConfig, path);
-            return scanService.checkLicenses(webhookConfig);
+            List<LPVSFile> files = scanService.checkLicenses(webhookConfig);
+            for (LPVSFile file : files) {
+                file.setAbsoluteFilePath(path + File.separator + file.getFilePath());
+                file.setMatchedLines(file.convertBytesToLinesNumbers());
+            }
+            return files;
         } catch (IllegalArgumentException | NullPointerException ex) {
             log.error(ex.getMessage());
             return new ArrayList<>();

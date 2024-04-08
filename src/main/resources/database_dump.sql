@@ -94,11 +94,14 @@ CREATE TABLE IF NOT EXISTS member (
   UNIQUE (email,provider)
 );
 
-INSERT INTO license_list (license_name, license_spdx, license_usage) VALUES
-('GNU General Public License v3.0 only','GPL-3.0-only','PROHIBITED'),
-('OpenSSL License','OpenSSL','PERMITTED'),
-('GNU Lesser General Public License v2.0 or later','LGPL-2.0-or-later','RESTRICTED'),
-('MIT License', 'MIT', 'PERMITTED'),
-('Apache License 2.0', 'Apache-2.0', 'PERMITTED'),
-('GNU General Public License v2.0 only', 'GPL-2.0-only', 'RESTRICTED'),
-('GNU Lesser General Public License v3.0 or later', 'LGPL-3.0-or-later', 'PROHIBITED');
+INSERT INTO license_list (id, license_name, license_spdx, license_usage) VALUES
+(1, 'GNU General Public License v3.0 only','GPL-3.0-only','PROHIBITED'),
+(2, 'OpenSSL License','OpenSSL','PERMITTED'),
+(3, 'GNU Lesser General Public License v2.0 or later','LGPL-2.0-or-later','RESTRICTED'),
+(4, 'MIT License', 'MIT', 'PERMITTED'),
+(5, 'Apache License 2.0', 'Apache-2.0', 'PERMITTED'),
+(6, 'GNU General Public License v2.0 only', 'GPL-2.0-only', 'RESTRICTED'),
+(7, 'GNU Lesser General Public License v3.0 or later', 'LGPL-3.0-or-later', 'PROHIBITED');
+
+INSERT INTO license_conflicts (conflict_license_id, repository_license_id) VALUES
+(1, 3), (1, 6), (2, 6), (2, 3), (3, 5), (3, 7), (5, 6), (6, 7);
