@@ -285,5 +285,14 @@ public class LPVSFileTest {
         invalidFile.setMatchedLines("BYTES:0-3709:6492-7819");
         String result = invalidFile.convertBytesToLinesNumbers();
         assertEquals("", result);
+
+        // Empty matched lines
+        invalidFile.setMatchedLines(null);
+        result = invalidFile.convertBytesToLinesNumbers();
+        assertEquals("", result);
+
+        invalidFile.setMatchedLines("");
+        result = invalidFile.convertBytesToLinesNumbers();
+        assertEquals("", result);
     }
 }
