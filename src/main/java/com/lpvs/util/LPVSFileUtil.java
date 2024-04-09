@@ -73,7 +73,7 @@ public class LPVSFileUtil {
 
             if (fileName.contains("/")) {
                 String filepath = fileName.substring(0, fileName.lastIndexOf("/"));
-                Path resultFolder = Paths.get(directoryPath + "/" + filepath);
+                Path resultFolder = Paths.get(directoryPath + File.separator + filepath);
                 if (!Files.exists(resultFolder)) {
                     try {
                         // create folder
@@ -89,7 +89,8 @@ public class LPVSFileUtil {
             if (prettyPatch.length() > 0) {
                 try (FileWriter fileWriter =
                                 new FileWriter(
-                                        directoryPath + "/" + fileName, Charset.forName("UTF8"));
+                                        directoryPath + File.separator + fileName,
+                                        Charset.forName("UTF8"));
                         BufferedWriter writer = new BufferedWriter(fileWriter)) {
                     writer.write(prettyPatch.toString());
                 }
@@ -146,17 +147,19 @@ public class LPVSFileUtil {
         if (webhookConfig.getHeadCommitSHA() == null
                 || webhookConfig.getHeadCommitSHA().equals("")) {
             return System.getProperty("user.home")
-                    + "/"
-                    + "Projects/"
+                    + File.separator
+                    + "Projects"
+                    + File.separator
                     + LPVSWebhookUtil.getRepositoryName(webhookConfig)
-                    + "/"
+                    + File.separator
                     + LPVSWebhookUtil.getPullRequestId(webhookConfig);
         } else {
             return System.getProperty("user.home")
-                    + "/"
-                    + "Projects/"
+                    + File.separator
+                    + "Projects"
+                    + File.separator
                     + LPVSWebhookUtil.getRepositoryName(webhookConfig)
-                    + "/"
+                    + File.separator
                     + webhookConfig.getHeadCommitSHA();
         }
     }
@@ -171,18 +174,20 @@ public class LPVSFileUtil {
         if (webhookConfig.getHeadCommitSHA() == null
                 || webhookConfig.getHeadCommitSHA().equals("")) {
             return System.getProperty("user.home")
-                    + "/"
-                    + "Results/"
+                    + File.separator
+                    + "Results"
+                    + File.separator
                     + LPVSWebhookUtil.getRepositoryName(webhookConfig)
-                    + "/"
+                    + File.separator
                     + LPVSWebhookUtil.getPullRequestId(webhookConfig)
                     + ".json";
         } else {
             return System.getProperty("user.home")
-                    + "/"
-                    + "Results/"
+                    + File.separator
+                    + "Results"
+                    + File.separator
                     + LPVSWebhookUtil.getRepositoryName(webhookConfig)
-                    + "/"
+                    + File.separator
                     + webhookConfig.getHeadCommitSHA()
                     + ".json";
         }
@@ -196,8 +201,9 @@ public class LPVSFileUtil {
      */
     public static String getScanResultsDirectoryPath(LPVSQueue webhookConfig) {
         return System.getProperty("user.home")
-                + "/"
-                + "Results/"
+                + File.separator
+                + "Results"
+                + File.separator
                 + LPVSWebhookUtil.getRepositoryName(webhookConfig);
     }
 

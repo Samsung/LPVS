@@ -162,7 +162,14 @@ public class LPVSDetectService {
             scanService.runScan(webhookConfig, path);
             List<LPVSFile> files = scanService.checkLicenses(webhookConfig);
             for (LPVSFile file : files) {
-                file.setAbsoluteFilePath(path + File.separator + file.getFilePath());
+                if (file.getFilePath().startsWith(path)) {
+                    file.setAbsoluteFilePath(file.getFilePath());
+                    file.setFilePath(
+                            file.getFilePath().substring(path.length()).replaceAll("\\\\", "/"));
+                } else {
+                    file.setFilePath(file.getFilePath().replaceAll("\\\\", "/"));
+                    file.setAbsoluteFilePath(path + File.separator + file.getFilePath());
+                }
                 file.setMatchedLines(file.convertBytesToLinesNumbers());
             }
             return files;
