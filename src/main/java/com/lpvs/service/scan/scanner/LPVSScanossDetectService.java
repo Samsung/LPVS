@@ -170,10 +170,11 @@ public class LPVSScanossDetectService implements LPVSScanService {
                         Files.newBufferedReader(
                                 Paths.get(
                                         System.getProperty("user.home")
-                                                + "/"
-                                                + "Results/"
+                                                + File.separator
+                                                + "Results"
+                                                + File.separator
                                                 + LPVSWebhookUtil.getRepositoryName(webhookConfig)
-                                                + "/"
+                                                + File.separator
                                                 + LPVSWebhookUtil.getPullRequestId(webhookConfig)
                                                 + ".json"));
             } else {
@@ -181,10 +182,11 @@ public class LPVSScanossDetectService implements LPVSScanService {
                         Files.newBufferedReader(
                                 Paths.get(
                                         System.getProperty("user.home")
-                                                + "/"
-                                                + "Results/"
+                                                + File.separator
+                                                + "Results"
+                                                + File.separator
                                                 + LPVSWebhookUtil.getRepositoryName(webhookConfig)
-                                                + "/"
+                                                + File.separator
                                                 + webhookConfig.getHeadCommitSHA()
                                                 + ".json"));
             }

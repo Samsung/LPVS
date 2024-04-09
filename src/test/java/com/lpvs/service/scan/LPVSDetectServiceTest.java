@@ -28,6 +28,7 @@ import org.kohsuke.github.GHRepository;
 import org.kohsuke.github.GitHub;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.net.URL;
@@ -85,12 +86,36 @@ public class LPVSDetectServiceTest {
 
             lpvs_file_1 =
                     new LPVSFile(
-                            1L, null, null, null, null, null, null, null, null, null, null, null,
-                            null, null);
+                            1L,
+                            "test_path" + File.separator + "some_path",
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null);
             lpvs_file_2 =
                     new LPVSFile(
-                            2L, null, null, null, null, null, null, null, null, null, null, null,
-                            null, null);
+                            2L,
+                            "some_path",
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null);
 
             when(scanoss_mock.checkLicenses(webhookConfig))
                     .thenReturn(List.of(lpvs_file_1, lpvs_file_2));

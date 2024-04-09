@@ -216,24 +216,31 @@ public class GitHubController {
         gitHubOrg = HtmlUtils.htmlEscape(gitHubOrg);
         gitHubRepo = HtmlUtils.htmlEscape(gitHubRepo);
 
-        GitHub gitHub = gitHubConnectionService.connectToGitHubApi();
-        GHRepository repository = gitHub.getRepository(gitHubOrg + "/" + gitHubRepo);
-        GHPullRequest pullRequest = repository.getPullRequest(prNumber);
-        LPVSQueue scanConfig = LPVSWebhookUtil.getGitHubWebhookConfig(repository, pullRequest);
-        scanConfig.setAction(LPVSPullRequestAction.SINGLE_SCAN);
-        scanConfig.setAttempts(0);
-        scanConfig.setDate(new Date());
-        scanConfig.setReviewSystemType("github");
-        queueRepository.save(scanConfig);
-        log.debug("Pull request scanning is enabled");
-        gitHubService.setPendingCheck(scanConfig);
-        log.debug("Set status to Pending done");
-        queueService.addFirst(scanConfig);
-        log.debug("Put Scan config to the queue done");
-        log.debug("Response sent");
-        return ResponseEntity.ok()
+        try {
+            GitHub gitHub = gitHubConnectionService.connectToGitHubApi();
+            GHRepository repository = gitHub.getRepository(gitHubOrg + "/" + gitHubRepo);
+            GHPullRequest pullRequest = repository.getPullRequest(prNumber);
+            LPVSQueue scanConfig = LPVSWebhookUtil.getGitHubWebhookConfig(repository, pullRequest);
+            scanConfig.setAction(LPVSPullRequestAction.SINGLE_SCAN);
+            scanConfig.setAttempts(0);
+            scanConfig.setDate(new Date());
+            scanConfig.setReviewSystemType("github");
+            queueRepository.save(scanConfig);
+            log.debug("Pull request scanning is enabled");
+            gitHubService.setPendingCheck(scanConfig);
+            log.debug("Set status to Pending done");
+            queueService.addFirst(scanConfig);
+            log.debug("Put Scan config to the queue done");
+            log.debug("Response sent");
+            return ResponseEntity.ok()
+                    .headers(LPVSWebhookUtil.generateSecurityHeaders())
+                    .body(new LPVSResponseWrapper(SUCCESS));
+        } catch (Exception e) {
+            log.error("Can't authorize single pull request scan " + e.getMessage());
+        }
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
                 .headers(LPVSWebhookUtil.generateSecurityHeaders())
-                .body(new LPVSResponseWrapper(SUCCESS));
+                .body(new LPVSResponseWrapper(ERROR));
     }
 
     /**

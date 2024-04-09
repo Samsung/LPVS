@@ -14,6 +14,7 @@ import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -114,7 +115,14 @@ public class LPVSFileUtilTest {
                     .thenReturn("repoName");
 
             String result = LPVSFileUtil.getLocalDirectoryPath(mockWebhookConfig);
-            String expectedPath = System.getProperty("user.home") + "/Projects/repoName/abcdef123";
+            String expectedPath =
+                    System.getProperty("user.home")
+                            + File.separator
+                            + "Projects"
+                            + File.separator
+                            + "repoName"
+                            + File.separator
+                            + "abcdef123";
             assert (result.equals(expectedPath));
         }
     }
@@ -134,7 +142,14 @@ public class LPVSFileUtilTest {
                     .thenReturn("1");
 
             String result = LPVSFileUtil.getLocalDirectoryPath(mockWebhookConfig);
-            String expectedPath = System.getProperty("user.home") + "/Projects/repoName/1";
+            String expectedPath =
+                    System.getProperty("user.home")
+                            + File.separator
+                            + "Projects"
+                            + File.separator
+                            + "repoName"
+                            + File.separator
+                            + "1";
             assert (result.equals(expectedPath));
         }
     }
@@ -155,7 +170,13 @@ public class LPVSFileUtilTest {
 
             String result = LPVSFileUtil.getLocalDirectoryPath(mockWebhookConfig);
             String expectedPath =
-                    System.getProperty("user.home") + "/Projects/repoName/pullRequestId";
+                    System.getProperty("user.home")
+                            + File.separator
+                            + "Projects"
+                            + File.separator
+                            + "repoName"
+                            + File.separator
+                            + "pullRequestId";
             assert (result.equals(expectedPath));
         }
     }
@@ -173,7 +194,13 @@ public class LPVSFileUtilTest {
 
             String result = LPVSFileUtil.getScanResultsJsonFilePath(mockWebhookConfig);
             String expectedPath =
-                    System.getProperty("user.home") + "/Results/repoName/abcdef123.json";
+                    System.getProperty("user.home")
+                            + File.separator
+                            + "Results"
+                            + File.separator
+                            + "repoName"
+                            + File.separator
+                            + "abcdef123.json";
             assert (result.equals(expectedPath));
         }
     }
@@ -193,7 +220,14 @@ public class LPVSFileUtilTest {
                     .thenReturn("1");
 
             String result = LPVSFileUtil.getScanResultsJsonFilePath(mockWebhookConfig);
-            String expectedPath = System.getProperty("user.home") + "/Results/repoName/1.json";
+            String expectedPath =
+                    System.getProperty("user.home")
+                            + File.separator
+                            + "Results"
+                            + File.separator
+                            + "repoName"
+                            + File.separator
+                            + "1.json";
             assert (result.equals(expectedPath));
         }
     }
@@ -214,7 +248,13 @@ public class LPVSFileUtilTest {
 
             String result = LPVSFileUtil.getScanResultsJsonFilePath(mockWebhookConfig);
             String expectedPath =
-                    System.getProperty("user.home") + "/Results/repoName/pullRequestId.json";
+                    System.getProperty("user.home")
+                            + File.separator
+                            + "Results"
+                            + File.separator
+                            + "repoName"
+                            + File.separator
+                            + "pullRequestId.json";
             assert (result.equals(expectedPath));
         }
     }
@@ -228,7 +268,12 @@ public class LPVSFileUtilTest {
                     .when(() -> LPVSWebhookUtil.getRepositoryName(Mockito.any()))
                     .thenReturn("repoName");
             String result = LPVSFileUtil.getScanResultsDirectoryPath(mockWebhookConfig);
-            String expectedPath = System.getProperty("user.home") + "/Results/repoName";
+            String expectedPath =
+                    System.getProperty("user.home")
+                            + File.separator
+                            + "Results"
+                            + File.separator
+                            + "repoName";
             assert (result.equals(expectedPath));
         }
     }
