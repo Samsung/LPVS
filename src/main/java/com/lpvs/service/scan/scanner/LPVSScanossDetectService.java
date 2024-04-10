@@ -281,7 +281,8 @@ public class LPVSScanossDetectService implements LPVSScanService {
             // close reader
             reader.close();
         } catch (IOException | IllegalArgumentException ex) {
-            log.error(ex.toString());
+            log.error("Error while processing Webhook ID = " + webhookConfig.getId());
+            log.error(ex.getMessage());
         }
         return detectedFiles;
     }
