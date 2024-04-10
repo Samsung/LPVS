@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.charset.StandardCharsets;
 import java.util.Set;
 
 /**
@@ -153,7 +154,9 @@ public class LPVSFile {
      */
     public String convertBytesToLinesNumbers() {
 
-        if (matchedLines != null && !matchedLines.startsWith("BYTES:")) {
+        if (matchedLines == null || matchedLines.isEmpty()) {
+            return "";
+        } else if (matchedLines != null && !matchedLines.startsWith("BYTES:")) {
             return matchedLines;
         }
 
@@ -183,7 +186,7 @@ public class LPVSFile {
                         if (startLine > 0 && endLine == 0) endLine = currentLine;
                         break;
                     }
-                    byteCounter += line.getBytes().length + 1;
+                    byteCounter += line.getBytes(StandardCharsets.UTF_8).length + 1;
                     if (byteCounter > startByte && startLine == 0) {
                         startLine = currentLine;
                     }
