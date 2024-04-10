@@ -156,7 +156,7 @@ public class LPVSFile {
 
         if (matchedLines == null || matchedLines.isEmpty()) {
             return "";
-        } else if (matchedLines != null && !matchedLines.startsWith("BYTES:")) {
+        } else if (!matchedLines.startsWith("BYTES:")) {
             return matchedLines;
         }
 
