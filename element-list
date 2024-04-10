@@ -10,5 +10,6 @@ com.lpvs.entity.result
 com.lpvs.exception
 com.lpvs.repository
 com.lpvs.service
-com.lpvs.service.scanner.scanoss
+com.lpvs.service.scan
+com.lpvs.service.scan.scanner
 com.lpvs.util
