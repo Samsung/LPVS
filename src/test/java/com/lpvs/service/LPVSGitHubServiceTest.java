@@ -2179,7 +2179,7 @@ public class LPVSGitHubServiceTest {
                         + " */\n\n\n\n\n"
                         + "**Detected license conflicts:**\n\n\n"
                         + "<ul><li>MIT and Apache-1.0</li></ul>"
-                        + "\n\n###### <p align='right'>Check the validation details at the link()</p>";
+                        + "\n\n###### <p align='right'>Check the validation details at the [link]()</p>";
 
         @BeforeEach
         void setUp() {
@@ -2510,7 +2510,7 @@ public class LPVSGitHubServiceTest {
                         + " */\n\n\n\n\n"
                         + "**Detected license conflicts:**\n\n\n"
                         + "<ul><li>MIT and Apache-1.0</li></ul>"
-                        + "\n\n###### <p align='right'>Check the validation details at the link()</p>";
+                        + "\n\n###### <p align='right'>Check the validation details at the [link]()</p>";
 
         @BeforeEach
         void setUp() {
@@ -2840,7 +2840,7 @@ public class LPVSGitHubServiceTest {
                         + " */\n\n\n\n\n"
                         + "**Detected license conflicts:**\n\n\n"
                         + "<ul><li>MIT and Apache-1.0</li></ul>"
-                        + "\n\n###### <p align='right'>Check the validation details at the link()</p>";
+                        + "\n\n###### <p align='right'>Check the validation details at the [link]()</p>";
 
         @BeforeEach
         void setUp() {
@@ -3172,7 +3172,7 @@ public class LPVSGitHubServiceTest {
                         + " */\n\n\n\n\n"
                         + "**Detected license conflicts:**\n\n\n"
                         + "<ul><li>MIT and Apache-1.0</li></ul>"
-                        + "\n\n###### <p align='right'>Check the validation details at the link()</p>";
+                        + "\n\n###### <p align='right'>Check the validation details at the [link]()</p>";
 
         @BeforeEach
         void setUp() {
