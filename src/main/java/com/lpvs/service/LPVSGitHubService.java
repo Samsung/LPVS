@@ -298,9 +298,9 @@ public class LPVSGitHubService {
             }
         }
 
+        StringBuilder commitCommentBuilder = new StringBuilder();
         if (conflicts != null && conflicts.size() > 0) {
             hasConflicts = true;
-            StringBuilder commitCommentBuilder = new StringBuilder();
             commitCommentBuilder.append("**Detected license conflicts:**\n\n\n");
             commitCommentBuilder.append("<ul>");
             for (LPVSLicenseService.Conflict<String, String> conflict : conflicts) {
@@ -326,14 +326,14 @@ public class LPVSGitHubService {
                 lpvsDetectedLicenseRepository.saveAndFlush(detectedIssue);
             }
             commitCommentBuilder.append("</ul>");
-            if (null != webhookConfig.getHubLink()) {
-                commitCommentBuilder.append(
-                        "\n\n###### <p align='right'>Check the validation details at the link(");
-                commitCommentBuilder.append(webhookConfig.getHubLink());
-                commitCommentBuilder.append(")</p>");
-            }
-            commitComment += commitCommentBuilder.toString();
         }
+        if (null != webhookConfig.getHubLink()) {
+            commitCommentBuilder.append(
+                    "\n\n###### <p align='right'>Check the validation details at the [link](");
+            commitCommentBuilder.append(webhookConfig.getHubLink());
+            commitCommentBuilder.append(")</p>");
+        }
+        commitComment += commitCommentBuilder.toString();
 
         if (hasProhibitedOrRestricted || hasConflicts) {
             lpvsPullRequest.setStatus(LPVSPullRequestStatus.ISSUES_DETECTED.toString());
