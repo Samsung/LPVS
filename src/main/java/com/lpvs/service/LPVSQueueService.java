@@ -250,7 +250,7 @@ public class LPVSQueueService {
                 log.debug("Results posted on GitHub");
                 delete(webhookConfig);
             } else {
-                log.warn("Files are not found. Probably pull request is not exists.");
+                log.warn("Files are not found. Probably pull request does not exist.");
                 throw new Exception(
                         "Files are not found. Probably pull request does not exist. Terminating.");
             }
