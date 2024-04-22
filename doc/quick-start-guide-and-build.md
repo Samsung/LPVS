@@ -171,9 +171,9 @@ Before building _LPVS_ from source code, ensure that you have the following prer
    mysql -u[username] -p[password] < src/main/resources/database_dump.sql
    ```
 
-2.5 Fill in the `license_list` and `license_conflicts` tables with the information about permitted, restricted, and prohibited licenses, as well as their compatibility specifics. You can find an example database dump file in the repository at [`src/main/resources/database_dump.sql`](src/main/resources/database_dump.sql).
+2.5 Fill in the `license_list` and `license_conflicts` tables with the information about permitted, restricted, and prohibited licenses, as well as their compatibility specifics. You can find an example database dump file in the repository at [`src/main/resources/database_dump.sql`](../src/main/resources/database_dump.sql).
 
-2.6 Update the following lines in the [`src/main/resources/application.properties`](src/main/resources/application.properties) file:
+2.6 Update the following lines in the [`src/main/resources/application.properties`](../src/main/resources/application.properties) file:
    ```properties
    spring.datasource.username=username
    spring.datasource.password=password
@@ -181,7 +181,7 @@ Before building _LPVS_ from source code, ensure that you have the following prer
 
 ### 3. Setting up _LPVS_ `application.properties`
 
-Fill in the following lines in the [`src/main/resources/application.properties`](src/main/resources/application.properties) file:
+Fill in the following lines in the [`src/main/resources/application.properties`](../src/main/resources/application.properties) file:
 
 ```properties
 # GitHub configuration (github.token and github.secret required)
