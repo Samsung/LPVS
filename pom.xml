@@ -7,7 +7,7 @@
     <groupId>com.lpvs</groupId>
     <artifactId>lpvs</artifactId>
     <name>LPVS</name>
-    <version>1.4.2</version>
+    <version>1.5.0</version>
     <packaging>jar</packaging>
     <url>https://github.com/Samsung/LPVS</url>
 
@@ -27,6 +27,7 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>3.2.2</version>
+        <relativePath/>
     </parent>
 
     <properties>
