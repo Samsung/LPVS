@@ -98,6 +98,23 @@ public class LPVSLicenseService {
     }
 
     /**
+     * Load all license conflicts from the database.
+     */
+    private void loadLicenseConflicts() {
+        List<LPVSLicenseConflict> conflicts =
+                lpvsLicenseConflictRepository.takeAllLicenseConflicts();
+        for (LPVSLicenseConflict conflict : conflicts) {
+            Conflict<String, String> conf =
+                    new Conflict<>(
+                            conflict.getConflictLicense().getSpdxId(),
+                            conflict.getRepositoryLicense().getSpdxId());
+            if (!licenseConflicts.contains(conf)) {
+                licenseConflicts.add(conf);
+            }
+        }
+    }
+
+    /**
      * Initializes the LPVSLicenseService by loading licenses and license conflicts from the database.
      */
     @PostConstruct
@@ -129,17 +146,7 @@ public class LPVSLicenseService {
                 licenseConflicts = new ArrayList<>();
 
                 if (licenseConflictsSource.equalsIgnoreCase("db")) {
-                    List<LPVSLicenseConflict> conflicts =
-                            lpvsLicenseConflictRepository.takeAllLicenseConflicts();
-                    for (LPVSLicenseConflict conflict : conflicts) {
-                        Conflict<String, String> conf =
-                                new Conflict<>(
-                                        conflict.getConflictLicense().getSpdxId(),
-                                        conflict.getRepositoryLicense().getSpdxId());
-                        if (!licenseConflicts.contains(conf)) {
-                            licenseConflicts.add(conf);
-                        }
-                    }
+                    loadLicenseConflicts();
                     // print info
                     log.info(
                             "LICENSE CONFLICTS: loaded "
@@ -163,20 +170,10 @@ public class LPVSLicenseService {
     public void reloadFromTables() {
         if (licenses.isEmpty()) {
             licenses = lpvsLicenseRepository.takeAllLicenses();
-            log.info("LOADED " + licenses.size() + " licenses from DB.");
+            log.info("RELOADED " + licenses.size() + " licenses from DB.");
 
-            List<LPVSLicenseConflict> conflicts =
-                    lpvsLicenseConflictRepository.takeAllLicenseConflicts();
-            for (LPVSLicenseConflict conflict : conflicts) {
-                Conflict<String, String> conf =
-                        new Conflict<>(
-                                conflict.getConflictLicense().getSpdxId(),
-                                conflict.getRepositoryLicense().getSpdxId());
-                if (!licenseConflicts.contains(conf)) {
-                    licenseConflicts.add(conf);
-                }
-            }
-            log.info("LOADED " + licenseConflicts.size() + " license conflicts from DB.");
+            loadLicenseConflicts();
+            log.info("RELOADED " + licenseConflicts.size() + " license conflicts from DB.");
         }
     }
 
