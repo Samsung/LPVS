@@ -12,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 import java.lang.reflect.Field;
@@ -153,6 +154,13 @@ public class LPVSLicenseServiceTest {
                         add(new LPVSLicenseService.Conflict<>("", ""));
                     }
                 });
+
+        LPVSLicenseRepository lpvsLicenseRepository = Mockito.mock(LPVSLicenseRepository.class);
+        ReflectionTestUtils.setField(
+                licenseService, "lpvsLicenseRepository", lpvsLicenseRepository);
+        when(lpvsLicenseRepository.searchBySpdxId(anyString())).thenReturn(null);
+        when(lpvsLicenseRepository.searchByAlternativeLicenseNames(anyString())).thenReturn(null);
+
         Assertions.assertNotNull(licenseService.findConflicts(webhookConfig, fileList));
     }
 
@@ -425,6 +433,12 @@ public class LPVSLicenseServiceTest {
             conflicts_field.setAccessible(true);
             conflicts_field.set(licenseService, List.of(conflict_1));
 
+            LPVSLicenseRepository lpvsLicenseRepository = Mockito.mock(LPVSLicenseRepository.class);
+            Field license_repository =
+                    licenseService.getClass().getDeclaredField("lpvsLicenseRepository");
+            license_repository.setAccessible(true);
+            license_repository.set(licenseService, lpvsLicenseRepository);
+
             lpvs_license_1 = new LPVSLicense(1L, null, spdx_id_1, null, null, null);
             lpvs_file_1 =
                     new LPVSFile(
@@ -460,6 +474,10 @@ public class LPVSLicenseServiceTest {
                             null,
                             null,
                             null);
+
+            when(lpvsLicenseRepository.searchBySpdxId(anyString())).thenReturn(null);
+            when(lpvsLicenseRepository.searchByAlternativeLicenseNames(anyString()))
+                    .thenReturn(lpvs_license_1);
 
             webhookConfig = new LPVSQueue();
             webhookConfig.setRepositoryLicense("MIT");

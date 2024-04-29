@@ -117,7 +117,7 @@ public class LPVSWebhookUtil {
     private static void checkWebhookConfig(LPVSQueue webhookConfig) {
         if (null == webhookConfig) {
             log.error("Webhook Config is absent");
-            throw new IllegalArgumentException("Webhook is absent");
+            throw new IllegalArgumentException("Webhook Config is absent");
         }
 
         if (null == webhookConfig.getRepositoryUrl()) {
@@ -160,7 +160,7 @@ public class LPVSWebhookUtil {
     public static String getRepositoryUrl(LPVSQueue webhookConfig) {
         if (null == webhookConfig) {
             log.error("Webhook Config is absent");
-            throw new IllegalArgumentException("Webhook is absent");
+            throw new IllegalArgumentException("Webhook Config is absent");
         }
         return webhookConfig.getRepositoryUrl();
     }

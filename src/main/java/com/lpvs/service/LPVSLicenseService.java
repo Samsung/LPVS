@@ -273,8 +273,18 @@ public class LPVSLicenseService {
 
         // 1. Check conflict between repository license and detected licenses
         String repositoryLicense = webhookConfig.getRepositoryLicense();
-        // ToDo: add check for license alternative names. Reason: GitHub can use not SPDX ID.
+
         if (repositoryLicense != null) {
+            LPVSLicense repoLicense = lpvsLicenseRepository.searchBySpdxId(repositoryLicense);
+            if (repoLicense == null) {
+                repoLicense =
+                        lpvsLicenseRepository.searchByAlternativeLicenseNames(repositoryLicense);
+            }
+
+            if (repoLicense != null) {
+                repositoryLicense = repoLicense.getSpdxId();
+            }
+
             for (String detectedLicenseUnique : detectedLicensesUnique) {
                 for (Conflict<String, String> licenseConflict : licenseConflicts) {
                     Conflict<String, String> possibleConflict =
