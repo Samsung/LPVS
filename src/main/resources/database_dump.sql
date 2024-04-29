@@ -94,14 +94,14 @@ CREATE TABLE IF NOT EXISTS member (
   UNIQUE (email,provider)
 );
 
-INSERT INTO license_list (id, license_name, license_spdx, license_usage) VALUES
-(1, 'GNU General Public License v3.0 only','GPL-3.0-only','PROHIBITED'),
-(2, 'OpenSSL License','OpenSSL','PERMITTED'),
-(3, 'GNU Lesser General Public License v2.0 or later','LGPL-2.0-or-later','RESTRICTED'),
-(4, 'MIT License', 'MIT', 'PERMITTED'),
-(5, 'Apache License 2.0', 'Apache-2.0', 'PERMITTED'),
-(6, 'GNU General Public License v2.0 only', 'GPL-2.0-only', 'RESTRICTED'),
-(7, 'GNU Lesser General Public License v3.0 or later', 'LGPL-3.0-or-later', 'PROHIBITED');
+INSERT INTO license_list (id, license_name, license_spdx, license_alternative_names, license_usage) VALUES
+(1, 'GNU General Public License v3.0 only','GPL-3.0-only','','PROHIBITED'),
+(2, 'OpenSSL License','OpenSSL','OPENSSL_LICENSE,SSLeay license and OpenSSL License','PERMITTED'),
+(3, 'GNU Lesser General Public License v2.0 or later','LGPL-2.0-or-later','','RESTRICTED'),
+(4, 'MIT License','MIT','Bouncy Castle Licence,The MIT License,The MIT License (MIT)','PERMITTED'),
+(5, 'Apache License 2.0','Apache-2.0','Android-Apache-2.0,Apache 2,Apache 2.0,Apache 2.0 license,Apache License (v2.0),Apache License v2,Apache License v2.0,Apache License Version 2.0,Apache License Version 2.0 January 2004,Apache Public License 2.0,Apache Software License (Apache 2.0),Apache Software License (Apache License 2.0),Apache Software License - Version 2.0,Apache v2,Apache v2.0,Apache Version 2.0,Apache-2.0 License,APACHE2,ASF 2.0,http://www.apache.org/licenses/LICENSE-2.0.txt,https://www.apache.org/licenses/LICENSE-2.0,https://www.apache.org/licenses/LICENSE-2.0.txt,the Apache License ASL Version 2.0,The Apache License Version 2.0,The Apache Software License Version 2.0','PERMITTED'),
+(6, 'GNU General Public License v2.0 only','GPL-2.0-only','','RESTRICTED'),
+(7, 'GNU Lesser General Public License v3.0 or later','LGPL-3.0-or-later','GNU Lesser General Public License v3 or later (LGPLv3+),Lesser General Public License version 3 or greater,LGPLv3+','PROHIBITED');
 
 INSERT INTO license_conflicts (conflict_license_id, repository_license_id) VALUES
 (1, 3), (1, 6), (2, 6), (2, 3), (3, 5), (3, 7), (5, 6), (6, 7);

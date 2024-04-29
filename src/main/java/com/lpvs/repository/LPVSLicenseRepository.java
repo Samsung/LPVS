@@ -49,7 +49,7 @@ public interface LPVSLicenseRepository extends JpaRepository<LPVSLicense, Long> 
      */
     @Query(
             value =
-                    "SELECT * FROM license_list WHERE license_list.license_alternative_names LIKE %:licenseName% ORDER BY id DESC LIMIT 1",
+                    "SELECT * FROM license_list WHERE FIND_IN_SET(:licenseName, license_alternative_names) > 0 ORDER BY id DESC LIMIT 1",
             nativeQuery = true)
     LPVSLicense searchByAlternativeLicenseNames(@Param("licenseName") String licenseName);
 

@@ -205,7 +205,7 @@ public class LPVSWebhookUtilTest {
                             () -> {
                                 LPVSWebhookUtil.getRepositoryOrganization(null);
                             });
-            assertEquals("Webhook is absent", exception.getMessage());
+            assertEquals("Webhook Config is absent", exception.getMessage());
 
             exception =
                     assertThrows(
@@ -221,7 +221,7 @@ public class LPVSWebhookUtilTest {
                             () -> {
                                 LPVSWebhookUtil.getRepositoryName(null);
                             });
-            assertEquals("Webhook is absent", exception.getMessage());
+            assertEquals("Webhook Config is absent", exception.getMessage());
 
             exception =
                     assertThrows(
@@ -237,7 +237,7 @@ public class LPVSWebhookUtilTest {
                             () -> {
                                 LPVSWebhookUtil.getRepositoryUrl(null);
                             });
-            assertEquals("Webhook is absent", exception.getMessage());
+            assertEquals("Webhook Config is absent", exception.getMessage());
 
             exception =
                     assertThrows(
@@ -245,7 +245,7 @@ public class LPVSWebhookUtilTest {
                             () -> {
                                 LPVSWebhookUtil.getPullRequestId(null);
                             });
-            assertEquals("Webhook is absent", exception.getMessage());
+            assertEquals("Webhook Config is absent", exception.getMessage());
 
             exception =
                     assertThrows(
