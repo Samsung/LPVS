@@ -45,7 +45,7 @@ jobs:
         name: jacoco-report
         path: target/site/jacoco/
     - name: Upload coverage reports to Codecov
-      uses: codecov/codecov-action@54bcd8715eee62d40e33596ef5e8f0f48dbbccab # v4.1.0
+      uses: codecov/codecov-action@5ecb98a3c6b747ed38dc09f787459979aebb39be # v4.3.1
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         files: target/site/jacoco/jacoco.xml
