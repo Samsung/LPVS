@@ -58,15 +58,6 @@ public class LPVSScanossDetectServiceTest {
                                 .toURI()),
                 Paths.get(destinationPath + File.separator + resourcePath),
                 StandardCopyOption.REPLACE_EXISTING);
-        Mockito.when(licenseService.findLicenseBySPDX("MIT"))
-                .thenReturn(
-                        new LPVSLicense() {
-                            {
-                                setLicenseName("MIT");
-                                setLicenseId(1L);
-                                setSpdxId("MIT");
-                            }
-                        });
         scanossDetectService =
                 new LPVSScanossDetectService(false, licenseService, lpvsLicenseRepository);
     }
@@ -88,6 +79,15 @@ public class LPVSScanossDetectServiceTest {
                 .thenAnswer(i -> i.getArguments()[0]);
         ReflectionTestUtils.setField(
                 licenseService, "licenseConflictsSource", licenseConflictsSource);
+        Mockito.when(licenseService.getLicenseBySpdxIdAndName(anyString(), any()))
+                .thenReturn(
+                        new LPVSLicense() {
+                            {
+                                setLicenseName("MIT");
+                                setLicenseId(1L);
+                                setSpdxId("MIT");
+                            }
+                        });
         Assertions.assertNotNull(scanossDetectService.checkLicenses(lpvsQueue));
     }
 
@@ -103,6 +103,15 @@ public class LPVSScanossDetectServiceTest {
                 .thenAnswer(i -> i.getArguments()[0]);
         ReflectionTestUtils.setField(
                 licenseService, "licenseConflictsSource", licenseConflictsSource);
+        Mockito.when(licenseService.getLicenseBySpdxIdAndName(anyString(), any()))
+                .thenReturn(
+                        new LPVSLicense() {
+                            {
+                                setLicenseName("MIT");
+                                setLicenseId(1L);
+                                setSpdxId("MIT");
+                            }
+                        });
         webhookConfig.setHeadCommitSHA("");
         Assertions.assertNotNull(scanossDetectService.checkLicenses(webhookConfig));
     }

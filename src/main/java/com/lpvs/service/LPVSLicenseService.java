@@ -14,12 +14,19 @@ import com.lpvs.repository.LPVSLicenseConflictRepository;
 import com.lpvs.repository.LPVSLicenseRepository;
 import com.lpvs.util.LPVSExitHandler;
 
+import com.lpvs.util.LPVSPayloadUtil;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import jakarta.annotation.PostConstruct;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.*;
 
 /**
@@ -66,6 +73,17 @@ public class LPVSLicenseService {
      * Handler for exiting the application.
      */
     private LPVSExitHandler exitHandler;
+
+    /**
+     * URL of the source of the new licenses.
+     */
+    @Value("${license_source:}")
+    private String osoriDbUrl;
+
+    /**
+     * The object used to make HTTP requests to the OSORI DB.
+     */
+    private OsoriConnection osoriConnection = new OsoriConnection();
 
     /**
      * Repository for accessing and managing LPVSLicense entities in the database.
@@ -198,7 +216,9 @@ public class LPVSLicenseService {
      * @param license The license to add.
      */
     public void addLicenseToList(LPVSLicense license) {
-        licenses.add(license);
+        if (!licenses.contains(license)) {
+            licenses.add(license);
+        }
     }
 
     /**
@@ -212,8 +232,85 @@ public class LPVSLicenseService {
             if (license.getLicenseName().equalsIgnoreCase(name)) {
                 return license;
             }
+            if (license.getAlternativeNames() != null
+                    && !license.getAlternativeNames().trim().isEmpty()) {
+                String[] names = license.getAlternativeNames().split(",");
+                for (String n : names) {
+                    if (n.trim().equalsIgnoreCase(name)) {
+                        return license;
+                    }
+                }
+            }
         }
         return null;
+    }
+
+    /**
+     * Gets a license object from the database using the specified license SPDX ID and license name.
+     * @param licenseSpdxId The license SPDX ID to search for
+     * @param licenseName The license name to use if the license is not found in the database
+     * @return The license object that was found or created
+     */
+    public LPVSLicense getLicenseBySpdxIdAndName(
+            String licenseSpdxId, Optional<String> licenseName) {
+        String licName = licenseName.orElse(licenseSpdxId);
+        // check by license SPDX ID
+        LPVSLicense lic = findLicenseBySPDX(licenseSpdxId);
+        if (null == lic) {
+            // check by license name and alternative names
+            lic = findLicenseByName(licName);
+        }
+        // create new license
+        if (lic == null) {
+
+            if (osoriDbUrl != null && !osoriDbUrl.trim().isEmpty()) {
+                // check OSORI DB and try to find the license there
+                try {
+                    HttpURLConnection connection =
+                            osoriConnection.createConnection(osoriDbUrl, licenseSpdxId);
+                    connection.setRequestMethod("GET");
+                    connection.connect();
+
+                    if (connection.getResponseCode() != 200) {
+                        throw new Exception(
+                                "HTTP error code ("
+                                        + connection.getResponseCode()
+                                        + "): "
+                                        + connection.getResponseMessage());
+                    }
+
+                    BufferedReader in =
+                            LPVSPayloadUtil.createBufferReader(
+                                    LPVSPayloadUtil.createInputStreamReader(
+                                            connection.getInputStream()));
+                    String inputLine;
+                    StringBuffer response = new StringBuffer();
+
+                    while ((inputLine = in.readLine()) != null) {
+                        response.append(inputLine);
+                    }
+                    in.close();
+
+                    // if found, create new license with field values taken from OSORI DB
+                    lic = LPVSPayloadUtil.convertOsoriDbResponseToLicense(response.toString());
+                } catch (Exception e) {
+                    log.error("Error connecting OSORI DB: " + e.getMessage());
+                }
+            }
+
+            if (lic == null) {
+                // if not found, create new license with default field values
+                lic = new LPVSLicense();
+                lic.setSpdxId(licenseSpdxId);
+                lic.setLicenseName(licName);
+                lic.setAlternativeNames(null);
+                lic.setAccess("UNREVIEWED");
+            }
+            // save new license and add it to the license list
+            lic = lpvsLicenseRepository.saveAndFlush(lic);
+        }
+        addLicenseToList(lic);
+        return lic;
     }
 
     /**
@@ -227,23 +324,6 @@ public class LPVSLicenseService {
         if (!licenseConflicts.contains(conf)) {
             licenseConflicts.add(conf);
         }
-    }
-
-    /**
-     * Checks a license by SPDX identifier and returns the corresponding license object.
-     *
-     * @param spdxId SPDX identifier of the license.
-     * @return The corresponding LPVSLicense object.
-     */
-    public LPVSLicense checkLicense(String spdxId) {
-        LPVSLicense newLicense = findLicenseBySPDX(spdxId);
-        if (newLicense == null && spdxId.contains("+")) {
-            newLicense = findLicenseBySPDX(spdxId.replace("+", "") + "-or-later");
-        }
-        if (newLicense == null && spdxId.contains("+")) {
-            newLicense = findLicenseBySPDX(spdxId.replace("+", "") + "-only");
-        }
-        return newLicense;
     }
 
     /**
@@ -367,6 +447,30 @@ public class LPVSLicenseService {
         @Override
         public int hashCode() {
             return Objects.hash(l1, l2);
+        }
+    }
+
+    /**
+     * The OsoriConnection class provides methods for creating a connection to the OSORI database.
+     */
+    @NoArgsConstructor
+    public static class OsoriConnection {
+
+        /**
+         * Creates a connection to the OSORI database using the specified OSORI server and license SPDX identifier.
+         *
+         * @param osoriDbUrl     The URL of the OSORI server.
+         * @param licenseSpdxId  The license SPDX identifier.
+         * @return A HttpURLConnection object representing the connection to the OSORI database.
+         */
+        public HttpURLConnection createConnection(String osoriDbUrl, String licenseSpdxId)
+                throws IOException {
+            URL url =
+                    new URL(
+                            osoriDbUrl
+                                    + "/api/v1/user/licenses/spdx_identifier?searchWord="
+                                    + URLEncoder.encode(licenseSpdxId, "UTF-8"));
+            return (HttpURLConnection) url.openConnection();
         }
     }
 }

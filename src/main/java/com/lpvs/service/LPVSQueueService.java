@@ -7,6 +7,7 @@
 package com.lpvs.service;
 
 import com.lpvs.entity.LPVSFile;
+import com.lpvs.entity.LPVSLicense;
 import com.lpvs.entity.LPVSPullRequest;
 import com.lpvs.entity.LPVSQueue;
 import com.lpvs.entity.enums.LPVSPullRequestStatus;
@@ -228,9 +229,11 @@ public class LPVSQueueService {
                 }
                 // check repository license
                 String repositoryLicense = gitHubService.getRepositoryLicense(webhookConfig);
-                if (licenseService.checkLicense(repositoryLicense) != null) {
-                    webhookConfig.setRepositoryLicense(
-                            licenseService.checkLicense(repositoryLicense).getSpdxId());
+                LPVSLicense repoLicense =
+                        licenseService.getLicenseBySpdxIdAndName(
+                                repositoryLicense, Optional.empty());
+                if (repoLicense != null) {
+                    webhookConfig.setRepositoryLicense(repoLicense.getSpdxId());
                 } else if (licenseService.findLicenseByName(repositoryLicense) != null) {
                     webhookConfig.setRepositoryLicense(
                             licenseService.findLicenseByName(repositoryLicense).getSpdxId());
