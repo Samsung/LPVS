@@ -14,7 +14,7 @@ import com.lpvs.entity.LPVSQueue;
 import com.lpvs.repository.LPVSLicenseRepository;
 import com.lpvs.service.LPVSLicenseService;
 import com.lpvs.service.scan.LPVSScanService;
-import com.lpvs.util.LPVSWebhookUtil;
+import com.lpvs.util.LPVSPayloadUtil;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.extern.slf4j.Slf4j;
@@ -70,28 +70,6 @@ public class LPVSScanossDetectService implements LPVSScanService {
     }
 
     /**
-     * Creates an InputStreamReader for the given process, handling UTF-8 encoding.
-     *
-     * @param process The process whose error stream InputStreamReader is to be created.
-     * @return An InputStreamReader for the error stream of the process.
-     * @throws UnsupportedEncodingException If UTF-8 encoding is not supported.
-     */
-    protected InputStreamReader createInputStreamReader(Process process)
-            throws UnsupportedEncodingException {
-        return new InputStreamReader(process.getErrorStream(), "UTF-8");
-    }
-
-    /**
-     * Creates a BufferedReader for the given InputStreamReader.
-     *
-     * @param inputStreamReader The InputStreamReader to create a BufferedReader from.
-     * @return A BufferedReader for the given InputStreamReader.
-     */
-    protected BufferedReader createBufferReader(InputStreamReader inputStreamReader) {
-        return new BufferedReader(inputStreamReader);
-    }
-
-    /**
      * Initiates the Scanoss scan for the specified LPVSQueue and file path.
      *
      * @param webhookConfig The LPVSQueue representing the GitHub webhook configuration.
@@ -133,7 +111,10 @@ public class LPVSScanossDetectService implements LPVSScanService {
                 log.error("Scanoss scanner terminated with non-zero code. Terminating.");
                 BufferedReader output = null;
                 try {
-                    output = createBufferReader(createInputStreamReader(process));
+                    output =
+                            LPVSPayloadUtil.createBufferReader(
+                                    LPVSPayloadUtil.createInputStreamReader(
+                                            process.getErrorStream()));
                     log.error(output.readLine());
                     throw new Exception(
                             "Scanoss scanner terminated with non-zero code. Terminating.");
@@ -173,9 +154,9 @@ public class LPVSScanossDetectService implements LPVSScanService {
                                                 + File.separator
                                                 + "Results"
                                                 + File.separator
-                                                + LPVSWebhookUtil.getRepositoryName(webhookConfig)
+                                                + LPVSPayloadUtil.getRepositoryName(webhookConfig)
                                                 + File.separator
-                                                + LPVSWebhookUtil.getPullRequestId(webhookConfig)
+                                                + LPVSPayloadUtil.getPullRequestId(webhookConfig)
                                                 + ".json"));
             } else {
                 reader =
@@ -185,7 +166,7 @@ public class LPVSScanossDetectService implements LPVSScanService {
                                                 + File.separator
                                                 + "Results"
                                                 + File.separator
-                                                + LPVSWebhookUtil.getRepositoryName(webhookConfig)
+                                                + LPVSPayloadUtil.getRepositoryName(webhookConfig)
                                                 + File.separator
                                                 + webhookConfig.getHeadCommitSHA()
                                                 + ".json"));

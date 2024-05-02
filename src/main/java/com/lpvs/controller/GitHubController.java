@@ -13,7 +13,7 @@ import com.lpvs.service.LPVSGitHubConnectionService;
 import com.lpvs.service.LPVSGitHubService;
 import com.lpvs.service.LPVSQueueService;
 import com.lpvs.util.LPVSExitHandler;
-import com.lpvs.util.LPVSWebhookUtil;
+import com.lpvs.util.LPVSPayloadUtil;
 import com.lpvs.entity.LPVSResponseWrapper;
 import lombok.extern.slf4j.Slf4j;
 
@@ -146,13 +146,13 @@ public class GitHubController {
         if (!StringUtils.hasText(signature) || signature.length() > 72) {
             log.error("Received empty or too long signature");
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .headers(LPVSWebhookUtil.generateSecurityHeaders())
+                    .headers(LPVSPayloadUtil.generateSecurityHeaders())
                     .body(new LPVSResponseWrapper(ERROR));
         }
         if (!GITHUB_SECRET.trim().isEmpty() && wrongSecret(signature, payload)) {
             log.error("Received empty or incorrect GITHUB_SECRET");
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .headers(LPVSWebhookUtil.generateSecurityHeaders())
+                    .headers(LPVSPayloadUtil.generateSecurityHeaders())
                     .body(new LPVSResponseWrapper(ERROR));
         }
 
@@ -161,10 +161,10 @@ public class GitHubController {
             log.debug("Response to empty payload sent");
             // Implement Content Security Policy (CSP) headers
             return ResponseEntity.ok()
-                    .headers(LPVSWebhookUtil.generateSecurityHeaders())
+                    .headers(LPVSPayloadUtil.generateSecurityHeaders())
                     .body(new LPVSResponseWrapper(SUCCESS));
-        } else if (LPVSWebhookUtil.checkPayload(payload)) {
-            LPVSQueue webhookConfig = LPVSWebhookUtil.getGitHubWebhookConfig(payload);
+        } else if (LPVSPayloadUtil.checkPayload(payload)) {
+            LPVSQueue webhookConfig = LPVSPayloadUtil.getGitHubWebhookConfig(payload);
             webhookConfig.setDate(new Date());
             webhookConfig.setReviewSystemType("github");
             queueRepository.save(webhookConfig);
@@ -177,7 +177,7 @@ public class GitHubController {
 
         log.debug("Response sent");
         return ResponseEntity.ok()
-                .headers(LPVSWebhookUtil.generateSecurityHeaders())
+                .headers(LPVSPayloadUtil.generateSecurityHeaders())
                 .body(new LPVSResponseWrapper(SUCCESS));
     }
 
@@ -208,7 +208,7 @@ public class GitHubController {
         if (GITHUB_SECRET.trim().isEmpty()) {
             log.error("Received empty GITHUB_SECRET");
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .headers(LPVSWebhookUtil.generateSecurityHeaders())
+                    .headers(LPVSPayloadUtil.generateSecurityHeaders())
                     .body(new LPVSResponseWrapper(ERROR));
         }
 
@@ -220,7 +220,7 @@ public class GitHubController {
             GitHub gitHub = gitHubConnectionService.connectToGitHubApi();
             GHRepository repository = gitHub.getRepository(gitHubOrg + "/" + gitHubRepo);
             GHPullRequest pullRequest = repository.getPullRequest(prNumber);
-            LPVSQueue scanConfig = LPVSWebhookUtil.getGitHubWebhookConfig(repository, pullRequest);
+            LPVSQueue scanConfig = LPVSPayloadUtil.getGitHubWebhookConfig(repository, pullRequest);
             scanConfig.setAction(LPVSPullRequestAction.SINGLE_SCAN);
             scanConfig.setAttempts(0);
             scanConfig.setDate(new Date());
@@ -233,13 +233,13 @@ public class GitHubController {
             log.debug("Put Scan config to the queue done");
             log.debug("Response sent");
             return ResponseEntity.ok()
-                    .headers(LPVSWebhookUtil.generateSecurityHeaders())
+                    .headers(LPVSPayloadUtil.generateSecurityHeaders())
                     .body(new LPVSResponseWrapper(SUCCESS));
         } catch (Exception e) {
             log.error("Can't authorize single pull request scan " + e.getMessage());
         }
         return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                .headers(LPVSWebhookUtil.generateSecurityHeaders())
+                .headers(LPVSPayloadUtil.generateSecurityHeaders())
                 .body(new LPVSResponseWrapper(ERROR));
     }
 

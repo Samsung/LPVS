@@ -72,7 +72,7 @@ public class LPVSCommentUtilTest {
         LPVSFile file = new LPVSFile();
         file.setFilePath("exampleFile.txt");
         file.setMatchedLines("all");
-        Mockito.when(LPVSWebhookUtil.getRepositoryUrl(webhookConfig))
+        Mockito.when(LPVSPayloadUtil.getRepositoryUrl(webhookConfig))
                 .thenReturn("https://github.com/repo");
         Mockito.when(webhookConfig.getHeadCommitSHA()).thenReturn("headCommitSHA");
         String result = LPVSCommentUtil.getMatchedLinesAsLink(webhookConfig, file, LPVSVcs.GITHUB);
@@ -86,7 +86,7 @@ public class LPVSCommentUtilTest {
         LPVSFile file = new LPVSFile();
         file.setFilePath("exampleFile.txt");
         file.setMatchedLines("1-5,7,9-12");
-        Mockito.when(LPVSWebhookUtil.getRepositoryUrl(webhookConfig))
+        Mockito.when(LPVSPayloadUtil.getRepositoryUrl(webhookConfig))
                 .thenReturn("https://github.com/repo");
         Mockito.when(webhookConfig.getHeadCommitSHA()).thenReturn("headCommitSHA");
         String result = LPVSCommentUtil.getMatchedLinesAsLink(webhookConfig, file, LPVSVcs.GITHUB);
@@ -102,7 +102,7 @@ public class LPVSCommentUtilTest {
         LPVSFile file = new LPVSFile();
         file.setFilePath("exampleFile.txt");
         file.setMatchedLines("all");
-        Mockito.when(LPVSWebhookUtil.getRepositoryUrl(webhookConfig))
+        Mockito.when(LPVSPayloadUtil.getRepositoryUrl(webhookConfig))
                 .thenReturn("https://gerrit.org/repo");
         Mockito.when(webhookConfig.getHeadCommitSHA()).thenReturn("headCommitSHA");
         String result = LPVSCommentUtil.getMatchedLinesAsLink(webhookConfig, file, LPVSVcs.GERRIT);
@@ -114,7 +114,7 @@ public class LPVSCommentUtilTest {
         LPVSFile file = new LPVSFile();
         file.setFilePath("exampleFile.txt");
         file.setMatchedLines("1-5,7,9-12");
-        Mockito.when(LPVSWebhookUtil.getRepositoryUrl(webhookConfig))
+        Mockito.when(LPVSPayloadUtil.getRepositoryUrl(webhookConfig))
                 .thenReturn("https://gerrit.org/repo");
         Mockito.when(webhookConfig.getHeadCommitSHA()).thenReturn("headCommitSHA");
         String result = LPVSCommentUtil.getMatchedLinesAsLink(webhookConfig, file, LPVSVcs.GERRIT);

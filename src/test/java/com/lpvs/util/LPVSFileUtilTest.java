@@ -108,10 +108,10 @@ public class LPVSFileUtilTest {
         LPVSQueue mockWebhookConfig = Mockito.mock(LPVSQueue.class);
         Mockito.when(mockWebhookConfig.getHeadCommitSHA()).thenReturn("abcdef123");
 
-        try (MockedStatic<LPVSWebhookUtil> mocked_static_file_util =
-                mockStatic(LPVSWebhookUtil.class)) {
+        try (MockedStatic<LPVSPayloadUtil> mocked_static_file_util =
+                mockStatic(LPVSPayloadUtil.class)) {
             mocked_static_file_util
-                    .when(() -> LPVSWebhookUtil.getRepositoryName(Mockito.any()))
+                    .when(() -> LPVSPayloadUtil.getRepositoryName(Mockito.any()))
                     .thenReturn("repoName");
 
             String result = LPVSFileUtil.getLocalDirectoryPath(mockWebhookConfig);
@@ -132,13 +132,13 @@ public class LPVSFileUtilTest {
         LPVSQueue mockWebhookConfig = Mockito.mock(LPVSQueue.class);
         Mockito.when(mockWebhookConfig.getHeadCommitSHA()).thenReturn("");
 
-        try (MockedStatic<LPVSWebhookUtil> mocked_static_file_util =
-                mockStatic(LPVSWebhookUtil.class)) {
+        try (MockedStatic<LPVSPayloadUtil> mocked_static_file_util =
+                mockStatic(LPVSPayloadUtil.class)) {
             mocked_static_file_util
-                    .when(() -> LPVSWebhookUtil.getRepositoryName(Mockito.any()))
+                    .when(() -> LPVSPayloadUtil.getRepositoryName(Mockito.any()))
                     .thenReturn("repoName");
             mocked_static_file_util
-                    .when(() -> LPVSWebhookUtil.getPullRequestId(Mockito.any()))
+                    .when(() -> LPVSPayloadUtil.getPullRequestId(Mockito.any()))
                     .thenReturn("1");
 
             String result = LPVSFileUtil.getLocalDirectoryPath(mockWebhookConfig);
@@ -159,13 +159,13 @@ public class LPVSFileUtilTest {
         LPVSQueue mockWebhookConfig = Mockito.mock(LPVSQueue.class);
         Mockito.when(mockWebhookConfig.getHeadCommitSHA()).thenReturn(null);
 
-        try (MockedStatic<LPVSWebhookUtil> mocked_static_file_util =
-                mockStatic(LPVSWebhookUtil.class)) {
+        try (MockedStatic<LPVSPayloadUtil> mocked_static_file_util =
+                mockStatic(LPVSPayloadUtil.class)) {
             mocked_static_file_util
-                    .when(() -> LPVSWebhookUtil.getRepositoryName(Mockito.any()))
+                    .when(() -> LPVSPayloadUtil.getRepositoryName(Mockito.any()))
                     .thenReturn("repoName");
             mocked_static_file_util
-                    .when(() -> LPVSWebhookUtil.getPullRequestId(Mockito.any()))
+                    .when(() -> LPVSPayloadUtil.getPullRequestId(Mockito.any()))
                     .thenReturn("pullRequestId");
 
             String result = LPVSFileUtil.getLocalDirectoryPath(mockWebhookConfig);
@@ -186,10 +186,10 @@ public class LPVSFileUtilTest {
         LPVSQueue mockWebhookConfig = Mockito.mock(LPVSQueue.class);
         Mockito.when(mockWebhookConfig.getHeadCommitSHA()).thenReturn("abcdef123");
 
-        try (MockedStatic<LPVSWebhookUtil> mocked_static_file_util =
-                mockStatic(LPVSWebhookUtil.class)) {
+        try (MockedStatic<LPVSPayloadUtil> mocked_static_file_util =
+                mockStatic(LPVSPayloadUtil.class)) {
             mocked_static_file_util
-                    .when(() -> LPVSWebhookUtil.getRepositoryName(Mockito.any()))
+                    .when(() -> LPVSPayloadUtil.getRepositoryName(Mockito.any()))
                     .thenReturn("repoName");
 
             String result = LPVSFileUtil.getScanResultsJsonFilePath(mockWebhookConfig);
@@ -210,13 +210,13 @@ public class LPVSFileUtilTest {
         LPVSQueue mockWebhookConfig = Mockito.mock(LPVSQueue.class);
         Mockito.when(mockWebhookConfig.getHeadCommitSHA()).thenReturn("");
 
-        try (MockedStatic<LPVSWebhookUtil> mocked_static_file_util =
-                mockStatic(LPVSWebhookUtil.class)) {
+        try (MockedStatic<LPVSPayloadUtil> mocked_static_file_util =
+                mockStatic(LPVSPayloadUtil.class)) {
             mocked_static_file_util
-                    .when(() -> LPVSWebhookUtil.getRepositoryName(Mockito.any()))
+                    .when(() -> LPVSPayloadUtil.getRepositoryName(Mockito.any()))
                     .thenReturn("repoName");
             mocked_static_file_util
-                    .when(() -> LPVSWebhookUtil.getPullRequestId(Mockito.any()))
+                    .when(() -> LPVSPayloadUtil.getPullRequestId(Mockito.any()))
                     .thenReturn("1");
 
             String result = LPVSFileUtil.getScanResultsJsonFilePath(mockWebhookConfig);
@@ -237,13 +237,13 @@ public class LPVSFileUtilTest {
         LPVSQueue mockWebhookConfig = Mockito.mock(LPVSQueue.class);
         Mockito.when(mockWebhookConfig.getHeadCommitSHA()).thenReturn(null);
 
-        try (MockedStatic<LPVSWebhookUtil> mocked_static_file_util =
-                mockStatic(LPVSWebhookUtil.class)) {
+        try (MockedStatic<LPVSPayloadUtil> mocked_static_file_util =
+                mockStatic(LPVSPayloadUtil.class)) {
             mocked_static_file_util
-                    .when(() -> LPVSWebhookUtil.getRepositoryName(Mockito.any()))
+                    .when(() -> LPVSPayloadUtil.getRepositoryName(Mockito.any()))
                     .thenReturn("repoName");
             mocked_static_file_util
-                    .when(() -> LPVSWebhookUtil.getPullRequestId(Mockito.any()))
+                    .when(() -> LPVSPayloadUtil.getPullRequestId(Mockito.any()))
                     .thenReturn("pullRequestId");
 
             String result = LPVSFileUtil.getScanResultsJsonFilePath(mockWebhookConfig);
@@ -262,10 +262,10 @@ public class LPVSFileUtilTest {
     @Test
     public void testGetScanResultsDirectoryPath() {
         LPVSQueue mockWebhookConfig = Mockito.mock(LPVSQueue.class);
-        try (MockedStatic<LPVSWebhookUtil> mocked_static_file_util =
-                mockStatic(LPVSWebhookUtil.class)) {
+        try (MockedStatic<LPVSPayloadUtil> mocked_static_file_util =
+                mockStatic(LPVSPayloadUtil.class)) {
             mocked_static_file_util
-                    .when(() -> LPVSWebhookUtil.getRepositoryName(Mockito.any()))
+                    .when(() -> LPVSPayloadUtil.getRepositoryName(Mockito.any()))
                     .thenReturn("repoName");
             String result = LPVSFileUtil.getScanResultsDirectoryPath(mockWebhookConfig);
             String expectedPath =

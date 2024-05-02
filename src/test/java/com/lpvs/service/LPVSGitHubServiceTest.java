@@ -19,7 +19,7 @@ import com.lpvs.repository.LPVSPullRequestRepository;
 import com.lpvs.util.LPVSCommentUtil;
 import com.lpvs.util.LPVSExitHandler;
 import com.lpvs.util.LPVSFileUtil;
-import com.lpvs.util.LPVSWebhookUtil;
+import com.lpvs.util.LPVSPayloadUtil;
 import lombok.extern.slf4j.Slf4j;
 import uk.org.webcompere.systemstubs.environment.EnvironmentVariables;
 import uk.org.webcompere.systemstubs.jupiter.SystemStub;
@@ -209,9 +209,9 @@ public class LPVSGitHubServiceTest {
 
             try {
                 when(mocked_instance_gh.getRepository(
-                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                LPVSPayloadUtil.getRepositoryOrganization(webhookConfig)
                                         + "/"
-                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig)))
+                                        + LPVSPayloadUtil.getRepositoryName(webhookConfig)))
                         .thenReturn(mocked_repo);
             } catch (IOException e) {
                 log.error("mocked_repo.getRepository error " + e);
@@ -264,9 +264,9 @@ public class LPVSGitHubServiceTest {
                 try {
                     verify(mocked_instance_gh, times(1))
                             .getRepository(
-                                    LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                    LPVSPayloadUtil.getRepositoryOrganization(webhookConfig)
                                             + "/"
-                                            + LPVSWebhookUtil.getRepositoryName(webhookConfig));
+                                            + LPVSPayloadUtil.getRepositoryName(webhookConfig));
                 } catch (IOException e) {
                     log.error(
                             "TestGetPullRequestFiles__ApiUrlAbsentPullPresentNoRescan.testGetPullRequestFiles__ApiUrlAbsentPullPresentNoRescan() error "
@@ -347,9 +347,9 @@ public class LPVSGitHubServiceTest {
 
             try {
                 when(mocked_instance_gh.getRepository(
-                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                LPVSPayloadUtil.getRepositoryOrganization(webhookConfig)
                                         + "/"
-                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig)))
+                                        + LPVSPayloadUtil.getRepositoryName(webhookConfig)))
                         .thenReturn(mocked_repo);
             } catch (IOException e) {
                 log.error("mocked_repo.getRepository error " + e);
@@ -410,9 +410,9 @@ public class LPVSGitHubServiceTest {
                 try {
                     verify(mocked_instance_gh, times(1))
                             .getRepository(
-                                    LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                    LPVSPayloadUtil.getRepositoryOrganization(webhookConfig)
                                             + "/"
-                                            + LPVSWebhookUtil.getRepositoryName(webhookConfig));
+                                            + LPVSPayloadUtil.getRepositoryName(webhookConfig));
                 } catch (IOException e) {
                     log.error(
                             "TestGetPullRequestFiles__ApiUrlPresentPullPresentNoRescan.testGetPullRequestFiles__ApiUrlPresentPullPresentNoRescan() error "
@@ -494,9 +494,9 @@ public class LPVSGitHubServiceTest {
 
             try {
                 when(mocked_instance_gh.getRepository(
-                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                LPVSPayloadUtil.getRepositoryOrganization(webhookConfig)
                                         + "/"
-                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig)))
+                                        + LPVSPayloadUtil.getRepositoryName(webhookConfig)))
                         .thenReturn(mocked_repo);
             } catch (IOException e) {
                 log.error("mocked_repo.getRepository error " + e);
@@ -557,9 +557,9 @@ public class LPVSGitHubServiceTest {
                 try {
                     verify(mocked_instance_gh, times(1))
                             .getRepository(
-                                    LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                    LPVSPayloadUtil.getRepositoryOrganization(webhookConfig)
                                             + "/"
-                                            + LPVSWebhookUtil.getRepositoryName(webhookConfig));
+                                            + LPVSPayloadUtil.getRepositoryName(webhookConfig));
                 } catch (IOException e) {
                     log.error(
                             "TestGetPullRequestFiles__ApiUrlPresentPullPresentNoRescan.testGetPullRequestFiles__ApiUrlPresentPullPresentNoRescan() error "
@@ -627,9 +627,9 @@ public class LPVSGitHubServiceTest {
 
             try {
                 when(mocked_instance_gh.getRepository(
-                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                LPVSPayloadUtil.getRepositoryOrganization(webhookConfig)
                                         + "/"
-                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig)))
+                                        + LPVSPayloadUtil.getRepositoryName(webhookConfig)))
                         .thenReturn(mocked_repo);
             } catch (IOException e) {
                 log.error("mocked_repo.getRepository error " + e);
@@ -671,9 +671,9 @@ public class LPVSGitHubServiceTest {
                 try {
                     verify(mocked_instance_gh, times(1))
                             .getRepository(
-                                    LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                    LPVSPayloadUtil.getRepositoryOrganization(webhookConfig)
                                             + "/"
-                                            + LPVSWebhookUtil.getRepositoryName(webhookConfig));
+                                            + LPVSPayloadUtil.getRepositoryName(webhookConfig));
                 } catch (IOException e) {
                     log.error(
                             "TestGetPullRequestFiles__ApiUrlAbsentPullAbsentNoRescan.testGetPullRequestFiles__ApiUrlAbsentPullAbsentNoRescan() error "
@@ -736,9 +736,9 @@ public class LPVSGitHubServiceTest {
 
             try {
                 when(mocked_instance_gh.getRepository(
-                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                LPVSPayloadUtil.getRepositoryOrganization(webhookConfig)
                                         + "/"
-                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig)))
+                                        + LPVSPayloadUtil.getRepositoryName(webhookConfig)))
                         .thenReturn(mocked_repo);
             } catch (IOException e) {
                 log.error("mocked_repo.getRepository error " + e);
@@ -787,9 +787,9 @@ public class LPVSGitHubServiceTest {
                 try {
                     verify(mocked_instance_gh, times(1))
                             .getRepository(
-                                    LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                    LPVSPayloadUtil.getRepositoryOrganization(webhookConfig)
                                             + "/"
-                                            + LPVSWebhookUtil.getRepositoryName(webhookConfig));
+                                            + LPVSPayloadUtil.getRepositoryName(webhookConfig));
                 } catch (IOException e) {
                     log.error(
                             "TestGetPullRequestFiles__ApiUrlPresentPullAbsentNoRescan.testGetPullRequestFiles__ApiUrlPresentPullAbsentNoRescan() error "
@@ -847,9 +847,9 @@ public class LPVSGitHubServiceTest {
 
             try {
                 when(mocked_instance_gh.getRepository(
-                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                LPVSPayloadUtil.getRepositoryOrganization(webhookConfig)
                                         + "/"
-                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig)))
+                                        + LPVSPayloadUtil.getRepositoryName(webhookConfig)))
                         .thenReturn(mocked_repo);
             } catch (IOException e) {
                 log.error("mocked_repo.getRepository error " + e);
@@ -885,9 +885,9 @@ public class LPVSGitHubServiceTest {
                 try {
                     verify(mocked_instance_gh, times(1))
                             .getRepository(
-                                    LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                    LPVSPayloadUtil.getRepositoryOrganization(webhookConfig)
                                             + "/"
-                                            + LPVSWebhookUtil.getRepositoryName(webhookConfig));
+                                            + LPVSPayloadUtil.getRepositoryName(webhookConfig));
                 } catch (IOException e) {
                     log.error(
                             "TestGetPullRequestFiles__ApiUrlAbsentPullExceptionNoRescan.testGetPullRequestFiles__ApiUrlAbsentPullExceptionNoRescan() error "
@@ -945,9 +945,9 @@ public class LPVSGitHubServiceTest {
 
             try {
                 when(mocked_instance_gh.getRepository(
-                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                LPVSPayloadUtil.getRepositoryOrganization(webhookConfig)
                                         + "/"
-                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig)))
+                                        + LPVSPayloadUtil.getRepositoryName(webhookConfig)))
                         .thenReturn(mocked_repo);
             } catch (IOException e) {
                 log.error("mocked_repo.getRepository error " + e);
@@ -989,9 +989,9 @@ public class LPVSGitHubServiceTest {
                 try {
                     verify(mocked_instance_gh, times(1))
                             .getRepository(
-                                    LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                    LPVSPayloadUtil.getRepositoryOrganization(webhookConfig)
                                             + "/"
-                                            + LPVSWebhookUtil.getRepositoryName(webhookConfig));
+                                            + LPVSPayloadUtil.getRepositoryName(webhookConfig));
                 } catch (IOException e) {
                     log.error(
                             "TestGetPullRequestFiles__ApiUrlPresentPullExceptionNoRescan.testGetPullRequestFiles__ApiUrlPresentPullExceptionNoRescan() error "
@@ -1066,9 +1066,9 @@ public class LPVSGitHubServiceTest {
 
             try {
                 when(mocked_instance_gh.getRepository(
-                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                LPVSPayloadUtil.getRepositoryOrganization(webhookConfig)
                                         + "/"
-                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig)))
+                                        + LPVSPayloadUtil.getRepositoryName(webhookConfig)))
                         .thenReturn(mocked_repo);
             } catch (IOException e) {
                 log.error("mocked_repo.getRepository error " + e);
@@ -1130,9 +1130,9 @@ public class LPVSGitHubServiceTest {
                 try {
                     verify(mocked_instance_gh, times(1))
                             .getRepository(
-                                    LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                    LPVSPayloadUtil.getRepositoryOrganization(webhookConfig)
                                             + "/"
-                                            + LPVSWebhookUtil.getRepositoryName(webhookConfig));
+                                            + LPVSPayloadUtil.getRepositoryName(webhookConfig));
                 } catch (IOException e) {
                     log.error(
                             "TestGetPullRequestFiles__ApiUrlPresentPullPresentRescanPresent.testGetPullRequestFiles__ApiUrlPresentPullPresentRescanPresent() error "
@@ -1199,9 +1199,9 @@ public class LPVSGitHubServiceTest {
 
             try {
                 when(mocked_instance_gh.getRepository(
-                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                LPVSPayloadUtil.getRepositoryOrganization(webhookConfig)
                                         + "/"
-                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig)))
+                                        + LPVSPayloadUtil.getRepositoryName(webhookConfig)))
                         .thenReturn(mocked_repo);
             } catch (IOException e) {
                 log.error("mocked_repo.getRepository error " + e);
@@ -1241,9 +1241,9 @@ public class LPVSGitHubServiceTest {
                 try {
                     verify(mocked_instance_gh, times(1))
                             .getRepository(
-                                    LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                    LPVSPayloadUtil.getRepositoryOrganization(webhookConfig)
                                             + "/"
-                                            + LPVSWebhookUtil.getRepositoryName(webhookConfig));
+                                            + LPVSPayloadUtil.getRepositoryName(webhookConfig));
                 } catch (IOException e) {
                     log.error(
                             "TestSetPendingCheck__ApiUrlAbsentNormalExecution.testSetPendingCheck__ApiUrlAbsentNormalExecution() error "
@@ -1307,9 +1307,9 @@ public class LPVSGitHubServiceTest {
 
             try {
                 when(mocked_instance_gh.getRepository(
-                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                LPVSPayloadUtil.getRepositoryOrganization(webhookConfig)
                                         + "/"
-                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig)))
+                                        + LPVSPayloadUtil.getRepositoryName(webhookConfig)))
                         .thenReturn(mocked_repo);
             } catch (IOException e) {
                 log.error("mocked_repo.getRepository error " + e);
@@ -1356,9 +1356,9 @@ public class LPVSGitHubServiceTest {
                 try {
                     verify(mocked_instance_gh, times(1))
                             .getRepository(
-                                    LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                    LPVSPayloadUtil.getRepositoryOrganization(webhookConfig)
                                             + "/"
-                                            + LPVSWebhookUtil.getRepositoryName(webhookConfig));
+                                            + LPVSPayloadUtil.getRepositoryName(webhookConfig));
                 } catch (IOException e) {
                     log.error(
                             "TestSetPendingCheck__ApiUrlPresentNormalExecution.testSetPendingCheck__ApiUrlPresentNormalExecution() error "
@@ -1523,9 +1523,9 @@ public class LPVSGitHubServiceTest {
 
             try {
                 when(mocked_instance_gh.getRepository(
-                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                LPVSPayloadUtil.getRepositoryOrganization(webhookConfig)
                                         + "/"
-                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig)))
+                                        + LPVSPayloadUtil.getRepositoryName(webhookConfig)))
                         .thenReturn(mocked_repo);
             } catch (IOException e) {
                 log.error("mocked_repo.getRepository error " + e);
@@ -1565,9 +1565,9 @@ public class LPVSGitHubServiceTest {
                 try {
                     verify(mocked_instance_gh, times(1))
                             .getRepository(
-                                    LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                    LPVSPayloadUtil.getRepositoryOrganization(webhookConfig)
                                             + "/"
-                                            + LPVSWebhookUtil.getRepositoryName(webhookConfig));
+                                            + LPVSPayloadUtil.getRepositoryName(webhookConfig));
                 } catch (IOException e) {
                     log.error(
                             "TestSetErrorCheck__ApiUrlAbsentNormalExecution.testSetErrorCheck__ApiUrlAbsentNormalExecution() error "
@@ -1631,9 +1631,9 @@ public class LPVSGitHubServiceTest {
 
             try {
                 when(mocked_instance_gh.getRepository(
-                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                LPVSPayloadUtil.getRepositoryOrganization(webhookConfig)
                                         + "/"
-                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig)))
+                                        + LPVSPayloadUtil.getRepositoryName(webhookConfig)))
                         .thenReturn(mocked_repo);
             } catch (IOException e) {
                 log.error("mocked_repo.getRepository error " + e);
@@ -1680,9 +1680,9 @@ public class LPVSGitHubServiceTest {
                 try {
                     verify(mocked_instance_gh, times(1))
                             .getRepository(
-                                    LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                    LPVSPayloadUtil.getRepositoryOrganization(webhookConfig)
                                             + "/"
-                                            + LPVSWebhookUtil.getRepositoryName(webhookConfig));
+                                            + LPVSPayloadUtil.getRepositoryName(webhookConfig));
                 } catch (IOException e) {
                     log.error(
                             "TestSetErrorCheck__ApiUrlPresentNormalExecution.testSetErrorCheck__ApiUrlPresentNormalExecution() error "
@@ -1858,9 +1858,9 @@ public class LPVSGitHubServiceTest {
 
             try {
                 when(mocked_instance_gh.getRepository(
-                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                LPVSPayloadUtil.getRepositoryOrganization(webhookConfig)
                                         + "/"
-                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig)))
+                                        + LPVSPayloadUtil.getRepositoryName(webhookConfig)))
                         .thenReturn(mocked_repo);
             } catch (IOException e) {
                 log.error("mocked_repo.getRepository error " + e);
@@ -1889,9 +1889,9 @@ public class LPVSGitHubServiceTest {
             try {
                 verify(mocked_instance_gh, times(1))
                         .getRepository(
-                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                LPVSPayloadUtil.getRepositoryOrganization(webhookConfig)
                                         + "/"
-                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig));
+                                        + LPVSPayloadUtil.getRepositoryName(webhookConfig));
             } catch (IOException e) {
                 log.error("TestCommentResults__PrAbsent.testCommentResults__PrAbsent() error " + e);
                 fail();
@@ -1954,9 +1954,9 @@ public class LPVSGitHubServiceTest {
 
             try {
                 when(mocked_instance_gh.getRepository(
-                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                LPVSPayloadUtil.getRepositoryOrganization(webhookConfig)
                                         + "/"
-                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig)))
+                                        + LPVSPayloadUtil.getRepositoryName(webhookConfig)))
                         .thenThrow(
                                 new IOException(
                                         "Test exception for TestCommentResults__CantAuthorize. Normal behavior."));
@@ -1974,9 +1974,9 @@ public class LPVSGitHubServiceTest {
 
                 verify(mocked_instance_gh, times(2))
                         .getRepository(
-                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                LPVSPayloadUtil.getRepositoryOrganization(webhookConfig)
                                         + "/"
-                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig));
+                                        + LPVSPayloadUtil.getRepositoryName(webhookConfig));
             } catch (Exception e) {
                 log.error(
                         "TestCommentResults__CantAuthorize.testCommentResults__CantAuthorize() error "
@@ -2032,9 +2032,9 @@ public class LPVSGitHubServiceTest {
 
             try {
                 when(mocked_instance_gh.getRepository(
-                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                LPVSPayloadUtil.getRepositoryOrganization(webhookConfig)
                                         + "/"
-                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig)))
+                                        + LPVSPayloadUtil.getRepositoryName(webhookConfig)))
                         .thenReturn(mocked_repo);
             } catch (IOException e) {
                 log.error("mocked_repo.getRepository error " + e);
@@ -2063,9 +2063,9 @@ public class LPVSGitHubServiceTest {
             try {
                 verify(mocked_instance_gh, times(1))
                         .getRepository(
-                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                LPVSPayloadUtil.getRepositoryOrganization(webhookConfig)
                                         + "/"
-                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig));
+                                        + LPVSPayloadUtil.getRepositoryName(webhookConfig));
             } catch (IOException e) {
                 log.error(
                         "TestCommentResults__ScanResultsEmpty.testCommentResults__ScanResultsEmpty() error "
@@ -2207,9 +2207,9 @@ public class LPVSGitHubServiceTest {
 
             try {
                 when(mocked_instance_gh.getRepository(
-                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                LPVSPayloadUtil.getRepositoryOrganization(webhookConfig)
                                         + "/"
-                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig)))
+                                        + LPVSPayloadUtil.getRepositoryName(webhookConfig)))
                         .thenReturn(mocked_repo);
             } catch (IOException e) {
                 log.error("mocked_repo.getRepository error " + e);
@@ -2271,9 +2271,9 @@ public class LPVSGitHubServiceTest {
             try {
                 verify(mocked_instance_gh, times(1))
                         .getRepository(
-                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                LPVSPayloadUtil.getRepositoryOrganization(webhookConfig)
                                         + "/"
-                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig));
+                                        + LPVSPayloadUtil.getRepositoryName(webhookConfig));
             } catch (IOException e) {
                 log.error(
                         "TestCommentResults__ProhibitedPresentConflictsPresent.testCommentResults__ProhibitedPresentConflictsPresent() error "
@@ -2330,9 +2330,9 @@ public class LPVSGitHubServiceTest {
             try {
                 verify(mocked_instance_gh, times(1))
                         .getRepository(
-                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                LPVSPayloadUtil.getRepositoryOrganization(webhookConfig)
                                         + "/"
-                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig));
+                                        + LPVSPayloadUtil.getRepositoryName(webhookConfig));
             } catch (IOException e) {
                 log.error(
                         "TestCommentResults__ProhibitedPresentConflictsPresent.testCommentResults__ProhibitedPresentConflictsPresent() error "
@@ -2390,9 +2390,9 @@ public class LPVSGitHubServiceTest {
             try {
                 verify(mocked_instance_gh, times(1))
                         .getRepository(
-                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                LPVSPayloadUtil.getRepositoryOrganization(webhookConfig)
                                         + "/"
-                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig));
+                                        + LPVSPayloadUtil.getRepositoryName(webhookConfig));
             } catch (IOException e) {
                 log.error(
                         "TestCommentResults__ProhibitedPresentConflictsPresent.testCommentResults__ProhibitedPresentConflictsPresent() error "
@@ -2537,9 +2537,9 @@ public class LPVSGitHubServiceTest {
 
             try {
                 when(mocked_instance_gh.getRepository(
-                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                LPVSPayloadUtil.getRepositoryOrganization(webhookConfig)
                                         + "/"
-                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig)))
+                                        + LPVSPayloadUtil.getRepositoryName(webhookConfig)))
                         .thenReturn(mocked_repo);
             } catch (IOException e) {
                 log.error("mocked_repo.getRepository error " + e);
@@ -2600,9 +2600,9 @@ public class LPVSGitHubServiceTest {
             try {
                 verify(mocked_instance_gh, times(1))
                         .getRepository(
-                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                LPVSPayloadUtil.getRepositoryOrganization(webhookConfig)
                                         + "/"
-                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig));
+                                        + LPVSPayloadUtil.getRepositoryName(webhookConfig));
             } catch (IOException e) {
                 log.error(
                         "TestCommentResults__EmptyPresentConflictsPresent.testCommentResults__EmptyPresentConflictsPresent() error "
@@ -2659,9 +2659,9 @@ public class LPVSGitHubServiceTest {
             try {
                 verify(mocked_instance_gh, times(1))
                         .getRepository(
-                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                LPVSPayloadUtil.getRepositoryOrganization(webhookConfig)
                                         + "/"
-                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig));
+                                        + LPVSPayloadUtil.getRepositoryName(webhookConfig));
             } catch (IOException e) {
                 log.error(
                         "TestCommentResults__EmptyPresentConflictsPresent.testCommentResults__EmptyPresentConflictsPresentLicensePresent() error "
@@ -2719,9 +2719,9 @@ public class LPVSGitHubServiceTest {
             try {
                 verify(mocked_instance_gh, times(1))
                         .getRepository(
-                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                LPVSPayloadUtil.getRepositoryOrganization(webhookConfig)
                                         + "/"
-                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig));
+                                        + LPVSPayloadUtil.getRepositoryName(webhookConfig));
             } catch (IOException e) {
                 log.error(
                         "TestCommentResults__EmptyPresentConflictsPresent.testCommentResults__EmptyPresentConflictsPresentLicensePresentAlt() error "
@@ -2868,9 +2868,9 @@ public class LPVSGitHubServiceTest {
 
             try {
                 when(mocked_instance_gh.getRepository(
-                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                LPVSPayloadUtil.getRepositoryOrganization(webhookConfig)
                                         + "/"
-                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig)))
+                                        + LPVSPayloadUtil.getRepositoryName(webhookConfig)))
                         .thenReturn(mocked_repo);
             } catch (IOException e) {
                 log.error("mocked_repo.getRepository error " + e);
@@ -2932,9 +2932,9 @@ public class LPVSGitHubServiceTest {
             try {
                 verify(mocked_instance_gh, times(1))
                         .getRepository(
-                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                LPVSPayloadUtil.getRepositoryOrganization(webhookConfig)
                                         + "/"
-                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig));
+                                        + LPVSPayloadUtil.getRepositoryName(webhookConfig));
             } catch (Exception e) {
                 log.error(
                         "TestCommentResults__UnreviewedPresentConflictsPresent.testCommentResults__RestrictedPresentConflictsPresent() error "
@@ -2991,9 +2991,9 @@ public class LPVSGitHubServiceTest {
             try {
                 verify(mocked_instance_gh, times(1))
                         .getRepository(
-                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                LPVSPayloadUtil.getRepositoryOrganization(webhookConfig)
                                         + "/"
-                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig));
+                                        + LPVSPayloadUtil.getRepositoryName(webhookConfig));
             } catch (Exception e) {
                 log.error(
                         "TestCommentResults__UnreviewedPresentConflictsPresent.testCommentResults__RestrictedPresentConflictsPresentLicensePresent() error "
@@ -3051,9 +3051,9 @@ public class LPVSGitHubServiceTest {
             try {
                 verify(mocked_instance_gh, times(1))
                         .getRepository(
-                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                LPVSPayloadUtil.getRepositoryOrganization(webhookConfig)
                                         + "/"
-                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig));
+                                        + LPVSPayloadUtil.getRepositoryName(webhookConfig));
             } catch (Exception e) {
                 log.error(
                         "TestCommentResults__UnreviewedPresentConflictsPresent.testCommentResults__RestrictedPresentConflictsPresentLicensePresentAlt() error "
@@ -3200,9 +3200,9 @@ public class LPVSGitHubServiceTest {
 
             try {
                 when(mocked_instance_gh.getRepository(
-                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                LPVSPayloadUtil.getRepositoryOrganization(webhookConfig)
                                         + "/"
-                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig)))
+                                        + LPVSPayloadUtil.getRepositoryName(webhookConfig)))
                         .thenReturn(mocked_repo);
             } catch (Exception e) {
                 log.error("mocked_repo.getRepository error " + e);
@@ -3264,9 +3264,9 @@ public class LPVSGitHubServiceTest {
             try {
                 verify(mocked_instance_gh, times(1))
                         .getRepository(
-                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                LPVSPayloadUtil.getRepositoryOrganization(webhookConfig)
                                         + "/"
-                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig));
+                                        + LPVSPayloadUtil.getRepositoryName(webhookConfig));
             } catch (Exception e) {
                 log.error(
                         "TestCommentResults__RestrictedPresentConflictsPresent.testCommentResults__RestrictedPresentConflictsPresent() error "
@@ -3323,9 +3323,9 @@ public class LPVSGitHubServiceTest {
             try {
                 verify(mocked_instance_gh, times(1))
                         .getRepository(
-                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                LPVSPayloadUtil.getRepositoryOrganization(webhookConfig)
                                         + "/"
-                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig));
+                                        + LPVSPayloadUtil.getRepositoryName(webhookConfig));
             } catch (Exception e) {
                 log.error(
                         "TestCommentResults__RestrictedPresentConflictsPresent.testCommentResults__RestrictedPresentConflictsPresentLicensePresent() error "
@@ -3383,9 +3383,9 @@ public class LPVSGitHubServiceTest {
             try {
                 verify(mocked_instance_gh, times(1))
                         .getRepository(
-                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                LPVSPayloadUtil.getRepositoryOrganization(webhookConfig)
                                         + "/"
-                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig));
+                                        + LPVSPayloadUtil.getRepositoryName(webhookConfig));
             } catch (Exception e) {
                 log.error(
                         "TestCommentResults__RestrictedPresentConflictsPresent.testCommentResults__RestrictedPresentConflictsPresentLicensePresentAlt() error "
@@ -3511,9 +3511,9 @@ public class LPVSGitHubServiceTest {
 
             try {
                 when(mocked_instance_gh.getRepository(
-                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                LPVSPayloadUtil.getRepositoryOrganization(webhookConfig)
                                         + "/"
-                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig)))
+                                        + LPVSPayloadUtil.getRepositoryName(webhookConfig)))
                         .thenReturn(mocked_repo);
             } catch (IOException e) {
                 log.error("mocked_repo.getRepository error " + e);
@@ -3568,9 +3568,9 @@ public class LPVSGitHubServiceTest {
             try {
                 verify(mocked_instance_gh, times(1))
                         .getRepository(
-                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                LPVSPayloadUtil.getRepositoryOrganization(webhookConfig)
                                         + "/"
-                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig));
+                                        + LPVSPayloadUtil.getRepositoryName(webhookConfig));
             } catch (Exception e) {
                 log.error(
                         "TestCommentResults__ProhibitedAbsentConflictsAbsent.testCommentResults__ProhibitedAbsentConflictsAbsent() error "
@@ -3639,9 +3639,9 @@ public class LPVSGitHubServiceTest {
 
             try {
                 when(mocked_instance_gh.getRepository(
-                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                LPVSPayloadUtil.getRepositoryOrganization(webhookConfig)
                                         + "/"
-                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig)))
+                                        + LPVSPayloadUtil.getRepositoryName(webhookConfig)))
                         .thenReturn(mocked_repo);
             } catch (IOException e) {
                 log.error("mocked_repo.getRepository error " + e);
@@ -3674,9 +3674,9 @@ public class LPVSGitHubServiceTest {
                 try {
                     verify(mocked_instance_gh, times(1))
                             .getRepository(
-                                    LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                    LPVSPayloadUtil.getRepositoryOrganization(webhookConfig)
                                             + "/"
-                                            + LPVSWebhookUtil.getRepositoryName(webhookConfig));
+                                            + LPVSPayloadUtil.getRepositoryName(webhookConfig));
                 } catch (IOException e) {
                     log.error("mocked_instance_gh.getRepository error " + e);
                 }
@@ -3733,9 +3733,9 @@ public class LPVSGitHubServiceTest {
             webhookConfig.setRepositoryUrl("https://github.com/Samsung/LPVS");
             try {
                 when(mocked_instance_gh.getRepository(
-                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                LPVSPayloadUtil.getRepositoryOrganization(webhookConfig)
                                         + "/"
-                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig)))
+                                        + LPVSPayloadUtil.getRepositoryName(webhookConfig)))
                         .thenReturn(mocked_repo);
             } catch (IOException e) {
                 log.error("mocked_repo.getRepository error " + e);
@@ -3768,9 +3768,9 @@ public class LPVSGitHubServiceTest {
                 try {
                     verify(mocked_instance_gh, times(1))
                             .getRepository(
-                                    LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                    LPVSPayloadUtil.getRepositoryOrganization(webhookConfig)
                                             + "/"
-                                            + LPVSWebhookUtil.getRepositoryName(webhookConfig));
+                                            + LPVSPayloadUtil.getRepositoryName(webhookConfig));
                 } catch (IOException e) {
                     log.error("mocked_instance_gh.getRepository error " + e);
                 }
@@ -3827,9 +3827,9 @@ public class LPVSGitHubServiceTest {
 
             try {
                 when(mocked_instance_gh.getRepository(
-                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                LPVSPayloadUtil.getRepositoryOrganization(webhookConfig)
                                         + "/"
-                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig)))
+                                        + LPVSPayloadUtil.getRepositoryName(webhookConfig)))
                         .thenReturn(mocked_repo);
             } catch (IOException e) {
                 log.error("mocked_repo.getRepository error " + e);
@@ -3869,9 +3869,9 @@ public class LPVSGitHubServiceTest {
                 try {
                     verify(mocked_instance_gh, times(1))
                             .getRepository(
-                                    LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                    LPVSPayloadUtil.getRepositoryOrganization(webhookConfig)
                                             + "/"
-                                            + LPVSWebhookUtil.getRepositoryName(webhookConfig));
+                                            + LPVSPayloadUtil.getRepositoryName(webhookConfig));
                 } catch (IOException e) {
                     log.error("mocked_instance_gh.getRepository error " + e);
                 }
@@ -3928,9 +3928,9 @@ public class LPVSGitHubServiceTest {
 
             try {
                 when(mocked_instance_gh.getRepository(
-                                LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                LPVSPayloadUtil.getRepositoryOrganization(webhookConfig)
                                         + "/"
-                                        + LPVSWebhookUtil.getRepositoryName(webhookConfig)))
+                                        + LPVSPayloadUtil.getRepositoryName(webhookConfig)))
                         .thenReturn(mocked_repo);
             } catch (IOException e) {
                 log.error("mocked_repo.getRepository error " + e);
@@ -3970,9 +3970,9 @@ public class LPVSGitHubServiceTest {
                 try {
                     verify(mocked_instance_gh, times(1))
                             .getRepository(
-                                    LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                    LPVSPayloadUtil.getRepositoryOrganization(webhookConfig)
                                             + "/"
-                                            + LPVSWebhookUtil.getRepositoryName(webhookConfig));
+                                            + LPVSPayloadUtil.getRepositoryName(webhookConfig));
                 } catch (IOException e) {
                     log.error("mocked_instance_gh.getRepository error " + e);
                 }
@@ -4243,13 +4243,11 @@ public class LPVSGitHubServiceTest {
             GitHub gitHub = Mockito.mock(GitHub.class);
             GHRepository repository = Mockito.mock(GHRepository.class);
             ReflectionTestUtils.setField(gh_service, "gitHub", gitHub);
-            System.out.println(LPVSWebhookUtil.getRepositoryOrganization(webhookConfig));
-            System.out.println(LPVSWebhookUtil.getRepositoryName(webhookConfig));
             Mockito.when(
                             gitHub.getRepository(
-                                    LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                                    LPVSPayloadUtil.getRepositoryOrganization(webhookConfig)
                                             + "/"
-                                            + LPVSWebhookUtil.getRepositoryName(webhookConfig)))
+                                            + LPVSPayloadUtil.getRepositoryName(webhookConfig)))
                     .thenReturn(repository);
             LPVSFile file = new LPVSFile();
             LPVSLicense license =

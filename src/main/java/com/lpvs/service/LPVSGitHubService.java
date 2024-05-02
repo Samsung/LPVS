@@ -16,7 +16,7 @@ import com.lpvs.repository.LPVSLicenseRepository;
 import com.lpvs.repository.LPVSPullRequestRepository;
 import com.lpvs.util.LPVSCommentUtil;
 import com.lpvs.util.LPVSFileUtil;
-import com.lpvs.util.LPVSWebhookUtil;
+import com.lpvs.util.LPVSPayloadUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.kohsuke.github.GitHub;
 import org.kohsuke.github.GHRepository;
@@ -102,14 +102,14 @@ public class LPVSGitHubService {
             gitHub = gitHubConnectionService.connectToGitHubApi();
             log.debug(
                     "Repository Info: "
-                            + LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                            + LPVSPayloadUtil.getRepositoryOrganization(webhookConfig)
                             + "/"
-                            + LPVSWebhookUtil.getRepositoryName(webhookConfig));
+                            + LPVSPayloadUtil.getRepositoryName(webhookConfig));
             GHRepository repository =
                     gitHub.getRepository(
-                            LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                            LPVSPayloadUtil.getRepositoryOrganization(webhookConfig)
                                     + "/"
-                                    + LPVSWebhookUtil.getRepositoryName(webhookConfig));
+                                    + LPVSPayloadUtil.getRepositoryName(webhookConfig));
 
             GHPullRequest pullRequest = getPullRequest(webhookConfig, repository);
             if (pullRequest == null) {
@@ -168,9 +168,9 @@ public class LPVSGitHubService {
             gitHub = gitHubConnectionService.connectToGitHubApi();
             GHRepository repository =
                     gitHub.getRepository(
-                            LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                            LPVSPayloadUtil.getRepositoryOrganization(webhookConfig)
                                     + "/"
-                                    + LPVSWebhookUtil.getRepositoryName(webhookConfig));
+                                    + LPVSPayloadUtil.getRepositoryName(webhookConfig));
             repository.createCommitStatus(
                     webhookConfig.getHeadCommitSHA(),
                     GHCommitState.PENDING,
@@ -192,9 +192,9 @@ public class LPVSGitHubService {
             gitHub = gitHubConnectionService.connectToGitHubApi();
             GHRepository repository =
                     gitHub.getRepository(
-                            LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                            LPVSPayloadUtil.getRepositoryOrganization(webhookConfig)
                                     + "/"
-                                    + LPVSWebhookUtil.getRepositoryName(webhookConfig));
+                                    + LPVSPayloadUtil.getRepositoryName(webhookConfig));
             repository.createCommitStatus(
                     webhookConfig.getHeadCommitSHA(),
                     GHCommitState.ERROR,
@@ -223,9 +223,9 @@ public class LPVSGitHubService {
 
         GHRepository repository =
                 gitHub.getRepository(
-                        LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                        LPVSPayloadUtil.getRepositoryOrganization(webhookConfig)
                                 + "/"
-                                + LPVSWebhookUtil.getRepositoryName(webhookConfig));
+                                + LPVSPayloadUtil.getRepositoryName(webhookConfig));
         GHPullRequest pullRequest = getPullRequest(webhookConfig, repository);
 
         if (pullRequest == null) {
@@ -370,9 +370,9 @@ public class LPVSGitHubService {
      */
     public String getRepositoryLicense(LPVSQueue webhookConfig) {
         try {
-            String repositoryName = LPVSWebhookUtil.getRepositoryName(webhookConfig);
+            String repositoryName = LPVSPayloadUtil.getRepositoryName(webhookConfig);
             String repositoryOrganization =
-                    LPVSWebhookUtil.getRepositoryOrganization(webhookConfig);
+                    LPVSPayloadUtil.getRepositoryOrganization(webhookConfig);
             gitHub = gitHubConnectionService.connectToGitHubApi();
             GHRepository repository =
                     gitHub.getRepository(repositoryOrganization + "/" + repositoryName);
@@ -412,7 +412,7 @@ public class LPVSGitHubService {
             gitHub = gitHubConnectionService.connectToGitHubApi();
             GHRepository repo = gitHub.getRepository(pullRequestRepo);
             GHPullRequest pR = repo.getPullRequest(pullRequestNum);
-            return LPVSWebhookUtil.getGitHubWebhookConfig(repo, pR);
+            return LPVSPayloadUtil.getGitHubWebhookConfig(repo, pR);
         } catch (IOException e) {
             log.error("Can't set up github client: " + e);
         }
