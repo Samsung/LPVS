@@ -14,6 +14,13 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.http.HttpHeaders;
 
+import java.io.*;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Objects;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class LPVSPayloadUtilTest {
@@ -287,6 +294,62 @@ public class LPVSPayloadUtilTest {
             assertEquals(
                     "GET, POST, PUT, DELETE", headers.getFirst("Access-Control-Allow-Methods"));
             assertEquals("Content-Type", headers.getFirst("Access-Control-Allow-Headers"));
+        }
+    }
+
+    @Nested
+    public class TestCreateInputStreamReader {
+
+        @Test
+        public void testCreateInputStreamReader() throws IOException, URISyntaxException {
+            Path path =
+                    Paths.get(
+                            Objects.requireNonNull(
+                                            getClass().getClassLoader().getResource("A_B.json"))
+                                    .toURI());
+            InputStream inputStream = Files.newInputStream(path);
+            InputStreamReader inputStreamReader =
+                    LPVSPayloadUtil.createInputStreamReader(inputStream);
+            assertEquals("UTF8", inputStreamReader.getEncoding());
+            inputStreamReader.close();
+            inputStream.close();
+        }
+
+        @Test
+        public void testCreateInputStreamReader_ThrowsException_N() {
+            InputStream inputStream = null;
+            assertThrows(
+                    NullPointerException.class,
+                    () -> LPVSPayloadUtil.createInputStreamReader(inputStream));
+        }
+    }
+
+    @Nested
+    public class TestCreateBufferReader {
+
+        @Test
+        public void testCreateBufferReader() throws URISyntaxException, IOException {
+            Path path =
+                    Paths.get(
+                            Objects.requireNonNull(
+                                            getClass().getClassLoader().getResource("A_B.json"))
+                                    .toURI());
+            InputStream inputStream = Files.newInputStream(path);
+            InputStreamReader inputStreamReader =
+                    LPVSPayloadUtil.createInputStreamReader(inputStream);
+            BufferedReader bufferedReader = LPVSPayloadUtil.createBufferReader(inputStreamReader);
+            assertNotNull(bufferedReader.readLine());
+            bufferedReader.close();
+            inputStreamReader.close();
+            inputStream.close();
+        }
+
+        @Test
+        public void testCreateBufferedReader_ThrowsException_N() {
+            InputStreamReader inputStreamReader = null;
+            assertThrows(
+                    NullPointerException.class,
+                    () -> LPVSPayloadUtil.createBufferReader(inputStreamReader));
         }
     }
 }
