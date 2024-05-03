@@ -15,6 +15,10 @@ import org.kohsuke.github.GHPullRequest;
 import org.kohsuke.github.GHRepository;
 import org.springframework.http.HttpHeaders;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -24,7 +28,29 @@ import java.util.List;
  * specific details such as organization name, repository name, repository URL, and pull request ID.
  */
 @Slf4j
-public class LPVSWebhookUtil {
+public class LPVSPayloadUtil {
+
+    /**
+     * Creates an InputStreamReader object with the specified input stream and UTF-8 encoding.
+     *
+     * @param inputStream The input stream to read from.
+     * @return An InputStreamReader object with the specified input stream.
+     * @throws UnsupportedEncodingException If UTF-8 encoding is not supported.
+     */
+    public static InputStreamReader createInputStreamReader(InputStream inputStream)
+            throws UnsupportedEncodingException {
+        return new InputStreamReader(inputStream, "UTF-8");
+    }
+
+    /**
+     * Creates a BufferedReader for the given InputStreamReader.
+     *
+     * @param inputStreamReader The InputStreamReader to create a BufferedReader from.
+     * @return A BufferedReader for the given InputStreamReader.
+     */
+    public static BufferedReader createBufferReader(InputStreamReader inputStreamReader) {
+        return new BufferedReader(inputStreamReader);
+    }
 
     /**
      * Parses the GitHub webhook payload and extracts relevant information to create an LPVSQueue object.

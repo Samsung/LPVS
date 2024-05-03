@@ -10,7 +10,7 @@ import com.lpvs.entity.LPVSLicense;
 import com.lpvs.entity.LPVSQueue;
 import com.lpvs.repository.LPVSLicenseRepository;
 import com.lpvs.service.LPVSLicenseService;
-import com.lpvs.util.LPVSWebhookUtil;
+import com.lpvs.util.LPVSPayloadUtil;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -83,7 +83,7 @@ public class LPVSScanossDetectServiceTest {
         String licenseConflictsSource = "scanner";
         Mockito.when(lpvsQueue.getHeadCommitSHA()).thenReturn("A_B");
         Mockito.when(lpvsQueue.getRepositoryUrl()).thenReturn("https://github.com/Samsung/LPVS");
-        Mockito.when(LPVSWebhookUtil.getRepositoryName(lpvsQueue)).thenReturn("C");
+        Mockito.when(LPVSPayloadUtil.getRepositoryName(lpvsQueue)).thenReturn("C");
         Mockito.when(lpvsLicenseRepository.save(Mockito.any(LPVSLicense.class)))
                 .thenAnswer(i -> i.getArguments()[0]);
         ReflectionTestUtils.setField(
@@ -98,7 +98,7 @@ public class LPVSScanossDetectServiceTest {
         Mockito.when(webhookConfig.getHeadCommitSHA()).thenReturn("A_B");
         Mockito.when(webhookConfig.getRepositoryUrl())
                 .thenReturn("https://github.com/Samsung/LPVS");
-        Mockito.when(LPVSWebhookUtil.getRepositoryName(webhookConfig)).thenReturn("C");
+        Mockito.when(LPVSPayloadUtil.getRepositoryName(webhookConfig)).thenReturn("C");
         Mockito.when(lpvsLicenseRepository.save(Mockito.any(LPVSLicense.class)))
                 .thenAnswer(i -> i.getArguments()[0]);
         ReflectionTestUtils.setField(
@@ -114,7 +114,7 @@ public class LPVSScanossDetectServiceTest {
         Mockito.when(webhookConfig.getHeadCommitSHA()).thenReturn(null);
         Mockito.when(webhookConfig.getRepositoryUrl())
                 .thenReturn("https://github.com/Samsung/LPVS");
-        Mockito.when(LPVSWebhookUtil.getRepositoryName(webhookConfig)).thenReturn("A");
+        Mockito.when(LPVSPayloadUtil.getRepositoryName(webhookConfig)).thenReturn("A");
         Mockito.when(webhookConfig.getPullRequestUrl()).thenReturn("A/B");
         ReflectionTestUtils.setField(
                 licenseService, "licenseConflictsSource", licenseConflictsSource);
@@ -129,7 +129,7 @@ public class LPVSScanossDetectServiceTest {
         Mockito.when(webhookConfig.getRepositoryUrl())
                 .thenReturn("https://github.com/Samsung/LPVS");
         Mockito.when(webhookConfig.getPullRequestUrl()).thenReturn("A/B");
-        Mockito.when(LPVSWebhookUtil.getRepositoryName(webhookConfig)).thenReturn("A");
+        Mockito.when(LPVSPayloadUtil.getRepositoryName(webhookConfig)).thenReturn("A");
         ReflectionTestUtils.setField(
                 licenseService, "licenseConflictsSource", licenseConflictsSource);
         Assertions.assertNotNull(scanossDetectService.checkLicenses(webhookConfig));

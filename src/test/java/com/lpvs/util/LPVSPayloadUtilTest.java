@@ -14,9 +14,16 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.http.HttpHeaders;
 
+import java.io.*;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Objects;
+
 import static org.junit.jupiter.api.Assertions.*;
 
-public class LPVSWebhookUtilTest {
+public class LPVSPayloadUtilTest {
 
     @Nested
     class TestGetGitHubWebhookConfig__ForkTrue {
@@ -78,7 +85,7 @@ public class LPVSWebhookUtilTest {
         @Test
         public void testGetGitHubWebhookConfig__ForkTrue() {
             // main test
-            assertEquals(expected, LPVSWebhookUtil.getGitHubWebhookConfig(json_to_test));
+            assertEquals(expected, LPVSPayloadUtil.getGitHubWebhookConfig(json_to_test));
         }
     }
 
@@ -142,7 +149,7 @@ public class LPVSWebhookUtilTest {
         @Test
         public void testGetGitHubWebhookConfig__ForkFalse() {
             // main test
-            assertEquals(expected, LPVSWebhookUtil.getGitHubWebhookConfig(json_to_test));
+            assertEquals(expected, LPVSPayloadUtil.getGitHubWebhookConfig(json_to_test));
         }
     }
 
@@ -154,26 +161,26 @@ public class LPVSWebhookUtilTest {
         public void testCheckPayload() {
             // test initial `if`
             json_to_test = "{" + "\"action\": \"opened\", " + "\"zen\": \"test\"" + "}";
-            assertFalse(LPVSWebhookUtil.checkPayload(json_to_test));
+            assertFalse(LPVSPayloadUtil.checkPayload(json_to_test));
 
             // test the rest 6 cases of `LPVSPullRequestAction`
             json_to_test = "{\"action\": \"opened\"}";
-            assertTrue(LPVSWebhookUtil.checkPayload(json_to_test));
+            assertTrue(LPVSPayloadUtil.checkPayload(json_to_test));
 
             json_to_test = "{\"action\": \"reopened\"}";
-            assertTrue(LPVSWebhookUtil.checkPayload(json_to_test));
+            assertTrue(LPVSPayloadUtil.checkPayload(json_to_test));
 
             json_to_test = "{\"action\": \"synchronize\"}";
-            assertTrue(LPVSWebhookUtil.checkPayload(json_to_test));
+            assertTrue(LPVSPayloadUtil.checkPayload(json_to_test));
 
             json_to_test = "{\"action\": \"closed\"}";
-            assertFalse(LPVSWebhookUtil.checkPayload(json_to_test));
+            assertFalse(LPVSPayloadUtil.checkPayload(json_to_test));
 
             json_to_test = "{\"action\": \"rescan\"}";
-            assertFalse(LPVSWebhookUtil.checkPayload(json_to_test));
+            assertFalse(LPVSPayloadUtil.checkPayload(json_to_test));
 
             json_to_test = "{\"action\": \"any_of_above\"}";
-            assertFalse(LPVSWebhookUtil.checkPayload(json_to_test));
+            assertFalse(LPVSPayloadUtil.checkPayload(json_to_test));
         }
     }
 
@@ -187,7 +194,7 @@ public class LPVSWebhookUtilTest {
             mockWebhookConfig = new LPVSQueue();
             mockWebhookConfig.setRepositoryUrl("https://github.com/repo");
             mockWebhookConfig.setPullRequestUrl("https://github.com/repo/pull/123");
-            String result = LPVSWebhookUtil.getPullRequestId(mockWebhookConfig);
+            String result = LPVSPayloadUtil.getPullRequestId(mockWebhookConfig);
             assertEquals("123", result);
         }
     }
@@ -203,7 +210,7 @@ public class LPVSWebhookUtilTest {
                     assertThrows(
                             IllegalArgumentException.class,
                             () -> {
-                                LPVSWebhookUtil.getRepositoryOrganization(null);
+                                LPVSPayloadUtil.getRepositoryOrganization(null);
                             });
             assertEquals("Webhook Config is absent", exception.getMessage());
 
@@ -211,7 +218,7 @@ public class LPVSWebhookUtilTest {
                     assertThrows(
                             IllegalArgumentException.class,
                             () -> {
-                                LPVSWebhookUtil.getRepositoryOrganization(mockWebhookConfig);
+                                LPVSPayloadUtil.getRepositoryOrganization(mockWebhookConfig);
                             });
             assertEquals("No repository URL info in webhook config", exception.getMessage());
 
@@ -219,7 +226,7 @@ public class LPVSWebhookUtilTest {
                     assertThrows(
                             IllegalArgumentException.class,
                             () -> {
-                                LPVSWebhookUtil.getRepositoryName(null);
+                                LPVSPayloadUtil.getRepositoryName(null);
                             });
             assertEquals("Webhook Config is absent", exception.getMessage());
 
@@ -227,7 +234,7 @@ public class LPVSWebhookUtilTest {
                     assertThrows(
                             IllegalArgumentException.class,
                             () -> {
-                                LPVSWebhookUtil.getRepositoryName(mockWebhookConfig);
+                                LPVSPayloadUtil.getRepositoryName(mockWebhookConfig);
                             });
             assertEquals("No repository URL info in webhook config", exception.getMessage());
 
@@ -235,7 +242,7 @@ public class LPVSWebhookUtilTest {
                     assertThrows(
                             IllegalArgumentException.class,
                             () -> {
-                                LPVSWebhookUtil.getRepositoryUrl(null);
+                                LPVSPayloadUtil.getRepositoryUrl(null);
                             });
             assertEquals("Webhook Config is absent", exception.getMessage());
 
@@ -243,7 +250,7 @@ public class LPVSWebhookUtilTest {
                     assertThrows(
                             IllegalArgumentException.class,
                             () -> {
-                                LPVSWebhookUtil.getPullRequestId(null);
+                                LPVSPayloadUtil.getPullRequestId(null);
                             });
             assertEquals("Webhook Config is absent", exception.getMessage());
 
@@ -251,7 +258,7 @@ public class LPVSWebhookUtilTest {
                     assertThrows(
                             IllegalArgumentException.class,
                             () -> {
-                                LPVSWebhookUtil.getPullRequestId(mockWebhookConfig);
+                                LPVSPayloadUtil.getPullRequestId(mockWebhookConfig);
                             });
             assertEquals("No repository URL info in webhook config", exception.getMessage());
 
@@ -260,7 +267,7 @@ public class LPVSWebhookUtilTest {
                     assertThrows(
                             IllegalArgumentException.class,
                             () -> {
-                                LPVSWebhookUtil.getPullRequestId(mockWebhookConfig);
+                                LPVSPayloadUtil.getPullRequestId(mockWebhookConfig);
                             });
             assertEquals("Pull Request URL is absent in webhook config", exception.getMessage());
         }
@@ -271,7 +278,7 @@ public class LPVSWebhookUtilTest {
 
         @Test
         void generateSecurityHeadersTest() {
-            HttpHeaders headers = LPVSWebhookUtil.generateSecurityHeaders();
+            HttpHeaders headers = LPVSPayloadUtil.generateSecurityHeaders();
 
             // Assert the presence of each expected header
             assertEquals(
@@ -287,6 +294,62 @@ public class LPVSWebhookUtilTest {
             assertEquals(
                     "GET, POST, PUT, DELETE", headers.getFirst("Access-Control-Allow-Methods"));
             assertEquals("Content-Type", headers.getFirst("Access-Control-Allow-Headers"));
+        }
+    }
+
+    @Nested
+    public class TestCreateInputStreamReader {
+
+        @Test
+        public void testCreateInputStreamReader() throws IOException, URISyntaxException {
+            Path path =
+                    Paths.get(
+                            Objects.requireNonNull(
+                                            getClass().getClassLoader().getResource("A_B.json"))
+                                    .toURI());
+            InputStream inputStream = Files.newInputStream(path);
+            InputStreamReader inputStreamReader =
+                    LPVSPayloadUtil.createInputStreamReader(inputStream);
+            assertEquals("UTF8", inputStreamReader.getEncoding());
+            inputStreamReader.close();
+            inputStream.close();
+        }
+
+        @Test
+        public void testCreateInputStreamReader_ThrowsException_N() {
+            InputStream inputStream = null;
+            assertThrows(
+                    NullPointerException.class,
+                    () -> LPVSPayloadUtil.createInputStreamReader(inputStream));
+        }
+    }
+
+    @Nested
+    public class TestCreateBufferReader {
+
+        @Test
+        public void testCreateBufferReader() throws URISyntaxException, IOException {
+            Path path =
+                    Paths.get(
+                            Objects.requireNonNull(
+                                            getClass().getClassLoader().getResource("A_B.json"))
+                                    .toURI());
+            InputStream inputStream = Files.newInputStream(path);
+            InputStreamReader inputStreamReader =
+                    LPVSPayloadUtil.createInputStreamReader(inputStream);
+            BufferedReader bufferedReader = LPVSPayloadUtil.createBufferReader(inputStreamReader);
+            assertNotNull(bufferedReader.readLine());
+            bufferedReader.close();
+            inputStreamReader.close();
+            inputStream.close();
+        }
+
+        @Test
+        public void testCreateBufferedReader_ThrowsException_N() {
+            InputStreamReader inputStreamReader = null;
+            assertThrows(
+                    NullPointerException.class,
+                    () -> LPVSPayloadUtil.createBufferReader(inputStreamReader));
         }
     }
 }

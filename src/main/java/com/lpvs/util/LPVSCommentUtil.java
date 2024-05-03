@@ -45,7 +45,7 @@ public class LPVSCommentUtil {
     public static String getMatchedLinesAsLink(
             LPVSQueue webhookConfig, LPVSFile file, LPVSVcs vcs) {
         String prefix =
-                LPVSWebhookUtil.getRepositoryUrl(webhookConfig)
+                LPVSPayloadUtil.getRepositoryUrl(webhookConfig)
                         + "/blob/"
                         + webhookConfig.getHeadCommitSHA()
                         + "/"

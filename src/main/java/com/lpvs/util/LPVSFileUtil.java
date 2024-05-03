@@ -150,15 +150,15 @@ public class LPVSFileUtil {
                     + File.separator
                     + "Projects"
                     + File.separator
-                    + LPVSWebhookUtil.getRepositoryName(webhookConfig)
+                    + LPVSPayloadUtil.getRepositoryName(webhookConfig)
                     + File.separator
-                    + LPVSWebhookUtil.getPullRequestId(webhookConfig);
+                    + LPVSPayloadUtil.getPullRequestId(webhookConfig);
         } else {
             return System.getProperty("user.home")
                     + File.separator
                     + "Projects"
                     + File.separator
-                    + LPVSWebhookUtil.getRepositoryName(webhookConfig)
+                    + LPVSPayloadUtil.getRepositoryName(webhookConfig)
                     + File.separator
                     + webhookConfig.getHeadCommitSHA();
         }
@@ -177,16 +177,16 @@ public class LPVSFileUtil {
                     + File.separator
                     + "Results"
                     + File.separator
-                    + LPVSWebhookUtil.getRepositoryName(webhookConfig)
+                    + LPVSPayloadUtil.getRepositoryName(webhookConfig)
                     + File.separator
-                    + LPVSWebhookUtil.getPullRequestId(webhookConfig)
+                    + LPVSPayloadUtil.getPullRequestId(webhookConfig)
                     + ".json";
         } else {
             return System.getProperty("user.home")
                     + File.separator
                     + "Results"
                     + File.separator
-                    + LPVSWebhookUtil.getRepositoryName(webhookConfig)
+                    + LPVSPayloadUtil.getRepositoryName(webhookConfig)
                     + File.separator
                     + webhookConfig.getHeadCommitSHA()
                     + ".json";
@@ -204,7 +204,7 @@ public class LPVSFileUtil {
                 + File.separator
                 + "Results"
                 + File.separator
-                + LPVSWebhookUtil.getRepositoryName(webhookConfig);
+                + LPVSPayloadUtil.getRepositoryName(webhookConfig);
     }
 
     /**

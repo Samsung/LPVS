@@ -508,9 +508,6 @@ public class LPVSLicenseServiceTest {
     @Test
     public void findConflictsEmptyScanResults() {
         List<LPVSFile> scanResults = new ArrayList<>();
-        if (scanResults.isEmpty()) {
-            System.out.println("is empty");
-        }
         LPVSLicenseService mockLicenseService = new LPVSLicenseService(null, exitHandler);
         LPVSQueue webhookConfig = new LPVSQueue(); // licenseConflicts = new ArrayList<>();
         assertEquals(

@@ -13,7 +13,7 @@ import com.lpvs.entity.enums.LPVSPullRequestStatus;
 import com.lpvs.repository.LPVSPullRequestRepository;
 import com.lpvs.repository.LPVSQueueRepository;
 import com.lpvs.service.scan.LPVSDetectService;
-import com.lpvs.util.LPVSWebhookUtil;
+import com.lpvs.util.LPVSPayloadUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
@@ -190,9 +190,9 @@ public class LPVSQueueService {
         LPVSPullRequest pullRequest =
                 lpvsPullRequestRepository.findLatestByPullRequestInfo(
                         webhookConfig.getUserId(),
-                        LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                        LPVSPayloadUtil.getRepositoryOrganization(webhookConfig)
                                 + "/"
-                                + LPVSWebhookUtil.getRepositoryName(webhookConfig),
+                                + LPVSPayloadUtil.getRepositoryName(webhookConfig),
                         webhookConfig.getPullRequestFilesUrl(),
                         webhookConfig.getPullRequestHead(),
                         webhookConfig.getPullRequestBase(),
@@ -203,9 +203,9 @@ public class LPVSQueueService {
             pullRequest = new LPVSPullRequest();
             pullRequest.setUser(webhookConfig.getUserId());
             pullRequest.setRepositoryName(
-                    LPVSWebhookUtil.getRepositoryOrganization(webhookConfig)
+                    LPVSPayloadUtil.getRepositoryOrganization(webhookConfig)
                             + "/"
-                            + LPVSWebhookUtil.getRepositoryName(webhookConfig));
+                            + LPVSPayloadUtil.getRepositoryName(webhookConfig));
             pullRequest.setPullRequestUrl(webhookConfig.getPullRequestUrl());
             pullRequest.setPullRequestFilesUrl(webhookConfig.getPullRequestFilesUrl());
             pullRequest.setPullRequestHead(webhookConfig.getPullRequestHead());

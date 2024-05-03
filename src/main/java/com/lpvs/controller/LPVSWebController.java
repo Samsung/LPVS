@@ -22,7 +22,7 @@ import com.lpvs.repository.LPVSMemberRepository;
 import com.lpvs.repository.LPVSPullRequestRepository;
 import com.lpvs.service.LPVSLoginCheckService;
 import com.lpvs.service.LPVSStatisticsService;
-import com.lpvs.util.LPVSWebhookUtil;
+import com.lpvs.util.LPVSPayloadUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.context.annotation.Profile;
@@ -130,7 +130,7 @@ public class LPVSWebController implements ErrorController {
         @ResponseBody
         public ResponseEntity<LPVSMember> personalInfoSettings(Authentication authentication) {
             lpvsLoginCheckService.loginVerification(authentication);
-            HttpHeaders headers = LPVSWebhookUtil.generateSecurityHeaders();
+            HttpHeaders headers = LPVSPayloadUtil.generateSecurityHeaders();
             LPVSMember member = lpvsLoginCheckService.getMemberFromMemberMap(authentication);
             sanitizeUserInputs(member);
             return ResponseEntity.ok().headers(headers).body(member);
@@ -149,7 +149,7 @@ public class LPVSWebController implements ErrorController {
             lpvsLoginCheckService.loginVerification(authentication);
 
             // Include security headers in the response
-            HttpHeaders headers = LPVSWebhookUtil.generateSecurityHeaders();
+            HttpHeaders headers = LPVSPayloadUtil.generateSecurityHeaders();
 
             Map<String, Object> oauthLoginMemberMap =
                     lpvsLoginCheckService.getOauthLoginMemberMap(authentication);
@@ -186,7 +186,7 @@ public class LPVSWebController implements ErrorController {
             lpvsLoginCheckService.loginVerification(authentication);
 
             // Include security headers in the response
-            HttpHeaders headers = LPVSWebhookUtil.generateSecurityHeaders();
+            HttpHeaders headers = LPVSPayloadUtil.generateSecurityHeaders();
 
             LPVSMember findMember = lpvsLoginCheckService.getMemberFromMemberMap(authentication);
             try {
@@ -221,7 +221,7 @@ public class LPVSWebController implements ErrorController {
                         Pageable pageable,
                 Authentication authentication) {
 
-            HttpHeaders headers = LPVSWebhookUtil.generateSecurityHeaders();
+            HttpHeaders headers = LPVSPayloadUtil.generateSecurityHeaders();
 
             HistoryPageEntity historyPageEntity =
                     lpvsLoginCheckService.pathCheck(type, name, pageable, authentication);
@@ -278,7 +278,7 @@ public class LPVSWebController implements ErrorController {
                 Authentication authentication) {
 
             lpvsLoginCheckService.loginVerification(authentication);
-            HttpHeaders headers = LPVSWebhookUtil.generateSecurityHeaders();
+            HttpHeaders headers = LPVSPayloadUtil.generateSecurityHeaders();
 
             Optional<LPVSPullRequest> prOpt = lpvsPullRequestRepository.findById(prId);
             if (!prOpt.isPresent()) {
@@ -372,7 +372,7 @@ public class LPVSWebController implements ErrorController {
                 @PathVariable("name") String name,
                 Authentication authentication) {
 
-            HttpHeaders headers = LPVSWebhookUtil.generateSecurityHeaders();
+            HttpHeaders headers = LPVSPayloadUtil.generateSecurityHeaders();
             Dashboard dashboardEntity =
                     lpvsStatisticsService.getDashboardEntity(
                             type, HtmlUtils.htmlEscape(name), authentication);
