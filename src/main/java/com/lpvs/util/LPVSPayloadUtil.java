@@ -31,10 +31,10 @@ import java.util.List;
 public class LPVSPayloadUtil {
 
     /**
-     * Creates an InputStreamReader for the given process, handling UTF-8 encoding.
+     * Creates an InputStreamReader object with the specified input stream and UTF-8 encoding.
      *
      * @param inputStream The input stream to read from.
-     * @return An InputStreamReader for the error stream of the process.
+     * @return An InputStreamReader object with the specified input stream.
      * @throws UnsupportedEncodingException If UTF-8 encoding is not supported.
      */
     public static InputStreamReader createInputStreamReader(InputStream inputStream)
