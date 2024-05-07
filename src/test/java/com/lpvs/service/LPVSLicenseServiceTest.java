@@ -641,9 +641,10 @@ public class LPVSLicenseServiceTest {
                     .thenAnswer(i -> i.getArguments()[0]);
 
             LPVSLicense result =
-                    licenseService.getLicenseBySpdxIdAndName("Apache-2.0", Optional.empty());
+                    licenseService.getLicenseBySpdxIdAndName(
+                            "Apache-2.0", Optional.of("Apache License 2.0"));
             assertEquals("Apache-2.0", result.getSpdxId());
-            assertEquals("Apache-2.0", result.getLicenseName());
+            assertEquals("Apache License 2.0", result.getLicenseName());
             assertEquals("UNREVIEWED", result.getAccess());
         }
 
@@ -656,9 +657,10 @@ public class LPVSLicenseServiceTest {
             when(licenseRepository.saveAndFlush(Mockito.any(LPVSLicense.class)))
                     .thenAnswer(i -> i.getArguments()[0]);
             LPVSLicense result =
-                    licenseService.getLicenseBySpdxIdAndName("Apache-2.0", Optional.empty());
+                    licenseService.getLicenseBySpdxIdAndName(
+                            "Apache-2.0", Optional.of("Apache License 2.0"));
             assertEquals("Apache-2.0", result.getSpdxId());
-            assertEquals("Apache-2.0", result.getLicenseName());
+            assertEquals("Apache License 2.0", result.getLicenseName());
             assertEquals("UNREVIEWED", result.getAccess());
         }
 
@@ -687,9 +689,10 @@ public class LPVSLicenseServiceTest {
                     .thenAnswer(i -> i.getArguments()[0]);
 
             LPVSLicense result =
-                    licenseService.getLicenseBySpdxIdAndName("Apache-2.0", Optional.empty());
+                    licenseService.getLicenseBySpdxIdAndName(
+                            "Apache-2.0", Optional.of("Apache License 2.0"));
             assertEquals("Apache-2.0", result.getSpdxId());
-            assertEquals("Apache-2.0", result.getLicenseName());
+            assertEquals("Apache License 2.0", result.getLicenseName());
             assertEquals("UNREVIEWED", result.getAccess());
         }
     }
