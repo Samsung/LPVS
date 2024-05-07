@@ -262,7 +262,7 @@ Alternatively, you can perform a one-time scan on a specific pull request using 
 
 4.2.3 By default, the above command requires a pre-configured MySQL database. To avoid setting up the database, use the "singlescan" profile:
    ```bash
-   java -jar -Dspring.profiles.active=singlescan -Dgithub.token=<my-token> lpvs-*.jar --github.pull-request=<PR URL>
+   java -jar -Dspring.profiles.active=singlescan -Dgithub.token=<my-token> lpvs-*.jar --github.pull.request=<PR URL>
    ```
 
 These steps streamline the process, allowing you to run a scan on a single pull request without the need for a preconfigured database.
