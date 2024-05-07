@@ -1,10 +1,10 @@
 FROM gcr.io/oss-fuzz-base/base-builder-jvm@sha256:0a35a200381bf7ebda008131f8b1b7f19fd9c1bba1cfbaa9e4068c124761ecfd
 
-RUN curl -L https://archive.apache.org/dist/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.zip -o maven.zip && \
+RUN curl -L https://archive.apache.org/dist/maven/maven-3/3.9.6/binaries/apache-maven-3.9.6-bin.zip -o maven.zip && \
     unzip maven.zip -d $SRC/maven && \
     rm -rf maven.zip
 
-ENV MVN $SRC/maven/apache-maven-3.6.3/bin/mvn
+ENV MVN $SRC/maven/apache-maven-3.9.6/bin/mvn
 
 RUN rm -rf $SRC/lpvs
 
