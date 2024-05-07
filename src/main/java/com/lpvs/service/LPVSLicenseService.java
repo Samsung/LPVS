@@ -22,7 +22,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import jakarta.annotation.PostConstruct;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -254,62 +253,85 @@ public class LPVSLicenseService {
     public LPVSLicense getLicenseBySpdxIdAndName(
             String licenseSpdxId, Optional<String> licenseName) {
         String licName = licenseName.orElse(licenseSpdxId);
+        // Check if the license exists in the database
+        LPVSLicense lic = findLicense(licenseSpdxId, licName);
+        // If not found, check OSORI DB and create a new license
+        if (lic == null) {
+            lic = findLicenseInOsoriDB(licenseSpdxId);
+            // If not found, create new license with default field values
+            if (lic == null) {
+                lic =
+                        new LPVSLicense() {
+                            {
+                                setSpdxId(licenseSpdxId);
+                                setLicenseName(licName);
+                                setAlternativeNames(null);
+                                setAccess("UNREVIEWED");
+                            }
+                        };
+            }
+            // Save new license
+            lic = lpvsLicenseRepository.saveAndFlush(lic);
+            // Add license to the license list
+            addLicenseToList(lic);
+        }
+        return lic;
+    }
+
+    /**
+     * Search for a license with the given SPDX identifier in the OSORI database.
+     *
+     * @param licenseSpdxId The SPDX identifier of the license to search for.
+     * @return The LPVSLicense object if the license is found in the OSORI database, otherwise null.
+     */
+    public LPVSLicense findLicenseInOsoriDB(String licenseSpdxId) {
+        // Check if the OSORI database URL is valid
+        if (osoriDbUrl == null || osoriDbUrl.trim().isEmpty()) {
+            return null;
+        }
+        // Try to find the license in the OSORI database
+        try {
+            HttpURLConnection connection =
+                    osoriConnection.createConnection(osoriDbUrl, licenseSpdxId);
+            connection.setRequestMethod("GET");
+            connection.connect();
+
+            // Check if the HTTP response code is 200 (OK)
+            if (connection.getResponseCode() != 200) {
+                throw new Exception(
+                        "HTTP error code ("
+                                + connection.getResponseCode()
+                                + "): "
+                                + connection.getResponseMessage());
+            }
+
+            // Convert the response InputStream to a string
+            String response =
+                    LPVSPayloadUtil.convertInputStreamToString(connection.getInputStream());
+            // If the license is found, create a new LPVSLicense object with the field values from
+            // the OSORI database
+            return LPVSPayloadUtil.convertOsoriDbResponseToLicense(response);
+        } catch (Exception e) {
+            log.error("Error connecting OSORI DB: " + e.getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * Search for a license using the given SPDX identifier and license name. It first tries to find the license by its
+     * SPDX identifier, and if that fails, it checks by the license name and alternative names.
+     *
+     * @param licenseSpdxId The SPDX identifier of the license to search for.
+     * @param licenseName   The name or alternative name of the license to search for.
+     * @return The LPVSLicense object if the license is found, otherwise null.
+     */
+    public LPVSLicense findLicense(String licenseSpdxId, String licenseName) {
         // check by license SPDX ID
         LPVSLicense lic = findLicenseBySPDX(licenseSpdxId);
         if (null == lic) {
             // check by license name and alternative names
-            lic = findLicenseByName(licName);
+            lic = findLicenseByName(licenseName);
         }
-        // create new license
-        if (lic == null) {
-
-            if (osoriDbUrl != null && !osoriDbUrl.trim().isEmpty()) {
-                // check OSORI DB and try to find the license there
-                try {
-                    HttpURLConnection connection =
-                            osoriConnection.createConnection(osoriDbUrl, licenseSpdxId);
-                    connection.setRequestMethod("GET");
-                    connection.connect();
-
-                    if (connection.getResponseCode() != 200) {
-                        throw new Exception(
-                                "HTTP error code ("
-                                        + connection.getResponseCode()
-                                        + "): "
-                                        + connection.getResponseMessage());
-                    }
-
-                    BufferedReader in =
-                            LPVSPayloadUtil.createBufferReader(
-                                    LPVSPayloadUtil.createInputStreamReader(
-                                            connection.getInputStream()));
-                    String inputLine;
-                    StringBuffer response = new StringBuffer();
-
-                    while ((inputLine = in.readLine()) != null) {
-                        response.append(inputLine);
-                    }
-                    in.close();
-
-                    // if found, create new license with field values taken from OSORI DB
-                    lic = LPVSPayloadUtil.convertOsoriDbResponseToLicense(response.toString());
-                } catch (Exception e) {
-                    log.error("Error connecting OSORI DB: " + e.getMessage());
-                }
-            }
-
-            if (lic == null) {
-                // if not found, create new license with default field values
-                lic = new LPVSLicense();
-                lic.setSpdxId(licenseSpdxId);
-                lic.setLicenseName(licName);
-                lic.setAlternativeNames(null);
-                lic.setAccess("UNREVIEWED");
-            }
-            // save new license and add it to the license list
-            lic = lpvsLicenseRepository.saveAndFlush(lic);
-        }
-        addLicenseToList(lic);
         return lic;
     }
 

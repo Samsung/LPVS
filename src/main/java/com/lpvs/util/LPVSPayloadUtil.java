@@ -17,10 +17,7 @@ import org.kohsuke.github.GHPullRequest;
 import org.kohsuke.github.GHRepository;
 import org.springframework.http.HttpHeaders;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -88,6 +85,25 @@ public class LPVSPayloadUtil {
             log.error("Error parsing OSORI DB payload: " + e.getMessage());
         }
         return null;
+    }
+
+    /**
+     * Convert an InputStream into a String by reading the contents line by line.
+     *
+     * @param inputStream The InputStream to convert.
+     * @return A String containing the contents of the InputStream.
+     * @throws IOException If an error occurs while reading the InputStream.
+     */
+    public static String convertInputStreamToString(InputStream inputStream) throws IOException {
+        BufferedReader in = createBufferReader(createInputStreamReader(inputStream));
+        String inputLine;
+        StringBuffer message = new StringBuffer();
+
+        while ((inputLine = in.readLine()) != null) {
+            message.append(inputLine);
+        }
+        in.close();
+        return message.toString();
     }
 
     /**

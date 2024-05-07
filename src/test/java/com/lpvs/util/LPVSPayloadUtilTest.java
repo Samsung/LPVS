@@ -384,4 +384,28 @@ public class LPVSPayloadUtilTest {
                     () -> LPVSPayloadUtil.createBufferReader(inputStreamReader));
         }
     }
+
+    @Nested
+    public class TestConvertInputStreamToString {
+
+        @Test
+        public void testConvertInputStreamToString() throws IOException, URISyntaxException {
+            Path path =
+                    Paths.get(
+                            Objects.requireNonNull(
+                                            getClass().getClassLoader().getResource("A_B.json"))
+                                    .toURI());
+            InputStream inputStream = Files.newInputStream(path);
+            assertNotNull(LPVSPayloadUtil.convertInputStreamToString(inputStream));
+            inputStream.close();
+        }
+
+        @Test
+        public void testConvertInputStreamToString_ThrowsException_N() {
+            InputStream inputStream = null;
+            assertThrows(
+                    NullPointerException.class,
+                    () -> LPVSPayloadUtil.convertInputStreamToString(inputStream));
+        }
+    }
 }
