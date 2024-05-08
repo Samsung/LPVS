@@ -7,7 +7,9 @@
 package com.lpvs.util;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.lpvs.entity.LPVSLicense;
 import com.lpvs.entity.LPVSQueue;
 import com.lpvs.entity.enums.LPVSPullRequestAction;
 import lombok.extern.slf4j.Slf4j;
@@ -15,10 +17,8 @@ import org.kohsuke.github.GHPullRequest;
 import org.kohsuke.github.GHRepository;
 import org.springframework.http.HttpHeaders;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -50,6 +50,60 @@ public class LPVSPayloadUtil {
      */
     public static BufferedReader createBufferReader(InputStreamReader inputStreamReader) {
         return new BufferedReader(inputStreamReader);
+    }
+
+    /**
+     * Parses the given payload from the OSORI DB and converts it into a LPVSLicense object.
+     *
+     * @param payload the JSON payload from the OSORI DB
+     * @return the LPVSLicense object containing the parsed information from the payload, or null if the payload is invalid
+     */
+    public static LPVSLicense convertOsoriDbResponseToLicense(String payload) {
+        try {
+            Gson gson = new Gson();
+            JsonObject json = gson.fromJson(payload, JsonObject.class);
+            JsonObject messageList = json.getAsJsonObject("messageList");
+            JsonArray detailInfoArray = messageList.getAsJsonArray("detailInfo");
+
+            LPVSLicense lic = new LPVSLicense();
+            lic.setLicenseName(detailInfoArray.get(0).getAsJsonObject().get("name").getAsString());
+            lic.setSpdxId(
+                    detailInfoArray.get(0).getAsJsonObject().get("spdx_identifier").getAsString());
+            lic.setAccess("UNREVIEWED");
+
+            List<String> nicknameList = new ArrayList<>();
+            detailInfoArray
+                    .get(0)
+                    .getAsJsonObject()
+                    .get("nicknameList")
+                    .getAsJsonArray()
+                    .forEach(element -> nicknameList.add(element.getAsString()));
+            lic.setAlternativeNames(String.join(",", nicknameList));
+
+            return lic;
+        } catch (Exception e) {
+            log.error("Error parsing OSORI DB payload: " + e.getMessage());
+        }
+        return null;
+    }
+
+    /**
+     * Convert an InputStream into a String by reading the contents line by line.
+     *
+     * @param inputStream The InputStream to convert.
+     * @return A String containing the contents of the InputStream.
+     * @throws IOException If an error occurs while reading the InputStream.
+     */
+    public static String convertInputStreamToString(InputStream inputStream) throws IOException {
+        BufferedReader in = createBufferReader(createInputStreamReader(inputStream));
+        String inputLine;
+        StringBuffer message = new StringBuffer();
+
+        while ((inputLine = in.readLine()) != null) {
+            message.append(inputLine);
+        }
+        in.close();
+        return message.toString();
     }
 
     /**

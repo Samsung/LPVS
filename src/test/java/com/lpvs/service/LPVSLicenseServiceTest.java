@@ -6,23 +6,20 @@
  */
 package com.lpvs.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.net.HttpURLConnection;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -372,43 +369,6 @@ public class LPVSLicenseServiceTest {
     }
 
     @Nested
-    class TestCheckLicense {
-        LPVSLicenseService licenseService;
-
-        // `lpvs_license_1`
-        LPVSLicense lpvs_license_1;
-        final String spdx_id_1 = "MIT";
-        // `lpvs_license_2`
-        LPVSLicense lpvs_license_2;
-        final String spdx_id_2 = "Apache-1.1-or-later";
-        // `lpvs_license_3`
-        LPVSLicense lpvs_license_3;
-        final String spdx_id_3 = "Apache-2.0-only";
-
-        @BeforeEach
-        void setUp() throws NoSuchFieldException, IllegalAccessException {
-            licenseService = new LPVSLicenseService(null, exitHandler);
-
-            lpvs_license_1 = new LPVSLicense(1L, null, spdx_id_1, null, null, null);
-            lpvs_license_2 = new LPVSLicense(1L, null, spdx_id_2, null, null, null);
-            lpvs_license_3 = new LPVSLicense(1L, null, spdx_id_3, null, null, null);
-
-            Field conflicts_field = licenseService.getClass().getDeclaredField("licenses");
-            conflicts_field.setAccessible(true);
-            conflicts_field.set(
-                    licenseService, List.of(lpvs_license_1, lpvs_license_2, lpvs_license_3));
-        }
-
-        @Test
-        public void testCheckLicense() {
-            assertEquals(lpvs_license_1, licenseService.checkLicense("MIT"));
-            assertEquals(lpvs_license_2, licenseService.checkLicense("Apache-1.1+"));
-            assertEquals(lpvs_license_3, licenseService.checkLicense("Apache-2.0+"));
-            assertNull(licenseService.checkLicense("non-MIT"));
-        }
-    }
-
-    @Nested
     class TestFindConflicts_fullExecution {
         LPVSLicenseService licenseService;
         LPVSLicenseService.Conflict<String, String> conflict_1 =
@@ -549,5 +509,260 @@ public class LPVSLicenseServiceTest {
         assertNotEquals(Objects.hash(license1, license2), base_conf_11.hashCode());
         assertNotEquals(Objects.hash(license1, license2), base_conf_21.hashCode());
         assertNotEquals(Objects.hash(license1, license2), base_conf_22.hashCode());
+    }
+
+    @Nested
+    class TestGetLicenseBySpdxIdAndNameTest {
+
+        LPVSLicenseService licenseService;
+        LPVSLicense lpvs_license_1, lpvs_license_2;
+        LPVSLicenseRepository licenseRepository;
+
+        @BeforeEach
+        void init() throws NoSuchFieldException, IllegalAccessException {
+            licenseService = new LPVSLicenseService(null, exitHandler);
+            licenseRepository = Mockito.mock(LPVSLicenseRepository.class);
+            Field license_repository =
+                    licenseService.getClass().getDeclaredField("lpvsLicenseRepository");
+            license_repository.setAccessible(true);
+            license_repository.set(licenseService, licenseRepository);
+
+            lpvs_license_1 =
+                    new LPVSLicense(
+                            1L,
+                            "OpenSSL License",
+                            "OpenSSL",
+                            "PERMITTED",
+                            "OPENSSL_LICENSE,SSLeay license and OpenSSL License",
+                            null);
+            lpvs_license_2 =
+                    new LPVSLicense(
+                            2L,
+                            "GNU General Public License v3.0 only",
+                            "GPL-3.0-only",
+                            "PROHIBITED",
+                            null,
+                            null);
+            licenseService.addLicenseToList(lpvs_license_1);
+            licenseService.addLicenseToList(lpvs_license_2);
+        }
+
+        @Test
+        public void getLicenseBySpdxIdAndNameTest_findLicenseBySPDX() {
+            LPVSLicense result =
+                    licenseService.getLicenseBySpdxIdAndName("GPL-3.0-only", Optional.empty());
+            assertEquals("GPL-3.0-only", result.getSpdxId());
+            assertEquals("GNU General Public License v3.0 only", result.getLicenseName());
+            assertEquals("PROHIBITED", result.getAccess());
+        }
+
+        @Test
+        public void getLicenseBySpdxIdAndNameTest_findLicenseByName() {
+            LPVSLicense result =
+                    licenseService.getLicenseBySpdxIdAndName("OpenSSL License", Optional.empty());
+            assertEquals("OpenSSL", result.getSpdxId());
+            assertEquals("OpenSSL License", result.getLicenseName());
+            assertEquals("PERMITTED", result.getAccess());
+        }
+
+        @Test
+        public void getLicenseBySpdxIdAndNameTest_connectToOSORI()
+                throws NoSuchFieldException,
+                        IllegalAccessException,
+                        IOException,
+                        URISyntaxException {
+            Field osoriDbUrl = licenseService.getClass().getDeclaredField("osoriDbUrl");
+            osoriDbUrl.setAccessible(true);
+            osoriDbUrl.set(licenseService, "http://127.0.0.1:8080");
+
+            HttpURLConnection mockConnection = Mockito.mock(HttpURLConnection.class);
+            when(mockConnection.getResponseCode()).thenReturn(200);
+
+            LPVSLicenseService.OsoriConnection mockOsoriConnection =
+                    Mockito.mock(LPVSLicenseService.OsoriConnection.class);
+            Field osoriConnection = licenseService.getClass().getDeclaredField("osoriConnection");
+            osoriConnection.setAccessible(true);
+            osoriConnection.set(licenseService, mockOsoriConnection);
+
+            when(mockOsoriConnection.createConnection(anyString(), anyString()))
+                    .thenReturn(mockConnection);
+
+            Path path =
+                    Paths.get(
+                            Objects.requireNonNull(
+                                            getClass()
+                                                    .getClassLoader()
+                                                    .getResource("osori_db_response1.json"))
+                                    .toURI());
+
+            when(mockConnection.getInputStream()).thenReturn(Files.newInputStream(path));
+            when(licenseRepository.saveAndFlush(Mockito.any(LPVSLicense.class)))
+                    .thenAnswer(i -> i.getArguments()[0]);
+
+            LPVSLicense result =
+                    licenseService.getLicenseBySpdxIdAndName("Apache-2.0", Optional.empty());
+            assertEquals("Apache-2.0", result.getSpdxId());
+            assertEquals("Apache License 2.0", result.getLicenseName());
+            assertEquals("UNREVIEWED", result.getAccess());
+        }
+
+        @Test
+        public void getLicenseBySpdxIdAndNameTest_createNewLicense()
+                throws NoSuchFieldException,
+                        IllegalAccessException,
+                        IOException,
+                        URISyntaxException {
+            Field osoriDbUrl = licenseService.getClass().getDeclaredField("osoriDbUrl");
+            osoriDbUrl.setAccessible(true);
+            osoriDbUrl.set(licenseService, "http://127.0.0.1:8080");
+
+            HttpURLConnection mockConnection = Mockito.mock(HttpURLConnection.class);
+            when(mockConnection.getResponseCode()).thenReturn(200);
+
+            LPVSLicenseService.OsoriConnection mockOsoriConnection =
+                    Mockito.mock(LPVSLicenseService.OsoriConnection.class);
+            Field osoriConnection = licenseService.getClass().getDeclaredField("osoriConnection");
+            osoriConnection.setAccessible(true);
+            osoriConnection.set(licenseService, mockOsoriConnection);
+
+            when(mockOsoriConnection.createConnection(anyString(), anyString()))
+                    .thenReturn(mockConnection);
+
+            Path path =
+                    Paths.get(
+                            Objects.requireNonNull(
+                                            getClass()
+                                                    .getClassLoader()
+                                                    .getResource("osori_db_response2.json"))
+                                    .toURI());
+
+            when(mockConnection.getInputStream()).thenReturn(Files.newInputStream(path));
+            when(licenseRepository.saveAndFlush(Mockito.any(LPVSLicense.class)))
+                    .thenAnswer(i -> i.getArguments()[0]);
+
+            LPVSLicense result =
+                    licenseService.getLicenseBySpdxIdAndName(
+                            "Apache-2.0", Optional.of("Apache License 2.0"));
+            assertEquals("Apache-2.0", result.getSpdxId());
+            assertEquals("Apache License 2.0", result.getLicenseName());
+            assertEquals("UNREVIEWED", result.getAccess());
+        }
+
+        @Test
+        public void getLicenseBySpdxIdAndNameTest_emptyOsoriUrl_N() {
+            when(licenseRepository.saveAndFlush(Mockito.any(LPVSLicense.class)))
+                    .thenAnswer(i -> i.getArguments()[0]);
+            LPVSLicense result =
+                    licenseService.getLicenseBySpdxIdAndName(
+                            "Apache-2.0", Optional.of("Apache License 2.0"));
+            assertEquals("Apache-2.0", result.getSpdxId());
+            assertEquals("Apache License 2.0", result.getLicenseName());
+            assertEquals("UNREVIEWED", result.getAccess());
+        }
+
+        @Test
+        public void getLicenseBySpdxIdAndNameTest_errorCodeInOSORI_N()
+                throws NoSuchFieldException,
+                        IllegalAccessException,
+                        IOException,
+                        URISyntaxException {
+            Field osoriDbUrl = licenseService.getClass().getDeclaredField("osoriDbUrl");
+            osoriDbUrl.setAccessible(true);
+            osoriDbUrl.set(licenseService, "http://127.0.0.1:8080");
+
+            HttpURLConnection mockConnection = Mockito.mock(HttpURLConnection.class);
+            when(mockConnection.getResponseCode()).thenReturn(400);
+
+            LPVSLicenseService.OsoriConnection mockOsoriConnection =
+                    Mockito.mock(LPVSLicenseService.OsoriConnection.class);
+            Field osoriConnection = licenseService.getClass().getDeclaredField("osoriConnection");
+            osoriConnection.setAccessible(true);
+            osoriConnection.set(licenseService, mockOsoriConnection);
+
+            when(mockOsoriConnection.createConnection(anyString(), anyString()))
+                    .thenReturn(mockConnection);
+            when(licenseRepository.saveAndFlush(Mockito.any(LPVSLicense.class)))
+                    .thenAnswer(i -> i.getArguments()[0]);
+
+            LPVSLicense result =
+                    licenseService.getLicenseBySpdxIdAndName(
+                            "Apache-2.0", Optional.of("Apache License 2.0"));
+            assertEquals("Apache-2.0", result.getSpdxId());
+            assertEquals("Apache License 2.0", result.getLicenseName());
+            assertEquals("UNREVIEWED", result.getAccess());
+        }
+
+        @Test
+        public void findLicenseInOsoriDBTest()
+                throws IOException,
+                        IllegalAccessException,
+                        NoSuchFieldException,
+                        URISyntaxException {
+            Field osoriDbUrl = licenseService.getClass().getDeclaredField("osoriDbUrl");
+            osoriDbUrl.setAccessible(true);
+            osoriDbUrl.set(licenseService, "http://127.0.0.1:8080");
+
+            HttpURLConnection mockConnection = Mockito.mock(HttpURLConnection.class);
+            when(mockConnection.getResponseCode()).thenReturn(200);
+
+            LPVSLicenseService.OsoriConnection mockOsoriConnection =
+                    Mockito.mock(LPVSLicenseService.OsoriConnection.class);
+            Field osoriConnection = licenseService.getClass().getDeclaredField("osoriConnection");
+            osoriConnection.setAccessible(true);
+            osoriConnection.set(licenseService, mockOsoriConnection);
+
+            when(mockOsoriConnection.createConnection(anyString(), anyString()))
+                    .thenReturn(mockConnection);
+
+            Path path =
+                    Paths.get(
+                            Objects.requireNonNull(
+                                            getClass()
+                                                    .getClassLoader()
+                                                    .getResource("osori_db_response1.json"))
+                                    .toURI());
+
+            when(mockConnection.getInputStream()).thenReturn(Files.newInputStream(path));
+            when(licenseRepository.saveAndFlush(Mockito.any(LPVSLicense.class)))
+                    .thenAnswer(i -> i.getArguments()[0]);
+
+            LPVSLicense result = licenseService.findLicenseInOsoriDB("Apache-2.0");
+            assertEquals("Apache-2.0", result.getSpdxId());
+            assertEquals("Apache License 2.0", result.getLicenseName());
+            assertEquals("UNREVIEWED", result.getAccess());
+        }
+
+        @Test
+        public void findLicenseTest() {
+            LPVSLicense result = licenseService.findLicense("GPL-3.0-only", "GPL-3.0-only");
+            assertEquals("GPL-3.0-only", result.getSpdxId());
+            assertEquals("GNU General Public License v3.0 only", result.getLicenseName());
+            assertEquals("PROHIBITED", result.getAccess());
+        }
+    }
+
+    @Nested
+    class TestOsoriConnection {
+
+        @Test
+        public void testCreateConnection() throws IOException {
+            String osoriDbUrl = "https://ossori.com";
+            String licenseSpdxId = "Apache-2.0";
+            LPVSLicenseService.OsoriConnection connection =
+                    new LPVSLicenseService.OsoriConnection();
+            HttpURLConnection httpURLConnection =
+                    connection.createConnection(osoriDbUrl, licenseSpdxId);
+            assertEquals(
+                    osoriDbUrl + "/api/v1/user/licenses/spdx_identifier?searchWord=Apache-2.0",
+                    httpURLConnection.getURL().toString());
+        }
+
+        @Test
+        public void testCreateConnectionThrowsIOException_N() {
+            String licenseSpdxId = "Apache-2.0";
+            LPVSLicenseService.OsoriConnection connection =
+                    new LPVSLicenseService.OsoriConnection();
+            assertThrows(IOException.class, () -> connection.createConnection(null, licenseSpdxId));
+        }
     }
 }

@@ -6,6 +6,7 @@
  */
 package com.lpvs.util;
 
+import com.lpvs.entity.LPVSLicense;
 import com.lpvs.entity.LPVSQueue;
 import com.lpvs.entity.enums.LPVSPullRequestAction;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,6 +25,37 @@ import java.util.Objects;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class LPVSPayloadUtilTest {
+
+    @Nested
+    class TestConvertOsoriDbResponseToLicense {
+        @Test
+        public void testConvertOsoriDbResponseToLicense() {
+            String payload =
+                    "{\"code\":\"200\",\"messageList\":{\"detailInfo\":[{\"name\":\"Apache License 2.0\",\"spdx_identifier\":\"Apache-2.0\",\"webpage\":\"https://spdx.org/licenses/Apache-2.0.html\",\"nicknameList\":[\"Android-Apache-2.0\",\"Apache 2\"],\"webpageList\":null,\"restrictionList\":null}]},\"success\":true}";
+            LPVSLicense expectedLicense = new LPVSLicense();
+            expectedLicense.setLicenseName("Apache License 2.0");
+            expectedLicense.setSpdxId("Apache-2.0");
+            expectedLicense.setAccess("UNREVIEWED");
+            expectedLicense.setAlternativeNames("Android-Apache-2.0,Apache 2");
+
+            LPVSLicense actualLicense = LPVSPayloadUtil.convertOsoriDbResponseToLicense(payload);
+
+            assertNotNull(actualLicense);
+            assertEquals(expectedLicense.getLicenseName(), actualLicense.getLicenseName());
+            assertEquals(expectedLicense.getSpdxId(), actualLicense.getSpdxId());
+            assertEquals(expectedLicense.getAccess(), actualLicense.getAccess());
+            assertEquals(
+                    expectedLicense.getAlternativeNames(), actualLicense.getAlternativeNames());
+        }
+
+        @Test
+        public void testConvertOsoriDbResponseToLicense_withInvalidPayload_N() {
+            String payload =
+                    "{\"code\":\"200\",\"messageList\":{\"detailInfo\":[{\"name\":\"Apache License 2.0\",\"spdx_identifier\":\"Apache-2.0\",\"webpage\":\"https://spdx.org/licenses/Apache-2.0.html\",\"webpageList\":null,\"restrictionList\":null}]},\"success\":true}";
+            LPVSLicense actualLicense = LPVSPayloadUtil.convertOsoriDbResponseToLicense(payload);
+            assertNull(actualLicense);
+        }
+    }
 
     @Nested
     class TestGetGitHubWebhookConfig__ForkTrue {
@@ -350,6 +382,30 @@ public class LPVSPayloadUtilTest {
             assertThrows(
                     NullPointerException.class,
                     () -> LPVSPayloadUtil.createBufferReader(inputStreamReader));
+        }
+    }
+
+    @Nested
+    public class TestConvertInputStreamToString {
+
+        @Test
+        public void testConvertInputStreamToString() throws IOException, URISyntaxException {
+            Path path =
+                    Paths.get(
+                            Objects.requireNonNull(
+                                            getClass().getClassLoader().getResource("A_B.json"))
+                                    .toURI());
+            InputStream inputStream = Files.newInputStream(path);
+            assertNotNull(LPVSPayloadUtil.convertInputStreamToString(inputStream));
+            inputStream.close();
+        }
+
+        @Test
+        public void testConvertInputStreamToString_ThrowsException_N() {
+            InputStream inputStream = null;
+            assertThrows(
+                    NullPointerException.class,
+                    () -> LPVSPayloadUtil.convertInputStreamToString(inputStream));
         }
     }
 }

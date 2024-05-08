@@ -227,21 +227,11 @@ public class LPVSScanossDetectService implements LPVSScanService {
                 if (object.licenses != null) {
                     for (ScanossJsonStructure.ScanossLicense license : object.licenses) {
                         // Check detected licenses
-                        LPVSLicense lic = licenseService.findLicenseBySPDX(license.name);
-                        if (lic != null) {
-                            lic.setChecklistUrl(license.checklist_url);
-                            licenses.add(lic);
-                        } else {
-                            LPVSLicense newLicense = new LPVSLicense();
-                            newLicense.setSpdxId(license.name);
-                            newLicense.setLicenseName(license.name);
-                            newLicense.setAccess("UNREVIEWED");
-                            newLicense.setChecklistUrl(license.checklist_url);
-                            newLicense.setAlternativeNames(null);
-                            newLicense = lpvsLicenseRepository.save(newLicense);
-                            licenseService.addLicenseToList(newLicense);
-                            licenses.add(newLicense);
-                        }
+                        LPVSLicense lic =
+                                licenseService.getLicenseBySpdxIdAndName(
+                                        license.name, Optional.empty());
+                        lic.setChecklistUrl(license.checklist_url);
+                        licenses.add(lic);
 
                         // Check for the license conflicts if the property
                         // "license_conflict=scanner"

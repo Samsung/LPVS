@@ -4343,14 +4343,6 @@ public class LPVSGitHubServiceTest {
                 throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
 
             environmentVars.set("LPVS_GITHUB_TOKEN", "");
-
-            LPVSPullRequestRepository mocked_pullRequestRepository =
-                    mock(LPVSPullRequestRepository.class);
-            LPVSDetectedLicenseRepository mocked_lpvsDetectedLicenseRepository =
-                    mock(LPVSDetectedLicenseRepository.class);
-            LPVSLicenseRepository mocked_lpvsLicenseRepository = mock(LPVSLicenseRepository.class);
-            LPVSLicenseConflictRepository mocked_lpvsLicenseConflictRepository =
-                    mock(LPVSLicenseConflictRepository.class);
             LPVSExitHandler exitHandler = mock(LPVSExitHandler.class);
             LPVSGitHubConnectionService lpvsGitHubConnectionService =
                     new LPVSGitHubConnectionService("", "", "", exitHandler);
