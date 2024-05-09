@@ -3757,7 +3757,7 @@ public class LPVSGitHubServiceTest {
                         .thenReturn(mocked_instance_gh);
 
                 // main test
-                assertEquals("Proprietary", gh_service.getRepositoryLicense(webhookConfig));
+                assertNull(gh_service.getRepositoryLicense(webhookConfig));
 
                 // verification of calling methods on `Mock`s
                 // `mocked_static_gh` verify
@@ -3955,7 +3955,7 @@ public class LPVSGitHubServiceTest {
                         .thenReturn(mocked_instance_gh);
 
                 // main test
-                assertEquals("Proprietary", gh_service.getRepositoryLicense(webhookConfig));
+                assertNull(gh_service.getRepositoryLicense(webhookConfig));
 
                 // verification of calling methods on `Mock`s
                 // `mocked_static_gh` verify
@@ -4033,7 +4033,7 @@ public class LPVSGitHubServiceTest {
                         .thenThrow(new IOException("test cant authorize"));
 
                 // main test
-                assertEquals("Proprietary", gh_service.getRepositoryLicense(webhookConfig));
+                assertNull(gh_service.getRepositoryLicense(webhookConfig));
 
                 // verification of calling methods on `Mock`s
                 // `mocked_static_gh` verify
@@ -4086,7 +4086,7 @@ public class LPVSGitHubServiceTest {
                         .thenThrow(new IOException("test cant authorize"));
 
                 // main test
-                assertEquals("Proprietary", gh_service.getRepositoryLicense(webhookConfig));
+                assertNull(gh_service.getRepositoryLicense(webhookConfig));
 
                 // verification of calling methods on `Mock`s
                 // `mocked_static_gh` verify
