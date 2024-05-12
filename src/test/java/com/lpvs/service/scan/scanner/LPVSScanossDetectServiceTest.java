@@ -123,11 +123,20 @@ public class LPVSScanossDetectServiceTest {
         Mockito.when(webhookConfig.getHeadCommitSHA()).thenReturn(null);
         Mockito.when(webhookConfig.getRepositoryUrl())
                 .thenReturn("https://github.com/Samsung/LPVS");
-        Mockito.when(LPVSPayloadUtil.getRepositoryName(webhookConfig)).thenReturn("A");
-        Mockito.when(webhookConfig.getPullRequestUrl()).thenReturn("A/B");
+        Mockito.when(LPVSPayloadUtil.getRepositoryName(webhookConfig)).thenReturn("C");
+        Mockito.when(webhookConfig.getPullRequestUrl()).thenReturn("A_B");
         ReflectionTestUtils.setField(
                 licenseService, "licenseConflictsSource", licenseConflictsSource);
-        Assertions.assertNotNull(scanossDetectService.checkLicenses(webhookConfig));
+        Mockito.when(licenseService.getLicenseBySpdxIdAndName(anyString(), any()))
+                .thenReturn(
+                        new LPVSLicense() {
+                            {
+                                setLicenseName("MIT");
+                                setLicenseId(1L);
+                                setSpdxId("MIT");
+                            }
+                        });
+        Assertions.assertEquals(scanossDetectService.checkLicenses(webhookConfig).size(), 3);
     }
 
     @Test
@@ -137,11 +146,21 @@ public class LPVSScanossDetectServiceTest {
         Mockito.when(webhookConfig.getHeadCommitSHA()).thenReturn(null);
         Mockito.when(webhookConfig.getRepositoryUrl())
                 .thenReturn("https://github.com/Samsung/LPVS");
-        Mockito.when(webhookConfig.getPullRequestUrl()).thenReturn("A/B");
-        Mockito.when(LPVSPayloadUtil.getRepositoryName(webhookConfig)).thenReturn("A");
+        Mockito.when(webhookConfig.getPullRequestUrl()).thenReturn("A_B");
+        Mockito.when(LPVSPayloadUtil.getRepositoryName(webhookConfig)).thenReturn("C");
         ReflectionTestUtils.setField(
                 licenseService, "licenseConflictsSource", licenseConflictsSource);
-        Assertions.assertNotNull(scanossDetectService.checkLicenses(webhookConfig));
+
+        Mockito.when(licenseService.getLicenseBySpdxIdAndName(anyString(), any()))
+                .thenReturn(
+                        new LPVSLicense() {
+                            {
+                                setLicenseName("MIT");
+                                setLicenseId(1L);
+                                setSpdxId("MIT");
+                            }
+                        });
+        Assertions.assertEquals(scanossDetectService.checkLicenses(webhookConfig).size(), 3);
     }
 
     @Test
