@@ -516,8 +516,7 @@ public class LPVSQueueServiceTest {
 
             mockLicenseService = mock(LPVSLicenseService.class);
             when(mockLicenseService.getLicenseBySpdxIdAndName(licenseNameTest, Optional.empty()))
-                    .thenReturn(null);
-            when(mockLicenseService.findLicenseByName(licenseNameTest)).thenReturn(lpvsLicenseTest);
+                    .thenReturn(lpvsLicenseTest);
 
             mockDetectService = mock(LPVSDetectService.class);
             try {
@@ -553,7 +552,8 @@ public class LPVSQueueServiceTest {
             verify(mockGitHubService, times(1)).getRepositoryLicense(webhookConfigMain);
             verify(mockLicenseService, times(1))
                     .getLicenseBySpdxIdAndName(licenseNameTest, Optional.empty());
-            verify(mockLicenseService, times(2)).findLicenseByName(licenseNameTest);
+            verify(mockLicenseService, times(1))
+                    .getLicenseBySpdxIdAndName(licenseNameTest, Optional.empty());
             try {
                 verify(mockDetectService, times(1))
                         .runScan(webhookConfigMain, filePathTestNoDeletion);
@@ -616,8 +616,7 @@ public class LPVSQueueServiceTest {
 
             mockLicenseService = mock(LPVSLicenseService.class);
             when(mockLicenseService.getLicenseBySpdxIdAndName(licenseNameTest, Optional.empty()))
-                    .thenReturn(null);
-            when(mockLicenseService.findLicenseByName(licenseNameTest)).thenReturn(lpvsLicenseTest);
+                    .thenReturn(lpvsLicenseTest);
 
             mockDetectService = mock(LPVSDetectService.class);
             try {
@@ -651,12 +650,13 @@ public class LPVSQueueServiceTest {
             verify(mockGitHubService, times(1)).getRepositoryLicense(webhookConfigMain);
             verify(mockLicenseService, times(1))
                     .getLicenseBySpdxIdAndName(licenseNameTest, Optional.empty());
-            verify(mockLicenseService, times(2)).findLicenseByName(licenseNameTest);
+            verify(mockLicenseService, times(1))
+                    .getLicenseBySpdxIdAndName(licenseNameTest, Optional.empty());
             try {
                 verify(mockDetectService, times(1))
                         .runScan(webhookConfigMain, filePathTestWithDeletionTruncated);
             } catch (Exception e) {
-                log.error("TestProcessWebHook__DeletionAbsentLicensePresent: Exception: " + e);
+                log.error("TestProcessWebHook__DeletionPresentLicenseFound: Exception: " + e);
                 fail();
             }
             verify(mockLicenseService, times(1)).findConflicts(webhookConfigMain, LPVSFilesTest);
@@ -709,14 +709,9 @@ public class LPVSQueueServiceTest {
             mockGitHubService = mock(LPVSGitHubService.class);
             when(mockGitHubService.getPullRequestFiles(webhookConfigMain))
                     .thenReturn(filePathTestNoDeletion);
-            when(mockGitHubService.getRepositoryLicense(webhookConfigMain))
-                    .thenReturn(licenseNameTest);
+            when(mockGitHubService.getRepositoryLicense(webhookConfigMain)).thenReturn(null);
 
             mockLicenseService = mock(LPVSLicenseService.class);
-            when(mockLicenseService.getLicenseBySpdxIdAndName(licenseNameTest, Optional.empty()))
-                    .thenReturn(null);
-            when(mockLicenseService.findLicenseByName(licenseNameTest)).thenReturn(null);
-
             mockDetectService = mock(LPVSDetectService.class);
             try {
                 when(mockDetectService.runScan(webhookConfigMain, filePathTestNoDeletion))
@@ -746,9 +741,6 @@ public class LPVSQueueServiceTest {
 
             verify(mockGitHubService, times(1)).getPullRequestFiles(webhookConfigMain);
             verify(mockGitHubService, times(1)).getRepositoryLicense(webhookConfigMain);
-            verify(mockLicenseService, times(1))
-                    .getLicenseBySpdxIdAndName(licenseNameTest, Optional.empty());
-            verify(mockLicenseService, times(1)).findLicenseByName(licenseNameTest);
             try {
                 verify(mockDetectService, times(1))
                         .runScan(webhookConfigMain, filePathTestNoDeletion);
@@ -806,14 +798,9 @@ public class LPVSQueueServiceTest {
             mockGitHubService = mock(LPVSGitHubService.class);
             when(mockGitHubService.getPullRequestFiles(webhookConfigMain))
                     .thenReturn(filePathTestWithDeletion);
-            when(mockGitHubService.getRepositoryLicense(webhookConfigMain))
-                    .thenReturn(licenseNameTest);
+            when(mockGitHubService.getRepositoryLicense(webhookConfigMain)).thenReturn(null);
 
             mockLicenseService = mock(LPVSLicenseService.class);
-            when(mockLicenseService.getLicenseBySpdxIdAndName(licenseNameTest, Optional.empty()))
-                    .thenReturn(null);
-            when(mockLicenseService.findLicenseByName(licenseNameTest)).thenReturn(null);
-
             mockDetectService = mock(LPVSDetectService.class);
             try {
                 when(mockDetectService.runScan(
@@ -844,9 +831,6 @@ public class LPVSQueueServiceTest {
 
             verify(mockGitHubService, times(1)).getPullRequestFiles(webhookConfigMain);
             verify(mockGitHubService, times(1)).getRepositoryLicense(webhookConfigMain);
-            verify(mockLicenseService, times(1))
-                    .getLicenseBySpdxIdAndName(licenseNameTest, Optional.empty());
-            verify(mockLicenseService, times(1)).findLicenseByName(licenseNameTest);
             try {
                 verify(mockDetectService, times(1))
                         .runScan(webhookConfigMain, filePathTestWithDeletionTruncated);

@@ -200,7 +200,7 @@ public class LPVSLicenseService {
      * @param name SPDX identifier of the license.
      * @return LPVSLicense object if found, otherwise null.
      */
-    public LPVSLicense findLicenseBySPDX(String name) {
+    protected LPVSLicense findLicenseBySPDX(String name) {
         for (LPVSLicense license : licenses) {
             if (license.getSpdxId().equalsIgnoreCase(name)) {
                 return license;
@@ -214,7 +214,7 @@ public class LPVSLicenseService {
      *
      * @param license The license to add.
      */
-    public void addLicenseToList(LPVSLicense license) {
+    protected void addLicenseToList(LPVSLicense license) {
         if (!licenses.contains(license)) {
             licenses.add(license);
         }
@@ -226,7 +226,7 @@ public class LPVSLicenseService {
      * @param name The name of the license.
      * @return LPVSLicense object if found, otherwise null.
      */
-    public LPVSLicense findLicenseByName(String name) {
+    protected LPVSLicense findLicenseByName(String name) {
         for (LPVSLicense license : licenses) {
             if (license.getLicenseName().equalsIgnoreCase(name)) {
                 return license;

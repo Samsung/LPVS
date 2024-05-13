@@ -229,14 +229,12 @@ public class LPVSQueueService {
                 }
                 // check repository license
                 String repositoryLicense = gitHubService.getRepositoryLicense(webhookConfig);
-                LPVSLicense repoLicense =
-                        licenseService.getLicenseBySpdxIdAndName(
-                                repositoryLicense, Optional.empty());
-                if (repoLicense != null) {
+
+                if (repositoryLicense != null) {
+                    LPVSLicense repoLicense =
+                            licenseService.getLicenseBySpdxIdAndName(
+                                    repositoryLicense, Optional.empty());
                     webhookConfig.setRepositoryLicense(repoLicense.getSpdxId());
-                } else if (licenseService.findLicenseByName(repositoryLicense) != null) {
-                    webhookConfig.setRepositoryLicense(
-                            licenseService.findLicenseByName(repositoryLicense).getSpdxId());
                 } else {
                     webhookConfig.setRepositoryLicense(null);
                 }

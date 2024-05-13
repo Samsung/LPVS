@@ -366,7 +366,7 @@ public class LPVSGitHubService {
      * Retrieves the license of the GitHub repository associated with the pull request.
      *
      * @param webhookConfig LPVSQueue configuration for the pull request.
-     * @return License key of the GitHub repository or "Proprietary" if not available.
+     * @return License key of the GitHub repository or null if not available.
      */
     public String getRepositoryLicense(LPVSQueue webhookConfig) {
         try {
@@ -378,14 +378,14 @@ public class LPVSGitHubService {
                     gitHub.getRepository(repositoryOrganization + "/" + repositoryName);
             GHLicense license = repository.getLicense();
             if (license == null) {
-                return "Proprietary";
+                return null;
             } else {
                 return license.getKey();
             }
         } catch (IOException | IllegalArgumentException e) {
             log.error("Can't authorize getRepositoryLicense(): " + e.getMessage());
         }
-        return "Proprietary";
+        return null;
     }
 
     /**
