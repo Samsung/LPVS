@@ -138,12 +138,44 @@ public class LPVSCommentUtilTest {
     }
 
     @Test
+    void testReportCommentBuilder_HubLink() {
+        LPVSQueue webhookConfig = new LPVSQueue();
+        List<LPVSFile> scanResults = new ArrayList<>();
+        scanResults.add(createSampleFile("testPath1", "test1"));
+        LPVSLicenseService.Conflict<String, String> conflict_1 =
+                new LPVSLicenseService.Conflict<>("MIT", "Apache-2.0");
+        List<LPVSLicenseService.Conflict<String, String>> conflicts =
+                List.of(conflict_1, conflict_1);
+        webhookConfig.setHubLink("any_link");
+        String comment =
+                LPVSCommentUtil.reportCommentBuilder(webhookConfig, scanResults, conflicts);
+
+        assertNotNull(comment);
+    }
+
+    @Test
     void testBuildHTMLComment() {
         LPVSQueue webhookConfig = new LPVSQueue();
         List<LPVSFile> scanResults = new ArrayList<>();
         scanResults.add(createSampleFile("testPath1", "test1"));
         List<LPVSLicenseService.Conflict<String, String>> conflicts = new ArrayList<>();
 
+        String htmlComment =
+                LPVSCommentUtil.buildHTMLComment(webhookConfig, scanResults, conflicts);
+
+        assertNotNull(htmlComment);
+    }
+
+    @Test
+    void testBuildHTMLComment_HubLink() {
+        LPVSQueue webhookConfig = new LPVSQueue();
+        List<LPVSFile> scanResults = new ArrayList<>();
+        scanResults.add(createSampleFile("testPath1", "test1"));
+        LPVSLicenseService.Conflict<String, String> conflict_1 =
+                new LPVSLicenseService.Conflict<>("MIT", "Apache-2.0");
+        List<LPVSLicenseService.Conflict<String, String>> conflicts =
+                List.of(conflict_1, conflict_1);
+        webhookConfig.setHubLink("some_link");
         String htmlComment =
                 LPVSCommentUtil.buildHTMLComment(webhookConfig, scanResults, conflicts);
 

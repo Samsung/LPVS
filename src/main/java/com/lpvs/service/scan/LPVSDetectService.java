@@ -138,11 +138,13 @@ public class LPVSDetectService {
                     String report =
                             LPVSCommentUtil.reportCommentBuilder(
                                     webhookConfig, scanResult, detectedConflicts);
-                    log.info(report);
+                    if (report != null && !report.isEmpty()) {
+                        log.info(report);
+                    }
                 }
                 log.info("Single scan completed.");
             } catch (Exception ex) {
-                log.error("\n\n\n Single scan finished with errors \n\n\n");
+                log.error("Single scan finished with errors.");
                 log.error("Can't trigger single scan: " + ex.getMessage());
             }
             SpringApplication.exit(ctx, () -> 0);
@@ -174,7 +176,7 @@ public class LPVSDetectService {
             }
             return files;
         } catch (IllegalArgumentException | NullPointerException ex) {
-            log.error(ex.getMessage());
+            log.error("Exception occurred during running the scan.");
             return new ArrayList<>();
         }
     }

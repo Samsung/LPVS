@@ -6,6 +6,7 @@
  */
 package com.lpvs;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -25,6 +26,7 @@ import com.lpvs.util.LPVSExitHandler;
 @SpringBootApplication(scanBasePackages = {"com.lpvs"})
 @EnableAutoConfiguration
 @EnableAsync
+@Slf4j
 public class LicensePreValidationService {
 
     /**
@@ -56,9 +58,11 @@ public class LicensePreValidationService {
             ApplicationContext applicationContext =
                     SpringApplication.run(LicensePreValidationService.class, args);
             exitHandler = applicationContext.getBean(LPVSExitHandler.class);
-        } catch (IllegalArgumentException e) {
-            System.err.println("An IllegalArgumentException occurred: " + e.getMessage());
+        } catch (IllegalArgumentException ex1) {
+            log.error("An IllegalArgumentException occurred: " + ex1.getMessage());
             System.exit(1);
+        } catch (Exception ex2) {
+            log.info("LPVS application is being closed.");
         }
     }
 

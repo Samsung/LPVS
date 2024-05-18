@@ -229,7 +229,7 @@ public class LPVSGitHubService {
         GHPullRequest pullRequest = getPullRequest(webhookConfig, repository);
 
         if (pullRequest == null) {
-            log.error("Can't find pull request " + webhookConfig.getPullRequestUrl());
+            log.error("Pull request is not found " + webhookConfig.getPullRequestUrl());
             lpvsPullRequest.setStatus(LPVSPullRequestStatus.NO_ACCESS.toString());
             pullRequestRepository.saveAndFlush(lpvsPullRequest);
             return;
