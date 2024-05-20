@@ -354,6 +354,20 @@ public class LPVSDetectServiceTest {
         }
 
         @Test
+        void testCommentBuilder_NoConflictNoLicense() {
+            List<LPVSLicenseService.Conflict<String, String>> expected = new ArrayList<>();
+            LPVSQueue webhookConfig = new LPVSQueue();
+            List<LPVSFile> scanResults = new ArrayList<>();
+            String commentGitHub =
+                    LPVSCommentUtil.reportCommentBuilder(webhookConfig, scanResults, expected);
+            String commentHTML =
+                    LPVSCommentUtil.buildHTMLComment(webhookConfig, scanResults, expected);
+
+            assertEquals(commentGitHub, "");
+            assertEquals(commentHTML, "<html><body></body></html>");
+        }
+
+        @Test
         public void testGetPathByPullRequest() {
 
             LPVSQueue mockWebhookConfig = mock(LPVSQueue.class);

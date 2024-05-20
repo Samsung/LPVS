@@ -178,6 +178,33 @@ public class LPVSScanossDetectServiceTest {
     }
 
     @Test
+    public void testRunScan_StatusEqualsOneNoErrorStream() throws Exception {
+        Mockito.when(lpvsQueue.getRepositoryUrl()).thenReturn("https://github.com/Samsung/LPVS");
+        Mockito.when(lpvsQueue.getPullRequestUrl())
+                .thenReturn("https://github.com/Samsung/LPVS/pull/1");
+        Process process = Mockito.mock(Process.class);
+        try (MockedConstruction<ProcessBuilder> mockedPb =
+                Mockito.mockConstruction(
+                        ProcessBuilder.class,
+                        (mock, context) -> {
+                            when(mock.inheritIO()).thenReturn(mock);
+                            when(mock.start()).thenReturn(process);
+                            when(process.getErrorStream()).thenReturn(null);
+                            when(process.waitFor()).thenReturn(1);
+                        })) {
+            Exception exception =
+                    assertThrows(
+                            Exception.class, () -> scanossDetectService.runScan(lpvsQueue, "path"));
+
+            // Verify that the method throws an exception when the status is 1
+            assertEquals(null, exception.getMessage());
+
+            verify(mockedPb.constructed().get(0)).start();
+            verify(process, times(1)).waitFor();
+        }
+    }
+
+    @Test
     public void testRunScan_StatusEqualsZero() throws Exception {
         Process process = Mockito.mock(Process.class);
         when(lpvsQueue.getRepositoryUrl()).thenReturn("https://github.com/Samsung/LPVS");

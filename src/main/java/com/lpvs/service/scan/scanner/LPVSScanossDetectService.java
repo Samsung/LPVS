@@ -115,7 +115,10 @@ public class LPVSScanossDetectService implements LPVSScanService {
                             LPVSPayloadUtil.createBufferReader(
                                     LPVSPayloadUtil.createInputStreamReader(
                                             process.getErrorStream()));
-                    log.error(output.readLine());
+                    String line = output.readLine();
+                    if (line != null) {
+                        log.error(line);
+                    }
                     throw new Exception(
                             "Scanoss scanner terminated with non-zero code. Terminating.");
                 } finally {
