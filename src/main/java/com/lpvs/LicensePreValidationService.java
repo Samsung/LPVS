@@ -58,10 +58,10 @@ public class LicensePreValidationService {
             ApplicationContext applicationContext =
                     SpringApplication.run(LicensePreValidationService.class, args);
             exitHandler = applicationContext.getBean(LPVSExitHandler.class);
-        } catch (IllegalArgumentException ex1) {
-            log.error("An IllegalArgumentException occurred: " + ex1.getMessage());
+        } catch (IllegalArgumentException e) {
+            log.error("An IllegalArgumentException occurred: " + e.getMessage());
             System.exit(1);
-        } catch (Exception ex2) {
+        } catch (Exception e) {
             log.info("LPVS application is being closed.");
         }
     }
