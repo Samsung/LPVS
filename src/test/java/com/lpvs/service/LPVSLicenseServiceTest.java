@@ -165,6 +165,9 @@ public class LPVSLicenseServiceTest {
     class TestInit {
         final LPVSLicenseService licenseService = new LPVSLicenseService(null, exitHandler);
 
+        final LPVSLicenseService licenseServiceWithSource =
+                new LPVSLicenseService("db", exitHandler);
+
         final LPVSLicenseRepository lpvsLicenseRepository =
                 Mockito.mock(LPVSLicenseRepository.class);
 
@@ -221,17 +224,17 @@ public class LPVSLicenseServiceTest {
                 Field lpvsLicenseRepositoryField =
                         LPVSLicenseService.class.getDeclaredField("lpvsLicenseRepository");
                 lpvsLicenseRepositoryField.setAccessible(true);
-                lpvsLicenseRepositoryField.set(licenseService, lpvsLicenseRepository);
+                lpvsLicenseRepositoryField.set(licenseServiceWithSource, lpvsLicenseRepository);
 
                 Field lpvsLicenseConflictRepositoryField =
                         LPVSLicenseService.class.getDeclaredField("lpvsLicenseConflictRepository");
                 lpvsLicenseConflictRepositoryField.setAccessible(true);
                 lpvsLicenseConflictRepositoryField.set(
-                        licenseService, lpvsLicenseConflictRepository);
+                        licenseServiceWithSource, lpvsLicenseConflictRepository);
 
-                Method init_method = licenseService.getClass().getDeclaredMethod("init");
+                Method init_method = licenseServiceWithSource.getClass().getDeclaredMethod("init");
                 init_method.setAccessible(true);
-                init_method.invoke(licenseService);
+                init_method.invoke(licenseServiceWithSource);
             } catch (NoSuchMethodException
                     | IllegalAccessException
                     | InvocationTargetException
@@ -314,13 +317,16 @@ public class LPVSLicenseServiceTest {
         LPVSLicense lpvs_license_2;
         final String license_name_2 = "Apache-2.0 License";
         final String spdx_id_2 = "Apache-2.0";
+        final String license_name_aleternative_2 = "Apache License 2.0";
 
         @BeforeEach
         void setUp() throws NoSuchFieldException, IllegalAccessException {
             licenseService = new LPVSLicenseService(null, exitHandler);
 
             lpvs_license_1 = new LPVSLicense(1L, license_name_1, spdx_id_1, null, null, null);
-            lpvs_license_2 = new LPVSLicense(2L, license_name_2, spdx_id_2, null, null, null);
+            lpvs_license_2 =
+                    new LPVSLicense(
+                            2L, license_name_2, spdx_id_2, null, license_name_aleternative_2, null);
 
             licenseService.addLicenseToList(lpvs_license_1);
             licenseService.addLicenseToList(lpvs_license_2);
@@ -334,6 +340,8 @@ public class LPVSLicenseServiceTest {
 
             assertEquals(lpvs_license_1, licenseService.findLicenseByName(license_name_1));
             assertEquals(lpvs_license_2, licenseService.findLicenseByName(license_name_2));
+            assertEquals(
+                    lpvs_license_2, licenseService.findLicenseByName(license_name_aleternative_2));
             assertNull(licenseService.findLicenseByName("Apache-1.1 License"));
         }
     }
