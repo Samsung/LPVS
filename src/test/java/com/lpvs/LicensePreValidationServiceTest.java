@@ -99,6 +99,24 @@ public class LicensePreValidationServiceTest {
     }
 
     @Test
+    public void testMain_IllegalAccessException_ExitHandlerIsNull_N() {
+        ConfigurableApplicationContext applicationContext =
+                Mockito.mock(ConfigurableApplicationContext.class);
+        LPVSExitHandler exitHandler = Mockito.mock(LPVSExitHandler.class);
+        String[] args = new String[0];
+
+        mockedStatic
+                .when(() -> SpringApplication.run(LicensePreValidationService.class, args))
+                .thenReturn(applicationContext);
+
+        Mockito.doThrow(new IllegalArgumentException("Test IllegalArgumentException"))
+                .when(applicationContext)
+                .getBean(LPVSExitHandler.class);
+        LicensePreValidationService.main(args);
+        Mockito.verify(exitHandler, Mockito.times(0)).exit(anyInt());
+    }
+
+    @Test
     public void testMain_Exception_N() throws NoSuchFieldException, IllegalAccessException {
         ConfigurableApplicationContext applicationContext =
                 Mockito.mock(ConfigurableApplicationContext.class);
