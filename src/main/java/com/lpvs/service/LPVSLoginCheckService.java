@@ -19,8 +19,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
 /**
@@ -130,15 +128,5 @@ public class LPVSLoginCheckService {
         }
 
         return new HistoryPageEntity(prPage, count);
-    }
-
-    /**
-     * Format LocalDateTime object as a string.
-     *
-     * @param localDateTime The LocalDateTime object to format.
-     * @return String representation of the formatted LocalDateTime.
-     */
-    public String dateTimeFormatting(LocalDateTime localDateTime) {
-        return localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 }
