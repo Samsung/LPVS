@@ -39,7 +39,8 @@ public class GitHubControllerTest {
 
     @SystemStub private EnvironmentVariables environmentVars;
 
-    private static final String SIGNATURE = "X-Hub-Signature-256";
+    private static final String SIGNATURE =
+            "sha256=757107ea0eb2509fc211221cce984b8a37570b6d7586c22c46f4379c8b043e17";
     private static final String SUCCESS = "Success";
     private static final String ERROR = "Error";
 
@@ -61,11 +62,33 @@ public class GitHubControllerTest {
                     "",
                     exitHandler);
 
+    GitHubController gitHubControllerWrongSecret =
+            new GitHubController(
+                    mocked_instance_queueServ,
+                    mocked_instance_ghServ,
+                    mocked_ghConnServ,
+                    mocked_queueRepo,
+                    "LPVS",
+                    exitHandler);
+
     @Test
     public void noSignatureTest() {
         ResponseEntity<LPVSResponseWrapper> actual;
         try {
             actual = gitHubController.gitHubWebhooks(null, null);
+        } catch (Exception e) {
+            actual = null;
+        }
+        ResponseEntity<LPVSResponseWrapper> expected =
+                new ResponseEntity<>(new LPVSResponseWrapper(ERROR), HttpStatus.FORBIDDEN);
+        assertEquals(expected.toString().substring(0, 56), actual.toString().substring(0, 56));
+    }
+
+    @Test
+    public void wrongGithubSecretTest() {
+        ResponseEntity<LPVSResponseWrapper> actual;
+        try {
+            actual = gitHubControllerWrongSecret.gitHubWebhooks(SIGNATURE, "test");
         } catch (Exception e) {
             actual = null;
         }
@@ -180,6 +203,27 @@ public class GitHubControllerTest {
     }
 
     @Test
+    public void noSecretSetTest() {
+
+        environmentVars.set("", "LPVS");
+
+        try {
+            gitHubController.initializeGitHubController();
+            fail("Expected Exception was not thrown");
+        } catch (NullPointerException e) {
+            // Test passes if a NullPointerException is caught during access to null pointer
+            // If we remove ExitHandler any time, this behaviour should be changed
+            log.info(
+                    "GitHubControllerTest::noSecretSetTest passed with NullPointerException: " + e);
+        } catch (Exception e) {
+            // Test fails if any other exception is caught
+            log.error(
+                    "GitHubControllerTest::noSecretSetTest failed with unexpected exception: " + e);
+            fail("Unexpected exception thrown: " + e);
+        }
+    }
+
+    @Test
     public void testGitHubSingleScan_Success() throws Exception {
         environmentVars.set("LPVS_GITHUB_SECRET", "LPVS");
         Method method = gitHubController.getClass().getDeclaredMethod("initializeGitHubController");
@@ -217,7 +261,7 @@ public class GitHubControllerTest {
         when(mocked_instance_ghServ.getInternalQueueByPullRequest(anyString()))
                 .thenThrow(new RuntimeException("Connection error"));
         ResponseEntity<LPVSResponseWrapper> responseEntity =
-                gitHubController.gitHubSingleScan("org", "repo", 1);
+                gitHubControllerWrongSecret.gitHubSingleScan("org", "repo", 1);
 
         assertEquals(HttpStatus.FORBIDDEN, responseEntity.getStatusCode());
     }
