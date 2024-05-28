@@ -60,7 +60,7 @@ public class LicensePreValidationService {
             exitHandler = applicationContext.getBean(LPVSExitHandler.class);
         } catch (IllegalArgumentException e) {
             log.error("An IllegalArgumentException occurred: " + e.getMessage());
-            System.exit(1);
+            exitHandler.exit(-1);
         } catch (Exception e) {
             log.info("LPVS application is being closed.");
         }
