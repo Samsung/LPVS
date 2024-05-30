@@ -15,10 +15,13 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.MockedConstruction;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.system.CapturedOutput;
+import org.springframework.boot.test.system.OutputCaptureExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.io.*;
@@ -28,6 +31,8 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Objects;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
@@ -161,6 +166,16 @@ public class LPVSScanossDetectServiceTest {
                             }
                         });
         Assertions.assertEquals(scanossDetectService.checkLicenses(webhookConfig).size(), 3);
+    }
+
+    @Test
+    @ExtendWith(OutputCaptureExtension.class)
+    public void testCheckLicenseException(CapturedOutput capturedOutput) {
+        Mockito.when(lpvsQueue.getHeadCommitSHA()).thenReturn("AB");
+        Mockito.when(lpvsQueue.getRepositoryUrl()).thenReturn("https://github.com/Samsung/LPVS");
+        scanossDetectService.checkLicenses(lpvsQueue);
+        assertThat(
+                capturedOutput.toString(), containsString("Error while processing Webhook ID = "));
     }
 
     @Test
