@@ -39,6 +39,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.HtmlUtils;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -235,7 +236,8 @@ public class LPVSWebController implements ErrorController {
                 String[] pullNumberTemp = pr.getPullRequestUrl().split("/");
                 LocalDateTime localDateTime =
                         pr.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-                String formattingDateTime = lpvsLoginCheckService.dateTimeFormatting(localDateTime);
+                String formattingDateTime =
+                        localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
                 // Validate and sanitize user inputs to prevent XSS attacks
                 sanitizeUserInputs(pr);
