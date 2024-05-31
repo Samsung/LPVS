@@ -147,107 +147,27 @@ public class LPVSScanossDetectService implements LPVSScanService {
         List<LPVSFile> detectedFiles = new ArrayList<>();
         try {
             Gson gson = new Gson();
-            Reader reader;
-            if (webhookConfig.getHeadCommitSHA() == null
-                    || webhookConfig.getHeadCommitSHA().equals("")) {
-                reader =
-                        Files.newBufferedReader(
-                                Paths.get(
-                                        System.getProperty("user.home")
-                                                + File.separator
-                                                + "Results"
-                                                + File.separator
-                                                + LPVSPayloadUtil.getRepositoryName(webhookConfig)
-                                                + File.separator
-                                                + LPVSPayloadUtil.getPullRequestId(webhookConfig)
-                                                + ".json"));
-            } else {
-                reader =
-                        Files.newBufferedReader(
-                                Paths.get(
-                                        System.getProperty("user.home")
-                                                + File.separator
-                                                + "Results"
-                                                + File.separator
-                                                + LPVSPayloadUtil.getRepositoryName(webhookConfig)
-                                                + File.separator
-                                                + webhookConfig.getHeadCommitSHA()
-                                                + ".json"));
-            }
+            Reader reader = getReader(webhookConfig);
+
             // convert JSON file to map
             Map<String, ArrayList<Object>> map =
                     gson.fromJson(
                             reader, new TypeToken<Map<String, ArrayList<Object>>>() {}.getType());
-
-            // parse map entries
-            long ind = 0L;
             if (null == map) {
                 log.error("Error parsing Json File");
                 return detectedFiles;
             }
+
+            // parse map entries
+            long ind = 0L;
             for (Map.Entry<String, ArrayList<Object>> entry : map.entrySet()) {
                 LPVSFile file = new LPVSFile();
                 file.setId(ind++);
                 file.setFilePath(entry.getKey().toString());
 
-                String content =
-                        entry.getValue()
-                                .toString()
-                                .replaceAll("=\\[", "\" : [")
-                                .replaceAll("=", "\" : \"")
-                                .replaceAll("\\}, \\{", "\"},{")
-                                .replaceAll("\\}\\],", "\"}],")
-                                .replaceAll("\\{", "{\"")
-                                .replaceAll(", ", "\", \"")
-                                .replaceAll("\\]\"", "]")
-                                .replaceAll("}\",", "\"},")
-                                .replaceAll(": \\[", ": [\"")
-                                .replaceAll("],", "\"],")
-                                .replaceAll("\"\\{\"", "{\"")
-                                .replaceAll("\"}\"]", "\"}]")
-                                .replaceAll("\\[\"\"\\]", "[]")
-                                .replaceAll(
-                                        "incompatible_with\" : (\".*?\"), \"name",
-                                        "incompatible_with\" : \\[$1\\], \"name");
-                content = content.substring(1, content.length() - 1);
-                if (content.endsWith("}")) {
-                    content = content.substring(0, content.length() - 1) + "\"}";
-                }
-                content = content.replaceAll("}\"}", "\"}}");
-                ScanossJsonStructure object = gson.fromJson(content, ScanossJsonStructure.class);
-                if (object.id != null) file.setSnippetType(object.id);
-                if (object.matched != null) file.setSnippetMatch(object.matched);
-                if (object.lines != null) file.setMatchedLines(object.lines);
-                if (object.file != null) file.setComponentFilePath(object.file);
-                if (object.file_url != null) file.setComponentFileUrl(object.file_url);
-                if (object.component != null) file.setComponentName(object.component);
-                if (object.oss_lines != null) file.setComponentLines(object.oss_lines);
-                if (object.url != null) file.setComponentUrl(object.url);
-                if (object.version != null) file.setComponentVersion(object.version);
-                if (object.vendor != null) file.setComponentVendor(object.vendor);
-
-                Set<LPVSLicense> licenses = new HashSet<>();
-                if (object.licenses != null) {
-                    for (ScanossJsonStructure.ScanossLicense license : object.licenses) {
-                        // Check detected licenses
-                        LPVSLicense lic =
-                                licenseService.getLicenseBySpdxIdAndName(
-                                        license.name, Optional.empty());
-                        lic.setChecklistUrl(license.checklist_url);
-                        licenses.add(lic);
-
-                        // Check for the license conflicts if the property
-                        // "license_conflict=scanner"
-                        if (licenseService.licenseConflictsSource.equalsIgnoreCase("scanner")) {
-                            if (license.incompatible_with != null) {
-                                for (String incompatibleLicense : license.incompatible_with) {
-                                    licenseService.addLicenseConflict(
-                                            incompatibleLicense, license.name);
-                                }
-                            }
-                        }
-                    }
-                }
+                String content = buildContent(entry);
+                ScanossJsonStructure object = getScanossJsonStructure(gson, content, file);
+                Set<LPVSLicense> licenses = buildLicenseSet(object);
                 file.setLicenses(new HashSet<>(licenses));
                 if (!file.getLicenses().isEmpty()) detectedFiles.add(file);
             }
@@ -259,6 +179,96 @@ public class LPVSScanossDetectService implements LPVSScanService {
             log.error(ex.getMessage());
         }
         return detectedFiles;
+    }
+
+    private Set<LPVSLicense> buildLicenseSet(ScanossJsonStructure object) {
+        if (object.licenses == null) {
+            return new HashSet<>();
+        }
+
+        Set<LPVSLicense> licenses = new HashSet<>();
+        for (ScanossJsonStructure.ScanossLicense license : object.licenses) {
+            // Check detected licenses
+            LPVSLicense lic =
+                    licenseService.getLicenseBySpdxIdAndName(license.name, Optional.empty());
+            lic.setChecklistUrl(license.checklist_url);
+            licenses.add(lic);
+
+            // Check for the license conflicts if the property
+            // "license_conflict=scanner"
+            if (licenseService.licenseConflictsSource.equalsIgnoreCase("scanner")) {
+                if (license.incompatible_with != null) {
+                    for (String incompatibleLicense : license.incompatible_with) {
+                        licenseService.addLicenseConflict(incompatibleLicense, license.name);
+                    }
+                }
+            }
+        }
+        return licenses;
+    }
+
+    private ScanossJsonStructure getScanossJsonStructure(Gson gson, String content, LPVSFile file) {
+        ScanossJsonStructure object = gson.fromJson(content, ScanossJsonStructure.class);
+        if (object.id != null) file.setSnippetType(object.id);
+        if (object.matched != null) file.setSnippetMatch(object.matched);
+        if (object.lines != null) file.setMatchedLines(object.lines);
+        if (object.file != null) file.setComponentFilePath(object.file);
+        if (object.file_url != null) file.setComponentFileUrl(object.file_url);
+        if (object.component != null) file.setComponentName(object.component);
+        if (object.oss_lines != null) file.setComponentLines(object.oss_lines);
+        if (object.url != null) file.setComponentUrl(object.url);
+        if (object.version != null) file.setComponentVersion(object.version);
+        if (object.vendor != null) file.setComponentVendor(object.vendor);
+        return object;
+    }
+
+    private static Reader getReader(LPVSQueue webhookConfig) throws IOException {
+        String fileName = null;
+        if (webhookConfig.getHeadCommitSHA() == null
+                || webhookConfig.getHeadCommitSHA().isBlank()) {
+            fileName = LPVSPayloadUtil.getPullRequestId(webhookConfig);
+        } else {
+            fileName = webhookConfig.getHeadCommitSHA();
+        }
+
+        return Files.newBufferedReader(
+                Paths.get(
+                        System.getProperty("user.home")
+                                + File.separator
+                                + "Results"
+                                + File.separator
+                                + LPVSPayloadUtil.getRepositoryName(webhookConfig)
+                                + File.separator
+                                + fileName
+                                + ".json"));
+    }
+
+    private static String buildContent(Map.Entry<String, ArrayList<Object>> entry) {
+        String content =
+                entry.getValue()
+                        .toString()
+                        .replaceAll("=\\[", "\" : [")
+                        .replaceAll("=", "\" : \"")
+                        .replaceAll("\\}, \\{", "\"},{")
+                        .replaceAll("\\}\\],", "\"}],")
+                        .replaceAll("\\{", "{\"")
+                        .replaceAll(", ", "\", \"")
+                        .replaceAll("\\]\"", "]")
+                        .replaceAll("}\",", "\"},")
+                        .replaceAll(": \\[", ": [\"")
+                        .replaceAll("],", "\"],")
+                        .replaceAll("\"\\{\"", "{\"")
+                        .replaceAll("\"}\"]", "\"}]")
+                        .replaceAll("\\[\"\"\\]", "[]")
+                        .replaceAll(
+                                "incompatible_with\" : (\".*?\"), \"name",
+                                "incompatible_with\" : \\[$1\\], \"name");
+        content = content.substring(1, content.length() - 1);
+        if (content.endsWith("}")) {
+            content = content.substring(0, content.length() - 1) + "\"}";
+        }
+        content = content.replaceAll("}\"}", "\"}}");
+        return content;
     }
 
     /**
