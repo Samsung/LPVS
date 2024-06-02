@@ -146,13 +146,14 @@ public class LPVSScanossDetectService implements LPVSScanService {
     public List<LPVSFile> checkLicenses(LPVSQueue webhookConfig) {
         List<LPVSFile> detectedFiles = new ArrayList<>();
         try {
-            Gson gson = new Gson();
             Reader reader = getReader(webhookConfig);
 
             // convert JSON file to map
             Map<String, ArrayList<Object>> map =
-                    gson.fromJson(
-                            reader, new TypeToken<Map<String, ArrayList<Object>>>() {}.getType());
+                    new Gson()
+                            .fromJson(
+                                    reader,
+                                    new TypeToken<Map<String, ArrayList<Object>>>() {}.getType());
             if (null == map) {
                 log.error("Error parsing Json File");
                 return detectedFiles;
@@ -166,7 +167,7 @@ public class LPVSScanossDetectService implements LPVSScanService {
                 file.setFilePath(entry.getKey().toString());
 
                 String content = buildContent(entry);
-                ScanossJsonStructure object = getScanossJsonStructure(gson, content, file);
+                ScanossJsonStructure object = getScanossJsonStructure(content, file);
                 Set<LPVSLicense> licenses = buildLicenseSet(object);
                 file.setLicenses(new HashSet<>(licenses));
                 if (!file.getLicenses().isEmpty()) detectedFiles.add(file);
@@ -181,6 +182,12 @@ public class LPVSScanossDetectService implements LPVSScanService {
         return detectedFiles;
     }
 
+    /**
+     * Builds a set of LPVSLicense objects detected by Scanoss in the given ScanossJsonStructure structure.
+     *
+     * @param object The ScanossJsonStructure containing information about the licenses detected by Scanoss.
+     * @return A set of LPVSLicense objects representing the detected licenses with additional metadata.
+     */
     private Set<LPVSLicense> buildLicenseSet(ScanossJsonStructure object) {
         if (object.licenses == null) {
             return new HashSet<>();
@@ -207,8 +214,15 @@ public class LPVSScanossDetectService implements LPVSScanService {
         return licenses;
     }
 
-    private ScanossJsonStructure getScanossJsonStructure(Gson gson, String content, LPVSFile file) {
-        ScanossJsonStructure object = gson.fromJson(content, ScanossJsonStructure.class);
+    /**
+     * Parses the content returned by Scanoss and populates the given LPVSFile entity with the relevant information.
+     *
+     * @param content The string content returned by Scanoss.
+     * @param file The LPVSFile entity to be populated with the parsed information.
+     * @return The parsed ScanossJsonStructure object containing the extracted information.
+     */
+    private ScanossJsonStructure getScanossJsonStructure(String content, LPVSFile file) {
+        ScanossJsonStructure object = new Gson().fromJson(content, ScanossJsonStructure.class);
         if (object.id != null) file.setSnippetType(object.id);
         if (object.matched != null) file.setSnippetMatch(object.matched);
         if (object.lines != null) file.setMatchedLines(object.lines);
@@ -222,6 +236,13 @@ public class LPVSScanossDetectService implements LPVSScanService {
         return object;
     }
 
+    /**
+     * Creates a new BufferedReader object for reading the JSON file containing the scan results.
+     *
+     * @param webhookConfig The LPVSQueue representing the GitHub webhook configuration.
+     * @return A BufferedReader object for reading the JSON file.
+     * @throws IOException If an error occurs while creating the BufferedReader object.
+     */
     private static Reader getReader(LPVSQueue webhookConfig) throws IOException {
         String fileName = null;
         if (webhookConfig.getHeadCommitSHA() == null
@@ -243,6 +264,12 @@ public class LPVSScanossDetectService implements LPVSScanService {
                                 + ".json"));
     }
 
+    /**
+     * Builds the content string for the given Map.Entry object.
+     *
+     * @param entry The Map.Entry object containing the information to be included in the content string.
+     * @return The constructed content string.
+     */
     private static String buildContent(Map.Entry<String, ArrayList<Object>> entry) {
         String content =
                 entry.getValue()
@@ -267,8 +294,7 @@ public class LPVSScanossDetectService implements LPVSScanService {
         if (content.endsWith("}")) {
             content = content.substring(0, content.length() - 1) + "\"}";
         }
-        content = content.replaceAll("}\"}", "\"}}");
-        return content;
+        return content.replaceAll("}\"}", "\"}}");
     }
 
     /**
