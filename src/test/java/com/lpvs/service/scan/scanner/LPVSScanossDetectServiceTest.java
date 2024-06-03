@@ -15,10 +15,13 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.MockedConstruction;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.system.CapturedOutput;
+import org.springframework.boot.test.system.OutputCaptureExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.io.*;
@@ -28,6 +31,8 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Objects;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
@@ -123,11 +128,20 @@ public class LPVSScanossDetectServiceTest {
         Mockito.when(webhookConfig.getHeadCommitSHA()).thenReturn(null);
         Mockito.when(webhookConfig.getRepositoryUrl())
                 .thenReturn("https://github.com/Samsung/LPVS");
-        Mockito.when(LPVSPayloadUtil.getRepositoryName(webhookConfig)).thenReturn("A");
-        Mockito.when(webhookConfig.getPullRequestUrl()).thenReturn("A/B");
+        Mockito.when(LPVSPayloadUtil.getRepositoryName(webhookConfig)).thenReturn("C");
+        Mockito.when(webhookConfig.getPullRequestUrl()).thenReturn("A_B");
         ReflectionTestUtils.setField(
                 licenseService, "licenseConflictsSource", licenseConflictsSource);
-        Assertions.assertNotNull(scanossDetectService.checkLicenses(webhookConfig));
+        Mockito.when(licenseService.getLicenseBySpdxIdAndName(anyString(), any()))
+                .thenReturn(
+                        new LPVSLicense() {
+                            {
+                                setLicenseName("MIT");
+                                setLicenseId(1L);
+                                setSpdxId("MIT");
+                            }
+                        });
+        Assertions.assertEquals(scanossDetectService.checkLicenses(webhookConfig).size(), 3);
     }
 
     @Test
@@ -137,11 +151,31 @@ public class LPVSScanossDetectServiceTest {
         Mockito.when(webhookConfig.getHeadCommitSHA()).thenReturn(null);
         Mockito.when(webhookConfig.getRepositoryUrl())
                 .thenReturn("https://github.com/Samsung/LPVS");
-        Mockito.when(webhookConfig.getPullRequestUrl()).thenReturn("A/B");
-        Mockito.when(LPVSPayloadUtil.getRepositoryName(webhookConfig)).thenReturn("A");
+        Mockito.when(webhookConfig.getPullRequestUrl()).thenReturn("A_B");
+        Mockito.when(LPVSPayloadUtil.getRepositoryName(webhookConfig)).thenReturn("C");
         ReflectionTestUtils.setField(
                 licenseService, "licenseConflictsSource", licenseConflictsSource);
-        Assertions.assertNotNull(scanossDetectService.checkLicenses(webhookConfig));
+
+        Mockito.when(licenseService.getLicenseBySpdxIdAndName(anyString(), any()))
+                .thenReturn(
+                        new LPVSLicense() {
+                            {
+                                setLicenseName("MIT");
+                                setLicenseId(1L);
+                                setSpdxId("MIT");
+                            }
+                        });
+        Assertions.assertEquals(scanossDetectService.checkLicenses(webhookConfig).size(), 3);
+    }
+
+    @Test
+    @ExtendWith(OutputCaptureExtension.class)
+    public void testCheckLicenseException(CapturedOutput capturedOutput) {
+        Mockito.when(lpvsQueue.getHeadCommitSHA()).thenReturn("AB");
+        Mockito.when(lpvsQueue.getRepositoryUrl()).thenReturn("https://github.com/Samsung/LPVS");
+        scanossDetectService.checkLicenses(lpvsQueue);
+        assertThat(
+                capturedOutput.toString(), containsString("Error while processing Webhook ID = "));
     }
 
     @Test
