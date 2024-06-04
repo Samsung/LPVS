@@ -14,6 +14,7 @@ import com.lpvs.entity.LPVSQueue;
 import com.lpvs.repository.LPVSLicenseRepository;
 import com.lpvs.service.LPVSLicenseService;
 import com.lpvs.service.scan.LPVSScanService;
+import com.lpvs.util.LPVSFileUtil;
 import com.lpvs.util.LPVSPayloadUtil;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -244,24 +245,9 @@ public class LPVSScanossDetectService implements LPVSScanService {
      * @throws IOException If an error occurs while creating the BufferedReader object.
      */
     private static Reader getReader(LPVSQueue webhookConfig) throws IOException {
-        String fileName = null;
-        if (webhookConfig.getHeadCommitSHA() == null
-                || webhookConfig.getHeadCommitSHA().isBlank()) {
-            fileName = LPVSPayloadUtil.getPullRequestId(webhookConfig);
-        } else {
-            fileName = webhookConfig.getHeadCommitSHA();
-        }
-
         return Files.newBufferedReader(
                 Paths.get(
-                        System.getProperty("user.home")
-                                + File.separator
-                                + "Results"
-                                + File.separator
-                                + LPVSPayloadUtil.getRepositoryName(webhookConfig)
-                                + File.separator
-                                + fileName
-                                + ".json"));
+                        LPVSFileUtil.getScanResultsJsonFilePath(webhookConfig)));
     }
 
     /**
