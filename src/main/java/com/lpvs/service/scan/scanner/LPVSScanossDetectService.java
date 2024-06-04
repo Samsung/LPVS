@@ -246,8 +246,7 @@ public class LPVSScanossDetectService implements LPVSScanService {
      */
     private static Reader getReader(LPVSQueue webhookConfig) throws IOException {
         return Files.newBufferedReader(
-                Paths.get(
-                        LPVSFileUtil.getScanResultsJsonFilePath(webhookConfig)));
+                Paths.get(LPVSFileUtil.getScanResultsJsonFilePath(webhookConfig)));
     }
 
     /**

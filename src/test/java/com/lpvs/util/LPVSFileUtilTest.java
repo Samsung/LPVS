@@ -38,14 +38,15 @@ public class LPVSFileUtilTest {
         GHPullRequestFileDetail detail = new GHPullRequestFileDetail();
         ReflectionTestUtils.setField(detail, "filename", "I_am_a_file");
         ReflectionTestUtils.setField(detail, "patch", "+ a\n- b\n@@ -8,7 +8,6 @@\n c");
-        assertEquals(expected,
+        assertEquals(
+                expected,
                 LPVSFileUtil.saveGithubDiffs(
-                                new ArrayList<GHPullRequestFileDetail>() {
-                                    {
-                                        add(detail);
-                                    }
-                                },
-                                webhookConfig));
+                        new ArrayList<GHPullRequestFileDetail>() {
+                            {
+                                add(detail);
+                            }
+                        },
+                        webhookConfig));
     }
 
     @Test
@@ -56,14 +57,15 @@ public class LPVSFileUtilTest {
         GHPullRequestFileDetail detail = new GHPullRequestFileDetail();
         ReflectionTestUtils.setField(detail, "filename", "dir/I_am_a_file");
         ReflectionTestUtils.setField(detail, "patch", "+ a\n- b\n@@ -8,7 +8,6 @@\n c");
-        assertEquals(expected,
+        assertEquals(
+                expected,
                 LPVSFileUtil.saveGithubDiffs(
-                                new ArrayList<GHPullRequestFileDetail>() {
-                                    {
-                                        add(detail);
-                                    }
-                                },
-                                webhookConfig));
+                        new ArrayList<GHPullRequestFileDetail>() {
+                            {
+                                add(detail);
+                            }
+                        },
+                        webhookConfig));
     }
 
     @Test
@@ -74,7 +76,8 @@ public class LPVSFileUtilTest {
         GHPullRequestFileDetail detail = new GHPullRequestFileDetail();
         ReflectionTestUtils.setField(detail, "filename", "I_am_a_file");
         ReflectionTestUtils.setField(detail, "patch", "");
-        assertEquals(expected,
+        assertEquals(
+                expected,
                 LPVSFileUtil.saveGithubDiffs(
                         new ArrayList<GHPullRequestFileDetail>() {
                             {
@@ -184,14 +187,10 @@ public class LPVSFileUtilTest {
     }
 
     private static String getExpectedJsonFilePathWithPullRequestId() {
-        return getExpectedResultsPath()
-                + File.separator
-                + "123.json";
+        return getExpectedResultsPath() + File.separator + "123.json";
     }
 
     private static String getExpectedJsonFilePathWithCommitSHA() {
-        return getExpectedResultsPath()
-                + File.separator
-                + "aaaa.json";
+        return getExpectedResultsPath() + File.separator + "aaaa.json";
     }
 }
