@@ -171,26 +171,22 @@ public class LPVSFileUtil {
      * @return The file path for storing scan results in JSON format.
      */
     public static String getScanResultsJsonFilePath(LPVSQueue webhookConfig) {
+        String fileName = null;
         if (webhookConfig.getHeadCommitSHA() == null
-                || webhookConfig.getHeadCommitSHA().equals("")) {
-            return System.getProperty("user.home")
-                    + File.separator
-                    + "Results"
-                    + File.separator
-                    + LPVSPayloadUtil.getRepositoryName(webhookConfig)
-                    + File.separator
-                    + LPVSPayloadUtil.getPullRequestId(webhookConfig)
-                    + ".json";
+                || webhookConfig.getHeadCommitSHA().isBlank()) {
+            fileName = LPVSPayloadUtil.getPullRequestId(webhookConfig);
         } else {
-            return System.getProperty("user.home")
-                    + File.separator
-                    + "Results"
-                    + File.separator
-                    + LPVSPayloadUtil.getRepositoryName(webhookConfig)
-                    + File.separator
-                    + webhookConfig.getHeadCommitSHA()
-                    + ".json";
+            fileName = webhookConfig.getHeadCommitSHA();
         }
+
+        return System.getProperty("user.home")
+                + File.separator
+                + "Results"
+                + File.separator
+                + LPVSPayloadUtil.getRepositoryName(webhookConfig)
+                + File.separator
+                + fileName
+                + ".json";
     }
 
     /**
