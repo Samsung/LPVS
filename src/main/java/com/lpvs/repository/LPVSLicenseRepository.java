@@ -26,7 +26,7 @@ public interface LPVSLicenseRepository extends JpaRepository<LPVSLicense, Long> 
      *
      * @return List of {@link LPVSLicense} entities representing licenses.
      */
-    @Query(value = "SELECT * FROM license_list", nativeQuery = true)
+    @Query("SELECT l FROM LPVSLicense l")
     List<LPVSLicense> takeAllLicenses();
 
     /**
@@ -35,10 +35,7 @@ public interface LPVSLicenseRepository extends JpaRepository<LPVSLicense, Long> 
      * @param spdxId The SPDX identifier of the license.
      * @return The latest {@link LPVSLicense} entity with the specified SPDX identifier.
      */
-    @Query(
-            value =
-                    "SELECT * FROM license_list WHERE license_list.license_spdx = :spdxId ORDER BY id DESC LIMIT 1",
-            nativeQuery = true)
+    @Query("SELECT l FROM LPVSLicense l WHERE l.spdxId = :spdxId ORDER BY l.id DESC LIMIT 1")
     LPVSLicense searchBySpdxId(@Param("spdxId") String spdxId);
 
     /**
@@ -48,9 +45,8 @@ public interface LPVSLicenseRepository extends JpaRepository<LPVSLicense, Long> 
      * @return The latest {@link LPVSLicense} entity with the specified alternative license name.
      */
     @Query(
-            value =
-                    "SELECT * FROM license_list WHERE FIND_IN_SET(:licenseName, license_alternative_names) > 0 ORDER BY id DESC LIMIT 1",
-            nativeQuery = true)
+            "SELECT l FROM LPVSLicense l WHERE (CONCAT(',', l.alternativeNames, ',') LIKE CONCAT('%,', :licenseName, ',%')) "
+                    + "ORDER BY l.id DESC LIMIT 1")
     LPVSLicense searchByAlternativeLicenseNames(@Param("licenseName") String licenseName);
 
     /**
