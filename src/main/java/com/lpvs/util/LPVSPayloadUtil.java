@@ -76,8 +76,9 @@ public class LPVSPayloadUtil {
             JsonElement nicknameListArray =
                     detailInfoArray.get(0).getAsJsonObject().get("nicknameList");
             if (nicknameListArray != null && nicknameListArray.isJsonArray()) {
-                JsonArray nicknameArray = nicknameListArray.getAsJsonArray();
-                nicknameArray.forEach(element -> nicknameList.add(element.getAsString()));
+                nicknameListArray
+                        .getAsJsonArray()
+                        .forEach(element -> nicknameList.add(element.getAsString()));
             }
             lic.setAlternativeNames(String.join(",", nicknameList));
 
