@@ -1,7 +1,7 @@
 CREATE SCHEMA IF NOT EXISTS lpvs;
 USE lpvs;
 
-CREATE TABLE IF NOT EXISTS license_list (
+CREATE TABLE IF NOT EXISTS lpvs_license_list (
   id bigint NOT NULL AUTO_INCREMENT,
   license_usage varchar(255) DEFAULT NULL,
   license_name varchar(255) NOT NULL,
@@ -11,18 +11,18 @@ CREATE TABLE IF NOT EXISTS license_list (
   UNIQUE (license_spdx)
 );
 
-CREATE TABLE IF NOT EXISTS license_conflicts (
+CREATE TABLE IF NOT EXISTS lpvs_license_conflicts (
   id bigint NOT NULL AUTO_INCREMENT,
   conflict_license_id bigint NOT NULL,
   repository_license_id bigint NOT NULL,
   PRIMARY KEY (id),
   KEY (conflict_license_id),
   KEY (repository_license_id),
-  FOREIGN KEY (conflict_license_id) REFERENCES license_list (id),
-  FOREIGN KEY (repository_license_id) REFERENCES license_list (id)
+  FOREIGN KEY (conflict_license_id) REFERENCES lpvs_license_list (id),
+  FOREIGN KEY (repository_license_id) REFERENCES lpvs_license_list (id)
 );
 
-CREATE TABLE IF NOT EXISTS pull_requests (
+CREATE TABLE IF NOT EXISTS lpvs_pull_requests (
   id bigint NOT NULL AUTO_INCREMENT,
   scan_date datetime NOT NULL,
   user varchar(255) DEFAULT NULL,
@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS pull_requests (
   PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS detected_license (
+CREATE TABLE IF NOT EXISTS lpvs_detected_license (
   id bigint NOT NULL AUTO_INCREMENT,
   pull_request_id bigint DEFAULT NULL,
   license_id bigint DEFAULT NULL,
@@ -59,13 +59,13 @@ CREATE TABLE IF NOT EXISTS detected_license (
   KEY (license_id),
   KEY (repository_license_id),
   KEY (conflict_id),
-  FOREIGN KEY (conflict_id) REFERENCES license_conflicts (id),
-  FOREIGN KEY (license_id) REFERENCES license_list (id),
-  FOREIGN KEY (pull_request_id) REFERENCES pull_requests (id),
-  FOREIGN KEY (repository_license_id) REFERENCES license_list (id)
+  FOREIGN KEY (conflict_id) REFERENCES lpvs_license_conflicts (id),
+  FOREIGN KEY (license_id) REFERENCES lpvs_license_list (id),
+  FOREIGN KEY (pull_request_id) REFERENCES lpvs_pull_requests (id),
+  FOREIGN KEY (repository_license_id) REFERENCES lpvs_license_list (id)
 );
 
-CREATE TABLE IF NOT EXISTS queue (
+CREATE TABLE IF NOT EXISTS lpvs_queue (
   id bigint NOT NULL AUTO_INCREMENT,
   action bigint NOT NULL,
   attempts int DEFAULT '0',
@@ -84,7 +84,7 @@ CREATE TABLE IF NOT EXISTS queue (
   PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS member (
+CREATE TABLE IF NOT EXISTS lpvs_member (
   id bigint PRIMARY KEY NOT NULL AUTO_INCREMENT,
   email varchar(255) NOT NULL,
   name varchar(255) NOT NULL,
@@ -94,7 +94,7 @@ CREATE TABLE IF NOT EXISTS member (
   UNIQUE (email,provider)
 );
 
-INSERT INTO license_list (id, license_name, license_spdx, license_alternative_names, license_usage) VALUES
+INSERT INTO lpvs_license_list (id, license_name, license_spdx, license_alternative_names, license_usage) VALUES
 (1, 'GNU General Public License v3.0 only','GPL-3.0-only','','PROHIBITED'),
 (2, 'OpenSSL License','OpenSSL','OPENSSL_LICENSE,SSLeay license and OpenSSL License','PERMITTED'),
 (3, 'GNU Lesser General Public License v2.0 or later','LGPL-2.0-or-later','','RESTRICTED'),
@@ -103,5 +103,5 @@ INSERT INTO license_list (id, license_name, license_spdx, license_alternative_na
 (6, 'GNU General Public License v2.0 only','GPL-2.0-only','','RESTRICTED'),
 (7, 'GNU Lesser General Public License v3.0 or later','LGPL-3.0-or-later','GNU Lesser General Public License v3 or later (LGPLv3+),Lesser General Public License version 3 or greater,LGPLv3+','PROHIBITED');
 
-INSERT INTO license_conflicts (conflict_license_id, repository_license_id) VALUES
+INSERT INTO lpvs_license_conflicts (conflict_license_id, repository_license_id) VALUES
 (1, 3), (1, 6), (2, 6), (2, 3), (3, 5), (3, 7), (5, 6), (6, 7);

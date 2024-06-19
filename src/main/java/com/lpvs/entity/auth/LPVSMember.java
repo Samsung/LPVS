@@ -14,14 +14,14 @@ import jakarta.persistence.*;
 
 /**
  * Represents a member in the LPVS system.
- * This class is mapped to the "member" table in the "lpvs" schema.
+ * This class is mapped to the "lpvs_member" table in the "lpvs" schema.
  */
 @Getter
 @NoArgsConstructor
 @DynamicUpdate
 @Entity
 @Table(
-        name = "member",
+        name = "lpvs_member",
         indexes = {@Index(name = "unq_member", columnList = "email, provider", unique = true)})
 public class LPVSMember {
 

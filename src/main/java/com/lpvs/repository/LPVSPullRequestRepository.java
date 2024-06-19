@@ -13,7 +13,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -21,14 +20,6 @@ import java.util.List;
  * Extends {@link org.springframework.data.jpa.repository.JpaRepository} for basic CRUD operations.
  */
 public interface LPVSPullRequestRepository extends JpaRepository<LPVSPullRequest, Long> {
-    /**
-     * Get the current date and time from the database.
-     *
-     * @return The current date and time.
-     */
-    @Query(value = "SELECT now();", nativeQuery = true)
-    Date getNow();
-
     /**
      * Retrieves the latest LPVSPullRequest entity based on the provided criteria.
      *
@@ -44,16 +35,15 @@ public interface LPVSPullRequestRepository extends JpaRepository<LPVSPullRequest
      */
     @Query(
             value =
-                    "SELECT * FROM pull_requests pr "
+                    "SELECT pr FROM LPVSPullRequest pr "
                             + "WHERE (:user IS NULL OR pr.user = :user) "
-                            + "AND (:repositoryName IS NULL OR pr.repository_name = :repositoryName) "
-                            + "AND (:pullRequestFilesUrl IS NULL OR pr.diff_url = :pullRequestFilesUrl) "
-                            + "AND (:pullRequestHead IS NULL OR pr.pull_request_head = :pullRequestHead) "
-                            + "AND (:pullRequestBase IS NULL OR pr.pull_request_base = :pullRequestBase) "
+                            + "AND (:repositoryName IS NULL OR pr.repositoryName = :repositoryName) "
+                            + "AND (:pullRequestFilesUrl IS NULL OR pr.pullRequestFilesUrl = :pullRequestFilesUrl) "
+                            + "AND (:pullRequestHead IS NULL OR pr.pullRequestHead = :pullRequestHead) "
+                            + "AND (:pullRequestBase IS NULL OR pr.pullRequestBase = :pullRequestBase) "
                             + "AND (:sender IS NULL OR pr.sender = :sender) "
                             + "AND (:status IS NULL OR pr.status = :status) "
-                            + "ORDER BY pr.scan_date DESC LIMIT 1",
-            nativeQuery = true)
+                            + "ORDER BY pr.date DESC LIMIT 1")
     LPVSPullRequest findLatestByPullRequestInfo(
             @Param("user") String user,
             @Param("repositoryName") String repositoryName,

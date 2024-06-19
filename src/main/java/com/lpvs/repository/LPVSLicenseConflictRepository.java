@@ -26,7 +26,7 @@ public interface LPVSLicenseConflictRepository extends JpaRepository<LPVSLicense
      *
      * @return List of {@link LPVSLicenseConflict} entities representing license conflicts.
      */
-    @Query(value = "SELECT * FROM license_conflicts", nativeQuery = true)
+    @Query("SELECT lc FROM LPVSLicenseConflict lc")
     List<LPVSLicenseConflict> takeAllLicenseConflicts();
 
     /**
@@ -37,10 +37,11 @@ public interface LPVSLicenseConflictRepository extends JpaRepository<LPVSLicense
      * @return The latest {@link LPVSLicenseConflict} entity representing the conflict between the two licenses.
      */
     @Query(
-            value =
-                    "SELECT * FROM license_conflicts WHERE (license_conflicts.repository_license_id = :license1 AND license_conflicts.conflict_license_id = :license2) "
-                            + "OR (license_conflicts.repository_license_id = :license2 AND license_conflicts.conflict_license_id = :license1) ORDER BY id DESC LIMIT 1",
-            nativeQuery = true)
+            "SELECT lc FROM LPVSLicenseConflict lc "
+                    + "WHERE (lc.repositoryLicense.licenseId = :license1 AND lc.conflictLicense.licenseId = :license2) "
+                    + "OR (lc.repositoryLicense.licenseId = :license2 AND lc.conflictLicense.licenseId = :license1) "
+                    + "ORDER BY lc.id DESC "
+                    + "LIMIT 1")
     LPVSLicenseConflict findLicenseConflict(
             @Param("license1") Long license1, @Param("license2") Long license2);
 }

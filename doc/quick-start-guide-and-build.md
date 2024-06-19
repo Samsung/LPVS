@@ -171,7 +171,7 @@ Before building _LPVS_ from source code, ensure that you have the following prer
    mysql -u[username] -p[password] < src/main/resources/database_dump.sql
    ```
 
-2.5 Fill in the `license_list` and `license_conflicts` tables with the information about permitted, restricted, and prohibited licenses, as well as their compatibility specifics. You can find an example database dump file in the repository at [`src/main/resources/database_dump.sql`](../src/main/resources/database_dump.sql).
+2.5 Fill in the `lpvs_license_list` and `lpvs_license_conflicts` tables with the information about permitted, restricted, and prohibited licenses, as well as their compatibility specifics. You can find an example database dump file in the repository at [`src/main/resources/database_dump.sql`](../src/main/resources/database_dump.sql).
 
 2.6 Update the following lines in the [`src/main/resources/application.properties`](../src/main/resources/application.properties) file:
    ```properties
@@ -198,7 +198,7 @@ github.secret=LPVS
 scanner=scanoss
 
 # Used license conflicts source:
-# > option "db": take conflicts from MySQL database - 'license_conflicts' table (should be filled manually
+# > option "db": take conflicts from MySQL database - 'lpvs_license_conflicts' table (should be filled manually
 # according to the example at 'src/main/resources/database_dump.sql')
 # > option "scanner": take conflicts from the scanner response
   license_conflict=db

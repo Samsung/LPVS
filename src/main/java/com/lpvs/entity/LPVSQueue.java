@@ -17,10 +17,10 @@ import java.util.Objects;
 
 /**
  * Represents an item in the LPVS queue for processing pull requests.
- * This class is mapped to the "queue" table in the "lpvs" schema.
+ * This class is mapped to the "lpvs_queue" table in the "lpvs" schema.
  */
 @Entity
-@Table(name = "queue")
+@Table(name = "lpvs_queue")
 @Getter
 @Setter
 public class LPVSQueue implements Serializable {

@@ -8,6 +8,7 @@ package com.lpvs.util;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.lpvs.entity.LPVSLicense;
 import com.lpvs.entity.LPVSQueue;
@@ -72,12 +73,13 @@ public class LPVSPayloadUtil {
             lic.setAccess("UNREVIEWED");
 
             List<String> nicknameList = new ArrayList<>();
-            detailInfoArray
-                    .get(0)
-                    .getAsJsonObject()
-                    .get("nicknameList")
-                    .getAsJsonArray()
-                    .forEach(element -> nicknameList.add(element.getAsString()));
+            JsonElement nicknameListArray =
+                    detailInfoArray.get(0).getAsJsonObject().get("nicknameList");
+            if (nicknameListArray != null && nicknameListArray.isJsonArray()) {
+                nicknameListArray
+                        .getAsJsonArray()
+                        .forEach(element -> nicknameList.add(element.getAsString()));
+            }
             lic.setAlternativeNames(String.join(",", nicknameList));
 
             return lic;

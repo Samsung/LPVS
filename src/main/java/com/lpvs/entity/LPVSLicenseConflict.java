@@ -15,10 +15,10 @@ import java.io.Serializable;
 
 /**
  * Represents a license conflict in the LPVS system.
- * This class is mapped to the "license_conflicts" table in the "lpvs" schema.
+ * This class is mapped to the "lpvs_license_conflicts" table in the "lpvs" schema.
  */
 @Entity
-@Table(name = "license_conflicts")
+@Table(name = "lpvs_license_conflicts")
 @Getter
 @Setter
 @NoArgsConstructor

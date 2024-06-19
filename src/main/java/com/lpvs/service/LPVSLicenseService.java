@@ -231,8 +231,7 @@ public class LPVSLicenseService {
             if (license.getLicenseName().equalsIgnoreCase(name)) {
                 return license;
             }
-            if (license.getAlternativeNames() != null
-                    && !license.getAlternativeNames().trim().isEmpty()) {
+            if (license.getAlternativeNames() != null && !license.getAlternativeNames().isBlank()) {
                 String[] names = license.getAlternativeNames().split(",");
                 for (String n : names) {
                     if (n.trim().equalsIgnoreCase(name)) {

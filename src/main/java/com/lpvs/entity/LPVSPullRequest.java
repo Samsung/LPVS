@@ -18,10 +18,10 @@ import java.util.Objects;
 
 /**
  * Represents a pull request in the LPVS system.
- * This class is mapped to the "pull_requests" table in the "lpvs" schema.
+ * This class is mapped to the "lpvs_pull_requests" table in the "lpvs" schema.
  */
 @Entity
-@Table(name = "pull_requests")
+@Table(name = "lpvs_pull_requests")
 @Getter
 @Setter
 @AllArgsConstructor

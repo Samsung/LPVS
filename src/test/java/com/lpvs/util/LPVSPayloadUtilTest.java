@@ -49,9 +49,29 @@ public class LPVSPayloadUtilTest {
         }
 
         @Test
+        public void testConvertOsoriDbResponseToLicense_nullNickname() {
+            String payload =
+                    "{\"code\":\"200\",\"messageList\":{\"detailInfo\":[{\"name\":\"Apache License 2.0\",\"spdx_identifier\":\"Apache-2.0\",\"webpage\":\"https://spdx.org/licenses/Apache-2.0.html\",\"nicknameList\":null,\"webpageList\":null,\"restrictionList\":null}]},\"success\":true}";
+            LPVSLicense expectedLicense = new LPVSLicense();
+            expectedLicense.setLicenseName("Apache License 2.0");
+            expectedLicense.setSpdxId("Apache-2.0");
+            expectedLicense.setAccess("UNREVIEWED");
+            expectedLicense.setAlternativeNames("");
+
+            LPVSLicense actualLicense = LPVSPayloadUtil.convertOsoriDbResponseToLicense(payload);
+
+            assertNotNull(actualLicense);
+            assertEquals(expectedLicense.getLicenseName(), actualLicense.getLicenseName());
+            assertEquals(expectedLicense.getSpdxId(), actualLicense.getSpdxId());
+            assertEquals(expectedLicense.getAccess(), actualLicense.getAccess());
+            assertEquals(
+                    expectedLicense.getAlternativeNames(), actualLicense.getAlternativeNames());
+        }
+
+        @Test
         public void testConvertOsoriDbResponseToLicense_withInvalidPayload_N() {
             String payload =
-                    "{\"code\":\"200\",\"messageList\":{\"detailInfo\":[{\"name\":\"Apache License 2.0\",\"spdx_identifier\":\"Apache-2.0\",\"webpage\":\"https://spdx.org/licenses/Apache-2.0.html\",\"webpageList\":null,\"restrictionList\":null}]},\"success\":true}";
+                    "{\"code\":\"200\",\"messageList\":{\"detailInfo\":[{\"name\":\"Apache License 2.0\",\"webpage\":\"https://spdx.org/licenses/Apache-2.0.html\",\"webpageList\":null,\"restrictionList\":null}]},\"success\":true}";
             LPVSLicense actualLicense = LPVSPayloadUtil.convertOsoriDbResponseToLicense(payload);
             assertNull(actualLicense);
         }

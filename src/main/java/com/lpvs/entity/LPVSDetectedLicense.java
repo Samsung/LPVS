@@ -14,10 +14,10 @@ import java.io.Serializable;
 
 /**
  * Entity class representing detected licenses in the LPVS system.
- * This class is mapped to the "detected_license" table in the "lpvs" schema.
+ * This class is mapped to the "lpvs_detected_license" table in the "lpvs" schema.
  */
 @Entity
-@Table(name = "detected_license")
+@Table(name = "lpvs_detected_license")
 @Getter
 @Setter
 public class LPVSDetectedLicense implements Serializable {

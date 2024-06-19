@@ -19,10 +19,10 @@ import java.util.List;
 public interface LPVSQueueRepository extends JpaRepository<LPVSQueue, Long> {
 
     /**
-     * Retrieve the list of all entities from the "queue" table.
+     * Retrieve the list of all entities from the "lpvs_queue" table.
      *
      * @return List of {@link LPVSQueue} entities representing the queue.
      */
-    @Query(value = "SELECT * FROM queue", nativeQuery = true)
+    @Query("SELECT q FROM LPVSQueue q")
     List<LPVSQueue> getQueueList();
 }
