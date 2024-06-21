@@ -171,11 +171,11 @@ public class LPVSStatisticsServiceTest {
         member.setNickname("testNickname");
         when(loginCheckService.getMemberFromMemberMap(authentication)).thenReturn(member);
         when(pullRequestRepository.findByPullRequestBase("testNickname")).thenReturn(pullRequests);
-        when(licenseRepository.takeAllSpdxId()).thenReturn(Collections.singletonList("MIT"));
+        when(licenseRepository.findAllSpdxId()).thenReturn(Collections.singletonList("MIT"));
         when(mockRequest.getDate()).thenReturn(new Date());
         when(mockRequest.getSender()).thenReturn("");
         when(mockRequest.getRepositoryName()).thenReturn("name");
-        when(detectedLicenseRepository.findNotNullDLByPR(mockRequest))
+        when(detectedLicenseRepository.findByPullRequestAndLicenseIsNotNull(mockRequest))
                 .thenReturn(
                         new ArrayList<>() {
                             {
@@ -196,9 +196,10 @@ public class LPVSStatisticsServiceTest {
         member.setNickname("testNickname");
         List<LPVSPullRequest> prList = createMockPullRequestList();
         List<LPVSDetectedLicense> dlList = Collections.emptyList();
-        when(licenseRepository.takeAllSpdxId()).thenReturn(Collections.<String>emptyList());
+        when(licenseRepository.findAllSpdxId()).thenReturn(Collections.<String>emptyList());
         when(pullRequestRepository.findByPullRequestBase("testNickname")).thenReturn(prList);
-        when(detectedLicenseRepository.findNotNullDLByPR(any())).thenReturn(dlList);
+        when(detectedLicenseRepository.findByPullRequestAndLicenseIsNotNull(any()))
+                .thenReturn(dlList);
         LPVSStatisticsServiceHelper statisticsServiceHelper =
                 new LPVSStatisticsServiceHelper(
                         pullRequestRepository,

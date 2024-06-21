@@ -167,7 +167,8 @@ public class LPVSWebControllerTest {
 
         when(loginCheckService.pathCheck(type, name, pageable, authentication))
                 .thenReturn(new HistoryPageEntity(prPage, 1L));
-        when(detectedLicenseRepository.existsIssue(pullRequest)).thenReturn(false);
+        when(detectedLicenseRepository.existsByIssueIsTrueAndPullRequest(pullRequest))
+                .thenReturn(false);
 
         HistoryEntity result =
                 webController.new WebApiEndpoints()
@@ -229,12 +230,13 @@ public class LPVSWebControllerTest {
 
         when(loginCheckService.getMemberFromMemberMap(authentication)).thenReturn(new LPVSMember());
         when(lpvsPullRequestRepository.findById(prId)).thenReturn(Optional.of(pullRequest));
-        when(detectedLicenseRepository.findDistinctByLicense(pullRequest)).thenReturn(licenses);
-        when(licenseRepository.takeAllSpdxId()).thenReturn(List.of("MIT", "Apache-2.0"));
+        when(detectedLicenseRepository.findDistinctByPullRequestAndLicense(pullRequest))
+                .thenReturn(licenses);
+        when(licenseRepository.findAllSpdxId()).thenReturn(List.of("MIT", "Apache-2.0"));
         when(detectedLicenseRepository.findByPullRequest(pullRequest, pageable))
                 .thenReturn(new PageImpl<>(detectedLicenses));
         when(detectedLicenseRepository.findByPullRequest(pullRequest)).thenReturn(detectedLicenses);
-        when(detectedLicenseRepository.CountByDetectedLicenseWherePullRequestId(pullRequest))
+        when(detectedLicenseRepository.countByPullRequestAndLicenseIsNotNull(pullRequest))
                 .thenReturn(1L);
 
         LPVSResult result =

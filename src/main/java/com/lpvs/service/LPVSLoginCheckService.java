@@ -119,10 +119,10 @@ public class LPVSLoginCheckService {
         if ((type.equals("own") && findNickName.equals(name))
                 || (type.equals("org") && findOrganization.equals(name))) {
             prPage = lpvsPullRequestRepository.findByPullRequestBase(name, pageable);
-            count = lpvsPullRequestRepository.CountByPullRequestBase(name);
+            count = lpvsPullRequestRepository.countByPullRequestBase(name);
         } else if (type.equals("send") && findNickName.equals(name)) {
             prPage = lpvsPullRequestRepository.findBySenderOrPullRequestHead(name, pageable);
-            count = lpvsPullRequestRepository.CountBySenderOrPullRequestHead(name);
+            count = lpvsPullRequestRepository.countBySenderOrPullRequestHead(name);
         } else {
             throw new WrongAccessException("WrongAccessException");
         }

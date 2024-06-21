@@ -12,7 +12,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 
 /**
  * Repository interface for managing {@link LPVSLicenseConflict} entities.
@@ -20,14 +19,6 @@ import java.util.List;
  */
 @Repository
 public interface LPVSLicenseConflictRepository extends JpaRepository<LPVSLicenseConflict, Long> {
-
-    /**
-     * Retrieve all license conflicts from the database.
-     *
-     * @return List of {@link LPVSLicenseConflict} entities representing license conflicts.
-     */
-    @Query("SELECT lc FROM LPVSLicenseConflict lc")
-    List<LPVSLicenseConflict> takeAllLicenseConflicts();
 
     /**
      * Find a specific license conflict between two licenses.

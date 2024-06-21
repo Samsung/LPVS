@@ -155,7 +155,7 @@ public class LPVSLicenseServiceTest {
         LPVSLicenseRepository lpvsLicenseRepository = Mockito.mock(LPVSLicenseRepository.class);
         ReflectionTestUtils.setField(
                 licenseService, "lpvsLicenseRepository", lpvsLicenseRepository);
-        when(lpvsLicenseRepository.searchBySpdxId(anyString())).thenReturn(null);
+        when(lpvsLicenseRepository.findFirstBySpdxIdOrderByIdDesc(anyString())).thenReturn(null);
         when(lpvsLicenseRepository.searchByAlternativeLicenseNames(anyString())).thenReturn(null);
 
         Assertions.assertNotNull(licenseService.findConflicts(webhookConfig, fileList));
@@ -210,7 +210,7 @@ public class LPVSLicenseServiceTest {
                 List<LPVSLicense> licenseList = new ArrayList<>();
                 licenseList.add(license1);
                 licenseList.add(license2);
-                Mockito.when(lpvsLicenseRepository.takeAllLicenses()).thenReturn(licenseList);
+                Mockito.when(lpvsLicenseRepository.findAll()).thenReturn(licenseList);
 
                 LPVSLicenseConflict licenseConflict = new LPVSLicenseConflict();
                 licenseConflict.setConflictId(1L);
@@ -218,7 +218,7 @@ public class LPVSLicenseServiceTest {
                 licenseConflict.setRepositoryLicense(license2);
                 List<LPVSLicenseConflict> licenseConflictList = new ArrayList<>();
                 licenseConflictList.add(licenseConflict);
-                Mockito.when(lpvsLicenseConflictRepository.takeAllLicenseConflicts())
+                Mockito.when(lpvsLicenseConflictRepository.findAll())
                         .thenReturn(licenseConflictList);
 
                 Field lpvsLicenseRepositoryField =
@@ -273,7 +273,7 @@ public class LPVSLicenseServiceTest {
             licenseList.add(license1);
             licenseList.add(license2);
 
-            when(lpvsLicenseRepository.takeAllLicenses()).thenReturn(licenseList);
+            when(lpvsLicenseRepository.findAll()).thenReturn(licenseList);
 
             LPVSLicenseConflict licenseConflict = new LPVSLicenseConflict();
             licenseConflict.setConflictId(1L);
@@ -282,8 +282,7 @@ public class LPVSLicenseServiceTest {
             List<LPVSLicenseConflict> licenseConflictList = new ArrayList<>();
             licenseConflictList.add(licenseConflict);
 
-            when(lpvsLicenseConflictRepository.takeAllLicenseConflicts())
-                    .thenReturn(licenseConflictList);
+            when(lpvsLicenseConflictRepository.findAll()).thenReturn(licenseConflictList);
 
             Field lpvsLicenseRepositoryField =
                     LPVSLicenseService.class.getDeclaredField("lpvsLicenseRepository");
@@ -443,7 +442,8 @@ public class LPVSLicenseServiceTest {
                             null,
                             null);
 
-            when(lpvsLicenseRepository.searchBySpdxId(anyString())).thenReturn(null);
+            when(lpvsLicenseRepository.findFirstBySpdxIdOrderByIdDesc(anyString()))
+                    .thenReturn(null);
             when(lpvsLicenseRepository.searchByAlternativeLicenseNames(anyString()))
                     .thenReturn(lpvs_license_1);
 

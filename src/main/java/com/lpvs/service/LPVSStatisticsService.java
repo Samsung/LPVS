@@ -128,7 +128,7 @@ public class LPVSStatisticsService {
         List<DashboardElementsByDate> dashboardByDates = new ArrayList<>();
         Map<LocalDate, List<LPVSPullRequest>> datePrMap = new HashMap<>();
 
-        List<String> allSpdxId = lpvsLicenseRepository.takeAllSpdxId();
+        List<String> allSpdxId = lpvsLicenseRepository.findAllSpdxId();
         for (String spdxId : allSpdxId) {
             licenseCountMap.put(spdxId, 0);
         }
@@ -159,7 +159,7 @@ public class LPVSStatisticsService {
             Set<String> senderSet = new HashSet<>();
             for (LPVSPullRequest pr : entry.getValue()) {
                 List<LPVSDetectedLicense> dlList =
-                        lpvsDetectedLicenseRepository.findNotNullDLByPR(pr);
+                        lpvsDetectedLicenseRepository.findByPullRequestAndLicenseIsNotNull(pr);
                 if (!(pr.getRepositoryName() == null || pr.getRepositoryName().isEmpty())) {
                     senderSet.add(pr.getSender());
                 }

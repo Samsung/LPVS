@@ -22,21 +22,12 @@ import java.util.List;
 public interface LPVSLicenseRepository extends JpaRepository<LPVSLicense, Long> {
 
     /**
-     * Retrieve all licenses from the database.
-     *
-     * @return List of {@link LPVSLicense} entities representing licenses.
-     */
-    @Query("SELECT l FROM LPVSLicense l")
-    List<LPVSLicense> takeAllLicenses();
-
-    /**
      * Search for a license by SPDX identifier.
      *
      * @param spdxId The SPDX identifier of the license.
      * @return The latest {@link LPVSLicense} entity with the specified SPDX identifier.
      */
-    @Query("SELECT l FROM LPVSLicense l WHERE l.spdxId = :spdxId ORDER BY l.id DESC LIMIT 1")
-    LPVSLicense searchBySpdxId(@Param("spdxId") String spdxId);
+    LPVSLicense findFirstBySpdxIdOrderByIdDesc(@Param("spdxId") String spdxId);
 
     /**
      * Search for a license by alternative license names.
@@ -54,6 +45,5 @@ public interface LPVSLicenseRepository extends JpaRepository<LPVSLicense, Long> 
      *
      * @return List of SPDX identifiers as Strings.
      */
-    @Query(value = "select licenses.spdxId from LPVSLicense licenses")
-    List<String> takeAllSpdxId();
+    List<String> findAllSpdxId();
 }

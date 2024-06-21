@@ -242,7 +242,7 @@ public class LPVSWebController implements ErrorController {
                 // Validate and sanitize user inputs to prevent XSS attacks
                 sanitizeUserInputs(pr);
 
-                Boolean hasIssue = detectedLicenseRepository.existsIssue(pr);
+                Boolean hasIssue = detectedLicenseRepository.existsByIssueIsTrueAndPullRequest(pr);
 
                 lpvsHistories.add(
                         new LPVSHistory(
@@ -289,11 +289,11 @@ public class LPVSWebController implements ErrorController {
             LPVSPullRequest pr = prOpt.get();
 
             List<LPVSLicense> distinctByLicense =
-                    detectedLicenseRepository.findDistinctByLicense(pr);
+                    detectedLicenseRepository.findDistinctByPullRequestAndLicense(pr);
             List<String> detectedLicenses = new ArrayList<>();
             Map<String, Integer> licenseCountMap = new HashMap<>();
 
-            List<String> allSpdxId = licenseRepository.takeAllSpdxId();
+            List<String> allSpdxId = licenseRepository.findAllSpdxId();
             for (String spdxId : allSpdxId) {
                 licenseCountMap.put(spdxId, 0);
             }
@@ -313,7 +313,7 @@ public class LPVSWebController implements ErrorController {
                     detectedLicenseRepository.findByPullRequest(pr, pageable);
             List<LPVSDetectedLicense> dlList = detectedLicenseRepository.findByPullRequest(pr);
             List<LPVSResultFile> lpvsResultFileList = new ArrayList<>();
-            Boolean hasIssue = detectedLicenseRepository.existsIssue(pr);
+            Boolean hasIssue = detectedLicenseRepository.existsByIssueIsTrueAndPullRequest(pr);
 
             String licenseSpdxId;
             String status;
@@ -343,7 +343,7 @@ public class LPVSWebController implements ErrorController {
                 }
             }
 
-            Long count = detectedLicenseRepository.CountByDetectedLicenseWherePullRequestId(pr);
+            Long count = detectedLicenseRepository.countByPullRequestAndLicenseIsNotNull(pr);
             String[] tempPullNumber = pr.getPullRequestUrl().split("/");
             LPVSResult lpvsResult =
                     new LPVSResult(
