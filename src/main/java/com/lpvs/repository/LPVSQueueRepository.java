@@ -9,7 +9,6 @@ package com.lpvs.repository;
 import com.lpvs.entity.LPVSQueue;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-
 /**
  * Repository interface for managing {@link LPVSQueue} entities.
  * Extends {@link org.springframework.data.jpa.repository.JpaRepository} for basic CRUD operations.
