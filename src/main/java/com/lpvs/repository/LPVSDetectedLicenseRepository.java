@@ -60,7 +60,7 @@ public interface LPVSDetectedLicenseRepository extends JpaRepository<LPVSDetecte
      * @param pr The {@link LPVSPullRequest} to retrieve distinct licenses for.
      * @return List of distinct {@link LPVSLicense} associated with the pull request.
      */
-    List<LPVSLicense> findDistinctByPullRequestAndLicense(@Param("pr") LPVSPullRequest pr);
+    List<LPVSLicense> findDistinctLicenseByPullRequest(@Param("pr") LPVSPullRequest pr);
 
     /**
      * Find detected licenses associated with a specific pull request where the license is not null.

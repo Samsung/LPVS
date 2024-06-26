@@ -309,17 +309,17 @@ public class LPVSGitHubService {
                 detectedIssue.setPullRequest(lpvsPullRequest);
                 Long l1 =
                         lpvsLicenseRepository
-                                .findFirstBySpdxIdOrderByIdDesc(conflict.l1)
+                                .findFirstBySpdxIdOrderByLicenseIdDesc(conflict.l1)
                                 .getLicenseId();
                 Long l2 =
                         lpvsLicenseRepository
-                                .findFirstBySpdxIdOrderByIdDesc(conflict.l2)
+                                .findFirstBySpdxIdOrderByLicenseIdDesc(conflict.l2)
                                 .getLicenseId();
                 detectedIssue.setLicenseConflict(
                         lpvsLicenseConflictRepository.findLicenseConflict(l1, l2));
                 if (webhookConfig.getRepositoryLicense() != null) {
                     LPVSLicense repoLicense =
-                            lpvsLicenseRepository.findFirstBySpdxIdOrderByIdDesc(
+                            lpvsLicenseRepository.findFirstBySpdxIdOrderByLicenseIdDesc(
                                     webhookConfig.getRepositoryLicense());
                     if (repoLicense == null) {
                         repoLicense =

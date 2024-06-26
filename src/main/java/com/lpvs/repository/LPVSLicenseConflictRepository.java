@@ -30,7 +30,7 @@ public interface LPVSLicenseConflictRepository extends JpaRepository<LPVSLicense
             "SELECT lc FROM LPVSLicenseConflict lc "
                     + "WHERE (lc.repositoryLicense.licenseId = :license1 AND lc.conflictLicense.licenseId = :license2) "
                     + "OR (lc.repositoryLicense.licenseId = :license2 AND lc.conflictLicense.licenseId = :license1) "
-                    + "ORDER BY lc.id DESC "
+                    + "ORDER BY lc.conflictId DESC "
                     + "LIMIT 1")
     LPVSLicenseConflict findLicenseConflict(
             @Param("license1") Long license1, @Param("license2") Long license2);

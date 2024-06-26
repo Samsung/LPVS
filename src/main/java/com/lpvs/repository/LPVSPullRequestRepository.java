@@ -85,6 +85,9 @@ public interface LPVSPullRequestRepository extends JpaRepository<LPVSPullRequest
      * @param pageable The pagination information.
      * @return Page of {@link LPVSPullRequest} entities with the specified sender or pull request head.
      */
+    @Query(
+            value =
+                    "select pr from LPVSPullRequest pr where pr.sender = :name or pr.pullRequestHead = :name")
     Page<LPVSPullRequest> findBySenderOrPullRequestHead(
             @Param("name") String name, Pageable pageable);
 
@@ -94,6 +97,9 @@ public interface LPVSPullRequestRepository extends JpaRepository<LPVSPullRequest
      * @param name The name of the sender or pull request head.
      * @return List of {@link LPVSPullRequest} entities with the specified sender or pull request head.
      */
+    @Query(
+            value =
+                    "select pr from LPVSPullRequest pr where pr.sender = :name or pr.pullRequestHead = :name")
     List<LPVSPullRequest> findBySenderOrPullRequestHead(@Param("name") String name);
 
     /**
@@ -102,5 +108,8 @@ public interface LPVSPullRequestRepository extends JpaRepository<LPVSPullRequest
      * @param name The name of the sender or pull request head.
      * @return The count of pull requests with the specified sender or pull request head.
      */
+    @Query(
+            value =
+                    "select count(*) from LPVSPullRequest pr where pr.sender = :name or pr.pullRequestHead = :name")
     Long countBySenderOrPullRequestHead(@Param("name") String name);
 }

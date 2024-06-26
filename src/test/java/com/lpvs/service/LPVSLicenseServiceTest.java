@@ -155,7 +155,8 @@ public class LPVSLicenseServiceTest {
         LPVSLicenseRepository lpvsLicenseRepository = Mockito.mock(LPVSLicenseRepository.class);
         ReflectionTestUtils.setField(
                 licenseService, "lpvsLicenseRepository", lpvsLicenseRepository);
-        when(lpvsLicenseRepository.findFirstBySpdxIdOrderByIdDesc(anyString())).thenReturn(null);
+        when(lpvsLicenseRepository.findFirstBySpdxIdOrderByLicenseIdDesc(anyString()))
+                .thenReturn(null);
         when(lpvsLicenseRepository.searchByAlternativeLicenseNames(anyString())).thenReturn(null);
 
         Assertions.assertNotNull(licenseService.findConflicts(webhookConfig, fileList));
@@ -442,7 +443,7 @@ public class LPVSLicenseServiceTest {
                             null,
                             null);
 
-            when(lpvsLicenseRepository.findFirstBySpdxIdOrderByIdDesc(anyString()))
+            when(lpvsLicenseRepository.findFirstBySpdxIdOrderByLicenseIdDesc(anyString()))
                     .thenReturn(null);
             when(lpvsLicenseRepository.searchByAlternativeLicenseNames(anyString()))
                     .thenReturn(lpvs_license_1);

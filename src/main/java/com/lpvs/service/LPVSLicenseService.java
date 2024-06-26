@@ -376,7 +376,7 @@ public class LPVSLicenseService {
 
         if (repositoryLicense != null) {
             LPVSLicense repoLicense =
-                    lpvsLicenseRepository.findFirstBySpdxIdOrderByIdDesc(repositoryLicense);
+                    lpvsLicenseRepository.findFirstBySpdxIdOrderByLicenseIdDesc(repositoryLicense);
             if (repoLicense == null) {
                 repoLicense =
                         lpvsLicenseRepository.searchByAlternativeLicenseNames(repositoryLicense);

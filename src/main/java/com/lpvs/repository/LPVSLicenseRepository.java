@@ -27,7 +27,7 @@ public interface LPVSLicenseRepository extends JpaRepository<LPVSLicense, Long> 
      * @param spdxId The SPDX identifier of the license.
      * @return The latest {@link LPVSLicense} entity with the specified SPDX identifier.
      */
-    LPVSLicense findFirstBySpdxIdOrderByIdDesc(@Param("spdxId") String spdxId);
+    LPVSLicense findFirstBySpdxIdOrderByLicenseIdDesc(@Param("spdxId") String spdxId);
 
     /**
      * Search for a license by alternative license names.
@@ -37,7 +37,7 @@ public interface LPVSLicenseRepository extends JpaRepository<LPVSLicense, Long> 
      */
     @Query(
             "SELECT l FROM LPVSLicense l WHERE (CONCAT(',', l.alternativeNames, ',') LIKE CONCAT('%,', :licenseName, ',%')) "
-                    + "ORDER BY l.id DESC LIMIT 1")
+                    + "ORDER BY l.licenseId DESC LIMIT 1")
     LPVSLicense searchByAlternativeLicenseNames(@Param("licenseName") String licenseName);
 
     /**
@@ -45,5 +45,6 @@ public interface LPVSLicenseRepository extends JpaRepository<LPVSLicense, Long> 
      *
      * @return List of SPDX identifiers as Strings.
      */
+    @Query(value = "select l.spdxId from LPVSLicense l")
     List<String> findAllSpdxId();
 }

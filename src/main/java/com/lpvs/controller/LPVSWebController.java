@@ -289,7 +289,7 @@ public class LPVSWebController implements ErrorController {
             LPVSPullRequest pr = prOpt.get();
 
             List<LPVSLicense> distinctByLicense =
-                    detectedLicenseRepository.findDistinctByPullRequestAndLicense(pr);
+                    detectedLicenseRepository.findDistinctLicenseByPullRequest(pr);
             List<String> detectedLicenses = new ArrayList<>();
             Map<String, Integer> licenseCountMap = new HashMap<>();
 

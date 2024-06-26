@@ -230,7 +230,7 @@ public class LPVSWebControllerTest {
 
         when(loginCheckService.getMemberFromMemberMap(authentication)).thenReturn(new LPVSMember());
         when(lpvsPullRequestRepository.findById(prId)).thenReturn(Optional.of(pullRequest));
-        when(detectedLicenseRepository.findDistinctByPullRequestAndLicense(pullRequest))
+        when(detectedLicenseRepository.findDistinctLicenseByPullRequest(pullRequest))
                 .thenReturn(licenses);
         when(licenseRepository.findAllSpdxId()).thenReturn(List.of("MIT", "Apache-2.0"));
         when(detectedLicenseRepository.findByPullRequest(pullRequest, pageable))

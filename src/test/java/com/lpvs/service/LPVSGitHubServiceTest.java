@@ -2255,7 +2255,7 @@ public class LPVSGitHubServiceTest {
                             null);
             conflict_1 = new LPVSLicenseService.Conflict<>(conflict_1_l1, conflict_1_l2);
 
-            when(mocked_lpvsLicenseRepository.findFirstBySpdxIdOrderByIdDesc(anyString()))
+            when(mocked_lpvsLicenseRepository.findFirstBySpdxIdOrderByLicenseIdDesc(anyString()))
                     .thenReturn(lpvs_license_1);
             when(mocked_lpvsLicenseRepository.searchByAlternativeLicenseNames(anyString()))
                     .thenReturn(null);
@@ -2310,7 +2310,7 @@ public class LPVSGitHubServiceTest {
                 throws Exception {
             // main test
             webhookConfig.setRepositoryLicense(spdx_id_1);
-            when(mocked_lpvsLicenseRepository.findFirstBySpdxIdOrderByIdDesc(spdx_id_1))
+            when(mocked_lpvsLicenseRepository.findFirstBySpdxIdOrderByLicenseIdDesc(spdx_id_1))
                     .thenReturn(
                             new LPVSLicense(
                                     1L,
@@ -2369,7 +2369,7 @@ public class LPVSGitHubServiceTest {
                 throws Exception {
             // main test
             webhookConfig.setRepositoryLicense(spdx_id_2);
-            when(mocked_lpvsLicenseRepository.findFirstBySpdxIdOrderByIdDesc(spdx_id_2))
+            when(mocked_lpvsLicenseRepository.findFirstBySpdxIdOrderByLicenseIdDesc(spdx_id_2))
                     .thenReturn(null);
             when(mocked_lpvsLicenseRepository.searchByAlternativeLicenseNames(spdx_id_2))
                     .thenReturn(
@@ -2585,7 +2585,7 @@ public class LPVSGitHubServiceTest {
                             null);
             conflict_1 = new LPVSLicenseService.Conflict<>(conflict_1_l1, conflict_1_l2);
 
-            when(mocked_lpvsLicenseRepository.findFirstBySpdxIdOrderByIdDesc(anyString()))
+            when(mocked_lpvsLicenseRepository.findFirstBySpdxIdOrderByLicenseIdDesc(anyString()))
                     .thenReturn(lpvs_license_1);
             when(mocked_lpvsLicenseRepository.searchByAlternativeLicenseNames(anyString()))
                     .thenReturn(null);
@@ -2640,7 +2640,7 @@ public class LPVSGitHubServiceTest {
                 throws Exception {
             // main test
             webhookConfig.setRepositoryLicense(spdx_id_1);
-            when(mocked_lpvsLicenseRepository.findFirstBySpdxIdOrderByIdDesc(spdx_id_1))
+            when(mocked_lpvsLicenseRepository.findFirstBySpdxIdOrderByLicenseIdDesc(spdx_id_1))
                     .thenReturn(
                             new LPVSLicense(
                                     1L,
@@ -2699,7 +2699,7 @@ public class LPVSGitHubServiceTest {
                 throws Exception {
             // main test
             webhookConfig.setRepositoryLicense(spdx_id_2);
-            when(mocked_lpvsLicenseRepository.findFirstBySpdxIdOrderByIdDesc(spdx_id_2))
+            when(mocked_lpvsLicenseRepository.findFirstBySpdxIdOrderByLicenseIdDesc(spdx_id_2))
                     .thenReturn(null);
             when(mocked_lpvsLicenseRepository.searchByAlternativeLicenseNames(spdx_id_2))
                     .thenReturn(
@@ -2918,7 +2918,7 @@ public class LPVSGitHubServiceTest {
                             null);
             conflict_1 = new LPVSLicenseService.Conflict<>(conflict_1_l1, conflict_1_l2);
 
-            when(mocked_lpvsLicenseRepository.findFirstBySpdxIdOrderByIdDesc(anyString()))
+            when(mocked_lpvsLicenseRepository.findFirstBySpdxIdOrderByLicenseIdDesc(anyString()))
                     .thenReturn(lpvs_license_1);
             when(mocked_lpvsLicenseRepository.searchByAlternativeLicenseNames(anyString()))
                     .thenReturn(null);
@@ -2973,7 +2973,7 @@ public class LPVSGitHubServiceTest {
                 throws Exception {
             // main test
             webhookConfig.setRepositoryLicense(spdx_id_1);
-            when(mocked_lpvsLicenseRepository.findFirstBySpdxIdOrderByIdDesc(spdx_id_1))
+            when(mocked_lpvsLicenseRepository.findFirstBySpdxIdOrderByLicenseIdDesc(spdx_id_1))
                     .thenReturn(
                             new LPVSLicense(
                                     1L,
@@ -3032,7 +3032,7 @@ public class LPVSGitHubServiceTest {
                 throws Exception {
             // main test
             webhookConfig.setRepositoryLicense(spdx_id_2);
-            when(mocked_lpvsLicenseRepository.findFirstBySpdxIdOrderByIdDesc(spdx_id_2))
+            when(mocked_lpvsLicenseRepository.findFirstBySpdxIdOrderByLicenseIdDesc(spdx_id_2))
                     .thenReturn(null);
             when(mocked_lpvsLicenseRepository.searchByAlternativeLicenseNames(spdx_id_2))
                     .thenReturn(
@@ -3251,7 +3251,7 @@ public class LPVSGitHubServiceTest {
                             null);
             conflict_1 = new LPVSLicenseService.Conflict<>(conflict_1_l1, conflict_1_l2);
 
-            when(mocked_lpvsLicenseRepository.findFirstBySpdxIdOrderByIdDesc(anyString()))
+            when(mocked_lpvsLicenseRepository.findFirstBySpdxIdOrderByLicenseIdDesc(anyString()))
                     .thenReturn(lpvs_license_1);
             when(mocked_lpvsLicenseRepository.searchByAlternativeLicenseNames(anyString()))
                     .thenReturn(null);
@@ -3306,7 +3306,7 @@ public class LPVSGitHubServiceTest {
                 throws Exception {
             // main test
             webhookConfig.setRepositoryLicense(spdx_id_1);
-            when(mocked_lpvsLicenseRepository.findFirstBySpdxIdOrderByIdDesc(spdx_id_1))
+            when(mocked_lpvsLicenseRepository.findFirstBySpdxIdOrderByLicenseIdDesc(spdx_id_1))
                     .thenReturn(
                             new LPVSLicense(
                                     1L,
@@ -3365,7 +3365,7 @@ public class LPVSGitHubServiceTest {
                 throws Exception {
             // main test
             webhookConfig.setRepositoryLicense(spdx_id_2);
-            when(mocked_lpvsLicenseRepository.findFirstBySpdxIdOrderByIdDesc(spdx_id_2))
+            when(mocked_lpvsLicenseRepository.findFirstBySpdxIdOrderByLicenseIdDesc(spdx_id_2))
                     .thenReturn(null);
             when(mocked_lpvsLicenseRepository.searchByAlternativeLicenseNames(spdx_id_2))
                     .thenReturn(
@@ -4298,7 +4298,9 @@ public class LPVSGitHubServiceTest {
                         }
                     };
             Mockito.when(repository.getPullRequests(GHIssueState.OPEN)).thenReturn(pullRequestList);
-            Mockito.when(mocked_lpvsLicenseRepository.findFirstBySpdxIdOrderByIdDesc(anyString()))
+            Mockito.when(
+                            mocked_lpvsLicenseRepository.findFirstBySpdxIdOrderByLicenseIdDesc(
+                                    anyString()))
                     .thenReturn(license);
 
             gh_service.commentResults(webhookConfig, fileList, conflictList, lpvsPullRequest);
