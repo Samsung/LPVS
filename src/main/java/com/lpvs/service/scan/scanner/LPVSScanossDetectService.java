@@ -274,7 +274,8 @@ public class LPVSScanossDetectService implements LPVSScanService {
                         .replaceAll("\\[\"\"\\]", "[]")
                         .replaceAll(
                                 "incompatible_with\" : (\".*?\"), \"name",
-                                "incompatible_with\" : \\[$1\\], \"name");
+                                "incompatible_with\" : \\[$1\\], \"name")
+                        .replaceAll("\\{\"\"\\}", "\"\"");
         content = content.substring(1, content.length() - 1);
         if (content.endsWith("}")) {
             content = content.substring(0, content.length() - 1) + "\"}";
@@ -291,43 +292,20 @@ public class LPVSScanossDetectService implements LPVSScanService {
     private class ScanossJsonStructure {
         private String component;
         private String file;
-        private String file_hash;
         private String file_url;
         private String id;
-        private String latest;
         private ArrayList<ScanossLicense> licenses;
         private String lines;
         private String matched;
         private String oss_lines;
-        private ArrayList<String> purl;
-        private String release_date;
-        private ScanossServer server;
-        private String source_hash;
-        private String status;
         private String url;
-        private String url_hash;
         private String vendor;
         private String version;
 
         private class ScanossLicense {
             private String checklist_url;
-            private String copyleft;
             private ArrayList<String> incompatible_with;
             private String name;
-            private String osadl_updated;
-            private String patent_hints;
-            private String source;
-            private String url;
-        }
-
-        private class ScanossServer {
-            private KbVersion kb_version;
-            private String version;
-
-            private class KbVersion {
-                private String daily;
-                private String monthly;
-            }
         }
     }
 }
