@@ -89,6 +89,7 @@
       "status": "pending",
       "url": "https://github.com/ShiftMediaProject/FFmpeg",
       "url_hash": "cf73511d784cddc8b080c199948c98dd",
+      "url_stats": {},
       "vendor": "ShiftMediaProject",
       "version": "4.5.r103180"
     }
@@ -177,6 +178,7 @@
       "status": "pending",
       "url": "https://pypi.org/project/scanoss",
       "url_hash": "721d702fc347c87457be94b27e66eac5",
+      "url_stats": {},
       "vendor": "SCANOSS",
       "version": "0.7.0"
     }
