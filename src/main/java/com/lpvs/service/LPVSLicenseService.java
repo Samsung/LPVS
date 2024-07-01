@@ -118,8 +118,7 @@ public class LPVSLicenseService {
      * Load all license conflicts from the database.
      */
     private void loadLicenseConflicts() {
-        List<LPVSLicenseConflict> conflicts =
-                lpvsLicenseConflictRepository.takeAllLicenseConflicts();
+        List<LPVSLicenseConflict> conflicts = lpvsLicenseConflictRepository.findAll();
         for (LPVSLicenseConflict conflict : conflicts) {
             Conflict<String, String> conf =
                     new Conflict<>(
@@ -155,7 +154,7 @@ public class LPVSLicenseService {
         } else {
             try {
                 // 1. Load licenses from DB
-                licenses = lpvsLicenseRepository.takeAllLicenses();
+                licenses = lpvsLicenseRepository.findAll();
                 // print info
                 log.info("LICENSES: loaded " + licenses.size() + " licenses from DB.");
 
@@ -186,7 +185,7 @@ public class LPVSLicenseService {
      */
     public void reloadFromTables() {
         if (licenses.isEmpty()) {
-            licenses = lpvsLicenseRepository.takeAllLicenses();
+            licenses = lpvsLicenseRepository.findAll();
             log.info("RELOADED " + licenses.size() + " licenses from DB.");
 
             loadLicenseConflicts();
@@ -376,7 +375,8 @@ public class LPVSLicenseService {
         String repositoryLicense = webhookConfig.getRepositoryLicense();
 
         if (repositoryLicense != null) {
-            LPVSLicense repoLicense = lpvsLicenseRepository.searchBySpdxId(repositoryLicense);
+            LPVSLicense repoLicense =
+                    lpvsLicenseRepository.findFirstBySpdxIdOrderByLicenseIdDesc(repositoryLicense);
             if (repoLicense == null) {
                 repoLicense =
                         lpvsLicenseRepository.searchByAlternativeLicenseNames(repositoryLicense);

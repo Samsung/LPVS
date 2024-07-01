@@ -307,13 +307,19 @@ public class LPVSGitHubService {
                 commitCommentBuilder.append("<li>" + conflict.l1 + " and " + conflict.l2 + "</li>");
                 LPVSDetectedLicense detectedIssue = new LPVSDetectedLicense();
                 detectedIssue.setPullRequest(lpvsPullRequest);
-                Long l1 = lpvsLicenseRepository.searchBySpdxId(conflict.l1).getLicenseId();
-                Long l2 = lpvsLicenseRepository.searchBySpdxId(conflict.l2).getLicenseId();
+                Long l1 =
+                        lpvsLicenseRepository
+                                .findFirstBySpdxIdOrderByLicenseIdDesc(conflict.l1)
+                                .getLicenseId();
+                Long l2 =
+                        lpvsLicenseRepository
+                                .findFirstBySpdxIdOrderByLicenseIdDesc(conflict.l2)
+                                .getLicenseId();
                 detectedIssue.setLicenseConflict(
                         lpvsLicenseConflictRepository.findLicenseConflict(l1, l2));
                 if (webhookConfig.getRepositoryLicense() != null) {
                     LPVSLicense repoLicense =
-                            lpvsLicenseRepository.searchBySpdxId(
+                            lpvsLicenseRepository.findFirstBySpdxIdOrderByLicenseIdDesc(
                                     webhookConfig.getRepositoryLicense());
                     if (repoLicense == null) {
                         repoLicense =

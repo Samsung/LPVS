@@ -12,22 +12,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 /**
  * Repository interface for managing {@link LPVSLicenseConflict} entities.
  * Extends {@link org.springframework.data.jpa.repository.JpaRepository} for basic CRUD operations.
  */
 @Repository
 public interface LPVSLicenseConflictRepository extends JpaRepository<LPVSLicenseConflict, Long> {
-
-    /**
-     * Retrieve all license conflicts from the database.
-     *
-     * @return List of {@link LPVSLicenseConflict} entities representing license conflicts.
-     */
-    @Query("SELECT lc FROM LPVSLicenseConflict lc")
-    List<LPVSLicenseConflict> takeAllLicenseConflicts();
 
     /**
      * Find a specific license conflict between two licenses.
@@ -40,7 +30,7 @@ public interface LPVSLicenseConflictRepository extends JpaRepository<LPVSLicense
             "SELECT lc FROM LPVSLicenseConflict lc "
                     + "WHERE (lc.repositoryLicense.licenseId = :license1 AND lc.conflictLicense.licenseId = :license2) "
                     + "OR (lc.repositoryLicense.licenseId = :license2 AND lc.conflictLicense.licenseId = :license1) "
-                    + "ORDER BY lc.id DESC "
+                    + "ORDER BY lc.conflictId DESC "
                     + "LIMIT 1")
     LPVSLicenseConflict findLicenseConflict(
             @Param("license1") Long license1, @Param("license2") Long license2);

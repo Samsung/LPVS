@@ -150,7 +150,7 @@ public class LPVSQueueService {
     public void checkForQueue() throws InterruptedException {
         QUEUE.clear();
         log.debug("Checking for previous queue");
-        List<LPVSQueue> webhookConfigList = queueRepository.getQueueList();
+        List<LPVSQueue> webhookConfigList = queueRepository.findAll();
         for (LPVSQueue webhook : webhookConfigList) {
             log.info("Add WebHook id = " + webhook.getId() + " to the queue.");
             QUEUE.putFirst(webhook);

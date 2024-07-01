@@ -60,7 +60,6 @@ public interface LPVSPullRequestRepository extends JpaRepository<LPVSPullRequest
      * @param pageable The pagination information.
      * @return Page of {@link LPVSPullRequest} entities with the specified base name.
      */
-    @Query(value = "select pr from LPVSPullRequest pr where pr.pullRequestBase = :name")
     Page<LPVSPullRequest> findByPullRequestBase(@Param("name") String name, Pageable pageable);
 
     /**
@@ -69,7 +68,6 @@ public interface LPVSPullRequestRepository extends JpaRepository<LPVSPullRequest
      * @param name The name of the pull request base.
      * @return List of {@link LPVSPullRequest} entities with the specified base name.
      */
-    @Query(value = "select pr from LPVSPullRequest pr where pr.pullRequestBase = :name")
     List<LPVSPullRequest> findByPullRequestBase(@Param("name") String name);
 
     /**
@@ -78,8 +76,7 @@ public interface LPVSPullRequestRepository extends JpaRepository<LPVSPullRequest
      * @param name The name of the pull request base.
      * @return The count of pull requests with the specified base name.
      */
-    @Query(value = "select count(*) from LPVSPullRequest pr where pr.pullRequestBase = :name")
-    Long CountByPullRequestBase(@Param("name") String name);
+    Long countByPullRequestBase(@Param("name") String name);
 
     /**
      * Find all pull requests with the specified sender or pull request head, paginated.
@@ -114,5 +111,5 @@ public interface LPVSPullRequestRepository extends JpaRepository<LPVSPullRequest
     @Query(
             value =
                     "select count(*) from LPVSPullRequest pr where pr.sender = :name or pr.pullRequestHead = :name")
-    Long CountBySenderOrPullRequestHead(@Param("name") String name);
+    Long countBySenderOrPullRequestHead(@Param("name") String name);
 }

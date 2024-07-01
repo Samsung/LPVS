@@ -881,7 +881,7 @@ public class LPVSQueueServiceTest {
             LPVSQueue webhookConfig = new LPVSQueue();
             webhookConfig.setAttempts(100);
             webhookConfig.setDate(new Date());
-            when(mocked_queueRepository.getQueueList()).thenReturn(List.of(webhookConfig));
+            when(mocked_queueRepository.findAll()).thenReturn(List.of(webhookConfig));
             assertDoesNotThrow(() -> queueService.checkForQueue());
         }
 
