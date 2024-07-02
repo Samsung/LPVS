@@ -96,12 +96,12 @@ extends org.springframework.data.jpa.repository.JpaRepository&lt;<a href="../ent
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#CountByPullRequestBase(java.lang.String)" class="member-name-link">CountByPullRequestBase</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#countByPullRequestBase(java.lang.String)" class="member-name-link">countByPullRequestBase</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Count the number of pull requests with the specified base name.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#CountBySenderOrPullRequestHead(java.lang.String)" class="member-name-link">CountBySenderOrPullRequestHead</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#countBySenderOrPullRequestHead(java.lang.String)" class="member-name-link">countBySenderOrPullRequestHead</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Count the number of pull requests with the specified sender or pull request head.</div>
 </div>
@@ -138,11 +138,6 @@ extends org.springframework.data.jpa.repository.JpaRepository&lt;<a href="../ent
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Retrieves the latest LPVSPullRequest entity based on the provided criteria.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Date.html" title="class or interface in java.util" class="external-link">Date</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getNow()" class="member-name-link">getNow</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">Get the current date and time from the database.</div>
-</div>
 </div>
 </div>
 </div>
@@ -176,23 +171,9 @@ extends org.springframework.data.jpa.repository.JpaRepository&lt;<a href="../ent
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="getNow()">
-<h3>getNow</h3>
-<div class="member-signature"><span class="annotations">@Query(value="SELECT now();",
-       nativeQuery=true)
-</span><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Date.html" title="class or interface in java.util" class="external-link">Date</a></span>&nbsp;<span class="element-name">getNow</span>()</div>
-<div class="block">Get the current date and time from the database.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>The current date and time.</dd>
-</dl>
-</section>
-</li>
-<li>
 <section class="detail" id="findLatestByPullRequestInfo(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)">
 <h3>findLatestByPullRequestInfo</h3>
-<div class="member-signature"><span class="annotations">@Query(value="SELECT * FROM pull_requests pr WHERE (:user IS NULL OR pr.user = :user) AND (:repositoryName IS NULL OR pr.repository_name = :repositoryName) AND (:pullRequestFilesUrl IS NULL OR pr.diff_url = :pullRequestFilesUrl) AND (:pullRequestHead IS NULL OR pr.pull_request_head = :pullRequestHead) AND (:pullRequestBase IS NULL OR pr.pull_request_base = :pullRequestBase) AND (:sender IS NULL OR pr.sender = :sender) AND (:status IS NULL OR pr.status = :status) ORDER BY pr.scan_date DESC LIMIT 1",
-       nativeQuery=true)
+<div class="member-signature"><span class="annotations">@Query("SELECT pr FROM LPVSPullRequest pr WHERE (:user IS NULL OR pr.user = :user) AND (:repositoryName IS NULL OR pr.repositoryName = :repositoryName) AND (:pullRequestFilesUrl IS NULL OR pr.pullRequestFilesUrl = :pullRequestFilesUrl) AND (:pullRequestHead IS NULL OR pr.pullRequestHead = :pullRequestHead) AND (:pullRequestBase IS NULL OR pr.pullRequestBase = :pullRequestBase) AND (:sender IS NULL OR pr.sender = :sender) AND (:status IS NULL OR pr.status = :status) ORDER BY pr.date DESC LIMIT 1")
 </span><span class="return-type"><a href="../entity/LPVSPullRequest.html" title="class in com.lpvs.entity">LPVSPullRequest</a></span>&nbsp;<span class="element-name">findLatestByPullRequestInfo</span><wbr><span class="parameters">(@Param("user")
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;user,
  @Param("repositoryName")
@@ -226,8 +207,7 @@ extends org.springframework.data.jpa.repository.JpaRepository&lt;<a href="../ent
 <li>
 <section class="detail" id="findByPullRequestBase(java.lang.String,org.springframework.data.domain.Pageable)">
 <h3>findByPullRequestBase</h3>
-<div class="member-signature"><span class="annotations">@Query("select pr from LPVSPullRequest pr where pr.pullRequestBase = :name")
-</span><span class="return-type">org.springframework.data.domain.Page&lt;<a href="../entity/LPVSPullRequest.html" title="class in com.lpvs.entity">LPVSPullRequest</a>&gt;</span>&nbsp;<span class="element-name">findByPullRequestBase</span><wbr><span class="parameters">(@Param("name")
+<div class="member-signature"><span class="return-type">org.springframework.data.domain.Page&lt;<a href="../entity/LPVSPullRequest.html" title="class in com.lpvs.entity">LPVSPullRequest</a>&gt;</span>&nbsp;<span class="element-name">findByPullRequestBase</span><wbr><span class="parameters">(@Param("name")
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  org.springframework.data.domain.Pageable&nbsp;pageable)</span></div>
 <div class="block">Find all pull requests with the specified base name, paginated.</div>
@@ -243,8 +223,7 @@ extends org.springframework.data.jpa.repository.JpaRepository&lt;<a href="../ent
 <li>
 <section class="detail" id="findByPullRequestBase(java.lang.String)">
 <h3>findByPullRequestBase</h3>
-<div class="member-signature"><span class="annotations">@Query("select pr from LPVSPullRequest pr where pr.pullRequestBase = :name")
-</span><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../entity/LPVSPullRequest.html" title="class in com.lpvs.entity">LPVSPullRequest</a>&gt;</span>&nbsp;<span class="element-name">findByPullRequestBase</span><wbr><span class="parameters">(@Param("name")
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../entity/LPVSPullRequest.html" title="class in com.lpvs.entity">LPVSPullRequest</a>&gt;</span>&nbsp;<span class="element-name">findByPullRequestBase</span><wbr><span class="parameters">(@Param("name")
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Find all pull requests with the specified base name.</div>
 <dl class="notes">
@@ -256,10 +235,9 @@ extends org.springframework.data.jpa.repository.JpaRepository&lt;<a href="../ent
 </section>
 </li>
 <li>
-<section class="detail" id="CountByPullRequestBase(java.lang.String)">
-<h3>CountByPullRequestBase</h3>
-<div class="member-signature"><span class="annotations">@Query("select count(*) from LPVSPullRequest pr where pr.pullRequestBase = :name")
-</span><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a></span>&nbsp;<span class="element-name">CountByPullRequestBase</span><wbr><span class="parameters">(@Param("name")
+<section class="detail" id="countByPullRequestBase(java.lang.String)">
+<h3>countByPullRequestBase</h3>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a></span>&nbsp;<span class="element-name">countByPullRequestBase</span><wbr><span class="parameters">(@Param("name")
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Count the number of pull requests with the specified base name.</div>
 <dl class="notes">
@@ -303,10 +281,10 @@ extends org.springframework.data.jpa.repository.JpaRepository&lt;<a href="../ent
 </section>
 </li>
 <li>
-<section class="detail" id="CountBySenderOrPullRequestHead(java.lang.String)">
-<h3>CountBySenderOrPullRequestHead</h3>
+<section class="detail" id="countBySenderOrPullRequestHead(java.lang.String)">
+<h3>countBySenderOrPullRequestHead</h3>
 <div class="member-signature"><span class="annotations">@Query("select count(*) from LPVSPullRequest pr where pr.sender = :name or pr.pullRequestHead = :name")
-</span><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a></span>&nbsp;<span class="element-name">CountBySenderOrPullRequestHead</span><wbr><span class="parameters">(@Param("name")
+</span><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a></span>&nbsp;<span class="element-name">countBySenderOrPullRequestHead</span><wbr><span class="parameters">(@Param("name")
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Count the number of pull requests with the specified sender or pull request head.</div>
 <dl class="notes">

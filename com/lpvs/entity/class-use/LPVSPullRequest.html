@@ -140,12 +140,12 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">LPVSDetectedLicenseRepository.</span><code><a href="../../repository/LPVSDetectedLicenseRepository.html#CountByDetectedLicenseWherePullRequestId(com.lpvs.entity.LPVSPullRequest)" class="member-name-link">CountByDetectedLicenseWherePullRequestId</a><wbr>(<a href="../LPVSPullRequest.html" title="class in com.lpvs.entity">LPVSPullRequest</a>&nbsp;pr)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">LPVSDetectedLicenseRepository.</span><code><a href="../../repository/LPVSDetectedLicenseRepository.html#countByPullRequestAndLicenseIsNotNull(com.lpvs.entity.LPVSPullRequest)" class="member-name-link">countByPullRequestAndLicenseIsNotNull</a><wbr>(<a href="../LPVSPullRequest.html" title="class in com.lpvs.entity">LPVSPullRequest</a>&nbsp;pr)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Count the number of detected licenses associated with a specific pull request where the license is not null.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">LPVSDetectedLicenseRepository.</span><code><a href="../../repository/LPVSDetectedLicenseRepository.html#existsIssue(com.lpvs.entity.LPVSPullRequest)" class="member-name-link">existsIssue</a><wbr>(<a href="../LPVSPullRequest.html" title="class in com.lpvs.entity">LPVSPullRequest</a>&nbsp;pr)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">LPVSDetectedLicenseRepository.</span><code><a href="../../repository/LPVSDetectedLicenseRepository.html#existsByIssueIsTrueAndPullRequest(com.lpvs.entity.LPVSPullRequest)" class="member-name-link">existsByIssueIsTrueAndPullRequest</a><wbr>(<a href="../LPVSPullRequest.html" title="class in com.lpvs.entity">LPVSPullRequest</a>&nbsp;pr)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Check if there is at least one detected license associated with a specific pull request and marked as an issue.</div>
 </div>
@@ -160,15 +160,15 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">
 <div class="block">Find a paginated list of detected licenses associated with a specific pull request.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../LPVSLicense.html" title="class in com.lpvs.entity">LPVSLicense</a>&gt;</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">LPVSDetectedLicenseRepository.</span><code><a href="../../repository/LPVSDetectedLicenseRepository.html#findDistinctByLicense(com.lpvs.entity.LPVSPullRequest)" class="member-name-link">findDistinctByLicense</a><wbr>(<a href="../LPVSPullRequest.html" title="class in com.lpvs.entity">LPVSPullRequest</a>&nbsp;pr)</code></div>
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../LPVSDetectedLicense.html" title="class in com.lpvs.entity">LPVSDetectedLicense</a>&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">LPVSDetectedLicenseRepository.</span><code><a href="../../repository/LPVSDetectedLicenseRepository.html#findByPullRequestAndLicenseIsNotNull(com.lpvs.entity.LPVSPullRequest)" class="member-name-link">findByPullRequestAndLicenseIsNotNull</a><wbr>(<a href="../LPVSPullRequest.html" title="class in com.lpvs.entity">LPVSPullRequest</a>&nbsp;pr)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Find distinct licenses associated with a specific pull request.</div>
-</div>
-<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../LPVSDetectedLicense.html" title="class in com.lpvs.entity">LPVSDetectedLicense</a>&gt;</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">LPVSDetectedLicenseRepository.</span><code><a href="../../repository/LPVSDetectedLicenseRepository.html#findNotNullDLByPR(com.lpvs.entity.LPVSPullRequest)" class="member-name-link">findNotNullDLByPR</a><wbr>(<a href="../LPVSPullRequest.html" title="class in com.lpvs.entity">LPVSPullRequest</a>&nbsp;pr)</code></div>
-<div class="col-last odd-row-color">
 <div class="block">Find detected licenses associated with a specific pull request where the license is not null.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../LPVSLicense.html" title="class in com.lpvs.entity">LPVSLicense</a>&gt;</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">LPVSDetectedLicenseRepository.</span><code><a href="../../repository/LPVSDetectedLicenseRepository.html#findDistinctLicenseByPullRequest(com.lpvs.entity.LPVSPullRequest)" class="member-name-link">findDistinctLicenseByPullRequest</a><wbr>(<a href="../LPVSPullRequest.html" title="class in com.lpvs.entity">LPVSPullRequest</a>&nbsp;pr)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Find distinct licenses associated with a specific pull request.</div>
 </div>
 </div>
 </section>

@@ -100,14 +100,14 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code><a href="../LPVSLicense.html" title="class in com.lpvs.entity">LPVSLicense</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">LPVSLicenseRepository.</span><code><a href="../../repository/LPVSLicenseRepository.html#searchByAlternativeLicenseNames(java.lang.String)" class="member-name-link">searchByAlternativeLicenseNames</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;licenseName)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">LPVSLicenseRepository.</span><code><a href="../../repository/LPVSLicenseRepository.html#findFirstBySpdxIdOrderByLicenseIdDesc(java.lang.String)" class="member-name-link">findFirstBySpdxIdOrderByLicenseIdDesc</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;spdxId)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Search for a license by alternative license names.</div>
+<div class="block">Search for a license by SPDX identifier.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../LPVSLicense.html" title="class in com.lpvs.entity">LPVSLicense</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">LPVSLicenseRepository.</span><code><a href="../../repository/LPVSLicenseRepository.html#searchBySpdxId(java.lang.String)" class="member-name-link">searchBySpdxId</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;spdxId)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">LPVSLicenseRepository.</span><code><a href="../../repository/LPVSLicenseRepository.html#searchByAlternativeLicenseNames(java.lang.String)" class="member-name-link">searchByAlternativeLicenseNames</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;licenseName)</code></div>
 <div class="col-last odd-row-color">
-<div class="block">Search for a license by SPDX identifier.</div>
+<div class="block">Search for a license by alternative license names.</div>
 </div>
 </div>
 <div class="caption"><span>Methods in <a href="../../repository/package-summary.html">com.lpvs.repository</a> that return types with arguments of type <a href="../LPVSLicense.html" title="class in com.lpvs.entity">LPVSLicense</a></span></div>
@@ -116,14 +116,9 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../LPVSLicense.html" title="class in com.lpvs.entity">LPVSLicense</a>&gt;</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">LPVSDetectedLicenseRepository.</span><code><a href="../../repository/LPVSDetectedLicenseRepository.html#findDistinctByLicense(com.lpvs.entity.LPVSPullRequest)" class="member-name-link">findDistinctByLicense</a><wbr>(<a href="../LPVSPullRequest.html" title="class in com.lpvs.entity">LPVSPullRequest</a>&nbsp;pr)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">LPVSDetectedLicenseRepository.</span><code><a href="../../repository/LPVSDetectedLicenseRepository.html#findDistinctLicenseByPullRequest(com.lpvs.entity.LPVSPullRequest)" class="member-name-link">findDistinctLicenseByPullRequest</a><wbr>(<a href="../LPVSPullRequest.html" title="class in com.lpvs.entity">LPVSPullRequest</a>&nbsp;pr)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Find distinct licenses associated with a specific pull request.</div>
-</div>
-<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../LPVSLicense.html" title="class in com.lpvs.entity">LPVSLicense</a>&gt;</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">LPVSLicenseRepository.</span><code><a href="../../repository/LPVSLicenseRepository.html#takeAllLicenses()" class="member-name-link">takeAllLicenses</a>()</code></div>
-<div class="col-last odd-row-color">
-<div class="block">Retrieve all licenses from the database.</div>
 </div>
 </div>
 </section>

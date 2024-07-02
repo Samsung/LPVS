@@ -216,15 +216,15 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Configures the CORS (Cross-Origin Resource Sharing) support.</div>
 </dd>
-<dt><a href="com/lpvs/repository/LPVSDetectedLicenseRepository.html#CountByDetectedLicenseWherePullRequestId(com.lpvs.entity.LPVSPullRequest)" class="member-name-link">CountByDetectedLicenseWherePullRequestId(LPVSPullRequest)</a> - Method in interface com.lpvs.repository.<a href="com/lpvs/repository/LPVSDetectedLicenseRepository.html" title="interface in com.lpvs.repository">LPVSDetectedLicenseRepository</a></dt>
+<dt><a href="com/lpvs/repository/LPVSDetectedLicenseRepository.html#countByPullRequestAndLicenseIsNotNull(com.lpvs.entity.LPVSPullRequest)" class="member-name-link">countByPullRequestAndLicenseIsNotNull(LPVSPullRequest)</a> - Method in interface com.lpvs.repository.<a href="com/lpvs/repository/LPVSDetectedLicenseRepository.html" title="interface in com.lpvs.repository">LPVSDetectedLicenseRepository</a></dt>
 <dd>
 <div class="block">Count the number of detected licenses associated with a specific pull request where the license is not null.</div>
 </dd>
-<dt><a href="com/lpvs/repository/LPVSPullRequestRepository.html#CountByPullRequestBase(java.lang.String)" class="member-name-link">CountByPullRequestBase(String)</a> - Method in interface com.lpvs.repository.<a href="com/lpvs/repository/LPVSPullRequestRepository.html" title="interface in com.lpvs.repository">LPVSPullRequestRepository</a></dt>
+<dt><a href="com/lpvs/repository/LPVSPullRequestRepository.html#countByPullRequestBase(java.lang.String)" class="member-name-link">countByPullRequestBase(String)</a> - Method in interface com.lpvs.repository.<a href="com/lpvs/repository/LPVSPullRequestRepository.html" title="interface in com.lpvs.repository">LPVSPullRequestRepository</a></dt>
 <dd>
 <div class="block">Count the number of pull requests with the specified base name.</div>
 </dd>
-<dt><a href="com/lpvs/repository/LPVSPullRequestRepository.html#CountBySenderOrPullRequestHead(java.lang.String)" class="member-name-link">CountBySenderOrPullRequestHead(String)</a> - Method in interface com.lpvs.repository.<a href="com/lpvs/repository/LPVSPullRequestRepository.html" title="interface in com.lpvs.repository">LPVSPullRequestRepository</a></dt>
+<dt><a href="com/lpvs/repository/LPVSPullRequestRepository.html#countBySenderOrPullRequestHead(java.lang.String)" class="member-name-link">countBySenderOrPullRequestHead(String)</a> - Method in interface com.lpvs.repository.<a href="com/lpvs/repository/LPVSPullRequestRepository.html" title="interface in com.lpvs.repository">LPVSPullRequestRepository</a></dt>
 <dd>
 <div class="block">Count the number of pull requests with the specified sender or pull request head.</div>
 </dd>
@@ -265,10 +265,6 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/lpvs/entity/dashboard/DashboardElementsByDate.html#%3Cinit%3E()" class="member-name-link">DashboardElementsByDate()</a> - Constructor for class com.lpvs.entity.dashboard.<a href="com/lpvs/entity/dashboard/DashboardElementsByDate.html" title="class in com.lpvs.entity.dashboard">DashboardElementsByDate</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/lpvs/service/LPVSLoginCheckService.html#dateTimeFormatting(java.time.LocalDateTime)" class="member-name-link">dateTimeFormatting(LocalDateTime)</a> - Method in class com.lpvs.service.<a href="com/lpvs/service/LPVSLoginCheckService.html" title="class in com.lpvs.service">LPVSLoginCheckService</a></dt>
-<dd>
-<div class="block">Format LocalDateTime object as a string.</div>
-</dd>
 <dt><a href="com/lpvs/service/LPVSQueueService.html#delete(com.lpvs.entity.LPVSQueue)" class="member-name-link">delete(LPVSQueue)</a> - Method in class com.lpvs.service.<a href="com/lpvs/service/LPVSQueueService.html" title="class in com.lpvs.service">LPVSQueueService</a></dt>
 <dd>
 <div class="block">Deletes the LPVSQueue element from the repository and the queue.</div>
@@ -300,7 +296,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Constructs a new ErrorResponse with the specified message, code, and status.</div>
 </dd>
-<dt><a href="com/lpvs/repository/LPVSDetectedLicenseRepository.html#existsIssue(com.lpvs.entity.LPVSPullRequest)" class="member-name-link">existsIssue(LPVSPullRequest)</a> - Method in interface com.lpvs.repository.<a href="com/lpvs/repository/LPVSDetectedLicenseRepository.html" title="interface in com.lpvs.repository">LPVSDetectedLicenseRepository</a></dt>
+<dt><a href="com/lpvs/repository/LPVSDetectedLicenseRepository.html#existsByIssueIsTrueAndPullRequest(com.lpvs.entity.LPVSPullRequest)" class="member-name-link">existsByIssueIsTrueAndPullRequest(LPVSPullRequest)</a> - Method in interface com.lpvs.repository.<a href="com/lpvs/repository/LPVSDetectedLicenseRepository.html" title="interface in com.lpvs.repository">LPVSDetectedLicenseRepository</a></dt>
 <dd>
 <div class="block">Check if there is at least one detected license associated with a specific pull request and marked as an issue.</div>
 </dd>
@@ -319,6 +315,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Configures the security filter chain.</div>
 </dd>
+<dt><a href="com/lpvs/repository/LPVSLicenseRepository.html#findAllSpdxId()" class="member-name-link">findAllSpdxId()</a> - Method in interface com.lpvs.repository.<a href="com/lpvs/repository/LPVSLicenseRepository.html" title="interface in com.lpvs.repository">LPVSLicenseRepository</a></dt>
+<dd>
+<div class="block">Retrieve all SPDX identifiers of licenses from the database.</div>
+</dd>
 <dt><a href="com/lpvs/repository/LPVSMemberRepository.html#findByEmailAndProvider(java.lang.String,java.lang.String)" class="member-name-link">findByEmailAndProvider(String, String)</a> - Method in interface com.lpvs.repository.<a href="com/lpvs/repository/LPVSMemberRepository.html" title="interface in com.lpvs.repository">LPVSMemberRepository</a></dt>
 <dd>
 <div class="block">Find a member by email and provider.</div>
@@ -330,6 +330,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/lpvs/repository/LPVSDetectedLicenseRepository.html#findByPullRequest(com.lpvs.entity.LPVSPullRequest,org.springframework.data.domain.Pageable)" class="member-name-link">findByPullRequest(LPVSPullRequest, Pageable)</a> - Method in interface com.lpvs.repository.<a href="com/lpvs/repository/LPVSDetectedLicenseRepository.html" title="interface in com.lpvs.repository">LPVSDetectedLicenseRepository</a></dt>
 <dd>
 <div class="block">Find a paginated list of detected licenses associated with a specific pull request.</div>
+</dd>
+<dt><a href="com/lpvs/repository/LPVSDetectedLicenseRepository.html#findByPullRequestAndLicenseIsNotNull(com.lpvs.entity.LPVSPullRequest)" class="member-name-link">findByPullRequestAndLicenseIsNotNull(LPVSPullRequest)</a> - Method in interface com.lpvs.repository.<a href="com/lpvs/repository/LPVSDetectedLicenseRepository.html" title="interface in com.lpvs.repository">LPVSDetectedLicenseRepository</a></dt>
+<dd>
+<div class="block">Find detected licenses associated with a specific pull request where the license is not null.</div>
 </dd>
 <dt><a href="com/lpvs/repository/LPVSPullRequestRepository.html#findByPullRequestBase(java.lang.String)" class="member-name-link">findByPullRequestBase(String)</a> - Method in interface com.lpvs.repository.<a href="com/lpvs/repository/LPVSPullRequestRepository.html" title="interface in com.lpvs.repository">LPVSPullRequestRepository</a></dt>
 <dd>
@@ -351,9 +355,13 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Finds license conflicts based on the provided scan results and repository information.</div>
 </dd>
-<dt><a href="com/lpvs/repository/LPVSDetectedLicenseRepository.html#findDistinctByLicense(com.lpvs.entity.LPVSPullRequest)" class="member-name-link">findDistinctByLicense(LPVSPullRequest)</a> - Method in interface com.lpvs.repository.<a href="com/lpvs/repository/LPVSDetectedLicenseRepository.html" title="interface in com.lpvs.repository">LPVSDetectedLicenseRepository</a></dt>
+<dt><a href="com/lpvs/repository/LPVSDetectedLicenseRepository.html#findDistinctLicenseByPullRequest(com.lpvs.entity.LPVSPullRequest)" class="member-name-link">findDistinctLicenseByPullRequest(LPVSPullRequest)</a> - Method in interface com.lpvs.repository.<a href="com/lpvs/repository/LPVSDetectedLicenseRepository.html" title="interface in com.lpvs.repository">LPVSDetectedLicenseRepository</a></dt>
 <dd>
 <div class="block">Find distinct licenses associated with a specific pull request.</div>
+</dd>
+<dt><a href="com/lpvs/repository/LPVSLicenseRepository.html#findFirstBySpdxIdOrderByLicenseIdDesc(java.lang.String)" class="member-name-link">findFirstBySpdxIdOrderByLicenseIdDesc(String)</a> - Method in interface com.lpvs.repository.<a href="com/lpvs/repository/LPVSLicenseRepository.html" title="interface in com.lpvs.repository">LPVSLicenseRepository</a></dt>
+<dd>
+<div class="block">Search for a license by SPDX identifier.</div>
 </dd>
 <dt><a href="com/lpvs/repository/LPVSPullRequestRepository.html#findLatestByPullRequestInfo(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)" class="member-name-link">findLatestByPullRequestInfo(String, String, String, String, String, String, String)</a> - Method in interface com.lpvs.repository.<a href="com/lpvs/repository/LPVSPullRequestRepository.html" title="interface in com.lpvs.repository">LPVSPullRequestRepository</a></dt>
 <dd>
@@ -378,10 +386,6 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/lpvs/service/LPVSLicenseService.html#findLicenseInOsoriDB(java.lang.String)" class="member-name-link">findLicenseInOsoriDB(String)</a> - Method in class com.lpvs.service.<a href="com/lpvs/service/LPVSLicenseService.html" title="class in com.lpvs.service">LPVSLicenseService</a></dt>
 <dd>
 <div class="block">Search for a license with the given SPDX identifier in the OSORI database.</div>
-</dd>
-<dt><a href="com/lpvs/repository/LPVSDetectedLicenseRepository.html#findNotNullDLByPR(com.lpvs.entity.LPVSPullRequest)" class="member-name-link">findNotNullDLByPR(LPVSPullRequest)</a> - Method in interface com.lpvs.repository.<a href="com/lpvs/repository/LPVSDetectedLicenseRepository.html" title="interface in com.lpvs.repository">LPVSDetectedLicenseRepository</a></dt>
-<dd>
-<div class="block">Find detected licenses associated with a specific pull request where the license is not null.</div>
 </dd>
 </dl>
 <h2 class="title" id="I:G">G</h2>
@@ -442,10 +446,6 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Retrieves the message from the response wrapper.</div>
 </dd>
-<dt><a href="com/lpvs/repository/LPVSPullRequestRepository.html#getNow()" class="member-name-link">getNow()</a> - Method in interface com.lpvs.repository.<a href="com/lpvs/repository/LPVSPullRequestRepository.html" title="interface in com.lpvs.repository">LPVSPullRequestRepository</a></dt>
-<dd>
-<div class="block">Get the current date and time from the database.</div>
-</dd>
 <dt><a href="com/lpvs/service/LPVSLoginCheckService.html#getOauthLoginMemberMap(org.springframework.security.core.Authentication)" class="member-name-link">getOauthLoginMemberMap(Authentication)</a> - Method in class com.lpvs.service.<a href="com/lpvs/service/LPVSLoginCheckService.html" title="class in com.lpvs.service">LPVSLoginCheckService</a></dt>
 <dd>
 <div class="block">Get OAuth login member map from the authentication object.</div>
@@ -477,10 +477,6 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/lpvs/service/LPVSQueueService.html#getQueueFirstElement()" class="member-name-link">getQueueFirstElement()</a> - Method in class com.lpvs.service.<a href="com/lpvs/service/LPVSQueueService.html" title="class in com.lpvs.service">LPVSQueueService</a></dt>
 <dd>
 <div class="block">Gets the first element from the LPVSQueue.</div>
-</dd>
-<dt><a href="com/lpvs/repository/LPVSQueueRepository.html#getQueueList()" class="member-name-link">getQueueList()</a> - Method in interface com.lpvs.repository.<a href="com/lpvs/repository/LPVSQueueRepository.html" title="interface in com.lpvs.repository">LPVSQueueRepository</a></dt>
-<dd>
-<div class="block">Retrieve the list of all entities from the "queue" table.</div>
 </dd>
 <dt><a href="com/lpvs/service/LPVSGitHubService.html#getRepositoryLicense(com.lpvs.entity.LPVSQueue)" class="member-name-link">getRepositoryLicense(LPVSQueue)</a> - Method in class com.lpvs.service.<a href="com/lpvs/service/LPVSGitHubService.html" title="class in com.lpvs.service">LPVSGitHubService</a></dt>
 <dd>
@@ -1049,10 +1045,6 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Search for a license by alternative license names.</div>
 </dd>
-<dt><a href="com/lpvs/repository/LPVSLicenseRepository.html#searchBySpdxId(java.lang.String)" class="member-name-link">searchBySpdxId(String)</a> - Method in interface com.lpvs.repository.<a href="com/lpvs/repository/LPVSLicenseRepository.html" title="interface in com.lpvs.repository">LPVSLicenseRepository</a></dt>
-<dd>
-<div class="block">Search for a license by SPDX identifier.</div>
-</dd>
 <dt><a href="com/lpvs/config/SecurityConfig.html" class="type-name-link" title="class in com.lpvs.config">SecurityConfig</a> - Class in <a href="com/lpvs/config/package-summary.html">com.lpvs.config</a></dt>
 <dd>
 <div class="block">Configuration class for setting up security configurations, including OAuth2 authentication
@@ -1095,18 +1087,6 @@ loadScripts(document, 'script');</script>
 </dl>
 <h2 class="title" id="I:T">T</h2>
 <dl class="index">
-<dt><a href="com/lpvs/repository/LPVSLicenseConflictRepository.html#takeAllLicenseConflicts()" class="member-name-link">takeAllLicenseConflicts()</a> - Method in interface com.lpvs.repository.<a href="com/lpvs/repository/LPVSLicenseConflictRepository.html" title="interface in com.lpvs.repository">LPVSLicenseConflictRepository</a></dt>
-<dd>
-<div class="block">Retrieve all license conflicts from the database.</div>
-</dd>
-<dt><a href="com/lpvs/repository/LPVSLicenseRepository.html#takeAllLicenses()" class="member-name-link">takeAllLicenses()</a> - Method in interface com.lpvs.repository.<a href="com/lpvs/repository/LPVSLicenseRepository.html" title="interface in com.lpvs.repository">LPVSLicenseRepository</a></dt>
-<dd>
-<div class="block">Retrieve all licenses from the database.</div>
-</dd>
-<dt><a href="com/lpvs/repository/LPVSLicenseRepository.html#takeAllSpdxId()" class="member-name-link">takeAllSpdxId()</a> - Method in interface com.lpvs.repository.<a href="com/lpvs/repository/LPVSLicenseRepository.html" title="interface in com.lpvs.repository">LPVSLicenseRepository</a></dt>
-<dd>
-<div class="block">Retrieve all SPDX identifiers of licenses from the database.</div>
-</dd>
 <dt><a href="com/lpvs/entity/auth/MemberProfile.html#toMember()" class="member-name-link">toMember()</a> - Method in class com.lpvs.entity.auth.<a href="com/lpvs/entity/auth/MemberProfile.html" title="class in com.lpvs.entity.auth">MemberProfile</a></dt>
 <dd>
 <div class="block">Converts the member profile to an instance of <a href="com/lpvs/entity/auth/LPVSMember.html" title="class in com.lpvs.entity.auth"><code>LPVSMember</code></a>.</div>

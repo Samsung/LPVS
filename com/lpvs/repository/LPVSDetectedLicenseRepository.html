@@ -96,12 +96,12 @@ extends org.springframework.data.jpa.repository.JpaRepository&lt;<a href="../ent
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#CountByDetectedLicenseWherePullRequestId(com.lpvs.entity.LPVSPullRequest)" class="member-name-link">CountByDetectedLicenseWherePullRequestId</a><wbr>(<a href="../entity/LPVSPullRequest.html" title="class in com.lpvs.entity">LPVSPullRequest</a>&nbsp;pr)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#countByPullRequestAndLicenseIsNotNull(com.lpvs.entity.LPVSPullRequest)" class="member-name-link">countByPullRequestAndLicenseIsNotNull</a><wbr>(<a href="../entity/LPVSPullRequest.html" title="class in com.lpvs.entity">LPVSPullRequest</a>&nbsp;pr)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Count the number of detected licenses associated with a specific pull request where the license is not null.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#existsIssue(com.lpvs.entity.LPVSPullRequest)" class="member-name-link">existsIssue</a><wbr>(<a href="../entity/LPVSPullRequest.html" title="class in com.lpvs.entity">LPVSPullRequest</a>&nbsp;pr)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#existsByIssueIsTrueAndPullRequest(com.lpvs.entity.LPVSPullRequest)" class="member-name-link">existsByIssueIsTrueAndPullRequest</a><wbr>(<a href="../entity/LPVSPullRequest.html" title="class in com.lpvs.entity">LPVSPullRequest</a>&nbsp;pr)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Check if there is at least one detected license associated with a specific pull request and marked as an issue.</div>
 </div>
@@ -116,15 +116,15 @@ extends org.springframework.data.jpa.repository.JpaRepository&lt;<a href="../ent
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Find a paginated list of detected licenses associated with a specific pull request.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../entity/LPVSLicense.html" title="class in com.lpvs.entity">LPVSLicense</a>&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#findDistinctByLicense(com.lpvs.entity.LPVSPullRequest)" class="member-name-link">findDistinctByLicense</a><wbr>(<a href="../entity/LPVSPullRequest.html" title="class in com.lpvs.entity">LPVSPullRequest</a>&nbsp;pr)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../entity/LPVSDetectedLicense.html" title="class in com.lpvs.entity">LPVSDetectedLicense</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#findByPullRequestAndLicenseIsNotNull(com.lpvs.entity.LPVSPullRequest)" class="member-name-link">findByPullRequestAndLicenseIsNotNull</a><wbr>(<a href="../entity/LPVSPullRequest.html" title="class in com.lpvs.entity">LPVSPullRequest</a>&nbsp;pr)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">Find distinct licenses associated with a specific pull request.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../entity/LPVSDetectedLicense.html" title="class in com.lpvs.entity">LPVSDetectedLicense</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#findNotNullDLByPR(com.lpvs.entity.LPVSPullRequest)" class="member-name-link">findNotNullDLByPR</a><wbr>(<a href="../entity/LPVSPullRequest.html" title="class in com.lpvs.entity">LPVSPullRequest</a>&nbsp;pr)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Find detected licenses associated with a specific pull request where the license is not null.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../entity/LPVSLicense.html" title="class in com.lpvs.entity">LPVSLicense</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#findDistinctLicenseByPullRequest(com.lpvs.entity.LPVSPullRequest)" class="member-name-link">findDistinctLicenseByPullRequest</a><wbr>(<a href="../entity/LPVSPullRequest.html" title="class in com.lpvs.entity">LPVSPullRequest</a>&nbsp;pr)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">Find distinct licenses associated with a specific pull request.</div>
 </div>
 </div>
 </div>
@@ -159,10 +159,9 @@ extends org.springframework.data.jpa.repository.JpaRepository&lt;<a href="../ent
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="existsIssue(com.lpvs.entity.LPVSPullRequest)">
-<h3>existsIssue</h3>
-<div class="member-signature"><span class="annotations">@Query("select count(dl)&gt;0 from LPVSDetectedLicense dl where dl.issue = True and dl.pullRequest = :pr")
-</span><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a></span>&nbsp;<span class="element-name">existsIssue</span><wbr><span class="parameters">(@Param("pr")
+<section class="detail" id="existsByIssueIsTrueAndPullRequest(com.lpvs.entity.LPVSPullRequest)">
+<h3>existsByIssueIsTrueAndPullRequest</h3>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a></span>&nbsp;<span class="element-name">existsByIssueIsTrueAndPullRequest</span><wbr><span class="parameters">(@Param("pr")
  <a href="../entity/LPVSPullRequest.html" title="class in com.lpvs.entity">LPVSPullRequest</a>&nbsp;pr)</span></div>
 <div class="block">Check if there is at least one detected license associated with a specific pull request and marked as an issue.</div>
 <dl class="notes">
@@ -202,10 +201,9 @@ extends org.springframework.data.jpa.repository.JpaRepository&lt;<a href="../ent
 </section>
 </li>
 <li>
-<section class="detail" id="CountByDetectedLicenseWherePullRequestId(com.lpvs.entity.LPVSPullRequest)">
-<h3>CountByDetectedLicenseWherePullRequestId</h3>
-<div class="member-signature"><span class="annotations">@Query("select count(*) from LPVSDetectedLicense dl where dl.pullRequest = :pr and dl.license is not null")
-</span><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a></span>&nbsp;<span class="element-name">CountByDetectedLicenseWherePullRequestId</span><wbr><span class="parameters">(@Param("pr")
+<section class="detail" id="countByPullRequestAndLicenseIsNotNull(com.lpvs.entity.LPVSPullRequest)">
+<h3>countByPullRequestAndLicenseIsNotNull</h3>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a></span>&nbsp;<span class="element-name">countByPullRequestAndLicenseIsNotNull</span><wbr><span class="parameters">(@Param("pr")
  <a href="../entity/LPVSPullRequest.html" title="class in com.lpvs.entity">LPVSPullRequest</a>&nbsp;pr)</span></div>
 <div class="block">Count the number of detected licenses associated with a specific pull request where the license is not null.</div>
 <dl class="notes">
@@ -217,10 +215,9 @@ extends org.springframework.data.jpa.repository.JpaRepository&lt;<a href="../ent
 </section>
 </li>
 <li>
-<section class="detail" id="findDistinctByLicense(com.lpvs.entity.LPVSPullRequest)">
-<h3>findDistinctByLicense</h3>
-<div class="member-signature"><span class="annotations">@Query("select distinct dl.license from LPVSDetectedLicense dl where dl.pullRequest = :pr")
-</span><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../entity/LPVSLicense.html" title="class in com.lpvs.entity">LPVSLicense</a>&gt;</span>&nbsp;<span class="element-name">findDistinctByLicense</span><wbr><span class="parameters">(@Param("pr")
+<section class="detail" id="findDistinctLicenseByPullRequest(com.lpvs.entity.LPVSPullRequest)">
+<h3>findDistinctLicenseByPullRequest</h3>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../entity/LPVSLicense.html" title="class in com.lpvs.entity">LPVSLicense</a>&gt;</span>&nbsp;<span class="element-name">findDistinctLicenseByPullRequest</span><wbr><span class="parameters">(@Param("pr")
  <a href="../entity/LPVSPullRequest.html" title="class in com.lpvs.entity">LPVSPullRequest</a>&nbsp;pr)</span></div>
 <div class="block">Find distinct licenses associated with a specific pull request.</div>
 <dl class="notes">
@@ -232,10 +229,9 @@ extends org.springframework.data.jpa.repository.JpaRepository&lt;<a href="../ent
 </section>
 </li>
 <li>
-<section class="detail" id="findNotNullDLByPR(com.lpvs.entity.LPVSPullRequest)">
-<h3>findNotNullDLByPR</h3>
-<div class="member-signature"><span class="annotations">@Query("select dl from LPVSDetectedLicense dl where dl.pullRequest = :pr and dl.license is not null")
-</span><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../entity/LPVSDetectedLicense.html" title="class in com.lpvs.entity">LPVSDetectedLicense</a>&gt;</span>&nbsp;<span class="element-name">findNotNullDLByPR</span><wbr><span class="parameters">(@Param("pr")
+<section class="detail" id="findByPullRequestAndLicenseIsNotNull(com.lpvs.entity.LPVSPullRequest)">
+<h3>findByPullRequestAndLicenseIsNotNull</h3>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../entity/LPVSDetectedLicense.html" title="class in com.lpvs.entity">LPVSDetectedLicense</a>&gt;</span>&nbsp;<span class="element-name">findByPullRequestAndLicenseIsNotNull</span><wbr><span class="parameters">(@Param("pr")
  <a href="../entity/LPVSPullRequest.html" title="class in com.lpvs.entity">LPVSPullRequest</a>&nbsp;pr)</span></div>
 <div class="block">Find detected licenses associated with a specific pull request where the license is not null.</div>
 <dl class="notes">

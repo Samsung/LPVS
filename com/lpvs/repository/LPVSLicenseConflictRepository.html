@@ -102,11 +102,6 @@ extends org.springframework.data.jpa.repository.JpaRepository&lt;<a href="../ent
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Find a specific license conflict between two licenses.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../entity/LPVSLicenseConflict.html" title="class in com.lpvs.entity">LPVSLicenseConflict</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#takeAllLicenseConflicts()" class="member-name-link">takeAllLicenseConflicts</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">Retrieve all license conflicts from the database.</div>
-</div>
 </div>
 </div>
 </div>
@@ -140,23 +135,9 @@ extends org.springframework.data.jpa.repository.JpaRepository&lt;<a href="../ent
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="takeAllLicenseConflicts()">
-<h3>takeAllLicenseConflicts</h3>
-<div class="member-signature"><span class="annotations">@Query(value="SELECT * FROM license_conflicts",
-       nativeQuery=true)
-</span><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../entity/LPVSLicenseConflict.html" title="class in com.lpvs.entity">LPVSLicenseConflict</a>&gt;</span>&nbsp;<span class="element-name">takeAllLicenseConflicts</span>()</div>
-<div class="block">Retrieve all license conflicts from the database.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>List of <a href="../entity/LPVSLicenseConflict.html" title="class in com.lpvs.entity"><code>LPVSLicenseConflict</code></a> entities representing license conflicts.</dd>
-</dl>
-</section>
-</li>
-<li>
 <section class="detail" id="findLicenseConflict(java.lang.Long,java.lang.Long)">
 <h3>findLicenseConflict</h3>
-<div class="member-signature"><span class="annotations">@Query(value="SELECT * FROM license_conflicts WHERE (license_conflicts.repository_license_id = :license1 AND license_conflicts.conflict_license_id = :license2) OR (license_conflicts.repository_license_id = :license2 AND license_conflicts.conflict_license_id = :license1) ORDER BY id DESC LIMIT 1",
-       nativeQuery=true)
+<div class="member-signature"><span class="annotations">@Query("SELECT lc FROM LPVSLicenseConflict lc WHERE (lc.repositoryLicense.licenseId = :license1 AND lc.conflictLicense.licenseId = :license2) OR (lc.repositoryLicense.licenseId = :license2 AND lc.conflictLicense.licenseId = :license1) ORDER BY lc.conflictId DESC LIMIT 1")
 </span><span class="return-type"><a href="../entity/LPVSLicenseConflict.html" title="class in com.lpvs.entity">LPVSLicenseConflict</a></span>&nbsp;<span class="element-name">findLicenseConflict</span><wbr><span class="parameters">(@Param("license1")
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;license1,
  @Param("license2")

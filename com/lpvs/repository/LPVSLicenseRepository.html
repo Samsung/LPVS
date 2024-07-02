@@ -96,25 +96,20 @@ extends org.springframework.data.jpa.repository.JpaRepository&lt;<a href="../ent
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#findAllSpdxId()" class="member-name-link">findAllSpdxId</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">Retrieve all SPDX identifiers of licenses from the database.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="../entity/LPVSLicense.html" title="class in com.lpvs.entity">LPVSLicense</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#findFirstBySpdxIdOrderByLicenseIdDesc(java.lang.String)" class="member-name-link">findFirstBySpdxIdOrderByLicenseIdDesc</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;spdxId)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">Search for a license by SPDX identifier.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="../entity/LPVSLicense.html" title="class in com.lpvs.entity">LPVSLicense</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#searchByAlternativeLicenseNames(java.lang.String)" class="member-name-link">searchByAlternativeLicenseNames</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;licenseName)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Search for a license by alternative license names.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="../entity/LPVSLicense.html" title="class in com.lpvs.entity">LPVSLicense</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#searchBySpdxId(java.lang.String)" class="member-name-link">searchBySpdxId</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;spdxId)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">Search for a license by SPDX identifier.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../entity/LPVSLicense.html" title="class in com.lpvs.entity">LPVSLicense</a>&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#takeAllLicenses()" class="member-name-link">takeAllLicenses</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">Retrieve all licenses from the database.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#takeAllSpdxId()" class="member-name-link">takeAllSpdxId</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">Retrieve all SPDX identifiers of licenses from the database.</div>
 </div>
 </div>
 </div>
@@ -149,24 +144,9 @@ extends org.springframework.data.jpa.repository.JpaRepository&lt;<a href="../ent
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="takeAllLicenses()">
-<h3>takeAllLicenses</h3>
-<div class="member-signature"><span class="annotations">@Query(value="SELECT * FROM license_list",
-       nativeQuery=true)
-</span><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../entity/LPVSLicense.html" title="class in com.lpvs.entity">LPVSLicense</a>&gt;</span>&nbsp;<span class="element-name">takeAllLicenses</span>()</div>
-<div class="block">Retrieve all licenses from the database.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>List of <a href="../entity/LPVSLicense.html" title="class in com.lpvs.entity"><code>LPVSLicense</code></a> entities representing licenses.</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="searchBySpdxId(java.lang.String)">
-<h3>searchBySpdxId</h3>
-<div class="member-signature"><span class="annotations">@Query(value="SELECT * FROM license_list WHERE license_list.license_spdx = :spdxId ORDER BY id DESC LIMIT 1",
-       nativeQuery=true)
-</span><span class="return-type"><a href="../entity/LPVSLicense.html" title="class in com.lpvs.entity">LPVSLicense</a></span>&nbsp;<span class="element-name">searchBySpdxId</span><wbr><span class="parameters">(@Param("spdxId")
+<section class="detail" id="findFirstBySpdxIdOrderByLicenseIdDesc(java.lang.String)">
+<h3>findFirstBySpdxIdOrderByLicenseIdDesc</h3>
+<div class="member-signature"><span class="return-type"><a href="../entity/LPVSLicense.html" title="class in com.lpvs.entity">LPVSLicense</a></span>&nbsp;<span class="element-name">findFirstBySpdxIdOrderByLicenseIdDesc</span><wbr><span class="parameters">(@Param("spdxId")
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;spdxId)</span></div>
 <div class="block">Search for a license by SPDX identifier.</div>
 <dl class="notes">
@@ -180,8 +160,7 @@ extends org.springframework.data.jpa.repository.JpaRepository&lt;<a href="../ent
 <li>
 <section class="detail" id="searchByAlternativeLicenseNames(java.lang.String)">
 <h3>searchByAlternativeLicenseNames</h3>
-<div class="member-signature"><span class="annotations">@Query(value="SELECT * FROM license_list WHERE FIND_IN_SET(:licenseName, license_alternative_names) &gt; 0 ORDER BY id DESC LIMIT 1",
-       nativeQuery=true)
+<div class="member-signature"><span class="annotations">@Query("SELECT l FROM LPVSLicense l WHERE (CONCAT(\',\', l.alternativeNames, \',\') LIKE CONCAT(\'%,\', :licenseName, \',%\')) ORDER BY l.licenseId DESC LIMIT 1")
 </span><span class="return-type"><a href="../entity/LPVSLicense.html" title="class in com.lpvs.entity">LPVSLicense</a></span>&nbsp;<span class="element-name">searchByAlternativeLicenseNames</span><wbr><span class="parameters">(@Param("licenseName")
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;licenseName)</span></div>
 <div class="block">Search for a license by alternative license names.</div>
@@ -194,10 +173,10 @@ extends org.springframework.data.jpa.repository.JpaRepository&lt;<a href="../ent
 </section>
 </li>
 <li>
-<section class="detail" id="takeAllSpdxId()">
-<h3>takeAllSpdxId</h3>
-<div class="member-signature"><span class="annotations">@Query("select licenses.spdxId from LPVSLicense licenses")
-</span><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name">takeAllSpdxId</span>()</div>
+<section class="detail" id="findAllSpdxId()">
+<h3>findAllSpdxId</h3>
+<div class="member-signature"><span class="annotations">@Query("select l.spdxId from LPVSLicense l")
+</span><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name">findAllSpdxId</span>()</div>
 <div class="block">Retrieve all SPDX identifiers of licenses from the database.</div>
 <dl class="notes">
 <dt>Returns:</dt>
