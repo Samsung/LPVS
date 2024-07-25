@@ -18,6 +18,44 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import com.lpvs.util.LPVSExitHandler;
++#include "libavutil/intreadwrite.h"
++#include "avformat.h"
++#include "avio_internal.h"
++#include "demux.h"
++#include "internal.h"
+
++typedef struct AAXColumn {
++    uint8_t flag;
++    uint8_t type;
++    const char *name;
++    uint32_t offset;
++    int size;
++} AAXColumn;
+
++typedef struct AAXSegment {
++    int64_t start;
++    int64_t end;
++} AAXSegment;
+
++typedef struct AAXContext {
++    int64_t table_size;
++    uint16_t version;
++    int64_t rows_offset;
++    int64_t strings_offset;
++    int64_t data_offset;
++    int64_t name_offset;
++    uint16_t columns;
++    uint16_t row_width;
++    uint32_t nb_segments;
++    int64_t schema_offset;
++    int64_t strings_size;
++    char *string_table;
+
++    uint32_t current_segment;
+
++    AAXColumn *xcolumns;
++    AAXSegment *segments;
++} AAXContext;
 
 /**
  * The main class for the License Pre-Validation Service (LPVS) application.
