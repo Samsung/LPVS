@@ -176,15 +176,15 @@ public class LPVSQueueServiceTest {
     // case DeletionAbsent
     static String filePathTestNoDeletion =
             System.getProperty("user.dir")
-                    + "/Projects/Samsung/LPVS/3c688f5caa42b936cd6bea04c1dc3f732364250b";
+                    + "/LPVS/Projects/Samsung/LPVS/3c688f5caa42b936cd6bea04c1dc3f732364250b";
 
     // case DeletionPresent
     static String filePathTestWithDeletion =
             System.getProperty("user.dir")
-                    + "/Projects/Samsung/LPVS/3c688f5caa42b936cd6bea04c1dc3f732364250b";
+                    + "/LPVS/Projects/Samsung/LPVS/3c688f5caa42b936cd6bea04c1dc3f732364250b";
     static String filePathTestWithDeletionTruncated =
             System.getProperty("user.dir")
-                    + "/Projects/Samsung/LPVS/3c688f5caa42b936cd6bea04c1dc3f732364250b";
+                    + "/LPVS/Projects/Samsung/LPVS/3c688f5caa42b936cd6bea04c1dc3f732364250b";
 
     private Path tempFolderPath;
 

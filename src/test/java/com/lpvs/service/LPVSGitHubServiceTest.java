@@ -195,7 +195,8 @@ public class LPVSGitHubServiceTest {
         GHPullRequest mocked_pr_2;
         final String url_pr_1 = "https://github.com/Samsung/LPVS/pull/18";
         final String url_pr_2 = "https://github.com/Samsung/LPVS/pull/19";
-        final String githubFiles = "Projects/Samsung/LPVS/895337e89ae103ff2d18c9e0d93709f743226afa";
+        final String githubFiles =
+                "LPVS/Projects/Samsung/LPVS/895337e89ae103ff2d18c9e0d93709f743226afa";
         final String commit_sha = "895337e89ae103ff2d18c9e0d93709f743226afa";
 
         @BeforeEach
@@ -332,7 +333,8 @@ public class LPVSGitHubServiceTest {
         final String url_pr_2 = "https://github.com/Samsung/LPVS/pull/19";
         final String repo_org = "Samsung";
         final String repo_name = "LPVS";
-        final String githubFiles = "Projects/Samsung/LPVS/895337e89ae103ff2d18c9e0d93709f743226afa";
+        final String githubFiles =
+                "LPVS/Projects/Samsung/LPVS/895337e89ae103ff2d18c9e0d93709f743226afa";
         final String commit_sha = "895337e89ae103ff2d18c9e0d93709f743226afa";
 
         @BeforeEach
@@ -479,7 +481,8 @@ public class LPVSGitHubServiceTest {
         final String url_pr_2 = "https://github.com/Samsung/LPVS/pull/19";
         final String repo_org = "Samsung";
         final String repo_name = "LPVS";
-        final String githubFiles = "Projects/Samsung/LPVS/895337e89ae103ff2d18c9e0d93709f743226afa";
+        final String githubFiles =
+                "LPVS/Projects/Samsung/LPVS/895337e89ae103ff2d18c9e0d93709f743226afa";
         final String commit_sha = "895337e89ae103ff2d18c9e0d93709f743226afa";
 
         @BeforeEach
@@ -1052,7 +1055,8 @@ public class LPVSGitHubServiceTest {
         final String repo_url = "https://github.com/Samsung/LPVS";
         final String repo_org = "Samsung";
         final String repo_name = "LPVS";
-        final String githubFiles = "Projects/Samsung/LPVS/895337e89ae103ff2d18c9e0d93709f743226afa";
+        final String githubFiles =
+                "LPVS/Projects/Samsung/LPVS/895337e89ae103ff2d18c9e0d93709f743226afa";
         final String commit_sha = "895337e89ae103ff2d18c9e0d93709f743226afa";
 
         @BeforeEach

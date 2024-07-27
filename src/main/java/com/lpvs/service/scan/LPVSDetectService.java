@@ -104,8 +104,8 @@ public class LPVSDetectService {
      * Event listener method triggered when the application is ready, runs a single license scan if triggered.
      */
     @EventListener(ApplicationReadyEvent.class)
-    public void runOneScan() {
-        if (trigger != null && !HtmlUtils.htmlEscape(trigger).equals("")) {
+    public void runSingleScan() {
+        if (trigger != null && !HtmlUtils.htmlEscape(trigger).isEmpty()) {
             log.info("Triggered single scan operation");
             try {
                 licenseService.reloadFromTables();
@@ -119,7 +119,7 @@ public class LPVSDetectService {
                 List<LPVSLicenseService.Conflict<String, String>> detectedConflicts =
                         licenseService.findConflicts(webhookConfig, scanResult);
 
-                if (htmlReport != null && !HtmlUtils.htmlEscape(htmlReport).equals("")) {
+                if (htmlReport != null && !HtmlUtils.htmlEscape(htmlReport).isEmpty()) {
                     Path buildReportPath = Paths.get(htmlReport);
                     Path parentDirectory = buildReportPath.getParent();
 

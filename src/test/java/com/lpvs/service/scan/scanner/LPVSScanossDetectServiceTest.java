@@ -52,7 +52,13 @@ public class LPVSScanossDetectServiceTest {
         MockitoAnnotations.openMocks(this);
         String resourcePath = "A_B.json";
         String destinationPath =
-                System.getProperty("user.home") + File.separator + "Results" + File.separator + "C";
+                System.getProperty("user.home")
+                        + File.separator
+                        + "LPVS"
+                        + File.separator
+                        + "Results"
+                        + File.separator
+                        + "C";
         if (!(new File(destinationPath).exists())) {
             new File(destinationPath).mkdirs();
         }
@@ -69,8 +75,8 @@ public class LPVSScanossDetectServiceTest {
 
     @AfterEach
     public void tearDown() {
-        if ((new File(System.getProperty("user.home") + File.separator + "Results")).exists()) {
-            new File(System.getProperty("user.home") + File.separator + "Results").delete();
+        if ((new File(System.getProperty("user.home") + File.separator + "LPVS")).exists()) {
+            new File(System.getProperty("user.home") + File.separator + "LPVS").delete();
         }
     }
 
