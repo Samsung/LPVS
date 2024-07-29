@@ -25,11 +25,6 @@ hs_err_pid*
 src/main/resources/.idea/*
 .idea/*
 target/
-Projects/
+LPVS/Projects/
+LPVS/Results/
 *.iml
-
-# DB storage by default
-mysql-lpvs-data/
-
-# Run results
-RESULTS/

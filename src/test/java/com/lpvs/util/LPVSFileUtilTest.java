@@ -161,6 +161,8 @@ public class LPVSFileUtilTest {
     private static String getExpectedProjectsPathWithCommitSHA() {
         return System.getProperty("user.home")
                 + File.separator
+                + "LPVS"
+                + File.separator
                 + "Projects"
                 + File.separator
                 + "test"
@@ -171,6 +173,8 @@ public class LPVSFileUtilTest {
     private static String getExpectedProjectsPathWithPullRequestId() {
         return System.getProperty("user.home")
                 + File.separator
+                + "LPVS"
+                + File.separator
                 + "Projects"
                 + File.separator
                 + "test"
@@ -180,6 +184,8 @@ public class LPVSFileUtilTest {
 
     private static String getExpectedResultsPath() {
         return System.getProperty("user.home")
+                + File.separator
+                + "LPVS"
                 + File.separator
                 + "Results"
                 + File.separator

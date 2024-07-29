@@ -56,7 +56,7 @@ public class LPVSQueueProcessorService {
         queueService.checkForQueue();
 
         // Process LPVSQueue elements until the trigger is set.
-        while (trigger == null || trigger.equals("")) {
+        while (trigger == null || trigger.isEmpty()) {
             // Get the first element from the LPVSQueue.
             LPVSQueue webhookConfig = queueService.getQueueFirstElement();
             log.info("PROCESS Webhook id = " + webhookConfig.getId());

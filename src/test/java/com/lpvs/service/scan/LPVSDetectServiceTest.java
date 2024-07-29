@@ -131,11 +131,11 @@ public class LPVSDetectServiceTest {
 
             setPrivateField(lpvsDetectService, "trigger", null);
 
-            assertDoesNotThrow(() -> lpvsDetectService.runOneScan());
+            assertDoesNotThrow(() -> lpvsDetectService.runSingleScan());
 
             setPrivateField(lpvsDetectService, "trigger", "");
 
-            assertDoesNotThrow(() -> lpvsDetectService.runOneScan());
+            assertDoesNotThrow(() -> lpvsDetectService.runSingleScan());
         }
 
         @Test
@@ -149,7 +149,7 @@ public class LPVSDetectServiceTest {
             setPrivateField(lpvsDetectService, "trigger", "fake-trigger-value");
             setPrivateField(lpvsDetectService, "ctx", mockApplicationContext);
 
-            assertDoesNotThrow(() -> lpvsDetectService.runOneScan());
+            assertDoesNotThrow(() -> lpvsDetectService.runSingleScan());
         }
 
         @Test
@@ -184,11 +184,11 @@ public class LPVSDetectServiceTest {
             setPrivateField(detectService, "htmlReport", null);
             setPrivateField(detectService, "ctx", mockApplicationContext);
 
-            detectService.runOneScan();
+            detectService.runSingleScan();
 
             setPrivateField(detectService, "htmlReport", "");
 
-            detectService.runOneScan();
+            detectService.runSingleScan();
         }
 
         @Test
@@ -223,9 +223,9 @@ public class LPVSDetectServiceTest {
             String expectedPullRequestUrl = "https://example.com/pull/1";
             when(mockPullRequest.getHtmlUrl()).thenReturn(new URL(expectedPullRequestUrl));
 
-            detectService.runOneScan();
+            detectService.runSingleScan();
 
-            assertDoesNotThrow(() -> detectService.runOneScan());
+            assertDoesNotThrow(() -> detectService.runSingleScan());
         }
 
         @Test
@@ -235,7 +235,7 @@ public class LPVSDetectServiceTest {
             setPrivateField(detectService, "trigger", "fake-trigger-value");
             setPrivateField(detectService, "ctx", mockApplicationContext);
 
-            assertDoesNotThrow(() -> detectService.runOneScan());
+            assertDoesNotThrow(() -> detectService.runSingleScan());
         }
 
         @Test
@@ -265,9 +265,9 @@ public class LPVSDetectServiceTest {
             String expectedPullRequestUrl = "https://example.com/pull/1";
             when(mockPullRequest.getHtmlUrl()).thenReturn(new URL(expectedPullRequestUrl));
 
-            detectService.runOneScan();
+            detectService.runSingleScan();
 
-            assertDoesNotThrow(() -> detectService.runOneScan());
+            assertDoesNotThrow(() -> detectService.runSingleScan());
         }
 
         @Test
@@ -297,9 +297,9 @@ public class LPVSDetectServiceTest {
             String expectedPullRequestUrl = "https://example.com/pull/1";
             when(mockPullRequest.getHtmlUrl()).thenReturn(new URL(expectedPullRequestUrl));
 
-            detectService.runOneScan();
+            detectService.runSingleScan();
 
-            assertDoesNotThrow(() -> detectService.runOneScan());
+            assertDoesNotThrow(() -> detectService.runSingleScan());
         }
 
         @Test
@@ -328,9 +328,9 @@ public class LPVSDetectServiceTest {
             String expectedPullRequestUrl = "https://example.com/pull/1";
             when(mockRepository.getHtmlUrl()).thenReturn(new URL(expectedPullRequestUrl));
 
-            detectService.runOneScan();
+            detectService.runSingleScan();
 
-            assertDoesNotThrow(() -> detectService.runOneScan());
+            assertDoesNotThrow(() -> detectService.runSingleScan());
         }
 
         @Test
