@@ -4401,7 +4401,7 @@ public class LPVSGitHubServiceTest {
             LPVSQueue result = gitHubService.getInternalQueueByPullRequest(pullRequest);
 
             assertNotNull(result);
-            assertEquals(result.getUserId(), "Single scan run");
+            assertEquals(result.getUserId(), "Single scan of pull request run");
         }
 
         @Test

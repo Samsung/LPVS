@@ -29,10 +29,16 @@ public class LPVSQueueProcessorService {
     private LPVSQueueService queueService;
 
     /**
-     * Trigger value obtained from application properties.
+     * Trigger value to start a single scan of a pull request (optional).
      */
     @Value("${github.pull.request:}")
     private String trigger;
+
+    /**
+     * Trigger value to start a single scan of local files or folder (optional).
+     */
+    @Value("${local.path:}")
+    private String localPath;
 
     /**
      * Constructor for LPVSQueueProcessorService.
@@ -56,7 +62,8 @@ public class LPVSQueueProcessorService {
         queueService.checkForQueue();
 
         // Process LPVSQueue elements until the trigger is set.
-        while (trigger == null || trigger.isEmpty()) {
+        while ((trigger == null || trigger.isEmpty())
+                && (localPath == null || localPath.isEmpty())) {
             // Get the first element from the LPVSQueue.
             LPVSQueue webhookConfig = queueService.getQueueFirstElement();
             log.info("PROCESS Webhook id = " + webhookConfig.getId());

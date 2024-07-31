@@ -7,15 +7,15 @@
 package com.lpvs.service.scan;
 
 import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.lpvs.service.LPVSGitHubConnectionService;
 import com.lpvs.service.LPVSGitHubService;
 import com.lpvs.service.LPVSLicenseService;
+import com.lpvs.util.LPVSFileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
@@ -59,10 +59,16 @@ public class LPVSDetectService {
     private LPVSScanService scanService;
 
     /**
-     * GitHub pull request used to trigger a single license scan (optional).
+     * Trigger value to start a single scan of a pull request (optional).
      */
     @Value("${github.pull.request:}")
     private String trigger;
+
+    /**
+     * Trigger value to start a single scan of local files or folder (optional).
+     */
+    @Value("${local.path:}")
+    private String localPath;
 
     /**
      * Optional parameter to save html report to specified location.
@@ -105,50 +111,116 @@ public class LPVSDetectService {
      */
     @EventListener(ApplicationReadyEvent.class)
     public void runSingleScan() {
-        if (trigger != null && !HtmlUtils.htmlEscape(trigger).isEmpty()) {
-            log.info("Triggered single scan operation");
+        // generateReport indicates that a report should be generated (HTML or command line output)
+        boolean generateReport = false;
+        LPVSQueue webhookConfig = null;
+        List<LPVSFile> scanResult = null;
+        List<LPVSLicenseService.Conflict<String, String>> detectedConflicts = null;
+
+        // Error case when both pull request scan and local files scan are set to true
+        if (trigger != null && !trigger.isEmpty() && localPath != null && !localPath.isEmpty()) {
+            log.error(
+                    "Incorrect settings: both pull request scan and local files scan are set to true.");
+            SpringApplication.exit(ctx, () -> 0);
+
+            // Scan option - single pull request scan
+        } else if (trigger != null && !HtmlUtils.htmlEscape(trigger).isEmpty()) {
+            log.info("Triggered single scan of pull request.");
             try {
                 licenseService.reloadFromTables();
-                LPVSQueue webhookConfig =
+                webhookConfig =
                         gitHubService.getInternalQueueByPullRequest(HtmlUtils.htmlEscape(trigger));
 
-                List<LPVSFile> scanResult =
+                scanResult =
                         this.runScan(
                                 webhookConfig, gitHubService.getPullRequestFiles(webhookConfig));
 
-                List<LPVSLicenseService.Conflict<String, String>> detectedConflicts =
-                        licenseService.findConflicts(webhookConfig, scanResult);
-
-                if (htmlReport != null && !HtmlUtils.htmlEscape(htmlReport).isEmpty()) {
-                    Path buildReportPath = Paths.get(htmlReport);
-                    Path parentDirectory = buildReportPath.getParent();
-
-                    if (parentDirectory != null && Files.isDirectory(parentDirectory)) {
-                        String report =
-                                LPVSCommentUtil.buildHTMLComment(
-                                        webhookConfig, scanResult, detectedConflicts);
-                        LPVSCommentUtil.saveHTMLToFile(report, buildReportPath.toString());
-                    } else {
-                        log.error(
-                                "Error: The parent directory '"
-                                        + parentDirectory
-                                        + "' does not exist.");
-                    }
-                } else {
-                    String report =
-                            LPVSCommentUtil.reportCommentBuilder(
-                                    webhookConfig, scanResult, detectedConflicts);
-                    if (report != null && !report.isEmpty()) {
-                        log.info(report);
-                    }
-                }
-                log.info("Single scan completed.");
+                detectedConflicts = licenseService.findConflicts(webhookConfig, scanResult);
+                generateReport = true;
+                log.info("Single scan of pull request completed.");
             } catch (Exception ex) {
-                log.error("Single scan finished with errors.");
+                log.error("Single scan of pull request finished with errors.");
                 log.error("Can't trigger single scan: " + ex.getMessage());
+                SpringApplication.exit(ctx, () -> 0);
+            }
+
+            // Scan option - single scan of local file or folder
+        } else if (localPath != null && !HtmlUtils.htmlEscape(localPath).isEmpty()) {
+            log.info("Triggered single scan of local file(s).");
+            try {
+                licenseService.reloadFromTables();
+                File localFile = new File(localPath);
+                if (localFile.exists()) {
+                    // 1. Generate webhook config
+                    webhookConfig = getInternalQueueByLocalPath();
+                    // 2. Copy files
+                    LPVSFileUtil.copyFiles(
+                            localPath, LPVSFileUtil.getLocalDirectoryPath(webhookConfig));
+                    // 3. Trigger scan
+                    scanResult =
+                            this.runScan(
+                                    webhookConfig,
+                                    LPVSFileUtil.getLocalDirectoryPath(webhookConfig));
+
+                    detectedConflicts = licenseService.findConflicts(webhookConfig, scanResult);
+                    generateReport = true;
+                    log.info("Single scan of local file(s) completed.");
+                } else {
+                    throw new Exception("File path does not exist: " + localPath);
+                }
+
+            } catch (Exception ex) {
+                log.error("Single scan of local file(s) finished with errors.");
+                log.error("Can't trigger single scan: " + ex.getMessage());
+                SpringApplication.exit(ctx, () -> 0);
+            }
+        }
+
+        // Report generation
+        // 1. HTML format
+        if (generateReport && htmlReport != null && !HtmlUtils.htmlEscape(htmlReport).isEmpty()) {
+            File report = new File(htmlReport);
+            String folderPath = report.getParent();
+            if (folderPath == null) {
+                folderPath = ".";
+            }
+            File folder = new File(folderPath);
+            if (folder.exists() && folder.isDirectory()) {
+                String reportFile =
+                        LPVSCommentUtil.buildHTMLComment(
+                                webhookConfig, scanResult, detectedConflicts);
+                LPVSCommentUtil.saveHTMLToFile(reportFile, report.getAbsolutePath());
+            } else {
+                log.error("Error: The parent directory '" + folder.getPath() + "' does not exist.");
+            }
+            SpringApplication.exit(ctx, () -> 0);
+        } else if (generateReport) {
+            // 2. Command line output
+            String report =
+                    LPVSCommentUtil.reportCommentBuilder(
+                            webhookConfig, scanResult, detectedConflicts);
+            if (!report.isEmpty()) {
+                log.info(report);
             }
             SpringApplication.exit(ctx, () -> 0);
         }
+    }
+
+    /**
+     * Creates a new LPVSQueue object with default values for a local scan.
+     *
+     * @return the new LPVSQueue object
+     */
+    private LPVSQueue getInternalQueueByLocalPath() {
+        LPVSQueue queue = new LPVSQueue();
+        queue.setDate(new Date());
+        queue.setUserId("Single scan of local files run");
+        queue.setReviewSystemType("local_scan");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd-HHmmss");
+        String repoUrl = "local_scan_" + sdf.format(queue.getDate());
+        queue.setRepositoryUrl(repoUrl);
+        queue.setPullRequestUrl(repoUrl);
+        return queue;
     }
 
     /**

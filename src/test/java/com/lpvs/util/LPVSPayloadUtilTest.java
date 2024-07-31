@@ -75,6 +75,14 @@ public class LPVSPayloadUtilTest {
             LPVSLicense actualLicense = LPVSPayloadUtil.convertOsoriDbResponseToLicense(payload);
             assertNull(actualLicense);
         }
+
+        @Test
+        public void testConvertOsoriDbResponseToLicense_emptyPayload_N() {
+            String payload =
+                    "{\"code\":\"200\",\"messageList\":{\"detailInfo\":[]},\"success\":true}";
+            LPVSLicense actualLicense = LPVSPayloadUtil.convertOsoriDbResponseToLicense(payload);
+            assertNull(actualLicense);
+        }
     }
 
     @Nested
