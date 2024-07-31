@@ -258,15 +258,10 @@ public class LPVSLicenseService {
             lic = findLicenseInOsoriDB(licenseSpdxId);
             // If not found, create new license with default field values
             if (lic == null) {
-                lic =
-                        new LPVSLicense() {
-                            {
-                                setSpdxId(licenseSpdxId);
-                                setLicenseName(licName);
-                                setAlternativeNames(null);
-                                setAccess("UNREVIEWED");
-                            }
-                        };
+                lic = new LPVSLicense();
+                lic.setSpdxId(licenseSpdxId);
+                lic.setLicenseName(licName);
+                lic.setAccess("UNREVIEWED");
             }
             // Save new license
             lic = lpvsLicenseRepository.saveAndFlush(lic);

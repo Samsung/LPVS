@@ -19,6 +19,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
 import java.util.List;
 
@@ -123,6 +124,43 @@ public class LPVSFileUtil {
             }
         }
         return directoryPath;
+    }
+
+    /**
+     * Copies files from a source path to a destination directory path.
+     *
+     * @param sourcePath the path to the source file or directory to be copied
+     * @param directoryPath the path to the destination directory where the files will be copied
+     * @throws IOException if an I/O error occurs
+     */
+    public static void copyFiles(String sourcePath, String directoryPath) throws IOException {
+        deleteIfExists(directoryPath);
+        File destination = new File(directoryPath);
+        File source = new File(sourcePath);
+        if (destination.mkdirs()) {
+            if (source.isDirectory()) {
+                File[] files = source.listFiles();
+                if (files != null) {
+                    for (File file : files) {
+                        if (file.isFile()) {
+                            Files.copy(
+                                    file.toPath(),
+                                    new File(destination, file.getName()).toPath(),
+                                    StandardCopyOption.REPLACE_EXISTING);
+                        } else if (file.isDirectory()) {
+                            File destinationSubdir = new File(destination, file.getName());
+                            destinationSubdir.mkdirs();
+                            copyFiles(file.getAbsolutePath(), destinationSubdir.getAbsolutePath());
+                        }
+                    }
+                }
+            } else if (source.isFile()) {
+                Files.copy(
+                        source.toPath(),
+                        new File(destination, source.getName()).toPath(),
+                        StandardCopyOption.REPLACE_EXISTING);
+            }
+        }
     }
 
     /**

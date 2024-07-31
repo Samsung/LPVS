@@ -245,34 +245,53 @@ _LPVS_ is now built and running. You can create a new pull request or update an 
 
 #### 4.2 Single scan mode
 
-Alternatively, you can perform a one-time scan on a specific pull request using the single scan mode. Follow these steps:
+Alternatively, you can perform a one-time scan on a specific pull request or local files using the single scan mode. Follow these steps:
 
-4.2.1 Begin by running the installation and navigating to the target directory, similar to the process in service mode (refer to steps 4.1.1 and 4.1.2):
+4.2.1  Install and navigate to the target directory as described in step 4.1.1 and 4.1.2:
 
    ```bash
    mvn clean install
    cd target/
    ```
 
-4.2.2 Execute the single scan with the following command:
+4.2.2 Choose either to scan a specific pull request from GitHub or local files.
+
+4.2.2.1 To scan a specific pull request from GitHub, execute the following command:
 
    ```bash
    java -jar -Dgithub.token=<my-token> lpvs-*.jar --github.pull.request=<PR URL>
    ```
 
-4.2.3 By default, the above command requires a pre-configured MySQL database. To avoid setting up the database, use the "singlescan" profile:
+4.2.2.2 To scan local files or directories, execute the following command:
+
+   ```bash
+   java -jar lpvs-*.jar --local.path=</path/to/file/or/folder>
+   ```
+
+4.2.3 By default, the above commands require a pre-configured MySQL database. Use the "singlescan" profile to skip setting up a pre-configured MySQL database:
+
    ```bash
    java -jar -Dspring.profiles.active=singlescan -Dgithub.token=<my-token> lpvs-*.jar --github.pull.request=<PR URL>
+   java -jar -Dspring.profiles.active=singlescan lpvs-*.jar --local.path=</path/to/file/or/folder>
    ```
 
-These steps streamline the process, allowing you to run a scan on a single pull request without the need for a preconfigured database.
+4.2.4 Optionally, generate an HTML report and save it in a specified folder. Replace `path/to/your/folder` with the full path to the folder where you want to save the HTML report, and `your_report_filename.html` with the desired filename for the report.
 
-4.2.4 Available option to generate an HTML report and save it in a specified folder. Replace `/path/to/your/folder` with the full path to the folder where you want to save the HTML report, and `your_report_filename.html` with the desired filename for the report.
    ```bash
-   java -jar -Dgithub.token=<my-token> lpvs-*.jar --github.pull.request=<PR URL> --build.html.report=</path/to/your/folder/your_report_filename.html>
+   java -jar -Dspring.profiles.active=singlescan -Dgithub.token=<my-token> lpvs-*.jar --github.pull.request=<PR URL> --build.html.report=</path/to/your/folder/your_report_filename.html>
+   java -jar -Dspring.profiles.active=singlescan lpvs-*.jar --local.path=</path/to/file/or/folder> --build.html.report=<your_report_filename.html>
    ```
 
-These steps streamline the process, allowing you to run a scan on a single pull request without the need for a preconfigured database.
+Note: Ensure that the specified folder exists before generating the HTML report.
+
+4.2.5 Examples of commands:
+
+   ```bash
+   java -jar -Dspring.profiles.active=singlescan lpvs-*.jar --github.pull.request=https://github.com/Samsung/LPVS/pull/2
+   java -jar -Dspring.profiles.active=singlescan lpvs-*.jar --github.pull.request=https://github.com/Samsung/LPVS/pull/2 --build.html.report=report.html
+   java -jar -Dspring.profiles.active=singlescan lpvs-*.jar --local.path=test.c
+   java -jar -Dspring.profiles.active=singlescan lpvs-*.jar --local.path=test --build.html.report=test/report.html
+   ```
 
 #### 4.3 Use of _LPVS_ JAR `lpvs-x.y.z.jar` in your project
 

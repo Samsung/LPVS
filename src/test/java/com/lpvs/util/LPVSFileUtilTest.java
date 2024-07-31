@@ -13,15 +13,20 @@ import org.kohsuke.github.GHPullRequestFileDetail;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.lpvs.util.LPVSFileUtil.copyFiles;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class LPVSFileUtilTest {
     private LPVSQueue webhookConfig = null;
+    private File sourceDir;
+    private File destinationDir;
 
     @BeforeEach
     public void setUp() {
@@ -85,6 +90,64 @@ public class LPVSFileUtilTest {
                             }
                         },
                         webhookConfig));
+    }
+
+    @Test
+    public void testCopyFilesDirectory() throws IOException {
+        sourceDir = Files.createTempDirectory("source").toFile();
+        destinationDir = Files.createTempDirectory("destination").toFile();
+
+        File sourceFile1 = new File(sourceDir, "file1.txt");
+        File sourceFile2 = new File(sourceDir, "file2.txt");
+        File sourceSubdir = new File(sourceDir, "subdir");
+        File sourceSubfile = new File(sourceSubdir, "subfile.txt");
+
+        sourceFile1.createNewFile();
+        sourceFile2.createNewFile();
+        sourceSubdir.mkdirs();
+        sourceSubfile.createNewFile();
+
+        copyFiles(sourceDir.getAbsolutePath(), destinationDir.getAbsolutePath());
+
+        assertTrue(new File(destinationDir, "file1.txt").exists());
+        assertTrue(new File(destinationDir, "file2.txt").exists());
+        assertTrue(new File(destinationDir, "subdir").exists());
+        assertTrue(new File(destinationDir, "subdir/subfile.txt").exists());
+
+        deleteDirectory(sourceDir);
+        deleteDirectory(destinationDir);
+    }
+
+    @Test
+    public void testCopyFilesFile() throws IOException {
+        sourceDir = Files.createTempDirectory("source").toFile();
+        destinationDir = Files.createTempDirectory("destination").toFile();
+
+        File sourceFile = new File(sourceDir, "file.txt");
+        sourceFile.createNewFile();
+
+        copyFiles(sourceFile.getAbsolutePath(), destinationDir.getAbsolutePath());
+
+        assertTrue(new File(destinationDir, "file.txt").exists());
+
+        deleteDirectory(sourceDir);
+        deleteDirectory(destinationDir);
+    }
+
+    @Test
+    public void testCopyFilesDirectoryWithNullFiles() throws IOException {
+        sourceDir = Files.createTempDirectory("source").toFile();
+        destinationDir = Files.createTempDirectory("destination").toFile();
+
+        File sourceSubdir = new File(sourceDir, "subdir");
+        sourceSubdir.mkdirs();
+
+        copyFiles(sourceDir.getAbsolutePath(), destinationDir.getAbsolutePath());
+
+        assertTrue(new File(destinationDir, "subdir").exists());
+
+        deleteDirectory(sourceDir);
+        deleteDirectory(destinationDir);
     }
 
     @Test
@@ -198,5 +261,19 @@ public class LPVSFileUtilTest {
 
     private static String getExpectedJsonFilePathWithCommitSHA() {
         return getExpectedResultsPath() + File.separator + "aaaa.json";
+    }
+
+    private void deleteDirectory(File directory) {
+        File[] files = directory.listFiles();
+        if (files != null) {
+            for (File file : files) {
+                if (file.isDirectory()) {
+                    deleteDirectory(file);
+                } else {
+                    file.delete();
+                }
+            }
+        }
+        directory.delete();
     }
 }

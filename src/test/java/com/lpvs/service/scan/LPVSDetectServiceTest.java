@@ -7,6 +7,7 @@
 package com.lpvs.service.scan;
 
 import com.lpvs.entity.LPVSFile;
+import com.lpvs.entity.LPVSLicense;
 import com.lpvs.entity.LPVSQueue;
 import com.lpvs.service.LPVSGitHubConnectionService;
 import com.lpvs.service.LPVSGitHubService;
@@ -32,7 +33,9 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.net.URL;
+import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -68,6 +71,7 @@ public class LPVSDetectServiceTest {
         final String test_path = "test_path";
 
         LPVSFile lpvs_file_1, lpvs_file_2;
+        LPVSLicense lpvs_license;
 
         @BeforeEach
         void setUp() throws IOException {
@@ -83,47 +87,65 @@ public class LPVSDetectServiceTest {
             webhookConfig = new LPVSQueue();
             webhookConfig.setId(1L);
             webhookConfig.setRepositoryUrl("https://github.com/Samsung/LPVS");
+            webhookConfig.setPullRequestUrl("https://github.com/Samsung/LPVS/pull/1");
+
+            lpvs_license =
+                    new LPVSLicense(
+                            1L,
+                            "MIT License",
+                            "MIT",
+                            "PERMITTED",
+                            "",
+                            "https://opensource.org/licenses/MIT");
 
             lpvs_file_1 =
                     new LPVSFile(
                             1L,
                             "test_path" + File.separator + "some_path",
                             null,
-                            null,
-                            null,
-                            null,
-                            null,
-                            null,
-                            null,
-                            null,
-                            null,
-                            null,
-                            null,
-                            null);
+                            "snippet",
+                            "100%",
+                            "1-10",
+                            new HashSet<>() {
+                                {
+                                    add(lpvs_license);
+                                }
+                            },
+                            "src/main/java/com/internal/lpvs/util/LPVSWebhookUtilExtension.java",
+                            "main/java/com/lpvs/util/LPVSWebhookUtil.java",
+                            "LPVS",
+                            "1-10",
+                            "https://github.com/Samsung/LPVS",
+                            "1.0.1",
+                            "Samsung");
             lpvs_file_2 =
                     new LPVSFile(
                             2L,
                             "some_path",
                             null,
-                            null,
-                            null,
-                            null,
-                            null,
-                            null,
-                            null,
-                            null,
-                            null,
-                            null,
-                            null,
-                            null);
+                            "snippet",
+                            "100%",
+                            "34-45",
+                            new HashSet<>() {
+                                {
+                                    add(lpvs_license);
+                                }
+                            },
+                            "src/main/java/com/internal/lpvs/util/LPVSWebhookUtilExtension.java",
+                            "main/java/com/lpvs/util/LPVSWebhookUtil.java",
+                            "LPVS",
+                            "34-45",
+                            "https://github.com/Samsung/LPVS",
+                            "1.5.0",
+                            "Samsung");
 
-            when(scanoss_mock.checkLicenses(webhookConfig))
-                    .thenReturn(List.of(lpvs_file_1, lpvs_file_2));
+            when(scanoss_mock.checkLicenses(any())).thenReturn(List.of(lpvs_file_1, lpvs_file_2));
             when(github_mock.connectToGitHubApi()).thenReturn(mockGitHub);
         }
 
         @Test
-        void testRunOneScanWithNullTrigger() throws NoSuchFieldException, IllegalAccessException {
+        void testRunOneScanPullRequestWithNullTrigger()
+                throws NoSuchFieldException, IllegalAccessException {
             lpvsDetectService =
                     spy(
                             new LPVSDetectService(
@@ -139,7 +161,40 @@ public class LPVSDetectServiceTest {
         }
 
         @Test
-        void testRunOneScan_Default() throws NoSuchFieldException, IllegalAccessException {
+        void testRunOneScanLocalFileWithNullTrigger()
+                throws NoSuchFieldException, IllegalAccessException {
+            lpvsDetectService =
+                    spy(
+                            new LPVSDetectService(
+                                    "scanoss", false, null, null, null, scanServiceFactory_mock));
+
+            setPrivateField(lpvsDetectService, "localPath", null);
+
+            assertDoesNotThrow(() -> lpvsDetectService.runSingleScan());
+
+            setPrivateField(lpvsDetectService, "localPath", "");
+
+            assertDoesNotThrow(() -> lpvsDetectService.runSingleScan());
+        }
+
+        @Test
+        void testRunOneScanBothPullRequestAndLocalFile()
+                throws NoSuchFieldException, IllegalAccessException {
+            lpvsDetectService =
+                    spy(
+                            new LPVSDetectService(
+                                    "scanoss", false, null, null, null, scanServiceFactory_mock));
+
+            setPrivateField(lpvsDetectService, "ctx", mockApplicationContext);
+            setPrivateField(lpvsDetectService, "trigger", "");
+            setPrivateField(lpvsDetectService, "localPath", "");
+
+            assertDoesNotThrow(() -> lpvsDetectService.runSingleScan());
+        }
+
+        @Test
+        void testRunOneScan_PullRequest_Default()
+                throws NoSuchFieldException, IllegalAccessException {
 
             lpvsDetectService =
                     spy(
@@ -148,12 +203,14 @@ public class LPVSDetectServiceTest {
 
             setPrivateField(lpvsDetectService, "trigger", "fake-trigger-value");
             setPrivateField(lpvsDetectService, "ctx", mockApplicationContext);
+            setPrivateField(lpvsDetectService, "licenseService", licenseservice_mock);
+            setPrivateField(lpvsDetectService, "gitHubService", githubservice_mock);
 
             assertDoesNotThrow(() -> lpvsDetectService.runSingleScan());
         }
 
         @Test
-        void testRunOneScan_Branch2()
+        void testRunOneScan_PullRequest_Branch2()
                 throws NoSuchFieldException, IllegalAccessException, IOException {
             LPVSLicenseService.Conflict<String, String> conflict_1 =
                     new LPVSLicenseService.Conflict<>("MIT", "Apache-2.0");
@@ -175,20 +232,30 @@ public class LPVSDetectServiceTest {
             when(mockCommitPointer.getRepository()).thenReturn(mockHeadRepository);
             when(mockHeadRepository.getHtmlUrl())
                     .thenReturn(new URL("https://example.com/repo/files"));
+            when(githubservice_mock.getInternalQueueByPullRequest(anyString()))
+                    .thenReturn(webhookConfig);
 
             // Set up expected values
             String expectedPullRequestUrl = "https://example.com/pull/1";
             when(mockPullRequest.getHtmlUrl()).thenReturn(new URL(expectedPullRequestUrl));
+            when(githubservice_mock.getPullRequestFiles(any()))
+                    .thenReturn(
+                            System.getProperty("user.home")
+                                    + File.separator
+                                    + "LPVS"
+                                    + File.separator
+                                    + "Projects");
 
             setPrivateField(detectService, "trigger", "github/owner/repo/branch/123");
             setPrivateField(detectService, "htmlReport", null);
             setPrivateField(detectService, "ctx", mockApplicationContext);
+            setPrivateField(detectService, "scanService", scanoss_mock);
 
-            detectService.runSingleScan();
+            assertDoesNotThrow(() -> detectService.runSingleScan());
 
             setPrivateField(detectService, "htmlReport", "");
 
-            detectService.runSingleScan();
+            assertDoesNotThrow(() -> detectService.runSingleScan());
         }
 
         @Test
@@ -208,6 +275,7 @@ public class LPVSDetectServiceTest {
             setPrivateField(detectService, "trigger", "github/owner/repo/branch/123");
             setPrivateField(detectService, "htmlReport", "build");
             setPrivateField(detectService, "ctx", mockApplicationContext);
+            setPrivateField(detectService, "scanService", scanoss_mock);
 
             // Mock the necessary GitHub objects for LPVSQueue
             when(mockGitHub.getRepository(any())).thenReturn(mockRepository);
@@ -218,14 +286,178 @@ public class LPVSDetectServiceTest {
             when(mockCommitPointer.getRepository()).thenReturn(mockHeadRepository);
             when(mockHeadRepository.getHtmlUrl())
                     .thenReturn(new URL("https://example.com/repo/files"));
+            when(githubservice_mock.getInternalQueueByPullRequest(anyString()))
+                    .thenReturn(webhookConfig);
 
             // Set up expected values
             String expectedPullRequestUrl = "https://example.com/pull/1";
             when(mockPullRequest.getHtmlUrl()).thenReturn(new URL(expectedPullRequestUrl));
-
-            detectService.runSingleScan();
+            when(githubservice_mock.getPullRequestFiles(any()))
+                    .thenReturn(
+                            System.getProperty("user.home")
+                                    + File.separator
+                                    + "LPVS"
+                                    + File.separator
+                                    + "Projects");
 
             assertDoesNotThrow(() -> detectService.runSingleScan());
+
+            deleteFile("build");
+        }
+
+        @Test
+        void testRunOneScan_LocalFiles_WithConsoleReport()
+                throws NoSuchFieldException, IllegalAccessException, IOException {
+            LPVSLicenseService.Conflict<String, String> conflict_1 =
+                    new LPVSLicenseService.Conflict<>("MIT", "Apache-2.0");
+
+            List<LPVSLicenseService.Conflict<String, String>> expected =
+                    List.of(conflict_1, conflict_1);
+
+            lpvsDetectService =
+                    spy(
+                            new LPVSDetectService(
+                                    "scanoss", false, null, null, null, scanServiceFactory_mock));
+
+            File sourceDir = Files.createTempDirectory("source").toFile();
+            File sourceFile1 = new File(sourceDir, "file1.txt");
+            sourceFile1.createNewFile();
+
+            setPrivateField(detectService, "localPath", sourceFile1.getAbsolutePath());
+            setPrivateField(detectService, "ctx", mockApplicationContext);
+            setPrivateField(detectService, "scanService", scanoss_mock);
+
+            // Mock the necessary GitHub objects for LPVSQueue
+            when(mockGitHub.getRepository(any())).thenReturn(mockRepository);
+            when(mockRepository.getPullRequest(anyInt())).thenReturn(mockPullRequest);
+            when(mockRepository.getPullRequest(anyInt())).thenReturn(mockPullRequest);
+            when(mockPullRequest.getHead()).thenReturn(mockCommitPointer);
+            when(licenseservice_mock.findConflicts(webhookConfig, null)).thenReturn(expected);
+            when(mockCommitPointer.getRepository()).thenReturn(mockHeadRepository);
+            when(mockHeadRepository.getHtmlUrl())
+                    .thenReturn(new URL("https://example.com/repo/files"));
+            when(githubservice_mock.getInternalQueueByPullRequest(anyString()))
+                    .thenReturn(webhookConfig);
+
+            // Set up expected values
+            String expectedPullRequestUrl = "https://example.com/pull/1";
+            when(mockPullRequest.getHtmlUrl()).thenReturn(new URL(expectedPullRequestUrl));
+            when(githubservice_mock.getPullRequestFiles(any()))
+                    .thenReturn(
+                            System.getProperty("user.home")
+                                    + File.separator
+                                    + "LPVS"
+                                    + File.separator
+                                    + "Projects");
+
+            assertDoesNotThrow(() -> detectService.runSingleScan());
+
+            deleteDirectory(sourceDir.getAbsolutePath());
+        }
+
+        @Test
+        void testRunOneScan_LocalFiles_WithHtmlReport()
+                throws NoSuchFieldException, IllegalAccessException, IOException {
+            LPVSLicenseService.Conflict<String, String> conflict_1 =
+                    new LPVSLicenseService.Conflict<>("MIT", "Apache-2.0");
+
+            List<LPVSLicenseService.Conflict<String, String>> expected =
+                    List.of(conflict_1, conflict_1);
+
+            lpvsDetectService =
+                    spy(
+                            new LPVSDetectService(
+                                    "scanoss", false, null, null, null, scanServiceFactory_mock));
+
+            File sourceDir = Files.createTempDirectory("source").toFile();
+            File sourceFile1 = new File(sourceDir, "file1.txt");
+            File sourceFile2 = new File(sourceDir, "file2.txt");
+            sourceFile1.createNewFile();
+            sourceFile2.createNewFile();
+
+            setPrivateField(detectService, "localPath", sourceDir.getAbsolutePath());
+            setPrivateField(detectService, "ctx", mockApplicationContext);
+            setPrivateField(detectService, "scanService", scanoss_mock);
+            setPrivateField(detectService, "htmlReport", "report/test.html");
+
+            new File("report").mkdir();
+
+            // Mock the necessary GitHub objects for LPVSQueue
+            when(mockGitHub.getRepository(any())).thenReturn(mockRepository);
+            when(mockRepository.getPullRequest(anyInt())).thenReturn(mockPullRequest);
+            when(mockRepository.getPullRequest(anyInt())).thenReturn(mockPullRequest);
+            when(mockPullRequest.getHead()).thenReturn(mockCommitPointer);
+            when(licenseservice_mock.findConflicts(webhookConfig, null)).thenReturn(expected);
+            when(mockCommitPointer.getRepository()).thenReturn(mockHeadRepository);
+            when(mockHeadRepository.getHtmlUrl())
+                    .thenReturn(new URL("https://example.com/repo/files"));
+            when(githubservice_mock.getInternalQueueByPullRequest(anyString()))
+                    .thenReturn(webhookConfig);
+
+            // Set up expected values
+            String expectedPullRequestUrl = "https://example.com/pull/1";
+            when(mockPullRequest.getHtmlUrl()).thenReturn(new URL(expectedPullRequestUrl));
+            when(githubservice_mock.getPullRequestFiles(any()))
+                    .thenReturn(
+                            System.getProperty("user.home")
+                                    + File.separator
+                                    + "LPVS"
+                                    + File.separator
+                                    + "Projects");
+
+            assertDoesNotThrow(() -> detectService.runSingleScan());
+
+            deleteDirectory(sourceDir.getAbsolutePath());
+            deleteDirectory("report");
+        }
+
+        @Test
+        void testRunOneScan_LocalFiles_NoFile()
+                throws NoSuchFieldException, IllegalAccessException, IOException {
+            LPVSLicenseService.Conflict<String, String> conflict_1 =
+                    new LPVSLicenseService.Conflict<>("MIT", "Apache-2.0");
+
+            List<LPVSLicenseService.Conflict<String, String>> expected =
+                    List.of(conflict_1, conflict_1);
+
+            lpvsDetectService =
+                    spy(
+                            new LPVSDetectService(
+                                    "scanoss", false, null, null, null, scanServiceFactory_mock));
+
+            File sourceDir = Files.createTempDirectory("source").toFile();
+            File sourceFile1 = new File(sourceDir, "file1.txt");
+
+            setPrivateField(detectService, "localPath", sourceFile1.getAbsolutePath());
+            setPrivateField(detectService, "ctx", mockApplicationContext);
+            setPrivateField(detectService, "scanService", scanoss_mock);
+
+            // Mock the necessary GitHub objects for LPVSQueue
+            when(mockGitHub.getRepository(any())).thenReturn(mockRepository);
+            when(mockRepository.getPullRequest(anyInt())).thenReturn(mockPullRequest);
+            when(mockRepository.getPullRequest(anyInt())).thenReturn(mockPullRequest);
+            when(mockPullRequest.getHead()).thenReturn(mockCommitPointer);
+            when(licenseservice_mock.findConflicts(webhookConfig, null)).thenReturn(expected);
+            when(mockCommitPointer.getRepository()).thenReturn(mockHeadRepository);
+            when(mockHeadRepository.getHtmlUrl())
+                    .thenReturn(new URL("https://example.com/repo/files"));
+            when(githubservice_mock.getInternalQueueByPullRequest(anyString()))
+                    .thenReturn(webhookConfig);
+
+            // Set up expected values
+            String expectedPullRequestUrl = "https://example.com/pull/1";
+            when(mockPullRequest.getHtmlUrl()).thenReturn(new URL(expectedPullRequestUrl));
+            when(githubservice_mock.getPullRequestFiles(any()))
+                    .thenReturn(
+                            System.getProperty("user.home")
+                                    + File.separator
+                                    + "LPVS"
+                                    + File.separator
+                                    + "Projects");
+
+            assertDoesNotThrow(() -> detectService.runSingleScan());
+
+            deleteDirectory(sourceDir.getAbsolutePath());
         }
 
         @Test
@@ -248,8 +480,11 @@ public class LPVSDetectServiceTest {
                     List.of(conflict_1, conflict_1);
 
             setPrivateField(detectService, "trigger", "github/owner/repo/branch/123");
-            setPrivateField(detectService, "htmlReport", "build/report/test.html");
+            setPrivateField(detectService, "htmlReport", "report/test.html");
             setPrivateField(detectService, "ctx", mockApplicationContext);
+            setPrivateField(detectService, "scanService", scanoss_mock);
+
+            new File("report").mkdir();
 
             // Mock the necessary GitHub objects for LPVSQueue
             when(mockGitHub.getRepository(any())).thenReturn(mockRepository);
@@ -260,14 +495,23 @@ public class LPVSDetectServiceTest {
             when(mockCommitPointer.getRepository()).thenReturn(mockHeadRepository);
             when(mockHeadRepository.getHtmlUrl())
                     .thenReturn(new URL("https://example.com/repo/files"));
+            when(githubservice_mock.getInternalQueueByPullRequest(anyString()))
+                    .thenReturn(webhookConfig);
 
             // Set up expected values
             String expectedPullRequestUrl = "https://example.com/pull/1";
             when(mockPullRequest.getHtmlUrl()).thenReturn(new URL(expectedPullRequestUrl));
-
-            detectService.runSingleScan();
+            when(githubservice_mock.getPullRequestFiles(any()))
+                    .thenReturn(
+                            System.getProperty("user.home")
+                                    + File.separator
+                                    + "LPVS"
+                                    + File.separator
+                                    + "Projects");
 
             assertDoesNotThrow(() -> detectService.runSingleScan());
+
+            deleteDirectory("report");
         }
 
         @Test
@@ -280,8 +524,11 @@ public class LPVSDetectServiceTest {
                     List.of(conflict_1, conflict_1);
 
             setPrivateField(detectService, "trigger", "github/owner/repo/branch/123");
-            setPrivateField(detectService, "htmlReport", "build/report/test.html");
+            setPrivateField(detectService, "htmlReport", "report/test.html");
             setPrivateField(detectService, "ctx", mockApplicationContext);
+            setPrivateField(detectService, "scanService", scanoss_mock);
+
+            new File("report").mkdir();
 
             // Mock the necessary GitHub objects for LPVSQueue
             when(mockGitHub.getRepository(any())).thenReturn(mockRepository);
@@ -292,14 +539,23 @@ public class LPVSDetectServiceTest {
             when(mockCommitPointer.getRepository()).thenReturn(null);
             when(mockHeadRepository.getHtmlUrl())
                     .thenReturn(new URL("https://example.com/repo/files"));
+            when(githubservice_mock.getInternalQueueByPullRequest(anyString()))
+                    .thenReturn(webhookConfig);
 
             // Set up expected values
             String expectedPullRequestUrl = "https://example.com/pull/1";
             when(mockPullRequest.getHtmlUrl()).thenReturn(new URL(expectedPullRequestUrl));
-
-            detectService.runSingleScan();
+            when(githubservice_mock.getPullRequestFiles(any()))
+                    .thenReturn(
+                            System.getProperty("user.home")
+                                    + File.separator
+                                    + "LPVS"
+                                    + File.separator
+                                    + "Projects");
 
             assertDoesNotThrow(() -> detectService.runSingleScan());
+
+            deleteDirectory("report");
         }
 
         @Test
@@ -313,8 +569,11 @@ public class LPVSDetectServiceTest {
                     List.of(conflict_1, conflict_1);
 
             setPrivateField(detectService, "trigger", "github/owner/repo/branch/123");
-            setPrivateField(detectService, "htmlReport", "build/report/test.html");
+            setPrivateField(detectService, "htmlReport", "report/test.html");
             setPrivateField(detectService, "ctx", mockApplicationContext);
+            setPrivateField(detectService, "scanService", scanoss_mock);
+
+            new File("report").mkdir();
 
             // Mock the necessary GitHub objects for LPVSQueue
             when(mockGitHub.getRepository(any())).thenReturn(mockRepository);
@@ -323,14 +582,23 @@ public class LPVSDetectServiceTest {
             when(mockPullRequest.getHead()).thenReturn(mockCommitPointer);
             when(licenseservice_mock.findConflicts(webhookConfig, null)).thenReturn(expected);
             when(mockCommitPointer.getRepository()).thenReturn(mockHeadRepository2);
+            when(githubservice_mock.getInternalQueueByPullRequest(anyString()))
+                    .thenReturn(webhookConfig);
 
             // Set up expected values
             String expectedPullRequestUrl = "https://example.com/pull/1";
             when(mockRepository.getHtmlUrl()).thenReturn(new URL(expectedPullRequestUrl));
-
-            detectService.runSingleScan();
+            when(githubservice_mock.getPullRequestFiles(any()))
+                    .thenReturn(
+                            System.getProperty("user.home")
+                                    + File.separator
+                                    + "LPVS"
+                                    + File.separator
+                                    + "Projects");
 
             assertDoesNotThrow(() -> detectService.runSingleScan());
+
+            deleteDirectory("report");
         }
 
         @Test
@@ -501,5 +769,27 @@ public class LPVSDetectServiceTest {
         field.setAccessible(true);
         field.set(target, value);
         field.setAccessible(false);
+    }
+
+    private void deleteFile(String path) {
+        File file = new File(path);
+        if (file.exists() && file.isFile()) {
+            file.delete();
+        }
+    }
+
+    private void deleteDirectory(String directoryPath) {
+        File directory = new File(directoryPath);
+        File[] files = directory.listFiles();
+        if (files != null) {
+            for (File file : files) {
+                if (file.isDirectory()) {
+                    deleteDirectory(file.getPath());
+                } else {
+                    file.delete();
+                }
+            }
+        }
+        directory.delete();
     }
 }
