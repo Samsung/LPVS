@@ -57,7 +57,7 @@ public class LPVSQueueProcessorService {
      * @throws Exception If an exception occurs during queue processing.
      */
     @EventListener(ApplicationReadyEvent.class)
-    private void queueProcessor() throws Exception {
+    protected void queueProcessor() throws Exception {
         // Check for any pending elements in the LPVSQueue.
         queueService.checkForQueue();
 
