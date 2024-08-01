@@ -193,6 +193,21 @@ public class LPVSDetectServiceTest {
         }
 
         @Test
+        void testRunOneScanBothPullRequestAndLocalFile2()
+                throws NoSuchFieldException, IllegalAccessException {
+            lpvsDetectService =
+                    spy(
+                            new LPVSDetectService(
+                                    "scanoss", false, null, null, null, scanServiceFactory_mock));
+
+            setPrivateField(lpvsDetectService, "ctx", mockApplicationContext);
+            setPrivateField(lpvsDetectService, "trigger", "some-pull-request");
+            setPrivateField(lpvsDetectService, "localPath", "some-local-path");
+
+            assertDoesNotThrow(() -> lpvsDetectService.runSingleScan());
+        }
+
+        @Test
         void testRunOneScan_PullRequest_Default()
                 throws NoSuchFieldException, IllegalAccessException {
 
@@ -203,7 +218,6 @@ public class LPVSDetectServiceTest {
 
             setPrivateField(lpvsDetectService, "trigger", "fake-trigger-value");
             setPrivateField(lpvsDetectService, "ctx", mockApplicationContext);
-            setPrivateField(lpvsDetectService, "licenseService", licenseservice_mock);
             setPrivateField(lpvsDetectService, "gitHubService", githubservice_mock);
 
             assertDoesNotThrow(() -> lpvsDetectService.runSingleScan());
@@ -602,7 +616,46 @@ public class LPVSDetectServiceTest {
         }
 
         @Test
-        void testCommentBuilder_ConflictFilePresent() throws Exception {
+        void testRunOneScan_TriggerNotNull_NoDirectory() throws Exception {
+            GHRepository mockHeadRepository2 = mock(GHRepository.class);
+
+            LPVSLicenseService.Conflict<String, String> conflict_1 =
+                    new LPVSLicenseService.Conflict<>("MIT", "Apache-2.0");
+
+            List<LPVSLicenseService.Conflict<String, String>> expected =
+                    List.of(conflict_1, conflict_1);
+
+            setPrivateField(detectService, "trigger", "github/owner/repo/branch/123");
+            setPrivateField(detectService, "htmlReport", "report/test.html");
+            setPrivateField(detectService, "ctx", mockApplicationContext);
+            setPrivateField(detectService, "scanService", scanoss_mock);
+
+            // Mock the necessary GitHub objects for LPVSQueue
+            when(mockGitHub.getRepository(any())).thenReturn(mockRepository);
+            when(mockRepository.getPullRequest(anyInt())).thenReturn(mockPullRequest);
+            when(mockRepository.getPullRequest(anyInt())).thenReturn(mockPullRequest);
+            when(mockPullRequest.getHead()).thenReturn(mockCommitPointer);
+            when(licenseservice_mock.findConflicts(webhookConfig, null)).thenReturn(expected);
+            when(mockCommitPointer.getRepository()).thenReturn(mockHeadRepository2);
+            when(githubservice_mock.getInternalQueueByPullRequest(anyString()))
+                    .thenReturn(webhookConfig);
+
+            // Set up expected values
+            String expectedPullRequestUrl = "https://example.com/pull/1";
+            when(mockRepository.getHtmlUrl()).thenReturn(new URL(expectedPullRequestUrl));
+            when(githubservice_mock.getPullRequestFiles(any()))
+                    .thenReturn(
+                            System.getProperty("user.home")
+                                    + File.separator
+                                    + "LPVS"
+                                    + File.separator
+                                    + "Projects");
+
+            assertDoesNotThrow(() -> detectService.runSingleScan());
+        }
+
+        @Test
+        void testCommentBuilder_ConflictFilePresent() {
 
             LPVSLicenseService.Conflict<String, String> conflict_1 =
                     new LPVSLicenseService.Conflict<>("MIT", "Apache-2.0");
