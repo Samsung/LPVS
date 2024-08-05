@@ -118,13 +118,13 @@ public class LPVSDetectService {
         List<LPVSLicenseService.Conflict<String, String>> detectedConflicts = null;
 
         // Error case when both pull request scan and local files scan are set to true
-        if (trigger != null && !trigger.isEmpty() && localPath != null && !localPath.isEmpty()) {
+        if (trigger != null && !trigger.isBlank() && localPath != null && !localPath.isBlank()) {
             log.error(
                     "Incorrect settings: both pull request scan and local files scan are set to true.");
             SpringApplication.exit(ctx, () -> 0);
 
             // Scan option - single pull request scan
-        } else if (trigger != null && !HtmlUtils.htmlEscape(trigger).isEmpty()) {
+        } else if (trigger != null && !HtmlUtils.htmlEscape(trigger).isBlank()) {
             log.info("Triggered single scan of pull request.");
             try {
                 licenseService.reloadFromTables();
