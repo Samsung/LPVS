@@ -21,6 +21,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import java.lang.reflect.Field;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
 public class LicensePreValidationServiceTest {
@@ -136,5 +137,11 @@ public class LicensePreValidationServiceTest {
                 .getBean(LPVSExitHandler.class);
         LicensePreValidationService.main(args);
         Mockito.verify(exitHandler, Mockito.times(0)).exit(anyInt());
+    }
+
+    @Test
+    public void testGetEmblem() {
+        String emblem = LicensePreValidationService.getEmblem();
+        assertNotNull(emblem);
     }
 }
