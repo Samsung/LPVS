@@ -55,6 +55,7 @@ public class LicensePreValidationService {
      */
     public static void main(String[] args) {
         try {
+            log.info(getEmblem());
             ApplicationContext applicationContext =
                     SpringApplication.run(LicensePreValidationService.class, args);
             exitHandler = applicationContext.getBean(LPVSExitHandler.class);
@@ -84,5 +85,40 @@ public class LicensePreValidationService {
         executor.setCorePoolSize(corePoolSize);
         executor.setThreadNamePrefix("LPVS::");
         return executor;
+    }
+
+    /**
+     * Returns the emblem for the License Pre-Validation Service.
+     *
+     * @return the emblem as a String
+     */
+    protected static String getEmblem() {
+        StringBuilder emblem = new StringBuilder();
+        emblem.append("\n");
+        emblem.append(
+                "   .----------------.   .----------------.   .----------------.   .----------------. \n");
+        emblem.append(
+                "  | .--------------. | | .--------------. | | .--------------. | | .--------------. |\n");
+        emblem.append(
+                "  | |   _____      | | | |   ______     | | | | ____   ____  | | | |    _______   | |\n");
+        emblem.append(
+                "  | |  |_   _|     | | | |  |_   __ \\   | | | ||_  _| |_  _| | | | |   /  ___  |  | |\n");
+        emblem.append(
+                "  | |    | |       | | | |    | |__) |  | | | |  \\ \\   / /   | | | |  |  (__ \\_|  | |\n");
+        emblem.append(
+                "  | |    | |   _   | | | |    |  ___/   | | | |   \\ \\ / /    | | | |   '.___`-.   | |\n");
+        emblem.append(
+                "  | |   _| |__/ |  | | | |   _| |_      | | | |    \\ ' /     | | | |  |`\\____) |  | |\n");
+        emblem.append(
+                "  | |  |________|  | | | |  |_____|     | | | |     \\_/      | | | |  |_______.'  | |\n");
+        emblem.append(
+                "  | |              | | | |              | | | |              | | | |              | |\n");
+        emblem.append(
+                "  | '--------------' | | '--------------' | | '--------------' | | '--------------' |\n");
+        emblem.append(
+                "   '----------------'   '----------------'   '----------------'   '----------------' \n");
+        emblem.append(
+                "  :: License Pre-Validation Service ::                                      (v1.5.2)\n");
+        return emblem.toString();
     }
 }
