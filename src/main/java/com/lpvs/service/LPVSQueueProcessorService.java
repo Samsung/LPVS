@@ -7,6 +7,7 @@
 package com.lpvs.service;
 
 import com.lpvs.entity.LPVSQueue;
+import io.micrometer.common.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -62,7 +63,7 @@ public class LPVSQueueProcessorService {
         queueService.checkForQueue();
 
         // Process LPVSQueue elements until the trigger is set.
-        while (trigger.isBlank() && localPath.isBlank()) {
+        while (StringUtils.isBlank(trigger) && StringUtils.isBlank(localPath)) {
             // Get the first element from the LPVSQueue.
             LPVSQueue webhookConfig = queueService.getQueueFirstElement();
             log.info("PROCESS Webhook id = " + webhookConfig.getId());

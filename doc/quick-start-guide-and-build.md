@@ -247,7 +247,7 @@ _LPVS_ is now built and running. You can create a new pull request or update an 
 
 Alternatively, you can perform a one-time scan on a specific pull request or local files using the single scan mode. Follow these steps:
 
-4.2.1  Install and navigate to the target directory as described in step 4.1.1 and 4.1.2:
+4.2.1 Install and navigate to the target directory as described in step 4.1.1 and 4.1.2:
 
    ```bash
    mvn clean install

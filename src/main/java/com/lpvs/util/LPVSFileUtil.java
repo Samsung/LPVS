@@ -10,6 +10,8 @@ import com.lpvs.entity.LPVSQueue;
 import lombok.extern.slf4j.Slf4j;
 import org.kohsuke.github.GHPullRequestFileDetail;
 import org.springframework.util.FileSystemUtils;
+import org.springframework.web.util.HtmlUtils;
+import io.micrometer.common.util.StringUtils;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -214,11 +216,10 @@ public class LPVSFileUtil {
      */
     public static String getScanResultsJsonFilePath(LPVSQueue webhookConfig) {
         String fileName = null;
-        if (webhookConfig.getHeadCommitSHA() == null
-                || webhookConfig.getHeadCommitSHA().isBlank()) {
+        if (StringUtils.isBlank(webhookConfig.getHeadCommitSHA())) {
             fileName = LPVSPayloadUtil.getPullRequestId(webhookConfig);
         } else {
-            fileName = webhookConfig.getHeadCommitSHA();
+            fileName = HtmlUtils.htmlEscape(webhookConfig.getHeadCommitSHA());
         }
 
         return System.getProperty("user.home")

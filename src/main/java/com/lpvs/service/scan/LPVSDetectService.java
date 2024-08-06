@@ -16,6 +16,7 @@ import com.lpvs.service.LPVSGitHubConnectionService;
 import com.lpvs.service.LPVSGitHubService;
 import com.lpvs.service.LPVSLicenseService;
 import com.lpvs.util.LPVSFileUtil;
+import io.micrometer.common.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
@@ -118,13 +119,13 @@ public class LPVSDetectService {
         List<LPVSLicenseService.Conflict<String, String>> detectedConflicts = null;
 
         // Error case when both pull request scan and local files scan are set to true
-        if (!trigger.isBlank() && !localPath.isBlank()) {
+        if (!StringUtils.isBlank(trigger) && !StringUtils.isBlank(localPath)) {
             log.error(
                     "Incorrect settings: both pull request scan and local files scan are set to true.");
             SpringApplication.exit(ctx, () -> 0);
 
             // Scan option - single pull request scan
-        } else if (trigger != null && !HtmlUtils.htmlEscape(trigger).isBlank()) {
+        } else if (!StringUtils.isBlank(trigger)) {
             log.info("Triggered single scan of pull request.");
             try {
                 licenseService.reloadFromTables();
@@ -144,10 +145,11 @@ public class LPVSDetectService {
             }
 
             // Scan option - single scan of local file or folder
-        } else if (localPath != null && !HtmlUtils.htmlEscape(localPath).isEmpty()) {
+        } else if (!StringUtils.isBlank(localPath)) {
             log.info("Triggered single scan of local file(s).");
             try {
                 licenseService.reloadFromTables();
+                localPath = HtmlUtils.htmlEscape(localPath);
                 File localFile = new File(localPath);
                 if (localFile.exists()) {
                     // 1. Generate webhook config
@@ -176,8 +178,8 @@ public class LPVSDetectService {
 
         // Report generation
         // 1. HTML format
-        if (generateReport && htmlReport != null && !HtmlUtils.htmlEscape(htmlReport).isEmpty()) {
-            File report = new File(htmlReport);
+        if (generateReport && !StringUtils.isBlank(htmlReport)) {
+            File report = new File(HtmlUtils.htmlEscape(htmlReport));
             String folderPath = report.getParent();
             if (folderPath == null) {
                 folderPath = ".";
