@@ -66,23 +66,30 @@ public class LPVSPayloadUtil {
             JsonObject messageList = json.getAsJsonObject("messageList");
             JsonArray detailInfoArray = messageList.getAsJsonArray("detailInfo");
 
-            LPVSLicense lic = new LPVSLicense();
-            lic.setLicenseName(detailInfoArray.get(0).getAsJsonObject().get("name").getAsString());
-            lic.setSpdxId(
-                    detailInfoArray.get(0).getAsJsonObject().get("spdx_identifier").getAsString());
-            lic.setAccess("UNREVIEWED");
+            if (!detailInfoArray.isEmpty()) {
+                LPVSLicense lic = new LPVSLicense();
+                lic.setLicenseName(
+                        detailInfoArray.get(0).getAsJsonObject().get("name").getAsString());
+                lic.setSpdxId(
+                        detailInfoArray
+                                .get(0)
+                                .getAsJsonObject()
+                                .get("spdx_identifier")
+                                .getAsString());
+                lic.setAccess("UNREVIEWED");
 
-            List<String> nicknameList = new ArrayList<>();
-            JsonElement nicknameListArray =
-                    detailInfoArray.get(0).getAsJsonObject().get("nicknameList");
-            if (nicknameListArray != null && nicknameListArray.isJsonArray()) {
-                nicknameListArray
-                        .getAsJsonArray()
-                        .forEach(element -> nicknameList.add(element.getAsString()));
+                List<String> nicknameList = new ArrayList<>();
+                JsonElement nicknameListArray =
+                        detailInfoArray.get(0).getAsJsonObject().get("nicknameList");
+                if (nicknameListArray != null && nicknameListArray.isJsonArray()) {
+                    nicknameListArray
+                            .getAsJsonArray()
+                            .forEach(element -> nicknameList.add(element.getAsString()));
+                }
+                lic.setAlternativeNames(String.join(",", nicknameList));
+
+                return lic;
             }
-            lic.setAlternativeNames(String.join(",", nicknameList));
-
-            return lic;
         } catch (Exception e) {
             log.error("Error parsing OSORI DB payload: " + e.getMessage());
         }
@@ -335,7 +342,7 @@ public class LPVSPayloadUtil {
         webhookConfig.setPullRequestAPIUrl(pR.getUrl() != null ? pR.getUrl().toString() : null);
         webhookConfig.setRepositoryUrl(
                 repo.getHtmlUrl() != null ? repo.getHtmlUrl().toString() : null);
-        webhookConfig.setUserId("Single scan run");
+        webhookConfig.setUserId("Single scan of pull request run");
         webhookConfig.setHeadCommitSHA(pR.getHead() != null ? pR.getHead().getSha() : null);
         return webhookConfig;
     }

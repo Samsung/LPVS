@@ -15,6 +15,7 @@ import com.lpvs.repository.LPVSLicenseRepository;
 import com.lpvs.util.LPVSExitHandler;
 
 import com.lpvs.util.LPVSPayloadUtil;
+import io.micrometer.common.util.StringUtils;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -230,7 +231,7 @@ public class LPVSLicenseService {
             if (license.getLicenseName().equalsIgnoreCase(name)) {
                 return license;
             }
-            if (license.getAlternativeNames() != null && !license.getAlternativeNames().isBlank()) {
+            if (!StringUtils.isBlank(license.getAlternativeNames())) {
                 String[] names = license.getAlternativeNames().split(",");
                 for (String n : names) {
                     if (n.trim().equalsIgnoreCase(name)) {
@@ -258,15 +259,10 @@ public class LPVSLicenseService {
             lic = findLicenseInOsoriDB(licenseSpdxId);
             // If not found, create new license with default field values
             if (lic == null) {
-                lic =
-                        new LPVSLicense() {
-                            {
-                                setSpdxId(licenseSpdxId);
-                                setLicenseName(licName);
-                                setAlternativeNames(null);
-                                setAccess("UNREVIEWED");
-                            }
-                        };
+                lic = new LPVSLicense();
+                lic.setSpdxId(licenseSpdxId);
+                lic.setLicenseName(licName);
+                lic.setAccess("UNREVIEWED");
             }
             // Save new license
             lic = lpvsLicenseRepository.saveAndFlush(lic);

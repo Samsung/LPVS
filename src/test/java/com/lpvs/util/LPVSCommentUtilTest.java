@@ -194,7 +194,6 @@ public class LPVSCommentUtilTest {
         assertEquals(htmlContent, fileContent);
 
         // Clean up: delete the created file
-        // TODO: need to switch to temp folder option
         Files.deleteIfExists(Paths.get(filePath));
     }
 }

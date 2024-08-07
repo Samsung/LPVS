@@ -7,6 +7,7 @@
 package com.lpvs.service;
 
 import com.lpvs.entity.LPVSQueue;
+import io.micrometer.common.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,10 +30,16 @@ public class LPVSQueueProcessorService {
     private LPVSQueueService queueService;
 
     /**
-     * Trigger value obtained from application properties.
+     * Trigger value to start a single scan of a pull request (optional).
      */
     @Value("${github.pull.request:}")
     private String trigger;
+
+    /**
+     * Trigger value to start a single scan of local files or folder (optional).
+     */
+    @Value("${local.path:}")
+    private String localPath;
 
     /**
      * Constructor for LPVSQueueProcessorService.
@@ -51,12 +58,12 @@ public class LPVSQueueProcessorService {
      * @throws Exception If an exception occurs during queue processing.
      */
     @EventListener(ApplicationReadyEvent.class)
-    private void queueProcessor() throws Exception {
+    protected void queueProcessor() throws Exception {
         // Check for any pending elements in the LPVSQueue.
         queueService.checkForQueue();
 
         // Process LPVSQueue elements until the trigger is set.
-        while (trigger == null || trigger.isEmpty()) {
+        while (StringUtils.isBlank(trigger) && StringUtils.isBlank(localPath)) {
             // Get the first element from the LPVSQueue.
             LPVSQueue webhookConfig = queueService.getQueueFirstElement();
             log.info("PROCESS Webhook id = " + webhookConfig.getId());
