@@ -151,7 +151,12 @@ public class LPVSFileUtil {
                                     StandardCopyOption.REPLACE_EXISTING);
                         } else if (file.isDirectory()) {
                             File destinationSubdir = new File(destination, file.getName());
-                            destinationSubdir.mkdirs();
+                            boolean isCreated = destinationSubdir.mkdirs();
+                            if (!isCreated) {
+                                throw new IOException(
+                                        "Failed to create directory: "
+                                                + destinationSubdir.getAbsolutePath());
+                            }
                             copyFiles(file.getAbsolutePath(), destinationSubdir.getAbsolutePath());
                         }
                     }
