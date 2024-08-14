@@ -451,19 +451,18 @@ public class LPVSReportBuilder {
      * @return the explanation for the specified license type
      */
     private String getExplanationForLicenseType(String type) {
-        return switch (type.toUpperCase()) {
-            case prohibited ->
-                    "This license prohibits the use of the licensed code in certain contexts, such as commercial software development.";
-            case restricted ->
-                    "This license required compliance with specific obligations. It is crucial to carefully review and adhere to these obligations before using the licensed code.";
-            case unreviewed ->
-                    "This license has not been reviewed thoroughly and may contain unknown risks or limitations. It is recommended to review these licenses carefully before using the licensed code.";
-            case permitted ->
-                    "This license permits free usage, modification, and distribution of the licensed code without any restrictions.";
-            default ->
-                    throw new IllegalStateException(
-                            "Unexpected value for the license type: " + type);
-        };
+        switch (type.toUpperCase()) {
+            case prohibited:
+                return "This license prohibits the use of the licensed code in certain contexts, such as commercial software development.";
+            case restricted:
+                return "This license required compliance with specific obligations. It is crucial to carefully review and adhere to these obligations before using the licensed code.";
+            case unreviewed:
+                return "This license has not been reviewed thoroughly and may contain unknown risks or limitations. It is recommended to review these licenses carefully before using the licensed code.";
+            case permitted:
+                return "This license permits free usage, modification, and distribution of the licensed code without any restrictions.";
+            default:
+                throw new IllegalStateException("Unexpected value for the license type: " + type);
+        }
     }
 
     /**
