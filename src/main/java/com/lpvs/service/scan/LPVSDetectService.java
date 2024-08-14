@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.lpvs.entity.report.LPVSReportBuilder;
 import com.lpvs.service.LPVSGitHubConnectionService;
 import com.lpvs.service.LPVSGitHubService;
 import com.lpvs.service.LPVSLicenseService;
@@ -60,6 +61,11 @@ public class LPVSDetectService {
     private LPVSScanService scanService;
 
     /**
+     * Component responsible for the generation of HTML reports.
+     */
+    private LPVSReportBuilder reportBuilder;
+
+    /**
      * Trigger value to start a single scan of a pull request (optional).
      */
     @Value("${github.pull.request:}")
@@ -91,6 +97,7 @@ public class LPVSDetectService {
      * @param licenseService          Service for license conflict analysis.
      * @param gitHubService           Service for GitHub connection and operation.
      * @param scanServiceFactory      Service for creating instance of the scanner.
+     * @param reportBuilder           Service for generating HTML reports.
      */
     @Autowired
     public LPVSDetectService(
@@ -99,12 +106,14 @@ public class LPVSDetectService {
             LPVSGitHubConnectionService gitHubConnectionService,
             LPVSLicenseService licenseService,
             LPVSGitHubService gitHubService,
-            LPVSScanServiceFactory scanServiceFactory) {
+            LPVSScanServiceFactory scanServiceFactory,
+            LPVSReportBuilder reportBuilder) {
         this.gitHubConnectionService = gitHubConnectionService;
         this.licenseService = licenseService;
         this.gitHubService = gitHubService;
         this.scanService = scanServiceFactory.createScanService(scannerType, isInternal);
         log.info("License detection scanner: " + scannerType);
+        this.reportBuilder = reportBuilder;
     }
 
     /**
@@ -117,6 +126,7 @@ public class LPVSDetectService {
         LPVSQueue webhookConfig = null;
         List<LPVSFile> scanResult = null;
         List<LPVSLicenseService.Conflict<String, String>> detectedConflicts = null;
+        String path = null;
 
         // Error case when both pull request scan and local files scan are set to true
         if (!StringUtils.isBlank(trigger) && !StringUtils.isBlank(localPath)) {
@@ -138,6 +148,7 @@ public class LPVSDetectService {
 
                 detectedConflicts = licenseService.findConflicts(webhookConfig, scanResult);
                 generateReport = true;
+                path = HtmlUtils.htmlEscape(trigger);
                 log.info("Single scan of pull request completed.");
             } catch (Exception ex) {
                 log.error("Single scan of pull request failed with error: " + ex.getMessage());
@@ -165,6 +176,7 @@ public class LPVSDetectService {
 
                     detectedConflicts = licenseService.findConflicts(webhookConfig, scanResult);
                     generateReport = true;
+                    path = localFile.getAbsolutePath();
                     log.info("Single scan of local file(s) completed.");
                 } else {
                     throw new Exception("File path does not exist: " + localPath);
@@ -187,8 +199,8 @@ public class LPVSDetectService {
             File folder = new File(folderPath);
             if (folder.exists() && folder.isDirectory()) {
                 String reportFile =
-                        LPVSCommentUtil.buildHTMLComment(
-                                webhookConfig, scanResult, detectedConflicts);
+                        reportBuilder.generateHtmlReportSingleScan(
+                                path, scanResult, detectedConflicts);
                 LPVSCommentUtil.saveHTMLToFile(reportFile, report.getAbsolutePath());
             } else {
                 log.error("Error: The parent directory '" + folder.getPath() + "' does not exist.");

@@ -7,6 +7,8 @@
 package com.lpvs;
 
 import com.lpvs.util.LPVSExitHandler;
+import org.apache.maven.model.Model;
+import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,6 +20,8 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
+import java.io.FileReader;
+import java.io.IOException;
 import java.lang.reflect.Field;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -143,5 +147,24 @@ public class LicensePreValidationServiceTest {
     public void testGetEmblem() {
         String emblem = LicensePreValidationService.getEmblem();
         assertNotNull(emblem);
+    }
+
+    @Test
+    public void testGetVersion() throws Exception {
+        MavenXpp3Reader reader = Mockito.mock(MavenXpp3Reader.class);
+        Model model = new Model();
+        model.setVersion("1.0");
+        Mockito.when(reader.read(Mockito.any(FileReader.class))).thenReturn(model);
+        String version = LicensePreValidationService.getVersion(reader);
+        assertEquals("1.0", version);
+    }
+
+    @Test
+    public void testGetVersionWithException() throws Exception {
+        MavenXpp3Reader reader = Mockito.mock(MavenXpp3Reader.class);
+        Mockito.when(reader.read(Mockito.any(FileReader.class))).thenThrow(new IOException());
+
+        String version = LicensePreValidationService.getVersion(reader);
+        assertEquals("latest", version);
     }
 }

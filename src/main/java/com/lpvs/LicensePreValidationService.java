@@ -7,6 +7,8 @@
 package com.lpvs;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.maven.model.Model;
+import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -18,6 +20,8 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import com.lpvs.util.LPVSExitHandler;
+
+import java.io.FileReader;
 
 /**
  * The main class for the License Pre-Validation Service (LPVS) application.
@@ -75,6 +79,21 @@ public class LicensePreValidationService {
     }
 
     /**
+     * Retrieves the version of the LicensePreValidationService using the provided MavenXpp3Reader object.
+     *
+     * @param reader the MavenXpp3Reader object used to read the pom.xml file
+     * @return the version of the LicensePreValidationService, or "latest" if an error occurs
+     */
+    public static String getVersion(MavenXpp3Reader reader) {
+        try (FileReader fileReader = new FileReader("pom.xml")) {
+            Model model = reader.read(fileReader);
+            return model.getVersion();
+        } catch (Exception e) {
+            return "latest";
+        }
+    }
+
+    /**
      * Configures and retrieves an asynchronous task executor bean.
      *
      * @return An asynchronous task executor bean.
@@ -93,32 +112,20 @@ public class LicensePreValidationService {
      * @return the emblem as a String
      */
     protected static String getEmblem() {
-        StringBuilder emblem = new StringBuilder();
-        emblem.append("\n");
-        emblem.append(
-                "   .----------------.   .----------------.   .----------------.   .----------------. \n");
-        emblem.append(
-                "  | .--------------. | | .--------------. | | .--------------. | | .--------------. |\n");
-        emblem.append(
-                "  | |   _____      | | | |   ______     | | | | ____   ____  | | | |    _______   | |\n");
-        emblem.append(
-                "  | |  |_   _|     | | | |  |_   __ \\   | | | ||_  _| |_  _| | | | |   /  ___  |  | |\n");
-        emblem.append(
-                "  | |    | |       | | | |    | |__) |  | | | |  \\ \\   / /   | | | |  |  (__ \\_|  | |\n");
-        emblem.append(
-                "  | |    | |   _   | | | |    |  ___/   | | | |   \\ \\ / /    | | | |   '.___`-.   | |\n");
-        emblem.append(
-                "  | |   _| |__/ |  | | | |   _| |_      | | | |    \\ ' /     | | | |  |`\\____) |  | |\n");
-        emblem.append(
-                "  | |  |________|  | | | |  |_____|     | | | |     \\_/      | | | |  |_______.'  | |\n");
-        emblem.append(
-                "  | |              | | | |              | | | |              | | | |              | |\n");
-        emblem.append(
-                "  | '--------------' | | '--------------' | | '--------------' | | '--------------' |\n");
-        emblem.append(
-                "   '----------------'   '----------------'   '----------------'   '----------------' \n");
-        emblem.append(
-                "  :: License Pre-Validation Service ::                                      (v1.5.2)\n");
-        return emblem.toString();
+        return "\n"
+                + "   .----------------.   .----------------.   .----------------.   .----------------. \n"
+                + "  | .--------------. | | .--------------. | | .--------------. | | .--------------. |\n"
+                + "  | |   _____      | | | |   ______     | | | | ____   ____  | | | |    _______   | |\n"
+                + "  | |  |_   _|     | | | |  |_   __ \\   | | | ||_  _| |_  _| | | | |   /  ___  |  | |\n"
+                + "  | |    | |       | | | |    | |__) |  | | | |  \\ \\   / /   | | | |  |  (__ \\_|  | |\n"
+                + "  | |    | |   _   | | | |    |  ___/   | | | |   \\ \\ / /    | | | |   '.___`-.   | |\n"
+                + "  | |   _| |__/ |  | | | |   _| |_      | | | |    \\ ' /     | | | |  |`\\____) |  | |\n"
+                + "  | |  |________|  | | | |  |_____|     | | | |     \\_/      | | | |  |_______.'  | |\n"
+                + "  | |              | | | |              | | | |              | | | |              | |\n"
+                + "  | '--------------' | | '--------------' | | '--------------' | | '--------------' |\n"
+                + "   '----------------'   '----------------'   '----------------'   '----------------' \n"
+                + "  :: License Pre-Validation Service ::                                    ("
+                + getVersion(new MavenXpp3Reader())
+                + ")\n";
     }
 }

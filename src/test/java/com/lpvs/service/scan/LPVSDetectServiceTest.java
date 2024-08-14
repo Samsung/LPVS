@@ -9,6 +9,7 @@ package com.lpvs.service.scan;
 import com.lpvs.entity.LPVSFile;
 import com.lpvs.entity.LPVSLicense;
 import com.lpvs.entity.LPVSQueue;
+import com.lpvs.entity.report.LPVSReportBuilder;
 import com.lpvs.service.LPVSGitHubConnectionService;
 import com.lpvs.service.LPVSGitHubService;
 import com.lpvs.service.LPVSLicenseService;
@@ -60,6 +61,7 @@ public class LPVSDetectServiceTest {
         LPVSLicenseService licenseservice_mock = mock(LPVSLicenseService.class);
         LPVSGitHubService githubservice_mock = mock(LPVSGitHubService.class);
         LPVSScanServiceFactory scanServiceFactory_mock = mock(LPVSScanServiceFactory.class);
+        LPVSReportBuilder reportBuilder_mock = mock(LPVSReportBuilder.class);
         GitHub mockGitHub = mock(GitHub.class);
         GHCommitPointer mockCommitPointer = mock(GHCommitPointer.class);
         GHRepository mockRepository = mock(GHRepository.class);
@@ -82,7 +84,8 @@ public class LPVSDetectServiceTest {
                             github_mock,
                             licenseservice_mock,
                             githubservice_mock,
-                            scanServiceFactory_mock);
+                            scanServiceFactory_mock,
+                            reportBuilder_mock);
 
             webhookConfig = new LPVSQueue();
             webhookConfig.setId(1L);
@@ -149,7 +152,13 @@ public class LPVSDetectServiceTest {
             lpvsDetectService =
                     spy(
                             new LPVSDetectService(
-                                    "scanoss", false, null, null, null, scanServiceFactory_mock));
+                                    "scanoss",
+                                    false,
+                                    null,
+                                    null,
+                                    null,
+                                    scanServiceFactory_mock,
+                                    null));
 
             setPrivateField(lpvsDetectService, "trigger", null);
 
@@ -166,7 +175,13 @@ public class LPVSDetectServiceTest {
             lpvsDetectService =
                     spy(
                             new LPVSDetectService(
-                                    "scanoss", false, null, null, null, scanServiceFactory_mock));
+                                    "scanoss",
+                                    false,
+                                    null,
+                                    null,
+                                    null,
+                                    scanServiceFactory_mock,
+                                    null));
 
             setPrivateField(lpvsDetectService, "localPath", null);
 
@@ -183,7 +198,13 @@ public class LPVSDetectServiceTest {
             lpvsDetectService =
                     spy(
                             new LPVSDetectService(
-                                    "scanoss", false, null, null, null, scanServiceFactory_mock));
+                                    "scanoss",
+                                    false,
+                                    null,
+                                    null,
+                                    null,
+                                    scanServiceFactory_mock,
+                                    null));
 
             setPrivateField(lpvsDetectService, "ctx", mockApplicationContext);
             setPrivateField(lpvsDetectService, "trigger", "");
@@ -198,7 +219,13 @@ public class LPVSDetectServiceTest {
             lpvsDetectService =
                     spy(
                             new LPVSDetectService(
-                                    "scanoss", false, null, null, null, scanServiceFactory_mock));
+                                    "scanoss",
+                                    false,
+                                    null,
+                                    null,
+                                    null,
+                                    scanServiceFactory_mock,
+                                    null));
 
             setPrivateField(lpvsDetectService, "ctx", mockApplicationContext);
             setPrivateField(lpvsDetectService, "trigger", "some-pull-request");
@@ -214,7 +241,13 @@ public class LPVSDetectServiceTest {
             lpvsDetectService =
                     spy(
                             new LPVSDetectService(
-                                    "scanoss", false, null, null, null, scanServiceFactory_mock));
+                                    "scanoss",
+                                    false,
+                                    null,
+                                    null,
+                                    null,
+                                    scanServiceFactory_mock,
+                                    null));
 
             setPrivateField(lpvsDetectService, "trigger", "fake-trigger-value");
             setPrivateField(lpvsDetectService, "ctx", mockApplicationContext);
@@ -235,7 +268,13 @@ public class LPVSDetectServiceTest {
             lpvsDetectService =
                     spy(
                             new LPVSDetectService(
-                                    "scanoss", false, null, null, null, scanServiceFactory_mock));
+                                    "scanoss",
+                                    false,
+                                    null,
+                                    null,
+                                    null,
+                                    scanServiceFactory_mock,
+                                    null));
 
             // Mock the necessary GitHub objects for LPVSQueue
             when(mockGitHub.getRepository(any())).thenReturn(mockRepository);
@@ -284,7 +323,13 @@ public class LPVSDetectServiceTest {
             lpvsDetectService =
                     spy(
                             new LPVSDetectService(
-                                    "scanoss", false, null, null, null, scanServiceFactory_mock));
+                                    "scanoss",
+                                    false,
+                                    null,
+                                    null,
+                                    null,
+                                    scanServiceFactory_mock,
+                                    null));
 
             setPrivateField(detectService, "trigger", "github/owner/repo/branch/123");
             setPrivateField(detectService, "htmlReport", "build");
@@ -302,6 +347,8 @@ public class LPVSDetectServiceTest {
                     .thenReturn(new URL("https://example.com/repo/files"));
             when(githubservice_mock.getInternalQueueByPullRequest(anyString()))
                     .thenReturn(webhookConfig);
+            when(reportBuilder_mock.generateHtmlReportSingleScan(anyString(), anyList(), anyList()))
+                    .thenReturn("<html></html>");
 
             // Set up expected values
             String expectedPullRequestUrl = "https://example.com/pull/1";
@@ -331,7 +378,13 @@ public class LPVSDetectServiceTest {
             lpvsDetectService =
                     spy(
                             new LPVSDetectService(
-                                    "scanoss", false, null, null, null, scanServiceFactory_mock));
+                                    "scanoss",
+                                    false,
+                                    null,
+                                    null,
+                                    null,
+                                    scanServiceFactory_mock,
+                                    null));
 
             File sourceDir = Files.createTempDirectory("source").toFile();
             File sourceFile1 = new File(sourceDir, "file1.txt");
@@ -381,7 +434,13 @@ public class LPVSDetectServiceTest {
             lpvsDetectService =
                     spy(
                             new LPVSDetectService(
-                                    "scanoss", false, null, null, null, scanServiceFactory_mock));
+                                    "scanoss",
+                                    false,
+                                    null,
+                                    null,
+                                    null,
+                                    scanServiceFactory_mock,
+                                    null));
 
             File sourceDir = Files.createTempDirectory("source").toFile();
             File sourceFile1 = new File(sourceDir, "file1.txt");
@@ -407,6 +466,8 @@ public class LPVSDetectServiceTest {
                     .thenReturn(new URL("https://example.com/repo/files"));
             when(githubservice_mock.getInternalQueueByPullRequest(anyString()))
                     .thenReturn(webhookConfig);
+            when(reportBuilder_mock.generateHtmlReportSingleScan(anyString(), anyList(), anyList()))
+                    .thenReturn("<html></html>");
 
             // Set up expected values
             String expectedPullRequestUrl = "https://example.com/pull/1";
@@ -437,7 +498,13 @@ public class LPVSDetectServiceTest {
             lpvsDetectService =
                     spy(
                             new LPVSDetectService(
-                                    "scanoss", false, null, null, null, scanServiceFactory_mock));
+                                    "scanoss",
+                                    false,
+                                    null,
+                                    null,
+                                    null,
+                                    scanServiceFactory_mock,
+                                    null));
 
             File sourceDir = Files.createTempDirectory("source").toFile();
             File sourceFile1 = new File(sourceDir, "file1.txt");
@@ -511,6 +578,8 @@ public class LPVSDetectServiceTest {
                     .thenReturn(new URL("https://example.com/repo/files"));
             when(githubservice_mock.getInternalQueueByPullRequest(anyString()))
                     .thenReturn(webhookConfig);
+            when(reportBuilder_mock.generateHtmlReportSingleScan(anyString(), anyList(), anyList()))
+                    .thenReturn("<html></html>");
 
             // Set up expected values
             String expectedPullRequestUrl = "https://example.com/pull/1";
@@ -555,6 +624,8 @@ public class LPVSDetectServiceTest {
                     .thenReturn(new URL("https://example.com/repo/files"));
             when(githubservice_mock.getInternalQueueByPullRequest(anyString()))
                     .thenReturn(webhookConfig);
+            when(reportBuilder_mock.generateHtmlReportSingleScan(anyString(), anyList(), anyList()))
+                    .thenReturn("<html></html>");
 
             // Set up expected values
             String expectedPullRequestUrl = "https://example.com/pull/1";
@@ -598,6 +669,8 @@ public class LPVSDetectServiceTest {
             when(mockCommitPointer.getRepository()).thenReturn(mockHeadRepository2);
             when(githubservice_mock.getInternalQueueByPullRequest(anyString()))
                     .thenReturn(webhookConfig);
+            when(reportBuilder_mock.generateHtmlReportSingleScan(anyString(), anyList(), anyList()))
+                    .thenReturn("<html></html>");
 
             // Set up expected values
             String expectedPullRequestUrl = "https://example.com/pull/1";
@@ -639,6 +712,8 @@ public class LPVSDetectServiceTest {
             when(mockCommitPointer.getRepository()).thenReturn(mockHeadRepository2);
             when(githubservice_mock.getInternalQueueByPullRequest(anyString()))
                     .thenReturn(webhookConfig);
+            when(reportBuilder_mock.generateHtmlReportSingleScan(anyString(), anyList(), anyList()))
+                    .thenReturn("<html></html>");
 
             // Set up expected values
             String expectedPullRequestUrl = "https://example.com/pull/1";
@@ -667,11 +742,8 @@ public class LPVSDetectServiceTest {
             List<LPVSFile> scanResults = new ArrayList<>();
             String commentGitHub =
                     LPVSCommentUtil.reportCommentBuilder(webhookConfig, scanResults, expected);
-            String commentHTML =
-                    LPVSCommentUtil.buildHTMLComment(webhookConfig, scanResults, expected);
 
             assertNotNull(commentGitHub);
-            assertNotNull(commentHTML);
         }
 
         @Test
@@ -681,11 +753,8 @@ public class LPVSDetectServiceTest {
             List<LPVSFile> scanResults = new ArrayList<>();
             String commentGitHub =
                     LPVSCommentUtil.reportCommentBuilder(webhookConfig, scanResults, expected);
-            String commentHTML =
-                    LPVSCommentUtil.buildHTMLComment(webhookConfig, scanResults, expected);
 
             assertEquals(commentGitHub, "");
-            assertEquals(commentHTML, "<html><body></body></html>");
         }
 
         @Test
@@ -737,6 +806,7 @@ public class LPVSDetectServiceTest {
         LPVSLicenseService licenseservice_mock = mock(LPVSLicenseService.class);
         LPVSGitHubService githubservice_mock = mock(LPVSGitHubService.class);
         LPVSScanServiceFactory scanServiceFactory_mock = mock(LPVSScanServiceFactory.class);
+        LPVSReportBuilder reportBuilder_mock = mock(LPVSReportBuilder.class);
 
         LPVSQueue webhookConfig;
         final String test_path = "test_path";
@@ -751,7 +821,8 @@ public class LPVSDetectServiceTest {
                             github_mock,
                             licenseservice_mock,
                             githubservice_mock,
-                            scanServiceFactory_mock);
+                            scanServiceFactory_mock,
+                            reportBuilder_mock);
 
             webhookConfig = new LPVSQueue();
             webhookConfig.setId(1L);
@@ -801,7 +872,7 @@ public class LPVSDetectServiceTest {
         void setUp() {
             detectService =
                     new LPVSDetectService(
-                            "not_scanoss", false, null, null, null, scanServiceFactory_mock);
+                            "not_scanoss", false, null, null, null, scanServiceFactory_mock, null);
         }
 
         @Test
