@@ -7,12 +7,12 @@
 package com.lpvs;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
@@ -32,7 +32,7 @@ public class LicensePreValidationService {
     /**
      * The core pool size for the asynchronous task executor.
      */
-    private final int corePoolSize;
+    private static int corePoolSize = 8;
 
     /**
      * The exit handler for handling application exits.
@@ -40,12 +40,12 @@ public class LicensePreValidationService {
     private static LPVSExitHandler exitHandler;
 
     /**
-     * Constructs a new LicensePreValidationService with the specified core pool size.
+     * Creates a new instance of {@link SpringApplication} configured to run the {@link LicensePreValidationService} class.
      *
-     * @param corePoolSize The core pool size for the asynchronous task executor.
+     * @return a new instance of {@link SpringApplication}
      */
-    public LicensePreValidationService(@Value("${lpvs.cores:8}") int corePoolSize) {
-        this.corePoolSize = corePoolSize;
+    protected SpringApplication createSpringApplication() {
+        return new SpringApplication(LicensePreValidationService.class);
     }
 
     /**
@@ -54,10 +54,26 @@ public class LicensePreValidationService {
      * @param args The command-line arguments passed to the application.
      */
     public static void main(String[] args) {
+        LicensePreValidationService lpvs = new LicensePreValidationService();
+        lpvs.run(args);
+    }
+
+    /**
+     * Runs the {@link LicensePreValidationService} application with the specified command-line arguments.
+     *
+     * @param args the command-line arguments to pass to the application
+     */
+    public void run(String[] args) {
+        SpringApplication app = createSpringApplication();
+        app.addInitializers(
+                applicationContext -> {
+                    ConfigurableEnvironment environment = applicationContext.getEnvironment();
+                    String version = environment.getProperty("lpvs.version", "Unknown");
+                    log.info(getEmblem(version));
+                    corePoolSize = Integer.parseInt(environment.getProperty("lpvs.cores", "8"));
+                });
         try {
-            log.info(getEmblem());
-            ApplicationContext applicationContext =
-                    SpringApplication.run(LicensePreValidationService.class, args);
+            ApplicationContext applicationContext = app.run(args);
             exitHandler = applicationContext.getBean(LPVSExitHandler.class);
         } catch (IllegalArgumentException e) {
             log.error("An IllegalArgumentException occurred: " + e.getMessage());
@@ -92,33 +108,21 @@ public class LicensePreValidationService {
      *
      * @return the emblem as a String
      */
-    protected static String getEmblem() {
-        StringBuilder emblem = new StringBuilder();
-        emblem.append("\n");
-        emblem.append(
-                "   .----------------.   .----------------.   .----------------.   .----------------. \n");
-        emblem.append(
-                "  | .--------------. | | .--------------. | | .--------------. | | .--------------. |\n");
-        emblem.append(
-                "  | |   _____      | | | |   ______     | | | | ____   ____  | | | |    _______   | |\n");
-        emblem.append(
-                "  | |  |_   _|     | | | |  |_   __ \\   | | | ||_  _| |_  _| | | | |   /  ___  |  | |\n");
-        emblem.append(
-                "  | |    | |       | | | |    | |__) |  | | | |  \\ \\   / /   | | | |  |  (__ \\_|  | |\n");
-        emblem.append(
-                "  | |    | |   _   | | | |    |  ___/   | | | |   \\ \\ / /    | | | |   '.___`-.   | |\n");
-        emblem.append(
-                "  | |   _| |__/ |  | | | |   _| |_      | | | |    \\ ' /     | | | |  |`\\____) |  | |\n");
-        emblem.append(
-                "  | |  |________|  | | | |  |_____|     | | | |     \\_/      | | | |  |_______.'  | |\n");
-        emblem.append(
-                "  | |              | | | |              | | | |              | | | |              | |\n");
-        emblem.append(
-                "  | '--------------' | | '--------------' | | '--------------' | | '--------------' |\n");
-        emblem.append(
-                "   '----------------'   '----------------'   '----------------'   '----------------' \n");
-        emblem.append(
-                "  :: License Pre-Validation Service ::                                      (v1.5.2)\n");
-        return emblem.toString();
+    protected static String getEmblem(String version) {
+        return "\n"
+                + "   .----------------.   .----------------.   .----------------.   .----------------. \n"
+                + "  | .--------------. | | .--------------. | | .--------------. | | .--------------. |\n"
+                + "  | |   _____      | | | |   ______     | | | | ____   ____  | | | |    _______   | |\n"
+                + "  | |  |_   _|     | | | |  |_   __ \\   | | | ||_  _| |_  _| | | | |   /  ___  |  | |\n"
+                + "  | |    | |       | | | |    | |__) |  | | | |  \\ \\   / /   | | | |  |  (__ \\_|  | |\n"
+                + "  | |    | |   _   | | | |    |  ___/   | | | |   \\ \\ / /    | | | |   '.___`-.   | |\n"
+                + "  | |   _| |__/ |  | | | |   _| |_      | | | |    \\ ' /     | | | |  |`\\____) |  | |\n"
+                + "  | |  |________|  | | | |  |_____|     | | | |     \\_/      | | | |  |_______.'  | |\n"
+                + "  | |              | | | |              | | | |              | | | |              | |\n"
+                + "  | '--------------' | | '--------------' | | '--------------' | | '--------------' |\n"
+                + "   '----------------'   '----------------'   '----------------'   '----------------' \n"
+                + "  :: License Pre-Validation Service ::                                    (v "
+                + version
+                + ")\n";
     }
 }
