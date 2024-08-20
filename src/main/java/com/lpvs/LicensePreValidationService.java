@@ -54,8 +54,7 @@ public class LicensePreValidationService {
      * @param args The command-line arguments passed to the application.
      */
     public static void main(String[] args) {
-        LicensePreValidationService lpvs = new LicensePreValidationService();
-        lpvs.run(args);
+        new LicensePreValidationService().run(args);
     }
 
     /**
