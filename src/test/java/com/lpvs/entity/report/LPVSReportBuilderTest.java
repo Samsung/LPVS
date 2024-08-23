@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.io.TempDir;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.autoconfigure.thymeleaf.ThymeleafAutoConfiguration;
@@ -29,8 +30,7 @@ import java.util.*;
 
 import static com.lpvs.entity.report.LPVSReportBuilder.saveHTMLToFile;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @ImportAutoConfiguration(ThymeleafAutoConfiguration.class)
@@ -43,10 +43,19 @@ public class LPVSReportBuilderTest {
     LPVSFile fileLicPermitted,
             fileLicProhibitedRestricted,
             fileLicUnreviewed_1,
-            fileLicUnreviewed_2;
-    LPVSLicense licPermitted, licProhibited, licRestricted, licUnreviewed;
+            fileLicUnreviewed_2,
+            fileLicUnreviewed_3,
+            fileLicIncorrect;
+    LPVSLicense licPermitted,
+            licProhibited,
+            licRestricted,
+            licUnreviewed,
+            licUnreviewed_2,
+            licIncorrect;
     LPVSLicenseService.Conflict<String, String> conflict1, conflict2;
     LPVSReportBuilder reportBuilder;
+
+    @TempDir Path tempDir;
 
     @BeforeEach
     public void setUp() throws Exception {
@@ -80,6 +89,24 @@ public class LPVSReportBuilderTest {
                         setLicenseName("Apache License 2.0");
                         setAccess("UNREVIEWED");
                         setSpdxId("Apache-2.0");
+                    }
+                };
+
+        licUnreviewed_2 =
+                new LPVSLicense() {
+                    {
+                        setLicenseName("BSD 3-Clause \"New\" or \"Revised\" License");
+                        setAccess("UNREVIEWED");
+                        setSpdxId("BSD-3-Clause");
+                    }
+                };
+
+        licIncorrect =
+                new LPVSLicense() {
+                    {
+                        setLicenseName("Some incorrect license");
+                        setAccess("INCORRECT");
+                        setSpdxId("Some-license");
                     }
                 };
 
@@ -121,7 +148,7 @@ public class LPVSReportBuilderTest {
         fileLicUnreviewed_1.setLicenses(
                 new HashSet<>() {
                     {
-                        add(licUnreviewed);
+                        add(licUnreviewed_2);
                     }
                 });
         fileLicUnreviewed_1.setFilePath("local_file_path_3");
@@ -150,6 +177,38 @@ public class LPVSReportBuilderTest {
         fileLicUnreviewed_2.setSnippetMatch("50%");
         fileLicUnreviewed_2.setMatchedLines("5-10");
 
+        fileLicUnreviewed_3 = new LPVSFile();
+        fileLicUnreviewed_3.setLicenses(
+                new HashSet<>() {
+                    {
+                        add(licUnreviewed);
+                    }
+                });
+        fileLicUnreviewed_3.setFilePath("local_file_path_4");
+        fileLicUnreviewed_3.setComponentFilePath("component_file_path_4");
+        fileLicUnreviewed_3.setComponentName("component_name_4");
+        fileLicUnreviewed_3.setComponentUrl("http://component_name_4/url");
+        fileLicUnreviewed_3.setComponentVersion("v4.0.0");
+        fileLicUnreviewed_3.setComponentVendor("component_vendor_4");
+        fileLicUnreviewed_3.setSnippetMatch("40%");
+        fileLicUnreviewed_3.setMatchedLines("1-10");
+
+        fileLicIncorrect = new LPVSFile();
+        fileLicIncorrect.setLicenses(
+                new HashSet<>() {
+                    {
+                        add(licIncorrect);
+                    }
+                });
+        fileLicIncorrect.setFilePath("local_file_path_4");
+        fileLicIncorrect.setComponentFilePath("component_file_path_4");
+        fileLicIncorrect.setComponentName("component_name_4");
+        fileLicIncorrect.setComponentUrl("http://component_name_4/url");
+        fileLicIncorrect.setComponentVersion("v4.0.0");
+        fileLicIncorrect.setComponentVendor("component_vendor_4");
+        fileLicIncorrect.setSnippetMatch("50%");
+        fileLicIncorrect.setMatchedLines("5-10");
+
         conflict1 = new LPVSLicenseService.Conflict<>("GPL-3.0-only", "Apache-2.0");
         conflict2 = new LPVSLicenseService.Conflict<>("LGPL-2.0-or-later", "MIT");
 
@@ -161,7 +220,8 @@ public class LPVSReportBuilderTest {
     @Test
     public void testGenerateHtmlReportSingleScan_Empty() {
         String actual =
-                reportBuilder.generateHtmlReportSingleScan("some/path", null, null, null, null);
+                reportBuilder.generateHtmlReportSingleScan(
+                        "some/path", new ArrayList<>(), null, null, null);
         assertThat(actual).contains(sdf.format(new Date())); // check title and scanDate
         assertThat(actual).contains("No license problems detected");
         assertThat(actual).contains("No license conflicts detected");
@@ -207,6 +267,18 @@ public class LPVSReportBuilderTest {
     }
 
     @Test
+    public void testGenerateHtmlReportSingleScan_WithSimilarLicenses() {
+        List<LPVSFile> scanResults =
+                List.of(fileLicUnreviewed_1, fileLicUnreviewed_2, fileLicUnreviewed_3);
+        String actual =
+                reportBuilder.generateHtmlReportSingleScan(
+                        "some/path", scanResults, new ArrayList<>(), null, null);
+        assertThat(actual).contains(sdf.format(new Date()));
+        assertThat(actual).doesNotContain("No license problems detected");
+        assertThat(actual).contains("No license conflicts detected");
+    }
+
+    @Test
     void testSaveHTMLToFile() throws IOException {
         String htmlContent = "<html><body><p>Test HTML</p></body></html>";
         String filePath = "test-output.html";
@@ -220,5 +292,13 @@ public class LPVSReportBuilderTest {
 
         // Clean up: delete the created file
         Files.deleteIfExists(path);
+    }
+
+    @Test
+    void saveHTMLToFile_CatchBlock_N() {
+        String htmlContent = "<html><body></body></html>";
+        Path invalidPath = tempDir.resolve("invalid/path/with/special/characters");
+        saveHTMLToFile(htmlContent, invalidPath.toString());
+        assertFalse(Files.exists(invalidPath));
     }
 }

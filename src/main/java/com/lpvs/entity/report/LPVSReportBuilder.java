@@ -300,9 +300,6 @@ public class LPVSReportBuilder {
                             .append(type)
                             .append("</span>");
                     break;
-                default:
-                    throw new IllegalStateException(
-                            "Unexpected value for the license type: " + type);
             }
             htmlBuilder.append(" / ");
             htmlBuilder.append(getExplanationForLicenseType(type));
@@ -396,12 +393,11 @@ public class LPVSReportBuilder {
                 return "This license prohibits the use of the licensed code in certain contexts, such as commercial software development.";
             case restricted:
                 return "This license required compliance with specific obligations. It is crucial to carefully review and adhere to these obligations before using the licensed code.";
-            case unreviewed:
-                return "This license has not been reviewed thoroughly and may contain unknown risks or limitations. It is recommended to review these licenses carefully before using the licensed code.";
             case permitted:
                 return "This license permits free usage, modification, and distribution of the licensed code without any restrictions.";
+            case unreviewed:
             default:
-                throw new IllegalStateException("Unexpected value for the license type: " + type);
+                return "This license has not been reviewed thoroughly and may contain unknown risks or limitations. It is recommended to review these licenses carefully before using the licensed code.";
         }
     }
 
