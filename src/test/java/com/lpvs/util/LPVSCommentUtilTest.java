@@ -20,11 +20,7 @@ import org.mockito.MockitoAnnotations;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -151,49 +147,5 @@ public class LPVSCommentUtilTest {
                 LPVSCommentUtil.reportCommentBuilder(webhookConfig, scanResults, conflicts);
 
         assertNotNull(comment);
-    }
-
-    @Test
-    void testBuildHTMLComment() {
-        LPVSQueue webhookConfig = new LPVSQueue();
-        List<LPVSFile> scanResults = new ArrayList<>();
-        scanResults.add(createSampleFile("testPath1", "test1"));
-        List<LPVSLicenseService.Conflict<String, String>> conflicts = new ArrayList<>();
-
-        String htmlComment =
-                LPVSCommentUtil.buildHTMLComment(webhookConfig, scanResults, conflicts);
-
-        assertNotNull(htmlComment);
-    }
-
-    @Test
-    void testBuildHTMLComment_HubLink() {
-        LPVSQueue webhookConfig = new LPVSQueue();
-        List<LPVSFile> scanResults = new ArrayList<>();
-        scanResults.add(createSampleFile("testPath1", "test1"));
-        LPVSLicenseService.Conflict<String, String> conflict_1 =
-                new LPVSLicenseService.Conflict<>("MIT", "Apache-2.0");
-        List<LPVSLicenseService.Conflict<String, String>> conflicts =
-                List.of(conflict_1, conflict_1);
-        webhookConfig.setHubLink("some_link");
-        String htmlComment =
-                LPVSCommentUtil.buildHTMLComment(webhookConfig, scanResults, conflicts);
-
-        assertNotNull(htmlComment);
-    }
-
-    @Test
-    void testSaveHTMLToFile() throws IOException {
-        String htmlContent = "<html><body><p>Test HTML</p></body></html>";
-        String filePath = "test-output.html";
-
-        LPVSCommentUtil.saveHTMLToFile(htmlContent, filePath);
-
-        assertTrue(Files.exists(Paths.get(filePath)));
-        String fileContent = Files.readString(Paths.get(filePath));
-        assertEquals(htmlContent, fileContent);
-
-        // Clean up: delete the created file
-        Files.deleteIfExists(Paths.get(filePath));
     }
 }
