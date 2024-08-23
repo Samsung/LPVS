@@ -71,8 +71,6 @@ public class LPVSReportBuilder {
     private final String restricted = "RESTRICTED";
     private final String prohibited = "PROHIBITED";
     private final String unreviewed = "UNREVIEWED";
-    private final String boldStart = "\033[1m";
-    private final String boldEnd = "\033[0m";
 
     /**
      * A class representing a group of elements with a count.
