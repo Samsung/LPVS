@@ -29,7 +29,6 @@ import org.springframework.web.util.HtmlUtils;
 
 import com.lpvs.entity.LPVSFile;
 import com.lpvs.entity.LPVSQueue;
-import com.lpvs.util.LPVSCommentUtil;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -211,8 +210,7 @@ public class LPVSDetectService {
         } else if (generateReport) {
             // 2. Command line output
             String report =
-                    LPVSCommentUtil.reportCommentBuilder(
-                            webhookConfig, scanResult, detectedConflicts);
+                    reportBuilder.generateCommandLineComment(path, scanResult, detectedConflicts);
             if (!report.isEmpty()) {
                 log.info(report);
             }

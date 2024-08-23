@@ -255,8 +255,7 @@ public class LPVSGitHubService {
             commitComment = "**Detected licenses:**\n\n\n";
             for (LPVSFile file : scanResults) {
                 commitComment += "**File:** " + file.getFilePath() + "\n";
-                commitComment +=
-                        "**License(s):** " + file.convertLicensesToString(LPVSVcs.GITHUB) + "\n";
+                commitComment += "**License(s):** " + file.convertLicensesToString(LPVSVcs.GITHUB);
                 commitComment +=
                         "**Component:** "
                                 + file.getComponentName()

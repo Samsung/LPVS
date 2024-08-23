@@ -14,7 +14,6 @@ import com.lpvs.service.LPVSGitHubConnectionService;
 import com.lpvs.service.LPVSGitHubService;
 import com.lpvs.service.LPVSLicenseService;
 import com.lpvs.service.scan.scanner.LPVSScanossDetectService;
-import com.lpvs.util.LPVSCommentUtil;
 
 import com.lpvs.util.LPVSFileUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -39,10 +38,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
@@ -274,7 +270,7 @@ public class LPVSDetectServiceTest {
                                     null,
                                     null,
                                     scanServiceFactory_mock,
-                                    null));
+                                    reportBuilder_mock));
 
             // Mock the necessary GitHub objects for LPVSQueue
             when(mockGitHub.getRepository(any())).thenReturn(mockRepository);
@@ -298,6 +294,8 @@ public class LPVSDetectServiceTest {
                                     + "LPVS"
                                     + File.separator
                                     + "Projects");
+            when(reportBuilder_mock.generateCommandLineComment(anyString(), anyList(), anyList()))
+                    .thenReturn("Sample report");
 
             setPrivateField(detectService, "trigger", "github/owner/repo/branch/123");
             setPrivateField(detectService, "htmlReport", null);
@@ -376,17 +374,6 @@ public class LPVSDetectServiceTest {
             List<LPVSLicenseService.Conflict<String, String>> expected =
                     List.of(conflict_1, conflict_1);
 
-            lpvsDetectService =
-                    spy(
-                            new LPVSDetectService(
-                                    "scanoss",
-                                    false,
-                                    null,
-                                    null,
-                                    null,
-                                    scanServiceFactory_mock,
-                                    null));
-
             File sourceDir = Files.createTempDirectory("source").toFile();
             File sourceFile1 = new File(sourceDir, "file1.txt");
             sourceFile1.createNewFile();
@@ -417,6 +404,8 @@ public class LPVSDetectServiceTest {
                                     + "LPVS"
                                     + File.separator
                                     + "Projects");
+            when(reportBuilder_mock.generateCommandLineComment(anyString(), anyList(), anyList()))
+                    .thenReturn("Sample report");
 
             assertDoesNotThrow(() -> detectService.runSingleScan());
 
@@ -431,17 +420,6 @@ public class LPVSDetectServiceTest {
 
             List<LPVSLicenseService.Conflict<String, String>> expected =
                     List.of(conflict_1, conflict_1);
-
-            lpvsDetectService =
-                    spy(
-                            new LPVSDetectService(
-                                    "scanoss",
-                                    false,
-                                    null,
-                                    null,
-                                    null,
-                                    scanServiceFactory_mock,
-                                    null));
 
             File sourceDir = Files.createTempDirectory("source").toFile();
             File sourceFile1 = new File(sourceDir, "file1.txt");
@@ -497,17 +475,6 @@ public class LPVSDetectServiceTest {
             List<LPVSLicenseService.Conflict<String, String>> expected =
                     List.of(conflict_1, conflict_1);
 
-            lpvsDetectService =
-                    spy(
-                            new LPVSDetectService(
-                                    "scanoss",
-                                    false,
-                                    null,
-                                    null,
-                                    null,
-                                    scanServiceFactory_mock,
-                                    null));
-
             File sourceDir = Files.createTempDirectory("source").toFile();
             File sourceFile1 = new File(sourceDir, "file1.txt");
 
@@ -549,6 +516,9 @@ public class LPVSDetectServiceTest {
 
             setPrivateField(detectService, "trigger", "fake-trigger-value");
             setPrivateField(detectService, "ctx", mockApplicationContext);
+            setPrivateField(detectService, "reportBuilder", reportBuilder_mock);
+            when(reportBuilder_mock.generateCommandLineComment(anyString(), anyList(), anyList()))
+                    .thenReturn("Sample report");
 
             assertDoesNotThrow(() -> detectService.runSingleScan());
         }
@@ -737,30 +707,33 @@ public class LPVSDetectServiceTest {
 
         @Test
         void testCommentBuilder_ConflictFilePresent() {
-
+            LPVSReportBuilder reportBuilder = new LPVSReportBuilder(null);
             LPVSLicenseService.Conflict<String, String> conflict_1 =
                     new LPVSLicenseService.Conflict<>("MIT", "Apache-2.0");
 
             List<LPVSLicenseService.Conflict<String, String>> expected =
                     List.of(conflict_1, conflict_1);
 
-            LPVSQueue webhookConfig = new LPVSQueue();
             List<LPVSFile> scanResults = new ArrayList<>();
             String commentGitHub =
-                    LPVSCommentUtil.reportCommentBuilder(webhookConfig, scanResults, expected);
+                    reportBuilder.generateCommandLineComment(
+                            "/some/path/to/file", scanResults, expected);
 
             assertNotNull(commentGitHub);
         }
 
         @Test
         void testCommentBuilder_NoConflictNoLicense() {
+            LPVSReportBuilder reportBuilder = new LPVSReportBuilder(null);
             List<LPVSLicenseService.Conflict<String, String>> expected = new ArrayList<>();
-            LPVSQueue webhookConfig = new LPVSQueue();
             List<LPVSFile> scanResults = new ArrayList<>();
             String commentGitHub =
-                    LPVSCommentUtil.reportCommentBuilder(webhookConfig, scanResults, expected);
+                    reportBuilder.generateCommandLineComment(
+                            "/some/path/to/file", scanResults, expected);
 
-            assertEquals(commentGitHub, "");
+            assertNotNull(commentGitHub);
+            assertTrue(commentGitHub.contains("No license problems detected."));
+            assertTrue(commentGitHub.contains("No license conflicts detected."));
         }
 
         @Test

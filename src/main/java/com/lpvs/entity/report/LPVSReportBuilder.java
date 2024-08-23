@@ -71,6 +71,8 @@ public class LPVSReportBuilder {
     private final String restricted = "RESTRICTED";
     private final String prohibited = "PROHIBITED";
     private final String unreviewed = "UNREVIEWED";
+    private final String boldStart = "\033[1m";
+    private final String boldEnd = "\033[0m";
 
     /**
      * A class representing a group of elements with a count.
@@ -145,6 +147,88 @@ public class LPVSReportBuilder {
         }
 
         return templateEngine.process("report_single_scan", context);
+    }
+
+    /**
+     * Generates a formatted string for an LPVS command line comment.
+     *
+     * @param path The path to the source folder for scan or pull request URL
+     * @param scanResults the results of the license scan
+     * @param conflicts a list of license conflicts found during the scan
+     * @return A string containing scan results in command line friendly format.
+     */
+    public String generateCommandLineComment(
+            String path,
+            List<LPVSFile> scanResults,
+            List<LPVSLicenseService.Conflict<String, String>> conflicts) {
+        StringBuilder commentBuilder = new StringBuilder();
+        String date = sdf.format(new Date());
+        commentBuilder.append("\n");
+        commentBuilder.append(boldStart + "Scan date: " + boldEnd + date + "\n");
+        commentBuilder.append(boldStart + "Source code location: " + boldEnd + path + "\n");
+        commentBuilder.append(boldStart + "Used scanner: " + boldEnd + scannerType + "\n");
+        commentBuilder.append(boldStart + "Version of LPVS: " + boldEnd + lpvsVersion + "\n\n");
+
+        commentBuilder.append(boldStart + "Detected Licenses" + boldEnd + "\n\n");
+
+        Map<String, GroupInfo<?>> detectedLicenseInfo =
+                groupScanResultsForLicenseTable(scanResults);
+        long prohibitedLicenses = getDetectedLicenseCountByType(detectedLicenseInfo, prohibited);
+        long restrictedLicenses = getDetectedLicenseCountByType(detectedLicenseInfo, restricted);
+        long unreviewedLicenses = getDetectedLicenseCountByType(detectedLicenseInfo, unreviewed);
+        long licenseDetected = prohibitedLicenses + restrictedLicenses + unreviewedLicenses;
+
+        if (licenseDetected > 0) {
+            commentBuilder.append(
+                    "Potential license problem(s) detected: " + licenseDetected + "\n");
+            if (prohibitedLicenses > 0) {
+                commentBuilder.append(" - Prohibited license(s): " + prohibitedLicenses + "\n");
+            }
+            if (restrictedLicenses > 0) {
+                commentBuilder.append(" - Restricted license(s): " + restrictedLicenses + "\n");
+            }
+            if (unreviewedLicenses > 0) {
+                commentBuilder.append(" - Unreviewed license(s): " + unreviewedLicenses + "\n");
+            }
+        } else {
+            commentBuilder.append("No license problems detected.\n");
+        }
+
+        if (scanResults != null && !scanResults.isEmpty()) {
+            commentBuilder.append("\n");
+            for (LPVSFile file : scanResults) {
+                commentBuilder.append(boldStart + "File: " + boldEnd);
+                commentBuilder.append(file.getFilePath());
+                commentBuilder.append("\n");
+                commentBuilder.append(boldStart + "License(s): " + boldEnd);
+                commentBuilder.append(file.convertLicensesToString(null));
+                commentBuilder.append(boldStart + "Component: " + boldEnd);
+                commentBuilder.append(file.getComponentName());
+                commentBuilder.append(" (");
+                commentBuilder.append(file.getComponentFilePath());
+                commentBuilder.append(")\n");
+                commentBuilder.append(boldStart + "Matched Lines: " + boldEnd);
+                commentBuilder.append(file.getMatchedLines());
+                commentBuilder.append("\n");
+                commentBuilder.append(boldStart + "Snippet Match: " + boldEnd);
+                commentBuilder.append(file.getSnippetMatch());
+                commentBuilder.append("\n\n");
+            }
+        }
+
+        commentBuilder.append("\n");
+        commentBuilder.append(boldStart + "Detected License Conflicts" + boldEnd + "\n\n");
+        if (conflicts != null && !conflicts.isEmpty()) {
+            commentBuilder.append(
+                    "Potential license conflict(s) detected: " + conflicts.size() + "\n");
+            for (LPVSLicenseService.Conflict<String, String> conflict : conflicts) {
+                commentBuilder.append(" - " + conflict.l1 + " and " + conflict.l2 + "\n");
+            }
+        } else {
+            commentBuilder.append("No license conflicts detected.\n");
+        }
+
+        return commentBuilder.toString();
     }
 
     /**

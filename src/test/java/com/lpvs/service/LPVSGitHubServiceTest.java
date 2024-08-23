@@ -2172,7 +2172,9 @@ public class LPVSGitHubServiceTest {
                 "**\\[License Pre-Validation Service\\]** Potential license problem(s) detected \n\n"
                         + "**Detected licenses:**\n\n\n"
                         + "**File:** src/main/java/com/lpvs/service/LPVSGitHubService.java\n"
-                        + "**License(s):** <a target=\"_blank\" href=\"https://opensource.org/licenses/MIT\">MIT</a> (prohibited)\n"
+                        + "**License(s):** \n"
+                        + "- PROHIBITED:\n"
+                        + "  : <a target=\"_blank\" href=\"https://opensource.org/licenses/MIT\">MIT</a>\n"
                         + "**Component:** LPVS::Services (src/main/java/com/lpvs/service/LPVSGitHubService.java)\n"
                         + "**Matched Lines:** <a target=\"_blank\" href=\"https://github.com/Samsung/LPVS/blob/895337e89ae103ff2d18c9e0d93709f743226afa/src/main/java/com/lpvs/service/LPVSGitHubService.java#L1L6\">1-6</a>  \n"
                         + "**Snippet Match:** /**\n"
@@ -2339,7 +2341,7 @@ public class LPVSGitHubServiceTest {
                                         + LPVSPayloadUtil.getRepositoryName(webhookConfig));
             } catch (IOException e) {
                 log.error(
-                        "TestCommentResults__ProhibitedPresentConflictsPresent.testCommentResults__ProhibitedPresentConflictsPresent() error "
+                        "TestCommentResults__ProhibitedPresentConflictsPresent.testCommentResults__ProhibitedPresentConflictsPresentLicensePresent() error "
                                 + e);
                 fail();
             }
@@ -2357,7 +2359,7 @@ public class LPVSGitHubServiceTest {
                                 "[License Pre-Validation Service]");
             } catch (IOException e) {
                 log.error(
-                        "TestCommentResults__ProhibitedPresentConflictsPresent.testCommentResults__ProhibitedPresentConflictsPresent() error "
+                        "TestCommentResults__ProhibitedPresentConflictsPresent.testCommentResults__ProhibitedPresentConflictsPresentLicensePresent() error "
                                 + e);
                 fail();
             }
@@ -2400,7 +2402,7 @@ public class LPVSGitHubServiceTest {
                                         + LPVSPayloadUtil.getRepositoryName(webhookConfig));
             } catch (IOException e) {
                 log.error(
-                        "TestCommentResults__ProhibitedPresentConflictsPresent.testCommentResults__ProhibitedPresentConflictsPresent() error "
+                        "TestCommentResults__ProhibitedPresentConflictsPresent.testCommentResults__ProhibitedPresentConflictsPresentLicensePresentAlt() error "
                                 + e);
                 fail();
             }
@@ -2418,7 +2420,7 @@ public class LPVSGitHubServiceTest {
                                 "[License Pre-Validation Service]");
             } catch (IOException e) {
                 log.error(
-                        "TestCommentResults__ProhibitedPresentConflictsPresent.testCommentResults__ProhibitedPresentConflictsPresent() error "
+                        "TestCommentResults__ProhibitedPresentConflictsPresent.testCommentResults__ProhibitedPresentConflictsPresentLicensePresentAlt() error "
                                 + e);
                 fail();
             }
@@ -2504,7 +2506,9 @@ public class LPVSGitHubServiceTest {
                 "**\\[License Pre-Validation Service\\]** Potential license problem(s) detected \n\n"
                         + "**Detected licenses:**\n\n\n"
                         + "**File:** src/main/java/com/lpvs/service/LPVSGitHubService.java\n"
-                        + "**License(s):** <a target=\"_blank\" href=\"https://opensource.org/licenses/MIT\">MIT</a> ()\n"
+                        + "**License(s):** \n"
+                        + "- :\n"
+                        + "  : <a target=\"_blank\" href=\"https://opensource.org/licenses/MIT\">MIT</a>\n"
                         + "**Component:** LPVS::Services (src/main/java/com/lpvs/service/LPVSGitHubService.java)\n"
                         + "**Matched Lines:** <a target=\"_blank\" href=\"https://github.com/Samsung/LPVS/blob/895337e89ae103ff2d18c9e0d93709f743226afa/src/main/java/com/lpvs/service/LPVSGitHubService.java#L1L6\">1-6</a>  \n"
                         + "**Snippet Match:** /**\n"
@@ -2835,7 +2839,9 @@ public class LPVSGitHubServiceTest {
                 "**\\[License Pre-Validation Service\\]** Potential license problem(s) detected \n\n"
                         + "**Detected licenses:**\n\n\n"
                         + "**File:** src/main/java/com/lpvs/service/LPVSGitHubService.java\n"
-                        + "**License(s):** <a target=\"_blank\" href=\"https://opensource.org/licenses/MIT\">MIT</a> (unreviewed)\n"
+                        + "**License(s):** \n"
+                        + "- UNREVIEWED:\n"
+                        + "  : <a target=\"_blank\" href=\"https://opensource.org/licenses/MIT\">MIT</a>\n"
                         + "**Component:** LPVS::Services (src/main/java/com/lpvs/service/LPVSGitHubService.java)\n"
                         + "**Matched Lines:** <a target=\"_blank\" href=\"https://github.com/Samsung/LPVS/blob/895337e89ae103ff2d18c9e0d93709f743226afa/src/main/java/com/lpvs/service/LPVSGitHubService.java#L1L6\">1-6</a>  \n"
                         + "**Snippet Match:** /**\n"
@@ -3168,7 +3174,9 @@ public class LPVSGitHubServiceTest {
                 "**\\[License Pre-Validation Service\\]** Potential license problem(s) detected \n\n"
                         + "**Detected licenses:**\n\n\n"
                         + "**File:** src/main/java/com/lpvs/service/LPVSGitHubService.java\n"
-                        + "**License(s):** <a target=\"_blank\" href=\"https://opensource.org/licenses/MIT\">MIT</a> (restricted)\n"
+                        + "**License(s):** \n"
+                        + "- RESTRICTED:\n"
+                        + "  : <a target=\"_blank\" href=\"https://opensource.org/licenses/MIT\">MIT</a>\n"
                         + "**Component:** LPVS::Services (src/main/java/com/lpvs/service/LPVSGitHubService.java)\n"
                         + "**Matched Lines:** <a target=\"_blank\" href=\"https://github.com/Samsung/LPVS/blob/895337e89ae103ff2d18c9e0d93709f743226afa/src/main/java/com/lpvs/service/LPVSGitHubService.java#L1L6\">1-6</a>  \n"
                         + "**Snippet Match:** /**\n"
@@ -3486,7 +3494,9 @@ public class LPVSGitHubServiceTest {
                 "**\\[License Pre-Validation Service\\]**  No license issue detected \n\n"
                         + "**Detected licenses:**\n\n\n"
                         + "**File:** src/main/java/com/lpvs/service/LPVSGitHubService.java\n"
-                        + "**License(s):** <a target=\"_blank\" href=\"https://opensource.org/licenses/MIT\">MIT</a> (permitted)\n"
+                        + "**License(s):** \n"
+                        + "- PERMITTED:\n"
+                        + "  : <a target=\"_blank\" href=\"https://opensource.org/licenses/MIT\">MIT</a>\n"
                         + "**Component:** LPVS::Services (src/main/java/com/lpvs/service/LPVSGitHubService.java)\n"
                         + "**Matched Lines:** <a target=\"_blank\" href=\"https://github.com/Samsung/LPVS/blob/895337e89ae103ff2d18c9e0d93709f743226afa/src/main/java/com/lpvs/service/LPVSGitHubService.java#L1L6\">1-6</a>  \n"
                         + "**Snippet Match:** /**\n"
