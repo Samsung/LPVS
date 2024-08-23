@@ -6,11 +6,6 @@
  */
 package com.lpvs.util;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import com.lpvs.entity.LPVSDetectedLicense;
@@ -44,6 +39,9 @@ public class LPVSCommentUtil {
      */
     public static String getMatchedLinesAsLink(
             LPVSQueue webhookConfig, LPVSFile file, LPVSVcs vcs) {
+        if (webhookConfig == null) {
+            return file.getMatchedLines();
+        }
         String prefix =
                 LPVSPayloadUtil.getRepositoryUrl(webhookConfig)
                         + "/blob/"
@@ -137,91 +135,5 @@ public class LPVSCommentUtil {
         }
 
         return commitCommentBuilder.toString();
-    }
-
-    /**
-     * Generates a formatted string for an HTML report with scan results.
-     *
-     * @param webhookConfig The {@link LPVSQueue} configuration for the webhook.
-     * @param scanResults   List containing preformatted scan results.
-     * @param conflicts     List containing license conflict information.
-     * @return A string containing scan results in HTML format.
-     */
-    public static String buildHTMLComment(
-            LPVSQueue webhookConfig,
-            List<LPVSFile> scanResults,
-            List<LPVSLicenseService.Conflict<String, String>> conflicts) {
-        StringBuilder htmlBuilder = new StringBuilder();
-
-        htmlBuilder.append("<html><body>");
-
-        if (scanResults != null && scanResults.size() != 0) {
-            htmlBuilder.append("<h2>Detected licenses:</h2>");
-            for (LPVSFile file : scanResults) {
-                htmlBuilder
-                        .append("<p><strong>File:</strong> ")
-                        .append(file.getFilePath())
-                        .append("</p>");
-                htmlBuilder
-                        .append("<p><strong>License(s):</strong> ")
-                        .append(file.convertLicensesToString(LPVSVcs.GITHUB))
-                        .append("</p>");
-                htmlBuilder
-                        .append("<p><strong>Component:</strong> ")
-                        .append(file.getComponentName())
-                        .append(" (")
-                        .append(file.getComponentFilePath())
-                        .append(")</p>");
-                htmlBuilder
-                        .append("<p><strong>Matched Lines:</strong> ")
-                        .append(
-                                LPVSCommentUtil.getMatchedLinesAsLink(
-                                        webhookConfig, file, LPVSVcs.GITHUB))
-                        .append("</p>");
-                htmlBuilder
-                        .append("<p><strong>Snippet Match:</strong> ")
-                        .append(file.getSnippetMatch())
-                        .append("</p>");
-                htmlBuilder.append("<hr>");
-            }
-        }
-
-        if (conflicts != null && conflicts.size() > 0) {
-            htmlBuilder.append("<h2>Detected license conflicts:</h2>");
-            htmlBuilder.append("<ul>");
-            for (LPVSLicenseService.Conflict<String, String> conflict : conflicts) {
-                htmlBuilder
-                        .append("<li>")
-                        .append(conflict.l1)
-                        .append(" and ")
-                        .append(conflict.l2)
-                        .append("</li>");
-            }
-            htmlBuilder.append("</ul>");
-            if (webhookConfig.getHubLink() != null) {
-                htmlBuilder.append("<p>").append(webhookConfig.getHubLink()).append("</p>");
-            }
-        }
-
-        htmlBuilder.append("</body></html>");
-
-        return htmlBuilder.toString();
-    }
-
-    /**
-     * Saves HTML report to given location.
-     *
-     * @param htmlContent   The string, containing report in HTML format.
-     * @param filePath      The path to expected html report file.
-     */
-    public static void saveHTMLToFile(String htmlContent, String filePath) {
-        File file = new File(filePath);
-        try (BufferedWriter writer =
-                new BufferedWriter(new FileWriter(file, StandardCharsets.UTF_8))) {
-            writer.write(htmlContent);
-            log.info("LPVS report saved to: " + filePath);
-        } catch (IOException ex) {
-            log.error("error during saving HTML report: " + ex.getMessage());
-        }
     }
 }
