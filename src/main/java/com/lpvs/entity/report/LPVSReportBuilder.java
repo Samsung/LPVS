@@ -249,6 +249,247 @@ public class LPVSReportBuilder {
     }
 
     /**
+     * Generates a comment to the pull request for publication to the VCS.
+     *
+     * @param scanResults the results of the license scan
+     * @param conflicts a list of license conflicts found during the scan
+     * @param webhookConfig configuration related to the repository and webhook
+     * @param vcs the string representation of the version control system
+     * @return the code of the generated VCS comment
+     */
+    public String generatePullRequestComment(
+            List<LPVSFile> scanResults,
+            List<LPVSLicenseService.Conflict<String, String>> conflicts,
+            LPVSQueue webhookConfig,
+            LPVSVcs vcs) {
+
+        StringBuilder commitCommentBuilder = new StringBuilder();
+        commitCommentBuilder.append("**Detected Licenses:**\n\n");
+
+        Map<String, GroupInfo<?>> detectedLicenseInfo =
+                groupScanResultsForLicenseTable(scanResults);
+        long prohibitedLicenses = getDetectedLicenseCountByType(detectedLicenseInfo, prohibited);
+        long restrictedLicenses = getDetectedLicenseCountByType(detectedLicenseInfo, restricted);
+        long unreviewedLicenses = getDetectedLicenseCountByType(detectedLicenseInfo, unreviewed);
+        long licenseDetected = prohibitedLicenses + restrictedLicenses + unreviewedLicenses;
+
+        if (licenseDetected > 0) {
+            commitCommentBuilder.append("Potential license problem(s) detected:\n");
+            if (prohibitedLicenses > 0) {
+                commitCommentBuilder.append(
+                        " - Prohibited license(s): " + prohibitedLicenses + "\n");
+            }
+            if (restrictedLicenses > 0) {
+                commitCommentBuilder.append(
+                        " - Restricted license(s): " + restrictedLicenses + "\n");
+            }
+            if (unreviewedLicenses > 0) {
+                commitCommentBuilder.append(
+                        " - Unreviewed license(s): " + unreviewedLicenses + "\n");
+            }
+        } else {
+            commitCommentBuilder.append("No license problems detected.\n");
+        }
+        if (scanResults != null && !scanResults.isEmpty()) {
+            commitCommentBuilder
+                    .append("\n")
+                    .append(generateLicenseTable(detectedLicenseInfo, webhookConfig, vcs))
+                    .append("\n");
+        }
+        commitCommentBuilder.append("\n");
+        commitCommentBuilder.append("**Detected License Conflicts:**\n\n");
+        if (conflicts != null && !conflicts.isEmpty()) {
+            commitCommentBuilder.append(
+                    "Potential license conflict(s) detected: " + conflicts.size() + "\n");
+            commitCommentBuilder
+                    .append("\n")
+                    .append(generateLicenseConflictsTable(conflicts, vcs))
+                    .append("\n");
+        } else {
+            commitCommentBuilder.append("No license conflicts detected.\n");
+        }
+        commitCommentBuilder.append("\n");
+
+        return commitCommentBuilder.toString();
+    }
+
+    /**
+     * Generates an HTML code of the license table to pull request comments
+     *
+     * @param detectedLicenseInfo grouped scan results by license SPDX ID and access type, component name and vendor
+     * @param webhookConfig configuration related to the repository and webhook
+     * @param vcs the string representation of the version control system
+     * @return the HTML code of the generated license table
+     */
+    private String generateLicenseTable(
+            Map<String, GroupInfo<?>> detectedLicenseInfo, LPVSQueue webhookConfig, LPVSVcs vcs) {
+        if (vcs != null && vcs.equals(LPVSVcs.GITHUB)) {
+            return "<details>"
+                    + "\n"
+                    + "<summary>"
+                    + "Detailed description of detected licenses"
+                    + "\n"
+                    + "</summary>"
+                    + "\n"
+                    + generateLicenseTableHTML(detectedLicenseInfo, webhookConfig, vcs)
+                    + "\n"
+                    + "</details>";
+        }
+        return generateLicenseTableMD(detectedLicenseInfo, webhookConfig, vcs);
+    }
+
+    /**
+     * Generates an HTML code of the license conflicts table to pull request comments
+     *
+     * @param conflicts a list of license conflicts found during the scan
+     * @param vcs the string representation of the version control system
+     * @return the code of the generated license conflicts table
+     */
+    private String generateLicenseConflictsTable(
+            List<LPVSLicenseService.Conflict<String, String>> conflicts, LPVSVcs vcs) {
+        if (vcs != null && vcs.equals(LPVSVcs.GITHUB)) {
+            return "<details>"
+                    + "\n"
+                    + "<summary>"
+                    + "Detailed description of detected license conflicts"
+                    + "\n"
+                    + "</summary>"
+                    + "\n"
+                    + generateLicenseConflictsTableHTML(conflicts)
+                    + "\n"
+                    + "</details>";
+        }
+        return generateLicenseConflictsTableMD(conflicts);
+    }
+
+    /**
+     * Generates an MD code of the license table to pull request comments
+     *
+     * @param detectedLicenseInfo grouped scan results by license SPDX ID and access type, component name and vendor
+     * @param webhookConfig configuration related to the repository and webhook
+     * @param vcs the string representation of the version control system
+     * @return the MD code of the generated license table
+     */
+    private String generateLicenseTableMD(
+            Map<String, GroupInfo<?>> detectedLicenseInfo, LPVSQueue webhookConfig, LPVSVcs vcs) {
+        StringBuilder mdBuilder = new StringBuilder();
+        mdBuilder
+                .append("|License Type / Explanation")
+                .append("|License SPDX ID")
+                .append("|Vendor / Component")
+                .append("|Version")
+                .append("|Repository File Path")
+                .append("|Component File Path")
+                .append("|Matched Lines")
+                .append("|Match Value|")
+                .append("\n")
+                .append("|-|-|-|-|-|-|-|-|")
+                .append("\n");
+        // Prohibited licenses
+        addBlockOfTableForLicenseTypeMD(
+                mdBuilder, detectedLicenseInfo, prohibited, webhookConfig, vcs);
+        // Restricted licenses
+        addBlockOfTableForLicenseTypeMD(
+                mdBuilder, detectedLicenseInfo, restricted, webhookConfig, vcs);
+        // Unreviewed licenses
+        addBlockOfTableForLicenseTypeMD(
+                mdBuilder, detectedLicenseInfo, unreviewed, webhookConfig, vcs);
+        // Permitted licenses
+        addBlockOfTableForLicenseTypeMD(
+                mdBuilder, detectedLicenseInfo, permitted, webhookConfig, vcs);
+
+        return mdBuilder.toString();
+    }
+
+    /**
+     * Generates the license conflicts table MD content.
+     *
+     * @param conflicts a list of license conflicts
+     * @return the MD content for the license conflicts table
+     */
+    private String generateLicenseConflictsTableMD(
+            List<LPVSLicenseService.Conflict<String, String>> conflicts) {
+        StringBuilder mdBuilder = new StringBuilder();
+        mdBuilder
+                .append("|Conflict>")
+                .append("|Explanation|")
+                .append("\n")
+                .append("|-|-|")
+                .append("\n");
+
+        for (LPVSLicenseService.Conflict<String, String> conflict : conflicts) {
+            mdBuilder
+                    .append("|")
+                    .append(conflict.l1)
+                    .append(" and ")
+                    .append(conflict.l2)
+                    .append("|")
+                    .append(getExplanationForLicenseConflict(conflict.l1, conflict.l2))
+                    .append("|")
+                    .append("\n");
+        }
+        return mdBuilder.toString();
+    }
+
+    /**
+     * Generates an MD code of the license conflicts table to pull request comments
+     *
+     * @param mdBuilder the StringBuilder object to which the MD content will be appended
+     * @param detectedLicenseInfo grouped scan results by license SPDX ID and access type, component name and vendor
+     * @param webhookConfig configuration related to the repository and webhook
+     * @param vcs the string representation of the version control system
+     */
+    private void addBlockOfTableForLicenseTypeMD(
+            StringBuilder mdBuilder,
+            Map<String, GroupInfo<?>> detectedLicenseInfo,
+            String type,
+            LPVSQueue webhookConfig,
+            LPVSVcs vcs) {
+        long detectedLicenseCountByType = getDetectedLicenseCountByType(detectedLicenseInfo, type);
+        if (detectedLicenseCountByType > 0) {
+            // license spdx id
+            Map<String, GroupInfo<?>> licenseSpdxIds =
+                    (Map<String, GroupInfo<?>>) detectedLicenseInfo.get(type).elements;
+            for (String licenseSpdxId : licenseSpdxIds.keySet()) {
+                // vendor + component
+                Map<String, GroupInfo<?>> componentAndVendor =
+                        (Map<String, GroupInfo<?>>) licenseSpdxIds.get(licenseSpdxId).elements;
+                for (String componentInfo : componentAndVendor.keySet()) {
+                    // file info
+                    List<LPVSFile> fileInfos =
+                            (List<LPVSFile>) componentAndVendor.get(componentInfo).elements;
+                    for (LPVSFile fileInfo : fileInfos) {
+                        mdBuilder
+                                .append("|")
+                                .append(type)
+                                .append(" / ")
+                                .append(getExplanationForLicenseType(type))
+                                .append("|")
+                                .append(licenseSpdxId)
+                                .append("|")
+                                .append(componentInfo.split(":::")[0])
+                                .append(" (")
+                                .append(componentInfo.split(":::")[1])
+                                .append(")")
+                                .append("|")
+                                .append(fileInfo.getComponentVersion())
+                                .append("|")
+                                .append(fileInfo.getFilePath())
+                                .append("|")
+                                .append(fileInfo.getComponentFilePath())
+                                .append("|")
+                                .append(getMatchedLinesAsLink(webhookConfig, fileInfo, vcs))
+                                .append("|")
+                                .append(fileInfo.getSnippetMatch())
+                                .append("|")
+                                .append("\n");
+                    }
+                }
+            }
+        }
+    }
+
+    /**
      * Generates the license conflicts table HTML content.
      *
      * @param conflicts a list of license conflicts

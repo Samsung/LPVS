@@ -2086,7 +2086,7 @@ public class LPVSGitHubServiceTest {
                                 commit_sha,
                                 GHCommitState.SUCCESS,
                                 null,
-                                "No license issue detected",
+                                "No license issue(s) detected",
                                 "[License Pre-Validation Service]");
             } catch (IOException e) {
                 log.error(
@@ -2141,13 +2141,7 @@ public class LPVSGitHubServiceTest {
 
         final String absolute_file_path_1 = "src/main/java/com/lpvs/service/LPVSGitHubService.java";
         final String snippet_type_1 = "snippet";
-        final String snippet_match_1 =
-                "/**\n"
-                        + " * Copyright (c) 2022, Samsung Electronics Co., Ltd. All rights reserved.\n"
-                        + " *\n"
-                        + " * Use of this source code is governed by a MIT license that can be\n"
-                        + " * found in the LICENSE file.\n"
-                        + " */\n";
+        final String snippet_match_1 = "15%";
         final String matched_lines_1 = "1-6";
         final String component_1 = "LPVS::Services";
         final String component_file_path_1 =
@@ -2170,22 +2164,27 @@ public class LPVSGitHubServiceTest {
 
         final String expected_comment =
                 "**\\[License Pre-Validation Service\\]** Potential license problem(s) detected \n\n"
-                        + "**Detected licenses:**\n\n\n"
-                        + "**File:** src/main/java/com/lpvs/service/LPVSGitHubService.java\n"
-                        + "**License(s):** \n"
-                        + "- PROHIBITED:\n"
-                        + "  : <a target=\"_blank\" href=\"https://opensource.org/licenses/MIT\">MIT</a>\n"
-                        + "**Component:** LPVS::Services (src/main/java/com/lpvs/service/LPVSGitHubService.java)\n"
-                        + "**Matched Lines:** <a target=\"_blank\" href=\"https://github.com/Samsung/LPVS/blob/895337e89ae103ff2d18c9e0d93709f743226afa/src/main/java/com/lpvs/service/LPVSGitHubService.java#L1L6\">1-6</a>  \n"
-                        + "**Snippet Match:** /**\n"
-                        + " * Copyright (c) 2022, Samsung Electronics Co., Ltd. All rights reserved.\n"
-                        + " *\n"
-                        + " * Use of this source code is governed by a MIT license that can be\n"
-                        + " * found in the LICENSE file.\n"
-                        + " */\n\n\n\n\n"
-                        + "**Detected license conflicts:**\n\n\n"
-                        + "<ul><li>MIT and Apache-1.0</li></ul>"
-                        + "\n\n###### <p align='right'>Check the validation details at the [link]()</p>";
+                        + "**Detected Licenses:**\n"
+                        + "\n"
+                        + "Potential license problem(s) detected:\n"
+                        + " - Prohibited license(s): 1\n"
+                        + "\n"
+                        + "<details>\n"
+                        + "<summary>Detailed description of detected licenses\n"
+                        + "</summary>\n"
+                        + "<table><tr><th>License Type / Explanation</th><th>License SPDX ID</th><th>Vendor / Component</th><th>Version</th><th>Repository File Path</th><th>Component File Path</th><th>Matched Lines</th><th>Match Value</th><tr><tr><td rowspan=\"1\"><span style=\"color: red; font-weight: bold;\">PROHIBITED</span> / This license prohibits the use of the licensed code in certain contexts, such as commercial software development.</td><td rowspan=\"1\">MIT</td><td rowspan=\"1\"><a href=\"null\">null / LPVS::Services</a></td><td>null</td><td>src/main/java/com/lpvs/service/LPVSGitHubService.java</td><td><a href=\"src/main/java/com/lpvs/service/LPVSGitHubService.java\">src/main/java/com/lpvs/service/LPVSGitHubService.java</a></td><td><a target=\"_blank\" href=\"https://github.com/Samsung/LPVS/blob/895337e89ae103ff2d18c9e0d93709f743226afa/src/main/java/com/lpvs/service/LPVSGitHubService.java#L1L6\">1-6</a>  </td><td>15%</td></tr></table>\n"
+                        + "</details>\n"
+                        + "\n"
+                        + "**Detected License Conflicts:**\n"
+                        + "\n"
+                        + "Potential license conflict(s) detected: 1\n"
+                        + "\n"
+                        + "<details>\n"
+                        + "<summary>Detailed description of detected license conflicts\n"
+                        + "</summary>\n"
+                        + "<table><tr><th>Conflict</th><th>Explanation</th><tr><tr><td>MIT and Apache-1.0</td><td>These two licenses are incompatible due to their conflicting terms and conditions. It is recommended to resolve this conflict by choosing either MIT or Apache-1.0 for the affected components.</td></tr></table>\n"
+                        + "</details>\n"
+                        + "\n";
 
         @BeforeEach
         void setUp() {
@@ -2470,30 +2469,25 @@ public class LPVSGitHubServiceTest {
 
         // `lpvs_file_1`
         LPVSFile lpvs_file_1;
-        final String file_url_1 =
-                "https://github.com/Samsung/LPVS/tree/main/src/main/java/com/lpvs/service/LPVSGitHubService.java";
         final String file_path_1 = "src/main/java/com/lpvs/service/LPVSGitHubService.java";
         final String absolute_file_path_1 = "src/main/java/com/lpvs/service/LPVSGitHubService.java";
         final String snippet_type_1 = "snippet";
-        final String snippet_match_1 =
-                "/**\n"
-                        + " * Copyright (c) 2022, Samsung Electronics Co., Ltd. All rights reserved.\n"
-                        + " *\n"
-                        + " * Use of this source code is governed by a MIT license that can be\n"
-                        + " * found in the LICENSE file.\n"
-                        + " */\n";
+        final String snippet_match_1 = "30%";
         final String matched_lines_1 = "1-6";
         final String component_1 = "LPVS::Services";
         final String component_file_path_1 =
                 "src/main/java/com/lpvs/service/LPVSGitHubService.java";
         final String component_file_url_1 = "src/main/java/com/lpvs/service/LPVSGitHubService.java";
+        final String component_vendor_1 = "vendor1";
+        final String component_version_1 = "version_1";
+        final String component_url_1 = "http://component/url";
 
         // `lpvs_license_1`
         LPVSLicense lpvs_license_1;
         final String license_name_1 = "MIT License";
         final String spdx_id_1 = "MIT";
         final String spdx_id_2 = "GPL-2.0-only";
-        final String access_1 = "";
+        final String access_1 = "PERMITTED";
         final String alternativeName_1 = "";
         final String checklist_url_1 = "https://opensource.org/licenses/MIT";
 
@@ -2504,22 +2498,26 @@ public class LPVSGitHubServiceTest {
 
         final String expected_comment =
                 "**\\[License Pre-Validation Service\\]** Potential license problem(s) detected \n\n"
-                        + "**Detected licenses:**\n\n\n"
-                        + "**File:** src/main/java/com/lpvs/service/LPVSGitHubService.java\n"
-                        + "**License(s):** \n"
-                        + "- :\n"
-                        + "  : <a target=\"_blank\" href=\"https://opensource.org/licenses/MIT\">MIT</a>\n"
-                        + "**Component:** LPVS::Services (src/main/java/com/lpvs/service/LPVSGitHubService.java)\n"
-                        + "**Matched Lines:** <a target=\"_blank\" href=\"https://github.com/Samsung/LPVS/blob/895337e89ae103ff2d18c9e0d93709f743226afa/src/main/java/com/lpvs/service/LPVSGitHubService.java#L1L6\">1-6</a>  \n"
-                        + "**Snippet Match:** /**\n"
-                        + " * Copyright (c) 2022, Samsung Electronics Co., Ltd. All rights reserved.\n"
-                        + " *\n"
-                        + " * Use of this source code is governed by a MIT license that can be\n"
-                        + " * found in the LICENSE file.\n"
-                        + " */\n\n\n\n\n"
-                        + "**Detected license conflicts:**\n\n\n"
-                        + "<ul><li>MIT and Apache-1.0</li></ul>"
-                        + "\n\n###### <p align='right'>Check the validation details at the [link]()</p>";
+                        + "**Detected Licenses:**\n"
+                        + "\n"
+                        + "No license problems detected.\n"
+                        + "\n"
+                        + "<details>\n"
+                        + "<summary>Detailed description of detected licenses\n"
+                        + "</summary>\n"
+                        + "<table><tr><th>License Type / Explanation</th><th>License SPDX ID</th><th>Vendor / Component</th><th>Version</th><th>Repository File Path</th><th>Component File Path</th><th>Matched Lines</th><th>Match Value</th><tr><tr><td rowspan=\"1\"><span style=\"color: green; font-weight: bold;\">PERMITTED</span> / This license permits free usage, modification, and distribution of the licensed code without any restrictions.</td><td rowspan=\"1\">MIT</td><td rowspan=\"1\"><a href=\"http://component/url\">vendor1 / LPVS::Services</a></td><td>version_1</td><td>src/main/java/com/lpvs/service/LPVSGitHubService.java</td><td><a href=\"src/main/java/com/lpvs/service/LPVSGitHubService.java\">src/main/java/com/lpvs/service/LPVSGitHubService.java</a></td><td><a target=\"_blank\" href=\"https://github.com/Samsung/LPVS/blob/895337e89ae103ff2d18c9e0d93709f743226afa/src/main/java/com/lpvs/service/LPVSGitHubService.java#L1L6\">1-6</a>  </td><td>30%</td></tr></table>\n"
+                        + "</details>\n"
+                        + "\n"
+                        + "**Detected License Conflicts:**\n"
+                        + "\n"
+                        + "Potential license conflict(s) detected: 1\n"
+                        + "\n"
+                        + "<details>\n"
+                        + "<summary>Detailed description of detected license conflicts\n"
+                        + "</summary>\n"
+                        + "<table><tr><th>Conflict</th><th>Explanation</th><tr><tr><td>MIT and Apache-1.0</td><td>These two licenses are incompatible due to their conflicting terms and conditions. It is recommended to resolve this conflict by choosing either MIT or Apache-1.0 for the affected components.</td></tr></table>\n"
+                        + "</details>\n"
+                        + "\n";
 
         @BeforeEach
         void setUp() {
@@ -2588,9 +2586,9 @@ public class LPVSGitHubServiceTest {
                             component_file_url_1,
                             component_1,
                             null,
-                            null,
-                            null,
-                            null);
+                            component_url_1,
+                            component_version_1,
+                            component_vendor_1);
             conflict_1 = new LPVSLicenseService.Conflict<>(conflict_1_l1, conflict_1_l2);
 
             when(mocked_lpvsLicenseRepository.findFirstBySpdxIdOrderByLicenseIdDesc(anyString()))
@@ -2807,13 +2805,7 @@ public class LPVSGitHubServiceTest {
         final String file_path_1 = "src/main/java/com/lpvs/service/LPVSGitHubService.java";
         final String absolute_file_path_1 = "src/main/java/com/lpvs/service/LPVSGitHubService.java";
         final String snippet_type_1 = "snippet";
-        final String snippet_match_1 =
-                "/**\n"
-                        + " * Copyright (c) 2022, Samsung Electronics Co., Ltd. All rights reserved.\n"
-                        + " *\n"
-                        + " * Use of this source code is governed by a MIT license that can be\n"
-                        + " * found in the LICENSE file.\n"
-                        + " */\n";
+        final String snippet_match_1 = "50%";
         final String matched_lines_1 = "1-6";
         final String component_1 = "LPVS::Services";
         final String component_file_path_1 =
@@ -2837,22 +2829,27 @@ public class LPVSGitHubServiceTest {
 
         final String expected_comment =
                 "**\\[License Pre-Validation Service\\]** Potential license problem(s) detected \n\n"
-                        + "**Detected licenses:**\n\n\n"
-                        + "**File:** src/main/java/com/lpvs/service/LPVSGitHubService.java\n"
-                        + "**License(s):** \n"
-                        + "- UNREVIEWED:\n"
-                        + "  : <a target=\"_blank\" href=\"https://opensource.org/licenses/MIT\">MIT</a>\n"
-                        + "**Component:** LPVS::Services (src/main/java/com/lpvs/service/LPVSGitHubService.java)\n"
-                        + "**Matched Lines:** <a target=\"_blank\" href=\"https://github.com/Samsung/LPVS/blob/895337e89ae103ff2d18c9e0d93709f743226afa/src/main/java/com/lpvs/service/LPVSGitHubService.java#L1L6\">1-6</a>  \n"
-                        + "**Snippet Match:** /**\n"
-                        + " * Copyright (c) 2022, Samsung Electronics Co., Ltd. All rights reserved.\n"
-                        + " *\n"
-                        + " * Use of this source code is governed by a MIT license that can be\n"
-                        + " * found in the LICENSE file.\n"
-                        + " */\n\n\n\n\n"
-                        + "**Detected license conflicts:**\n\n\n"
-                        + "<ul><li>MIT and Apache-1.0</li></ul>"
-                        + "\n\n###### <p align='right'>Check the validation details at the [link]()</p>";
+                        + "**Detected Licenses:**\n"
+                        + "\n"
+                        + "Potential license problem(s) detected:\n"
+                        + " - Unreviewed license(s): 1\n"
+                        + "\n"
+                        + "<details>\n"
+                        + "<summary>Detailed description of detected licenses\n"
+                        + "</summary>\n"
+                        + "<table><tr><th>License Type / Explanation</th><th>License SPDX ID</th><th>Vendor / Component</th><th>Version</th><th>Repository File Path</th><th>Component File Path</th><th>Matched Lines</th><th>Match Value</th><tr><tr><td rowspan=\"1\"><span style=\"color: orange; font-weight: bold;\">UNREVIEWED</span> / This license has not been reviewed thoroughly and may contain unknown risks or limitations. It is recommended to review these licenses carefully before using the licensed code.</td><td rowspan=\"1\">MIT</td><td rowspan=\"1\"><a href=\"null\">null / LPVS::Services</a></td><td>null</td><td>src/main/java/com/lpvs/service/LPVSGitHubService.java</td><td><a href=\"src/main/java/com/lpvs/service/LPVSGitHubService.java\">src/main/java/com/lpvs/service/LPVSGitHubService.java</a></td><td><a target=\"_blank\" href=\"https://github.com/Samsung/LPVS/blob/895337e89ae103ff2d18c9e0d93709f743226afa/src/main/java/com/lpvs/service/LPVSGitHubService.java#L1L6\">1-6</a>  </td><td>50%</td></tr></table>\n"
+                        + "</details>\n"
+                        + "\n"
+                        + "**Detected License Conflicts:**\n"
+                        + "\n"
+                        + "Potential license conflict(s) detected: 1\n"
+                        + "\n"
+                        + "<details>\n"
+                        + "<summary>Detailed description of detected license conflicts\n"
+                        + "</summary>\n"
+                        + "<table><tr><th>Conflict</th><th>Explanation</th><tr><tr><td>MIT and Apache-1.0</td><td>These two licenses are incompatible due to their conflicting terms and conditions. It is recommended to resolve this conflict by choosing either MIT or Apache-1.0 for the affected components.</td></tr></table>\n"
+                        + "</details>\n"
+                        + "\n";
 
         @BeforeEach
         void setUp() {
@@ -3142,13 +3139,7 @@ public class LPVSGitHubServiceTest {
         final String file_path_1 = "src/main/java/com/lpvs/service/LPVSGitHubService.java";
         final String absolute_file_path_1 = "src/main/java/com/lpvs/service/LPVSGitHubService.java";
         final String snippet_type_1 = "snippet";
-        final String snippet_match_1 =
-                "/**\n"
-                        + " * Copyright (c) 2022, Samsung Electronics Co., Ltd. All rights reserved.\n"
-                        + " *\n"
-                        + " * Use of this source code is governed by a MIT license that can be\n"
-                        + " * found in the LICENSE file.\n"
-                        + " */\n";
+        final String snippet_match_1 = "40%";
         final String matched_lines_1 = "1-6";
         final String component_1 = "LPVS::Services";
         final String component_file_path_1 =
@@ -3172,22 +3163,27 @@ public class LPVSGitHubServiceTest {
 
         final String expected_comment =
                 "**\\[License Pre-Validation Service\\]** Potential license problem(s) detected \n\n"
-                        + "**Detected licenses:**\n\n\n"
-                        + "**File:** src/main/java/com/lpvs/service/LPVSGitHubService.java\n"
-                        + "**License(s):** \n"
-                        + "- RESTRICTED:\n"
-                        + "  : <a target=\"_blank\" href=\"https://opensource.org/licenses/MIT\">MIT</a>\n"
-                        + "**Component:** LPVS::Services (src/main/java/com/lpvs/service/LPVSGitHubService.java)\n"
-                        + "**Matched Lines:** <a target=\"_blank\" href=\"https://github.com/Samsung/LPVS/blob/895337e89ae103ff2d18c9e0d93709f743226afa/src/main/java/com/lpvs/service/LPVSGitHubService.java#L1L6\">1-6</a>  \n"
-                        + "**Snippet Match:** /**\n"
-                        + " * Copyright (c) 2022, Samsung Electronics Co., Ltd. All rights reserved.\n"
-                        + " *\n"
-                        + " * Use of this source code is governed by a MIT license that can be\n"
-                        + " * found in the LICENSE file.\n"
-                        + " */\n\n\n\n\n"
-                        + "**Detected license conflicts:**\n\n\n"
-                        + "<ul><li>MIT and Apache-1.0</li></ul>"
-                        + "\n\n###### <p align='right'>Check the validation details at the [link]()</p>";
+                        + "**Detected Licenses:**\n"
+                        + "\n"
+                        + "Potential license problem(s) detected:\n"
+                        + " - Restricted license(s): 1\n"
+                        + "\n"
+                        + "<details>\n"
+                        + "<summary>Detailed description of detected licenses\n"
+                        + "</summary>\n"
+                        + "<table><tr><th>License Type / Explanation</th><th>License SPDX ID</th><th>Vendor / Component</th><th>Version</th><th>Repository File Path</th><th>Component File Path</th><th>Matched Lines</th><th>Match Value</th><tr><tr><td rowspan=\"1\"><span style=\"color: orange; font-weight: bold;\">RESTRICTED</span> / This license required compliance with specific obligations. It is crucial to carefully review and adhere to these obligations before using the licensed code.</td><td rowspan=\"1\">MIT</td><td rowspan=\"1\"><a href=\"null\">null / LPVS::Services</a></td><td>null</td><td>src/main/java/com/lpvs/service/LPVSGitHubService.java</td><td><a href=\"src/main/java/com/lpvs/service/LPVSGitHubService.java\">src/main/java/com/lpvs/service/LPVSGitHubService.java</a></td><td><a target=\"_blank\" href=\"https://github.com/Samsung/LPVS/blob/895337e89ae103ff2d18c9e0d93709f743226afa/src/main/java/com/lpvs/service/LPVSGitHubService.java#L1L6\">1-6</a>  </td><td>40%</td></tr></table>\n"
+                        + "</details>\n"
+                        + "\n"
+                        + "**Detected License Conflicts:**\n"
+                        + "\n"
+                        + "Potential license conflict(s) detected: 1\n"
+                        + "\n"
+                        + "<details>\n"
+                        + "<summary>Detailed description of detected license conflicts\n"
+                        + "</summary>\n"
+                        + "<table><tr><th>Conflict</th><th>Explanation</th><tr><tr><td>MIT and Apache-1.0</td><td>These two licenses are incompatible due to their conflicting terms and conditions. It is recommended to resolve this conflict by choosing either MIT or Apache-1.0 for the affected components.</td></tr></table>\n"
+                        + "</details>\n"
+                        + "\n";
 
         @BeforeEach
         void setUp() {
@@ -3469,13 +3465,7 @@ public class LPVSGitHubServiceTest {
         final String file_path_1 = "src/main/java/com/lpvs/service/LPVSGitHubService.java";
         final String absolute_file_path_1 = "src/main/java/com/lpvs/service/LPVSGitHubService.java";
         final String snippet_type_1 = "snippet";
-        final String snippet_match_1 =
-                "/**\n"
-                        + " * Copyright (c) 2022, Samsung Electronics Co., Ltd. All rights reserved.\n"
-                        + " *\n"
-                        + " * Use of this source code is governed by a MIT license that can be\n"
-                        + " * found in the LICENSE file.\n"
-                        + " */\n";
+        final String snippet_match_1 = "10%";
         final String matched_lines_1 = "1-6";
         final String component_1 = "LPVS::Services";
         final String component_file_path_1 =
@@ -3492,19 +3482,20 @@ public class LPVSGitHubServiceTest {
 
         final String expected_comment =
                 "**\\[License Pre-Validation Service\\]**  No license issue detected \n\n"
-                        + "**Detected licenses:**\n\n\n"
-                        + "**File:** src/main/java/com/lpvs/service/LPVSGitHubService.java\n"
-                        + "**License(s):** \n"
-                        + "- PERMITTED:\n"
-                        + "  : <a target=\"_blank\" href=\"https://opensource.org/licenses/MIT\">MIT</a>\n"
-                        + "**Component:** LPVS::Services (src/main/java/com/lpvs/service/LPVSGitHubService.java)\n"
-                        + "**Matched Lines:** <a target=\"_blank\" href=\"https://github.com/Samsung/LPVS/blob/895337e89ae103ff2d18c9e0d93709f743226afa/src/main/java/com/lpvs/service/LPVSGitHubService.java#L1L6\">1-6</a>  \n"
-                        + "**Snippet Match:** /**\n"
-                        + " * Copyright (c) 2022, Samsung Electronics Co., Ltd. All rights reserved.\n"
-                        + " *\n"
-                        + " * Use of this source code is governed by a MIT license that can be\n"
-                        + " * found in the LICENSE file.\n"
-                        + " */\n\n\n\n\n";
+                        + "**Detected Licenses:**\n"
+                        + "\n"
+                        + "No license problems detected.\n"
+                        + "\n"
+                        + "<details>\n"
+                        + "<summary>Detailed description of detected licenses\n"
+                        + "</summary>\n"
+                        + "<table><tr><th>License Type / Explanation</th><th>License SPDX ID</th><th>Vendor / Component</th><th>Version</th><th>Repository File Path</th><th>Component File Path</th><th>Matched Lines</th><th>Match Value</th><tr><tr><td rowspan=\"1\"><span style=\"color: green; font-weight: bold;\">PERMITTED</span> / This license permits free usage, modification, and distribution of the licensed code without any restrictions.</td><td rowspan=\"1\">MIT</td><td rowspan=\"1\"><a href=\"null\">null / LPVS::Services</a></td><td>null</td><td>src/main/java/com/lpvs/service/LPVSGitHubService.java</td><td><a href=\"src/main/java/com/lpvs/service/LPVSGitHubService.java\">src/main/java/com/lpvs/service/LPVSGitHubService.java</a></td><td><a target=\"_blank\" href=\"https://github.com/Samsung/LPVS/blob/895337e89ae103ff2d18c9e0d93709f743226afa/src/main/java/com/lpvs/service/LPVSGitHubService.java#L1L6\">1-6</a>  </td><td>10%</td></tr></table>\n"
+                        + "</details>\n"
+                        + "\n"
+                        + "**Detected License Conflicts:**\n"
+                        + "\n"
+                        + "No license conflicts detected.\n"
+                        + "\n";
 
         @BeforeEach
         void setUp() {
@@ -3605,7 +3596,7 @@ public class LPVSGitHubServiceTest {
                                 commit_sha,
                                 GHCommitState.SUCCESS,
                                 null,
-                                "No license issue detected",
+                                "No license issue(s) detected",
                                 "[License Pre-Validation Service]");
             } catch (Exception e) {
                 log.error(
