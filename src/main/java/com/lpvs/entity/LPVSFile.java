@@ -16,7 +16,10 @@ import lombok.extern.slf4j.Slf4j;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Represents a file in the LPVS system.
@@ -105,45 +108,51 @@ public class LPVSFile {
      * @return A formatted string representing the licenses.
      */
     public String convertLicensesToString(LPVSVcs vcs) {
-        String licenseNames = "";
-        for (LPVSLicense license : this.licenses) {
-            String licSpdxId = license.getSpdxId();
-            // Check if the license SPDX ID has scanner-specific name
-            if (licSpdxId.startsWith("LicenseRef")) {
+        StringBuilder licenseNames = new StringBuilder();
+        Map<String, List<LPVSLicense>> groupedLicenses =
+                licenses.stream().collect(Collectors.groupingBy(LPVSLicense::getAccess));
+
+        for (Map.Entry<String, List<LPVSLicense>> entry : groupedLicenses.entrySet()) {
+            String accessType = entry.getKey();
+            List<LPVSLicense> licensesWithAccessType = entry.getValue();
+            licenseNames.append("\n").append("- ").append(accessType.toUpperCase()).append(":\n");
+
+            for (LPVSLicense license : licensesWithAccessType) {
+                String licSpdxId = license.getSpdxId();
+                // Check if the license SPDX ID has scanner-specific name.
                 // Change the name of the license that will be displayed in PR comment to
                 // scanner-independent
                 licSpdxId =
-                        "UNREVIEWED LICENSE : "
-                                + licSpdxId
-                                        .replaceAll("LicenseRef-scancode-", "")
-                                        .replaceAll("LicenseRef-scanoss-", "");
-            }
-            if (vcs != null && vcs.equals(LPVSVcs.GITHUB)) {
-                licenseNames +=
-                        (license.getChecklistUrl() != null
-                                        ? "<a target=\"_blank\" href=\""
-                                                + license.getChecklistUrl()
-                                                + "\">"
-                                        : "")
-                                + licSpdxId
-                                + (license.getChecklistUrl() != null ? "</a>" : "")
-                                + " ("
-                                + license.getAccess().toLowerCase()
-                                + "), ";
-            } else {
-                licenseNames +=
                         licSpdxId
-                                + (license.getChecklistUrl() != null
-                                        ? " (" + license.getChecklistUrl() + ")"
-                                        : "")
-                                + " - "
-                                + license.getAccess().toLowerCase()
-                                + ", ";
+                                .replaceAll("LicenseRef-scancode-", "")
+                                .replaceAll("LicenseRef-scanoss-", "");
+
+                if (vcs != null && vcs.equals(LPVSVcs.GITHUB)) {
+                    licenseNames
+                            .append("  : ")
+                            .append(
+                                    license.getChecklistUrl() != null
+                                            ? "<a target=\"_blank\" href=\""
+                                                    + license.getChecklistUrl()
+                                                    + "\">"
+                                            : "")
+                            .append(licSpdxId)
+                            .append(license.getChecklistUrl() != null ? "</a>" : "")
+                            .append("\n");
+                } else {
+                    licenseNames
+                            .append("  : ")
+                            .append(licSpdxId)
+                            .append(
+                                    license.getChecklistUrl() != null
+                                            ? " (" + license.getChecklistUrl() + ")"
+                                            : "")
+                            .append("\n");
+                }
             }
         }
-        if (licenseNames.endsWith(", "))
-            licenseNames = licenseNames.substring(0, licenseNames.length() - 2);
-        return licenseNames;
+
+        return licenseNames.toString();
     }
 
     /**
@@ -183,7 +192,7 @@ public class LPVSFile {
                 while (byteCounter < endByte) {
                     String line = sourceFile.readLine();
                     if (line == null) {
-                        if (startLine > 0 && endLine == 0) endLine = currentLine;
+                        if (startLine > 0) endLine = currentLine;
                         break;
                     }
                     byteCounter += line.getBytes(StandardCharsets.UTF_8).length + 1;
@@ -198,7 +207,7 @@ public class LPVSFile {
                 }
 
                 // Construct the string representing start and end line numbers in the range
-                if (result.length() > 0) {
+                if (!result.isEmpty()) {
                     result.append(",");
                 }
                 result.append(startLine);

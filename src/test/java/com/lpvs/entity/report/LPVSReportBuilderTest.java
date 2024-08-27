@@ -301,4 +301,71 @@ public class LPVSReportBuilderTest {
         saveHTMLToFile(htmlContent, invalidPath.toString());
         assertFalse(Files.exists(invalidPath));
     }
+
+    private LPVSFile createSampleFile(String filePath, String matchedLines, String baseAccess) {
+        final Long baseLicenseId = 1234567890L;
+        final String baseLicenseName = "licenseName";
+        final String baseSpdxId = "spdxId";
+        final String baseAlternativeName = "licenseNameAlternative";
+
+        LPVSLicense lpvsLicense =
+                new LPVSLicense(
+                        baseLicenseId,
+                        baseLicenseName,
+                        baseSpdxId,
+                        baseAccess,
+                        baseAlternativeName,
+                        null);
+
+        Set<LPVSLicense> licenses = new HashSet<>(List.of(lpvsLicense));
+        LPVSFile file = new LPVSFile();
+        file.setFilePath(filePath);
+        file.setMatchedLines(matchedLines);
+        file.setLicenses(licenses);
+        return file;
+    }
+
+    @Test
+    void testReportCommentBuilder_LicenseDetectedNoConflicts() {
+        LPVSReportBuilder reportBuilder = new LPVSReportBuilder(null);
+        List<LPVSFile> scanResults = new ArrayList<>();
+        List<LPVSLicenseService.Conflict<String, String>> conflicts = new ArrayList<>();
+
+        scanResults.add(createSampleFile("testPath1", "test1", "UNREVIEWED"));
+        String comment =
+                reportBuilder.generateCommandLineComment("testPath1", scanResults, conflicts);
+        assertNotNull(comment);
+
+        scanResults.add(createSampleFile("testPath1", "test1", "PROHIBITED"));
+        comment = reportBuilder.generateCommandLineComment("testPath1", scanResults, conflicts);
+        assertNotNull(comment);
+
+        scanResults.add(createSampleFile("testPath1", "test1", "RESTRICTED"));
+        comment = reportBuilder.generateCommandLineComment("testPath1", scanResults, conflicts);
+        assertNotNull(comment);
+
+        scanResults.add(createSampleFile("testPath1", "test1", "PERMITTED"));
+        comment = reportBuilder.generateCommandLineComment("testPath1", scanResults, conflicts);
+        assertNotNull(comment);
+    }
+
+    @Test
+    void testReportCommentBuilder_LicenseDetectedConflictsDetected() {
+        LPVSReportBuilder reportBuilder = new LPVSReportBuilder(null);
+        List<LPVSFile> scanResults = new ArrayList<>();
+        scanResults.add(createSampleFile("testPath1", "test1", "PROHIBITED"));
+        LPVSLicenseService.Conflict<String, String> conflict_1 =
+                new LPVSLicenseService.Conflict<>("MIT", "Apache-2.0");
+        List<LPVSLicenseService.Conflict<String, String>> conflicts =
+                List.of(conflict_1, conflict_1);
+        String comment = reportBuilder.generateCommandLineComment("testPath1", null, null);
+        assertNotNull(comment);
+    }
+
+    @Test
+    void testReportCommentBuilder_NoLicenseDetectedNoConflicts() {
+        LPVSReportBuilder reportBuilder = new LPVSReportBuilder(null);
+        String comment = reportBuilder.generateCommandLineComment("testPath1", null, null);
+        assertNotNull(comment);
+    }
 }

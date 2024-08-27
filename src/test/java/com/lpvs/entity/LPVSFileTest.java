@@ -156,7 +156,7 @@ public class LPVSFileTest {
         lpvsFile.setLicenses(licenses);
         assertEquals(
                 lpvsFile.convertLicensesToString(LPVSVcs.GITHUB),
-                "<a target=\"_blank\" href=\"checklistUrl\">spdxId</a> (access)");
+                "\n- ACCESS:\n  : <a target=\"_blank\" href=\"checklistUrl\">spdxId</a>\n");
     }
 
     @Test
@@ -189,7 +189,7 @@ public class LPVSFileTest {
         lpvsFile.setLicenses(licenses);
         assertEquals(
                 lpvsFile.convertLicensesToString(LPVSVcs.GITHUB),
-                "spdxId (access), spdxId (access)");
+                "\n- ACCESS:\n  : spdxId\n  : spdxId\n");
     }
 
     @Test
@@ -211,9 +211,7 @@ public class LPVSFileTest {
 
         Set<LPVSLicense> licenses = new HashSet<>(Arrays.asList(lpvsLicense3));
         lpvsFile.setLicenses(licenses);
-        assertEquals(
-                lpvsFile.convertLicensesToString(LPVSVcs.GITHUB),
-                "UNREVIEWED LICENSE : spdxId (access)");
+        assertEquals(lpvsFile.convertLicensesToString(LPVSVcs.GITHUB), "\n- ACCESS:\n  : spdxId\n");
 
         licenses = new HashSet<>();
         lpvsFile.setLicenses(licenses);
@@ -251,7 +249,7 @@ public class LPVSFileTest {
         lpvsFile.setLicenses(licenses);
         assertEquals(
                 lpvsFile.convertLicensesToString(LPVSVcs.GITHUB),
-                "<a target=\"_blank\" href=\"checklistUrl\">spdxId</a> (access), <a target=\"_blank\" href=\"checklistUrl\">spdxId</a> (access)");
+                "\n- ACCESS:\n  : <a target=\"_blank\" href=\"checklistUrl\">spdxId</a>\n  : <a target=\"_blank\" href=\"checklistUrl\">spdxId</a>\n");
     }
 
     @Test

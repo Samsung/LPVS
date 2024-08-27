@@ -6,13 +6,9 @@
  */
 package com.lpvs.util;
 
-import java.util.List;
-
-import com.lpvs.entity.LPVSDetectedLicense;
 import com.lpvs.entity.LPVSFile;
 import com.lpvs.entity.LPVSQueue;
 import com.lpvs.entity.enums.LPVSVcs;
-import com.lpvs.service.LPVSLicenseService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -77,63 +73,5 @@ public class LPVSCommentUtil {
         }
         log.debug("MatchedLines: " + matchedLines);
         return matchedLines;
-    }
-
-    /**
-     * Generates a formatted string for an LPVS GitHub comment.
-     *
-     * @param webhookConfig The {@link LPVSQueue} configuration for the webhook.
-     * @param scanResults   List containing preformatted scan results.
-     * @param conflicts     List of conflicts, containing license conflict information.
-     * @return A string containing scan results in GitHub-friendly format.
-     */
-    public static String reportCommentBuilder(
-            LPVSQueue webhookConfig,
-            List<LPVSFile> scanResults,
-            List<LPVSLicenseService.Conflict<String, String>> conflicts) {
-
-        StringBuilder commitCommentBuilder = new StringBuilder();
-
-        if (scanResults != null && scanResults.size() != 0) {
-            commitCommentBuilder.append("**Detected licenses:**\n\n\n");
-            for (LPVSFile file : scanResults) {
-                commitCommentBuilder.append("**File:** ");
-                commitCommentBuilder.append(file.getFilePath());
-                commitCommentBuilder.append("\n");
-                commitCommentBuilder.append("**License(s):** ");
-                commitCommentBuilder.append(file.convertLicensesToString(LPVSVcs.GITHUB));
-                commitCommentBuilder.append("\n");
-                commitCommentBuilder.append("**Component:** ");
-                commitCommentBuilder.append(file.getComponentName());
-                commitCommentBuilder.append(" (");
-                commitCommentBuilder.append(file.getComponentFilePath());
-                commitCommentBuilder.append(")\n");
-                commitCommentBuilder.append("**Matched Lines:** ");
-                commitCommentBuilder.append(
-                        LPVSCommentUtil.getMatchedLinesAsLink(webhookConfig, file, LPVSVcs.GITHUB));
-                commitCommentBuilder.append("\n");
-                commitCommentBuilder.append("**Snippet Match:** ");
-                commitCommentBuilder.append(file.getSnippetMatch());
-                commitCommentBuilder.append("\n\n\n\n");
-            }
-        }
-
-        if (conflicts != null && conflicts.size() > 0) {
-            commitCommentBuilder.append("**Detected license conflicts:**\n\n\n");
-            commitCommentBuilder.append("<ul>");
-            for (LPVSLicenseService.Conflict<String, String> conflict : conflicts) {
-                commitCommentBuilder.append("<li>" + conflict.l1 + " and " + conflict.l2 + "</li>");
-                LPVSDetectedLicense detectedIssue = new LPVSDetectedLicense();
-                detectedIssue.setIssue(true);
-            }
-            commitCommentBuilder.append("</ul>");
-            if (null != webhookConfig.getHubLink()) {
-                commitCommentBuilder.append("(");
-                commitCommentBuilder.append(webhookConfig.getHubLink());
-                commitCommentBuilder.append(")");
-            }
-        }
-
-        return commitCommentBuilder.toString();
     }
 }
