@@ -179,8 +179,7 @@ public class LPVSReportBuilder {
         long licenseDetected = prohibitedLicenses + restrictedLicenses + unreviewedLicenses;
 
         if (licenseDetected > 0) {
-            commentBuilder.append(
-                    "Potential license problem(s) detected: " + licenseDetected + "\n");
+            commentBuilder.append("Potential license issues detected: " + licenseDetected + "\n");
             if (prohibitedLicenses > 0) {
                 commentBuilder.append(" - Prohibited license(s): " + prohibitedLicenses + "\n");
             }
@@ -274,7 +273,7 @@ public class LPVSReportBuilder {
         long licenseDetected = prohibitedLicenses + restrictedLicenses + unreviewedLicenses;
 
         if (licenseDetected > 0) {
-            commitCommentBuilder.append("Potential license problem(s) detected:\n");
+            commitCommentBuilder.append("Potential license issues detected:\n");
             if (prohibitedLicenses > 0) {
                 commitCommentBuilder.append(
                         " - Prohibited license(s): " + prohibitedLicenses + "\n");

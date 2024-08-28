@@ -90,7 +90,7 @@
 <hr>
 <h3 class="ml-30">Detected Licenses</h3>
 <div class="items" th:if="${licenseDetected} > 0">
-    <b>Potential license problem(s) detected:</b> <span th:text=${licenseDetected}>licenseDetected</span>
+    <b>Potential license issues detected:</b> <span th:text=${licenseDetected}>licenseDetected</span>
     <ul>
         <li th:if="${prohibitedLicenses} > 0">Prohibited license(s): <span th:text=${prohibitedLicenses}>prohibitedLicenses</span></li>
         <li th:if="${restrictedLicenses} > 0">Restricted license(s): <span th:text=${restrictedLicenses}>restrictedLicenses</span></li>

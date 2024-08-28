@@ -1218,7 +1218,7 @@ public class LPVSGitHubServiceTest {
                                 GHCommitState.PENDING,
                                 null,
                                 "Scanning opensource licenses",
-                                "[License Pre-Validation Service]"))
+                                "[LPVS]"))
                         .thenReturn(null);
             } catch (IOException e) {
                 log.error("mocked_repo.getPullRequests error " + e);
@@ -1264,7 +1264,7 @@ public class LPVSGitHubServiceTest {
                                     GHCommitState.PENDING,
                                     null,
                                     "Scanning opensource licenses",
-                                    "[License Pre-Validation Service]");
+                                    "[LPVS]");
                 } catch (IOException e) {
                     log.error(
                             "TestSetPendingCheck__ApiUrlAbsentNormalExecution.testSetPendingCheck__ApiUrlAbsentNormalExecution() error "
@@ -1326,7 +1326,7 @@ public class LPVSGitHubServiceTest {
                                 GHCommitState.PENDING,
                                 null,
                                 "Scanning opensource licenses",
-                                "[License Pre-Validation Service]"))
+                                "[LPVS]"))
                         .thenReturn(null);
             } catch (IOException e) {
                 log.error("mocked_repo.getPullRequests error " + e);
@@ -1379,7 +1379,7 @@ public class LPVSGitHubServiceTest {
                                     GHCommitState.PENDING,
                                     null,
                                     "Scanning opensource licenses",
-                                    "[License Pre-Validation Service]");
+                                    "[LPVS]");
                 } catch (IOException e) {
                     log.error(
                             "TestSetPendingCheck__ApiUrlPresentNormalExecution.testSetPendingCheck__ApiUrlPresentNormalExecution() error "
@@ -1542,7 +1542,7 @@ public class LPVSGitHubServiceTest {
                                 GHCommitState.ERROR,
                                 null,
                                 "Scanning process failed",
-                                "[License Pre-Validation Service]"))
+                                "[LPVS]"))
                         .thenReturn(null);
             } catch (IOException e) {
                 log.error("mocked_repo.getPullRequests error " + e);
@@ -1588,7 +1588,7 @@ public class LPVSGitHubServiceTest {
                                     GHCommitState.ERROR,
                                     null,
                                     "Scanning process failed",
-                                    "[License Pre-Validation Service]");
+                                    "[LPVS]");
                 } catch (IOException e) {
                     log.error(
                             "TestSetErrorCheck__ApiUrlAbsentNormalExecution.testSetErrorCheck__ApiUrlAbsentNormalExecution() error "
@@ -1650,7 +1650,7 @@ public class LPVSGitHubServiceTest {
                                 GHCommitState.ERROR,
                                 null,
                                 "Scanning process failed",
-                                "[License Pre-Validation Service]"))
+                                "[LPVS]"))
                         .thenReturn(null);
             } catch (IOException e) {
                 log.error("mocked_repo.getPullRequests error " + e);
@@ -1703,7 +1703,7 @@ public class LPVSGitHubServiceTest {
                                     GHCommitState.ERROR,
                                     null,
                                     "Scanning process failed",
-                                    "[License Pre-Validation Service]");
+                                    "[LPVS]");
                 } catch (IOException e) {
                     log.error(
                             "TestSetErrorCheck__ApiUrlPresentNormalExecution.testSetErrorCheck__ApiUrlPresentNormalExecution() error "
@@ -2086,8 +2086,8 @@ public class LPVSGitHubServiceTest {
                                 commit_sha,
                                 GHCommitState.SUCCESS,
                                 null,
-                                "No license issue(s) detected",
-                                "[License Pre-Validation Service]");
+                                "No license issues detected",
+                                "[LPVS]");
             } catch (IOException e) {
                 log.error(
                         "TestCommentResults__ScanResultsEmpty.testCommentResults__ScanResultsEmpty() error "
@@ -2163,10 +2163,10 @@ public class LPVSGitHubServiceTest {
         final String conflict_1_l2 = "Apache-1.0";
 
         final String expected_comment =
-                "**\\[License Pre-Validation Service\\]** Potential license problem(s) detected \n\n"
+                "**\\[LPVS\\]** Potential license issues detected \n\n"
                         + "**Detected Licenses:**\n"
                         + "\n"
-                        + "Potential license problem(s) detected:\n"
+                        + "Potential license issues detected:\n"
                         + " - Prohibited license(s): 1\n"
                         + "\n"
                         + "<details>\n"
@@ -2295,8 +2295,8 @@ public class LPVSGitHubServiceTest {
                                 commit_sha,
                                 GHCommitState.FAILURE,
                                 null,
-                                "Potential license problem(s) detected",
-                                "[License Pre-Validation Service]");
+                                "Potential license issues detected",
+                                "[LPVS]");
             } catch (IOException e) {
                 log.error(
                         "TestCommentResults__ProhibitedPresentConflictsPresent.testCommentResults__ProhibitedPresentConflictsPresent() error "
@@ -2354,8 +2354,8 @@ public class LPVSGitHubServiceTest {
                                 commit_sha,
                                 GHCommitState.FAILURE,
                                 null,
-                                "Potential license problem(s) detected",
-                                "[License Pre-Validation Service]");
+                                "Potential license issues detected",
+                                "[LPVS]");
             } catch (IOException e) {
                 log.error(
                         "TestCommentResults__ProhibitedPresentConflictsPresent.testCommentResults__ProhibitedPresentConflictsPresentLicensePresent() error "
@@ -2415,8 +2415,8 @@ public class LPVSGitHubServiceTest {
                                 commit_sha,
                                 GHCommitState.FAILURE,
                                 null,
-                                "Potential license problem(s) detected",
-                                "[License Pre-Validation Service]");
+                                "Potential license issues detected",
+                                "[LPVS]");
             } catch (IOException e) {
                 log.error(
                         "TestCommentResults__ProhibitedPresentConflictsPresent.testCommentResults__ProhibitedPresentConflictsPresentLicensePresentAlt() error "
@@ -2497,7 +2497,7 @@ public class LPVSGitHubServiceTest {
         final String conflict_1_l2 = "Apache-1.0";
 
         final String expected_comment =
-                "**\\[License Pre-Validation Service\\]** Potential license problem(s) detected \n\n"
+                "**\\[LPVS\\]** Potential license issues detected \n\n"
                         + "**Detected Licenses:**\n"
                         + "\n"
                         + "No license problems detected.\n"
@@ -2626,8 +2626,8 @@ public class LPVSGitHubServiceTest {
                                 commit_sha,
                                 GHCommitState.FAILURE,
                                 null,
-                                "Potential license problem(s) detected",
-                                "[License Pre-Validation Service]");
+                                "Potential license issues detected",
+                                "[LPVS]");
             } catch (IOException e) {
                 log.error(
                         "TestCommentResults__EmptyPresentConflictsPresent.testCommentResults__EmptyPresentConflictsPresent() error "
@@ -2685,8 +2685,8 @@ public class LPVSGitHubServiceTest {
                                 commit_sha,
                                 GHCommitState.FAILURE,
                                 null,
-                                "Potential license problem(s) detected",
-                                "[License Pre-Validation Service]");
+                                "Potential license issues detected",
+                                "[LPVS]");
             } catch (IOException e) {
                 log.error(
                         "TestCommentResults__EmptyPresentConflictsPresent.testCommentResults__EmptyPresentConflictsPresentLicensePresent() error "
@@ -2746,8 +2746,8 @@ public class LPVSGitHubServiceTest {
                                 commit_sha,
                                 GHCommitState.FAILURE,
                                 null,
-                                "Potential license problem(s) detected",
-                                "[License Pre-Validation Service]");
+                                "Potential license issues detected",
+                                "[LPVS]");
             } catch (IOException e) {
                 log.error(
                         "TestCommentResults__EmptyPresentConflictsPresent.testCommentResults__EmptyPresentConflictsPresentLicensePresentAlt() error "
@@ -2828,10 +2828,10 @@ public class LPVSGitHubServiceTest {
         final String conflict_1_l2 = "Apache-1.0";
 
         final String expected_comment =
-                "**\\[License Pre-Validation Service\\]** Potential license problem(s) detected \n\n"
+                "**\\[LPVS\\]** Potential license issues detected \n\n"
                         + "**Detected Licenses:**\n"
                         + "\n"
-                        + "Potential license problem(s) detected:\n"
+                        + "Potential license issues detected:\n"
                         + " - Unreviewed license(s): 1\n"
                         + "\n"
                         + "<details>\n"
@@ -2960,8 +2960,8 @@ public class LPVSGitHubServiceTest {
                                 commit_sha,
                                 GHCommitState.FAILURE,
                                 null,
-                                "Potential license problem(s) detected",
-                                "[License Pre-Validation Service]");
+                                "Potential license issues detected",
+                                "[LPVS]");
             } catch (Exception e) {
                 log.error(
                         "TestCommentResults__UnreviewedPresentConflictsPresent.testCommentResults__RestrictedPresentConflictsPresent() error "
@@ -3019,8 +3019,8 @@ public class LPVSGitHubServiceTest {
                                 commit_sha,
                                 GHCommitState.FAILURE,
                                 null,
-                                "Potential license problem(s) detected",
-                                "[License Pre-Validation Service]");
+                                "Potential license issues detected",
+                                "[LPVS]");
             } catch (Exception e) {
                 log.error(
                         "TestCommentResults__UnreviewedPresentConflictsPresent.testCommentResults__RestrictedPresentConflictsPresentLicensePresent() error "
@@ -3080,8 +3080,8 @@ public class LPVSGitHubServiceTest {
                                 commit_sha,
                                 GHCommitState.FAILURE,
                                 null,
-                                "Potential license problem(s) detected",
-                                "[License Pre-Validation Service]");
+                                "Potential license issues detected",
+                                "[LPVS]");
             } catch (Exception e) {
                 log.error(
                         "TestCommentResults__UnreviewedPresentConflictsPresent.testCommentResults__RestrictedPresentConflictsPresentLicensePresentAlt() error "
@@ -3162,10 +3162,10 @@ public class LPVSGitHubServiceTest {
         final String conflict_1_l2 = "Apache-1.0";
 
         final String expected_comment =
-                "**\\[License Pre-Validation Service\\]** Potential license problem(s) detected \n\n"
+                "**\\[LPVS\\]** Potential license issues detected \n\n"
                         + "**Detected Licenses:**\n"
                         + "\n"
-                        + "Potential license problem(s) detected:\n"
+                        + "Potential license issues detected:\n"
                         + " - Restricted license(s): 1\n"
                         + "\n"
                         + "<details>\n"
@@ -3294,8 +3294,8 @@ public class LPVSGitHubServiceTest {
                                 commit_sha,
                                 GHCommitState.FAILURE,
                                 null,
-                                "Potential license problem(s) detected",
-                                "[License Pre-Validation Service]");
+                                "Potential license issues detected",
+                                "[LPVS]");
             } catch (Exception e) {
                 log.error(
                         "TestCommentResults__RestrictedPresentConflictsPresent.testCommentResults__RestrictedPresentConflictsPresent() error "
@@ -3353,8 +3353,8 @@ public class LPVSGitHubServiceTest {
                                 commit_sha,
                                 GHCommitState.FAILURE,
                                 null,
-                                "Potential license problem(s) detected",
-                                "[License Pre-Validation Service]");
+                                "Potential license issues detected",
+                                "[LPVS]");
             } catch (Exception e) {
                 log.error(
                         "TestCommentResults__RestrictedPresentConflictsPresent.testCommentResults__RestrictedPresentConflictsPresentLicensePresent() error "
@@ -3414,8 +3414,8 @@ public class LPVSGitHubServiceTest {
                                 commit_sha,
                                 GHCommitState.FAILURE,
                                 null,
-                                "Potential license problem(s) detected",
-                                "[License Pre-Validation Service]");
+                                "Potential license issues detected",
+                                "[LPVS]");
             } catch (Exception e) {
                 log.error(
                         "TestCommentResults__RestrictedPresentConflictsPresent.testCommentResults__RestrictedPresentConflictsPresentLicensePresentAlt() error "
@@ -3481,7 +3481,7 @@ public class LPVSGitHubServiceTest {
         final String checklist_url_1 = "https://opensource.org/licenses/MIT";
 
         final String expected_comment =
-                "**\\[License Pre-Validation Service\\]**  No license issue detected \n\n"
+                "**\\[LPVS\\]**  No license issue detected \n\n"
                         + "**Detected Licenses:**\n"
                         + "\n"
                         + "No license problems detected.\n"
@@ -3596,8 +3596,8 @@ public class LPVSGitHubServiceTest {
                                 commit_sha,
                                 GHCommitState.SUCCESS,
                                 null,
-                                "No license issue(s) detected",
-                                "[License Pre-Validation Service]");
+                                "No license issues detected",
+                                "[LPVS]");
             } catch (Exception e) {
                 log.error(
                         "TestCommentResults__ProhibitedAbsentConflictsAbsent.testCommentResults__ProhibitedAbsentConflictsAbsent() error "
