@@ -37,6 +37,7 @@ import static com.lpvs.util.LPVSCommentUtil.getMatchedLinesAsLink;
  */
 @Component
 @Slf4j
+@SuppressWarnings("unchecked")
 public class LPVSReportBuilder {
 
     /**

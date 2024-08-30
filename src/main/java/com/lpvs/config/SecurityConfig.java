@@ -12,16 +12,16 @@ import lombok.RequiredArgsConstructor;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
@@ -73,53 +73,58 @@ public class SecurityConfig {
      */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.cors()
-                .and()
-                .csrf()
-                .disable()
-                .headers()
-                .frameOptions()
-                .disable()
-                .and()
-                .logout()
-                .logoutRequestMatcher(new AntPathRequestMatcher("/oauth/logout"))
-                .logoutSuccessUrl(frontendMainPageUrl)
-                .invalidateHttpSession(true)
-                .clearAuthentication(true)
-                .and()
-                .authorizeRequests()
-                .anyRequest()
-                .permitAll()
-                .and()
-                .oauth2Login()
-                .successHandler(
-                        new AuthenticationSuccessHandler() {
-                            @Value("${frontend.main-page.url:}")
-                            private String frontendMainPageUrl;
+        http.cors(
+                        cors ->
+                                cors.configurationSource(
+                                        request ->
+                                                new CorsConfiguration().applyPermitDefaultValues()))
+                .csrf(AbstractHttpConfigurer::disable)
+                .headers(
+                        headers ->
+                                headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
+                .logout(
+                        logout ->
+                                logout.logoutRequestMatcher(
+                                                new AntPathRequestMatcher("/oauth/logout"))
+                                        .logoutSuccessUrl(frontendMainPageUrl)
+                                        .invalidateHttpSession(true)
+                                        .clearAuthentication(true))
+                .authorizeHttpRequests(authz -> authz.anyRequest().permitAll())
+                .oauth2Login(
+                        login ->
+                                login.successHandler(
+                                                new AuthenticationSuccessHandler() {
+                                                    @Value("${frontend.main-page.url:}")
+                                                    private String frontendMainPageUrl;
 
-                            private String REDIRECT_URI = frontendMainPageUrl + "/login/callback";
+                                                    private final String REDIRECT_URI =
+                                                            frontendMainPageUrl + "/login/callback";
 
-                            @Override
-                            public void onAuthenticationSuccess(
-                                    HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    Authentication authentication)
-                                    throws IOException, ServletException {
-                                OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
-                                System.out.println("oAuth2User = " + oAuth2User);
-
-                                response.sendRedirect(
-                                        UriComponentsBuilder.fromUriString(REDIRECT_URI)
-                                                .queryParam("accessToken", "accessToken")
-                                                .queryParam("refreshToken", "refreshToken")
-                                                .build()
-                                                .encode(StandardCharsets.UTF_8)
-                                                .toUriString());
-                            }
-                        })
-                .defaultSuccessUrl(frontendMainPageUrl, true)
-                .userInfoEndpoint()
-                .userService(oAuthService);
+                                                    @Override
+                                                    public void onAuthenticationSuccess(
+                                                            HttpServletRequest request,
+                                                            HttpServletResponse response,
+                                                            Authentication authentication)
+                                                            throws IOException {
+                                                        response.sendRedirect(
+                                                                UriComponentsBuilder.fromUriString(
+                                                                                REDIRECT_URI)
+                                                                        .queryParam(
+                                                                                "accessToken",
+                                                                                "accessToken")
+                                                                        .queryParam(
+                                                                                "refreshToken",
+                                                                                "refreshToken")
+                                                                        .build()
+                                                                        .encode(
+                                                                                StandardCharsets
+                                                                                        .UTF_8)
+                                                                        .toUriString());
+                                                    }
+                                                })
+                                        .defaultSuccessUrl(frontendMainPageUrl, true)
+                                        .userInfoEndpoint(
+                                                userInfo -> userInfo.userService(oAuthService)));
 
         return http.build();
     }
