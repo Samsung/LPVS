@@ -8,6 +8,8 @@ package com.lpvs.entity.report;
 
 import com.lpvs.entity.LPVSFile;
 import com.lpvs.entity.LPVSLicense;
+import com.lpvs.entity.LPVSQueue;
+import com.lpvs.entity.enums.LPVSVcs;
 import com.lpvs.service.LPVSLicenseService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
@@ -332,20 +334,11 @@ public class LPVSReportBuilderTest {
         List<LPVSLicenseService.Conflict<String, String>> conflicts = new ArrayList<>();
 
         scanResults.add(createSampleFile("testPath1", "test1", "UNREVIEWED"));
+        scanResults.add(createSampleFile("testPath1", "test1", "PROHIBITED"));
+        scanResults.add(createSampleFile("testPath1", "test1", "RESTRICTED"));
+        scanResults.add(createSampleFile("testPath1", "test1", "PERMITTED"));
         String comment =
                 reportBuilder.generateCommandLineComment("testPath1", scanResults, conflicts);
-        assertNotNull(comment);
-
-        scanResults.add(createSampleFile("testPath1", "test1", "PROHIBITED"));
-        comment = reportBuilder.generateCommandLineComment("testPath1", scanResults, conflicts);
-        assertNotNull(comment);
-
-        scanResults.add(createSampleFile("testPath1", "test1", "RESTRICTED"));
-        comment = reportBuilder.generateCommandLineComment("testPath1", scanResults, conflicts);
-        assertNotNull(comment);
-
-        scanResults.add(createSampleFile("testPath1", "test1", "PERMITTED"));
-        comment = reportBuilder.generateCommandLineComment("testPath1", scanResults, conflicts);
         assertNotNull(comment);
     }
 
@@ -358,7 +351,8 @@ public class LPVSReportBuilderTest {
                 new LPVSLicenseService.Conflict<>("MIT", "Apache-2.0");
         List<LPVSLicenseService.Conflict<String, String>> conflicts =
                 List.of(conflict_1, conflict_1);
-        String comment = reportBuilder.generateCommandLineComment("testPath1", null, null);
+        String comment =
+                reportBuilder.generateCommandLineComment("testPath1", scanResults, conflicts);
         assertNotNull(comment);
     }
 
@@ -366,6 +360,66 @@ public class LPVSReportBuilderTest {
     void testReportCommentBuilder_NoLicenseDetectedNoConflicts() {
         LPVSReportBuilder reportBuilder = new LPVSReportBuilder(null);
         String comment = reportBuilder.generateCommandLineComment("testPath1", null, null);
+        assertNotNull(comment);
+    }
+
+    @Test
+    void testGeneratePullRequestComment_LicenseDetectedNoConflicts() {
+        LPVSReportBuilder reportBuilder = new LPVSReportBuilder(null);
+        List<LPVSFile> scanResults = new ArrayList<>();
+        List<LPVSLicenseService.Conflict<String, String>> conflicts = new ArrayList<>();
+
+        LPVSQueue webhookConfig = new LPVSQueue();
+        webhookConfig.setPullRequestUrl("https://github.com/Samsung/LPVS/pull/1");
+        webhookConfig.setRepositoryUrl("https://github.com/Samsung/LPVS");
+
+        scanResults.add(createSampleFile("testPath1", "test1", "UNREVIEWED"));
+        scanResults.add(createSampleFile("testPath1", "test1", "PROHIBITED"));
+        scanResults.add(createSampleFile("testPath1", "test1", "RESTRICTED"));
+        scanResults.add(createSampleFile("testPath1", "test1", "PERMITTED"));
+
+        String comment =
+                reportBuilder.generatePullRequestComment(
+                        scanResults, conflicts, webhookConfig, LPVSVcs.GITHUB);
+        assertNotNull(comment);
+
+        comment =
+                reportBuilder.generatePullRequestComment(
+                        scanResults, conflicts, webhookConfig, LPVSVcs.GERRIT);
+        assertNotNull(comment);
+    }
+
+    @Test
+    void testGeneratePullRequestComment_LicenseDetectedConflictsDetected() {
+        LPVSReportBuilder reportBuilder = new LPVSReportBuilder(null);
+        List<LPVSFile> scanResults = new ArrayList<>();
+        scanResults.add(createSampleFile("testPath1", "test1", "PROHIBITED"));
+        LPVSLicenseService.Conflict<String, String> conflict_1 =
+                new LPVSLicenseService.Conflict<>("MIT", "Apache-2.0");
+        List<LPVSLicenseService.Conflict<String, String>> conflicts =
+                List.of(conflict_1, conflict_1);
+        LPVSQueue webhookConfig = new LPVSQueue();
+        webhookConfig.setPullRequestUrl("https://github.com/Samsung/LPVS/pull/1");
+        webhookConfig.setRepositoryUrl("https://github.com/Samsung/LPVS");
+
+        String comment =
+                reportBuilder.generatePullRequestComment(
+                        scanResults, conflicts, webhookConfig, LPVSVcs.GITHUB);
+        assertNotNull(comment);
+
+        comment =
+                reportBuilder.generatePullRequestComment(
+                        scanResults, conflicts, webhookConfig, LPVSVcs.GERRIT);
+        assertNotNull(comment);
+    }
+
+    @Test
+    void testGeneratePullRequestComment_NoLicenseDetectedNoConflicts() {
+        LPVSReportBuilder reportBuilder = new LPVSReportBuilder(null);
+        String comment = reportBuilder.generatePullRequestComment(null, null, null, LPVSVcs.GITHUB);
+        assertNotNull(comment);
+
+        comment = reportBuilder.generatePullRequestComment(null, null, null, LPVSVcs.GERRIT);
         assertNotNull(comment);
     }
 }

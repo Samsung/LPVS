@@ -10,11 +10,11 @@ import com.lpvs.entity.*;
 import com.lpvs.entity.LPVSQueue;
 import com.lpvs.entity.enums.LPVSPullRequestStatus;
 import com.lpvs.entity.enums.LPVSVcs;
+import com.lpvs.entity.report.LPVSReportBuilder;
 import com.lpvs.repository.LPVSDetectedLicenseRepository;
 import com.lpvs.repository.LPVSLicenseConflictRepository;
 import com.lpvs.repository.LPVSLicenseRepository;
 import com.lpvs.repository.LPVSPullRequestRepository;
-import com.lpvs.util.LPVSCommentUtil;
 import com.lpvs.util.LPVSFileUtil;
 import com.lpvs.util.LPVSPayloadUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -176,7 +176,7 @@ public class LPVSGitHubService {
                     GHCommitState.PENDING,
                     null,
                     "Scanning opensource licenses",
-                    "[License Pre-Validation Service]");
+                    "[LPVS]");
         } catch (IOException | IllegalArgumentException e) {
             log.error("Can't authorize setPendingCheck(): " + e.getMessage());
         }
@@ -200,7 +200,7 @@ public class LPVSGitHubService {
                     GHCommitState.ERROR,
                     null,
                     "Scanning process failed",
-                    "[License Pre-Validation Service]");
+                    "[LPVS]");
         } catch (IOException | IllegalArgumentException e) {
             log.error("Can't authorize setErrorCheck(): " + e.getMessage());
         }
@@ -243,31 +243,19 @@ public class LPVSGitHubService {
                     GHCommitState.SUCCESS,
                     null,
                     "Files are not found",
-                    "[License Pre-Validation Service]");
+                    "[LPVS]");
             return;
         }
 
         boolean hasProhibitedOrRestricted = false;
         boolean hasConflicts = false;
-        String commitComment = "";
+        LPVSReportBuilder reportBuilder = new LPVSReportBuilder(null);
+        String commitComment =
+                reportBuilder.generatePullRequestComment(
+                        scanResults, conflicts, webhookConfig, LPVSVcs.GITHUB);
 
-        if (scanResults != null && scanResults.size() != 0) {
-            commitComment = "**Detected licenses:**\n\n\n";
+        if (scanResults != null && !scanResults.isEmpty()) {
             for (LPVSFile file : scanResults) {
-                commitComment += "**File:** " + file.getFilePath() + "\n";
-                commitComment += "**License(s):** " + file.convertLicensesToString(LPVSVcs.GITHUB);
-                commitComment +=
-                        "**Component:** "
-                                + file.getComponentName()
-                                + " ("
-                                + file.getComponentFilePath()
-                                + ")\n";
-                commitComment +=
-                        "**Matched Lines:** "
-                                + LPVSCommentUtil.getMatchedLinesAsLink(
-                                        webhookConfig, file, LPVSVcs.GITHUB)
-                                + "\n";
-                commitComment += "**Snippet Match:** " + file.getSnippetMatch() + "\n\n\n\n";
                 for (LPVSLicense license : file.getLicenses()) {
                     LPVSDetectedLicense detectedIssue = new LPVSDetectedLicense();
                     detectedIssue.setPullRequest(lpvsPullRequest);
@@ -297,13 +285,9 @@ public class LPVSGitHubService {
             }
         }
 
-        StringBuilder commitCommentBuilder = new StringBuilder();
-        if (conflicts != null && conflicts.size() > 0) {
+        if (conflicts != null && !conflicts.isEmpty()) {
             hasConflicts = true;
-            commitCommentBuilder.append("**Detected license conflicts:**\n\n\n");
-            commitCommentBuilder.append("<ul>");
             for (LPVSLicenseService.Conflict<String, String> conflict : conflicts) {
-                commitCommentBuilder.append("<li>" + conflict.l1 + " and " + conflict.l2 + "</li>");
                 LPVSDetectedLicense detectedIssue = new LPVSDetectedLicense();
                 detectedIssue.setPullRequest(lpvsPullRequest);
                 Long l1 =
@@ -330,40 +314,29 @@ public class LPVSGitHubService {
                 detectedIssue.setIssue(true);
                 lpvsDetectedLicenseRepository.saveAndFlush(detectedIssue);
             }
-            commitCommentBuilder.append("</ul>");
         }
-        if (null != webhookConfig.getHubLink()) {
-            commitCommentBuilder.append(
-                    "\n\n###### <p align='right'>Check the validation details at the [link](");
-            commitCommentBuilder.append(webhookConfig.getHubLink());
-            commitCommentBuilder.append(")</p>");
-        }
-        commitComment += commitCommentBuilder.toString();
 
         if (hasProhibitedOrRestricted || hasConflicts) {
             lpvsPullRequest.setStatus(LPVSPullRequestStatus.ISSUES_DETECTED.toString());
             pullRequestRepository.save(lpvsPullRequest);
             pullRequest.comment(
-                    "**\\[License Pre-Validation Service\\]** Potential license problem(s) detected \n\n"
-                            + commitComment);
+                    "**\\[LPVS\\]** Potential license issues detected \n\n" + commitComment);
             repository.createCommitStatus(
                     webhookConfig.getHeadCommitSHA(),
                     GHCommitState.FAILURE,
                     null,
-                    "Potential license problem(s) detected",
-                    "[License Pre-Validation Service]");
+                    "Potential license issues detected",
+                    "[LPVS]");
         } else {
             lpvsPullRequest.setStatus(LPVSPullRequestStatus.COMPLETED.toString());
             pullRequestRepository.save(lpvsPullRequest);
-            pullRequest.comment(
-                    "**\\[License Pre-Validation Service\\]**  No license issue detected \n\n"
-                            + commitComment);
+            pullRequest.comment("**\\[LPVS\\]**  No license issue detected \n\n" + commitComment);
             repository.createCommitStatus(
                     webhookConfig.getHeadCommitSHA(),
                     GHCommitState.SUCCESS,
                     null,
-                    "No license issue detected",
-                    "[License Pre-Validation Service]");
+                    "No license issues detected",
+                    "[LPVS]");
         }
     }
 
