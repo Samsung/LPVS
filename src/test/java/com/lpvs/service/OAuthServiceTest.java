@@ -38,9 +38,11 @@ public class OAuthServiceTest {
                 ClientRegistration.withRegistrationId("google")
                         .userInfoUri("https://example.com/userinfo")
                         .userNameAttributeName("email")
-                        .authorizationGrantType(AuthorizationGrantType.PASSWORD)
+                        .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                         .clientId("id")
                         .tokenUri("https://example.com/tokenuri")
+                        .redirectUri("https://example.com/redirecturi")
+                        .authorizationUri("https://example.com/authorizationuri")
                         .build();
         OAuth2UserRequest userRequest =
                 new OAuth2UserRequest(

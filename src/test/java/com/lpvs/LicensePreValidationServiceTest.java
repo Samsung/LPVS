@@ -24,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.verify;
 
+@SuppressWarnings("unchecked")
 public class LicensePreValidationServiceTest {
 
     LicensePreValidationService licensePreValidationService;
