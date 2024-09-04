@@ -19,6 +19,11 @@ markdown_extensions:
   - pymdownx.tasklist:
       clickable_checkbox: true
 
+plugins:
+  - search
+  - neoteroi.mkdocsoad:
+      use_pymdownx: true
+
 nav:
   - Home: index.md
   #- Getting Started: getting-started.md
@@ -28,7 +33,7 @@ nav:
       - Contributing guide: dev-guide/contributing.md
       - Testing policy: dev-guide/testing_policy.md
       - Code review requirements: dev-guide/code-review-requirements.md
-      #- API reference: dev-guide/api.md
+      - API reference: dev-guide/api.md
       #- Integration guide: dev-guide/integration.md
   - About:
       - License: about/license.md
