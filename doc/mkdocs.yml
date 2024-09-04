@@ -1,0 +1,55 @@
+site_name: License Pre-Validation Service
+site_url: https://samsung.github.io/LPVS/
+site_description: License Pre-Validation Service (LPVS) Documentation
+
+repo_url: https://github.com/Samsung/LPVS
+edit_uri: blob/main/doc/docs/
+
+theme:
+  name: mkdocs
+  color_mode: auto
+  user_color_mode_toggle: true
+  locale: en
+  highlightjs: true
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.tasklist:
+      clickable_checkbox: true
+
+nav:
+  - Home: index.md
+  #- Getting Started: getting-started.md
+  #- User Guide: user-guide
+  - Developer Guide:
+      - Developer guide: dev-guide/README.md
+      - Contributing guide: dev-guide/contributing.md
+      - Testing policy: dev-guide/testing_policy.md
+      - Code review requirements: dev-guide/code-review-requirements.md
+      #- API reference: dev-guide/api.md
+      #- Integration guide: dev-guide/integration.md
+  - About:
+      - License: about/license.md
+      - Releases: about/releases.md
+
+extra_css:
+  - css/extra.css
+
+exclude_docs: |
+  *.py
+
+use_directory_urls: true
+
+#extra:
+#  # files to be copied from repository root to docs_path
+#  files_to_copy:
+#    - contributing.md
+#  # path to documentation root
+#  docs_path: docs/about
+
+#hooks:
+#  - docs/hooks.py
+
+copyright: Copyright &copy; 2024, Samsung Electronics Co., Ltd. All rights reserved.

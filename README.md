@@ -1,5 +1,5 @@
-![Logo for dark mode](doc/lpvs-dark.png#gh-dark-mode-only)
-![Logo for light mode](doc/lpvs-light.png#gh-light-mode-only)
+![Logo for dark mode](doc/docs/img/lpvs-dark.png#gh-dark-mode-only)
+![Logo for light mode](doc/docs/img/lpvs-light.png#gh-light-mode-only)
 
 # License Pre-Validation Service
 
@@ -74,8 +74,8 @@ The _LPVS_ source code is distributed under the [MIT](https://opensource.org/lic
 
 You are welcome to contribute to the _LPVS_ project. Contributing is a great way to practice social coding on GitHub, learn new technologies, and enhance your public portfolio. If you would like to contribute, please follow the guidelines below:
 
-- [How to Contribute Code](.github/CONTRIBUTING.md)
+- [How to Contribute Code](doc/docs/dev-guide/contributing.md)
 - [How to Report a Security Vulnerability](.github/SECURITY.md)
-- [Code Review Requirements](doc/code-review-requirements.md)
+- [Code Review Requirements](doc/docs/dev-guide/code-review-requirements.md)
 
 Thank you for your interest in contributing to _LPVS_! Your contributions are highly appreciated.
