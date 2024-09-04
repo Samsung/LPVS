@@ -34,7 +34,7 @@ nav:
       - Testing policy: dev-guide/testing_policy.md
       - Code review requirements: dev-guide/code-review-requirements.md
       - API reference: dev-guide/api.md
-      #- Integration guide: dev-guide/integration.md
+      - Integration guide: dev-guide/integration.md
   - About:
       - License: about/license.md
       - Releases: about/releases.md
