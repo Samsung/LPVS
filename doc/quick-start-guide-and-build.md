@@ -133,7 +133,7 @@ Before building _LPVS_ from source code, ensure that you have the following prer
 
 - SCANOSS Python package by following the [guidelines](https://github.com/scanoss/scanoss.py#installation).
   
-  For installing SCANOSS on Ubuntu 2023.04, Fedora 38, Debian 11, etc. or later versions of mentioned OSes please follow the note at the end of the paragraph otherwise install it using the command:
+  For installing SCANOSS on Ubuntu 23.04, Fedora 38, Debian 11, etc. or later versions of mentioned OSes, please follow the note at the end of the paragraph otherwise install it using the command:
   ```bash
   pip3 install scanoss
   ```
@@ -149,7 +149,7 @@ Before building _LPVS_ from source code, ensure that you have the following prer
 
   
 > [!NOTE]  
-> For installing SCANOSS on Ubuntu 2023.04, Fedora 38, Debian 11, etc. or later versions of mentioned OSes, a few additional steps are required, as previously mentioned command : `pip3 install scanoss` will not work correctly. [More details](https://github.com/scanoss/scanoss.py/blob/main/PACKAGE.md#externally-managed-environments-on-linux)
+> For installing SCANOSS on Ubuntu 23.04, Fedora 38, Debian 11, etc. or later versions of mentioned OSes, a few additional steps are required, as previously mentioned command : `pip3 install scanoss` will not work correctly. [More details](https://github.com/scanoss/scanoss.py/blob/main/PACKAGE.md#externally-managed-environments-on-linux)
 
 Installation steps:
 - Install `pipx`:
