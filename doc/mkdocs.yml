@@ -27,7 +27,18 @@ plugins:
 nav:
   - Home: index.md
   #- Getting Started: getting-started.md
-  #- User Guide: user-guide
+  - User Guide:
+      - User guide: user-guide/README.md
+      - Service mode:
+          - GitHub webhook configuration: user-guide/service/webhook.md
+          - Run service using pre-built Docker image: user-guide/service/docker.md
+          #- Build and run service from the source code: user-guide/service/source_code.md
+      #- Command line mode:
+      #    - Single scan of the pull request: user-guide/cli/cli_pr.md
+      #    - Single scan of local files: user-guide/cli/cli_file.md
+      #- Configuration options:
+      #    - Possible configuration options: user-guide/config/options.md
+      #    - Database with licenses and license conflicts: user-guide/config/database.md
   - Developer Guide:
       - Developer guide: dev-guide/README.md
       - Contributing guide: dev-guide/contributing.md
