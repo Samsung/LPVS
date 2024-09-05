@@ -28,3 +28,6 @@ target/
 LPVS/Projects/
 LPVS/Results/
 *.iml
+
+# MkDocs generated website
+doc/site/
