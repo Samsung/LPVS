@@ -131,7 +131,9 @@ You can now create a new pull request or update an existing one with commits. _L
 
 Before building _LPVS_ from source code, ensure that you have the following prerequisites installed:
 
-- SCANOSS Python package by following the [guidelines](https://github.com/scanoss/scanoss.py#installation). Install it using the command:
+- SCANOSS Python package by following the [guidelines](https://github.com/scanoss/scanoss.py#installation).
+  
+  For installing SCANOSS on Ubuntu 2023.04, Fedora 38, Debian 11, etc. or later versions of mentioned OSes please follow the note at the end of the paragraph otherwise install it using the command:
   ```bash
   pip3 install scanoss
   ```
@@ -146,29 +148,26 @@ Before building _LPVS_ from source code, ensure that you have the following prer
   ```
 
   
-Note: for installing SCANOSS on Ubuntu 2023.04, Fedora 38, Debian 11, etc. or later versions of mentioned OSes-a few additional steps are required, as previously mentioned command : "pip3 install scanoss" will not work correctly. 
+> [!NOTE]  
+> For installing SCANOSS on Ubuntu 2023.04, Fedora 38, Debian 11, etc. or later versions of mentioned OSes-a few additional steps are required, as previously mentioned command : `pip3 install scanoss` will not work correctly. [More details](https://github.com/scanoss/scanoss.py/blob/main/PACKAGE.md#externally-managed-environments-on-linux)
 
-More details: https://github.com/scanoss/scanoss.py/blob/main/PACKAGE.md#externally-managed-environments-on-linux
-
-Steps(1-4):
-
-1)Install pipx:
+Installation steps:
+- Install `pipx`:
   ```bash
   sudo apt install pipx
   ```
-2)Install scanoss by using pipx:
+- Install `scanoss` by using `pipx`:
   ```bash
- pipx install scanoss
+  pipx install scanoss
   ```
-3)Add to PATH scanoss installation:
+- Add to `PATH` `scanoss` installation:
   ```bash
- pipx ensurepath
+  pipx ensurepath
   ```
-4)Close the terminal, open new terminal and check if the command below is available from any location:
+- Close the terminal, open new terminal and check if the command below is available from any location:
   ```bash
-scanoss-py
+  scanoss-py
   ```
-
 
 
 ### 2. Create Necessary MySQL Database and User (optional if not using a database)
