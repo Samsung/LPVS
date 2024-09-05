@@ -135,7 +135,7 @@ Before building _LPVS_ from source code, ensure that you have the following prer
   
   For installing SCANOSS on Ubuntu 23.04, Fedora 38, Debian 11, etc. or later versions of mentioned OSes, please follow the note at the end of the paragraph otherwise install it using the command:
   ```bash
-  pip3 install scanoss
+  pip3 install --require-hashes -r requirements.txt
   ```
   Make sure that the path variable is added to the environment:
   ```bash
