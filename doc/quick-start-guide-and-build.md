@@ -145,6 +145,32 @@ Before building _LPVS_ from source code, ensure that you have the following prer
   sudo apt install mysql-server
   ```
 
+  
+Note: for installing SCANOSS on Ubuntu 2023.04, Fedora 38, Debian 11, etc. or later versions of mentioned OSes-a few additional steps are required, as previously mentioned command : "pip3 install scanoss" will not work correctly. 
+
+More details: https://github.com/scanoss/scanoss.py/blob/main/PACKAGE.md#externally-managed-environments-on-linux
+
+Steps(1-4):
+
+1)Install pipx:
+  ```bash
+  sudo apt install pipx
+  ```
+2)Install scanoss by using pipx:
+  ```bash
+ pipx install scanoss
+  ```
+3)Add to PATH scanoss installation:
+  ```bash
+ pipx ensurepath
+  ```
+4)Close the terminal, open new terminal and check if the command below is available from any location:
+  ```bash
+scanoss-py
+  ```
+
+
+
 ### 2. Create Necessary MySQL Database and User (optional if not using a database)
 
 2.1 Start the MySQL server:
