@@ -33,9 +33,9 @@ nav:
           - GitHub webhook configuration: user-guide/service/webhook.md
           - Run service using pre-built Docker image: user-guide/service/docker.md
           #- Build and run service from the source code: user-guide/service/source_code.md
-      #- Command line mode:
-      #    - Single scan of the pull request: user-guide/cli/cli_pr.md
-      #    - Single scan of local files: user-guide/cli/cli_file.md
+      - Command line mode:
+          - Single scan of the pull request: user-guide/cli/cli_pr.md
+          - Single scan of local files: user-guide/cli/cli_file.md
       #- Configuration options:
       #    - Possible configuration options: user-guide/config/options.md
       #    - Database with licenses and license conflicts: user-guide/config/database.md
