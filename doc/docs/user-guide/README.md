@@ -12,16 +12,13 @@ There are 2 modes of LPVS operation:
 - Service mode - LPVS works as a service that is started by the system and runs continuously.
 - Command line mode - LPVS is executed from the command line and runs until it completes its task.
 
-## Prerequisites
-
-- [Scanner installation]
-- [Database configuration]
-
 ## Service mode
 
 - [GitHub webhook configuration](service/webhook.md)
 - [Run service using pre-built Docker image](service/docker.md)
-- [Build and run service from the source code](service/source_code.md)
+- [Scanner installation](service/scanner.md)
+- [Database configuration](service/database.md)
+- [Build and run service from the source code](service/build-and-run.md)
 
 ## Command line mode
 

@@ -5,11 +5,18 @@ One-time scan on a specific local files from the command line.
 ---
 
 You can perform a one-time scan on a specific local file or folder using the single scan mode.
-LPVS should be compiled from the source code. Please refer to the [detailed guideline](../../user-guide/service/source_code.md).
+LPVS should be compiled from the source code. Please refer to the [detailed guideline](../../user-guide/service/build-and-run.md).
 
 Follow the next steps:
 
-* Install LPVS and navigate to the target directory.
+* Make sure that the ScanOSS scanner is installed. If not, please follow 
+  the [installation guide](../../user-guide/service/scanner.md).
+
+* Fill in all required properties in the profile file. Please refer to
+  the [profile configuration guide](../config/options.md).
+
+* Build and install LPVS, navigate to the target directory. For more details,
+  please refer to the [build instructions](../service/build-and-run.md).
 
 ```bash
 mvn clean install
@@ -30,8 +37,8 @@ Example:
 
 !!! note
 
-    By default, the above commands require a pre-configured MySQL database. Use the "singlescan" profile to skip 
-    setting up a pre-configured MySQL database:
+    By default, the above commands require a [pre-configured MySQL database](../../user-guide/service/database.md). 
+    Use the "singlescan" profile to skip setting up a pre-configured MySQL database:
 
     ```bash
     java -jar -Dspring.profiles.active=singlescan lpvs-*.jar --local.path=</path/to/file/or/folder>

@@ -60,7 +60,7 @@ Example `settings.xml`:
 
 !!! note
 
-    if your `settings.xml` file is not located in `~/.m2/settings.xml`, then you need 
+    If your `settings.xml` file is not located in `~/.m2/settings.xml`, then you need 
     to add the `-s path/to/file/settings.xml` option to `mvn` command
 
 ---

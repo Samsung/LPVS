@@ -31,13 +31,14 @@ nav:
   #- Getting Started: getting-started.md
   - User Guide:
       - User guide: user-guide/README.md
-      #- Prerequisites:
-          #- Scanner installation:
-          #- Database configuration:
       - Service mode:
           - GitHub webhook configuration: user-guide/service/webhook.md
           - Run service using pre-built Docker image: user-guide/service/docker.md
-          #- Build and run service from the source code: user-guide/service/source_code.md
+          - Build and run service from the source code:
+            - Prerequisites:
+              - Scanner installation: user-guide/service/scanner.md
+              - Database configuration: user-guide/service/database.md
+            - Build and run service: user-guide/service/build-and-run.md
       - Command line mode:
           - Single scan of the pull request: user-guide/cli/cli_pr.md
           - Single scan of local files: user-guide/cli/cli_file.md
