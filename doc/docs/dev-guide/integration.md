@@ -4,7 +4,7 @@ Use of LPVS JAR in your project
 
 ---
 
-## 1. Authenticating with a personal access token
+## Authenticating with a personal access token
 
 You can authenticate to GitHub Packages with Apache Maven by editing your 
 `~/.m2/settings.xml` file to include your personal access token.
@@ -60,12 +60,12 @@ Example `settings.xml`:
 
 !!! note
 
-    if your `settings.xml` file is not located in `~/.m2/settings.xml`, then you need 
+    If your `settings.xml` file is not located in `~/.m2/settings.xml`, then you need 
     to add the `-s path/to/file/settings.xml` option to `mvn` command
 
 ---
 
-## 2 Installing a package
+## Installing a package
 
 Edit the `<dependencies>` element of the `pom.xml` file located in your project directory.
 

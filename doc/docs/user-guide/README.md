@@ -14,26 +14,18 @@ There are 2 modes of LPVS operation:
 
 ## Service mode
 
-- [GitHub webhook configuration]
-- [Run service using pre-built Docker image]
-- [Build and run service from the source code]
+- [GitHub webhook configuration](service/webhook.md)
+- [Run service using pre-built Docker image](service/docker.md)
+- [Scanner installation](service/scanner.md)
+- [Database configuration](service/database.md)
+- [Build and run service from the source code](service/build-and-run.md)
 
 ## Command line mode
 
-- [Single scan of the pull request]
-- [Single scan of local files]
+- [Single scan of the pull request](cli/cli_pr.md)
+- [Single scan of local files](cli/cli_file.md)
 
-## Configuration options
+## Configuration
 
-- [Possible configuration options]
-- [Database with licenses and license conflicts]
-
-[GitHub webhook configuration]: service/webhook.md
-[Run service using pre-built Docker image]: service/docker.md
-[Build and run service from the source code]: service/source_code.md
-
-[Single scan of the pull request]: cli/cli_pr.md
-[Single scan of local files]: cli/cli_file.md
-
-[Possible configuration options]: config/options.md
-[Database with licenses and license conflicts]: config/database.md
+- [Configuration options](config/options.md)
+- [Database customization](config/database.md)
