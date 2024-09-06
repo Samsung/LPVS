@@ -1,6 +1,6 @@
-# Database description
+# Database customization
 
-Database with licenses and license conflicts.
+Customization of the database with licenses and license conflicts.
 
 ---
 
@@ -59,3 +59,8 @@ The meanings of each field are as follows:
 
 When a new license is detected by LPVS, it will be added to the table `lpvs_license_list` with 
 `license_usage` status set to `UNREVIEWED`, indicating that it has not been reviewed yet.
+
+!!! info
+
+    Sample MySQL dump file is located in the [repository](https://github.com/Samsung/LPVS/blob/main/src/main/resources/database_dump.sql) 
+    and can be used as a reference.
