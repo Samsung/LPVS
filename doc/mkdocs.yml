@@ -65,14 +65,4 @@ exclude_docs: |
 
 use_directory_urls: true
 
-#extra:
-#  # files to be copied from repository root to docs_path
-#  files_to_copy:
-#    - contributing.md
-#  # path to documentation root
-#  docs_path: docs/about
-
-#hooks:
-#  - docs/hooks.py
-
 copyright: Copyright &copy; 2024, Samsung Electronics Co., Ltd. All rights reserved.
