@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2022, Samsung Electronics Co., Ltd. All rights reserved.
+ * Copyright (c) 2024, Samsung Electronics Co., Ltd. All rights reserved.
  *
  * Use of this source code is governed by a MIT license that can be
  * found in the LICENSE file.
@@ -7,6 +7,8 @@
 package com.lpvs.service;
 
 import com.lpvs.entity.LPVSQueue;
+import com.lpvs.service.webhook.LPVSWebhookService;
+import com.lpvs.service.webhook.LPVSWebhookServiceFactory;
 import io.micrometer.common.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +29,7 @@ public class LPVSQueueProcessorService {
     /**
      * Service for managing LPVSQueue elements.
      */
-    private LPVSQueueService queueService;
+    @Autowired private final LPVSQueueService queueService;
 
     /**
      * Trigger value to start a single scan of a pull request (optional).
@@ -41,13 +43,21 @@ public class LPVSQueueProcessorService {
     @Value("${local.path:}")
     private String localPath;
 
+    @Autowired private LPVSWebhookService webhookService;
+
     /**
      * Constructor for LPVSQueueProcessorService.
      *
      * @param queueService The LPVSQueueService to be injected.
+     * @param webhookServiceFactory Service for creating instance of the webhook service.
+     * @param isInternal Indicates the mode of LPVS operation.
      */
     @Autowired
-    LPVSQueueProcessorService(LPVSQueueService queueService) {
+    LPVSQueueProcessorService(
+            LPVSQueueService queueService,
+            LPVSWebhookServiceFactory webhookServiceFactory,
+            @Value("${lpvs.mode.internal:false}") boolean isInternal) {
+        this.webhookService = webhookServiceFactory.createWebhookService(isInternal);
         this.queueService = queueService;
     }
 
@@ -72,7 +82,7 @@ public class LPVSQueueProcessorService {
             webhookConfig.setDate(new Date());
 
             // Process the LPVSQueue element.
-            queueService.processWebHook(webhookConfig);
+            webhookService.processWebHook(webhookConfig);
         }
     }
 }
