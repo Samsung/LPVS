@@ -29,7 +29,7 @@ public class LPVSQueueProcessorService {
     /**
      * Service for managing LPVSQueue elements.
      */
-    @Autowired private final LPVSQueueService queueService;
+    private LPVSQueueService queueService;
 
     /**
      * Trigger value to start a single scan of a pull request (optional).
@@ -52,7 +52,6 @@ public class LPVSQueueProcessorService {
      * @param webhookServiceFactory Service for creating instance of the webhook service.
      * @param isInternal Indicates the mode of LPVS operation.
      */
-    @Autowired
     LPVSQueueProcessorService(
             LPVSQueueService queueService,
             LPVSWebhookServiceFactory webhookServiceFactory,
