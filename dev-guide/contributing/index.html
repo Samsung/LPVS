@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="auto">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        <link rel="canonical" href="https://samsung.github.io/LPVS/dev-guide/contributing/">
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+        <title>Contributing guide - License Pre-Validation Service</title>
+        <link href="../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../css/fontawesome.min.css" rel="stylesheet">
+        <link href="../../css/brands.min.css" rel="stylesheet">
+        <link href="../../css/solid.min.css" rel="stylesheet">
+        <link href="../../css/v4-font-face.min.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" disabled>
+        <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
+        <link href="../../css/extra.css" rel="stylesheet">
+        <link href="../../css/mkdocsoad.css" rel="stylesheet">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="../..">License Pre-Validation Service</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="nav-item">
+                                <a href="../.." class="nav-link">Home</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"  aria-expanded="false">User Guide</a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../../user-guide/" class="dropdown-item">User guide</a>
+</li>
+                                    
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Service mode</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../../user-guide/service/webhook/" class="dropdown-item">GitHub webhook configuration</a>
+</li>
+            
+<li>
+    <a href="../../user-guide/service/docker/" class="dropdown-item">Run service using pre-built Docker image</a>
+</li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Build and run service from the source code</a>
+    <ul class="dropdown-menu">
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Prerequisites</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../../user-guide/service/scanner/" class="dropdown-item">Scanner installation</a>
+</li>
+            
+<li>
+    <a href="../../user-guide/service/database/" class="dropdown-item">Database configuration</a>
+</li>
+    </ul>
+  </li>
+            
+<li>
+    <a href="../../user-guide/service/build-and-run/" class="dropdown-item">Build and run service</a>
+</li>
+    </ul>
+  </li>
+    </ul>
+  </li>
+                                    
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Command line mode</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../../user-guide/cli/cli_pr/" class="dropdown-item">Single scan of the pull request</a>
+</li>
+            
+<li>
+    <a href="../../user-guide/cli/cli_file/" class="dropdown-item">Single scan of local files</a>
+</li>
+    </ul>
+  </li>
+                                    
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Configuration</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../../user-guide/config/options/" class="dropdown-item">Configuration options</a>
+</li>
+            
+<li>
+    <a href="../../user-guide/config/database/" class="dropdown-item">Database customization</a>
+</li>
+    </ul>
+  </li>
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle active" aria-current="page" role="button" data-bs-toggle="dropdown"  aria-expanded="false">Developer Guide</a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../" class="dropdown-item">Developer guide</a>
+</li>
+                                    
+<li>
+    <a href="./" class="dropdown-item active" aria-current="page">Contributing guide</a>
+</li>
+                                    
+<li>
+    <a href="../testing_policy/" class="dropdown-item">Testing policy</a>
+</li>
+                                    
+<li>
+    <a href="../code-review-requirements/" class="dropdown-item">Code review requirements</a>
+</li>
+                                    
+<li>
+    <a href="../api/" class="dropdown-item">API reference</a>
+</li>
+                                    
+<li>
+    <a href="../integration/" class="dropdown-item">Integration guide</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"  aria-expanded="false">About</a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../../about/license/" class="dropdown-item">License</a>
+</li>
+                                    
+<li>
+    <a href="../../about/releases/" class="dropdown-item">Releases</a>
+</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ms-md-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a rel="prev" href="../" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../testing_policy/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="https://github.com/Samsung/LPVS/blob/main/doc/docs/dev-guide/contributing.md" class="nav-link"><i class="fa-brands fa-github"></i> Edit on GitHub</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                              <button id="theme-menu" aria-expanded="false" data-bs-toggle="dropdown" data-bs-display="static" aria-label="Toggle theme" class="nav-link dropdown-toggle">
+                                <i class="fa-solid fa-circle-half-stroke fa-fw"></i>
+                                <span class="d-lg-none ms-2">Toggle theme</span>
+                              </button>
+                              <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                  <button class="dropdown-item d-flex align-items-center" data-bs-theme-value="light" aria-pressed="false">
+                                    <i class="fa-solid fa-sun fa-fw"></i>
+                                    <span class="ms-2">Light</span>
+                                    <i class="fa-solid fa-check ms-auto d-none"></i>
+                                  </button>
+                                </li>
+                                <li>
+                                  <button class="dropdown-item d-flex align-items-center" data-bs-theme-value="dark" aria-pressed="false">
+                                    <i class="fa-solid fa-moon fa-fw"></i>
+                                    <span class="ms-2">Dark</span>
+                                    <i class="fa-solid fa-check ms-auto d-none"></i>
+                                  </button>
+                                </li>
+                                <li>
+                                  <button class="dropdown-item d-flex align-items-center" data-bs-theme-value="auto" aria-pressed="true">
+                                    <i class="fa-solid fa-circle-half-stroke fa-fw"></i>
+                                    <span class="ms-2">Auto</span>
+                                    <i class="fa-solid fa-check ms-auto"></i>
+                                  </button>
+                                </li>
+                              </ul>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <script src="../../js/darkmode.js"></script>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-bs-level="1"><a href="#contributing" class="nav-link">Contributing</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#ways-to-contribute" class="nav-link">Ways to Contribute</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#code-contribution" class="nav-link">Code Contribution</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#code-of-conduct" class="nav-link">Code of Conduct</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="contributing">Contributing</h1>
+<p>An introduction to contributing to the LPVS project.</p>
+<hr />
+<p>We welcome contributions! By contributing, you can help improve this project and make it better for everyone.</p>
+<h2 id="ways-to-contribute">Ways to Contribute</h2>
+<p>Here are some ways you can contribute to this project:</p>
+<ul>
+<li><strong>Report Bugs &amp; Request Features</strong> 🐛💡: Let us know if you find any bugs or have ideas
+  for new features by <a href="https://github.com/Samsung/LPVS/issues/new/choose">creating an issue</a>.</li>
+<li><strong>Vulnerability Reporting</strong> 🚨: If you discover a vulnerability in our project, please report it according to 
+  the <a href="https://github.com/Samsung/LPVS?tab=security-ov-file">Security guideline</a>.</li>
+<li><strong>Code Contributions</strong> 🛠️: Fix bugs, add new features, or improve the existing code.</li>
+<li><strong>Documentation</strong> 📝: Improve our documentation by correcting typos, clarifying instructions,
+  or adding new content.</li>
+<li><strong>Code Reviews</strong> 🔍: Review other contributors' <a href="https://github.com/Samsung/LPVS/pulls">pull requests</a> to maintain code quality.</li>
+</ul>
+<hr />
+<h2 id="code-contribution">Code Contribution</h2>
+<p>If you want to contribute to the LPVS project and make it better, your help is very welcome. 
+Contributing is also a great way to learn more about social coding on GitHub, new technologies, 
+and how to make constructive bug reports, feature requests, and the noblest of all contributions: 
+a good, clean pull request.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You can use templates to create a description of your pull request or issue, which will greatly 
+simplify the LPVS team's work on reviewing and incorporating your code. However, using these 
+templates is not mandatory, and we will always welcome any help.</p>
+</div>
+<p>To make a clean pull request, follow the steps below:</p>
+<ul>
+<li><a href="http://help.github.com/fork-a-repo/">Fork</a> the LPVS repository on GitHub and clone your fork 
+to your development environment.</li>
+</ul>
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/YOUR-GITHUB-USERNAME/LPVS.git
+</code></pre></div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>If you have trouble setting up Git with GitHub in Linux or are getting errors like <code>Permission 
+  Denied (publickey)</code>, you must <a href="http://help.github.com/linux-set-up-git/">set up your Git installation to work with GitHub</a>.</p>
+</div>
+<ul>
+<li>Add the main LPVS repository as an additional Git remote called <code>upstream</code>.</li>
+</ul>
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>remote<span class="w"> </span>add<span class="w"> </span>upstream<span class="w"> </span>https://github.com/samsung/lpvs
+</code></pre></div>
+<ul>
+<li>Make sure there is an issue created for the task you are working on. All new features and bug 
+fixes should have an associated issue to provide a single point of reference for discussion and documentation. 
+If the issue already exists, leave a comment on that issue indicating that you intend to work on it. 
+If it doesn't exist, open a new issue for your task. </li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For small changes or documentation issues, creating an issue is not necessary, 
+  and a pull request is sufficient.</p>
+</div>
+<ul>
+<li>Fetch the latest code from the main LPVS branch.</li>
+</ul>
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>fetch<span class="w"> </span>upstream
+</code></pre></div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>You should start at this point for every new contribution to make sure you are working 
+  on the latest code.</p>
+</div>
+<ul>
+<li>Create a new branch for your feature based on the current LPVS main branch. Each separate bug fix 
+or feature addition should have its own branch. Branch names should be descriptive and start with 
+the number of the corresponding issue, if applicable. If you're not fixing a specific issue, you 
+can skip the number. </li>
+</ul>
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>checkout<span class="w"> </span>upstream/&lt;NAMED_RELEASE&gt;
+git<span class="w"> </span>checkout<span class="w"> </span>-b<span class="w"> </span><span class="m">999</span>-name-of-your-branch-goes-here
+</code></pre></div>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>Above, <NAMED_RELEASE> can be '1.0.0', etc. - see the list of releases or <code>main</code> branch.</p>
+</div>
+<ul>
+<li>
+<p>Write your code and make the necessary changes.</p>
+</li>
+<li>
+<p>Follow the coding conventions and style guidelines used in the LPVS project.</p>
+</li>
+<li>Write clear, concise, and well-documented code.</li>
+<li>Include unit tests to ensure the correctness of your code.</li>
+<li>If you're adding a new feature, consider updating the relevant documentation and examples.</li>
+<li>
+<p>If you're fixing a bug, provide a clear explanation of the issue and how your code resolves it.</p>
+</li>
+<li>
+<p>Commit your changes with a descriptive commit message. Make sure to mention the issue number 
+with <code>#XXX</code> so that GitHub will automatically link your commit with the issue. Additionally, use 
+appropriate commit message prefixes to categorize your changes.</p>
+<ul>
+<li><strong>feat</strong>: Introduce a new feature or enhancement.</li>
+<li><strong>fix</strong>: Address a bug or resolve an issue.</li>
+<li><strong>chore</strong>: Perform routine tasks or maintenance.</li>
+<li><strong>docs</strong>: Make changes to documentation.</li>
+<li><strong>style</strong>: Implement code style changes (e.g., formatting).</li>
+<li><strong>test</strong>: Modify or add tests.</li>
+<li><strong>refactor</strong>: Implement code refactoring.</li>
+<li><strong>perf</strong>: Performance Improvements.</li>
+<li><strong>build</strong>: Any changes in build conditions.</li>
+<li><strong>ci</strong>: Implement any continuous integration changes.</li>
+<li><strong>revert</strong>: Revert to previous code state.</li>
+</ul>
+</li>
+</ul>
+<p>For example:</p>
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>add<span class="w"> </span>path/to/my/file
+git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;feat: A brief description of this new feature which resolves #42&quot;</span><span class="w"> </span>--signoff
+git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;fix: A brief description of this bug fix which fixes #42&quot;</span><span class="w"> </span>--signoff
+git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;chore: A brief description of routine tasks or maintenance&quot;</span><span class="w"> </span>--signoff
+git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;docs: A brief description of documentation changes&quot;</span><span class="w"> </span>--signoff
+git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;style: A brief description of code style changes (e.g., formatting)&quot;</span><span class="w"> </span>--signoff
+git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;test: A brief description of changes related to testing&quot;</span><span class="w"> </span>--signoff
+git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;refactor: A brief description of code refactoring&quot;</span><span class="w"> </span>--signoff
+git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;perf: A brief description of performance improvements&quot;</span><span class="w"> </span>--signoff
+git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;build: A brief description of build conditions&quot;</span><span class="w"> </span>--signoff
+git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;ci: A brief description of continuous integration changes&quot;</span><span class="w"> </span>--signoff
+git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;revert: A brief description of revert previous code state&quot;</span><span class="w"> </span>--signoff
+</code></pre></div>
+<ul>
+<li>Pull the latest LPVS code from upstream into your branch.</li>
+</ul>
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>rebase<span class="w"> </span>upstream/main
+</code></pre></div>
+<ul>
+<li>Push your code to your forked repository.</li>
+</ul>
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>push<span class="w"> </span>-u<span class="w"> </span>origin<span class="w"> </span>my-feature
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code>-u</code> parameter ensures that your branch will now automatically push and pull from the GitHub branch. That means if you type <code>git push</code> next time, it will know where to push to.</p>
+</div>
+<ul>
+<li>Open a pull request against the upstream repository. Go to your repository on GitHub and click <code>Pull Request</code>. 
+Choose your branch on the right and enter some more details in the comment box. To link the pull request 
+to the issue, include <code>#999</code> in the pull request comment, where 999 is the issue number.</li>
+</ul>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>Each pull-request should fix a single change.</p>
+</div>
+<ul>
+<li>
+<p>Someone from the LPVS team will review your code, and you might be asked to make some changes. If requested, 
+make the necessary changes and push them to your branch. The pull request will be updated automatically.</p>
+</li>
+<li>
+<p>Once your code is accepted, it will be merged into the main branch and become part of the next LPVS release. 
+If your code is not accepted, don't be discouraged. LPVS aims to meet specific requirements and priorities, 
+and your contribution will still be available on GitHub as a reference for others.</p>
+</li>
+<li>
+<p>After your contribution is merged or declined, you can delete the branch you've worked on from your local 
+repository and your forked repository:</p>
+</li>
+</ul>
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>checkout<span class="w"> </span>main
+git<span class="w"> </span>branch<span class="w"> </span>-D<span class="w"> </span>my-feature
+git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>--delete<span class="w"> </span>my-feature
+</code></pre></div>
+<hr />
+<h2 id="code-of-conduct">Code of Conduct</h2>
+<p>Everyone interacting in the LPVS project's codebases and issue trackers is expected to follow the <a href="https://github.com/Samsung/LPVS?tab=coc-ov-file">Code of Conduct</a>.</p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+                <p>Copyright &copy; 2024, Samsung Electronics Co., Ltd. All rights reserved.</p>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script src="../../js/bootstrap.bundle.min.js"></script>
+        <script>
+            var base_url = "../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../js/base.js"></script>
+        <script src="../../search/main.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

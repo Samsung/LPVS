@@ -1,0 +1,89 @@
+div.col-md-9 h1:first-of-type {
+    text-align: center;
+    font-size: 60px;
+    font-weight: 300;
+}
+
+div.col-md-9>p:first-of-type {
+    text-align: center;
+}
+
+div.col-md-9 p.admonition-title:first-of-type {
+    text-align: left;
+}
+
+div.col-md-9 h1:first-of-type .headerlink {
+    display: none;
+}
+
+div.admonition.block>.admonition-title {
+    display: none;
+}
+
+.admonition.new, details.new {
+    color: var(--bs-success-text-emphasis);
+    background-color: var(--bs-success-bg-subtle);
+    border-color: var(--bs-success-border-subtle);
+}
+.admonition.example, details.example {
+    color: var(--bs-info-text-emphasis);
+    background-color: var(--bs-info-bg-subtle);
+    border-color: var(--bs-info-border-subtle);
+}
+
+/* Definition List styles */
+
+dd {
+    padding-left: 20px;
+}
+
+.card-body svg {
+    width: 100%;
+    padding: 0 50px;
+    height: auto;
+}
+
+/* Homepage */
+
+body.homepage>div.container>div.row>div.col-md-3 {
+    display: none;
+}
+
+body.homepage>div.container>div.row>div.col-md-9 {
+    margin-left: 0;
+    flex: 0 0 100%;
+    max-width: 100%;
+}
+
+/* mkdocstrings */
+
+.doc-object {
+    padding-left: 10px;
+    border-left: 4px solid var(--bs-light-border-subtle);
+}
+
+.doc-contents .field-body p:first-of-type {
+    display: inline;
+}
+
+.doc-label-class-attribute,
+.doc-label-instance-attribute {
+    display: none;
+}
+
+h2.doc-heading {
+    font-size: 1.5rem;
+}
+h3.doc-heading {
+    font-size: 1.4rem;
+}
+h4.doc-heading {
+    font-size: 1.3rem;
+}
+h5.doc-heading {
+    font-size: 1.2rem;
+}
+
+.doc-contents {
+    padding-left: 0;
+}
