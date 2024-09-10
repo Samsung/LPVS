@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2022, Samsung Electronics Co., Ltd. All rights reserved.
+ * Copyright (c) 2024, Samsung Electronics Co., Ltd. All rights reserved.
  *
  * Use of this source code is governed by a MIT license that can be
  * found in the LICENSE file.
@@ -7,6 +7,8 @@
 package com.lpvs.service;
 
 import com.lpvs.entity.LPVSQueue;
+import com.lpvs.service.webhook.LPVSWebhookService;
+import com.lpvs.service.webhook.LPVSWebhookServiceFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,12 +25,12 @@ public class LPVSQueueProcessorServiceTest {
     LPVSQueueProcessorService queueProcessorService = mock(LPVSQueueProcessorService.class);
     LPVSQueue webhookConfigTest = mock(LPVSQueue.class);
     LPVSQueueService queueService = mock(LPVSQueueService.class);
-    ;
+    LPVSWebhookService webhookService = mock(LPVSWebhookService.class);
+    LPVSWebhookServiceFactory webhookServiceFactory = mock(LPVSWebhookServiceFactory.class);
 
     @BeforeEach
     void setUp() {
         webhookConfigTest = new LPVSQueue();
-        queueService = mock(LPVSQueueService.class);
 
         try {
             when(queueService.getQueueFirstElement())
@@ -42,7 +44,10 @@ public class LPVSQueueProcessorServiceTest {
             fail();
         }
 
-        queueProcessorService = new LPVSQueueProcessorService(queueService);
+        when(webhookServiceFactory.createWebhookService(false)).thenReturn(webhookService);
+
+        queueProcessorService =
+                new LPVSQueueProcessorService(queueService, webhookServiceFactory, false);
     }
 
     @Test
@@ -81,6 +86,6 @@ public class LPVSQueueProcessorServiceTest {
             fail();
         }
         // called once, only at the end of first iteration
-        verify(queueService, times(1)).processWebHook(webhookConfigTest);
+        verify(webhookService, times(1)).processWebHook(webhookConfigTest);
     }
 }
