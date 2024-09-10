@@ -1,0 +1,35 @@
+name: Build & Publish Documentation
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  generate-and-publish-mkdocs:
+    name: Build and Publish Updated Docs
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      pages: write
+
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@0d381219ddf674d61a7572ddd19d7941e271515c # v2.9.0
+        with:
+          egress-policy: audit
+      - name: Checkout repository
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+      - name: Install required packages
+        run: pip install mkdocs mkdocs-material neoteroi-mkdocs pymdown-extensions
+      - name: Build website
+        run: |
+          cd doc
+          mkdocs build
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e # v4.0.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./doc/site
