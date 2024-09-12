@@ -51,7 +51,7 @@ With these features, _LPVS_ assists developers to manage license compliance for 
 
 ## Quick Start Guide & Build
 
-- [_LPVS_ quick start guide](doc/quick-start-guide-and-build.md#quick-start-guide-1)
+- [_LPVS_ quick start guide](doc/docs/user-guide/service/quick-start-guide.md#quick-start-guide-1)
 - [How to Build and Run _LPVS_ from Source Code](doc/quick-start-guide-and-build.md#how-to-build-and-run-lpvs-from-source-code-1)
 
 ---
