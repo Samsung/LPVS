@@ -11,7 +11,7 @@ To enable LPVS license scanning for your project, you need to set up GitHub Webh
 Follow the instructions [here](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token#creating-a-fine-grained-personal-access-token) 
 to create a personal access token (`personal-token`) with the necessary permissions.
 
-!!! note
+!!! warning
 
     Pay attention that the token must be copied immediately after creation, 
     because you will not be able to see it later!
@@ -22,11 +22,11 @@ to create a personal access token (`personal-token`) with the necessary permissi
 
 To configure GitHub access to a personal server, you need to expose the URL to an external API. If the server has a dedicated IP address or domain, this step can be omitted.
 
-- Install ngrok and connect your account from [Ngrok guide](https://ngrok.com/docs/getting-started/#step-2-install-the-ngrok-agent) (follow steps 1 and 2).
+- Install Ngrok and connect your account from [Ngrok guide](https://ngrok.com/docs/getting-started/#step-2-install-the-ngrok-agent) (follow steps 1 and 2).
 
-- If ngrok included in docker compose, auth token can be found on [Ngrok portal](https://dashboard.ngrok.com/get-started/your-authtoken).
+- If Ngrok is included in the docker compose file, `auth-token` can be found on [Ngrok portal](https://dashboard.ngrok.com/get-started/your-authtoken).
 
-- Run ngrok using the command:
+- Run Ngrok using the command:
 
 ```bash
 ngrok http 7896
@@ -48,8 +48,9 @@ Follow the next steps:
 
 !!! note
 
-    If you're using ngrok, the `Payload URL` can be found on localhost: `http://127.0.0.1:4040/`.
-    It should be like `https://50be-62-205-136-206.ngrok-free.app/`.
+    If you're using Ngrok, the `Payload URL` can be found on localhost: `http://127.0.0.1:4040/`.
+    
+    It will look like `https://50be-62-205-136-206.ngrok-free.app/`.
 
 - Specify the content type as `application/json`.
 - Fill in the `Secret` field with the passphrase: `LPVS`.

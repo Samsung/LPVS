@@ -15,7 +15,7 @@ in the navigation bar at the top of the page to move through the documentation i
 - [Integration guide]
 
 [Contributing guide]: contributing.md
-[Testing policy]: testing_policy.md
+[Testing policy]: testing-policy.md
 [Code review requirements]: code-review-requirements.md
 [API reference]: api.md
 [Integration guide]: integration.md

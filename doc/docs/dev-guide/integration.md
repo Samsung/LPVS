@@ -14,10 +14,12 @@ You can authenticate to GitHub Packages with Apache Maven by editing your
     Create a token with minimally sufficient rights:
 
     - Fine-grained tokens **(recommended)**  
+
         Only select repositories -> Permissions -> Repository permissions -> Metadata -> Read-only
     
     - Tokens (classic)
-        Select scopes -> read:packages_
+
+        Select scopes -> read:packages
 
 Create a new `~/.m2/settings.xml` file if one doesn't exist.
 
