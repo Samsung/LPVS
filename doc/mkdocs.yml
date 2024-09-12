@@ -28,7 +28,7 @@ plugins:
 
 nav:
   - Home: index.md
-  #- Getting Started: getting-started.md
+  - Quick Start Guide: user-guide/service/quick-start-guide.md
   - User Guide:
       - User guide: user-guide/README.md
       - Service mode:
