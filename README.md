@@ -30,19 +30,13 @@ Use LPVS to protect your projects from license infringement.
 
 Refer to the [Quick Start Guide], and then try running the tool.
 
----
-
 ## Documentation 📚
 
 Full documentation is available at [GitHub pages].
 
----
-
 ## License 📝
 
 The LPVS source code is distributed under the [MIT] open source license.
-
----
 
 ## Contributing 🤝
 
