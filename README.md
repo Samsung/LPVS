@@ -20,15 +20,11 @@ The **License Pre-Validation Service (LPVS)** is a tool designed to address lice
 It helps developers ensure license compliance by analyzing project components and flagging potential issues at each update.
 Use LPVS to protect your projects from license infringement.
 
----
-
 ## Features ✨
 
 - **License Checking**: Ensures open-source license compliance by analyzing project components.
 - **Always Watching**: Continuously monitors license-related risks throughout the development process.
 - **GitHub Integration**: Automatically generates comments on GitHub, highlighting potential license violations or issues within the codebase.
-
----
 
 ## Usage 🚀
 
