@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2023, Samsung Electronics Co., Ltd. All rights reserved.
+ * Copyright (c) 2022-2024, Samsung Electronics Co., Ltd. All rights reserved.
  *
  * Use of this source code is governed by a MIT license that can be
  * found in the LICENSE file.
@@ -45,15 +45,4 @@ public class LPVSLicenseConflict implements Serializable {
     @ManyToOne
     @JoinColumn(name = "conflict_license_id", referencedColumnName = "id", nullable = false)
     private LPVSLicense conflictLicense;
-
-    /**
-     * Constructs a new license conflict with the given repository and conflicting licenses.
-     *
-     * @param repositoryLicense The repository license involved in the conflict.
-     * @param conflictLicense   The conflicting license involved in the conflict.
-     */
-    public LPVSLicenseConflict(LPVSLicense repositoryLicense, LPVSLicense conflictLicense) {
-        this.repositoryLicense = repositoryLicense;
-        this.conflictLicense = conflictLicense;
-    }
 }

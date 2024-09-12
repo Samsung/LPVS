@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2023, Samsung Electronics Co., Ltd. All rights reserved.
+ * Copyright (c) 2023-2024, Samsung Electronics Co., Ltd. All rights reserved.
  *
  * Use of this source code is governed by a MIT license that can be
  * found in the LICENSE file.
@@ -15,7 +15,7 @@
  * Enums in this package may include but are not limited to:
  * - Actions related to pull requests (e.g., opening, closing)
  * - Status of pull request scans (e.g., completed, scanning)
- * - Version control systems (e.g., GitHub, GitLab)
+ * - Version control systems (e.g., GitHub)
  * - OAuth attributes for various authentication providers (e.g., Google, Naver, Kakao)
  * </p><p>
  * Enums in this package may have additional methods and functionalities to facilitate
