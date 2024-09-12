@@ -14,6 +14,7 @@ theme:
 
 markdown_extensions:
   - admonition
+  - attr_list
   - pymdownx.details
   - pymdownx.superfences
   - pymdownx.tasklist:
@@ -28,7 +29,7 @@ plugins:
 
 nav:
   - Home: index.md
-  #- Getting Started: getting-started.md
+  - Quick Start Guide: quick-start-guide.md
   - User Guide:
       - User guide: user-guide/README.md
       - Service mode:
@@ -48,7 +49,7 @@ nav:
   - Developer Guide:
       - Developer guide: dev-guide/README.md
       - Contributing guide: dev-guide/contributing.md
-      - Testing policy: dev-guide/testing_policy.md
+      - Testing policy: dev-guide/testing-policy.md
       - Code review requirements: dev-guide/code-review-requirements.md
       - API reference: dev-guide/api.md
       - Integration guide: dev-guide/integration.md
