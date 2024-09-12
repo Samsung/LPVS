@@ -13,12 +13,12 @@
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7127519.svg)](https://doi.org/10.5281/zenodo.7127519)
 
 ---
-## Introduction
+
+## ~~ Introduction ~~
 
 The **License Pre-Validation Service (LPVS)** is a tool designed to address license-related risks in the source code.
 It helps developers ensure license compliance by analyzing project components and flagging potential issues at each update.
 Use LPVS to protect your projects from license infringement.
----
 
 ## Features ✨
 
@@ -26,25 +26,17 @@ Use LPVS to protect your projects from license infringement.
 - **Always Watching**: Continuously monitors license-related risks throughout the development process.
 - **GitHub Integration**: Automatically generates comments on GitHub, highlighting potential license violations or issues within the codebase.
 
----
-
 ## Usage 🚀
 
 Refer to the [Quick Start Guide], and then try running the tool.
-
----
 
 ## Documentation 📚
 
 Full documentation is available at [GitHub pages].
 
----
-
 ## License 📝
 
 The LPVS source code is distributed under the [MIT] open source license.
-
----
 
 ## Contributing 🤝
 
