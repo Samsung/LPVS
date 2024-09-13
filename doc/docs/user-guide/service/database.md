@@ -32,7 +32,7 @@ sudo mysql
 
 !!! note
 
-    Replace 'username' and 'password' with your preferred values. However, in the example below, they are kept as placeholders for the sake of clarity:
+    Replace `username` and `password` with your preferred values. However, in the example below, they are kept as placeholders for the sake of clarity.
 
 ```sql
 create database lpvs;

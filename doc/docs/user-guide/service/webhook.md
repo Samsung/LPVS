@@ -44,7 +44,7 @@ Follow the next steps:
 
 ![step2](../../img/webhook/step_1_2.png)
 
-- Fill in the `Payload URL` with: <URL where LPVS is running>.
+- Fill in the `Payload URL` with URL where LPVS is running.
 
 !!! note
 

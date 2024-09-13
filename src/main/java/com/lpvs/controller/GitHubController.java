@@ -132,11 +132,10 @@ public class GitHubController {
     }
 
     /**
-     * @brief Default endpoint that forwards POST requests to the `/webhooks` endpoint.
-     *
+     * Default endpoint that forwards POST requests to the `/webhooks` endpoint.
      * This method serves as a "default" POST endpoint that doesn't have any specific path assigned.
      * It forwards any requests to the `/webhooks` endpoint using Spring's `RequestDispatcher`.
-     * Implemented to simplify Github webhook configuration.
+     * Implemented to simplify GitHub webhook configuration.
      *
      * @param request The HttpServletRequest object representing the incoming request.
      * @param response The HttpServletResponse object for the outgoing response.
@@ -146,7 +145,7 @@ public class GitHubController {
     @RequestMapping(method = RequestMethod.POST)
     public void forwardToWebhook(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Forward the request to the /webhooks endpoint
+        // Forward the request to the `/webhooks` endpoint
         RequestDispatcher dispatcher = request.getRequestDispatcher("/webhooks");
         dispatcher.forward(request, response);
     }

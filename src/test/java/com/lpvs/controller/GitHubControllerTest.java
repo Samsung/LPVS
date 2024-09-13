@@ -81,17 +81,11 @@ public class GitHubControllerTest {
 
     @Test
     void ForwardToWebhookTest() throws ServletException, IOException {
-
         HttpServletRequest mockRequest = mock(HttpServletRequest.class);
         HttpServletResponse mockResponse = mock(HttpServletResponse.class);
         RequestDispatcher mockDispatcher = mock(RequestDispatcher.class);
-
         when(mockRequest.getRequestDispatcher("/webhooks")).thenReturn(mockDispatcher);
-
-        // Act
         gitHubController.forwardToWebhook(mockRequest, mockResponse);
-
-        // Assert
         verify(mockRequest).getRequestDispatcher("/webhooks");
         verify(mockDispatcher).forward(mockRequest, mockResponse);
     }
