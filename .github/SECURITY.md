@@ -72,115 +72,56 @@ Note: This security policy is subject to change and may be updated without notic
 
 ## 3. Security requirements
 
-```plantuml
-@startuml
+```mermaid
+graph LR
+    A[Security requirements] --> B[Confidentiality]
+    A --> C[Integrity]
+    A --> D[Availability]
+    A --> E[Access control]
 
-left to right direction
-usecase "Security requirements"     #palegreen;line:black
-usecase Confidentiality     as Co   #lightblue;line:black
-usecase Integrity           as In   #lightblue;line:black
-usecase Availability        as Av   #lightblue;line:black
-usecase "Access control"    as Ac   #lightblue;line:black
-usecase Identification              #lightblue;line:black
-usecase Authentication              #lightblue;line:black
-usecase Authorization               #lightblue;line:black
-usecase Non                         #lightblue;line:black as "Non-public data 
-    is kept confidential"
-usecase "User privacy maintaned"    #lightblue;line:black
-usecase "All data is confidential"  #lightblue;line:black
-usecase "HTTPS: data in motion"     #lightblue;line:black
-usecase "Authorization via GITHUB"  #lightblue;line:black
-usecase Dtm                         #lightblue;line:black as "Data modification
-    requires authorization"
-usecase "Multiple backups"          #lightblue;line:black
-usecase "Rerstore after DDoS"       #lightblue;line:black
+    E --> F[Identification]
+    E --> G[Authentication]
+    E --> H[Authorization]
 
+    B --> I[User privacy maintained]
+    B --> J[Non-public data is kept confidential]
+    B --> K[All data is confidential]
+    B --> L[HTTPS: data in motion]
 
-(Security requirements) <-- (Co)    #line:black;line.bold
-(Security requirements) <-- (In)    #line:black;line.bold
-(Security requirements) <-- (Av)    #line:black;line.bold
-(Security requirements) <-- (Ac)    #line:black;line.bold
+    C --> L
+    C --> M[Authorization via GITHUB]
+    C --> N[Data modification requires authorization]
 
-(Ac) <-- (Identification)           #line:black
-(Ac) <-- (Authentication)           #line:black
-(Ac) <-- (Authorization)            #line:black
-(Co) <-- (User privacy maintaned)   #line:black
-(Co) <-- (Non)                      #line:black
-(Co) <-- (All data is confidential) #line:black
-(Co) <-- (HTTPS: data in motion)    #line:black
-(In) <-- (HTTPS: data in motion)    #line:black
-(In) <-- (Authorization via GITHUB) #line:black
-(In) <-- (Dtm)                      #line:black
-(Av) <-- (Multiple backups)         #line:black
-(Av) <-- (Rerstore after DDoS)      #line:black
-
-@enduml
+    D --> O[Multiple backups]
+    D --> P[Restore after DDoS]
 ```
 
 ---
 
 ## 4. Security Software life cycle processes
-```plantuml
-@startuml
 
-left to right direction
-usecase SSLCP           #palegreen;line:black   as  "Security Software
-    life cycle processes"
-usecase "Certification & Controls"      as CC       #lightblue;line:black
-usecase CBPB            #lightblue;line:black   as  "CII Best 
-    Practices badge"
-usecase "OpenSSF Score Card"            as OSSFSC   #lightblue;line:black
-usecase "Security in maintenance"       as SM       #lightblue;line:black
-usecase ADPV            #lightblue;line:black   as  "Auto-detect publicy
-    vulnerabilities"
-usecase "Rapid update"                  as RU       #lightblue;line:black
-usecase KDKDSS          #lightblue;line:black   as  "Key developers know how to
-    develop secure software"
-usecase "Infrastructure management"     as IM       #lightblue;line:black
-usecase DTEPA           #lightblue;line:black   as  "Development & test
-    environments protected
-    from attack"
-usecase CIATEP          #lightblue;line:black   as  "CI automated test
-    environment does not have
-    protected data"
-usecase SIV             #lightblue;line:black   as  "Security in integration
-    & verification"
-usecase "Style checking tools"          as SCT      #lightblue;line:black
-usecase SCWA            #lightblue;line:black   as  "Source code
-    weakness analyzer"
-usecase FLOSS           #lightblue;line:black
-usecase "Negative Testing"              as NT       #lightblue;line:black
-usecase UTC             #lightblue;line:black   as  "Unit Test
-    coverage >75%"
-usecase "Security in design"            as SD       #lightblue;line:black
-usecase "Simple design"                 as SID      #lightblue;line:black
-usecase "Memory-safe languages"         as MSL      #lightblue;line:black
-usecase SDISS           #lightblue;line:black   as  "Secure disign
-    includes S&S"
+```mermaid
+graph LR
+    A[Security Software Life Cycle Processes] --> B[Certification & Controls]
+    A --> C[Security in Maintenance]
+    A --> D[Key Developers Know How to Develop Secure Software]
+    A --> E[Security in Integration & Verification]
+    A --> F[Infrastructure Management]
+    A --> G[Security in Design]
 
-
-(SSLCP) <-- (CC)                    #line:black;line.bold
-(SSLCP) <-- (SM)                    #line:black;line.bold
-(SSLCP) <-- (KDKDSS)                #line:black;line.bold
-(SSLCP) <-- (SIV)                   #line:black;line.bold
-(SSLCP) <-- (IM)                    #line:black;line.bold
-(SSLCP) <-- (SD)                    #line:black;line.bold
-
-(CC)    <-- (CBPB)                  #line:black
-(CC)    <-- (OSSFSC)                #line:black
-(SM)    <-- (ADPV)                  #line:black
-(SM)    <-- (RU)                    #line:black
-(IM)    <-- (DTEPA)                 #line:black
-(IM)    <-- (CIATEP)                #line:black
-(SIV)   <-- (SCT)                   #line:black
-(SIV)   <-- (SCWA)                  #line:black
-(SIV)   <-- (FLOSS)                 #line:black
-(SIV)   <-- (NT)                    #line:black
-(SIV)   <-- (UTC)                   #line:black
-(SD)    <-- (SID)                   #line:black
-(SD)    <-- (MSL)                   #line:black
-(SD)    <-- (SDISS)                 #line:black
-
-@enduml
+    B --> H[CII Best Practices Badge]
+    B --> I[OpenSSF Score Card]
+    C --> J[Auto-detect Public Vulnerabilities]
+    C --> K[Rapid Update]
+    F --> L[Development & Test Environments Protected from Attack]
+    F --> M[CI Automated Test Environment Does Not Have Protected Data]
+    E --> N[Style Checking Tools]
+    E --> O[Source Code Weakness Analyzer]
+    E --> P[Free/Libre/Open Source Software]
+    E --> Q[Negative Testing]
+    E --> R[Unit Test Coverage >75%]
+    G --> S[Simple Design]
+    G --> T[Memory-Safe Languages]
+    G --> U[Secure Design Includes S&S]
 ```
 ---
