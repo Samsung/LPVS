@@ -48,11 +48,14 @@ nav:
           - Database customization: user-guide/config/database.md
   - Developer Guide:
       - Developer guide: dev-guide/README.md
+      - Architecture: dev-guide/architecture.md
       - Contributing guide: dev-guide/contributing.md
+      - Coding style: dev-guide/coding-style.md
       - Testing policy: dev-guide/testing-policy.md
       - Code review requirements: dev-guide/code-review-requirements.md
       - API reference: dev-guide/api.md
       - Integration guide: dev-guide/integration.md
+      - FAQ: dev-guide/faq.md
   - About:
       - License: about/license.md
       - Releases: about/releases.md
