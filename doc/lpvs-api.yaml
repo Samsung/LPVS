@@ -48,6 +48,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/WebhookResponseForbidden'
 
+  /:
+    post:
+      tags:
+        - GitHub Webhooks API
+      summary: Forward to Start Scan
+      description: Forwards the request to the `/webhooks` endpoint.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebhookRequest'
+      responses:
+        '200':
+          description: 200 OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookResponseOK'
+        '403':
+          description: 403 Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookResponseForbidden'
+
   /scan/{gitHubOrg}/{gitHubRepo}/{prNumber}:
     post:
       tags:
