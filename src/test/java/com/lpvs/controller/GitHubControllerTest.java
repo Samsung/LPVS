@@ -14,6 +14,11 @@ import com.lpvs.service.LPVSGitHubService;
 import com.lpvs.service.LPVSQueueService;
 
 import com.lpvs.util.LPVSExitHandler;
+
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import uk.org.webcompere.systemstubs.environment.EnvironmentVariables;
 import uk.org.webcompere.systemstubs.jupiter.SystemStub;
@@ -28,9 +33,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.lang.reflect.Method;
+import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 @Slf4j
@@ -70,6 +78,17 @@ public class GitHubControllerTest {
                     mocked_queueRepo,
                     "LPVS",
                     exitHandler);
+
+    @Test
+    void ForwardToWebhookTest() throws ServletException, IOException {
+        HttpServletRequest mockRequest = mock(HttpServletRequest.class);
+        HttpServletResponse mockResponse = mock(HttpServletResponse.class);
+        RequestDispatcher mockDispatcher = mock(RequestDispatcher.class);
+        when(mockRequest.getRequestDispatcher("/webhooks")).thenReturn(mockDispatcher);
+        gitHubController.forwardToWebhook(mockRequest, mockResponse);
+        verify(mockRequest).getRequestDispatcher("/webhooks");
+        verify(mockDispatcher).forward(mockRequest, mockResponse);
+    }
 
     @Test
     public void noSignatureTest() {

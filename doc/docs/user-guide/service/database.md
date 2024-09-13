@@ -28,20 +28,24 @@ sudo service mysql start
 sudo mysql
 ```
 
-* Run the following commands in the MySQL command line interface to create the necessary database and user:
+* Run the following commands in the MySQL command line interface to create the necessary database and user.
+
+!!! note
+
+    Replace `username` and `password` with your preferred values. However, in the example below, they are kept as placeholders for the sake of clarity.
 
 ```sql
-mysql> create database lpvs;
-mysql> create user username;
-mysql> grant all on lpvs.* to username;
-mysql> alter user username identified by 'password';
-mysql> exit;
+create database lpvs;
+create user username;
+grant all on lpvs.* to username;
+alter user username identified by 'password';
+exit;
 ```
 
-* (**Optional**) If you have an existing dump file, import it into the newly created database using the command:
+* (**Optional**) If using the provided dump file, make sure to run the following command from the repository's base folder. If using a different dump file, specify its path in the command. After running the command, you will be prompted to enter the password set in the previous step:
 
 ```bash
-mysql -u[username] -p[password] < /path/to/dump/file/database_dump.sql
+mysql -u [username] -p < /src/main/resources/database_dump.sql
 ```
 
 * (**Optional**) Fill in the `lpvs_license_list` and `lpvs_license_conflicts` tables according to the [Database customization guideline](../config/database.md).

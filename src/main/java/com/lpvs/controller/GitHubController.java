@@ -38,6 +38,10 @@ import java.util.Optional;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import jakarta.annotation.PostConstruct;
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * Controller class for handling GitHub webhook events and single scan requests.
@@ -125,6 +129,25 @@ public class GitHubController {
         this.queueRepository = queueRepository;
         this.GITHUB_SECRET = GITHUB_SECRET;
         this.exitHandler = exitHandler;
+    }
+
+    /**
+     * Default endpoint that forwards POST requests to the `/webhooks` endpoint.
+     * This method serves as a "default" POST endpoint that doesn't have any specific path assigned.
+     * It forwards any requests to the `/webhooks` endpoint using Spring's `RequestDispatcher`.
+     * Implemented to simplify GitHub webhook configuration.
+     *
+     * @param request The HttpServletRequest object representing the incoming request.
+     * @param response The HttpServletResponse object for the outgoing response.
+     * @throws ServletException If an error occurs during request forwarding.
+     * @throws IOException If an input or output error occurs during request forwarding.
+     */
+    @RequestMapping(method = RequestMethod.POST)
+    public void forwardToWebhook(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        // Forward the request to the `/webhooks` endpoint
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/webhooks");
+        dispatcher.forward(request, response);
     }
 
     /**
