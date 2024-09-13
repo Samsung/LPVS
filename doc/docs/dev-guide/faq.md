@@ -36,7 +36,7 @@ During the execution of this command, you will need to enter additional data:
 * Key is valid for? (0): **0**
 * Is this correct? (y/N): **y**
 * Real name: **LPVS**
-* Email address: **o.kopysov@samsung.com**
+* Email address: **john.doe@samsung.com**
 * Comment: **Keys for LPVS**
 
 In this case, the result will be the next
@@ -68,10 +68,10 @@ Is this correct? (y/N) y
 GnuPG needs to construct a user ID to identify your key.
 
 Real name: LPVS
-Email address: o.kopysov@samsung.com
+Email address: john.doe@samsung.com
 Comment: Keys for LPVS
 You selected this USER-ID:
-    "LPVS (Keys for LPVS) <o.kopysov@samsung.com>"
+    "LPVS (Keys for LPVS) <john.doe@samsung.com>"
 
 Change (N)ame, (C)omment, (E)mail or (O)kay/(Q)uit? O
 We need to generate a lot of random bytes. It is a good idea to perform
@@ -88,7 +88,7 @@ public and secret key created and signed.
 
 pub   rsa4096 2021-10-15 [SC]
       D3C7C06AC34BDA9A41388E76BE13B1D440E813F0
-uid                      LPVS (Keys for LPVS) <o.kopysov@samsung.com>
+uid                      LPVS (Keys for LPVS) <john.doe@samsung.com>
 sub   rsa4096 2021-10-15 [E]
 ``` 
 
@@ -119,8 +119,8 @@ gpg --armor --detach-sign lpvs-vx.x.x.tar.gz
 ###  Extraction a copy of a key pair from local gpg keyring
 
 ```bash
-gpg --output lpvs-public.pgp --armor --export o.kopysov@samsung.com 
-gpg --output lpvs-private.pgp --armor --export-secret-key o.kopysov@samsung.com
+gpg --output lpvs-public.pgp --armor --export john.doe@samsung.com 
+gpg --output lpvs-private.pgp --armor --export-secret-key john.doe@samsung.com
 ```
 
 !!! note
