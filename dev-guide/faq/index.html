@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="auto">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        <link rel="canonical" href="https://samsung.github.io/LPVS/dev-guide/faq/">
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+        <title>FAQ - License Pre-Validation Service</title>
+        <link href="../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../css/fontawesome.min.css" rel="stylesheet">
+        <link href="../../css/brands.min.css" rel="stylesheet">
+        <link href="../../css/solid.min.css" rel="stylesheet">
+        <link href="../../css/v4-font-face.min.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" disabled>
+        <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
+        <link href="../../css/extra.css" rel="stylesheet">
+        <link href="../../css/mkdocsoad.css" rel="stylesheet">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="../..">License Pre-Validation Service</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="nav-item">
+                                <a href="../.." class="nav-link">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../../quick-start-guide/" class="nav-link">Quick Start Guide</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"  aria-expanded="false">User Guide</a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../../user-guide/" class="dropdown-item">User guide</a>
+</li>
+                                    
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Service mode</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../../user-guide/service/webhook/" class="dropdown-item">GitHub webhook configuration</a>
+</li>
+            
+<li>
+    <a href="../../user-guide/service/docker/" class="dropdown-item">Run service using pre-built Docker image</a>
+</li>
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Build and run service from the source code</a>
+    <ul class="dropdown-menu">
+            
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Prerequisites</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../../user-guide/service/scanner/" class="dropdown-item">Scanner installation</a>
+</li>
+            
+<li>
+    <a href="../../user-guide/service/database/" class="dropdown-item">Database configuration</a>
+</li>
+    </ul>
+  </li>
+            
+<li>
+    <a href="../../user-guide/service/build-and-run/" class="dropdown-item">Build and run service</a>
+</li>
+    </ul>
+  </li>
+    </ul>
+  </li>
+                                    
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Command line mode</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../../user-guide/cli/cli_pr/" class="dropdown-item">Single scan of the pull request</a>
+</li>
+            
+<li>
+    <a href="../../user-guide/cli/cli_file/" class="dropdown-item">Single scan of local files</a>
+</li>
+    </ul>
+  </li>
+                                    
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Configuration</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../../user-guide/config/options/" class="dropdown-item">Configuration options</a>
+</li>
+            
+<li>
+    <a href="../../user-guide/config/database/" class="dropdown-item">Database customization</a>
+</li>
+    </ul>
+  </li>
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle active" aria-current="page" role="button" data-bs-toggle="dropdown"  aria-expanded="false">Developer Guide</a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../" class="dropdown-item">Developer guide</a>
+</li>
+                                    
+<li>
+    <a href="../architecture/" class="dropdown-item">Architecture</a>
+</li>
+                                    
+<li>
+    <a href="../contributing/" class="dropdown-item">Contributing guide</a>
+</li>
+                                    
+<li>
+    <a href="../coding-style/" class="dropdown-item">Coding style</a>
+</li>
+                                    
+<li>
+    <a href="../testing-policy/" class="dropdown-item">Testing policy</a>
+</li>
+                                    
+<li>
+    <a href="../code-review-requirements/" class="dropdown-item">Code review requirements</a>
+</li>
+                                    
+<li>
+    <a href="../api/" class="dropdown-item">API reference</a>
+</li>
+                                    
+<li>
+    <a href="../integration/" class="dropdown-item">Integration guide</a>
+</li>
+                                    
+<li>
+    <a href="./" class="dropdown-item active" aria-current="page">FAQ</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"  aria-expanded="false">About</a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../../about/license/" class="dropdown-item">License</a>
+</li>
+                                    
+<li>
+    <a href="../../about/releases/" class="dropdown-item">Releases</a>
+</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ms-md-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a rel="prev" href="../integration/" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../../about/license/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="https://github.com/Samsung/LPVS/blob/main/doc/docs/dev-guide/faq.md" class="nav-link"><i class="fa-brands fa-github"></i> Edit on GitHub</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                              <button id="theme-menu" aria-expanded="false" data-bs-toggle="dropdown" data-bs-display="static" aria-label="Toggle theme" class="nav-link dropdown-toggle">
+                                <i class="fa-solid fa-circle-half-stroke fa-fw"></i>
+                                <span class="d-lg-none ms-2">Toggle theme</span>
+                              </button>
+                              <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                  <button class="dropdown-item d-flex align-items-center" data-bs-theme-value="light" aria-pressed="false">
+                                    <i class="fa-solid fa-sun fa-fw"></i>
+                                    <span class="ms-2">Light</span>
+                                    <i class="fa-solid fa-check ms-auto d-none"></i>
+                                  </button>
+                                </li>
+                                <li>
+                                  <button class="dropdown-item d-flex align-items-center" data-bs-theme-value="dark" aria-pressed="false">
+                                    <i class="fa-solid fa-moon fa-fw"></i>
+                                    <span class="ms-2">Dark</span>
+                                    <i class="fa-solid fa-check ms-auto d-none"></i>
+                                  </button>
+                                </li>
+                                <li>
+                                  <button class="dropdown-item d-flex align-items-center" data-bs-theme-value="auto" aria-pressed="true">
+                                    <i class="fa-solid fa-circle-half-stroke fa-fw"></i>
+                                    <span class="ms-2">Auto</span>
+                                    <i class="fa-solid fa-check ms-auto"></i>
+                                  </button>
+                                </li>
+                              </ul>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <script src="../../js/darkmode.js"></script>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-bs-level="1"><a href="#faq" class="nav-link">FAQ</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#useful-utilities" class="nav-link">Useful utilities</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#how-to-sign-a-release-using-gpg" class="nav-link">How to sign a release using GPG?</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#how-to-use-gpg-to-verify-signed-release" class="nav-link">How to use GPG to verify signed release?</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#dco-via-the-command-line" class="nav-link">DCO via the command line</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="faq">FAQ</h1>
+<p>Frequently asked questions and useful information.</p>
+<hr />
+<h2 id="useful-utilities">Useful utilities</h2>
+<h3 id="swagger">Swagger</h3>
+<ul>
+<li><a href="https://swagger.io/">Swagger</a></li>
+<li><a href="https://editor.swagger.io/">Swagger Editor</a></li>
+</ul>
+<h3 id="plantuml">PlantUML</h3>
+<ul>
+<li><a href="http://plantuml.com/guide">PlantUML Language Reference Guide</a></li>
+<li><a href="https://www.planttext.com/">PlantText - Online Editor</a></li>
+</ul>
+<hr />
+<h2 id="how-to-sign-a-release-using-gpg">How to sign a release using GPG?</h2>
+<p>A good example of a release signature can be found on the <a href="https://wiki.debian.org/Creating%20signed%20GitHub%20releases">link</a>. However, 5 and 6 items are described separately.</p>
+<h3 id="creating-a-key-pair">Creating a key pair</h3>
+<div class="highlight"><pre><span></span><code>gpg<span class="w"> </span>--full-generate-key
+</code></pre></div>
+<p>During the execution of this command, you will need to enter additional data:</p>
+<ul>
+<li>Please select what kind of key you want: <strong>1</strong></li>
+<li>What keysize do you want? (3072): <strong>4096</strong></li>
+<li>Please specify how long the key should be valid: <strong>0</strong></li>
+<li>Key is valid for? (0): <strong>0</strong></li>
+<li>Is this correct? (y/N): <strong>y</strong></li>
+<li>Real name: <strong>LPVS</strong></li>
+<li>Email address: <strong>john.doe@example.com</strong></li>
+<li>Comment: <strong>Keys for LPVS</strong></li>
+</ul>
+<p>In this case, the result will be the next</p>
+<div class="highlight"><pre><span></span><code>gpg<span class="w"> </span><span class="o">(</span>GnuPG<span class="o">)</span><span class="w"> </span><span class="m">2</span>.2.4<span class="p">;</span><span class="w"> </span>Copyright<span class="w"> </span><span class="o">(</span>C<span class="o">)</span><span class="w"> </span><span class="m">2017</span><span class="w"> </span>Free<span class="w"> </span>Software<span class="w"> </span>Foundation,<span class="w"> </span>Inc.
+This<span class="w"> </span>is<span class="w"> </span>free<span class="w"> </span>software:<span class="w"> </span>you<span class="w"> </span>are<span class="w"> </span>free<span class="w"> </span>to<span class="w"> </span>change<span class="w"> </span>and<span class="w"> </span>redistribute<span class="w"> </span>it.
+There<span class="w"> </span>is<span class="w"> </span>NO<span class="w"> </span>WARRANTY,<span class="w"> </span>to<span class="w"> </span>the<span class="w"> </span>extent<span class="w"> </span>permitted<span class="w"> </span>by<span class="w"> </span>law.
+
+Please<span class="w"> </span><span class="k">select</span><span class="w"> </span>what<span class="w"> </span>kind<span class="w"> </span>of<span class="w"> </span>key<span class="w"> </span>you<span class="w"> </span>want:
+<span class="w">   </span><span class="o">(</span><span class="m">1</span><span class="o">)</span><span class="w"> </span>RSA<span class="w"> </span>and<span class="w"> </span>RSA<span class="w"> </span><span class="o">(</span>default<span class="o">)</span>
+<span class="w">   </span><span class="o">(</span><span class="m">2</span><span class="o">)</span><span class="w"> </span>DSA<span class="w"> </span>and<span class="w"> </span>Elgamal
+<span class="w">   </span><span class="o">(</span><span class="m">3</span><span class="o">)</span><span class="w"> </span>DSA<span class="w"> </span><span class="o">(</span>sign<span class="w"> </span>only<span class="o">)</span>
+<span class="w">   </span><span class="o">(</span><span class="m">4</span><span class="o">)</span><span class="w"> </span>RSA<span class="w"> </span><span class="o">(</span>sign<span class="w"> </span>only<span class="o">)</span>
+Your<span class="w"> </span>selection?<span class="w"> </span><span class="m">1</span>
+RSA<span class="w"> </span>keys<span class="w"> </span>may<span class="w"> </span>be<span class="w"> </span>between<span class="w"> </span><span class="m">1024</span><span class="w"> </span>and<span class="w"> </span><span class="m">4096</span><span class="w"> </span>bits<span class="w"> </span>long.
+What<span class="w"> </span>keysize<span class="w"> </span><span class="k">do</span><span class="w"> </span>you<span class="w"> </span>want?<span class="w"> </span><span class="o">(</span><span class="m">3072</span><span class="o">)</span><span class="w"> </span><span class="m">4096</span>
+Requested<span class="w"> </span>keysize<span class="w"> </span>is<span class="w"> </span><span class="m">4096</span><span class="w"> </span>bits
+Please<span class="w"> </span>specify<span class="w"> </span>how<span class="w"> </span>long<span class="w"> </span>the<span class="w"> </span>key<span class="w"> </span>should<span class="w"> </span>be<span class="w"> </span>valid.
+<span class="w">         </span><span class="nv">0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>key<span class="w"> </span>does<span class="w"> </span>not<span class="w"> </span>expire
+<span class="w">      </span>&lt;n&gt;<span class="w">  </span><span class="o">=</span><span class="w"> </span>key<span class="w"> </span>expires<span class="w"> </span><span class="k">in</span><span class="w"> </span>n<span class="w"> </span>days
+<span class="w">      </span>&lt;n&gt;w<span class="w"> </span><span class="o">=</span><span class="w"> </span>key<span class="w"> </span>expires<span class="w"> </span><span class="k">in</span><span class="w"> </span>n<span class="w"> </span>weeks
+<span class="w">      </span>&lt;n&gt;m<span class="w"> </span><span class="o">=</span><span class="w"> </span>key<span class="w"> </span>expires<span class="w"> </span><span class="k">in</span><span class="w"> </span>n<span class="w"> </span>months
+<span class="w">      </span>&lt;n&gt;y<span class="w"> </span><span class="o">=</span><span class="w"> </span>key<span class="w"> </span>expires<span class="w"> </span><span class="k">in</span><span class="w"> </span>n<span class="w"> </span>years
+Key<span class="w"> </span>is<span class="w"> </span>valid<span class="w"> </span><span class="k">for</span>?<span class="w"> </span><span class="o">(</span><span class="m">0</span><span class="o">)</span><span class="w"> </span><span class="m">0</span>
+Key<span class="w"> </span>does<span class="w"> </span>not<span class="w"> </span>expire<span class="w"> </span>at<span class="w"> </span>all
+Is<span class="w"> </span>this<span class="w"> </span>correct?<span class="w"> </span><span class="o">(</span>y/N<span class="o">)</span><span class="w"> </span>y
+
+GnuPG<span class="w"> </span>needs<span class="w"> </span>to<span class="w"> </span>construct<span class="w"> </span>a<span class="w"> </span>user<span class="w"> </span>ID<span class="w"> </span>to<span class="w"> </span>identify<span class="w"> </span>your<span class="w"> </span>key.
+
+Real<span class="w"> </span>name:<span class="w"> </span>LPVS
+Email<span class="w"> </span>address:<span class="w"> </span>john.doe@example.com
+Comment:<span class="w"> </span>Keys<span class="w"> </span><span class="k">for</span><span class="w"> </span>LPVS
+You<span class="w"> </span>selected<span class="w"> </span>this<span class="w"> </span>USER-ID:
+<span class="w">    </span><span class="s2">&quot;LPVS (Keys for LPVS) &lt;john.doe@example.com&gt;&quot;</span>
+
+Change<span class="w"> </span><span class="o">(</span>N<span class="o">)</span>ame,<span class="w"> </span><span class="o">(</span>C<span class="o">)</span>omment,<span class="w"> </span><span class="o">(</span>E<span class="o">)</span>mail<span class="w"> </span>or<span class="w"> </span><span class="o">(</span>O<span class="o">)</span>kay/<span class="o">(</span>Q<span class="o">)</span>uit?<span class="w"> </span>O
+We<span class="w"> </span>need<span class="w"> </span>to<span class="w"> </span>generate<span class="w"> </span>a<span class="w"> </span>lot<span class="w"> </span>of<span class="w"> </span>random<span class="w"> </span>bytes.<span class="w"> </span>It<span class="w"> </span>is<span class="w"> </span>a<span class="w"> </span>good<span class="w"> </span>idea<span class="w"> </span>to<span class="w"> </span>perform
+some<span class="w"> </span>other<span class="w"> </span>action<span class="w"> </span><span class="o">(</span><span class="nb">type</span><span class="w"> </span>on<span class="w"> </span>the<span class="w"> </span>keyboard,<span class="w"> </span>move<span class="w"> </span>the<span class="w"> </span>mouse,<span class="w"> </span>utilize<span class="w"> </span>the
+disks<span class="o">)</span><span class="w"> </span>during<span class="w"> </span>the<span class="w"> </span>prime<span class="w"> </span>generation<span class="p">;</span><span class="w"> </span>this<span class="w"> </span>gives<span class="w"> </span>the<span class="w"> </span>random<span class="w"> </span>number
+generator<span class="w"> </span>a<span class="w"> </span>better<span class="w"> </span>chance<span class="w"> </span>to<span class="w"> </span>gain<span class="w"> </span>enough<span class="w"> </span>entropy.
+We<span class="w"> </span>need<span class="w"> </span>to<span class="w"> </span>generate<span class="w"> </span>a<span class="w"> </span>lot<span class="w"> </span>of<span class="w"> </span>random<span class="w"> </span>bytes.<span class="w"> </span>It<span class="w"> </span>is<span class="w"> </span>a<span class="w"> </span>good<span class="w"> </span>idea<span class="w"> </span>to<span class="w"> </span>perform
+some<span class="w"> </span>other<span class="w"> </span>action<span class="w"> </span><span class="o">(</span><span class="nb">type</span><span class="w"> </span>on<span class="w"> </span>the<span class="w"> </span>keyboard,<span class="w"> </span>move<span class="w"> </span>the<span class="w"> </span>mouse,<span class="w"> </span>utilize<span class="w"> </span>the
+disks<span class="o">)</span><span class="w"> </span>during<span class="w"> </span>the<span class="w"> </span>prime<span class="w"> </span>generation<span class="p">;</span><span class="w"> </span>this<span class="w"> </span>gives<span class="w"> </span>the<span class="w"> </span>random<span class="w"> </span>number
+generator<span class="w"> </span>a<span class="w"> </span>better<span class="w"> </span>chance<span class="w"> </span>to<span class="w"> </span>gain<span class="w"> </span>enough<span class="w"> </span>entropy.
+gpg:<span class="w"> </span>key<span class="w"> </span>BE13B1D440E813F0<span class="w"> </span>marked<span class="w"> </span>as<span class="w"> </span>ultimately<span class="w"> </span>trusted
+gpg:<span class="w"> </span>revocation<span class="w"> </span>certificate<span class="w"> </span>stored<span class="w"> </span>as<span class="w"> </span><span class="s1">&#39;/home/virtual-pc/.gnupg/openpgp-revocs.d/D3C7C06AC34BDA9A41388E76BE13B1D440E813F0.rev&#39;</span>
+public<span class="w"> </span>and<span class="w"> </span>secret<span class="w"> </span>key<span class="w"> </span>created<span class="w"> </span>and<span class="w"> </span>signed.
+
+pub<span class="w">   </span>rsa4096<span class="w"> </span><span class="m">2021</span>-10-15<span class="w"> </span><span class="o">[</span>SC<span class="o">]</span>
+<span class="w">      </span>D3C7C06AC34BDA9A41388E76BE13B1D440E813F0
+uid<span class="w">                      </span>LPVS<span class="w"> </span><span class="o">(</span>Keys<span class="w"> </span><span class="k">for</span><span class="w"> </span>LPVS<span class="o">)</span><span class="w"> </span>&lt;john.doe@example.com&gt;
+sub<span class="w">   </span>rsa4096<span class="w"> </span><span class="m">2021</span>-10-15<span class="w"> </span><span class="o">[</span>E<span class="o">]</span>
+</code></pre></div>
+<h3 id="create-and-sign-a-tag-with-your-created-key">Create and sign a tag with your created key</h3>
+<p>Set your GPG signing key in Git</p>
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>user.signingkey<span class="w"> </span>&lt;key-ID&gt;
+</code></pre></div>
+<p>Create and sign the tag</p>
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>tag<span class="w"> </span>-s<span class="w"> </span>&lt;tag&gt;
+</code></pre></div>
+<h3 id="sign-the-release-tarball-with-your-created-key">Sign the release tarball with your created key</h3>
+<div class="highlight"><pre><span></span><code>gpg<span class="w"> </span>--armor<span class="w"> </span>--detach-sign<span class="w"> </span>lpvs-vx.x.x.tar.gz
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you have multiple keys, you must specify the key that will be used by adding the option <code>-u &lt;key-ID&gt;</code></p>
+</div>
+<h3 id="extraction-a-copy-of-a-key-pair-from-local-gpg-keyring">Extraction a copy of a key pair from local gpg keyring</h3>
+<div class="highlight"><pre><span></span><code>gpg<span class="w"> </span>--output<span class="w"> </span>lpvs-public.pgp<span class="w"> </span>--armor<span class="w"> </span>--export<span class="w"> </span>john.doe@example.com<span class="w"> </span>
+gpg<span class="w"> </span>--output<span class="w"> </span>lpvs-private.pgp<span class="w"> </span>--armor<span class="w"> </span>--export-secret-key<span class="w"> </span>john.doe@example.com
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Only the signature file (<code>lpvs-vx.x.x.tar.gz.asc</code>) and the public key (<code>lpvs-public.pgp</code>) must be loaded as an artifact to release.</p>
+</div>
+<h3 id="to-sign-the-release-using-another-computer">To sign the release using another computer</h3>
+<p>For this need to download the private key (<code>lpvs-private.pgp</code>) by the next command:</p>
+<div class="highlight"><pre><span></span><code>gpg<span class="w"> </span>--import<span class="w"> </span>lpvs-private.pgp
+</code></pre></div>
+<hr />
+<h2 id="how-to-use-gpg-to-verify-signed-release">How to use GPG to verify signed release?</h2>
+<p>To perform the verification, you need the following:
+* signed file – for example <code>lpvs-vx.x.x.tar.gz</code>
+* signature file – accompanying file with “.asc” extension (Ex. <code>lpvs-vx.x.x.tar.gz.asc</code>)
+* public key – for example <code>lpvs-public.pgp</code></p>
+<h3 id="import-the-public-key-to-your-keystore">Import the public key to your keystore</h3>
+<div class="highlight"><pre><span></span><code>gpg<span class="w"> </span>--import<span class="w"> </span>&lt;public<span class="w"> </span>key&gt;
+</code></pre></div>
+<h3 id="verification-signed-file">Verification signed file</h3>
+<div class="highlight"><pre><span></span><code>gpg<span class="w"> </span>--verify<span class="w"> </span>&lt;signature<span class="w"> </span>file&gt;<span class="w"> </span>&lt;signed<span class="w"> </span>file&gt;
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you have multiple keys, you must specify the key that will be used by adding the option <code>-u &lt;key-ID&gt;</code></p>
+</div>
+<hr />
+<h2 id="dco-via-the-command-line">DCO via the command line</h2>
+<p>The most popular way to do DCO is to sign off your username and email address in the git command line.</p>
+<p>First, configure your local git install.</p>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>user.name<span class="w"> </span><span class="s2">&quot;John Doe&quot;</span><span class="w"> </span>
+$<span class="w"> </span>git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>user.email<span class="w"> </span>johndoe@example.com
+</code></pre></div>
+<p>Obviously, you should use your own name and the email address associated with your GitHub user account.</p>
+<p>Now, every time you commit new code in git, just add a signoff statement via the <code>-s</code> flag.</p>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-s<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;This is my commit message&quot;</span>
+</code></pre></div>
+<p>That’s it. Git adds your sign-off message in the commit message, and you contribution (commit) is now DCO compliant.</p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+                <p>Copyright &copy; 2024, Samsung Electronics Co., Ltd. All rights reserved.</p>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script src="../../js/bootstrap.bundle.min.js"></script>
+        <script>
+            var base_url = "../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../js/base.js"></script>
+        <script src="../../search/main.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>
