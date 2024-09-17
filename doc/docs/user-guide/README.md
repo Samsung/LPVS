@@ -29,3 +29,6 @@ There are 2 modes of LPVS operation:
 
 - [Configuration options](config/options.md)
 - [Database customization](config/database.md)
+
+## Performance monitoring
+- [Tools](performance.md)
