@@ -46,6 +46,7 @@ nav:
       - Configuration:
           - Configuration options: user-guide/config/options.md
           - Database customization: user-guide/config/database.md
+      - Performance monitoring: user-guide/performance.md
   - Developer Guide:
       - Developer guide: dev-guide/README.md
       - Architecture: dev-guide/architecture.md
