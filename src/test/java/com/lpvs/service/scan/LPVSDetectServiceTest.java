@@ -10,6 +10,7 @@ import com.lpvs.entity.LPVSFile;
 import com.lpvs.entity.LPVSLicense;
 import com.lpvs.entity.LPVSQueue;
 import com.lpvs.entity.report.LPVSReportBuilder;
+import com.lpvs.entity.LPVSConflict;
 import com.lpvs.service.LPVSGitHubConnectionService;
 import com.lpvs.service.LPVSGitHubService;
 import com.lpvs.service.LPVSLicenseService;
@@ -255,11 +256,9 @@ public class LPVSDetectServiceTest {
         @Test
         void testRunOneScan_PullRequest_Branch2()
                 throws NoSuchFieldException, IllegalAccessException, IOException {
-            LPVSLicenseService.Conflict<String, String> conflict_1 =
-                    new LPVSLicenseService.Conflict<>("MIT", "Apache-2.0");
+            LPVSConflict<String, String> conflict_1 = new LPVSConflict<>("MIT", "Apache-2.0");
 
-            List<LPVSLicenseService.Conflict<String, String>> expected =
-                    List.of(conflict_1, conflict_1);
+            List<LPVSConflict<String, String>> expected = List.of(conflict_1, conflict_1);
 
             lpvsDetectService =
                     spy(
@@ -312,11 +311,9 @@ public class LPVSDetectServiceTest {
         @Test
         void testRunOneScan_Branch3()
                 throws NoSuchFieldException, IllegalAccessException, IOException {
-            LPVSLicenseService.Conflict<String, String> conflict_1 =
-                    new LPVSLicenseService.Conflict<>("MIT", "Apache-2.0");
+            LPVSConflict<String, String> conflict_1 = new LPVSConflict<>("MIT", "Apache-2.0");
 
-            List<LPVSLicenseService.Conflict<String, String>> expected =
-                    List.of(conflict_1, conflict_1);
+            List<LPVSConflict<String, String>> expected = List.of(conflict_1, conflict_1);
 
             lpvsDetectService =
                     spy(
@@ -368,11 +365,9 @@ public class LPVSDetectServiceTest {
         @Test
         void testRunOneScan_LocalFiles_WithConsoleReport()
                 throws NoSuchFieldException, IllegalAccessException, IOException {
-            LPVSLicenseService.Conflict<String, String> conflict_1 =
-                    new LPVSLicenseService.Conflict<>("MIT", "Apache-2.0");
+            LPVSConflict<String, String> conflict_1 = new LPVSConflict<>("MIT", "Apache-2.0");
 
-            List<LPVSLicenseService.Conflict<String, String>> expected =
-                    List.of(conflict_1, conflict_1);
+            List<LPVSConflict<String, String>> expected = List.of(conflict_1, conflict_1);
 
             File sourceDir = Files.createTempDirectory("source").toFile();
             File sourceFile1 = new File(sourceDir, "file1.txt");
@@ -415,11 +410,9 @@ public class LPVSDetectServiceTest {
         @Test
         void testRunOneScan_LocalFiles_WithHtmlReport()
                 throws NoSuchFieldException, IllegalAccessException, IOException {
-            LPVSLicenseService.Conflict<String, String> conflict_1 =
-                    new LPVSLicenseService.Conflict<>("MIT", "Apache-2.0");
+            LPVSConflict<String, String> conflict_1 = new LPVSConflict<>("MIT", "Apache-2.0");
 
-            List<LPVSLicenseService.Conflict<String, String>> expected =
-                    List.of(conflict_1, conflict_1);
+            List<LPVSConflict<String, String>> expected = List.of(conflict_1, conflict_1);
 
             File sourceDir = Files.createTempDirectory("source").toFile();
             File sourceFile1 = new File(sourceDir, "file1.txt");
@@ -469,11 +462,9 @@ public class LPVSDetectServiceTest {
         @Test
         void testRunOneScan_LocalFiles_NoFile()
                 throws NoSuchFieldException, IllegalAccessException, IOException {
-            LPVSLicenseService.Conflict<String, String> conflict_1 =
-                    new LPVSLicenseService.Conflict<>("MIT", "Apache-2.0");
+            LPVSConflict<String, String> conflict_1 = new LPVSConflict<>("MIT", "Apache-2.0");
 
-            List<LPVSLicenseService.Conflict<String, String>> expected =
-                    List.of(conflict_1, conflict_1);
+            List<LPVSConflict<String, String>> expected = List.of(conflict_1, conflict_1);
 
             File sourceDir = Files.createTempDirectory("source").toFile();
             File sourceFile1 = new File(sourceDir, "file1.txt");
@@ -526,11 +517,9 @@ public class LPVSDetectServiceTest {
         @Test
         void testRunOneScan_TriggerNotNull() throws Exception {
 
-            LPVSLicenseService.Conflict<String, String> conflict_1 =
-                    new LPVSLicenseService.Conflict<>("MIT", "Apache-2.0");
+            LPVSConflict<String, String> conflict_1 = new LPVSConflict<>("MIT", "Apache-2.0");
 
-            List<LPVSLicenseService.Conflict<String, String>> expected =
-                    List.of(conflict_1, conflict_1);
+            List<LPVSConflict<String, String>> expected = List.of(conflict_1, conflict_1);
 
             setPrivateField(detectService, "trigger", "github/owner/repo/branch/123");
             setPrivateField(detectService, "htmlReport", "report/test.html");
@@ -573,11 +562,9 @@ public class LPVSDetectServiceTest {
         @Test
         void testRunOneScan_TriggerNotNull_Branch2() throws Exception {
 
-            LPVSLicenseService.Conflict<String, String> conflict_1 =
-                    new LPVSLicenseService.Conflict<>("MIT", "Apache-2.0");
+            LPVSConflict<String, String> conflict_1 = new LPVSConflict<>("MIT", "Apache-2.0");
 
-            List<LPVSLicenseService.Conflict<String, String>> expected =
-                    List.of(conflict_1, conflict_1);
+            List<LPVSConflict<String, String>> expected = List.of(conflict_1, conflict_1);
 
             setPrivateField(detectService, "trigger", "github/owner/repo/branch/123");
             setPrivateField(detectService, "htmlReport", "report/test.html");
@@ -621,11 +608,9 @@ public class LPVSDetectServiceTest {
         void testRunOneScan_TriggerNotNull_Branch3() throws Exception {
             GHRepository mockHeadRepository2 = mock(GHRepository.class);
 
-            LPVSLicenseService.Conflict<String, String> conflict_1 =
-                    new LPVSLicenseService.Conflict<>("MIT", "Apache-2.0");
+            LPVSConflict<String, String> conflict_1 = new LPVSConflict<>("MIT", "Apache-2.0");
 
-            List<LPVSLicenseService.Conflict<String, String>> expected =
-                    List.of(conflict_1, conflict_1);
+            List<LPVSConflict<String, String>> expected = List.of(conflict_1, conflict_1);
 
             setPrivateField(detectService, "trigger", "github/owner/repo/branch/123");
             setPrivateField(detectService, "htmlReport", "report/test.html");
@@ -667,11 +652,9 @@ public class LPVSDetectServiceTest {
         void testRunOneScan_TriggerNotNull_NoDirectory() throws Exception {
             GHRepository mockHeadRepository2 = mock(GHRepository.class);
 
-            LPVSLicenseService.Conflict<String, String> conflict_1 =
-                    new LPVSLicenseService.Conflict<>("MIT", "Apache-2.0");
+            LPVSConflict<String, String> conflict_1 = new LPVSConflict<>("MIT", "Apache-2.0");
 
-            List<LPVSLicenseService.Conflict<String, String>> expected =
-                    List.of(conflict_1, conflict_1);
+            List<LPVSConflict<String, String>> expected = List.of(conflict_1, conflict_1);
 
             setPrivateField(detectService, "trigger", "github/owner/repo/branch/123");
             setPrivateField(detectService, "htmlReport", "report/test.html");
@@ -708,11 +691,9 @@ public class LPVSDetectServiceTest {
         @Test
         void testCommentBuilder_ConflictFilePresent() {
             LPVSReportBuilder reportBuilder = new LPVSReportBuilder(null);
-            LPVSLicenseService.Conflict<String, String> conflict_1 =
-                    new LPVSLicenseService.Conflict<>("MIT", "Apache-2.0");
+            LPVSConflict<String, String> conflict_1 = new LPVSConflict<>("MIT", "Apache-2.0");
 
-            List<LPVSLicenseService.Conflict<String, String>> expected =
-                    List.of(conflict_1, conflict_1);
+            List<LPVSConflict<String, String>> expected = List.of(conflict_1, conflict_1);
 
             List<LPVSFile> scanResults = new ArrayList<>();
             String commentGitHub =
@@ -725,7 +706,7 @@ public class LPVSDetectServiceTest {
         @Test
         void testCommentBuilder_NoConflictNoLicense() {
             LPVSReportBuilder reportBuilder = new LPVSReportBuilder(null);
-            List<LPVSLicenseService.Conflict<String, String>> expected = new ArrayList<>();
+            List<LPVSConflict<String, String>> expected = new ArrayList<>();
             List<LPVSFile> scanResults = new ArrayList<>();
             String commentGitHub =
                     reportBuilder.generateCommandLineComment(

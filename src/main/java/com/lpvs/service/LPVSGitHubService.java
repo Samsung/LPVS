@@ -217,7 +217,7 @@ public class LPVSGitHubService {
     public void commentResults(
             LPVSQueue webhookConfig,
             List<LPVSFile> scanResults,
-            List<LPVSLicenseService.Conflict<String, String>> conflicts,
+            List<LPVSConflict<String, String>> conflicts,
             LPVSPullRequest lpvsPullRequest)
             throws Exception {
 
@@ -287,16 +287,16 @@ public class LPVSGitHubService {
 
         if (conflicts != null && !conflicts.isEmpty()) {
             hasConflicts = true;
-            for (LPVSLicenseService.Conflict<String, String> conflict : conflicts) {
+            for (LPVSConflict<String, String> conflict : conflicts) {
                 LPVSDetectedLicense detectedIssue = new LPVSDetectedLicense();
                 detectedIssue.setPullRequest(lpvsPullRequest);
                 Long l1 =
                         lpvsLicenseRepository
-                                .findFirstBySpdxIdOrderByLicenseIdDesc(conflict.l1)
+                                .findFirstBySpdxIdOrderByLicenseIdDesc(conflict.getL1())
                                 .getLicenseId();
                 Long l2 =
                         lpvsLicenseRepository
-                                .findFirstBySpdxIdOrderByLicenseIdDesc(conflict.l2)
+                                .findFirstBySpdxIdOrderByLicenseIdDesc(conflict.getL2())
                                 .getLicenseId();
                 detectedIssue.setLicenseConflict(
                         lpvsLicenseConflictRepository.findLicenseConflict(l1, l2));

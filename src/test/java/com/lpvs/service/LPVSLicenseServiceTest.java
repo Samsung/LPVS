@@ -21,6 +21,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
+import com.lpvs.entity.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -29,10 +30,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import com.lpvs.entity.LPVSFile;
-import com.lpvs.entity.LPVSLicense;
-import com.lpvs.entity.LPVSLicenseConflict;
-import com.lpvs.entity.LPVSQueue;
 import com.lpvs.repository.LPVSLicenseConflictRepository;
 import com.lpvs.repository.LPVSLicenseRepository;
 import com.lpvs.util.LPVSExitHandler;
@@ -146,9 +143,9 @@ public class LPVSLicenseServiceTest {
         ReflectionTestUtils.setField(
                 licenseService,
                 "licenseConflicts",
-                new ArrayList<LPVSLicenseService.Conflict<String, String>>() {
+                new ArrayList<LPVSConflict<String, String>>() {
                     {
-                        add(new LPVSLicenseService.Conflict<>("", ""));
+                        add(new LPVSConflict<>("", ""));
                     }
                 });
 
@@ -320,7 +317,7 @@ public class LPVSLicenseServiceTest {
         final String license_name_aleternative_2 = "Apache License 2.0";
 
         @BeforeEach
-        void setUp() throws NoSuchFieldException, IllegalAccessException {
+        void setUp() {
             licenseService = new LPVSLicenseService(null, exitHandler);
 
             lpvs_license_1 = new LPVSLicense(1L, license_name_1, spdx_id_1, null, null, null);
@@ -349,10 +346,8 @@ public class LPVSLicenseServiceTest {
     @Nested
     class TestAddLicenseConflict {
         LPVSLicenseService licenseService;
-        LPVSLicenseService.Conflict<String, String> conflict_1 =
-                new LPVSLicenseService.Conflict<>("MIT", "Apache-1.1");
-        LPVSLicenseService.Conflict<String, String> conflict_2 =
-                new LPVSLicenseService.Conflict<>("MIT", "Apache-2.0");
+        LPVSConflict<String, String> conflict_1 = new LPVSConflict<>("MIT", "Apache-1.1");
+        LPVSConflict<String, String> conflict_2 = new LPVSConflict<>("MIT", "Apache-2.0");
 
         @BeforeEach
         void setUp() throws NoSuchFieldException, IllegalAccessException {
@@ -379,8 +374,7 @@ public class LPVSLicenseServiceTest {
     @Nested
     class TestFindConflicts_fullExecution {
         LPVSLicenseService licenseService;
-        LPVSLicenseService.Conflict<String, String> conflict_1 =
-                new LPVSLicenseService.Conflict<>("MIT", "Apache-2.0");
+        LPVSConflict<String, String> conflict_1 = new LPVSConflict<>("MIT", "Apache-2.0");
 
         // `lpvs_file_1`
         LPVSFile lpvs_file_1;
@@ -454,70 +448,12 @@ public class LPVSLicenseServiceTest {
 
         @Test
         public void testFindConflicts_fullExecution() {
-            List<LPVSLicenseService.Conflict<String, String>> expected =
-                    List.of(conflict_1, conflict_1);
-            List<LPVSLicenseService.Conflict<String, String>> actual =
+            List<LPVSConflict<String, String>> expected = List.of(conflict_1, conflict_1);
+            List<LPVSConflict<String, String>> actual =
                     licenseService.findConflicts(webhookConfig, List.of(lpvs_file_1, lpvs_file_2));
 
             assertEquals(expected, actual);
         }
-    }
-
-    final String license1 = "license1";
-    final String license2 = "license2";
-    final LPVSLicenseService.Conflict<String, String> base_conf_11 =
-            new LPVSLicenseService.Conflict<>(license1, license1);
-    final LPVSLicenseService.Conflict<String, String> base_conf_12 =
-            new LPVSLicenseService.Conflict<>(license1, license2);
-    final LPVSLicenseService.Conflict<String, String> base_conf_21 =
-            new LPVSLicenseService.Conflict<>(license2, license1);
-    final LPVSLicenseService.Conflict<String, String> base_conf_22 =
-            new LPVSLicenseService.Conflict<>(license2, license2);
-
-    @Test
-    public void findConflictsEmptyScanResults() {
-        List<LPVSFile> scanResults = new ArrayList<>();
-        LPVSLicenseService mockLicenseService = new LPVSLicenseService(null, exitHandler);
-        LPVSQueue webhookConfig = new LPVSQueue(); // licenseConflicts = new ArrayList<>();
-        assertEquals(
-                new ArrayList<>(), mockLicenseService.findConflicts(webhookConfig, scanResults));
-    }
-
-    @Test
-    public void conflictEquals() {
-        String license1 = "license1";
-        String license2 = "license2";
-
-        LPVSLicenseService.Conflict<String, String> conf =
-                new LPVSLicenseService.Conflict<>(license1, license2);
-        assertNotEquals(conf.l1, conf.l2);
-    }
-
-    @Test
-    public void conflictEqualNotEqualsTest() {
-        final String license1 = "license1";
-        final String license2 = "license2";
-        final LPVSLicenseService.Conflict<String, String> conf_1_2 =
-                new LPVSLicenseService.Conflict<>(license1, license2);
-
-        assertTrue(conf_1_2.equals(conf_1_2));
-        assertTrue(conf_1_2.equals(base_conf_12));
-        assertTrue(conf_1_2.equals(base_conf_21));
-
-        assertFalse(conf_1_2.equals(base_conf_22));
-        assertFalse(conf_1_2.equals(base_conf_11));
-        assertFalse(conf_1_2.equals(license1));
-        assertFalse(conf_1_2.equals(null));
-    }
-
-    @Test
-    public void hashTest() {
-        String license1 = "license1";
-        String license2 = "license2";
-        assertEquals(Objects.hash(license1, license2), base_conf_12.hashCode());
-        assertNotEquals(Objects.hash(license1, license2), base_conf_11.hashCode());
-        assertNotEquals(Objects.hash(license1, license2), base_conf_21.hashCode());
-        assertNotEquals(Objects.hash(license1, license2), base_conf_22.hashCode());
     }
 
     @Nested

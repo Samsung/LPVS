@@ -6,10 +6,7 @@
  */
 package com.lpvs.service;
 
-import com.lpvs.entity.LPVSFile;
-import com.lpvs.entity.LPVSLicense;
-import com.lpvs.entity.LPVSPullRequest;
-import com.lpvs.entity.LPVSQueue;
+import com.lpvs.entity.*;
 import com.lpvs.entity.enums.LPVSPullRequestAction;
 import com.lpvs.entity.enums.LPVSVcs;
 import com.lpvs.repository.LPVSDetectedLicenseRepository;
@@ -2158,7 +2155,7 @@ public class LPVSGitHubServiceTest {
         final String checklist_url_1 = "https://opensource.org/licenses/MIT";
 
         // `conflict_1`
-        LPVSLicenseService.Conflict<String, String> conflict_1;
+        LPVSConflict<String, String> conflict_1;
         final String conflict_1_l1 = "MIT";
         final String conflict_1_l2 = "Apache-1.0";
 
@@ -2258,7 +2255,7 @@ public class LPVSGitHubServiceTest {
                             null,
                             null,
                             null);
-            conflict_1 = new LPVSLicenseService.Conflict<>(conflict_1_l1, conflict_1_l2);
+            conflict_1 = new LPVSConflict<>(conflict_1_l1, conflict_1_l2);
 
             when(mocked_lpvsLicenseRepository.findFirstBySpdxIdOrderByLicenseIdDesc(anyString()))
                     .thenReturn(lpvs_license_1);
@@ -2492,7 +2489,7 @@ public class LPVSGitHubServiceTest {
         final String checklist_url_1 = "https://opensource.org/licenses/MIT";
 
         // `conflict_1`
-        LPVSLicenseService.Conflict<String, String> conflict_1;
+        LPVSConflict<String, String> conflict_1;
         final String conflict_1_l1 = "MIT";
         final String conflict_1_l2 = "Apache-1.0";
 
@@ -2589,7 +2586,7 @@ public class LPVSGitHubServiceTest {
                             component_url_1,
                             component_version_1,
                             component_vendor_1);
-            conflict_1 = new LPVSLicenseService.Conflict<>(conflict_1_l1, conflict_1_l2);
+            conflict_1 = new LPVSConflict<>(conflict_1_l1, conflict_1_l2);
 
             when(mocked_lpvsLicenseRepository.findFirstBySpdxIdOrderByLicenseIdDesc(anyString()))
                     .thenReturn(lpvs_license_1);
@@ -2823,7 +2820,7 @@ public class LPVSGitHubServiceTest {
         final String access_2 = "UNREVIEWED";
 
         // `conflict_1`
-        LPVSLicenseService.Conflict<String, String> conflict_1;
+        LPVSConflict<String, String> conflict_1;
         final String conflict_1_l1 = "MIT";
         final String conflict_1_l2 = "Apache-1.0";
 
@@ -2923,7 +2920,7 @@ public class LPVSGitHubServiceTest {
                             null,
                             null,
                             null);
-            conflict_1 = new LPVSLicenseService.Conflict<>(conflict_1_l1, conflict_1_l2);
+            conflict_1 = new LPVSConflict<>(conflict_1_l1, conflict_1_l2);
 
             when(mocked_lpvsLicenseRepository.findFirstBySpdxIdOrderByLicenseIdDesc(anyString()))
                     .thenReturn(lpvs_license_1);
@@ -3157,7 +3154,7 @@ public class LPVSGitHubServiceTest {
         final String access_2 = "RESTRICTED";
 
         // `conflict_1`
-        LPVSLicenseService.Conflict<String, String> conflict_1;
+        LPVSConflict<String, String> conflict_1;
         final String conflict_1_l1 = "MIT";
         final String conflict_1_l2 = "Apache-1.0";
 
@@ -3257,7 +3254,7 @@ public class LPVSGitHubServiceTest {
                             null,
                             null,
                             null);
-            conflict_1 = new LPVSLicenseService.Conflict<>(conflict_1_l1, conflict_1_l2);
+            conflict_1 = new LPVSConflict<>(conflict_1_l1, conflict_1_l2);
 
             when(mocked_lpvsLicenseRepository.findFirstBySpdxIdOrderByLicenseIdDesc(anyString()))
                     .thenReturn(lpvs_license_1);
@@ -4292,8 +4289,8 @@ public class LPVSGitHubServiceTest {
                             add(file);
                         }
                     };
-            List<LPVSLicenseService.Conflict<String, String>> conflictList = new ArrayList<>();
-            conflictList.add(new LPVSLicenseService.Conflict<>("1", "2"));
+            List<LPVSConflict<String, String>> conflictList = new ArrayList<>();
+            conflictList.add(new LPVSConflict<>("1", "2"));
             GHPullRequest pullRequest = mock(GHPullRequest.class);
             ReflectionTestUtils.setField(pullRequest, "url", "http://url.com");
             List<GHPullRequest> pullRequestList =
