@@ -10,7 +10,8 @@ import com.lpvs.entity.LPVSFile;
 import com.lpvs.entity.LPVSLicense;
 import com.lpvs.entity.LPVSQueue;
 import com.lpvs.entity.enums.LPVSVcs;
-import com.lpvs.service.LPVSLicenseService;
+import com.lpvs.entity.LPVSConflict;
+import com.lpvs.util.LPVSCommentUtil;
 import io.micrometer.common.util.StringUtils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,8 +30,6 @@ import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
-
-import static com.lpvs.util.LPVSCommentUtil.getMatchedLinesAsLink;
 
 /**
  * A class responsible for building reports based on the results of license scanning.
@@ -106,7 +105,7 @@ public class LPVSReportBuilder {
     public String generateHtmlReportSingleScan(
             String path,
             List<LPVSFile> scanResults,
-            List<LPVSLicenseService.Conflict<String, String>> conflicts,
+            List<LPVSConflict<String, String>> conflicts,
             LPVSQueue webhookConfig,
             LPVSVcs vcs) {
         Context context = new Context();
@@ -159,9 +158,7 @@ public class LPVSReportBuilder {
      * @return A string containing scan results in command line friendly format.
      */
     public String generateCommandLineComment(
-            String path,
-            List<LPVSFile> scanResults,
-            List<LPVSLicenseService.Conflict<String, String>> conflicts) {
+            String path, List<LPVSFile> scanResults, List<LPVSConflict<String, String>> conflicts) {
         StringBuilder commentBuilder = new StringBuilder();
         String date = sdf.format(new Date());
         commentBuilder.append("\n");
@@ -221,8 +218,8 @@ public class LPVSReportBuilder {
         if (conflicts != null && !conflicts.isEmpty()) {
             commentBuilder.append(
                     "Potential license conflict(s) detected: " + conflicts.size() + "\n");
-            for (LPVSLicenseService.Conflict<String, String> conflict : conflicts) {
-                commentBuilder.append(" - " + conflict.l1 + " and " + conflict.l2 + "\n");
+            for (LPVSConflict<String, String> conflict : conflicts) {
+                commentBuilder.append(" - " + conflict.getL1() + " and " + conflict.getL2() + "\n");
             }
         } else {
             commentBuilder.append("No license conflicts detected.\n");
@@ -259,7 +256,7 @@ public class LPVSReportBuilder {
      */
     public String generatePullRequestComment(
             List<LPVSFile> scanResults,
-            List<LPVSLicenseService.Conflict<String, String>> conflicts,
+            List<LPVSConflict<String, String>> conflicts,
             LPVSQueue webhookConfig,
             LPVSVcs vcs) {
 
@@ -346,7 +343,7 @@ public class LPVSReportBuilder {
      * @return the code of the generated license conflicts table
      */
     private String generateLicenseConflictsTable(
-            List<LPVSLicenseService.Conflict<String, String>> conflicts, LPVSVcs vcs) {
+            List<LPVSConflict<String, String>> conflicts, LPVSVcs vcs) {
         if (vcs != null && vcs.equals(LPVSVcs.GITHUB)) {
             return "<details>"
                     + "\n"
@@ -407,8 +404,7 @@ public class LPVSReportBuilder {
      * @param conflicts a list of license conflicts
      * @return the MD content for the license conflicts table
      */
-    private String generateLicenseConflictsTableMD(
-            List<LPVSLicenseService.Conflict<String, String>> conflicts) {
+    private String generateLicenseConflictsTableMD(List<LPVSConflict<String, String>> conflicts) {
         StringBuilder mdBuilder = new StringBuilder();
         mdBuilder
                 .append("|Conflict>")
@@ -417,14 +413,14 @@ public class LPVSReportBuilder {
                 .append("|-|-|")
                 .append("\n");
 
-        for (LPVSLicenseService.Conflict<String, String> conflict : conflicts) {
+        for (LPVSConflict<String, String> conflict : conflicts) {
             mdBuilder
                     .append("|")
-                    .append(conflict.l1)
+                    .append(conflict.getL1())
                     .append(" and ")
-                    .append(conflict.l2)
+                    .append(conflict.getL2())
                     .append("|")
-                    .append(getExplanationForLicenseConflict(conflict.l1, conflict.l2))
+                    .append(getExplanationForLicenseConflict(conflict.getL1(), conflict.getL2()))
                     .append("|")
                     .append("\n");
         }
@@ -478,7 +474,9 @@ public class LPVSReportBuilder {
                                 .append("|")
                                 .append(fileInfo.getComponentFilePath())
                                 .append("|")
-                                .append(getMatchedLinesAsLink(webhookConfig, fileInfo, vcs))
+                                .append(
+                                        LPVSCommentUtil.getMatchedLinesAsLink(
+                                                webhookConfig, fileInfo, vcs))
                                 .append("|")
                                 .append(fileInfo.getSnippetMatch())
                                 .append("|")
@@ -495,8 +493,7 @@ public class LPVSReportBuilder {
      * @param conflicts a list of license conflicts
      * @return the HTML content for the license conflicts table
      */
-    private String generateLicenseConflictsTableHTML(
-            List<LPVSLicenseService.Conflict<String, String>> conflicts) {
+    private String generateLicenseConflictsTableHTML(List<LPVSConflict<String, String>> conflicts) {
         StringBuilder htmlBuilder = new StringBuilder();
         htmlBuilder.append("<table>");
         htmlBuilder
@@ -505,16 +502,16 @@ public class LPVSReportBuilder {
                 .append("<th>Explanation</th>")
                 .append("<tr>");
 
-        for (LPVSLicenseService.Conflict<String, String> conflict : conflicts) {
+        for (LPVSConflict<String, String> conflict : conflicts) {
             htmlBuilder
                     .append("<tr>")
                     .append("<td>")
-                    .append(conflict.l1)
+                    .append(conflict.getL1())
                     .append(" and ")
-                    .append(conflict.l2)
+                    .append(conflict.getL2())
                     .append("</td>")
                     .append("<td>")
-                    .append(getExplanationForLicenseConflict(conflict.l1, conflict.l2))
+                    .append(getExplanationForLicenseConflict(conflict.getL1(), conflict.getL2()))
                     .append("</td>")
                     .append("</tr>");
         }
@@ -691,7 +688,9 @@ public class LPVSReportBuilder {
 
                         htmlBuilder
                                 .append("</td><td>")
-                                .append(getMatchedLinesAsLink(webhookConfig, fileInfo, vcs))
+                                .append(
+                                        LPVSCommentUtil.getMatchedLinesAsLink(
+                                                webhookConfig, fileInfo, vcs))
                                 .append("</td><td>")
                                 .append(fileInfo.getSnippetMatch())
                                 .append("</td>");

@@ -6,10 +6,7 @@
  */
 package com.lpvs.service;
 
-import com.lpvs.entity.LPVSFile;
-import com.lpvs.entity.LPVSLicense;
-import com.lpvs.entity.LPVSLicenseConflict;
-import com.lpvs.entity.LPVSQueue;
+import com.lpvs.entity.*;
 import com.lpvs.repository.LPVSLicenseConflictRepository;
 import com.lpvs.repository.LPVSLicenseRepository;
 import com.lpvs.util.LPVSExitHandler;
@@ -67,7 +64,7 @@ public class LPVSLicenseService {
     /**
      * List of license conflicts loaded from the database.
      */
-    private List<Conflict<String, String>> licenseConflicts = new ArrayList<>();
+    private List<LPVSConflict<String, String>> licenseConflicts = new ArrayList<>();
 
     /**
      * Handler for exiting the application.
@@ -121,8 +118,8 @@ public class LPVSLicenseService {
     private void loadLicenseConflicts() {
         List<LPVSLicenseConflict> conflicts = lpvsLicenseConflictRepository.findAll();
         for (LPVSLicenseConflict conflict : conflicts) {
-            Conflict<String, String> conf =
-                    new Conflict<>(
+            LPVSConflict<String, String> conf =
+                    new LPVSConflict<>(
                             conflict.getConflictLicense().getSpdxId(),
                             conflict.getRepositoryLicense().getSpdxId());
             if (!licenseConflicts.contains(conf)) {
@@ -336,7 +333,7 @@ public class LPVSLicenseService {
      * @param license2 The second license in conflict.
      */
     public void addLicenseConflict(String license1, String license2) {
-        Conflict<String, String> conf = new Conflict<>(license1, license2);
+        LPVSConflict<String, String> conf = new LPVSConflict<>(license1, license2);
         if (!licenseConflicts.contains(conf)) {
             licenseConflicts.add(conf);
         }
@@ -349,9 +346,9 @@ public class LPVSLicenseService {
      * @param scanResults    List of scanned files.
      * @return List of license conflicts found.
      */
-    public List<Conflict<String, String>> findConflicts(
+    public List<LPVSConflict<String, String>> findConflicts(
             LPVSQueue webhookConfig, List<LPVSFile> scanResults) {
-        List<Conflict<String, String>> foundConflicts = new ArrayList<>();
+        List<LPVSConflict<String, String>> foundConflicts = new ArrayList<>();
 
         if (scanResults.isEmpty() || licenseConflicts.isEmpty()) {
             return foundConflicts;
@@ -383,9 +380,9 @@ public class LPVSLicenseService {
             }
 
             for (String detectedLicenseUnique : detectedLicensesUnique) {
-                for (Conflict<String, String> licenseConflict : licenseConflicts) {
-                    Conflict<String, String> possibleConflict =
-                            new Conflict<>(detectedLicenseUnique, repositoryLicense);
+                for (LPVSConflict<String, String> licenseConflict : licenseConflicts) {
+                    LPVSConflict<String, String> possibleConflict =
+                            new LPVSConflict<>(detectedLicenseUnique, repositoryLicense);
                     if (licenseConflict.equals(possibleConflict)) {
                         foundConflicts.add(possibleConflict);
                     }
@@ -396,9 +393,9 @@ public class LPVSLicenseService {
         // 2. Check conflict between detected licenses
         for (int i = 0; i < detectedLicensesUnique.size(); i++) {
             for (int j = i + 1; j < detectedLicensesUnique.size(); j++) {
-                for (Conflict<String, String> licenseConflict : licenseConflicts) {
-                    Conflict<String, String> possibleConflict =
-                            new Conflict<>(
+                for (LPVSConflict<String, String> licenseConflict : licenseConflicts) {
+                    LPVSConflict<String, String> possibleConflict =
+                            new LPVSConflict<>(
                                     (String) detectedLicensesUnique.toArray()[i],
                                     (String) detectedLicensesUnique.toArray()[j]);
                     if (licenseConflict.equals(possibleConflict)) {
@@ -409,62 +406,6 @@ public class LPVSLicenseService {
         }
 
         return foundConflicts;
-    }
-
-    /**
-     * Represents a license conflict between two licenses.
-     *
-     * @param <License1> Type of the first license.
-     * @param <License2> Type of the second license.
-     */
-    public static class Conflict<License1, License2> {
-
-        /**
-         * The first license in the conflict.
-         */
-        public License1 l1;
-
-        /**
-         * The second license in the conflict.
-         */
-        public License2 l2;
-
-        /**
-         * Constructs a Conflict object with the specified licenses.
-         *
-         * @param l1 The first license.
-         * @param l2 The second license.
-         */
-        public Conflict(License1 l1, License2 l2) {
-            this.l1 = l1;
-            this.l2 = l2;
-        }
-
-        /**
-         * Compares this Conflict object with another object for equality.
-         *
-         * @param o The object to compare with this Conflict.
-         * @return {@code true} if the objects are equal, {@code false} otherwise.
-         */
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            Conflict<?, ?> conflict = (Conflict<?, ?>) o;
-            return (l1.equals(conflict.l1) && l2.equals(conflict.l2))
-                    || (l1.equals(conflict.l2) && l2.equals(conflict.l1));
-        }
-
-        /**
-         * Generates a hash code value for this Conflict object.
-         * The hash code is computed based on the hash codes of the two licenses.
-         *
-         * @return A hash code value for this Conflict object.
-         */
-        @Override
-        public int hashCode() {
-            return Objects.hash(l1, l2);
-        }
     }
 
     /**

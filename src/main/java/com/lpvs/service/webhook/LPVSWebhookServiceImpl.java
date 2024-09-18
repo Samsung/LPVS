@@ -13,6 +13,7 @@ import com.lpvs.entity.LPVSQueue;
 import com.lpvs.entity.enums.LPVSPullRequestStatus;
 import com.lpvs.repository.LPVSPullRequestRepository;
 import com.lpvs.repository.LPVSQueueRepository;
+import com.lpvs.entity.LPVSConflict;
 import com.lpvs.service.LPVSGitHubService;
 import com.lpvs.service.LPVSLicenseService;
 import com.lpvs.service.LPVSQueueService;
@@ -169,7 +170,7 @@ public class LPVSWebhookServiceImpl implements LPVSWebhookService {
                 List<LPVSFile> files = detectService.runScan(webhookConfig, filePath);
 
                 // check license conflicts
-                List<LPVSLicenseService.Conflict<String, String>> detectedConflicts =
+                List<LPVSConflict<String, String>> detectedConflicts =
                         licenseService.findConflicts(webhookConfig, files);
 
                 log.debug("Creating comment");

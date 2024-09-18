@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.lpvs.entity.report.LPVSReportBuilder;
+import com.lpvs.entity.LPVSConflict;
 import com.lpvs.service.LPVSGitHubConnectionService;
 import com.lpvs.service.LPVSGitHubService;
 import com.lpvs.service.LPVSLicenseService;
@@ -126,7 +127,7 @@ public class LPVSDetectService {
         boolean generateReport = false;
         LPVSQueue webhookConfig = null;
         List<LPVSFile> scanResult = null;
-        List<LPVSLicenseService.Conflict<String, String>> detectedConflicts = null;
+        List<LPVSConflict<String, String>> detectedConflicts = null;
         String path = null;
 
         // Error case when both pull request scan and local files scan are set to true

@@ -10,7 +10,7 @@ import com.lpvs.entity.LPVSFile;
 import com.lpvs.entity.LPVSLicense;
 import com.lpvs.entity.LPVSQueue;
 import com.lpvs.entity.enums.LPVSVcs;
-import com.lpvs.service.LPVSLicenseService;
+import com.lpvs.entity.LPVSConflict;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -54,7 +54,7 @@ public class LPVSReportBuilderTest {
             licUnreviewed,
             licUnreviewed_2,
             licIncorrect;
-    LPVSLicenseService.Conflict<String, String> conflict1, conflict2;
+    LPVSConflict<String, String> conflict1, conflict2;
     LPVSReportBuilder reportBuilder;
 
     @TempDir Path tempDir;
@@ -211,8 +211,8 @@ public class LPVSReportBuilderTest {
         fileLicIncorrect.setSnippetMatch("50%");
         fileLicIncorrect.setMatchedLines("5-10");
 
-        conflict1 = new LPVSLicenseService.Conflict<>("GPL-3.0-only", "Apache-2.0");
-        conflict2 = new LPVSLicenseService.Conflict<>("LGPL-2.0-or-later", "MIT");
+        conflict1 = new LPVSConflict<>("GPL-3.0-only", "Apache-2.0");
+        conflict2 = new LPVSConflict<>("LGPL-2.0-or-later", "MIT");
 
         reportBuilder = new LPVSReportBuilder(templateEngine);
     }
@@ -237,7 +237,7 @@ public class LPVSReportBuilderTest {
                         fileLicProhibitedRestricted,
                         fileLicUnreviewed_1,
                         fileLicUnreviewed_2);
-        List<LPVSLicenseService.Conflict<String, String>> conflicts = List.of(conflict1, conflict2);
+        List<LPVSConflict<String, String>> conflicts = List.of(conflict1, conflict2);
         String actual =
                 reportBuilder.generateHtmlReportSingleScan(
                         "some/path", scanResults, conflicts, null, null);
@@ -331,7 +331,7 @@ public class LPVSReportBuilderTest {
     void testReportCommentBuilder_LicenseDetectedNoConflicts() {
         LPVSReportBuilder reportBuilder = new LPVSReportBuilder(null);
         List<LPVSFile> scanResults = new ArrayList<>();
-        List<LPVSLicenseService.Conflict<String, String>> conflicts = new ArrayList<>();
+        List<LPVSConflict<String, String>> conflicts = new ArrayList<>();
 
         scanResults.add(createSampleFile("testPath1", "test1", "UNREVIEWED"));
         scanResults.add(createSampleFile("testPath1", "test1", "PROHIBITED"));
@@ -347,10 +347,8 @@ public class LPVSReportBuilderTest {
         LPVSReportBuilder reportBuilder = new LPVSReportBuilder(null);
         List<LPVSFile> scanResults = new ArrayList<>();
         scanResults.add(createSampleFile("testPath1", "test1", "PROHIBITED"));
-        LPVSLicenseService.Conflict<String, String> conflict_1 =
-                new LPVSLicenseService.Conflict<>("MIT", "Apache-2.0");
-        List<LPVSLicenseService.Conflict<String, String>> conflicts =
-                List.of(conflict_1, conflict_1);
+        LPVSConflict<String, String> conflict_1 = new LPVSConflict<>("MIT", "Apache-2.0");
+        List<LPVSConflict<String, String>> conflicts = List.of(conflict_1, conflict_1);
         String comment =
                 reportBuilder.generateCommandLineComment("testPath1", scanResults, conflicts);
         assertNotNull(comment);
@@ -367,7 +365,7 @@ public class LPVSReportBuilderTest {
     void testGeneratePullRequestComment_LicenseDetectedNoConflicts() {
         LPVSReportBuilder reportBuilder = new LPVSReportBuilder(null);
         List<LPVSFile> scanResults = new ArrayList<>();
-        List<LPVSLicenseService.Conflict<String, String>> conflicts = new ArrayList<>();
+        List<LPVSConflict<String, String>> conflicts = new ArrayList<>();
 
         LPVSQueue webhookConfig = new LPVSQueue();
         webhookConfig.setPullRequestUrl("https://github.com/Samsung/LPVS/pull/1");
@@ -394,10 +392,8 @@ public class LPVSReportBuilderTest {
         LPVSReportBuilder reportBuilder = new LPVSReportBuilder(null);
         List<LPVSFile> scanResults = new ArrayList<>();
         scanResults.add(createSampleFile("testPath1", "test1", "PROHIBITED"));
-        LPVSLicenseService.Conflict<String, String> conflict_1 =
-                new LPVSLicenseService.Conflict<>("MIT", "Apache-2.0");
-        List<LPVSLicenseService.Conflict<String, String>> conflicts =
-                List.of(conflict_1, conflict_1);
+        LPVSConflict<String, String> conflict_1 = new LPVSConflict<>("MIT", "Apache-2.0");
+        List<LPVSConflict<String, String>> conflicts = List.of(conflict_1, conflict_1);
         LPVSQueue webhookConfig = new LPVSQueue();
         webhookConfig.setPullRequestUrl("https://github.com/Samsung/LPVS/pull/1");
         webhookConfig.setRepositoryUrl("https://github.com/Samsung/LPVS");
