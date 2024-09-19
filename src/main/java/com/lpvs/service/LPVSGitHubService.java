@@ -317,17 +317,22 @@ public class LPVSGitHubService {
             }
         }
 
+        // Generate hub link
+        String hubLink = "";
+        if (!StringUtils.isBlank(webhookConfig.getHubLink())) {
+            hubLink =
+                    "\n\n###### <p align='right'>Check the validation details on the [website]("
+                            + webhookConfig.getHubLink()
+                            + ")</p>";
+        }
+
         if (hasProhibitedOrRestricted || hasConflicts) {
             lpvsPullRequest.setStatus(LPVSPullRequestStatus.ISSUES_DETECTED.toString());
             pullRequestRepository.save(lpvsPullRequest);
             pullRequest.comment(
                     "**\\[LPVS\\]** Potential license issues detected \n\n"
                             + commitComment
-                            + (!StringUtils.isBlank(webhookConfig.getHubLink())
-                                    ? ("\n\n###### <p align='right'>Check the validation details on the [website]("
-                                            + webhookConfig.getHubLink()
-                                            + ")</p>")
-                                    : ""));
+                            + hubLink);
             repository.createCommitStatus(
                     webhookConfig.getHeadCommitSHA(),
                     GHCommitState.FAILURE,
@@ -338,13 +343,7 @@ public class LPVSGitHubService {
             lpvsPullRequest.setStatus(LPVSPullRequestStatus.COMPLETED.toString());
             pullRequestRepository.save(lpvsPullRequest);
             pullRequest.comment(
-                    "**\\[LPVS\\]**  No license issue detected \n\n"
-                            + commitComment
-                            + (!StringUtils.isBlank(webhookConfig.getHubLink())
-                                    ? ("\n\n###### <p align='right'>Check the validation details on the [website]("
-                                            + webhookConfig.getHubLink()
-                                            + ")</p>")
-                                    : ""));
+                    "**\\[LPVS\\]**  No license issue detected \n\n" + commitComment + hubLink);
             repository.createCommitStatus(
                     webhookConfig.getHeadCommitSHA(),
                     GHCommitState.SUCCESS,
