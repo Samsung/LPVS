@@ -115,20 +115,11 @@ public class LPVSWebhookServiceImpl implements LPVSWebhookService {
                         + (webhookConfig.getAttempts() + 1)
                         + " for PR: "
                         + webhookConfig.getPullRequestUrl());
-        LPVSPullRequest pullRequest =
-                lpvsPullRequestRepository.findLatestByPullRequestInfo(
-                        webhookConfig.getUserId(),
-                        LPVSPayloadUtil.getRepositoryOrganization(webhookConfig)
-                                + "/"
-                                + LPVSPayloadUtil.getRepositoryName(webhookConfig),
-                        webhookConfig.getPullRequestFilesUrl(),
-                        webhookConfig.getPullRequestHead(),
-                        webhookConfig.getPullRequestBase(),
-                        webhookConfig.getSender(),
-                        LPVSPullRequestStatus.INTERNAL_ERROR.getPullRequestStatus());
+        LPVSPullRequest pullRequest = lpvsPullRequestRepository.findByQueueId(id);
 
         if (pullRequest == null) {
             pullRequest = new LPVSPullRequest();
+            pullRequest.setQueueId(id);
             pullRequest.setUser(webhookConfig.getUserId());
             pullRequest.setRepositoryName(
                     LPVSPayloadUtil.getRepositoryOrganization(webhookConfig)

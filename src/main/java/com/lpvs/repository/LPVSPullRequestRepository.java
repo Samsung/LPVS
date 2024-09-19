@@ -20,38 +20,15 @@ import java.util.List;
  * Extends {@link org.springframework.data.jpa.repository.JpaRepository} for basic CRUD operations.
  */
 public interface LPVSPullRequestRepository extends JpaRepository<LPVSPullRequest, Long> {
+
     /**
-     * Retrieves the latest LPVSPullRequest entity based on the provided criteria.
+     * Find pull request with the specified queue ID.
      *
-     * @param user                The user associated with the pull request. If {@code null}, this parameter is ignored.
-     * @param repositoryName     The name of the repository associated with the pull request. If {@code null}, this parameter is ignored.
-     * @param pullRequestFilesUrl The URL of the pull request files. If {@code null}, this parameter is ignored.
-     * @param pullRequestHead    The head of the pull request. If {@code null}, this parameter is ignored.
-     * @param pullRequestBase    The base of the pull request. If {@code null}, this parameter is ignored.
-     * @param sender              The sender of the pull request. If {@code null}, this parameter is ignored.
-     * @param status              The status of the pull request. If {@code null}, this parameter is ignored.
-     * @return                    The latest LPVSPullRequest entity matching the provided criteria,
-     *                            or {@code null} if no matching entity is found.
+     * @param queueId ID of the related element from the queue.
+     * @return {@link LPVSPullRequest} entity with the specified queue ID.
      */
-    @Query(
-            value =
-                    "SELECT pr FROM LPVSPullRequest pr "
-                            + "WHERE (:user IS NULL OR pr.user = :user) "
-                            + "AND (:repositoryName IS NULL OR pr.repositoryName = :repositoryName) "
-                            + "AND (:pullRequestFilesUrl IS NULL OR pr.pullRequestFilesUrl = :pullRequestFilesUrl) "
-                            + "AND (:pullRequestHead IS NULL OR pr.pullRequestHead = :pullRequestHead) "
-                            + "AND (:pullRequestBase IS NULL OR pr.pullRequestBase = :pullRequestBase) "
-                            + "AND (:sender IS NULL OR pr.sender = :sender) "
-                            + "AND (:status IS NULL OR pr.status = :status) "
-                            + "ORDER BY pr.date DESC LIMIT 1")
-    LPVSPullRequest findLatestByPullRequestInfo(
-            @Param("user") String user,
-            @Param("repositoryName") String repositoryName,
-            @Param("pullRequestFilesUrl") String pullRequestFilesUrl,
-            @Param("pullRequestHead") String pullRequestHead,
-            @Param("pullRequestBase") String pullRequestBase,
-            @Param("sender") String sender,
-            @Param("status") String status);
+    @Query(value = "SELECT pr FROM LPVSPullRequest pr WHERE pr.queueId = :queueId LIMIT 1")
+    LPVSPullRequest findByQueueId(@Param("queueId") Long queueId);
 
     /**
      * Find all pull requests with the specified base name, paginated.

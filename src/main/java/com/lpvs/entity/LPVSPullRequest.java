@@ -37,6 +37,12 @@ public class LPVSPullRequest implements Serializable {
     private Long id;
 
     /**
+     * ID of the connected queue element.
+     */
+    @Column(name = "queue_id")
+    private Long queueId;
+
+    /**
      * The date of the pull request.
      */
     @Column(name = "scan_date")

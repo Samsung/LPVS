@@ -50,7 +50,7 @@ public class LPVSScanossDetectServiceTest {
     @BeforeEach
     public void setUp() throws URISyntaxException, IOException {
         MockitoAnnotations.openMocks(this);
-        String resourcePath = "A_B.json";
+        String resourcePath = "1-A_B.json";
         String destinationPath =
                 System.getProperty("user.home")
                         + File.separator
@@ -136,6 +136,7 @@ public class LPVSScanossDetectServiceTest {
                 .thenReturn("https://github.com/Samsung/LPVS");
         Mockito.when(LPVSPayloadUtil.getRepositoryName(webhookConfig)).thenReturn("C");
         Mockito.when(webhookConfig.getPullRequestUrl()).thenReturn("A_B");
+        Mockito.when(webhookConfig.getId()).thenReturn(1L);
         ReflectionTestUtils.setField(
                 licenseService, "licenseConflictsSource", licenseConflictsSource);
         Mockito.when(licenseService.getLicenseBySpdxIdAndName(anyString(), any()))
@@ -158,6 +159,7 @@ public class LPVSScanossDetectServiceTest {
         Mockito.when(webhookConfig.getRepositoryUrl())
                 .thenReturn("https://github.com/Samsung/LPVS");
         Mockito.when(webhookConfig.getPullRequestUrl()).thenReturn("A_B");
+        Mockito.when(webhookConfig.getId()).thenReturn(1L);
         Mockito.when(LPVSPayloadUtil.getRepositoryName(webhookConfig)).thenReturn("C");
         ReflectionTestUtils.setField(
                 licenseService, "licenseConflictsSource", licenseConflictsSource);
