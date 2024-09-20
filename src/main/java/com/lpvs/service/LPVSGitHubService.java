@@ -17,6 +17,7 @@ import com.lpvs.repository.LPVSLicenseRepository;
 import com.lpvs.repository.LPVSPullRequestRepository;
 import com.lpvs.util.LPVSFileUtil;
 import com.lpvs.util.LPVSPayloadUtil;
+import io.micrometer.common.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.kohsuke.github.GitHub;
 import org.kohsuke.github.GHRepository;
@@ -316,11 +317,22 @@ public class LPVSGitHubService {
             }
         }
 
+        // Generate hub link
+        String hubLink = "";
+        if (!StringUtils.isBlank(webhookConfig.getHubLink())) {
+            hubLink =
+                    "\n\n###### <p align='right'>Check the validation details on the [website]("
+                            + webhookConfig.getHubLink()
+                            + ")</p>";
+        }
+
         if (hasProhibitedOrRestricted || hasConflicts) {
             lpvsPullRequest.setStatus(LPVSPullRequestStatus.ISSUES_DETECTED.toString());
             pullRequestRepository.save(lpvsPullRequest);
             pullRequest.comment(
-                    "**\\[LPVS\\]** Potential license issues detected \n\n" + commitComment);
+                    "**\\[LPVS\\]** Potential license issues detected \n\n"
+                            + commitComment
+                            + hubLink);
             repository.createCommitStatus(
                     webhookConfig.getHeadCommitSHA(),
                     GHCommitState.FAILURE,
@@ -330,7 +342,8 @@ public class LPVSGitHubService {
         } else {
             lpvsPullRequest.setStatus(LPVSPullRequestStatus.COMPLETED.toString());
             pullRequestRepository.save(lpvsPullRequest);
-            pullRequest.comment("**\\[LPVS\\]**  No license issue detected \n\n" + commitComment);
+            pullRequest.comment(
+                    "**\\[LPVS\\]**  No license issue detected \n\n" + commitComment + hubLink);
             repository.createCommitStatus(
                     webhookConfig.getHeadCommitSHA(),
                     GHCommitState.SUCCESS,
