@@ -365,7 +365,7 @@ public class LPVSPayloadUtilTest {
             Path path =
                     Paths.get(
                             Objects.requireNonNull(
-                                            getClass().getClassLoader().getResource("A_B.json"))
+                                            getClass().getClassLoader().getResource("1-A_B.json"))
                                     .toURI());
             InputStream inputStream = Files.newInputStream(path);
             InputStreamReader inputStreamReader =
@@ -392,7 +392,7 @@ public class LPVSPayloadUtilTest {
             Path path =
                     Paths.get(
                             Objects.requireNonNull(
-                                            getClass().getClassLoader().getResource("A_B.json"))
+                                            getClass().getClassLoader().getResource("1-A_B.json"))
                                     .toURI());
             InputStream inputStream = Files.newInputStream(path);
             InputStreamReader inputStreamReader =
@@ -421,7 +421,7 @@ public class LPVSPayloadUtilTest {
             Path path =
                     Paths.get(
                             Objects.requireNonNull(
-                                            getClass().getClassLoader().getResource("A_B.json"))
+                                            getClass().getClassLoader().getResource("1-A_B.json"))
                                     .toURI());
             InputStream inputStream = Files.newInputStream(path);
             assertNotNull(LPVSPayloadUtil.convertInputStreamToString(inputStream));

@@ -24,6 +24,7 @@ CREATE TABLE IF NOT EXISTS lpvs_license_conflicts (
 
 CREATE TABLE IF NOT EXISTS lpvs_pull_requests (
   id bigint NOT NULL AUTO_INCREMENT,
+  queue_id bigint DEFAULT NULL,
   scan_date datetime NOT NULL,
   user varchar(255) DEFAULT NULL,
   repository_name varchar(255) NOT NULL,

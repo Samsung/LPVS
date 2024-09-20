@@ -189,8 +189,7 @@ public class LPVSFileUtil {
      * @return The local directory path.
      */
     public static String getLocalDirectoryPath(LPVSQueue webhookConfig) {
-        if (webhookConfig.getHeadCommitSHA() == null
-                || webhookConfig.getHeadCommitSHA().isEmpty()) {
+        if (StringUtils.isBlank(webhookConfig.getHeadCommitSHA())) {
             return System.getProperty("user.home")
                     + File.separator
                     + "LPVS"
@@ -199,6 +198,8 @@ public class LPVSFileUtil {
                     + File.separator
                     + LPVSPayloadUtil.getRepositoryName(webhookConfig)
                     + File.separator
+                    + webhookConfig.getId().toString()
+                    + "-"
                     + LPVSPayloadUtil.getPullRequestId(webhookConfig);
         } else {
             return System.getProperty("user.home")
@@ -209,6 +210,8 @@ public class LPVSFileUtil {
                     + File.separator
                     + LPVSPayloadUtil.getRepositoryName(webhookConfig)
                     + File.separator
+                    + webhookConfig.getId().toString()
+                    + "-"
                     + webhookConfig.getHeadCommitSHA();
         }
     }
@@ -222,9 +225,13 @@ public class LPVSFileUtil {
     public static String getScanResultsJsonFilePath(LPVSQueue webhookConfig) {
         String fileName = null;
         if (StringUtils.isBlank(webhookConfig.getHeadCommitSHA())) {
-            fileName = LPVSPayloadUtil.getPullRequestId(webhookConfig);
+            fileName =
+                    webhookConfig.getId() + "-" + LPVSPayloadUtil.getPullRequestId(webhookConfig);
         } else {
-            fileName = HtmlUtils.htmlEscape(webhookConfig.getHeadCommitSHA());
+            fileName =
+                    webhookConfig.getId()
+                            + "-"
+                            + HtmlUtils.htmlEscape(webhookConfig.getHeadCommitSHA());
         }
 
         return System.getProperty("user.home")

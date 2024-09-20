@@ -18,6 +18,7 @@ public class LPVSPullRequestTest {
 
     LPVSPullRequest lpvsPullRequest;
     final long pullRequestId = 1234567890L;
+    final long queueId = 54321L;
     final Date date = new Date();
     final String user = "user";
     final String repositoryName = "repositoryName";
@@ -33,6 +34,7 @@ public class LPVSPullRequestTest {
         lpvsPullRequest =
                 new LPVSPullRequest(
                         pullRequestId,
+                        queueId,
                         date,
                         user,
                         repositoryName,
@@ -47,6 +49,7 @@ public class LPVSPullRequestTest {
     @Test
     public void gettersTest() {
         assertEquals(lpvsPullRequest.getId(), pullRequestId);
+        assertEquals(lpvsPullRequest.getQueueId(), queueId);
         assertEquals(lpvsPullRequest.getDate(), date);
         assertEquals(lpvsPullRequest.getUser(), user);
         assertEquals(lpvsPullRequest.getRepositoryName(), repositoryName);
@@ -64,6 +67,15 @@ public class LPVSPullRequestTest {
         lpvsPullRequest.setId(newActualValue);
         assertNotEquals(lpvsPullRequest.getId(), pullRequestId);
         assertEquals(lpvsPullRequest.getId(), newActualValue);
+    }
+
+    @Test
+    public void setQueueIdIdTest() {
+        final long newActualValue = 0L;
+        assertEquals(lpvsPullRequest.getQueueId(), queueId);
+        lpvsPullRequest.setQueueId(newActualValue);
+        assertNotEquals(lpvsPullRequest.getQueueId(), queueId);
+        assertEquals(lpvsPullRequest.getQueueId(), newActualValue);
     }
 
     @Test
@@ -179,13 +191,13 @@ public class LPVSPullRequestTest {
         pr6.setPullRequestFilesUrl(
                 pullRequestFilesUrl + "1"); /* initialize with different pullRequestFilesUrl */
 
-        assertTrue(pr1.equals(pr2)); // Objects are equal
-        assertFalse(pr1.equals(pr3)); // Date is different
-        assertFalse(pr1.equals(pr4)); // RepositoryName is different
-        assertFalse(pr1.equals(pr5)); // PullRequestUrl is different
-        assertFalse(pr1.equals(pr6)); // PullRequestFilesUrl is different
+        assertEquals(pr1, pr2); // Objects are equal
+        assertNotEquals(pr1, pr3); // Date is different
+        assertNotEquals(pr1, pr4); // RepositoryName is different
+        assertNotEquals(pr1, pr5); // PullRequestUrl is different
+        assertNotEquals(pr1, pr6); // PullRequestFilesUrl is different
 
-        assertFalse(pr1.equals(null)); // Null comparison
-        assertFalse(pr1.equals(new Object())); // Different class comparison
+        assertNotEquals(null, pr1); // Null comparison
+        assertNotEquals(pr1, new Object()); // Different class comparison
     }
 }

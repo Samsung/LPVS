@@ -31,6 +31,7 @@ public class LPVSFileUtilTest {
     @BeforeEach
     public void setUp() {
         webhookConfig = new LPVSQueue();
+        webhookConfig.setId(1L);
         webhookConfig.setRepositoryUrl("http://test.com/test/test");
         webhookConfig.setPullRequestUrl("http://test.com/test/test/pull/123");
     }
@@ -38,7 +39,7 @@ public class LPVSFileUtilTest {
     @Test
     public void testSaveGithubDiffs() {
         webhookConfig.setHeadCommitSHA("aaaa");
-        String expected = getExpectedProjectsPathWithCommitSHA();
+        String expected = getExpectedProjectsPathWithCommitSHA(1);
 
         GHPullRequestFileDetail detail = new GHPullRequestFileDetail();
         ReflectionTestUtils.setField(detail, "filename", "I_am_a_file");
@@ -57,7 +58,7 @@ public class LPVSFileUtilTest {
     @Test
     public void testSaveGithubDiffsFileNameWithSlash() {
         webhookConfig.setHeadCommitSHA("aaaa");
-        String expected = getExpectedProjectsPathWithCommitSHA();
+        String expected = getExpectedProjectsPathWithCommitSHA(1);
 
         GHPullRequestFileDetail detail = new GHPullRequestFileDetail();
         ReflectionTestUtils.setField(detail, "filename", "dir/I_am_a_file");
@@ -76,7 +77,7 @@ public class LPVSFileUtilTest {
     @Test
     public void testSaveGithubDiffsEmptyPatchLines() {
         webhookConfig.setHeadCommitSHA("aaaa");
-        String expected = getExpectedProjectsPathWithCommitSHA();
+        String expected = getExpectedProjectsPathWithCommitSHA(1);
 
         GHPullRequestFileDetail detail = new GHPullRequestFileDetail();
         ReflectionTestUtils.setField(detail, "filename", "I_am_a_file");
@@ -153,7 +154,7 @@ public class LPVSFileUtilTest {
     @Test
     public void testGetLocalDirectoryPathWithHeadCommitSHA() {
         webhookConfig.setHeadCommitSHA("aaaa");
-        String expected = getExpectedProjectsPathWithCommitSHA();
+        String expected = getExpectedProjectsPathWithCommitSHA(1);
 
         assertEquals(expected, LPVSFileUtil.getLocalDirectoryPath(webhookConfig));
     }
@@ -161,7 +162,7 @@ public class LPVSFileUtilTest {
     @Test
     public void testGetLocalDirectoryPathWithHeadCommitSHAEmpty() {
         webhookConfig.setHeadCommitSHA("");
-        String expected = getExpectedProjectsPathWithPullRequestId();
+        String expected = getExpectedProjectsPathWithPullRequestId(1);
 
         assertEquals(expected, LPVSFileUtil.getLocalDirectoryPath(webhookConfig));
     }
@@ -169,7 +170,7 @@ public class LPVSFileUtilTest {
     @Test
     public void testGetLocalDirectoryPathWithoutHeadCommitSHA() {
         webhookConfig.setHeadCommitSHA(null);
-        String expected = getExpectedProjectsPathWithPullRequestId();
+        String expected = getExpectedProjectsPathWithPullRequestId(1);
 
         assertEquals(expected, LPVSFileUtil.getLocalDirectoryPath(webhookConfig));
     }
@@ -177,7 +178,7 @@ public class LPVSFileUtilTest {
     @Test
     public void testGetScanResultsJsonFilePathWithHeadCommitSHA() {
         webhookConfig.setHeadCommitSHA("aaaa");
-        String expected = getExpectedJsonFilePathWithCommitSHA();
+        String expected = getExpectedJsonFilePathWithCommitSHA(1);
 
         assertEquals(expected, LPVSFileUtil.getScanResultsJsonFilePath(webhookConfig));
     }
@@ -185,7 +186,7 @@ public class LPVSFileUtilTest {
     @Test
     public void testGetScanResultsJsonFilePathWithHeadCommitSHAEmpty() {
         webhookConfig.setHeadCommitSHA("");
-        String expected = getExpectedJsonFilePathWithPullRequestId();
+        String expected = getExpectedJsonFilePathWithPullRequestId(1);
 
         assertEquals(expected, LPVSFileUtil.getScanResultsJsonFilePath(webhookConfig));
     }
@@ -193,7 +194,7 @@ public class LPVSFileUtilTest {
     @Test
     public void testGetScanResultsJsonFilePathWithoutHeadCommitSHA() {
         webhookConfig.setHeadCommitSHA(null);
-        String expected = getExpectedJsonFilePathWithPullRequestId();
+        String expected = getExpectedJsonFilePathWithPullRequestId(1);
 
         assertEquals(expected, LPVSFileUtil.getScanResultsJsonFilePath(webhookConfig));
     }
@@ -221,7 +222,7 @@ public class LPVSFileUtilTest {
         assert (result2.equals(false));
     }
 
-    private static String getExpectedProjectsPathWithCommitSHA() {
+    private static String getExpectedProjectsPathWithCommitSHA(long id) {
         return System.getProperty("user.home")
                 + File.separator
                 + "LPVS"
@@ -230,10 +231,11 @@ public class LPVSFileUtilTest {
                 + File.separator
                 + "test"
                 + File.separator
-                + "aaaa";
+                + id
+                + "-aaaa";
     }
 
-    private static String getExpectedProjectsPathWithPullRequestId() {
+    private static String getExpectedProjectsPathWithPullRequestId(long id) {
         return System.getProperty("user.home")
                 + File.separator
                 + "LPVS"
@@ -242,7 +244,8 @@ public class LPVSFileUtilTest {
                 + File.separator
                 + "test"
                 + File.separator
-                + "123";
+                + id
+                + "-123";
     }
 
     private static String getExpectedResultsPath() {
@@ -255,12 +258,12 @@ public class LPVSFileUtilTest {
                 + "test";
     }
 
-    private static String getExpectedJsonFilePathWithPullRequestId() {
-        return getExpectedResultsPath() + File.separator + "123.json";
+    private static String getExpectedJsonFilePathWithPullRequestId(long id) {
+        return getExpectedResultsPath() + File.separator + id + "-123.json";
     }
 
-    private static String getExpectedJsonFilePathWithCommitSHA() {
-        return getExpectedResultsPath() + File.separator + "aaaa.json";
+    private static String getExpectedJsonFilePathWithCommitSHA(long id) {
+        return getExpectedResultsPath() + File.separator + id + "-aaaa.json";
     }
 
     private void deleteDirectory(File directory) {
