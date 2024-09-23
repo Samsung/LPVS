@@ -198,7 +198,7 @@ public class LPVSFileUtil {
                     + File.separator
                     + LPVSPayloadUtil.getRepositoryName(webhookConfig)
                     + File.separator
-                    + webhookConfig.getId().toString()
+                    + webhookConfig.getId()
                     + "-"
                     + LPVSPayloadUtil.getPullRequestId(webhookConfig);
         } else {
@@ -210,7 +210,7 @@ public class LPVSFileUtil {
                     + File.separator
                     + LPVSPayloadUtil.getRepositoryName(webhookConfig)
                     + File.separator
-                    + webhookConfig.getId().toString()
+                    + webhookConfig.getId()
                     + "-"
                     + webhookConfig.getHeadCommitSHA();
         }
