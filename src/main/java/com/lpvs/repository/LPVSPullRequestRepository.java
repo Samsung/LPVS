@@ -27,7 +27,9 @@ public interface LPVSPullRequestRepository extends JpaRepository<LPVSPullRequest
      * @param queueId ID of the related element from the queue.
      * @return {@link LPVSPullRequest} entity with the specified queue ID.
      */
-    @Query(value = "SELECT pr FROM LPVSPullRequest pr WHERE pr.queueId = :queueId LIMIT 1")
+    @Query(
+            value =
+                    "SELECT pr FROM LPVSPullRequest pr WHERE pr.queueId = :queueId ORDER BY pr.id DESC LIMIT 1")
     LPVSPullRequest findByQueueId(@Param("queueId") Long queueId);
 
     /**
