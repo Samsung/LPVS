@@ -182,3 +182,66 @@ $ git commit -s -m "This is my commit message"
 ```
 
 That’s it. Git adds your sign-off message in the commit message, and you contribution (commit) is now DCO compliant.
+
+---
+
+## How to generate Python requirements file with hashes?
+
+To generate a Python `requirements.txt` file with hashes, which ensures that the same versions of packages are installed across different environments, you can use the `pip-compile` tool from the `pip-tools` package. Here's a step-by-step guide on how to achieve this:
+
+### Steps:
+
+1. **Install pip-tools**
+
+First, install `pip-tools` to manage your `requirements.txt` and add hashes.
+
+``` bash
+pip install pip-tools
+```
+
+2. **Create `requirements.in` file:**
+
+Add your packages to a `requirements.in` file. This file will be used as input to generate the final `requirements.txt` file with hashes.
+In case you need to use exact version of a package, you can specify it in this file.
+
+Example `requirements.in`:
+
+``` in
+mkdocs==1.6.1
+pymdown-extensions==10.9
+```
+
+3. **Compile the `requirements.txt` with hashes**
+
+Use `pip-compile` with `--generate-hashes` flag to create a `requirements.txt` file includes secure hashes.
+``` bash
+pip-compile --generate-hashes
+```
+
+!!! note
+
+    If you want to use custom names of input and output requirements file, specify them in command line like this:
+
+    ``` bash
+    pip-compile --output-file=custom-requirements.txt --generate-hashes custom-requirements.in
+    ```
+
+    - Without `--output-file`: It will always create `requirements.txt` file.
+    - With `--output-file`: It will specify any custom output file name.
+
+4. **Result**
+
+It will generate a `requirements.txt` (or `custom-requirements.txt`) file with hashes for each package, ensuring the integrity and security of the installed packages.
+
+Example output in `requirements.txt`:
+
+``` txt
+mkdocs==1.6.1 \
+    --hash=sha256:... \
+    --hash=sha256:...
+...
+pymdown-extensions==10.9 \
+    --hash=sha256:... \
+    --hash=sha256:...
+...
+```

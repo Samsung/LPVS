@@ -15,6 +15,7 @@ theme:
 markdown_extensions:
   - admonition
   - attr_list
+  - sane_lists
   - pymdownx.details
   - pymdownx.superfences
   - pymdownx.tasklist:
