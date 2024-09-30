@@ -262,6 +262,10 @@
               <ul class="nav flex-column">
               </ul>
             </li>
+            <li class="nav-item" data-bs-level="2"><a href="#how-to-generate-python-requirements-file-with-hashes" class="nav-link">How to generate Python requirements file with hashes?</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
               </ul>
             </li>
         </ul>
@@ -403,7 +407,56 @@ $<span class="w"> </span>git<span class="w"> </span>config<span class="w"> </spa
 <p>Now, every time you commit new code in git, just add a signoff statement via the <code>-s</code> flag.</p>
 <div class="highlight"><pre><span></span><code>$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-s<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;This is my commit message&quot;</span>
 </code></pre></div>
-<p>That’s it. Git adds your sign-off message in the commit message, and you contribution (commit) is now DCO compliant.</p></div>
+<p>That’s it. Git adds your sign-off message in the commit message, and you contribution (commit) is now DCO compliant.</p>
+<hr />
+<h2 id="how-to-generate-python-requirements-file-with-hashes">How to generate Python requirements file with hashes?</h2>
+<p>To generate a Python <code>requirements.txt</code> file with hashes, which ensures that the same versions of packages are installed across different environments, you can use the <code>pip-compile</code> tool from the <code>pip-tools</code> package. Here's a step-by-step guide on how to achieve this:</p>
+<h3 id="steps">Steps:</h3>
+<ol>
+<li><strong>Install pip-tools</strong></li>
+</ol>
+<p>First, install <code>pip-tools</code> to manage your <code>requirements.txt</code> and add hashes.</p>
+<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>pip-tools
+</code></pre></div>
+<ol start="2">
+<li><strong>Create <code>requirements.in</code> file:</strong></li>
+</ol>
+<p>Add your packages to a <code>requirements.in</code> file. This file will be used as input to generate the final <code>requirements.txt</code> file with hashes.
+In case you need to use exact version of a package, you can specify it in this file.</p>
+<p>Example <code>requirements.in</code>:</p>
+<div class="highlight"><pre><span></span><code>mkdocs==1.6.1
+pymdown-extensions==10.9
+</code></pre></div>
+<ol start="3">
+<li><strong>Compile the <code>requirements.txt</code> with hashes</strong></li>
+</ol>
+<p>Use <code>pip-compile</code> with <code>--generate-hashes</code> flag to create a <code>requirements.txt</code> file includes secure hashes.
+<div class="highlight"><pre><span></span><code>pip-compile<span class="w"> </span>--generate-hashes
+</code></pre></div></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you want to use custom names of input and output requirements file, specify them in command line like this:</p>
+<div class="highlight"><pre><span></span><code>pip-compile<span class="w"> </span>--output-file<span class="o">=</span>custom-requirements.txt<span class="w"> </span>--generate-hashes<span class="w"> </span>custom-requirements.in
+</code></pre></div>
+<ul>
+<li>Without <code>--output-file</code>: It will always create <code>requirements.txt</code> file.</li>
+<li>With <code>--output-file</code>: It will specify any custom output file name.</li>
+</ul>
+</div>
+<ol start="4">
+<li><strong>Result</strong></li>
+</ol>
+<p>It will generate a <code>requirements.txt</code> (or <code>custom-requirements.txt</code>) file with hashes for each package, ensuring the integrity and security of the installed packages.</p>
+<p>Example output in <code>requirements.txt</code>:</p>
+<div class="highlight"><pre><span></span><code>mkdocs==1.6.1 \
+    --hash=sha256:... \
+    --hash=sha256:...
+...
+pymdown-extensions==10.9 \
+    --hash=sha256:... \
+    --hash=sha256:...
+...
+</code></pre></div></div>
             </div>
         </div>
 
