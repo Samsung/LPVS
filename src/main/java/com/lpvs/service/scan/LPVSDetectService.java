@@ -8,9 +8,7 @@ package com.lpvs.service.scan;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import com.lpvs.entity.report.LPVSReportBuilder;
 import com.lpvs.entity.LPVSConflict;
@@ -58,9 +56,9 @@ public class LPVSDetectService {
     private LPVSGitHubService gitHubService;
 
     /**
-     * Service responsible for initialization of the scanner.
+     * List of services responsible for initialization of the scanners.
      */
-    private LPVSScanService scanService;
+    private List<LPVSScanService> scanServiceList = new ArrayList<>();
 
     /**
      * Component responsible for the generation of HTML reports.
@@ -90,7 +88,7 @@ public class LPVSDetectService {
      */
     @Autowired ApplicationContext ctx;
 
-    /**
+    /** TODO change description
      * Constructs an instance of LPVSDetectService with the specified parameters.
      *
      * @param scannerType             The type of license detection scanner.
@@ -104,7 +102,7 @@ public class LPVSDetectService {
     @Autowired
     public LPVSDetectService(
             @Value("${scanner:scanoss}") String scannerType,
-            @Value("${internal:false}") boolean isInternal,
+            @Value("${internal:false}") String isInternal,
             LPVSGitHubConnectionService gitHubConnectionService,
             LPVSLicenseService licenseService,
             LPVSGitHubService gitHubService,
@@ -113,9 +111,27 @@ public class LPVSDetectService {
         this.gitHubConnectionService = gitHubConnectionService;
         this.licenseService = licenseService;
         this.gitHubService = gitHubService;
-        this.scanService = scanServiceFactory.createScanService(scannerType, isInternal);
-        log.info("License detection scanner: " + scannerType);
         this.reportBuilder = reportBuilder;
+
+        List<String> scannerTypeList =
+                Arrays.stream(scannerType.split(",")).map(String::trim).toList();
+        List<Boolean> isInternalList =
+                Arrays.stream(isInternal.split(","))
+                        .map(String::trim)
+                        .map(Boolean::parseBoolean)
+                        .toList();
+        if (scannerTypeList.size() != isInternalList.size()) {
+            log.error(
+                    "The number of declared scanners and internal flags do not match. The default values will be used.");
+            scannerTypeList = Collections.singletonList("scanoss");
+            isInternalList = Collections.singletonList(false);
+        }
+        for (int ind = 0; ind < scannerTypeList.size(); ind++) {
+            scanServiceList.add(
+                    scanServiceFactory.createScanService(
+                            scannerTypeList.get(ind), isInternalList.get(ind)));
+        }
+        log.info("License detection scanner(s): " + String.join(", ", scannerTypeList));
     }
 
     /**
@@ -125,8 +141,8 @@ public class LPVSDetectService {
     public void runSingleScan() {
         // generateReport indicates that a report should be generated (HTML or command line output)
         boolean generateReport = false;
-        LPVSQueue webhookConfig = null;
-        List<LPVSFile> scanResult = null;
+        LPVSQueue webhookConfig;
+        List<LPVSFile> scanResult = new ArrayList<>();
         List<LPVSConflict<String, String>> detectedConflicts = null;
         String path = null;
 
@@ -177,6 +193,7 @@ public class LPVSDetectService {
                                     LPVSFileUtil.getLocalDirectoryPath(webhookConfig));
 
                     detectedConflicts = licenseService.findConflicts(webhookConfig, scanResult);
+
                     generateReport = true;
                     path = localFile.getAbsolutePath();
                     log.info("Single scan of local file(s) completed.");
@@ -236,7 +253,18 @@ public class LPVSDetectService {
         return queue;
     }
 
-    /**
+    public List<LPVSFile> runScan(LPVSQueue webhookConfig, String path) throws Exception {
+        List<LPVSFile> scanResult = new ArrayList<>();
+        for (LPVSScanService lpvsScanService : scanServiceList) {
+            List<LPVSFile> scanResultForScanner =
+                    this.runScan(webhookConfig, path, lpvsScanService);
+            // Merge scan results
+            scanResult = mergeScanResults(scanResult, scanResultForScanner);
+        }
+        return scanResult;
+    }
+
+    /** TODO add scan service
      * Runs a license scan based on the selected scanner type.
      *
      * @param webhookConfig LPVSQueue configuration for the scan.
@@ -244,7 +272,8 @@ public class LPVSDetectService {
      * @return List of LPVSFile objects representing the scan results.
      * @throws Exception if an error occurs during the scan.
      */
-    public List<LPVSFile> runScan(LPVSQueue webhookConfig, String path) throws Exception {
+    private List<LPVSFile> runScan(
+            LPVSQueue webhookConfig, String path, LPVSScanService scanService) throws Exception {
         try {
             scanService.runScan(webhookConfig, path);
             List<LPVSFile> files = scanService.checkLicenses(webhookConfig);
@@ -264,5 +293,47 @@ public class LPVSDetectService {
             log.error("Exception occurred during running the scan.");
             return new ArrayList<>();
         }
+    }
+
+    // TODO add comment
+    private List<LPVSFile> mergeScanResults(
+            List<LPVSFile> resultMergeTo, List<LPVSFile> resultMergeWith) {
+        for (LPVSFile file : resultMergeWith) {
+            boolean isUpdated = false;
+            for (LPVSFile finalFile : resultMergeTo) {
+                // if component is the same - just merge license information
+                if (finalFile
+                                .getFilePath()
+                                .replaceAll("/", "")
+                                .equalsIgnoreCase(file.getFilePath().replaceAll("/", ""))
+                        && finalFile.getComponentName().equalsIgnoreCase(file.getComponentName())
+                        && finalFile
+                                .getComponentVendor()
+                                .equalsIgnoreCase(file.getComponentVendor())
+                        && finalFile
+                                .getComponentVersion()
+                                .equalsIgnoreCase(file.getComponentVersion())) {
+                    if (finalFile.getFilePath().startsWith("/")) {
+                        finalFile.setFilePath(finalFile.getFilePath().substring(1));
+                    }
+                    finalFile.getLicenses().addAll(file.getLicenses());
+                    finalFile.setLicenses(new HashSet<>(finalFile.getLicenses()));
+                    // Merge other field
+                    if (StringUtils.isBlank(finalFile.getComponentFilePath()))
+                        finalFile.setComponentFilePath(file.getComponentFilePath());
+                    if (StringUtils.isBlank(finalFile.getComponentFileUrl()))
+                        finalFile.setComponentFileUrl(file.getComponentFileUrl());
+                    if (StringUtils.isBlank(finalFile.getComponentUrl()))
+                        finalFile.setComponentUrl(file.getComponentUrl());
+                    isUpdated = true;
+                    break;
+                }
+            }
+            // if component is missing in final result - add whole scan result
+            if (!isUpdated) {
+                resultMergeTo.add(file);
+            }
+        }
+        return resultMergeTo;
     }
 }

@@ -77,7 +77,7 @@ public class LPVSDetectServiceTest {
             detectService =
                     new LPVSDetectService(
                             "scanoss",
-                            false,
+                            "false",
                             github_mock,
                             licenseservice_mock,
                             githubservice_mock,
@@ -150,7 +150,7 @@ public class LPVSDetectServiceTest {
                     spy(
                             new LPVSDetectService(
                                     "scanoss",
-                                    false,
+                                    "false",
                                     null,
                                     null,
                                     null,
@@ -173,7 +173,7 @@ public class LPVSDetectServiceTest {
                     spy(
                             new LPVSDetectService(
                                     "scanoss",
-                                    false,
+                                    "false",
                                     null,
                                     null,
                                     null,
@@ -196,7 +196,7 @@ public class LPVSDetectServiceTest {
                     spy(
                             new LPVSDetectService(
                                     "scanoss",
-                                    false,
+                                    "false",
                                     null,
                                     null,
                                     null,
@@ -217,7 +217,7 @@ public class LPVSDetectServiceTest {
                     spy(
                             new LPVSDetectService(
                                     "scanoss",
-                                    false,
+                                    "false",
                                     null,
                                     null,
                                     null,
@@ -239,7 +239,7 @@ public class LPVSDetectServiceTest {
                     spy(
                             new LPVSDetectService(
                                     "scanoss",
-                                    false,
+                                    "false",
                                     null,
                                     null,
                                     null,
@@ -264,7 +264,7 @@ public class LPVSDetectServiceTest {
                     spy(
                             new LPVSDetectService(
                                     "scanoss",
-                                    false,
+                                    "false",
                                     null,
                                     null,
                                     null,
@@ -299,7 +299,7 @@ public class LPVSDetectServiceTest {
             setPrivateField(detectService, "trigger", "github/owner/repo/branch/123");
             setPrivateField(detectService, "htmlReport", null);
             setPrivateField(detectService, "ctx", mockApplicationContext);
-            setPrivateField(detectService, "scanService", scanoss_mock);
+            setPrivateField(detectService, "scanServiceList", List.of(scanoss_mock));
 
             assertDoesNotThrow(() -> detectService.runSingleScan());
 
@@ -319,7 +319,7 @@ public class LPVSDetectServiceTest {
                     spy(
                             new LPVSDetectService(
                                     "scanoss",
-                                    false,
+                                    "false",
                                     null,
                                     null,
                                     null,
@@ -329,7 +329,7 @@ public class LPVSDetectServiceTest {
             setPrivateField(detectService, "trigger", "github/owner/repo/branch/123");
             setPrivateField(detectService, "htmlReport", "build");
             setPrivateField(detectService, "ctx", mockApplicationContext);
-            setPrivateField(detectService, "scanService", scanoss_mock);
+            setPrivateField(detectService, "scanServiceList", List.of(scanoss_mock));
 
             // Mock the necessary GitHub objects for LPVSQueue
             when(mockGitHub.getRepository(any())).thenReturn(mockRepository);
@@ -375,7 +375,7 @@ public class LPVSDetectServiceTest {
 
             setPrivateField(detectService, "localPath", sourceFile1.getAbsolutePath());
             setPrivateField(detectService, "ctx", mockApplicationContext);
-            setPrivateField(detectService, "scanService", scanoss_mock);
+            setPrivateField(detectService, "scanServiceList", List.of(scanoss_mock));
 
             // Mock the necessary GitHub objects for LPVSQueue
             when(mockGitHub.getRepository(any())).thenReturn(mockRepository);
@@ -422,7 +422,7 @@ public class LPVSDetectServiceTest {
 
             setPrivateField(detectService, "localPath", sourceDir.getAbsolutePath());
             setPrivateField(detectService, "ctx", mockApplicationContext);
-            setPrivateField(detectService, "scanService", scanoss_mock);
+            setPrivateField(detectService, "scanServiceList", List.of(scanoss_mock));
             setPrivateField(detectService, "htmlReport", "report/test.html");
 
             new File("report").mkdir();
@@ -471,7 +471,7 @@ public class LPVSDetectServiceTest {
 
             setPrivateField(detectService, "localPath", sourceFile1.getAbsolutePath());
             setPrivateField(detectService, "ctx", mockApplicationContext);
-            setPrivateField(detectService, "scanService", scanoss_mock);
+            setPrivateField(detectService, "scanServiceList", List.of(scanoss_mock));
 
             // Mock the necessary GitHub objects for LPVSQueue
             when(mockGitHub.getRepository(any())).thenReturn(mockRepository);
@@ -524,7 +524,7 @@ public class LPVSDetectServiceTest {
             setPrivateField(detectService, "trigger", "github/owner/repo/branch/123");
             setPrivateField(detectService, "htmlReport", "report/test.html");
             setPrivateField(detectService, "ctx", mockApplicationContext);
-            setPrivateField(detectService, "scanService", scanoss_mock);
+            setPrivateField(detectService, "scanServiceList", List.of(scanoss_mock));
 
             new File("report").mkdir();
 
@@ -569,7 +569,7 @@ public class LPVSDetectServiceTest {
             setPrivateField(detectService, "trigger", "github/owner/repo/branch/123");
             setPrivateField(detectService, "htmlReport", "report/test.html");
             setPrivateField(detectService, "ctx", mockApplicationContext);
-            setPrivateField(detectService, "scanService", scanoss_mock);
+            setPrivateField(detectService, "scanServiceList", List.of(scanoss_mock));
 
             new File("report").mkdir();
 
@@ -615,7 +615,7 @@ public class LPVSDetectServiceTest {
             setPrivateField(detectService, "trigger", "github/owner/repo/branch/123");
             setPrivateField(detectService, "htmlReport", "report/test.html");
             setPrivateField(detectService, "ctx", mockApplicationContext);
-            setPrivateField(detectService, "scanService", scanoss_mock);
+            setPrivateField(detectService, "scanServiceList", List.of(scanoss_mock));
 
             new File("report").mkdir();
 
@@ -659,7 +659,7 @@ public class LPVSDetectServiceTest {
             setPrivateField(detectService, "trigger", "github/owner/repo/branch/123");
             setPrivateField(detectService, "htmlReport", "report/test.html");
             setPrivateField(detectService, "ctx", mockApplicationContext);
-            setPrivateField(detectService, "scanService", scanoss_mock);
+            setPrivateField(detectService, "scanServiceList", List.of(scanoss_mock));
 
             // Mock the necessary GitHub objects for LPVSQueue
             when(mockGitHub.getRepository(any())).thenReturn(mockRepository);
@@ -736,7 +736,7 @@ public class LPVSDetectServiceTest {
         @Test
         public void testRunScan__Scanoss() {
             try {
-                setPrivateField(detectService, "scanService", scanoss_mock);
+                setPrivateField(detectService, "scanServiceList", List.of(scanoss_mock));
                 // main test
                 assertEquals(
                         List.of(lpvs_file_1, lpvs_file_2),
@@ -777,7 +777,7 @@ public class LPVSDetectServiceTest {
             detectService =
                     new LPVSDetectService(
                             "scanoss",
-                            false,
+                            "false",
                             github_mock,
                             licenseservice_mock,
                             githubservice_mock,
@@ -788,7 +788,7 @@ public class LPVSDetectServiceTest {
             webhookConfig.setId(1L);
 
             try {
-                setPrivateField(detectService, "scanService", scanoss_mock);
+                setPrivateField(detectService, "scanServiceList", List.of(scanoss_mock));
                 doThrow(new Exception(exc_msg))
                         .when(scanoss_mock)
                         .runScan(webhookConfig, test_path);
@@ -832,7 +832,13 @@ public class LPVSDetectServiceTest {
         void setUp() {
             detectService =
                     new LPVSDetectService(
-                            "not_scanoss", false, null, null, null, scanServiceFactory_mock, null);
+                            "not_scanoss",
+                            "false",
+                            null,
+                            null,
+                            null,
+                            scanServiceFactory_mock,
+                            null);
         }
 
         @Test
