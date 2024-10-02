@@ -791,9 +791,11 @@ public class LPVSReportBuilder {
                                             Collectors.collectingAndThen(
                                                     Collectors.groupingBy(
                                                             this::getLicenseSpdxId,
+                                                            TreeMap::new,
                                                             Collectors.collectingAndThen(
                                                                     Collectors.groupingBy(
                                                                             this::getComponentKey,
+                                                                            TreeMap::new,
                                                                             Collectors
                                                                                     .collectingAndThen(
                                                                                             Collectors

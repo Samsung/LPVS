@@ -257,7 +257,7 @@ public class LPVSDetectService {
         List<LPVSFile> scanResult = new ArrayList<>();
         for (LPVSScanService lpvsScanService : scanServiceList) {
             List<LPVSFile> scanResultForScanner =
-                    this.runScan(webhookConfig, path, lpvsScanService);
+                    this.runScanByService(webhookConfig, path, lpvsScanService);
             // Merge scan results
             scanResult = mergeScanResults(scanResult, scanResultForScanner);
         }
@@ -272,7 +272,7 @@ public class LPVSDetectService {
      * @return List of LPVSFile objects representing the scan results.
      * @throws Exception if an error occurs during the scan.
      */
-    private List<LPVSFile> runScan(
+    private List<LPVSFile> runScanByService(
             LPVSQueue webhookConfig, String path, LPVSScanService scanService) throws Exception {
         try {
             scanService.runScan(webhookConfig, path);
@@ -331,6 +331,9 @@ public class LPVSDetectService {
             }
             // if component is missing in final result - add whole scan result
             if (!isUpdated) {
+                if (file.getFilePath().startsWith("/")) {
+                    file.setFilePath(file.getFilePath().substring(1));
+                }
                 resultMergeTo.add(file);
             }
         }
