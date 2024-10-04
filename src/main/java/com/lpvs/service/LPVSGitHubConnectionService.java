@@ -7,6 +7,7 @@
 package com.lpvs.service;
 
 import com.lpvs.util.LPVSExitHandler;
+import io.micrometer.common.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.kohsuke.github.GitHub;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,12 @@ import java.util.Optional;
 @Service
 @Slf4j
 public class LPVSGitHubConnectionService {
+
+    /**
+     * Trigger value to start a single scan of local files or folder.
+     */
+    @Value("${local.path:}")
+    private String localPath;
 
     /**
      * GitHub login username.
@@ -115,7 +122,7 @@ public class LPVSGitHubConnectionService {
      */
     @PostConstruct
     private void checks() {
-        if (this.GITHUB_AUTH_TOKEN.isEmpty()) {
+        if (this.GITHUB_AUTH_TOKEN.isEmpty() && StringUtils.isBlank(localPath)) {
             log.error(
                     GITHUB_AUTH_TOKEN_ENV_VAR_NAME
                             + "("
