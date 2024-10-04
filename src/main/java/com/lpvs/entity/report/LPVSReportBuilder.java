@@ -374,8 +374,8 @@ public class LPVSReportBuilder {
                 .append("|License Type / Explanation")
                 .append("|License SPDX ID")
                 .append("|Vendor / Component")
-                .append("|Version")
                 .append("|Repository File Path")
+                .append("|Component Version")
                 .append("|Component File Path")
                 .append("|Matched Lines")
                 .append("|Match Value|")
@@ -451,36 +451,49 @@ public class LPVSReportBuilder {
                 Map<String, GroupInfo<?>> componentAndVendor =
                         (Map<String, GroupInfo<?>>) licenseSpdxIds.get(licenseSpdxId).elements;
                 for (String componentInfo : componentAndVendor.keySet()) {
-                    // file info
-                    List<LPVSFile> fileInfos =
-                            (List<LPVSFile>) componentAndVendor.get(componentInfo).elements;
-                    for (LPVSFile fileInfo : fileInfos) {
-                        mdBuilder
-                                .append("|")
-                                .append(type)
-                                .append(" / ")
-                                .append(getExplanationForLicenseType(type))
-                                .append("|")
-                                .append(licenseSpdxId)
-                                .append("|")
-                                .append(componentInfo.split(":::")[0])
-                                .append(" (")
-                                .append(componentInfo.split(":::")[1])
-                                .append(")")
-                                .append("|")
-                                .append(fileInfo.getComponentVersion())
-                                .append("|")
-                                .append(fileInfo.getFilePath())
-                                .append("|")
-                                .append(fileInfo.getComponentFilePath())
-                                .append("|")
-                                .append(
-                                        LPVSCommentUtil.getMatchedLinesAsLink(
-                                                webhookConfig, fileInfo, vcs))
-                                .append("|")
-                                .append(fileInfo.getSnippetMatch())
-                                .append("|")
-                                .append("\n");
+                    // file path
+                    Map<String, GroupInfo<?>> filePath =
+                            (Map<String, GroupInfo<?>>)
+                                    componentAndVendor.get(componentInfo).elements;
+                    for (String filePathInfo : filePath.keySet()) {
+                        List<LPVSFile> fileInfos =
+                                (List<LPVSFile>) filePath.get(filePathInfo).elements;
+                        for (LPVSFile fileInfo : fileInfos) {
+                            mdBuilder
+                                    .append("|")
+                                    .append(type)
+                                    .append(" / ")
+                                    .append(getExplanationForLicenseType(type))
+                                    .append("|")
+                                    .append(licenseSpdxId)
+                                    .append("|")
+                                    .append(componentInfo)
+                                    .append("|")
+                                    .append(filePathInfo)
+                                    .append("|")
+                                    .append("[")
+                                    .append(fileInfo.getComponentVersion())
+                                    .append("](")
+                                    .append(fileInfo.getComponentUrl())
+                                    .append(")")
+                                    .append("|")
+                                    .append(
+                                            !StringUtils.isBlank(fileInfo.getComponentFileUrl())
+                                                    ? "["
+                                                            + fileInfo.getComponentFilePath()
+                                                            + "]("
+                                                            + fileInfo.getComponentFileUrl()
+                                                            + ")"
+                                                    : fileInfo.getComponentFilePath())
+                                    .append("|")
+                                    .append(
+                                            LPVSCommentUtil.getMatchedLinesAsLink(
+                                                    webhookConfig, fileInfo, vcs))
+                                    .append("|")
+                                    .append(fileInfo.getSnippetMatch())
+                                    .append("|")
+                                    .append("\n");
+                        }
                     }
                 }
             }
@@ -552,8 +565,8 @@ public class LPVSReportBuilder {
                 .append("<th>License Type / Explanation</th>")
                 .append("<th>License SPDX ID</th>")
                 .append("<th>Vendor / Component</th>")
-                .append("<th>Version</th>")
                 .append("<th>Repository File Path</th>")
+                .append("<th>Component Version</th>")
                 .append("<th>Component File Path</th>")
                 .append("<th>Matched Lines</th>")
                 .append("<th>Match Value</th>")
@@ -652,51 +665,65 @@ public class LPVSReportBuilder {
                     htmlBuilder
                             .append("<td rowspan=\"")
                             .append(componentAndVendor.get(componentInfo).getCount())
-                            .append("\">");
-                    htmlBuilder
-                            .append("<a href=\"")
-                            .append(componentInfo.split(":::")[1])
                             .append("\">")
-                            .append(componentInfo.split(":::")[0])
-                            .append("</a>");
-                    htmlBuilder.append("</td>");
+                            .append(componentInfo)
+                            .append("</td>");
 
-                    // file info
-                    List<LPVSFile> fileInfos =
-                            (List<LPVSFile>) componentAndVendor.get(componentInfo).elements;
-                    for (LPVSFile fileInfo : fileInfos) {
+                    // file path
+                    Map<String, GroupInfo<?>> filePath =
+                            (Map<String, GroupInfo<?>>)
+                                    componentAndVendor.get(componentInfo).elements;
+                    for (String filePathInfo : filePath.keySet()) {
                         if (!isNewRow) {
                             htmlBuilder.append("<tr>");
+                            isNewRow = true;
                         }
                         htmlBuilder
-                                .append("<td>")
-                                .append(fileInfo.getComponentVersion())
-                                .append("</td><td>")
-                                .append(fileInfo.getFilePath())
-                                .append("</td><td>");
-
-                        if (!StringUtils.isBlank(fileInfo.getComponentFileUrl())) {
-                            htmlBuilder
-                                    .append("<a href=\"")
-                                    .append(fileInfo.getComponentFileUrl())
-                                    .append("\">")
-                                    .append(fileInfo.getComponentFilePath())
-                                    .append("</a>");
-                        } else {
-                            htmlBuilder.append(fileInfo.getComponentFilePath());
-                        }
-
-                        htmlBuilder
-                                .append("</td><td>")
-                                .append(
-                                        LPVSCommentUtil.getMatchedLinesAsLink(
-                                                webhookConfig, fileInfo, vcs))
-                                .append("</td><td>")
-                                .append(fileInfo.getSnippetMatch())
+                                .append("<td rowspan=\"")
+                                .append(filePath.get(filePathInfo).getCount())
+                                .append("\">")
+                                .append(filePathInfo)
                                 .append("</td>");
 
-                        htmlBuilder.append("</tr>");
-                        isNewRow = false;
+                        // version + file info + match info
+                        List<LPVSFile> fileInfos =
+                                (List<LPVSFile>) filePath.get(filePathInfo).elements;
+                        for (LPVSFile fileInfo : fileInfos) {
+                            if (!isNewRow) {
+                                htmlBuilder.append("<tr>");
+                            }
+                            htmlBuilder
+                                    .append("<td>")
+                                    .append("<a href=\"")
+                                    .append(fileInfo.getComponentUrl())
+                                    .append("\">")
+                                    .append(fileInfo.getComponentVersion())
+                                    .append("</a>")
+                                    .append("</td><td>");
+
+                            if (!StringUtils.isBlank(fileInfo.getComponentFileUrl())) {
+                                htmlBuilder
+                                        .append("<a href=\"")
+                                        .append(fileInfo.getComponentFileUrl())
+                                        .append("\">")
+                                        .append(fileInfo.getComponentFilePath())
+                                        .append("</a>");
+                            } else {
+                                htmlBuilder.append(fileInfo.getComponentFilePath());
+                            }
+
+                            htmlBuilder
+                                    .append("</td><td>")
+                                    .append(
+                                            LPVSCommentUtil.getMatchedLinesAsLink(
+                                                    webhookConfig, fileInfo, vcs))
+                                    .append("</td><td>")
+                                    .append(fileInfo.getSnippetMatch())
+                                    .append("</td>");
+
+                            htmlBuilder.append("</tr>");
+                            isNewRow = false;
+                        }
                     }
                 }
             }
@@ -791,18 +818,30 @@ public class LPVSReportBuilder {
                                             Collectors.collectingAndThen(
                                                     Collectors.groupingBy(
                                                             this::getLicenseSpdxId,
+                                                            TreeMap::new,
                                                             Collectors.collectingAndThen(
                                                                     Collectors.groupingBy(
                                                                             this::getComponentKey,
+                                                                            TreeMap::new,
                                                                             Collectors
                                                                                     .collectingAndThen(
                                                                                             Collectors
-                                                                                                    .toList(),
-                                                                                            files ->
-                                                                                                    new GroupInfo<>(
-                                                                                                            files
-                                                                                                                    .size(),
-                                                                                                            files))),
+                                                                                                    .groupingBy(
+                                                                                                            this
+                                                                                                                    ::getFilePathKey,
+                                                                                                            TreeMap
+                                                                                                                    ::new,
+                                                                                                            Collectors
+                                                                                                                    .collectingAndThen(
+                                                                                                                            Collectors
+                                                                                                                                    .toList(),
+                                                                                                                            files ->
+                                                                                                                                    new GroupInfo<>(
+                                                                                                                                            files
+                                                                                                                                                    .size(),
+                                                                                                                                            files))),
+                                                                                            this
+                                                                                                    ::sumGroupInfo)),
                                                                     this::sumGroupInfo)),
                                                     this::sumGroupInfo)));
         }
@@ -829,11 +868,20 @@ public class LPVSReportBuilder {
      * @return the component key that contains component name, vendor name and component URL
      */
     private String getComponentKey(LPVSFile lpvsFile) {
-        return lpvsFile.getComponentVendor()
-                + " / "
-                + lpvsFile.getComponentName()
-                + ":::"
-                + lpvsFile.getComponentUrl();
+        return lpvsFile.getComponentVendor() + " / " + lpvsFile.getComponentName();
+    }
+
+    /**
+     * Grouping criteria for the file path
+     *
+     * @param lpvsFile the LPVSFile whose file path is to be retrieved
+     * @return the component key that contains component path
+     */
+    private String getFilePathKey(LPVSFile lpvsFile) {
+        if (lpvsFile.getFilePath().startsWith("/")) {
+            return lpvsFile.getFilePath().substring(1);
+        }
+        return lpvsFile.getFilePath();
     }
 
     /**

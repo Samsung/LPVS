@@ -119,7 +119,7 @@ public class LPVSReportBuilderTest {
                         add(licPermitted);
                     }
                 });
-        fileLicPermitted.setFilePath("local_file_path_1");
+        fileLicPermitted.setFilePath("/local_file_path_1");
         fileLicPermitted.setComponentFilePath("component_file_path_1");
         fileLicPermitted.setComponentFileUrl("http://component_name_1/file_url");
         fileLicPermitted.setComponentName("component_name_1");
@@ -304,7 +304,8 @@ public class LPVSReportBuilderTest {
         assertFalse(Files.exists(invalidPath));
     }
 
-    private LPVSFile createSampleFile(String filePath, String matchedLines, String baseAccess) {
+    private LPVSFile createSampleFile(
+            String filePath, String matchedLines, String baseAccess, String componentFileUrl) {
         final Long baseLicenseId = 1234567890L;
         final String baseLicenseName = "licenseName";
         final String baseSpdxId = "spdxId";
@@ -324,6 +325,7 @@ public class LPVSReportBuilderTest {
         file.setFilePath(filePath);
         file.setMatchedLines(matchedLines);
         file.setLicenses(licenses);
+        file.setComponentFileUrl(componentFileUrl);
         return file;
     }
 
@@ -333,10 +335,10 @@ public class LPVSReportBuilderTest {
         List<LPVSFile> scanResults = new ArrayList<>();
         List<LPVSConflict<String, String>> conflicts = new ArrayList<>();
 
-        scanResults.add(createSampleFile("testPath1", "test1", "UNREVIEWED"));
-        scanResults.add(createSampleFile("testPath1", "test1", "PROHIBITED"));
-        scanResults.add(createSampleFile("testPath1", "test1", "RESTRICTED"));
-        scanResults.add(createSampleFile("testPath1", "test1", "PERMITTED"));
+        scanResults.add(createSampleFile("/testPath1", "test1", "UNREVIEWED", ""));
+        scanResults.add(createSampleFile("/testPath1", "test1", "PROHIBITED", "fileUrl"));
+        scanResults.add(createSampleFile("testPath1", "test1", "RESTRICTED", ""));
+        scanResults.add(createSampleFile("testPath1", "test1", "PERMITTED", ""));
         String comment =
                 reportBuilder.generateCommandLineComment("testPath1", scanResults, conflicts);
         assertNotNull(comment);
@@ -346,7 +348,7 @@ public class LPVSReportBuilderTest {
     void testReportCommentBuilder_LicenseDetectedConflictsDetected() {
         LPVSReportBuilder reportBuilder = new LPVSReportBuilder(null);
         List<LPVSFile> scanResults = new ArrayList<>();
-        scanResults.add(createSampleFile("testPath1", "test1", "PROHIBITED"));
+        scanResults.add(createSampleFile("testPath1", "test1", "PROHIBITED", null));
         LPVSConflict<String, String> conflict_1 = new LPVSConflict<>("MIT", "Apache-2.0");
         List<LPVSConflict<String, String>> conflicts = List.of(conflict_1, conflict_1);
         String comment =
@@ -371,10 +373,10 @@ public class LPVSReportBuilderTest {
         webhookConfig.setPullRequestUrl("https://github.com/Samsung/LPVS/pull/1");
         webhookConfig.setRepositoryUrl("https://github.com/Samsung/LPVS");
 
-        scanResults.add(createSampleFile("testPath1", "test1", "UNREVIEWED"));
-        scanResults.add(createSampleFile("testPath1", "test1", "PROHIBITED"));
-        scanResults.add(createSampleFile("testPath1", "test1", "RESTRICTED"));
-        scanResults.add(createSampleFile("testPath1", "test1", "PERMITTED"));
+        scanResults.add(createSampleFile("testPath1", "test1", "UNREVIEWED", ""));
+        scanResults.add(createSampleFile("testPath1", "test1", "PROHIBITED", ""));
+        scanResults.add(createSampleFile("testPath1", "test1", "RESTRICTED", ""));
+        scanResults.add(createSampleFile("testPath1", "test1", "PERMITTED", "fileUrl"));
 
         String comment =
                 reportBuilder.generatePullRequestComment(
@@ -391,7 +393,7 @@ public class LPVSReportBuilderTest {
     void testGeneratePullRequestComment_LicenseDetectedConflictsDetected() {
         LPVSReportBuilder reportBuilder = new LPVSReportBuilder(null);
         List<LPVSFile> scanResults = new ArrayList<>();
-        scanResults.add(createSampleFile("testPath1", "test1", "PROHIBITED"));
+        scanResults.add(createSampleFile("testPath1", "test1", "PROHIBITED", null));
         LPVSConflict<String, String> conflict_1 = new LPVSConflict<>("MIT", "Apache-2.0");
         List<LPVSConflict<String, String>> conflicts = List.of(conflict_1, conflict_1);
         LPVSQueue webhookConfig = new LPVSQueue();
