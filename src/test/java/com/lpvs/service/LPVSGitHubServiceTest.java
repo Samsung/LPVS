@@ -3829,7 +3829,8 @@ public class LPVSGitHubServiceTest {
             } catch (IOException e) {
                 log.error("mocked_repo.getLicense error " + e);
             }
-            when(mocked_license.getKey()).thenReturn(test_license_key);
+            when(mocked_license.getSpdxId()).thenReturn(test_license_key);
+            when(mocked_license.getName()).thenReturn(test_license_key);
         }
 
         @Test
@@ -3841,7 +3842,8 @@ public class LPVSGitHubServiceTest {
                         .thenReturn(mocked_instance_gh);
 
                 // main test
-                assertEquals(test_license_key, gh_service.getRepositoryLicense(webhookConfig));
+                assertEquals(
+                        2, Arrays.stream(gh_service.getRepositoryLicense(webhookConfig)).count());
 
                 // verification of calling methods on `Mock`s
                 // `mocked_static_gh` verify
@@ -3869,7 +3871,8 @@ public class LPVSGitHubServiceTest {
                 verifyNoMoreInteractions(mocked_repo);
 
                 // `mocked_license` verify
-                verify(mocked_license, times(1)).getKey();
+                verify(mocked_license, times(1)).getSpdxId();
+                verify(mocked_license, times(1)).getName();
                 verifyNoMoreInteractions(mocked_license);
             }
         }
@@ -4032,7 +4035,8 @@ public class LPVSGitHubServiceTest {
                         .thenReturn(mocked_instance_gh);
 
                 // main test
-                assertEquals(test_license_key, gh_service.getRepositoryLicense(webhookConfig));
+                assertEquals(
+                        2, Arrays.stream(gh_service.getRepositoryLicense(webhookConfig)).count());
 
                 // verification of calling methods on `Mock`s
                 // `mocked_static_gh` verify
@@ -4064,7 +4068,8 @@ public class LPVSGitHubServiceTest {
                 verifyNoMoreInteractions(mocked_repo);
 
                 // `mocked_license` verify
-                verify(mocked_license, times(1)).getKey();
+                verify(mocked_license, times(1)).getSpdxId();
+                verify(mocked_license, times(1)).getName();
                 verifyNoMoreInteractions(mocked_license);
             }
         }

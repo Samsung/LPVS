@@ -146,12 +146,13 @@ public class LPVSWebhookServiceImpl implements LPVSWebhookService {
                     filePath = filePath.split(":::::")[0];
                 }
                 // check repository license
-                String repositoryLicense = gitHubService.getRepositoryLicense(webhookConfig);
+                String[] repositoryLicense = gitHubService.getRepositoryLicense(webhookConfig);
 
                 if (repositoryLicense != null) {
                     LPVSLicense repoLicense =
                             licenseService.getLicenseBySpdxIdAndName(
-                                    repositoryLicense, Optional.empty());
+                                    repositoryLicense[0],
+                                    Optional.ofNullable(repositoryLicense[1]));
                     webhookConfig.setRepositoryLicense(repoLicense.getSpdxId());
                 } else {
                     webhookConfig.setRepositoryLicense(null);

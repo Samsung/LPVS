@@ -357,9 +357,9 @@ public class LPVSGitHubService {
      * Retrieves the license of the GitHub repository associated with the pull request.
      *
      * @param webhookConfig LPVSQueue configuration for the pull request.
-     * @return License key of the GitHub repository or null if not available.
+     * @return License SPDX ID and name for the GitHub repository or null if not available.
      */
-    public String getRepositoryLicense(LPVSQueue webhookConfig) {
+    public String[] getRepositoryLicense(LPVSQueue webhookConfig) {
         try {
             String repositoryName = LPVSPayloadUtil.getRepositoryName(webhookConfig);
             String repositoryOrganization =
@@ -371,7 +371,7 @@ public class LPVSGitHubService {
             if (license == null) {
                 return null;
             } else {
-                return license.getKey();
+                return new String[] {license.getSpdxId(), license.getName()};
             }
         } catch (IOException | IllegalArgumentException e) {
             log.error("Can't authorize getRepositoryLicense(): " + e.getMessage());
