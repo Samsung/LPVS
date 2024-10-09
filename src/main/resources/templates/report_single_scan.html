@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <meta charset="UTF-8" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
 
     <title th:text="${title}">title</title>
 
@@ -55,15 +55,23 @@
             transition: max-height 0.2s ease-out;
         }
         table {
-            border-collapse: separate;
+            border-collapse: collapse;
             width: 100%;
             padding: 20px;
+            table-layout: fixed;
         }
         table td, table th {
             padding: 8px;
             text-align: left;
             border: 1px solid black;
             width: auto;
+            word-wrap: break-words;
+        }
+        table thead {
+            display: table-header-group;
+        }
+        table tbody {
+            display: table-row-group;
         }
         .mt-30 {
             margin-top: 30px;
@@ -87,7 +95,7 @@
     <b>Used scanner:</b> <span th:text=${usedScanner}>usedScanner</span><br/>
     <b>Version of LPVS:</b> <span th:text=${lpvsVersion}>lpvsVersion</span><br/>
 </div>
-<hr>
+<hr />
 <h3 class="ml-30">Detected Licenses</h3>
 <div class="items" th:if="${licenseDetected} > 0">
     <b>Potential license issues detected:</b> <span th:text=${licenseDetected}>licenseDetected</span>
@@ -107,7 +115,7 @@
         <p th:utext=${licenseTable}></p>
     </div>
 </div>
-<hr>
+<hr />
 <h3 class="ml-30">Detected License Conflicts</h3>
 <div class="items" th:if="${licenseConflicts} > 0">
     <b>Potential license conflict(s) detected:</b> <span th:text=${licenseConflicts}>licenseConflicts</span>

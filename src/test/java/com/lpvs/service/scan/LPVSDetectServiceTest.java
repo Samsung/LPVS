@@ -298,12 +298,14 @@ public class LPVSDetectServiceTest {
 
             setPrivateField(detectService, "trigger", "github/owner/repo/branch/123");
             setPrivateField(detectService, "htmlReport", null);
+            setPrivateField(detectService, "pdfReport", null);
             setPrivateField(detectService, "ctx", mockApplicationContext);
             setPrivateField(detectService, "scanService", scanoss_mock);
 
             assertDoesNotThrow(() -> detectService.runSingleScan());
 
             setPrivateField(detectService, "htmlReport", "");
+            setPrivateField(detectService, "pdfReport", "");
 
             assertDoesNotThrow(() -> detectService.runSingleScan());
         }
@@ -328,6 +330,7 @@ public class LPVSDetectServiceTest {
 
             setPrivateField(detectService, "trigger", "github/owner/repo/branch/123");
             setPrivateField(detectService, "htmlReport", "build");
+            setPrivateField(detectService, "pdfReport", "build.pdf");
             setPrivateField(detectService, "ctx", mockApplicationContext);
             setPrivateField(detectService, "scanService", scanoss_mock);
 
@@ -360,6 +363,7 @@ public class LPVSDetectServiceTest {
             assertDoesNotThrow(() -> detectService.runSingleScan());
 
             deleteFile("build");
+            deleteFile("build.pdf");
         }
 
         @Test
@@ -424,6 +428,7 @@ public class LPVSDetectServiceTest {
             setPrivateField(detectService, "ctx", mockApplicationContext);
             setPrivateField(detectService, "scanService", scanoss_mock);
             setPrivateField(detectService, "htmlReport", "report/test.html");
+            setPrivateField(detectService, "pdfReport", "");
 
             new File("report").mkdir();
 
@@ -522,7 +527,7 @@ public class LPVSDetectServiceTest {
             List<LPVSConflict<String, String>> expected = List.of(conflict_1, conflict_1);
 
             setPrivateField(detectService, "trigger", "github/owner/repo/branch/123");
-            setPrivateField(detectService, "htmlReport", "report/test.html");
+            setPrivateField(detectService, "pdfReport", "report/test.pdf");
             setPrivateField(detectService, "ctx", mockApplicationContext);
             setPrivateField(detectService, "scanService", scanoss_mock);
 
@@ -568,6 +573,7 @@ public class LPVSDetectServiceTest {
 
             setPrivateField(detectService, "trigger", "github/owner/repo/branch/123");
             setPrivateField(detectService, "htmlReport", "report/test.html");
+            setPrivateField(detectService, "pdfReport", "report/test.pdf");
             setPrivateField(detectService, "ctx", mockApplicationContext);
             setPrivateField(detectService, "scanService", scanoss_mock);
 
@@ -657,7 +663,8 @@ public class LPVSDetectServiceTest {
             List<LPVSConflict<String, String>> expected = List.of(conflict_1, conflict_1);
 
             setPrivateField(detectService, "trigger", "github/owner/repo/branch/123");
-            setPrivateField(detectService, "htmlReport", "report/test.html");
+            setPrivateField(detectService, "htmlReport", "");
+            setPrivateField(detectService, "pdfReport", "report/test.pdf");
             setPrivateField(detectService, "ctx", mockApplicationContext);
             setPrivateField(detectService, "scanService", scanoss_mock);
 

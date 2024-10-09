@@ -30,6 +30,7 @@ import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import static com.lpvs.entity.report.LPVSReportBuilder.generatePdfFromHtml;
 import static com.lpvs.entity.report.LPVSReportBuilder.saveHTMLToFile;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -297,10 +298,26 @@ public class LPVSReportBuilderTest {
     }
 
     @Test
-    void saveHTMLToFile_CatchBlock_N() {
+    void testSavePDFToFile() throws IOException {
+        String htmlContent = "<html><body><p class=\"panel\">Test HTML</p></body></html>";
+        String filePath = "test-output.pdf";
+
+        generatePdfFromHtml(htmlContent, filePath);
+
+        Path path = Paths.get(filePath);
+        assertTrue(Files.exists(path));
+
+        // Clean up: delete the created file
+        Files.deleteIfExists(path);
+    }
+
+    @Test
+    void saveHTMLandPDFtoFile_CatchBlock_N() {
         String htmlContent = "<html><body></body></html>";
         Path invalidPath = tempDir.resolve("invalid/path/with/special/characters");
         saveHTMLToFile(htmlContent, invalidPath.toString());
+        assertFalse(Files.exists(invalidPath));
+        generatePdfFromHtml(htmlContent, invalidPath.toString());
         assertFalse(Files.exists(invalidPath));
     }
 
