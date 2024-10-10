@@ -104,6 +104,9 @@ The following command line options are available:
 - `--build.html.report`: This setting specifies the path to the HTML report file which will be generated after the scan.
 If it is not specified, no HTML report will be generated and result of the scan will be displayed in the console.
 
+- `--build.pdf.report`: This setting specifies the path to the PDF report file which will be generated after the scan.
+If it is not specified, no PDF report will be generated and result of the scan will be displayed in the console.
+
 - `--github.pull.request`: This setting specifies the pull request URL which should be scanned by the LPVS application.
 
 - `--local.path`: This setting specifies the path to the local file or folder which should be scanned by the LPVS application.

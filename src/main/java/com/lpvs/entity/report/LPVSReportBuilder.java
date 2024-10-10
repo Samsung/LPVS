@@ -12,6 +12,8 @@ import com.lpvs.entity.LPVSQueue;
 import com.lpvs.entity.enums.LPVSVcs;
 import com.lpvs.entity.LPVSConflict;
 import com.lpvs.util.LPVSCommentUtil;
+import com.openhtmltopdf.outputdevice.helper.BaseRendererBuilder;
+import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
 import io.micrometer.common.util.StringUtils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,10 +24,7 @@ import org.springframework.stereotype.Component;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -242,6 +241,32 @@ public class LPVSReportBuilder {
             log.info("LPVS report saved to: " + filePath);
         } catch (IOException ex) {
             log.error("Error during saving HTML report: " + ex.getMessage());
+        }
+    }
+
+    /**
+     * Saves PDF report to given location.
+     *
+     * @param htmlContent   The string, containing report in HTML format.
+     * @param filePath      The path to expected pdf report file.
+     */
+    public static void generatePdfFromHtml(String htmlContent, String filePath) {
+        String report =
+                htmlContent
+                        .replaceAll(" class=\"panel\"", "")
+                        .replaceAll("<script>[\\s\\S]*?</script>", "")
+                        .replaceAll("<button.*</button>", "")
+                        .replaceAll("body [\\s\\S]*?}", "");
+        try (FileOutputStream os = new FileOutputStream(filePath)) {
+            PdfRendererBuilder builder = new PdfRendererBuilder();
+            builder.withHtmlContent(report, new File(filePath).toURI().toString())
+                    // Size for the standard A4 landscape page
+                    .useDefaultPageSize(11.7f, 8.3f, BaseRendererBuilder.PageSizeUnits.INCHES)
+                    .toStream(os)
+                    .run();
+            log.info("LPVS report saved to: " + filePath);
+        } catch (IOException ex) {
+            log.error("Error during saving PDF report: " + ex.getMessage());
         }
     }
 
@@ -508,12 +533,14 @@ public class LPVSReportBuilder {
      */
     private String generateLicenseConflictsTableHTML(List<LPVSConflict<String, String>> conflicts) {
         StringBuilder htmlBuilder = new StringBuilder();
-        htmlBuilder.append("<table>");
+        htmlBuilder.append("<table>").append("<thead>");
         htmlBuilder
                 .append("<tr>")
                 .append("<th>Conflict</th>")
                 .append("<th>Explanation</th>")
-                .append("<tr>");
+                .append("</tr>")
+                .append("</thead>")
+                .append("<tbody>");
 
         for (LPVSConflict<String, String> conflict : conflicts) {
             htmlBuilder
@@ -528,7 +555,7 @@ public class LPVSReportBuilder {
                     .append("</td>")
                     .append("</tr>");
         }
-        htmlBuilder.append("</table>");
+        htmlBuilder.append("</tbody>").append("</table>");
         return htmlBuilder.toString();
     }
 
@@ -559,8 +586,9 @@ public class LPVSReportBuilder {
     private String generateLicenseTableHTML(
             Map<String, GroupInfo<?>> detectedLicenseInfo, LPVSQueue webhookConfig, LPVSVcs vcs) {
         StringBuilder htmlBuilder = new StringBuilder();
-        htmlBuilder.append("<table>");
         htmlBuilder
+                .append("<table>")
+                .append("<thead>")
                 .append("<tr>")
                 .append("<th>License Type / Explanation</th>")
                 .append("<th>License SPDX ID</th>")
@@ -570,7 +598,10 @@ public class LPVSReportBuilder {
                 .append("<th>Component File Path</th>")
                 .append("<th>Matched Lines</th>")
                 .append("<th>Match Value</th>")
-                .append("<tr>");
+                .append("</tr>")
+                .append("</thead>")
+                .append("<tbody>");
+
         // Prohibited licenses
         addBlockOfTableForLicenseTypeHTML(
                 htmlBuilder, detectedLicenseInfo, prohibited, webhookConfig, vcs);
@@ -584,7 +615,7 @@ public class LPVSReportBuilder {
         addBlockOfTableForLicenseTypeHTML(
                 htmlBuilder, detectedLicenseInfo, permitted, webhookConfig, vcs);
 
-        htmlBuilder.append("</table>");
+        htmlBuilder.append("</tbody>").append("</table>");
         return htmlBuilder.toString();
     }
 

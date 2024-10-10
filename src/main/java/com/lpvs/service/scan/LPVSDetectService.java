@@ -33,6 +33,7 @@ import com.lpvs.entity.LPVSQueue;
 
 import lombok.extern.slf4j.Slf4j;
 
+import static com.lpvs.entity.report.LPVSReportBuilder.generatePdfFromHtml;
 import static com.lpvs.entity.report.LPVSReportBuilder.saveHTMLToFile;
 
 /**
@@ -84,6 +85,12 @@ public class LPVSDetectService {
      */
     @Value("${build.html.report:}")
     private String htmlReport;
+
+    /**
+     * Optional parameter to save pdf report to specified location.
+     */
+    @Value("${build.pdf.report:}")
+    private String pdfReport;
 
     /**
      * Spring application context.
@@ -192,20 +199,19 @@ public class LPVSDetectService {
 
         // Report generation
         // 1. HTML format
-        if (generateReport && !StringUtils.isBlank(htmlReport)) {
-            File report = new File(HtmlUtils.htmlEscape(htmlReport));
-            String folderPath = report.getParent();
-            if (folderPath == null) {
-                folderPath = ".";
+        if (generateReport
+                && (!StringUtils.isBlank(htmlReport) || !StringUtils.isBlank(pdfReport))) {
+            String reportContent =
+                    reportBuilder.generateHtmlReportSingleScan(
+                            path, scanResult, detectedConflicts, null, null);
+            if (!StringUtils.isBlank(htmlReport) && checkFolderForReport(htmlReport)) {
+                saveHTMLToFile(
+                        reportContent,
+                        new File(HtmlUtils.htmlEscape(htmlReport)).getAbsolutePath());
             }
-            File folder = new File(folderPath);
-            if (folder.exists() && folder.isDirectory()) {
-                String reportFile =
-                        reportBuilder.generateHtmlReportSingleScan(
-                                path, scanResult, detectedConflicts, null, null);
-                saveHTMLToFile(reportFile, report.getAbsolutePath());
-            } else {
-                log.error("Error: The parent directory '" + folder.getPath() + "' does not exist.");
+            if (!StringUtils.isBlank(pdfReport) && checkFolderForReport(pdfReport)) {
+                generatePdfFromHtml(
+                        reportContent, new File(HtmlUtils.htmlEscape(pdfReport)).getAbsolutePath());
             }
             SpringApplication.exit(ctx, () -> 0);
         } else if (generateReport) {
@@ -217,6 +223,25 @@ public class LPVSDetectService {
             }
             SpringApplication.exit(ctx, () -> 0);
         }
+    }
+
+    /**
+     * Checks if the folder exists where the report will be saved.
+     * @param reportPath the path to the report file
+     * @return {@code true} if the folder exists and is a directory, otherwise {@code false}
+     */
+    private boolean checkFolderForReport(String reportPath) {
+        File report = new File(HtmlUtils.htmlEscape(reportPath));
+        String folderPath = report.getParent();
+        if (folderPath == null) {
+            folderPath = ".";
+        }
+        File folder = new File(folderPath);
+        if (folder.exists() && folder.isDirectory()) {
+            return true;
+        }
+        log.error("Error: The parent directory '" + folder.getPath() + "' does not exist.");
+        return false;
     }
 
     /**

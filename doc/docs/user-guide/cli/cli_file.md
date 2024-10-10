@@ -44,12 +44,15 @@ Example:
     java -jar -Dspring.profiles.active=singlescan lpvs-*.jar --local.path=</path/to/file/or/folder>
     ```
 
-* Optionally, generate an HTML report and save it in a specified folder using flag `--build.html.report`.
-  Replace `path/to/your/folder` with the full path to the folder where you want to save the HTML report,
-  and `your_report_filename.html` with the desired filename for the report.
+* Optionally, generate an HTML report and save it in a specified folder using flag `--build.html.report`,
+  or PDF report using flag `--build.pdf.report`.
+  Replace `path/to/your/folder` with the full path to the folder where you want to save the HTML/PDF report,
+  and `your_report_filename.html` or `your_report_filename.pdf` with the desired filename for the report.
 
 ```bash
 java -jar -Dspring.profiles.active=singlescan lpvs-*.jar --local.path=</path/to/file/or/folder> --build.html.report=<your_report_filename.html>
+java -jar -Dspring.profiles.active=singlescan lpvs-*.jar --local.path=</path/to/file/or/folder> --build.pdf.report=<your_report_filename.pdf>
+java -jar -Dspring.profiles.active=singlescan lpvs-*.jar --local.path=</path/to/file/or/folder> --build.html.report=<your_report_filename.html> --build.pdf.report=<your_report_filename.pdf>
 ```
 
 !!! warning
@@ -61,4 +64,6 @@ Examples of the command:
 ```bash
 java -jar -Dspring.profiles.active=singlescan lpvs-*.jar --local.path=test.c
 java -jar -Dspring.profiles.active=singlescan lpvs-*.jar --local.path=test_folder --build.html.report=test/report.html
+java -jar -Dspring.profiles.active=singlescan lpvs-*.jar --local.path=test_folder --build.pdf.report=test/report.pdf
+java -jar -Dspring.profiles.active=singlescan lpvs-*.jar --local.path=test_folder --build.html.report=test/report.html --build.pdf.report=test/report.pdf
 ```
