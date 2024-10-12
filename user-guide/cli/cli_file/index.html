@@ -292,11 +292,14 @@ Use the "singlescan" profile to skip setting up a pre-configured MySQL database:
 </code></pre></div>
 </div>
 <ul>
-<li>Optionally, generate an HTML report and save it in a specified folder using flag <code>--build.html.report</code>.
-  Replace <code>path/to/your/folder</code> with the full path to the folder where you want to save the HTML report,
-  and <code>your_report_filename.html</code> with the desired filename for the report.</li>
+<li>Optionally, generate an HTML report and save it in a specified folder using flag <code>--build.html.report</code>,
+  or PDF report using flag <code>--build.pdf.report</code>.
+  Replace <code>path/to/your/folder</code> with the full path to the folder where you want to save the HTML/PDF report,
+  and <code>your_report_filename.html</code> or <code>your_report_filename.pdf</code> with the desired filename for the report.</li>
 </ul>
 <div class="highlight"><pre><span></span><code>java<span class="w"> </span>-jar<span class="w"> </span>-Dspring.profiles.active<span class="o">=</span>singlescan<span class="w"> </span>lpvs-*.jar<span class="w"> </span>--local.path<span class="o">=</span>&lt;/path/to/file/or/folder&gt;<span class="w"> </span>--build.html.report<span class="o">=</span>&lt;your_report_filename.html&gt;
+java<span class="w"> </span>-jar<span class="w"> </span>-Dspring.profiles.active<span class="o">=</span>singlescan<span class="w"> </span>lpvs-*.jar<span class="w"> </span>--local.path<span class="o">=</span>&lt;/path/to/file/or/folder&gt;<span class="w"> </span>--build.pdf.report<span class="o">=</span>&lt;your_report_filename.pdf&gt;
+java<span class="w"> </span>-jar<span class="w"> </span>-Dspring.profiles.active<span class="o">=</span>singlescan<span class="w"> </span>lpvs-*.jar<span class="w"> </span>--local.path<span class="o">=</span>&lt;/path/to/file/or/folder&gt;<span class="w"> </span>--build.html.report<span class="o">=</span>&lt;your_report_filename.html&gt;<span class="w"> </span>--build.pdf.report<span class="o">=</span>&lt;your_report_filename.pdf&gt;
 </code></pre></div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
@@ -305,6 +308,8 @@ Use the "singlescan" profile to skip setting up a pre-configured MySQL database:
 <p>Examples of the command:</p>
 <div class="highlight"><pre><span></span><code>java<span class="w"> </span>-jar<span class="w"> </span>-Dspring.profiles.active<span class="o">=</span>singlescan<span class="w"> </span>lpvs-*.jar<span class="w"> </span>--local.path<span class="o">=</span>test.c
 java<span class="w"> </span>-jar<span class="w"> </span>-Dspring.profiles.active<span class="o">=</span>singlescan<span class="w"> </span>lpvs-*.jar<span class="w"> </span>--local.path<span class="o">=</span>test_folder<span class="w"> </span>--build.html.report<span class="o">=</span>test/report.html
+java<span class="w"> </span>-jar<span class="w"> </span>-Dspring.profiles.active<span class="o">=</span>singlescan<span class="w"> </span>lpvs-*.jar<span class="w"> </span>--local.path<span class="o">=</span>test_folder<span class="w"> </span>--build.pdf.report<span class="o">=</span>test/report.pdf
+java<span class="w"> </span>-jar<span class="w"> </span>-Dspring.profiles.active<span class="o">=</span>singlescan<span class="w"> </span>lpvs-*.jar<span class="w"> </span>--local.path<span class="o">=</span>test_folder<span class="w"> </span>--build.html.report<span class="o">=</span>test/report.html<span class="w"> </span>--build.pdf.report<span class="o">=</span>test/report.pdf
 </code></pre></div></div>
             </div>
         </div>
