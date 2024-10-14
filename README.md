@@ -3,14 +3,12 @@
 
 # License Pre-Validation Service
 
-[![Build](https://github.com/samsung/lpvs/workflows/Build/badge.svg)](https://github.com/samsung/lpvs/actions?query=workflow%3ABuild)
 [![CodeQL Analysis](https://github.com/Samsung/LPVS/workflows/CodeQL%20Analysis/badge.svg)](https://github.com/Samsung/LPVS/actions?query=workflow%3A%22CodeQL+Analysis%22)
 [![OpenSSF Best Practices](https://www.bestpractices.dev/projects/6309/badge)](https://www.bestpractices.dev/projects/6309)
 [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/Samsung/LPVS/badge)](https://api.securityscorecards.dev/projects/github.com/Samsung/LPVS)
 [![Release](https://img.shields.io/github/v/release/samsung/lpvs.svg)](https://github.com/Samsung/LPVS/releases)
 [![LICENSE](https://img.shields.io/github/license/samsung/lpvs.svg)](https://github.com/Samsung/LPVS/blob/main/LICENSE)
 [![codecov](https://codecov.io/gh/Samsung/LPVS/graph/badge.svg?token=XTD749ITNF)](https://codecov.io/gh/Samsung/LPVS)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7127519.svg)](https://doi.org/10.5281/zenodo.7127519)
 
 ---
 
