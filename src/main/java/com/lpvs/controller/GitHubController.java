@@ -224,8 +224,7 @@ public class GitHubController {
     public ResponseEntity<LPVSResponseWrapper> gitHubSingleScan(
             @PathVariable("gitHubOrg") @NotEmpty @Valid String gitHubOrg,
             @PathVariable("gitHubRepo") @NotEmpty @Valid String gitHubRepo,
-            @PathVariable("prNumber") @Min(1) @Valid Integer prNumber)
-            throws InterruptedException, IOException {
+            @PathVariable("prNumber") @Min(1) @Valid Integer prNumber) {
         log.debug("New GitHub single scan request received");
 
         if (GITHUB_SECRET.trim().isEmpty()) {

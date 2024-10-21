@@ -150,6 +150,23 @@ public class LPVSGitHubConnectionService {
     }
 
     /**
+     * Connects to the GitHub API based on the configured authentication token and API URL with custom token.
+     *
+     * @param token  GitHub custom authentication token.
+     * @return GitHub instance for interacting with the GitHub API.
+     * @throws IOException if an error occurs during the GitHub connection.
+     */
+    public GitHub connectToEnterpriseApiWithCustomToken(String token) throws IOException {
+        GitHub gH;
+        if (StringUtils.isBlank(token)) {
+            gH = connectToGitHubApi();
+        } else {
+            gH = GitHub.connectToEnterpriseWithOAuth(GITHUB_API_URL, GITHUB_LOGIN, token);
+        }
+        return gH;
+    }
+
+    /**
      * Sets the GitHub authentication token from the environment variable if available.
      */
     public void setGithubTokenFromEnv() {
