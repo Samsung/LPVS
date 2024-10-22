@@ -16,7 +16,11 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class LPVSCommentUtilTest {
 
@@ -83,5 +87,23 @@ public class LPVSCommentUtilTest {
                         + "7 (https://gerrit.org/repo/blob/headCommitSHA/exampleFile.txt#L7) "
                         + "9-12 (https://gerrit.org/repo/blob/headCommitSHA/exampleFile.txt#L9L12) ",
                 result);
+    }
+
+    @Test
+    void testConstructorThrowsException_N() {
+        try {
+            Constructor<LPVSCommentUtil> constructor =
+                    LPVSCommentUtil.class.getDeclaredConstructor();
+            constructor.setAccessible(true);
+            constructor.newInstance();
+            fail("Expected UnsupportedOperationException to be thrown");
+        } catch (InvocationTargetException e) {
+            assertInstanceOf(
+                    UnsupportedOperationException.class,
+                    e.getCause(),
+                    "UnsupportedOperationException expected");
+        } catch (Exception e) {
+            fail("Unexpected exception type thrown: " + e.getCause());
+        }
     }
 }

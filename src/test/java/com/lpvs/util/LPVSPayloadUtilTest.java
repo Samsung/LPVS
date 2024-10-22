@@ -16,6 +16,8 @@ import org.mockito.Mock;
 import org.springframework.http.HttpHeaders;
 
 import java.io.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -434,6 +436,24 @@ public class LPVSPayloadUtilTest {
             assertThrows(
                     NullPointerException.class,
                     () -> LPVSPayloadUtil.convertInputStreamToString(inputStream));
+        }
+    }
+
+    @Test
+    void testConstructorThrowsException_N() {
+        try {
+            Constructor<LPVSPayloadUtil> constructor =
+                    LPVSPayloadUtil.class.getDeclaredConstructor();
+            constructor.setAccessible(true);
+            constructor.newInstance();
+            fail("Expected UnsupportedOperationException to be thrown");
+        } catch (InvocationTargetException e) {
+            assertInstanceOf(
+                    UnsupportedOperationException.class,
+                    e.getCause(),
+                    "UnsupportedOperationException expected");
+        } catch (Exception e) {
+            fail("Unexpected exception type thrown: " + e.getCause());
         }
     }
 }

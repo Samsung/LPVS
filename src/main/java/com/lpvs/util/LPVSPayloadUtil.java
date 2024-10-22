@@ -32,6 +32,13 @@ import java.util.List;
 public class LPVSPayloadUtil {
 
     /**
+     * Private constructor to prevent instantiation of utility class
+     */
+    private LPVSPayloadUtil() {
+        throw new UnsupportedOperationException("Utility class, cannot be instantiated.");
+    }
+
+    /**
      * Creates an InputStreamReader object with the specified input stream and UTF-8 encoding.
      *
      * @param inputStream The input stream to read from.

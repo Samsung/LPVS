@@ -14,14 +14,16 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static com.lpvs.util.LPVSFileUtil.copyFiles;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class LPVSFileUtilTest {
     private LPVSQueue webhookConfig = null;
@@ -213,11 +215,11 @@ public class LPVSFileUtilTest {
         String directoryPath = "testDirectory";
         List<String> patchedLines = new ArrayList<>();
 
-        LPVSFileUtil.saveFile(fileName, directoryPath, patchedLines);
+        assertFalse(LPVSFileUtil.saveFile(fileName, directoryPath, patchedLines));
         Boolean result1 = Files.exists(Paths.get(directoryPath, fileName));
         assert (result1.equals(false));
 
-        LPVSFileUtil.saveFile(fileName, directoryPath, null);
+        assertFalse(LPVSFileUtil.saveFile(fileName, directoryPath, null));
         Boolean result2 = Files.exists(Paths.get(directoryPath, fileName));
         assert (result2.equals(false));
     }
@@ -278,5 +280,56 @@ public class LPVSFileUtilTest {
             }
         }
         directory.delete();
+    }
+
+    @Test
+    void testConstructorThrowsException_N() {
+        try {
+            Constructor<LPVSFileUtil> constructor = LPVSFileUtil.class.getDeclaredConstructor();
+            constructor.setAccessible(true);
+            constructor.newInstance();
+            fail("Expected UnsupportedOperationException to be thrown");
+        } catch (InvocationTargetException e) {
+            assertInstanceOf(
+                    UnsupportedOperationException.class,
+                    e.getCause(),
+                    "UnsupportedOperationException expected");
+        } catch (Exception e) {
+            fail("Unexpected exception type thrown: " + e.getCause());
+        }
+    }
+
+    @Test
+    public void saveFileToDiskTest() throws IOException {
+        sourceDir = Files.createTempDirectory("source").toFile();
+        String content = "Hello, World!";
+        String fileName = "file.txt";
+        LPVSFileUtil.saveFileToDisk(sourceDir.getAbsolutePath(), fileName, content);
+        assertTrue(new File(sourceDir.getAbsolutePath() + File.separator + fileName).exists());
+        deleteDirectory(sourceDir);
+    }
+
+    @Test
+    public void saveFileToDiskTest_N() throws IOException {
+        sourceDir = Files.createTempDirectory("source").toFile();
+        String content = "Hello, World!";
+        String fileName =
+                "zxcvbnmasdfghjklqwertyuiopoiuytrewqasdfghjklmnbvcxzaqwsxcderfvbgtyhnmjuikzxcvbnmasdfsdsdsdhjhjghjklqwertyuiopoiuytrewqasdfghjklmnbvcxzaqwsxcderfvbgtyhnmjuikzxcvbnmasdfghjklqwertyuiopoiuytrewqasdfghjklmnbvcxzaqwsxcderfvbgtyhnmjuikzxcvbnmasdfghjklqwertyuiopoiuytrewqasdfg/file.txt";
+        assertThrows(
+                IOException.class,
+                () -> LPVSFileUtil.saveFileToDisk(sourceDir.getAbsolutePath(), fileName, content));
+        deleteDirectory(sourceDir);
+    }
+
+    @Test
+    public void saveFileTest_N() throws IOException {
+        sourceDir = Files.createTempDirectory("source").toFile();
+        String content = "+Hello, World!";
+        String fileName =
+                "zxcvbnmasdfghjklqwertyuiopoiuytrewqasdfghjklmnbvcxzaqwsxcderfvbgtyhnmjuikzxcvbnmasdfsdsdsdhjhjghjklqwertyuiopoiuytrewqasdfghjklmnbvcxzaqwsxcderfvbgtyhnmjuikzxcvbnmasdfghjklqwertyuiopoiuytrewqasdfghjklmnbvcxzaqwsxcderfvbgtyhnmjuikzxcvbnmasdfghjklqwertyuiopoiuytrewqasdfg/file.txt";
+        assertFalse(
+                LPVSFileUtil.saveFile(
+                        fileName, sourceDir.getAbsolutePath(), Collections.singletonList(content)));
+        deleteDirectory(sourceDir);
     }
 }

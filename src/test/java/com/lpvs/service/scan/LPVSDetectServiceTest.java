@@ -741,6 +741,11 @@ public class LPVSDetectServiceTest {
         }
 
         @Test
+        public void testGetPathByPullRequest_N() {
+            assertNull(LPVSFileUtil.getPathByPullRequest(null));
+        }
+
+        @Test
         public void testRunScan__Scanoss() {
             try {
                 setPrivateField(detectService, "scanService", scanoss_mock);
