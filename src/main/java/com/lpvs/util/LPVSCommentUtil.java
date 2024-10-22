@@ -26,6 +26,13 @@ import lombok.extern.slf4j.Slf4j;
 public class LPVSCommentUtil {
 
     /**
+     * Private constructor to prevent instantiation of utility class
+     */
+    private LPVSCommentUtil() {
+        throw new UnsupportedOperationException("Utility class, cannot be instantiated.");
+    }
+
+    /**
      * Generates a formatted string containing links to matched lines in a file.
      *
      * @param webhookConfig The {@link LPVSQueue} configuration for the webhook.
