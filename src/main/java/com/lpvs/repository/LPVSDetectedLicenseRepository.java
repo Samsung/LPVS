@@ -69,4 +69,13 @@ public interface LPVSDetectedLicenseRepository extends JpaRepository<LPVSDetecte
      * @return List of {@link LPVSDetectedLicense} associated with the pull request where the license is not null.
      */
     List<LPVSDetectedLicense> findByPullRequestAndLicenseIsNotNull(@Param("pr") LPVSPullRequest pr);
+
+    /**
+     * Find detected license conflicts associated with a specific pull request where the license conflict is not null.
+     *
+     * @param pr The {@link LPVSPullRequest} to retrieve detected license conflicts for.
+     * @return List of {@link LPVSDetectedLicense} associated with the pull request where the license conflict is not null.
+     */
+    List<LPVSDetectedLicense> findByPullRequestAndLicenseConflictIsNotNull(
+            @Param("pr") LPVSPullRequest pr);
 }
