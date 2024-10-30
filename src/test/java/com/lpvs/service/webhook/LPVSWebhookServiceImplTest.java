@@ -774,6 +774,7 @@ public class LPVSWebhookServiceImplTest {
             lpvsPullRequest.setUser("user");
 
             webhookConfigMain = new LPVSQueue();
+            webhookConfigMain.setId(1L);
             webhookConfigMain.setPullRequestUrl("http://test_url/url/pull/1");
             webhookConfigMain.setPullRequestFilesUrl("http://test_url/url");
             webhookConfigMain.setRepositoryUrl("http://test_url/url");
@@ -811,6 +812,7 @@ public class LPVSWebhookServiceImplTest {
                             4);
             when(mocked_webhookServiceFactory.createWebhookService(false))
                     .thenReturn(webhookService);
+            when(mocked_lpvsPullRequestRepository.findByQueueId(1L)).thenReturn(lpvsPullRequest);
         }
 
         @Test
