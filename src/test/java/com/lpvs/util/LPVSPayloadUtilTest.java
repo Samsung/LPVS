@@ -12,19 +12,25 @@ import com.lpvs.entity.enums.LPVSPullRequestAction;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.kohsuke.github.GHCommitPointer;
+import org.kohsuke.github.GHPullRequest;
+import org.kohsuke.github.GHRepository;
 import org.mockito.Mock;
 import org.springframework.http.HttpHeaders;
 
 import java.io.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.net.MalformedURLException;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 public class LPVSPayloadUtilTest {
 
@@ -84,6 +90,73 @@ public class LPVSPayloadUtilTest {
                     "{\"code\":\"200\",\"messageList\":{\"detailInfo\":[]},\"success\":true}";
             LPVSLicense actualLicense = LPVSPayloadUtil.convertOsoriDbResponseToLicense(payload);
             assertNull(actualLicense);
+        }
+    }
+
+    @Nested
+    class TestGetGitHubWebhookConfig {
+        GHRepository repo;
+        GHPullRequest pR;
+
+        @BeforeEach
+        void setUp() {
+            repo = mock(GHRepository.class);
+            pR = mock(GHPullRequest.class);
+        }
+
+        @Test
+        void testGetGitHubWebhookConfig_WithValidPRAndRepo() throws MalformedURLException {
+            when(repo.getHtmlUrl()).thenReturn(new URL("https://github.com/repo"));
+            when(pR.getHtmlUrl()).thenReturn(new URL("https://github.com/repo/pull/1"));
+            when(pR.getHead()).thenReturn(mock(GHCommitPointer.class));
+            when(pR.getHead().getRepository()).thenReturn(repo);
+            when(pR.getHead().getRepository().getHtmlUrl())
+                    .thenReturn(new URL("https://github.com/repo"));
+            when(pR.getHead().getSha()).thenReturn("1234567890");
+
+            LPVSQueue webhookConfig = LPVSPayloadUtil.getGitHubWebhookConfig(repo, pR);
+
+            assertEquals("https://github.com/repo/pull/1", webhookConfig.getPullRequestUrl());
+            assertEquals("https://github.com/repo", webhookConfig.getPullRequestFilesUrl());
+            assertNull(webhookConfig.getPullRequestAPIUrl());
+            assertEquals("https://github.com/repo", webhookConfig.getRepositoryUrl());
+            assertEquals("Single scan of pull request run", webhookConfig.getUserId());
+            assertEquals("1234567890", webhookConfig.getHeadCommitSHA());
+        }
+
+        @Test
+        void testGetGitHubWebhookConfig_WithNullPRHtmlUrl() {
+            when(pR.getHtmlUrl()).thenReturn(null);
+            when(pR.getHead()).thenReturn(mock(GHCommitPointer.class));
+            when(pR.getHead().getRepository()).thenReturn(repo);
+            when(pR.getHead().getRepository().getHtmlUrl()).thenReturn(null);
+            when(pR.getHead().getSha()).thenReturn("1234567890");
+
+            LPVSQueue webhookConfig = LPVSPayloadUtil.getGitHubWebhookConfig(repo, pR);
+
+            assertNull(webhookConfig.getPullRequestUrl());
+            assertNull(webhookConfig.getPullRequestFilesUrl());
+            assertNull(webhookConfig.getPullRequestAPIUrl());
+            assertNull(webhookConfig.getRepositoryUrl());
+            assertEquals("Single scan of pull request run", webhookConfig.getUserId());
+            assertEquals("1234567890", webhookConfig.getHeadCommitSHA());
+        }
+
+        @Test
+        void testGetGitHubWebhookConfig_WithNullPRHead() {
+            when(pR.getHtmlUrl()).thenReturn(null);
+            when(pR.getHead()).thenReturn(mock(GHCommitPointer.class));
+            when(pR.getHead().getRepository()).thenReturn(null);
+            when(pR.getHead().getSha()).thenReturn("1234567890");
+
+            LPVSQueue webhookConfig = LPVSPayloadUtil.getGitHubWebhookConfig(repo, pR);
+
+            assertNull(webhookConfig.getPullRequestUrl());
+            assertNull(webhookConfig.getPullRequestFilesUrl());
+            assertNull(webhookConfig.getPullRequestAPIUrl());
+            assertNull(webhookConfig.getRepositoryUrl());
+            assertEquals("Single scan of pull request run", webhookConfig.getUserId());
+            assertEquals("1234567890", webhookConfig.getHeadCommitSHA());
         }
     }
 

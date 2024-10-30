@@ -142,9 +142,6 @@ public class LPVSWebhookServiceImpl implements LPVSWebhookService {
             if (filePath != null && Files.list(Paths.get(filePath)).count() != 0) {
                 log.debug("Successfully downloaded files");
 
-                if (filePath.contains(":::::")) {
-                    filePath = filePath.split(":::::")[0];
-                }
                 // check repository license
                 String[] repositoryLicense = gitHubService.getRepositoryLicense(webhookConfig);
 
