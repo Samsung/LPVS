@@ -16,6 +16,12 @@ jobs:
           egress-policy: audit
       - name: Checkout repository
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Set up JDK 17
+        uses: actions/setup-java@8df1039502a15bceb9433410b1a100fbe190c53b # v4.5.0
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
       - uses: axel-op/googlejavaformat-action@0dc4ef525e7ed73d8dff50b1b062a4d441d014b5 # v3.6
         with:
           args: "--aosp --skip-javadoc-formatting --skip-reflowing-long-strings --skip-sorting-imports --replace"
