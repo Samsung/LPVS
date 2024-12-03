@@ -18,6 +18,7 @@ Please delete options that are not relevant.
 - [ ] This change requires a documentation update
 - [ ] CI system update
 - [ ] Test Coverage update
+- [ ] Version update (release)
 
 ## Testing
 
