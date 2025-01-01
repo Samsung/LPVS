@@ -1,4 +1,4 @@
-FROM node:23@sha256:a2fea8b0b74b6e828caa6d83f4b2a0dcb2eb1ff90f30205c32f7bd36ddf976c4 AS frontend
+FROM node:23@sha256:1745a99b66da41b5ccd6f7be3810f74ddab16eb4579de10de378adb50d2e6e6f AS frontend
 
 WORKDIR /frontend
 COPY frontend .
