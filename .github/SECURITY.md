@@ -26,6 +26,7 @@ We provide patches to address vulnerabilities for the following versions of LPVS
 | ----------- | ------------ | ------------------ | ---------------------------------------------- |
 | 1.0.0       | N/A          |                    |                                                |
 | 1.4.1       |              |                    | CVE-2021-3803, CVE-2023-44270                  |
+| 2.1.2       |              |                    | CVE-2024-35195                                 |
 
 ### 2.2 Private Vulnerability Reporting
 
