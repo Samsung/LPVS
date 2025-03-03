@@ -22,7 +22,7 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           cache: maven
-      - uses: axel-op/googlejavaformat-action@0dc4ef525e7ed73d8dff50b1b062a4d441d014b5 # v3.6
+      - uses: axel-op/googlejavaformat-action@c1134ebd196c4cbffb077f9476585b0be8b6afcd # v3.6
         with:
           args: "--aosp --skip-javadoc-formatting --skip-reflowing-long-strings --skip-sorting-imports --replace"
           skip-commit: true
