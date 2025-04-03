@@ -1,13 +1,14 @@
 # Security Policy
 
 ## Table of Contents
+
 1. [Introduction](#1-introduction)
 2. [Vulnerabilities](#2-vulnerabilities)  
-    2.1 [Supported Versions](#21-supported-versions)  
-    2.2 [Private Vulnerability Reporting](#22-private-vulnerability-reporting)  
-    2.3 [Public Vulnerability Reporting](#23-public-vulnerability-reporting)  
-    2.4 [Security Disclosure](#24-security-disclosure)  
-3. [Security requirements](#3-security-requirements)  
+   2.1 [Supported Versions](#21-supported-versions)  
+   2.2 [Private Vulnerability Reporting](#22-private-vulnerability-reporting)  
+   2.3 [Public Vulnerability Reporting](#23-public-vulnerability-reporting)  
+   2.4 [Security Disclosure](#24-security-disclosure)
+3. [Security requirements](#3-security-requirements)
 4. [Security Software life cycle processes](#4-security-software-life-cycle-processes)
 
 ## 1. Introduction
@@ -41,7 +42,7 @@ We take the security of LPVS seriously, and we welcome responsible disclosure of
 
 ### 2.3 Public Vulnerability Reporting
 
-If you believe that a vulnerability can be publicly disclosed or is not critical, you can still report it using our email contact _o.kopysov@samsung.com_ with the subject line "SECURITY". 
+If you believe that a vulnerability can be publicly disclosed or is not critical, you can still report it using our email contact _o.kopysov@samsung.com_ with the subject line "SECURITY".
 
 Our LPVS Security Issue Review (SIR) team will acknowledge your report and aim to provide recommendations for mitigation within 1 week. Throughout the process, we will keep you informed of the progress toward the fix and may request additional information or guidance.
 
@@ -126,4 +127,5 @@ graph LR
     G --> T[Memory-Safe Languages]
     G --> U[Secure Design Includes S&S]
 ```
+
 ---
