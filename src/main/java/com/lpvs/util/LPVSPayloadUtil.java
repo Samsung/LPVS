@@ -195,8 +195,12 @@ public class LPVSPayloadUtil {
 
         Gson gson = new Gson();
         JsonObject json = gson.fromJson(payload, JsonObject.class);
+        if (json == null || json.get("action") == null) {
+            log.error("'action' field is not presented in the payload.");
+            return false;
+        }
         String actionString = json.get("action").getAsString();
-        log.debug("Action " + actionString);
+        log.debug("Action {}", actionString);
         LPVSPullRequestAction action = LPVSPullRequestAction.convertFrom(actionString);
         return (action != null)
                 && (action.equals(LPVSPullRequestAction.UPDATE)
