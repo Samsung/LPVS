@@ -85,15 +85,6 @@ CREATE TABLE IF NOT EXISTS lpvs_queue (
   PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS lpvs_member (
-  id bigint PRIMARY KEY NOT NULL AUTO_INCREMENT,
-  email varchar(255) NOT NULL,
-  name varchar(255) NOT NULL,
-  nickname varchar(255) DEFAULT NULL,
-  provider varchar(255) NOT NULL,
-  organization varchar(255) DEFAULT NULL,
-  UNIQUE (email,provider)
-);
 
 INSERT INTO lpvs_license_list (id, license_name, license_spdx, license_alternative_names, license_usage) VALUES
 (1, 'GNU General Public License v3.0 only','GPL-3.0-only','','PROHIBITED'),
