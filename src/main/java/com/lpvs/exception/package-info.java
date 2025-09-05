@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2023-2024, Samsung Electronics Co., Ltd. All rights reserved.
+ * Copyright (c) 2023-2025, Samsung Electronics Co., Ltd. All rights reserved.
  *
  * Use of this source code is governed by a MIT license that can be
  * found in the LICENSE file.
@@ -11,9 +11,7 @@
  * exceptions that can be thrown and propagated throughout the application.
  *
  * <p>
- * The exceptions in this package are designed to cover specific error conditions, such as failed login attempts
- * ({@link com.lpvs.exception.LoginFailedException}), unauthorized access attempts
- * ({@link com.lpvs.exception.WrongAccessException}), and other application-specific error situations.
+ * The exceptions in this package are designed to cover specific application-specific error situations.
  * </p><p>
  * Each exception class includes a constructor that allows the specification of a detailed error message,
  * providing additional context about the reason for the exception.
