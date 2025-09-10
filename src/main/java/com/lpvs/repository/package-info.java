@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2023-2024, Samsung Electronics Co., Ltd. All rights reserved.
+ * Copyright (c) 2023-2025, Samsung Electronics Co., Ltd. All rights reserved.
  *
  * Use of this source code is governed by a MIT license that can be
  * found in the LICENSE file.
@@ -13,7 +13,7 @@
  * <p>
  * The repositories in this package interact with the underlying database to perform operations on entities
  * such as {@link com.lpvs.entity.LPVSDetectedLicense}, {@link com.lpvs.entity.LPVSLicenseConflict},
- * {@link com.lpvs.entity.auth.LPVSMember}, {@link com.lpvs.entity.LPVSQueue}, and {@link com.lpvs.entity.LPVSPullRequest}.
+ * {@link com.lpvs.entity.LPVSQueue}, and {@link com.lpvs.entity.LPVSPullRequest}.
  * </p><p>
  * The custom queries defined in these repositories use native queries (SQL) or Spring Data JPA query language
  * to retrieve specific data sets based on various criteria.
