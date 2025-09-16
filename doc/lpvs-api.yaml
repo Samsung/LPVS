@@ -115,6 +115,20 @@ paths:
               schema:
                 $ref: '#/components/schemas/WebhookResponseForbidden'
 
+  /health:
+    get:
+      tags:
+        - Health Check API
+      summary: Service Health Check
+      description: Endpoint for checking the health of the service. Returns the current number of items in the processing queue.
+      responses:
+        '200':
+          description: 200 OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+
 components:
   schemas:
     WebhookRequest:
@@ -182,3 +196,12 @@ components:
           type: string
           format: uuid
           example: Error
+
+    HealthResponse:
+      type: object
+      properties:
+        queueLength:
+          type: integer
+          format: int64
+          description: The current number of items in the processing queue.
+          example: 5
