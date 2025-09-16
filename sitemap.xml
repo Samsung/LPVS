@@ -2,98 +2,102 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://samsung.github.io/LPVS/</loc>
-         <lastmod>2024-10-12</lastmod>
+         <lastmod>2025-09-16</lastmod>
     </url>
     <url>
          <loc>https://samsung.github.io/LPVS/quick-start-guide/</loc>
-         <lastmod>2024-10-12</lastmod>
+         <lastmod>2025-09-16</lastmod>
     </url>
     <url>
          <loc>https://samsung.github.io/LPVS/about/license/</loc>
-         <lastmod>2024-10-12</lastmod>
+         <lastmod>2025-09-16</lastmod>
     </url>
     <url>
          <loc>https://samsung.github.io/LPVS/about/releases/</loc>
-         <lastmod>2024-10-12</lastmod>
+         <lastmod>2025-09-16</lastmod>
     </url>
     <url>
          <loc>https://samsung.github.io/LPVS/dev-guide/</loc>
-         <lastmod>2024-10-12</lastmod>
+         <lastmod>2025-09-16</lastmod>
     </url>
     <url>
          <loc>https://samsung.github.io/LPVS/dev-guide/api/</loc>
-         <lastmod>2024-10-12</lastmod>
+         <lastmod>2025-09-16</lastmod>
     </url>
     <url>
          <loc>https://samsung.github.io/LPVS/dev-guide/architecture/</loc>
-         <lastmod>2024-10-12</lastmod>
+         <lastmod>2025-09-16</lastmod>
     </url>
     <url>
          <loc>https://samsung.github.io/LPVS/dev-guide/code-review-requirements/</loc>
-         <lastmod>2024-10-12</lastmod>
+         <lastmod>2025-09-16</lastmod>
     </url>
     <url>
          <loc>https://samsung.github.io/LPVS/dev-guide/coding-style/</loc>
-         <lastmod>2024-10-12</lastmod>
+         <lastmod>2025-09-16</lastmod>
     </url>
     <url>
          <loc>https://samsung.github.io/LPVS/dev-guide/contributing/</loc>
-         <lastmod>2024-10-12</lastmod>
+         <lastmod>2025-09-16</lastmod>
     </url>
     <url>
          <loc>https://samsung.github.io/LPVS/dev-guide/faq/</loc>
-         <lastmod>2024-10-12</lastmod>
+         <lastmod>2025-09-16</lastmod>
     </url>
     <url>
          <loc>https://samsung.github.io/LPVS/dev-guide/integration/</loc>
-         <lastmod>2024-10-12</lastmod>
+         <lastmod>2025-09-16</lastmod>
     </url>
     <url>
          <loc>https://samsung.github.io/LPVS/dev-guide/testing-policy/</loc>
-         <lastmod>2024-10-12</lastmod>
+         <lastmod>2025-09-16</lastmod>
     </url>
     <url>
          <loc>https://samsung.github.io/LPVS/user-guide/</loc>
-         <lastmod>2024-10-12</lastmod>
+         <lastmod>2025-09-16</lastmod>
     </url>
     <url>
          <loc>https://samsung.github.io/LPVS/user-guide/performance/</loc>
-         <lastmod>2024-10-12</lastmod>
+         <lastmod>2025-09-16</lastmod>
     </url>
     <url>
          <loc>https://samsung.github.io/LPVS/user-guide/cli/cli_file/</loc>
-         <lastmod>2024-10-12</lastmod>
+         <lastmod>2025-09-16</lastmod>
     </url>
     <url>
          <loc>https://samsung.github.io/LPVS/user-guide/cli/cli_pr/</loc>
-         <lastmod>2024-10-12</lastmod>
+         <lastmod>2025-09-16</lastmod>
     </url>
     <url>
          <loc>https://samsung.github.io/LPVS/user-guide/config/database/</loc>
-         <lastmod>2024-10-12</lastmod>
+         <lastmod>2025-09-16</lastmod>
     </url>
     <url>
          <loc>https://samsung.github.io/LPVS/user-guide/config/options/</loc>
-         <lastmod>2024-10-12</lastmod>
+         <lastmod>2025-09-16</lastmod>
     </url>
     <url>
          <loc>https://samsung.github.io/LPVS/user-guide/service/build-and-run/</loc>
-         <lastmod>2024-10-12</lastmod>
+         <lastmod>2025-09-16</lastmod>
     </url>
     <url>
          <loc>https://samsung.github.io/LPVS/user-guide/service/database/</loc>
-         <lastmod>2024-10-12</lastmod>
+         <lastmod>2025-09-16</lastmod>
     </url>
     <url>
          <loc>https://samsung.github.io/LPVS/user-guide/service/docker/</loc>
-         <lastmod>2024-10-12</lastmod>
+         <lastmod>2025-09-16</lastmod>
+    </url>
+    <url>
+         <loc>https://samsung.github.io/LPVS/user-guide/service/health/</loc>
+         <lastmod>2025-09-16</lastmod>
     </url>
     <url>
          <loc>https://samsung.github.io/LPVS/user-guide/service/scanner/</loc>
-         <lastmod>2024-10-12</lastmod>
+         <lastmod>2025-09-16</lastmod>
     </url>
     <url>
          <loc>https://samsung.github.io/LPVS/user-guide/service/webhook/</loc>
-         <lastmod>2024-10-12</lastmod>
+         <lastmod>2025-09-16</lastmod>
     </url>
 </urlset>
