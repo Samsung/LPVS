@@ -1,10 +1,3 @@
-FROM node:24@sha256:701c8a634cb3ddbc1dc9584725937619716882525356f0989f11816ba3747a22 AS frontend
-
-WORKDIR /frontend
-COPY frontend .
-RUN npm ci
-RUN npm run build
-
 # Base image for building lpvs lib
 FROM openjdk:17-slim@sha256:aaa3b3cb27e3e520b8f116863d0580c438ed55ecfa0bc126b41f68c3f62f9774 AS builder
 
@@ -40,7 +33,6 @@ RUN pip3 install --require-hashes -r requirements.txt
 EXPOSE 7896
 
 # Set workdir for running jar
-COPY --from=frontend /frontend/build/ ./static/
 COPY --from=builder /root/target/lpvs-*.jar ./lpvs.jar
 
 # Run application in container

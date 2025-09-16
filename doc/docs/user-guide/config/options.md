@@ -10,7 +10,6 @@ There are three profiles available in the LPVS application:
 
 - `application.properties`: default profile which contains all main properties of the application
 - `application-singlescan.properties`: profile for single scan mode
-- `application-web.properties`: profile for connecting the frontend application to the backend
 
 ---
 
@@ -67,23 +66,6 @@ it is left blank here, indicating that no password is needed for authentication.
 
 ---
 
-### `application-web.properties` profile
-
-These properties configure OAuth2 clients for different providers such as Google, Naver, and Kakao. 
-For each provider, client ID, client secret, redirect URI, authorization grant type, scope, and other 
-relevant details should be specified. Additionally, there are frontend configuration options for 
-specifying the main page URL and allowed origins for CORS. Overall, these properties enable 
-integration with multiple authentication providers and provide flexibility in handling user authentication.
-
-!!! warning 
-
-    All properties in `application-web.properties` profile must be filled in case of connecting some 
-    frontend application. If you don't need to connect any frontend application, you can ignore this file.
-
-!!! info
-
-    Sample frontend application is available at [LPVS repository](https://github.com/Samsung/LPVS/tree/main/frontend)
-    and can be used as a reference.
 
 ---
 
