@@ -36,6 +36,7 @@ nav:
       - Service mode:
           - GitHub webhook configuration: user-guide/service/webhook.md
           - Run service using pre-built Docker image: user-guide/service/docker.md
+          - Health check: user-guide/service/health.md
           - Build and run service from the source code:
             - Prerequisites:
               - Scanner installation: user-guide/service/scanner.md
