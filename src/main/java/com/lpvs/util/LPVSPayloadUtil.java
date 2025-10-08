@@ -113,11 +113,11 @@ public class LPVSPayloadUtil {
         try {
             Gson gson = new Gson();
             JsonObject json = gson.fromJson(payload, JsonObject.class);
-            
+
             LPVSLicense lic = new LPVSLicense();
             lic.setLicenseName(json.get("name").getAsString());
             lic.setSpdxId(json.get("spdxIdentifier").getAsString());
-            
+
             // Set access based on trafficLight field
             JsonElement trafficLightElement = json.get("trafficLight");
             if (trafficLightElement != null && !trafficLightElement.isJsonNull()) {

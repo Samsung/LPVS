@@ -45,9 +45,11 @@ public class LPVSPayloadUtilTest {
             expectedLicense.setLicenseName("Apache License 2.0");
             expectedLicense.setSpdxId("Apache-2.0");
             expectedLicense.setAccess("PERMITTED");
-            expectedLicense.setAlternativeNames("Apache Public License 2.0,http://www.apache.org/licenses/LICENSE-2.0,Apache License Version 2.0");
+            expectedLicense.setAlternativeNames(
+                    "Apache Public License 2.0,http://www.apache.org/licenses/LICENSE-2.0,Apache License Version 2.0");
 
-            LPVSLicense actualLicense = LPVSPayloadUtil.convertOsoriDbResponseToLicenseAlternative(payload);
+            LPVSLicense actualLicense =
+                    LPVSPayloadUtil.convertOsoriDbResponseToLicenseAlternative(payload);
 
             assertNotNull(actualLicense);
             assertEquals(expectedLicense.getLicenseName(), actualLicense.getLicenseName());
@@ -65,9 +67,11 @@ public class LPVSPayloadUtilTest {
             expectedLicense.setLicenseName("GNU General Public License v3.0 only");
             expectedLicense.setSpdxId("GPL-3.0-only");
             expectedLicense.setAccess("PROHIBITED");
-            expectedLicense.setAlternativeNames("GNU General Public License (GPL) version 3.0,GPLv3");
+            expectedLicense.setAlternativeNames(
+                    "GNU General Public License (GPL) version 3.0,GPLv3");
 
-            LPVSLicense actualLicense = LPVSPayloadUtil.convertOsoriDbResponseToLicenseAlternative(payload);
+            LPVSLicense actualLicense =
+                    LPVSPayloadUtil.convertOsoriDbResponseToLicenseAlternative(payload);
 
             assertNotNull(actualLicense);
             assertEquals(expectedLicense.getLicenseName(), actualLicense.getLicenseName());
@@ -87,7 +91,8 @@ public class LPVSPayloadUtilTest {
             expectedLicense.setAccess("RESTRICTED");
             expectedLicense.setAlternativeNames("Mozilla Public License (MPL) version 2.0,MPLv2");
 
-            LPVSLicense actualLicense = LPVSPayloadUtil.convertOsoriDbResponseToLicenseAlternative(payload);
+            LPVSLicense actualLicense =
+                    LPVSPayloadUtil.convertOsoriDbResponseToLicenseAlternative(payload);
 
             assertNotNull(actualLicense);
             assertEquals(expectedLicense.getLicenseName(), actualLicense.getLicenseName());
@@ -107,7 +112,29 @@ public class LPVSPayloadUtilTest {
             expectedLicense.setAccess("UNREVIEWED");
             expectedLicense.setAlternativeNames("The MIT License (MIT)");
 
-            LPVSLicense actualLicense = LPVSPayloadUtil.convertOsoriDbResponseToLicenseAlternative(payload);
+            LPVSLicense actualLicense =
+                    LPVSPayloadUtil.convertOsoriDbResponseToLicenseAlternative(payload);
+
+            assertNotNull(actualLicense);
+            assertEquals(expectedLicense.getLicenseName(), actualLicense.getLicenseName());
+            assertEquals(expectedLicense.getSpdxId(), actualLicense.getSpdxId());
+            assertEquals(expectedLicense.getAccess(), actualLicense.getAccess());
+            assertEquals(
+                    expectedLicense.getAlternativeNames(), actualLicense.getAlternativeNames());
+        }
+
+        @Test
+        public void testConvertOsoriDbResponseToLicenseAlternative_UnexpectedTrafficLight() {
+            String payload =
+                    "{\"name\":\"MIT License\",\"obligationDisclosingSrc\":\"NONE\",\"obligationNotification\":true,\"spdxIdentifier\":\"MIT\",\"webpage\":\"https://spdx.org/licenses/MIT.html\",\"description\":\"To distribute the software, copyright and license notice is required.\\n\\n\",\"descriptionKo\":null,\"licenseText\":\"MIT License\\n\\n\",\"osiApproval\":true,\"nicknames\":[\"The MIT License (MIT)\"],\"restrictions\":[],\"trafficLight\":\"🔵\",\"note\":null}";
+            LPVSLicense expectedLicense = new LPVSLicense();
+            expectedLicense.setLicenseName("MIT License");
+            expectedLicense.setSpdxId("MIT");
+            expectedLicense.setAccess("UNREVIEWED");
+            expectedLicense.setAlternativeNames("The MIT License (MIT)");
+
+            LPVSLicense actualLicense =
+                    LPVSPayloadUtil.convertOsoriDbResponseToLicenseAlternative(payload);
 
             assertNotNull(actualLicense);
             assertEquals(expectedLicense.getLicenseName(), actualLicense.getLicenseName());
@@ -127,7 +154,8 @@ public class LPVSPayloadUtilTest {
             expectedLicense.setAccess("PERMITTED");
             expectedLicense.setAlternativeNames("");
 
-            LPVSLicense actualLicense = LPVSPayloadUtil.convertOsoriDbResponseToLicenseAlternative(payload);
+            LPVSLicense actualLicense =
+                    LPVSPayloadUtil.convertOsoriDbResponseToLicenseAlternative(payload);
 
             assertNotNull(actualLicense);
             assertEquals(expectedLicense.getLicenseName(), actualLicense.getLicenseName());
@@ -141,7 +169,8 @@ public class LPVSPayloadUtilTest {
         public void testConvertOsoriDbResponseToLicenseAlternative_withInvalidPayload_N() {
             String payload =
                     "{\"obligationDisclosingSrc\":\"NONE\",\"obligationNotification\":true,\"webpage\":\"https://spdx.org/licenses/Apache-2.0.html\",\"description\":\"To distribute the software, copyright and license notice is required.\\n\\n\",\"descriptionKo\":null,\"licenseText\":\"Apache License\\nVersion 2.0, ....\",\"osiApproval\":true,\"nicknames\":[\"Apache Public License 2.0\",\"http://www.apache.org/licenses/LICENSE-2.0\",\"Apache License Version 2.0\"],\"restrictions\":[],\"trafficLight\":\"🟢\",\"note\":null}";
-            LPVSLicense actualLicense = LPVSPayloadUtil.convertOsoriDbResponseToLicenseAlternative(payload);
+            LPVSLicense actualLicense =
+                    LPVSPayloadUtil.convertOsoriDbResponseToLicenseAlternative(payload);
             assertNull(actualLicense);
         }
     }

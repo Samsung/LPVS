@@ -731,7 +731,9 @@ public class LPVSLicenseServiceTest {
             String licenseSpdxId = "Apache-2.0";
             LPVSLicenseService.OsoriConnection connection =
                     new LPVSLicenseService.OsoriConnection();
-            assertThrows(IOException.class, () -> connection.createConnection(null, licenseSpdxId, false));
+            assertThrows(
+                    IOException.class,
+                    () -> connection.createConnection(null, licenseSpdxId, false));
         }
     }
 
@@ -769,7 +771,9 @@ public class LPVSLicenseServiceTest {
             String licenseSpdxId = "Apache-2.0";
             LPVSLicenseService.OsoriConnection connection =
                     new LPVSLicenseService.OsoriConnection();
-            assertThrows(IOException.class, () -> connection.createConnection(null, licenseSpdxId, false));
+            assertThrows(
+                    IOException.class,
+                    () -> connection.createConnection(null, licenseSpdxId, false));
         }
     }
 }

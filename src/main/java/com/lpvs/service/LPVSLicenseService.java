@@ -13,7 +13,6 @@ import com.lpvs.util.LPVSExitHandler;
 
 import com.lpvs.util.LPVSPayloadUtil;
 import io.micrometer.common.util.StringUtils;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -432,15 +431,18 @@ public class LPVSLicenseService {
          * @param internalMode   Flag indicating whether to use internal or external API format.
          * @return A HttpURLConnection object representing the connection to the OSORI database.
          */
-        public HttpURLConnection createConnection(String osoriDbUrl, String licenseSpdxId, boolean internalMode)
-                throws IOException {
+        public HttpURLConnection createConnection(
+                String osoriDbUrl, String licenseSpdxId, boolean internalMode) throws IOException {
             String apiUrl;
             if (internalMode) {
                 apiUrl = osoriDbUrl + "/api/v1/licenses/" + licenseSpdxId;
             } else {
-                apiUrl = osoriDbUrl + "/api/v1/user/licenses/spdx_identifier?searchWord=" + URLEncoder.encode(licenseSpdxId, "UTF-8");
+                apiUrl =
+                        osoriDbUrl
+                                + "/api/v1/user/licenses/spdx_identifier?searchWord="
+                                + URLEncoder.encode(licenseSpdxId, "UTF-8");
             }
-            
+
             URL url = new URL(apiUrl);
             return (HttpURLConnection) url.openConnection();
         }
