@@ -1,0 +1,18 @@
+{
+    "name": "Mozilla Public License 2.0",
+    "obligationDisclosingSrc": "SOURCE",
+    "obligationNotification": true,
+    "spdxIdentifier": "MPL-2.0",
+    "webpage": "https://spdx.org/licenses/MPL-2.0.html",
+    "description": "Distribute the software and its source code.\n\n",
+    "descriptionKo": null,
+    "licenseText": "Mozilla Public License Version 2.0\n\n",
+    "osiApproval": true,
+    "nicknames": [
+        "Mozilla Public License (MPL) version 2.0",
+        "MPLv2"
+    ],
+    "restrictions": [],
+    "trafficLight": "🟡",
+    "note": null
+}

@@ -1,0 +1,18 @@
+{
+    "name": "GNU General Public License v3.0 only",
+    "obligationDisclosingSrc": "SOURCE",
+    "obligationNotification": true,
+    "spdxIdentifier": "GPL-3.0-only",
+    "webpage": "https://spdx.org/licenses/GPL-3.0-only.html",
+    "description": "Distribute the software and its source code.\n\n",
+    "descriptionKo": null,
+    "licenseText": "GNU GENERAL PUBLIC LICENSE\nVersion 3, 29 June 2007\n\n",
+    "osiApproval": true,
+    "nicknames": [
+        "GNU General Public License (GPL) version 3.0",
+        "GPLv3"
+    ],
+    "restrictions": [],
+    "trafficLight": "🔴",
+    "note": null
+}
