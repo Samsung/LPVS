@@ -1,0 +1,19 @@
+{
+    "name": "Apache License 2.0",
+    "obligationDisclosingSrc": "NONE",
+    "obligationNotification": true,
+    "spdxIdentifier": "Apache-2.0",
+    "webpage": "https://spdx.org/licenses/Apache-2.0.html",
+    "description": "To distribute the software, copyright and license notice is required.\n\n",
+    "descriptionKo": null,
+    "licenseText": "Apache License\nVersion 2.0, ....",
+    "osiApproval": true,
+    "nicknames": [
+        "Apache Public License 2.0",
+        "http://www.apache.org/licenses/LICENSE-2.0",
+        "Apache License Version 2.0"
+    ],
+    "restrictions": [],
+    "trafficLight": "🟢",
+    "note": null
+}

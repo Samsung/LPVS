@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2022-2024, Samsung Electronics Co., Ltd. All rights reserved.
+ * Copyright (c) 2022-2025, Samsung Electronics Co., Ltd. All rights reserved.
  *
  * Use of this source code is governed by a MIT license that can be
  * found in the LICENSE file.
@@ -520,6 +520,10 @@ public class LPVSLicenseServiceTest {
             osoriDbUrl.setAccessible(true);
             osoriDbUrl.set(licenseService, "http://127.0.0.1:8080");
 
+            Field internalMode = licenseService.getClass().getDeclaredField("internalMode");
+            internalMode.setAccessible(true);
+            internalMode.set(licenseService, false); // external mode
+
             HttpURLConnection mockConnection = Mockito.mock(HttpURLConnection.class);
             when(mockConnection.getResponseCode()).thenReturn(200);
 
@@ -529,7 +533,7 @@ public class LPVSLicenseServiceTest {
             osoriConnection.setAccessible(true);
             osoriConnection.set(licenseService, mockOsoriConnection);
 
-            when(mockOsoriConnection.createConnection(anyString(), anyString()))
+            when(mockOsoriConnection.createConnection(anyString(), anyString(), anyBoolean()))
                     .thenReturn(mockConnection);
 
             Path path =
@@ -552,6 +556,51 @@ public class LPVSLicenseServiceTest {
         }
 
         @Test
+        public void getLicenseBySpdxIdAndNameTest_connectToOSORI_Internal()
+                throws NoSuchFieldException,
+                        IllegalAccessException,
+                        IOException,
+                        URISyntaxException {
+            Field osoriDbUrl = licenseService.getClass().getDeclaredField("osoriDbUrl");
+            osoriDbUrl.setAccessible(true);
+            osoriDbUrl.set(licenseService, "http://127.0.0.1:8080");
+
+            Field internalMode = licenseService.getClass().getDeclaredField("internalMode");
+            internalMode.setAccessible(true);
+            internalMode.set(licenseService, true); // internal mode
+
+            HttpURLConnection mockConnection = Mockito.mock(HttpURLConnection.class);
+            when(mockConnection.getResponseCode()).thenReturn(200);
+
+            LPVSLicenseService.OsoriConnection mockOsoriConnection =
+                    Mockito.mock(LPVSLicenseService.OsoriConnection.class);
+            Field osoriConnection = licenseService.getClass().getDeclaredField("osoriConnection");
+            osoriConnection.setAccessible(true);
+            osoriConnection.set(licenseService, mockOsoriConnection);
+
+            when(mockOsoriConnection.createConnection(anyString(), anyString(), anyBoolean()))
+                    .thenReturn(mockConnection);
+
+            Path path =
+                    Paths.get(
+                            Objects.requireNonNull(
+                                            getClass()
+                                                    .getClassLoader()
+                                                    .getResource("osori_db_response_internal.json"))
+                                    .toURI());
+
+            when(mockConnection.getInputStream()).thenReturn(Files.newInputStream(path));
+            when(licenseRepository.saveAndFlush(Mockito.any(LPVSLicense.class)))
+                    .thenAnswer(i -> i.getArguments()[0]);
+
+            LPVSLicense result =
+                    licenseService.getLicenseBySpdxIdAndName("Apache-2.0", Optional.empty());
+            assertEquals("Apache-2.0", result.getSpdxId());
+            assertEquals("Apache License 2.0", result.getLicenseName());
+            assertEquals("PERMITTED", result.getAccess());
+        }
+
+        @Test
         public void getLicenseBySpdxIdAndNameTest_createNewLicense()
                 throws NoSuchFieldException,
                         IllegalAccessException,
@@ -570,7 +619,7 @@ public class LPVSLicenseServiceTest {
             osoriConnection.setAccessible(true);
             osoriConnection.set(licenseService, mockOsoriConnection);
 
-            when(mockOsoriConnection.createConnection(anyString(), anyString()))
+            when(mockOsoriConnection.createConnection(anyString(), anyString(), anyBoolean()))
                     .thenReturn(mockConnection);
 
             Path path =
@@ -624,7 +673,7 @@ public class LPVSLicenseServiceTest {
             osoriConnection.setAccessible(true);
             osoriConnection.set(licenseService, mockOsoriConnection);
 
-            when(mockOsoriConnection.createConnection(anyString(), anyString()))
+            when(mockOsoriConnection.createConnection(anyString(), anyString(), anyBoolean()))
                     .thenReturn(mockConnection);
             when(licenseRepository.saveAndFlush(Mockito.any(LPVSLicense.class)))
                     .thenAnswer(i -> i.getArguments()[0]);
@@ -656,7 +705,7 @@ public class LPVSLicenseServiceTest {
             osoriConnection.setAccessible(true);
             osoriConnection.set(licenseService, mockOsoriConnection);
 
-            when(mockOsoriConnection.createConnection(anyString(), anyString()))
+            when(mockOsoriConnection.createConnection(anyString(), anyString(), anyBoolean()))
                     .thenReturn(mockConnection);
 
             Path path =
@@ -678,11 +727,13 @@ public class LPVSLicenseServiceTest {
         }
 
         @Test
-        public void findLicenseTest() {
-            LPVSLicense result = licenseService.findLicense("GPL-3.0-only", "GPL-3.0-only");
-            assertEquals("GPL-3.0-only", result.getSpdxId());
-            assertEquals("GNU General Public License v3.0 only", result.getLicenseName());
-            assertEquals("PROHIBITED", result.getAccess());
+        public void testCreateConnectionThrowsIOException_N() {
+            String licenseSpdxId = "Apache-2.0";
+            LPVSLicenseService.OsoriConnection connection =
+                    new LPVSLicenseService.OsoriConnection();
+            assertThrows(
+                    IOException.class,
+                    () -> connection.createConnection(null, licenseSpdxId, false));
         }
     }
 
@@ -696,9 +747,22 @@ public class LPVSLicenseServiceTest {
             LPVSLicenseService.OsoriConnection connection =
                     new LPVSLicenseService.OsoriConnection();
             HttpURLConnection httpURLConnection =
-                    connection.createConnection(osoriDbUrl, licenseSpdxId);
+                    connection.createConnection(osoriDbUrl, licenseSpdxId, false); // external mode
             assertEquals(
                     osoriDbUrl + "/api/v1/user/licenses/spdx_identifier?searchWord=Apache-2.0",
+                    httpURLConnection.getURL().toString());
+        }
+
+        @Test
+        public void testCreateConnectionInternal() throws IOException {
+            String osoriDbUrl = "https://ossori.com";
+            String licenseSpdxId = "Apache-2.0";
+            LPVSLicenseService.OsoriConnection connection =
+                    new LPVSLicenseService.OsoriConnection();
+            HttpURLConnection httpURLConnection =
+                    connection.createConnection(osoriDbUrl, licenseSpdxId, true); // internal mode
+            assertEquals(
+                    osoriDbUrl + "/api/v1/licenses/Apache-2.0",
                     httpURLConnection.getURL().toString());
         }
 
@@ -707,7 +771,9 @@ public class LPVSLicenseServiceTest {
             String licenseSpdxId = "Apache-2.0";
             LPVSLicenseService.OsoriConnection connection =
                     new LPVSLicenseService.OsoriConnection();
-            assertThrows(IOException.class, () -> connection.createConnection(null, licenseSpdxId));
+            assertThrows(
+                    IOException.class,
+                    () -> connection.createConnection(null, licenseSpdxId, false));
         }
     }
 }

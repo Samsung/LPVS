@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2022-2024, Samsung Electronics Co., Ltd. All rights reserved.
+ * Copyright (c) 2022-2025, Samsung Electronics Co., Ltd. All rights reserved.
  *
  * Use of this source code is governed by a MIT license that can be
  * found in the LICENSE file.
@@ -13,7 +13,6 @@ import com.lpvs.util.LPVSExitHandler;
 
 import com.lpvs.util.LPVSPayloadUtil;
 import io.micrometer.common.util.StringUtils;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -78,6 +77,12 @@ public class LPVSLicenseService {
     private String osoriDbUrl;
 
     /**
+     * Flag to indicate if this is an internal LPVS instance.
+     */
+    @Value("${internal:false}")
+    private boolean internalMode;
+
+    /**
      * The object used to make HTTP requests to the OSORI DB.
      */
     private OsoriConnection osoriConnection = new OsoriConnection();
@@ -110,6 +115,7 @@ public class LPVSLicenseService {
             LPVSExitHandler exitHandler) {
         this.licenseConflictsSource = licenseConflictsSource;
         this.exitHandler = exitHandler;
+        this.osoriConnection = new OsoriConnection();
     }
 
     /**
@@ -283,7 +289,7 @@ public class LPVSLicenseService {
         // Try to find the license in the OSORI database
         try {
             HttpURLConnection connection =
-                    osoriConnection.createConnection(osoriDbUrl, licenseSpdxId);
+                    osoriConnection.createConnection(osoriDbUrl, licenseSpdxId, internalMode);
             connection.setRequestMethod("GET");
             connection.connect();
 
@@ -301,7 +307,11 @@ public class LPVSLicenseService {
                     LPVSPayloadUtil.convertInputStreamToString(connection.getInputStream());
             // If the license is found, create a new LPVSLicense object with the field values from
             // the OSORI database
-            return LPVSPayloadUtil.convertOsoriDbResponseToLicense(response);
+            if (internalMode) {
+                return LPVSPayloadUtil.convertOsoriDbResponseToLicenseAlternative(response);
+            } else {
+                return LPVSPayloadUtil.convertOsoriDbResponseToLicense(response);
+            }
         } catch (Exception e) {
             log.error("Error connecting OSORI DB: " + e.getMessage());
             return null;
@@ -411,7 +421,6 @@ public class LPVSLicenseService {
     /**
      * The OsoriConnection class provides methods for creating a connection to the OSORI database.
      */
-    @NoArgsConstructor
     public static class OsoriConnection {
 
         /**
@@ -419,15 +428,22 @@ public class LPVSLicenseService {
          *
          * @param osoriDbUrl     The URL of the OSORI server.
          * @param licenseSpdxId  The license SPDX identifier.
+         * @param internalMode   Flag indicating whether to use internal or external API format.
          * @return A HttpURLConnection object representing the connection to the OSORI database.
          */
-        public HttpURLConnection createConnection(String osoriDbUrl, String licenseSpdxId)
-                throws IOException {
-            URL url =
-                    new URL(
-                            osoriDbUrl
-                                    + "/api/v1/user/licenses/spdx_identifier?searchWord="
-                                    + URLEncoder.encode(licenseSpdxId, "UTF-8"));
+        public HttpURLConnection createConnection(
+                String osoriDbUrl, String licenseSpdxId, boolean internalMode) throws IOException {
+            String apiUrl;
+            if (internalMode) {
+                apiUrl = osoriDbUrl + "/api/v1/licenses/" + licenseSpdxId;
+            } else {
+                apiUrl =
+                        osoriDbUrl
+                                + "/api/v1/user/licenses/spdx_identifier?searchWord="
+                                + URLEncoder.encode(licenseSpdxId, "UTF-8");
+            }
+
+            URL url = new URL(apiUrl);
             return (HttpURLConnection) url.openConnection();
         }
     }

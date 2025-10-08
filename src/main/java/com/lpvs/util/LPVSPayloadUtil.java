@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2022-2024, Samsung Electronics Co., Ltd. All rights reserved.
+ * Copyright (c) 2022-2025, Samsung Electronics Co., Ltd. All rights reserved.
  *
  * Use of this source code is governed by a MIT license that can be
  * found in the LICENSE file.
@@ -99,6 +99,54 @@ public class LPVSPayloadUtil {
             }
         } catch (Exception e) {
             log.error("Error parsing OSORI DB payload: " + e.getMessage());
+        }
+        return null;
+    }
+
+    /**
+     * Parses the given payload from the alternative OSORI DB and converts it into a LPVSLicense object.
+     *
+     * @param payload the JSON payload from the alternative OSORI DB
+     * @return the LPVSLicense object containing the parsed information from the payload, or null if the payload is invalid
+     */
+    public static LPVSLicense convertOsoriDbResponseToLicenseAlternative(String payload) {
+        try {
+            Gson gson = new Gson();
+            JsonObject json = gson.fromJson(payload, JsonObject.class);
+
+            LPVSLicense lic = new LPVSLicense();
+            lic.setLicenseName(json.get("name").getAsString());
+            lic.setSpdxId(json.get("spdxIdentifier").getAsString());
+
+            // Set access based on trafficLight field
+            JsonElement trafficLightElement = json.get("trafficLight");
+            if (trafficLightElement != null && !trafficLightElement.isJsonNull()) {
+                String trafficLight = trafficLightElement.getAsString();
+                if ("🔴".equals(trafficLight)) {
+                    lic.setAccess("PROHIBITED");
+                } else if ("🟡".equals(trafficLight)) {
+                    lic.setAccess("RESTRICTED");
+                } else if ("🟢".equals(trafficLight)) {
+                    lic.setAccess("PERMITTED");
+                } else {
+                    lic.setAccess("UNREVIEWED");
+                }
+            } else {
+                lic.setAccess("UNREVIEWED");
+            }
+
+            List<String> nicknameList = new ArrayList<>();
+            JsonElement nicknamesArray = json.get("nicknames");
+            if (nicknamesArray != null && nicknamesArray.isJsonArray()) {
+                nicknamesArray
+                        .getAsJsonArray()
+                        .forEach(element -> nicknameList.add(element.getAsString()));
+            }
+            lic.setAlternativeNames(String.join(",", nicknameList));
+
+            return lic;
+        } catch (Exception e) {
+            log.error("Error parsing alternative OSORI DB payload: " + e.getMessage());
         }
         return null;
     }
