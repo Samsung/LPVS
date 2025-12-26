@@ -2,9 +2,9 @@ name: Check build of docker container
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main", "upgrade-python-for-docker-image"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 permissions:
   contents: read
@@ -14,11 +14,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Harden Runner
-      uses: step-security/harden-runner@f4a75cfd619ee5ce8d5b864b0d183aff3c69b55a # v2.13.1
-      with:
-        egress-policy: audit
-    - name: Checkout repository
-      uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
-    - name: Build docker container
-      run: docker image build --no-cache --progress=plain .
+      - name: Harden Runner
+        uses: step-security/harden-runner@f4a75cfd619ee5ce8d5b864b0d183aff3c69b55a # v2.13.1
+        with:
+          egress-policy: audit
+      - name: Checkout repository
+        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+      - name: Build docker container
+        run: docker image build --no-cache --progress=plain .
