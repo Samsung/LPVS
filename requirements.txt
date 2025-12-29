@@ -465,9 +465,9 @@ dukpy==0.5.0 \
     --hash=sha256:fb7fea246fd5dbb49f8213b952c3317fa0e76e32290808e1d911c9720422d4a7 \
     --hash=sha256:ffb5d0ee55d202c916972d245c7528214a13dac6c407d86b74cb84a088609ca2
     # via pypac
-filelock==3.20.1 \
-    --hash=sha256:15d9e9a67306188a44baa72f569d2bfd803076269365fdea0934385da4dc361a \
-    --hash=sha256:b8360948b351b80f420878d8516519a2204b07aefcdcfd24912a5d33127f188c
+filelock==3.19.1 \
+    --hash=sha256:66eda1888b0171c998b35be2bcc0f6d75c388a7ce20c3f3f37aa8e96c2dddf58 \
+    --hash=sha256:d38e30481def20772f5baf097c122c3babc4fcdb7e14e57049eb9d88c6dc017d
     # via tldextract
 fqdn==1.5.1 \
     --hash=sha256:105ed3677e767fb5ca086a0c1f4bb66ebc3c100be518f0e0d755d9eae164d89f \
