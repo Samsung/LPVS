@@ -120,7 +120,7 @@ public class LPVSWebhookServiceImpl implements LPVSWebhookService {
         if (pullRequest == null) {
             pullRequest = new LPVSPullRequest();
             pullRequest.setQueueId(id);
-            pullRequest.setUser(webhookConfig.getUserId());
+            pullRequest.setUser(LPVSPayloadUtil.extractId(webhookConfig.getUserId()));
             pullRequest.setRepositoryName(
                     LPVSPayloadUtil.getRepositoryOrganization(webhookConfig)
                             + "/"
@@ -129,7 +129,7 @@ public class LPVSWebhookServiceImpl implements LPVSWebhookService {
             pullRequest.setPullRequestFilesUrl(webhookConfig.getPullRequestFilesUrl());
             pullRequest.setPullRequestHead(webhookConfig.getPullRequestHead());
             pullRequest.setPullRequestBase(webhookConfig.getPullRequestBase());
-            pullRequest.setSender(webhookConfig.getSender());
+            pullRequest.setSender(LPVSPayloadUtil.extractId(webhookConfig.getSender()));
         }
 
         try {

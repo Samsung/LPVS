@@ -695,8 +695,48 @@ public class LPVSPayloadUtilTest {
         }
     }
 
+    @Nested
+    public class TestExtractId {
+
+        @Test
+        public void testExtractId_Null() {
+            assertNull(LPVSPayloadUtil.extractId(null));
+        }
+
+        @Test
+        public void testExtractId_LeadingAt() {
+            assertEquals("username", LPVSPayloadUtil.extractId("@username"));
+        }
+
+        @Test
+        public void testExtractId_DomainSuffix() {
+            assertEquals("user", LPVSPayloadUtil.extractId("user@domain.com"));
+        }
+
+        @Test
+        public void testExtractId_LeadingAtAndDomainSuffix() {
+            assertEquals("user", LPVSPayloadUtil.extractId("@user@domain.com"));
+        }
+
+        @Test
+        public void testExtractId_NoAtOrDomain() {
+            assertEquals("plainuser", LPVSPayloadUtil.extractId("plainuser"));
+        }
+
+        @Test
+        public void testExtractId_EmptyString() {
+            assertEquals("", LPVSPayloadUtil.extractId(""));
+        }
+
+        @Test
+        public void testExtractId_OnlyAt() {
+            assertEquals("", LPVSPayloadUtil.extractId("@"));
+        }
+    }
+
     @Test
     void testConstructorThrowsException_N() {
+
         try {
             Constructor<LPVSPayloadUtil> constructor =
                     LPVSPayloadUtil.class.getDeclaredConstructor();

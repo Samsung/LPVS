@@ -275,12 +275,36 @@ public class LPVSPayloadUtil {
     }
 
     /**
+     * Extracts the user ID from a value that may contain a leading '@' or an '@domain' suffix.
+     *
+     * @param value The raw value potentially containing '@' or a domain.
+     * @return The cleaned ID with '@' and domain removed.
+     */
+    public static String extractId(String value) {
+        if (value == null) {
+            return null;
+        }
+        String result = value;
+        // Remove leading '@'
+        if (result.startsWith("@")) {
+            result = result.substring(1);
+        }
+        // Remove '@domain' suffix if present
+        int atIndex = result.indexOf("@");
+        if (atIndex > 0) {
+            result = result.substring(0, atIndex);
+        }
+        return result;
+    }
+
+    /**
      * Retrieves the organization name from the repository URL in the LPVSQueue object.
      *
      * @param webhookConfig LPVSQueue object containing repository information.
      * @return The organization name.
      */
     public static String getRepositoryOrganization(LPVSQueue webhookConfig) {
+
         checkWebhookConfig(webhookConfig);
         List<String> url = Arrays.asList(webhookConfig.getRepositoryUrl().split("/"));
         return url.get(url.size() - 2);
