@@ -12,8 +12,8 @@ services:
     environment:
       ## Database Configuration
       - spring.datasource.url=jdbc:mysql://mysqldb:3306/lpvs
-      - spring.datasource.username=root
-      - spring.datasource.password=
+      - spring.datasource.username=${MYSQL_USER:?Set MYSQL_USER in .env (see .env.example)}
+      - spring.datasource.password=${MYSQL_PASSWORD:?Set MYSQL_PASSWORD in .env (see .env.example)}
       - spring.jpa.properties.hibernate.default_schema=lpvs
       ## Github data for fetching code
       - github.login=
@@ -28,13 +28,16 @@ services:
       - lpvs
 
   mysqldb:
-    image: mysql:latest
+    image: mysql:8.4
     restart: always
-    ports:
-      - "3306:3306"
+    # Not published to the host: MySQL is reachable only from other containers on the
+    # `lpvs` network. If you need host access for debugging, bind it to localhost only,
+    # e.g. `ports: ["127.0.0.1:3306:3306"]`.
     environment:
-      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-      MYSQL_ROOT_PASSWORD: ""
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?Set MYSQL_ROOT_PASSWORD in .env (see .env.example)}
+      MYSQL_DATABASE: lpvs
+      MYSQL_USER: ${MYSQL_USER:?Set MYSQL_USER in .env (see .env.example)}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:?Set MYSQL_PASSWORD in .env (see .env.example)}
     healthcheck:
       test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
       timeout: 20s
