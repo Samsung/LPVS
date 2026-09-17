@@ -29,7 +29,7 @@ fill in strong, unique values for `MYSQL_ROOT_PASSWORD` and `MYSQL_PASSWORD`:
 
 * Open `docker-compose.yml` file.
 
-* In the `environment` part of the `lpvs` service, find `## Github data for fetching code` 
+* In the `environment` part of the `lpvs` service, find `## Github data for fetching code`
 and fill in the GitHub `login` and personal `token` that was generated [earlier](webhook.md#create-a-personal-github-access-token).
 
     ```yaml
