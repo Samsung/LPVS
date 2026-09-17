@@ -1,5 +1,5 @@
 # Base image for building lpvs lib
-FROM openjdk:17-slim@sha256:aaa3b3cb27e3e520b8f116863d0580c438ed55ecfa0bc126b41f68c3f62f9774 AS builder
+FROM eclipse-temurin:17-jdk-jammy@sha256:ef4374b4b6b9d813dd3f5b593a35ec9a820cfb64a55994798147cc73435a0208 AS builder
 
 # Install dependencies
 RUN apt-get update && \
@@ -13,8 +13,8 @@ COPY . .
 # Build LPVS-open-source application
 RUN mvn clean install
 
-# OpenJDK 17 stage
-FROM openjdk:17-slim@sha256:aaa3b3cb27e3e520b8f116863d0580c438ed55ecfa0bc126b41f68c3f62f9774
+# OpenJDK 17 stage (JRE only for smaller runtime image)
+FROM eclipse-temurin:17-jre-jammy@sha256:ec72ba5962b45ae4e7f96bfb5ebf6eeb34a488b967f937c8e14f0aaec688954f
 
 # Install build dependencies for Python compilation
 RUN apt-get update && \
