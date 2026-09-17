@@ -31,3 +31,6 @@ LPVS/Results/
 
 # MkDocs generated website
 doc/site/
+
+# Local secrets for docker compose (see .env.example)
+.env

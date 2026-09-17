@@ -48,7 +48,11 @@ number of scan attempts, and version.
 should use. Default: `lpvs`.
 
 - `spring.datasource.*`: These settings specify the data source configurations including URL, username, password, etc.
-Fill in your own values for these settings.
+Fill in your own values for these settings. `spring.datasource.username` and `spring.datasource.password` have no
+insecure default — if left as the shipped `${LPVS_DATASOURCE_USERNAME}`/`${LPVS_DATASOURCE_PASSWORD}` placeholders,
+the application refuses to start until you either edit them directly here, pass `-Dspring.datasource.username=...`/
+`-Dspring.datasource.password=...` on the command line, or set the `LPVS_DATASOURCE_USERNAME`/`LPVS_DATASOURCE_PASSWORD`
+environment variables described below.
 
 ---
 
@@ -109,3 +113,7 @@ Alternatively, you can provide the necessary values for several properties using
 - `LPVS_GITHUB_API_URL`: Equivalent to the property `github.api.url`.
 - `LPVS_GITHUB_SECRET`: Equivalent to the property `github.secret`.
 - `LPVS_LICENSE_CONFLICT`: Equivalent to the property `license_conflict`.
+- `LPVS_DATASOURCE_USERNAME`: Equivalent to the property `spring.datasource.username`. Required — the
+application will not start without it (or an equivalent override) being set.
+- `LPVS_DATASOURCE_PASSWORD`: Equivalent to the property `spring.datasource.password`. Required — the
+application will not start without it (or an equivalent override) being set.
