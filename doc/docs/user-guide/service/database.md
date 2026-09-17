@@ -51,3 +51,11 @@ mysql -u [username] -p < /src/main/resources/database_dump.sql
 * (**Optional**) Fill in the `lpvs_license_list` and `lpvs_license_conflicts` tables according to the [Database customization guideline](../config/database.md).
 
 * Update the properties related to the database operation in the profile file according to the [guideline](../config/options.md).
+`spring.datasource.username`/`spring.datasource.password` have no default and must be set to the `username`/`password`
+created above — either directly in `application.properties`, or by exporting `LPVS_DATASOURCE_USERNAME`/
+`LPVS_DATASOURCE_PASSWORD` before starting the application:
+
+```bash
+export LPVS_DATASOURCE_USERNAME=username
+export LPVS_DATASOURCE_PASSWORD=password
+```
