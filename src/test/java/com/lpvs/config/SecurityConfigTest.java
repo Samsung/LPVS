@@ -8,12 +8,14 @@ package com.lpvs.config;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.test.context.ContextConfiguration;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@SpringBootTest(classes = SecurityConfig.class)
+@WebMvcTest
+@ContextConfiguration(classes = SecurityConfig.class)
 class SecurityConfigTest {
 
     @Autowired private SecurityConfig securityConfig;

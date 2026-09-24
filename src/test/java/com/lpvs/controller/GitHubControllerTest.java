@@ -31,6 +31,7 @@ import org.kohsuke.github.GHRepository;
 import org.kohsuke.github.GitHub;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.lang.reflect.Method;
 import java.io.IOException;
@@ -51,6 +52,7 @@ public class GitHubControllerTest {
             "sha256=757107ea0eb2509fc211221cce984b8a37570b6d7586c22c46f4379c8b043e17";
     private static final String SUCCESS = "Success";
     private static final String ERROR = "Error";
+    private static final String API_KEY = "test-api-key";
 
     private LPVSExitHandler exitHandler;
 
@@ -245,6 +247,7 @@ public class GitHubControllerTest {
     @Test
     public void testGitHubSingleScan_Success() throws Exception {
         environmentVars.set("LPVS_GITHUB_SECRET", "LPVS");
+        environmentVars.set("LPVS_API_KEY", API_KEY);
         Method method = gitHubController.getClass().getDeclaredMethod("initializeGitHubController");
         method.setAccessible(true);
         method.invoke(gitHubController);
@@ -259,28 +262,75 @@ public class GitHubControllerTest {
         when(ghRepository.getPullRequest(1)).thenReturn(ghPullRequest);
 
         ResponseEntity<LPVSResponseWrapper> responseEntity =
-                gitHubController.gitHubSingleScan("org", "repo", 1);
+                gitHubController.gitHubSingleScan(API_KEY, "org", "repo", 1);
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        verify(mocked_instance_queueServ).addFirst(any());
+    }
+
+    @Test
+    public void testGitHubSingleScan_ApiKeyFromProperty() throws Exception {
+        ReflectionTestUtils.setField(gitHubController, "apiKeyProperty", API_KEY);
+        when(mocked_ghConnServ.connectToGitHubApi()).thenReturn(gitHub);
+        when(gitHub.getRepository("org/repo")).thenReturn(ghRepository);
+        when(ghRepository.getPullRequest(1)).thenReturn(ghPullRequest);
+
+        ResponseEntity<LPVSResponseWrapper> responseEntity =
+                gitHubController.gitHubSingleScan(API_KEY, "org", "repo", 1);
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
     }
 
     @Test
-    public void testGitHubSingleScan_InvalidSecret() throws Exception {
-        environmentVars.set("LPVS_GITHUB_SECRET", "LPVS");
-        when(mocked_instance_ghServ.getInternalQueueByPullRequest(anyString())).thenReturn(null);
+    public void testGitHubSingleScan_EnvApiKeyTakesPrecedenceOverProperty() throws Exception {
+        environmentVars.set("LPVS_API_KEY", API_KEY);
+        ReflectionTestUtils.setField(gitHubController, "apiKeyProperty", "property-api-key");
+
         ResponseEntity<LPVSResponseWrapper> responseEntity =
-                gitHubController.gitHubSingleScan("org", "repo", 1);
+                gitHubController.gitHubSingleScan("property-api-key", "org", "repo", 1);
 
         assertEquals(HttpStatus.FORBIDDEN, responseEntity.getStatusCode());
+        verifyNoInteractions(mocked_ghConnServ, mocked_queueRepo, mocked_instance_queueServ);
+    }
+
+    @Test
+    public void testGitHubSingleScan_ApiKeyNotConfigured() throws Exception {
+        environmentVars.set("LPVS_GITHUB_SECRET", "LPVS");
+        ResponseEntity<LPVSResponseWrapper> responseEntity =
+                gitHubController.gitHubSingleScan(API_KEY, "org", "repo", 1);
+
+        assertEquals(HttpStatus.FORBIDDEN, responseEntity.getStatusCode());
+        verifyNoInteractions(mocked_ghConnServ, mocked_queueRepo, mocked_instance_queueServ);
+    }
+
+    @Test
+    public void testGitHubSingleScan_MissingApiKey() throws Exception {
+        environmentVars.set("LPVS_API_KEY", API_KEY);
+        ResponseEntity<LPVSResponseWrapper> responseEntity =
+                gitHubController.gitHubSingleScan(null, "org", "repo", 1);
+
+        assertEquals(HttpStatus.FORBIDDEN, responseEntity.getStatusCode());
+        verifyNoInteractions(mocked_ghConnServ, mocked_queueRepo, mocked_instance_queueServ);
+    }
+
+    @Test
+    public void testGitHubSingleScan_WrongApiKey() throws Exception {
+        environmentVars.set("LPVS_API_KEY", API_KEY);
+        ResponseEntity<LPVSResponseWrapper> responseEntity =
+                gitHubController.gitHubSingleScan("wrong-api-key", "org", "repo", 1);
+
+        assertEquals(HttpStatus.FORBIDDEN, responseEntity.getStatusCode());
+        verifyNoInteractions(mocked_ghConnServ, mocked_queueRepo, mocked_instance_queueServ);
     }
 
     @Test
     public void testGitHubSingleScan_ConnectionError() throws Exception {
         environmentVars.set("LPVS_GITHUB_SECRET", "LPVS");
+        environmentVars.set("LPVS_API_KEY", API_KEY);
         when(mocked_instance_ghServ.getInternalQueueByPullRequest(anyString()))
                 .thenThrow(new RuntimeException("Connection error"));
         ResponseEntity<LPVSResponseWrapper> responseEntity =
-                gitHubControllerWrongSecret.gitHubSingleScan("org", "repo", 1);
+                gitHubControllerWrongSecret.gitHubSingleScan(API_KEY, "org", "repo", 1);
 
         assertEquals(HttpStatus.FORBIDDEN, responseEntity.getStatusCode());
     }

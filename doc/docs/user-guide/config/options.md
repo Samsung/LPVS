@@ -44,6 +44,10 @@ for more details. Default: `LPVS`.
 - `lpvs.*`: These settings include various configurations specific to the LPVS application like core pool size, 
 number of scan attempts, and version.
 
+- `lpvs.api.key`: This setting specifies the API key for the single scan endpoint
+`POST /scan/{gitHubOrg}/{gitHubRepo}/{prNumber}`. Callers must send it in the `X-LPVS-Api-Key` header.
+Use a strong random value, e.g. generated with `openssl rand -hex 32`. Default: empty, which disables the endpoint.
+
 - `spring.jpa.properties.hibernate.default_schema`: This setting specifies the default schema name that Hibernate 
 should use. Default: `lpvs`.
 
@@ -113,6 +117,7 @@ Alternatively, you can provide the necessary values for several properties using
 - `LPVS_GITHUB_API_URL`: Equivalent to the property `github.api.url`.
 - `LPVS_GITHUB_SECRET`: Equivalent to the property `github.secret`.
 - `LPVS_LICENSE_CONFLICT`: Equivalent to the property `license_conflict`.
+- `LPVS_API_KEY`: Equivalent to the property `lpvs.api.key`. Takes precedence over the property if both are set.
 - `LPVS_DATASOURCE_USERNAME`: Equivalent to the property `spring.datasource.username`. Required — the
 application will not start without it (or an equivalent override) being set.
 - `LPVS_DATASOURCE_PASSWORD`: Equivalent to the property `spring.datasource.password`. Required — the
