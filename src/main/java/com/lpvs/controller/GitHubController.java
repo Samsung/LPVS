@@ -72,8 +72,9 @@ public class GitHubController {
                         .orElse(Optional.ofNullable(this.GITHUB_SECRET).orElse(""));
         if (!StringUtils.hasText(this.GITHUB_SECRET)) {
             if (StringUtils.hasText(pullRequestTrigger) || StringUtils.hasText(localPath)) {
-                // Single scan (CLI) mode doesn't need webhooks: keep running, but reject all webhooks
-                log.warn("LPVS_GITHUB_SECRET (github.secret) is not set. Webhook endpoint is disabled.");
+                // Single scan (CLI) mode doesn't need webhooks: keep running, reject webhooks
+                log.warn(
+                        "LPVS_GITHUB_SECRET (github.secret) is not set. Webhook endpoint is disabled.");
                 this.GITHUB_SECRET = "";
             } else {
                 log.error("LPVS_GITHUB_SECRET (github.secret) is not set.");
