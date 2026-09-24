@@ -331,6 +331,7 @@ public class GitHubControllerTest {
 
     @Test
     public void malformedSignatureRejectedTest() throws Exception {
+        assertTrue(gitHubController.wrongSecret(null, "test"));
         assertTrue(gitHubController.wrongSecret("no-prefix-signature", "test"));
         assertTrue(gitHubController.wrongSecret("sha1=abc", "test"));
         ResponseEntity<LPVSResponseWrapper> actual =
@@ -372,5 +373,38 @@ public class GitHubControllerTest {
         verify(mockExitHandler, never()).exit(anyInt());
         ResponseEntity<LPVSResponseWrapper> actual = controller.gitHubWebhooks(SIGNATURE, "test");
         assertEquals(HttpStatus.FORBIDDEN, actual.getStatusCode());
+    }
+
+    @Test
+    public void noSecretInLocalScanModeDisablesWebhookTest() throws Exception {
+        LPVSExitHandler mockExitHandler = mock(LPVSExitHandler.class);
+        GitHubController controller =
+                new GitHubController(
+                        mocked_instance_queueServ,
+                        mocked_instance_ghServ,
+                        mocked_ghConnServ,
+                        mocked_queueRepo,
+                        "",
+                        mockExitHandler);
+        ReflectionTestUtils.setField(controller, "localPath", "/tmp/source");
+        controller.initializeGitHubController();
+        verify(mockExitHandler, never()).exit(anyInt());
+        ResponseEntity<LPVSResponseWrapper> actual = controller.gitHubWebhooks(SIGNATURE, "test");
+        assertEquals(HttpStatus.FORBIDDEN, actual.getStatusCode());
+    }
+
+    @Test
+    public void noSecretInServerModeExitsTest() {
+        LPVSExitHandler mockExitHandler = mock(LPVSExitHandler.class);
+        GitHubController controller =
+                new GitHubController(
+                        mocked_instance_queueServ,
+                        mocked_instance_ghServ,
+                        mocked_ghConnServ,
+                        mocked_queueRepo,
+                        "",
+                        mockExitHandler);
+        controller.initializeGitHubController();
+        verify(mockExitHandler).exit(-1);
     }
 }
