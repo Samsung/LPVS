@@ -106,4 +106,60 @@ public class LPVSCommentUtilTest {
             fail("Unexpected exception type thrown: " + e.getCause());
         }
     }
+
+    @Test
+    public void testGetMatchedLinesAsLinkEscapesFilePath() {
+        LPVSFile file = new LPVSFile();
+        file.setFilePath("\"><img src=x onerror=alert(1)>");
+        file.setMatchedLines("all");
+        Mockito.when(LPVSPayloadUtil.getRepositoryUrl(webhookConfig))
+                .thenReturn("https://github.com/repo");
+        Mockito.when(webhookConfig.getHeadCommitSHA()).thenReturn("headCommitSHA");
+        String result = LPVSCommentUtil.getMatchedLinesAsLink(webhookConfig, file, LPVSVcs.GITHUB);
+        assertEquals(
+                "<a target=\"_blank\" href=\"https://github.com/repo/blob/headCommitSHA/"
+                        + "&quot;&gt;&lt;img src=x onerror=alert(1)&gt;\">all</a>",
+                result);
+    }
+
+    @Test
+    public void testGetMatchedLinesAsLinkNoWebhookConfigEscapesLines() {
+        LPVSFile file = new LPVSFile();
+        file.setMatchedLines("<b>1-5</b>");
+        assertEquals(
+                "&lt;b&gt;1-5&lt;/b&gt;",
+                LPVSCommentUtil.getMatchedLinesAsLink(null, file, LPVSVcs.GITHUB));
+    }
+
+    @Test
+    public void testEscapeHtml() {
+        assertEquals(
+                "&lt;a href=&quot;x&quot;&gt;&amp;&#39;",
+                LPVSCommentUtil.escapeHtml("<a href=\"x\">&'"));
+        assertEquals("null", LPVSCommentUtil.escapeHtml(null));
+    }
+
+    @Test
+    public void testIsSafeUrl() {
+        assertTrue(LPVSCommentUtil.isSafeUrl("https://example.com"));
+        assertTrue(LPVSCommentUtil.isSafeUrl(" HTTP://example.com"));
+        assertFalse(LPVSCommentUtil.isSafeUrl("javascript:alert(1)"));
+        assertFalse(LPVSCommentUtil.isSafeUrl("data:text/html,<script>alert(1)</script>"));
+        assertFalse(LPVSCommentUtil.isSafeUrl("relative/path"));
+        assertFalse(LPVSCommentUtil.isSafeUrl(null));
+    }
+
+    @Test
+    public void testGetHtmlLink() {
+        assertEquals(
+                "<a href=\"https://example.com/?a=1&amp;b=&quot;2&quot;\">text&lt;/a&gt;</a>",
+                LPVSCommentUtil.getHtmlLink(
+                        "https://example.com/?a=1&b=\"2\"", "text</a>", false));
+        assertEquals(
+                "<a target=\"_blank\" href=\"https://example.com\">text</a>",
+                LPVSCommentUtil.getHtmlLink("https://example.com", "text", true));
+        assertEquals(
+                "&lt;b&gt;text&lt;/b&gt;",
+                LPVSCommentUtil.getHtmlLink("javascript:alert(1)", "<b>text</b>", false));
+    }
 }

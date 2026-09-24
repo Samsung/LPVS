@@ -231,6 +231,54 @@ public class LPVSReportBuilderTest {
     }
 
     @Test
+    public void testGenerateHtmlReportSingleScan_EscapesScanData() {
+        String payload = "\"><img src=x onerror=alert(1)>";
+        String escapedPayload = "&quot;&gt;&lt;img src=x onerror=alert(1)&gt;";
+
+        LPVSLicense license = new LPVSLicense();
+        license.setLicenseName("License" + payload);
+        license.setAccess("PROHIBITED");
+        license.setSpdxId("SPDX" + payload);
+
+        LPVSFile file = new LPVSFile();
+        file.setLicenses(new HashSet<>(List.of(license)));
+        file.setFilePath("file" + payload);
+        file.setComponentFilePath("component_file" + payload);
+        file.setComponentFileUrl("https://component/file_url" + payload);
+        file.setComponentName("component" + payload);
+        file.setComponentUrl("javascript:alert(1)");
+        file.setComponentVersion("version" + payload);
+        file.setComponentVendor("vendor" + payload);
+        file.setSnippetMatch("snippet" + payload);
+        file.setMatchedLines("lines" + payload);
+
+        LPVSConflict<String, String> conflict =
+                new LPVSConflict<>("L1" + payload, "L2" + payload);
+
+        String actual =
+                reportBuilder.generateHtmlReportSingleScan(
+                        "some/path", List.of(file), List.of(conflict), null, null);
+
+        assertThat(actual).doesNotContain("<img");
+        assertThat(actual).doesNotContain("href=\"javascript:");
+        assertThat(actual).contains("SPDX" + escapedPayload);
+        assertThat(actual).contains("file" + escapedPayload);
+        assertThat(actual).contains("component" + escapedPayload);
+        assertThat(actual).contains("vendor" + escapedPayload);
+        assertThat(actual).contains("<td>version" + escapedPayload + "</td>");
+        assertThat(actual)
+                .contains(
+                        "<a href=\"https://component/file_url"
+                                + escapedPayload
+                                + "\">component_file"
+                                + escapedPayload
+                                + "</a>");
+        assertThat(actual).contains("snippet" + escapedPayload);
+        assertThat(actual).contains("lines" + escapedPayload);
+        assertThat(actual).contains("L1" + escapedPayload + " and L2" + escapedPayload);
+    }
+
+    @Test
     public void testGenerateHtmlReportSingleScan_WithLicensesAndConflicts() {
         List<LPVSFile> scanResults =
                 List.of(

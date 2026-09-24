@@ -141,7 +141,7 @@ public class LPVSFileTest {
         final String baseSpdxId = "spdxId";
         final String baseAccess = "access";
         final String baseAlternativeName = "licenseNameAlternative";
-        final String baseChecklistUrl = "checklistUrl";
+        final String baseChecklistUrl = "https://checklist.url";
 
         LPVSLicense lpvsLicense =
                 new LPVSLicense(
@@ -156,7 +156,7 @@ public class LPVSFileTest {
         lpvsFile.setLicenses(licenses);
         assertEquals(
                 lpvsFile.convertLicensesToString(LPVSVcs.GITHUB),
-                "\n- ACCESS:\n  : <a target=\"_blank\" href=\"checklistUrl\">spdxId</a>\n");
+                "\n- ACCESS:\n  : <a target=\"_blank\" href=\"https://checklist.url\">spdxId</a>\n");
     }
 
     @Test
@@ -225,7 +225,7 @@ public class LPVSFileTest {
         final String baseSpdxId = "spdxId";
         final String baseAccess = "access";
         final String baseAlternativeName = "licenseNameAlternative";
-        final String baseChecklistUrl = "checklistUrl";
+        final String baseChecklistUrl = "https://checklist.url";
 
         LPVSLicense lpvsLicense1 =
                 new LPVSLicense(
@@ -249,7 +249,7 @@ public class LPVSFileTest {
         lpvsFile.setLicenses(licenses);
         assertEquals(
                 lpvsFile.convertLicensesToString(LPVSVcs.GITHUB),
-                "\n- ACCESS:\n  : <a target=\"_blank\" href=\"checklistUrl\">spdxId</a>\n  : <a target=\"_blank\" href=\"checklistUrl\">spdxId</a>\n");
+                "\n- ACCESS:\n  : <a target=\"_blank\" href=\"https://checklist.url\">spdxId</a>\n  : <a target=\"_blank\" href=\"https://checklist.url\">spdxId</a>\n");
     }
 
     @Test
