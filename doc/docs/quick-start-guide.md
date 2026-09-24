@@ -23,7 +23,7 @@ This section explains how to download and run pre-built LPVS Docker image with n
 ### Set up LPVS Docker environment variables
 
 * Copy `.env.example` to `.env` in the same directory as `docker-compose-quick.yml`, and
-fill in strong, unique values for `MYSQL_ROOT_PASSWORD` and `MYSQL_PASSWORD` (refer to the
+fill in strong, unique values for `MYSQL_ROOT_PASSWORD`, `MYSQL_PASSWORD` and `LPVS_GITHUB_SECRET` (refer to the
 [guide](user-guide/service/docker.md#setting-up-lpvs-docker-environment-variables)). `docker compose`
 refuses to start if these are left empty.
 
