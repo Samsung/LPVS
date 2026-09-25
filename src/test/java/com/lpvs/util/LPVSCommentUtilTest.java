@@ -153,8 +153,7 @@ public class LPVSCommentUtilTest {
     public void testGetHtmlLink() {
         assertEquals(
                 "<a href=\"https://example.com/?a=1&amp;b=&quot;2&quot;\">text&lt;/a&gt;</a>",
-                LPVSCommentUtil.getHtmlLink(
-                        "https://example.com/?a=1&b=\"2\"", "text</a>", false));
+                LPVSCommentUtil.getHtmlLink("https://example.com/?a=1&b=\"2\"", "text</a>", false));
         assertEquals(
                 "<a target=\"_blank\" href=\"https://example.com\">text</a>",
                 LPVSCommentUtil.getHtmlLink("https://example.com", "text", true));

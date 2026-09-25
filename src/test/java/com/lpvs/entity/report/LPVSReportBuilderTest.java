@@ -252,8 +252,7 @@ public class LPVSReportBuilderTest {
         file.setSnippetMatch("snippet" + payload);
         file.setMatchedLines("lines" + payload);
 
-        LPVSConflict<String, String> conflict =
-                new LPVSConflict<>("L1" + payload, "L2" + payload);
+        LPVSConflict<String, String> conflict = new LPVSConflict<>("L1" + payload, "L2" + payload);
 
         String actual =
                 reportBuilder.generateHtmlReportSingleScan(

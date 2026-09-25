@@ -753,9 +753,7 @@ public class LPVSReportBuilder {
                                             LPVSCommentUtil.getMatchedLinesAsLink(
                                                     webhookConfig, fileInfo, vcs))
                                     .append("</td><td>")
-                                    .append(
-                                            LPVSCommentUtil.escapeHtml(
-                                                    fileInfo.getSnippetMatch()))
+                                    .append(LPVSCommentUtil.escapeHtml(fileInfo.getSnippetMatch()))
                                     .append("</td>");
 
                             htmlBuilder.append("</tr>");
