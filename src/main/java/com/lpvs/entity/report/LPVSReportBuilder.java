@@ -546,12 +546,15 @@ public class LPVSReportBuilder {
             htmlBuilder
                     .append("<tr>")
                     .append("<td>")
-                    .append(conflict.getL1())
+                    .append(LPVSCommentUtil.escapeHtml(conflict.getL1()))
                     .append(" and ")
-                    .append(conflict.getL2())
+                    .append(LPVSCommentUtil.escapeHtml(conflict.getL2()))
                     .append("</td>")
                     .append("<td>")
-                    .append(getExplanationForLicenseConflict(conflict.getL1(), conflict.getL2()))
+                    .append(
+                            LPVSCommentUtil.escapeHtml(
+                                    getExplanationForLicenseConflict(
+                                            conflict.getL1(), conflict.getL2())))
                     .append("</td>")
                     .append("</tr>");
         }
@@ -681,7 +684,7 @@ public class LPVSReportBuilder {
                         .append("<td rowspan=\"")
                         .append(licenseSpdxIds.get(licenseSpdxId).getCount())
                         .append("\">");
-                htmlBuilder.append(licenseSpdxId);
+                htmlBuilder.append(LPVSCommentUtil.escapeHtml(licenseSpdxId));
                 htmlBuilder.append("</td>");
 
                 // vendor + component
@@ -697,7 +700,7 @@ public class LPVSReportBuilder {
                             .append("<td rowspan=\"")
                             .append(componentAndVendor.get(componentInfo).getCount())
                             .append("\">")
-                            .append(componentInfo)
+                            .append(LPVSCommentUtil.escapeHtml(componentInfo))
                             .append("</td>");
 
                     // file path
@@ -713,7 +716,7 @@ public class LPVSReportBuilder {
                                 .append("<td rowspan=\"")
                                 .append(filePath.get(filePathInfo).getCount())
                                 .append("\">")
-                                .append(filePathInfo)
+                                .append(LPVSCommentUtil.escapeHtml(filePathInfo))
                                 .append("</td>");
 
                         // version + file info + match info
@@ -725,22 +728,23 @@ public class LPVSReportBuilder {
                             }
                             htmlBuilder
                                     .append("<td>")
-                                    .append("<a href=\"")
-                                    .append(fileInfo.getComponentUrl())
-                                    .append("\">")
-                                    .append(fileInfo.getComponentVersion())
-                                    .append("</a>")
+                                    .append(
+                                            LPVSCommentUtil.getHtmlLink(
+                                                    fileInfo.getComponentUrl(),
+                                                    fileInfo.getComponentVersion(),
+                                                    false))
                                     .append("</td><td>");
 
                             if (!StringUtils.isBlank(fileInfo.getComponentFileUrl())) {
-                                htmlBuilder
-                                        .append("<a href=\"")
-                                        .append(fileInfo.getComponentFileUrl())
-                                        .append("\">")
-                                        .append(fileInfo.getComponentFilePath())
-                                        .append("</a>");
+                                htmlBuilder.append(
+                                        LPVSCommentUtil.getHtmlLink(
+                                                fileInfo.getComponentFileUrl(),
+                                                fileInfo.getComponentFilePath(),
+                                                false));
                             } else {
-                                htmlBuilder.append(fileInfo.getComponentFilePath());
+                                htmlBuilder.append(
+                                        LPVSCommentUtil.escapeHtml(
+                                                fileInfo.getComponentFilePath()));
                             }
 
                             htmlBuilder
@@ -749,7 +753,7 @@ public class LPVSReportBuilder {
                                             LPVSCommentUtil.getMatchedLinesAsLink(
                                                     webhookConfig, fileInfo, vcs))
                                     .append("</td><td>")
-                                    .append(fileInfo.getSnippetMatch())
+                                    .append(LPVSCommentUtil.escapeHtml(fileInfo.getSnippetMatch()))
                                     .append("</td>");
 
                             htmlBuilder.append("</tr>");

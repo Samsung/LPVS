@@ -7,6 +7,7 @@
 package com.lpvs.entity;
 
 import com.lpvs.entity.enums.LPVSVcs;
+import com.lpvs.util.LPVSCommentUtil;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -131,13 +132,8 @@ public class LPVSFile {
                     licenseNames
                             .append("  : ")
                             .append(
-                                    license.getChecklistUrl() != null
-                                            ? "<a target=\"_blank\" href=\""
-                                                    + license.getChecklistUrl()
-                                                    + "\">"
-                                            : "")
-                            .append(licSpdxId)
-                            .append(license.getChecklistUrl() != null ? "</a>" : "")
+                                    LPVSCommentUtil.getHtmlLink(
+                                            license.getChecklistUrl(), licSpdxId, true))
                             .append("\n");
                 } else {
                     licenseNames
