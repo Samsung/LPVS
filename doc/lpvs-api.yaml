@@ -78,7 +78,11 @@ paths:
       tags:
         - GitHub Pull Request Single Scan API
       summary: GitHub Pull Request Single Scan
-      description: Endpoint for performing a single scan operation based on GitHub organization, repository, and pull request number.
+      description: >-
+        Endpoint for performing a single scan operation based on GitHub organization, repository, and pull request number.
+        Requires the API key configured in `LPVS_API_KEY` (`lpvs.api.key`). If no API key is configured, the endpoint is disabled.
+      security:
+        - ApiKeyAuth: []
       parameters:
         - in: path
           name: gitHubOrg
@@ -130,6 +134,12 @@ paths:
                 $ref: '#/components/schemas/HealthResponse'
 
 components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-LPVS-Api-Key
+
   schemas:
     WebhookRequest:
       type: object

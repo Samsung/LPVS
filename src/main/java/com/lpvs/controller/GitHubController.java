@@ -121,6 +121,7 @@ public class GitHubController {
     private LPVSExitHandler exitHandler;
 
     private static final String SIGNATURE = "X-Hub-Signature-256";
+    private static final String API_KEY_HEADER = "X-LPVS-Api-Key";
     private static final String SUCCESS = "Success";
     private static final String ERROR = "Error";
     private static final String ALGORITHM = "HmacSHA256";
@@ -226,12 +227,33 @@ public class GitHubController {
     }
 
     /**
+     * The API key used for authenticating single scan requests (optional).
+     * If not set, the single scan endpoint is disabled.
+     */
+    @Value("${lpvs.api.key:}")
+    private String apiKeyProperty;
+
+    /**
+     * Returns the API key from the LPVS_API_KEY environment variable or the application property.
+     * The environment variable takes precedence over the property.
+     *
+     * @return The API key, or an empty string if it is not set.
+     */
+    private String getApiKey() {
+        return Optional.ofNullable(System.getenv("LPVS_API_KEY"))
+                .filter(StringUtils::hasText)
+                .orElse(Optional.ofNullable(apiKeyProperty).orElse(""));
+    }
+
+    /**
      * Handles a GitHub single scan request.
      *
      * This endpoint performs a single scan operation based on the GitHub organization, repository,
      * and pull request number provided in the path variables. The method validates
-     * the input parameters and performs necessary security checks.
+     * the input parameters and performs necessary security checks. The caller must provide
+     * the API key configured in LPVS_API_KEY (lpvs.api.key) in the X-LPVS-Api-Key header.
      *
+     * @param apiKey The API key provided by the caller.
      * @param gitHubOrg The GitHub organization name. Must not be empty and should be a valid string.
      * @param gitHubRepo The GitHub repository name. Must not be empty and should be a valid string.
      * @param prNumber The pull request number. Must be a positive integer greater than or equal to 1.
@@ -243,13 +265,25 @@ public class GitHubController {
             value = "/scan/{gitHubOrg}/{gitHubRepo}/{prNumber}",
             method = RequestMethod.POST)
     public ResponseEntity<LPVSResponseWrapper> gitHubSingleScan(
+            @RequestHeader(value = API_KEY_HEADER, required = false) String apiKey,
             @PathVariable("gitHubOrg") @NotEmpty @Valid String gitHubOrg,
             @PathVariable("gitHubRepo") @NotEmpty @Valid String gitHubRepo,
             @PathVariable("prNumber") @Min(1) @Valid Integer prNumber) {
         log.debug("New GitHub single scan request received");
 
-        if (!StringUtils.hasText(GITHUB_SECRET)) {
-            log.error("Received empty GITHUB_SECRET");
+        String expectedApiKey = getApiKey();
+        if (!StringUtils.hasText(expectedApiKey)) {
+            log.error("Single scan API is disabled: LPVS_API_KEY (lpvs.api.key) is not set");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .headers(LPVSPayloadUtil.generateSecurityHeaders())
+                    .body(new LPVSResponseWrapper(ERROR));
+        }
+        // Constant-time comparison to prevent timing attacks
+        if (apiKey == null
+                || !MessageDigest.isEqual(
+                        expectedApiKey.getBytes(StandardCharsets.UTF_8),
+                        apiKey.getBytes(StandardCharsets.UTF_8))) {
+            log.error("Received empty or incorrect API key");
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
                     .headers(LPVSPayloadUtil.generateSecurityHeaders())
                     .body(new LPVSResponseWrapper(ERROR));
