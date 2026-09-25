@@ -33,6 +33,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.HtmlUtils;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 import java.util.Date;
 import java.util.Optional;
 import javax.crypto.Mac;
@@ -59,21 +61,39 @@ public class GitHubController {
 
     /**
      * Initializes the GitHub secret from the LPVS_GITHUB_SECRET environment variable or the application property.
+     * The environment variable takes precedence over the property.
      * Exits the application if the secret is not set.
      */
     @PostConstruct
     public void initializeGitHubController() {
         this.GITHUB_SECRET =
-                Optional.ofNullable(this.GITHUB_SECRET)
-                        .filter(s -> !s.isEmpty())
-                        .orElse(
-                                Optional.ofNullable(System.getenv("LPVS_GITHUB_SECRET"))
-                                        .orElse(""));
-        if (this.GITHUB_SECRET.isEmpty()) {
-            log.error("LPVS_GITHUB_SECRET (github.secret) is not set.");
-            exitHandler.exit(-1);
+                Optional.ofNullable(System.getenv("LPVS_GITHUB_SECRET"))
+                        .filter(StringUtils::hasText)
+                        .orElse(Optional.ofNullable(this.GITHUB_SECRET).orElse(""));
+        if (!StringUtils.hasText(this.GITHUB_SECRET)) {
+            if (StringUtils.hasText(pullRequestTrigger) || StringUtils.hasText(localPath)) {
+                // Single scan (CLI) mode doesn't need webhooks: keep running, reject webhooks
+                log.warn(
+                        "LPVS_GITHUB_SECRET (github.secret) is not set. Webhook endpoint is disabled.");
+                this.GITHUB_SECRET = "";
+            } else {
+                log.error("LPVS_GITHUB_SECRET (github.secret) is not set.");
+                exitHandler.exit(-1);
+            }
         }
     }
+
+    /**
+     * Trigger value to start a single scan of a pull request (optional).
+     */
+    @Value("${github.pull.request:}")
+    private String pullRequestTrigger;
+
+    /**
+     * Trigger value to start a single scan of local files or folder (optional).
+     */
+    @Value("${local.path:}")
+    private String localPath;
 
     /**
      * LPVSQueueService for handling user-related business logic.
@@ -104,6 +124,7 @@ public class GitHubController {
     private static final String SUCCESS = "Success";
     private static final String ERROR = "Error";
     private static final String ALGORITHM = "HmacSHA256";
+    private static final String SIGNATURE_PREFIX = "sha256=";
 
     /**
      * Constructor for GitHubController.
@@ -172,7 +193,7 @@ public class GitHubController {
                     .headers(LPVSPayloadUtil.generateSecurityHeaders())
                     .body(new LPVSResponseWrapper(ERROR));
         }
-        if (!GITHUB_SECRET.trim().isEmpty() && wrongSecret(signature, payload)) {
+        if (!StringUtils.hasText(GITHUB_SECRET) || wrongSecret(signature, payload)) {
             log.error("Received empty or incorrect GITHUB_SECRET");
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
                     .headers(LPVSPayloadUtil.generateSecurityHeaders())
@@ -227,7 +248,7 @@ public class GitHubController {
             @PathVariable("prNumber") @Min(1) @Valid Integer prNumber) {
         log.debug("New GitHub single scan request received");
 
-        if (GITHUB_SECRET.trim().isEmpty()) {
+        if (!StringUtils.hasText(GITHUB_SECRET)) {
             log.error("Received empty GITHUB_SECRET");
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
                     .headers(LPVSPayloadUtil.generateSecurityHeaders())
@@ -274,16 +295,25 @@ public class GitHubController {
      * @throws Exception if an error occurs during signature verification.
      */
     public boolean wrongSecret(String signature, String payload) throws Exception {
-        String lpvsSecret = signature.split("=", 2)[1];
+        if (signature == null || !signature.startsWith(SIGNATURE_PREFIX)) {
+            return true;
+        }
+        String lpvsSecret = signature.substring(SIGNATURE_PREFIX.length());
 
-        SecretKeySpec key = new SecretKeySpec(GITHUB_SECRET.getBytes("utf-8"), ALGORITHM);
+        SecretKeySpec key =
+                new SecretKeySpec(GITHUB_SECRET.getBytes(StandardCharsets.UTF_8), ALGORITHM);
         Mac mac = Mac.getInstance(ALGORITHM);
         mac.init(key);
-        String githubSecret = Hex.encodeHexString(mac.doFinal(payload.getBytes("utf-8")));
+        String githubSecret =
+                Hex.encodeHexString(
+                        mac.doFinal(
+                                Optional.ofNullable(payload)
+                                        .orElse("")
+                                        .getBytes(StandardCharsets.UTF_8)));
 
-        log.debug("lpvs   signature: " + lpvsSecret);
-        log.debug("github signature: " + githubSecret);
-
-        return !lpvsSecret.equals(githubSecret);
+        // Constant-time comparison to prevent timing attacks
+        return !MessageDigest.isEqual(
+                lpvsSecret.getBytes(StandardCharsets.UTF_8),
+                githubSecret.getBytes(StandardCharsets.UTF_8));
     }
 }

@@ -10,7 +10,7 @@ For the Docker deployment scenario, you need to provide database credentials and
 GitHub settings before starting the containers.
 
 * Copy `.env.example` to `.env` in the same directory as `docker-compose.yml`, and
-fill in strong, unique values for `MYSQL_ROOT_PASSWORD` and `MYSQL_PASSWORD`:
+fill in strong, unique values for `MYSQL_ROOT_PASSWORD`, `MYSQL_PASSWORD` and `LPVS_GITHUB_SECRET`:
 
     ```bash
     cp .env.example .env
