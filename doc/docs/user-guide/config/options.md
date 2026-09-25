@@ -39,7 +39,7 @@ for more details.
 
 - `github.secret`: This setting specifies the secret string used for configuring webhooks. Please refer to the
 [Webhook configuration guide](../service/webhook.md#configure-the-webhook-in-your-github-repository-settings) 
-for more details. Default: `LPVS`.
+for more details. Required, no default: LPVS refuses to start if it is empty.
 
 - `lpvs.*`: These settings include various configurations specific to the LPVS application like core pool size, 
 number of scan attempts, and version.
@@ -115,7 +115,7 @@ Alternatively, you can provide the necessary values for several properties using
 - `LPVS_GITHUB_LOGIN`: Equivalent to the property `github.login`.
 - `LPVS_GITHUB_TOKEN`: Equivalent to the property `github.token`.
 - `LPVS_GITHUB_API_URL`: Equivalent to the property `github.api.url`.
-- `LPVS_GITHUB_SECRET`: Equivalent to the property `github.secret`.
+- `LPVS_GITHUB_SECRET`: Equivalent to the property `github.secret`. Takes precedence over the property if both are set.
 - `LPVS_LICENSE_CONFLICT`: Equivalent to the property `license_conflict`.
 - `LPVS_API_KEY`: Equivalent to the property `lpvs.api.key`. Takes precedence over the property if both are set.
 - `LPVS_DATASOURCE_USERNAME`: Equivalent to the property `spring.datasource.username`. Required — the

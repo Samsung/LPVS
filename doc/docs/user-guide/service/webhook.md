@@ -53,8 +53,9 @@ Follow the next steps:
     It will look like `https://50be-62-205-136-206.ngrok-free.app/`.
 
 - Specify the content type as `application/json`.
-- Fill in the `Secret` field with the passphrase: `LPVS`.
-- Save the same passphrase in `github.secret` of the LPVS backend `application.properties` or `docker-compose.yml` files.
+- Fill in the `Secret` field with a strong random passphrase, e.g. generated with `openssl rand -hex 32`.
+- Save the same passphrase as `LPVS_GITHUB_SECRET` in the `.env` file (Docker deployment), or in `github.secret`
+of the LPVS backend `application.properties` file. LPVS refuses to start if the secret is empty.
 
 ![step3](../../img/webhook/step_1_3.png)
 

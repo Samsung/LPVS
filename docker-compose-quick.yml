@@ -21,7 +21,7 @@ services:
       - github.login=
       - github.token=
       - github.api.url=https://api.github.com
-      - github.secret=LPVS
+      - github.secret=${LPVS_GITHUB_SECRET:?Set LPVS_GITHUB_SECRET in .env (see .env.example)}
 
     depends_on:
       mysqldb:
