@@ -457,4 +457,20 @@ public class GitHubControllerTest {
         controller.initializeGitHubController();
         verify(mockExitHandler).exit(-1);
     }
+
+    @Test
+    public void blankSecretInServerModeExitsTest() {
+        environmentVars.set("LPVS_GITHUB_SECRET", " \n");
+        LPVSExitHandler mockExitHandler = mock(LPVSExitHandler.class);
+        GitHubController controller =
+                new GitHubController(
+                        mocked_instance_queueServ,
+                        mocked_instance_ghServ,
+                        mocked_ghConnServ,
+                        mocked_queueRepo,
+                        "  \t\n",
+                        mockExitHandler);
+        controller.initializeGitHubController();
+        verify(mockExitHandler).exit(-1);
+    }
 }
