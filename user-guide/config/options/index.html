@@ -313,11 +313,16 @@ for more details.</p>
 <li>
 <p><code>github.secret</code>: This setting specifies the secret string used for configuring webhooks. Please refer to the
 <a href="../../service/webhook/#configure-the-webhook-in-your-github-repository-settings">Webhook configuration guide</a> 
-for more details. Default: <code>LPVS</code>.</p>
+for more details. Required, no default: LPVS refuses to start if it is empty.</p>
 </li>
 <li>
 <p><code>lpvs.*</code>: These settings include various configurations specific to the LPVS application like core pool size, 
 number of scan attempts, and version.</p>
+</li>
+<li>
+<p><code>lpvs.api.key</code>: This setting specifies the API key for the single scan endpoint
+<code>POST /scan/{gitHubOrg}/{gitHubRepo}/{prNumber}</code>. Callers must send it in the <code>X-LPVS-Api-Key</code> header.
+Use a strong random value, e.g. generated with <code>openssl rand -hex 32</code>. Default: empty, which disables the endpoint.</p>
 </li>
 <li>
 <p><code>spring.jpa.properties.hibernate.default_schema</code>: This setting specifies the default schema name that Hibernate 
@@ -325,7 +330,11 @@ should use. Default: <code>lpvs</code>.</p>
 </li>
 <li>
 <p><code>spring.datasource.*</code>: These settings specify the data source configurations including URL, username, password, etc.
-Fill in your own values for these settings.</p>
+Fill in your own values for these settings. <code>spring.datasource.username</code> and <code>spring.datasource.password</code> have no
+insecure default — if left as the shipped <code>${LPVS_DATASOURCE_USERNAME}</code>/<code>${LPVS_DATASOURCE_PASSWORD}</code> placeholders,
+the application refuses to start until you either edit them directly here, pass <code>-Dspring.datasource.username=...</code>/
+<code>-Dspring.datasource.password=...</code> on the command line, or set the <code>LPVS_DATASOURCE_USERNAME</code>/<code>LPVS_DATASOURCE_PASSWORD</code>
+environment variables described below.</p>
 </li>
 </ul>
 <hr />
@@ -383,8 +392,13 @@ LPVS application will throw an exception and exit with error code.</p>
 <li><code>LPVS_GITHUB_LOGIN</code>: Equivalent to the property <code>github.login</code>.</li>
 <li><code>LPVS_GITHUB_TOKEN</code>: Equivalent to the property <code>github.token</code>.</li>
 <li><code>LPVS_GITHUB_API_URL</code>: Equivalent to the property <code>github.api.url</code>.</li>
-<li><code>LPVS_GITHUB_SECRET</code>: Equivalent to the property <code>github.secret</code>.</li>
+<li><code>LPVS_GITHUB_SECRET</code>: Equivalent to the property <code>github.secret</code>. Takes precedence over the property if both are set.</li>
 <li><code>LPVS_LICENSE_CONFLICT</code>: Equivalent to the property <code>license_conflict</code>.</li>
+<li><code>LPVS_API_KEY</code>: Equivalent to the property <code>lpvs.api.key</code>. Takes precedence over the property if both are set.</li>
+<li><code>LPVS_DATASOURCE_USERNAME</code>: Equivalent to the property <code>spring.datasource.username</code>. Required — the
+application will not start without it (or an equivalent override) being set.</li>
+<li><code>LPVS_DATASOURCE_PASSWORD</code>: Equivalent to the property <code>spring.datasource.password</code>. Required — the
+application will not start without it (or an equivalent override) being set.</li>
 </ul></div>
             </div>
         </div>

@@ -328,7 +328,7 @@ Please<span class="w"> </span>specify<span class="w"> </span>how<span class="w">
 <span class="w">      </span>&lt;n&gt;w<span class="w"> </span><span class="o">=</span><span class="w"> </span>key<span class="w"> </span>expires<span class="w"> </span><span class="k">in</span><span class="w"> </span>n<span class="w"> </span>weeks
 <span class="w">      </span>&lt;n&gt;m<span class="w"> </span><span class="o">=</span><span class="w"> </span>key<span class="w"> </span>expires<span class="w"> </span><span class="k">in</span><span class="w"> </span>n<span class="w"> </span>months
 <span class="w">      </span>&lt;n&gt;y<span class="w"> </span><span class="o">=</span><span class="w"> </span>key<span class="w"> </span>expires<span class="w"> </span><span class="k">in</span><span class="w"> </span>n<span class="w"> </span>years
-Key<span class="w"> </span>is<span class="w"> </span>valid<span class="w"> </span><span class="k">for</span>?<span class="w"> </span><span class="o">(</span><span class="m">0</span><span class="o">)</span><span class="w"> </span><span class="m">0</span>
+Key<span class="w"> </span>is<span class="w"> </span>valid<span class="w"> </span>for?<span class="w"> </span><span class="o">(</span><span class="m">0</span><span class="o">)</span><span class="w"> </span><span class="m">0</span>
 Key<span class="w"> </span>does<span class="w"> </span>not<span class="w"> </span>expire<span class="w"> </span>at<span class="w"> </span>all
 Is<span class="w"> </span>this<span class="w"> </span>correct?<span class="w"> </span><span class="o">(</span>y/N<span class="o">)</span><span class="w"> </span>y
 
@@ -338,7 +338,7 @@ Real<span class="w"> </span>name:<span class="w"> </span>LPVS
 Email<span class="w"> </span>address:<span class="w"> </span>john.doe@example.com
 Comment:<span class="w"> </span>Keys<span class="w"> </span><span class="k">for</span><span class="w"> </span>LPVS
 You<span class="w"> </span>selected<span class="w"> </span>this<span class="w"> </span>USER-ID:
-<span class="w">    </span><span class="s2">&quot;LPVS (Keys for LPVS) &lt;john.doe@example.com&gt;&quot;</span>
+<span class="w">    </span><span class="s2">"LPVS (Keys for LPVS) &lt;john.doe@example.com&gt;"</span>
 
 Change<span class="w"> </span><span class="o">(</span>N<span class="o">)</span>ame,<span class="w"> </span><span class="o">(</span>C<span class="o">)</span>omment,<span class="w"> </span><span class="o">(</span>E<span class="o">)</span>mail<span class="w"> </span>or<span class="w"> </span><span class="o">(</span>O<span class="o">)</span>kay/<span class="o">(</span>Q<span class="o">)</span>uit?<span class="w"> </span>O
 We<span class="w"> </span>need<span class="w"> </span>to<span class="w"> </span>generate<span class="w"> </span>a<span class="w"> </span>lot<span class="w"> </span>of<span class="w"> </span>random<span class="w"> </span>bytes.<span class="w"> </span>It<span class="w"> </span>is<span class="w"> </span>a<span class="w"> </span>good<span class="w"> </span>idea<span class="w"> </span>to<span class="w"> </span>perform
@@ -350,7 +350,7 @@ some<span class="w"> </span>other<span class="w"> </span>action<span class="w"> 
 disks<span class="o">)</span><span class="w"> </span>during<span class="w"> </span>the<span class="w"> </span>prime<span class="w"> </span>generation<span class="p">;</span><span class="w"> </span>this<span class="w"> </span>gives<span class="w"> </span>the<span class="w"> </span>random<span class="w"> </span>number
 generator<span class="w"> </span>a<span class="w"> </span>better<span class="w"> </span>chance<span class="w"> </span>to<span class="w"> </span>gain<span class="w"> </span>enough<span class="w"> </span>entropy.
 gpg:<span class="w"> </span>key<span class="w"> </span>BE13B1D440E813F0<span class="w"> </span>marked<span class="w"> </span>as<span class="w"> </span>ultimately<span class="w"> </span>trusted
-gpg:<span class="w"> </span>revocation<span class="w"> </span>certificate<span class="w"> </span>stored<span class="w"> </span>as<span class="w"> </span><span class="s1">&#39;/home/virtual-pc/.gnupg/openpgp-revocs.d/D3C7C06AC34BDA9A41388E76BE13B1D440E813F0.rev&#39;</span>
+gpg:<span class="w"> </span>revocation<span class="w"> </span>certificate<span class="w"> </span>stored<span class="w"> </span>as<span class="w"> </span><span class="s1">'/home/virtual-pc/.gnupg/openpgp-revocs.d/D3C7C06AC34BDA9A41388E76BE13B1D440E813F0.rev'</span>
 public<span class="w"> </span>and<span class="w"> </span>secret<span class="w"> </span>key<span class="w"> </span>created<span class="w"> </span>and<span class="w"> </span>signed.
 
 pub<span class="w">   </span>rsa4096<span class="w"> </span><span class="m">2021</span>-10-15<span class="w"> </span><span class="o">[</span>SC<span class="o">]</span>
@@ -404,12 +404,12 @@ gpg<span class="w"> </span>--output<span class="w"> </span>lpvs-private.pgp<span
 <h2 id="dco-via-the-command-line">DCO via the command line</h2>
 <p>The most popular way to do DCO is to sign off your username and email address in the git command line.</p>
 <p>First, configure your local git install.</p>
-<div class="highlight"><pre><span></span><code>$<span class="w"> </span>git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>user.name<span class="w"> </span><span class="s2">&quot;John Doe&quot;</span><span class="w"> </span>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>user.name<span class="w"> </span><span class="s2">"John Doe"</span><span class="w"> </span>
 $<span class="w"> </span>git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>user.email<span class="w"> </span>johndoe@example.com
 </code></pre></div>
 <p>Obviously, you should use your own name and the email address associated with your GitHub user account.</p>
 <p>Now, every time you commit new code in git, just add a signoff statement via the <code>-s</code> flag.</p>
-<div class="highlight"><pre><span></span><code>$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-s<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;This is my commit message&quot;</span>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-s<span class="w"> </span>-m<span class="w"> </span><span class="s2">"This is my commit message"</span>
 </code></pre></div>
 <p>That’s it. Git adds your sign-off message in the commit message, and you contribution (commit) is now DCO compliant.</p>
 <hr />

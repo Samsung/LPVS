@@ -269,48 +269,37 @@
 <p>How to download and run pre-built LPVS Docker images without building the LPVS project.</p>
 <hr />
 <h2 id="setting-up-lpvs-docker-environment-variables">Setting up LPVS Docker environment variables</h2>
-<p>For the Docker deployment scenario, you may need to fill in the environment variables 
-in the <code>docker-compose.yml</code> file.</p>
+<p>For the Docker deployment scenario, you need to provide database credentials and
+GitHub settings before starting the containers.</p>
+<ul>
+<li>
+<p>Copy <code>.env.example</code> to <code>.env</code> in the same directory as <code>docker-compose.yml</code>, and
+fill in strong, unique values for <code>MYSQL_ROOT_PASSWORD</code>, <code>MYSQL_PASSWORD</code> and <code>LPVS_GITHUB_SECRET</code>:</p>
+<div class="highlight"><pre><span></span><code>cp<span class="w"> </span>.env.example<span class="w"> </span>.env
+</code></pre></div>
+<p><code>docker compose</code> refuses to start if these are left empty, so there is no
+insecure default to forget to change. <code>MYSQL_USER</code> defaults to <code>lpvs</code>, a
+dedicated database account scoped to the <code>lpvs</code> schema only — the application
+does not need and does not use the MySQL <code>root</code> account.</p>
+</li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Never commit <code>.env</code> to version control, and do not publish MySQL's port
+(3306) to the host unless you have a specific need for external access —
+the default <code>docker-compose.yml</code> keeps it internal to the <code>lpvs</code> network.</p>
+</div>
 <ul>
 <li>
 <p>Open <code>docker-compose.yml</code> file.</p>
 </li>
 <li>
-<p>In the <code>environment</code> part of the <code>lpvs</code> service, find <code>## Github data for fetching code</code> 
+<p>In the <code>environment</code> part of the <code>lpvs</code> service, find <code>## Github data for fetching code</code>
 and fill in the GitHub <code>login</code> and personal <code>token</code> that was generated <a href="../webhook/#create-a-personal-github-access-token">earlier</a>.</p>
 <div class="highlight"><pre><span></span><code><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">github.login=&lt;github-login&gt;</span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">github.token=&lt;personal-token&gt;</span>
 </code></pre></div>
 </li>
-<li>
-<p>In case you plan to use a database user other than <code>root</code> reflect this in the appropriate 
-lines in the <code>## Database Configuration</code> part of the <code>lpvs</code> service in <code>environment</code> section.</p>
-<div class="highlight"><pre><span></span><code><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">spring.datasource.username=user</span>
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">spring.datasource.password=password</span><span class="w">  </span>
-</code></pre></div>
-</li>
-<li>
-<p>Make the following changes in the <code>environment</code> section of <code>mysqldb</code> service near 
-<code>MYSQL_ROOT_PASSWORD</code> value:</p>
-<div class="highlight"><pre><span></span><code><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">MYSQL_USER</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">user</span>
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">MYSQL_PASSWORD</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">password</span>
-</code></pre></div>
-</li>
-</ul>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>If you are using only the <code>root</code> user, make the following change:</p>
-<div class="highlight"><pre><span></span><code><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">spring.datasource.username=root</span>
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">spring.datasource.password=rootpassword</span>
-<span class="nn">...</span>
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">MYSQL_ROOT_PASSWORD</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rootpassword</span>
-</code></pre></div>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>In both cases, ensure that the <code>MYSQL_ROOT_PASSWORD</code> field is filled.</p>
-</div>
-<ul>
 <li>
 <p>You can also change the directory for storing MySQL data by modifying the following line:</p>
 <div class="highlight"><pre><span></span><code><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./mysql-lpvs-data:/var/lib/mysql</span>

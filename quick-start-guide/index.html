@@ -290,6 +290,14 @@
 <p>This section explains how to download and run pre-built LPVS Docker image with ngrok reverse proxy.</p>
 <h3 id="set-up-lpvs-docker-environment-variables">Set up LPVS Docker environment variables</h3>
 <ul>
+<li>Copy <code>.env.example</code> to <code>.env</code> in the same directory as <code>docker-compose-quick.yml</code>, and
+fill in strong, unique values for <code>MYSQL_ROOT_PASSWORD</code>, <code>MYSQL_PASSWORD</code> and <code>LPVS_GITHUB_SECRET</code> (refer to the
+<a href="../user-guide/service/docker/#setting-up-lpvs-docker-environment-variables">guide</a>). <code>docker compose</code>
+refuses to start if these are left empty.</li>
+</ul>
+<div class="highlight"><pre><span></span><code>cp<span class="w"> </span>.env.example<span class="w"> </span>.env
+</code></pre></div>
+<ul>
 <li>
 <p>Open <code>docker-compose-quick.yml</code> file.</p>
 </li>

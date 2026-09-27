@@ -294,7 +294,7 @@
 <div class="highlight"><pre><span></span><code><span class="k">create</span><span class="w"> </span><span class="k">database</span><span class="w"> </span><span class="n">lpvs</span><span class="p">;</span>
 <span class="k">create</span><span class="w"> </span><span class="k">user</span><span class="w"> </span><span class="n">username</span><span class="p">;</span>
 <span class="k">grant</span><span class="w"> </span><span class="k">all</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">lpvs</span><span class="p">.</span><span class="o">*</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="n">username</span><span class="p">;</span>
-<span class="k">alter</span><span class="w"> </span><span class="k">user</span><span class="w"> </span><span class="n">username</span><span class="w"> </span><span class="n">identified</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="s1">&#39;password&#39;</span><span class="p">;</span>
+<span class="k">alter</span><span class="w"> </span><span class="k">user</span><span class="w"> </span><span class="n">username</span><span class="w"> </span><span class="n">identified</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="s1">'password'</span><span class="p">;</span>
 <span class="n">exit</span><span class="p">;</span>
 </code></pre></div>
 <ul>
@@ -307,9 +307,15 @@
 <p>(<strong>Optional</strong>) Fill in the <code>lpvs_license_list</code> and <code>lpvs_license_conflicts</code> tables according to the <a href="../../config/database/">Database customization guideline</a>.</p>
 </li>
 <li>
-<p>Update the properties related to the database operation in the profile file according to the <a href="../../config/options/">guideline</a>.</p>
+<p>Update the properties related to the database operation in the profile file according to the <a href="../../config/options/">guideline</a>.
+<code>spring.datasource.username</code>/<code>spring.datasource.password</code> have no default and must be set to the <code>username</code>/<code>password</code>
+created above — either directly in <code>application.properties</code>, or by exporting <code>LPVS_DATASOURCE_USERNAME</code>/
+<code>LPVS_DATASOURCE_PASSWORD</code> before starting the application:</p>
 </li>
-</ul></div>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">LPVS_DATASOURCE_USERNAME</span><span class="o">=</span>username
+<span class="nb">export</span><span class="w"> </span><span class="nv">LPVS_DATASOURCE_PASSWORD</span><span class="o">=</span>password
+</code></pre></div></div>
             </div>
         </div>
 

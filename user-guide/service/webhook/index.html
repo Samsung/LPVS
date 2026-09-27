@@ -317,8 +317,9 @@ because you will not be able to see it later!</p>
 </div>
 <ul>
 <li>Specify the content type as <code>application/json</code>.</li>
-<li>Fill in the <code>Secret</code> field with the passphrase: <code>LPVS</code>.</li>
-<li>Save the same passphrase in <code>github.secret</code> of the LPVS backend <code>application.properties</code> or <code>docker-compose.yml</code> files.</li>
+<li>Fill in the <code>Secret</code> field with a strong random passphrase, e.g. generated with <code>openssl rand -hex 32</code>.</li>
+<li>Save the same passphrase as <code>LPVS_GITHUB_SECRET</code> in the <code>.env</code> file (Docker deployment), or in <code>github.secret</code>
+of the LPVS backend <code>application.properties</code> file. LPVS refuses to start if the secret is empty.</li>
 </ul>
 <p><img alt="step3" src="../../../img/webhook/step_1_3.png" /></p>
 <ul>
