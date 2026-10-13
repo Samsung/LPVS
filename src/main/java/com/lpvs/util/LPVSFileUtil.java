@@ -10,7 +10,6 @@ import com.lpvs.entity.LPVSQueue;
 import lombok.extern.slf4j.Slf4j;
 import org.kohsuke.github.GHPullRequestFileDetail;
 import org.springframework.util.FileSystemUtils;
-import org.springframework.web.util.HtmlUtils;
 import io.micrometer.common.util.StringUtils;
 
 import java.io.File;
@@ -102,9 +101,15 @@ public class LPVSFileUtil {
      */
     public static void saveFileToDisk(String localDirectoryPath, String fileName, String content)
             throws IOException {
+        String filePath;
+        try {
+            filePath = resolvePathInside(localDirectoryPath, fileName);
+        } catch (IllegalArgumentException e) {
+            log.error(e.getMessage());
+            throw new IOException("Invalid file name " + fileName);
+        }
         if (fileName.contains("/")) {
-            String filepath = fileName.substring(0, fileName.lastIndexOf("/"));
-            Path resultFolder = Paths.get(localDirectoryPath + File.separator + filepath);
+            Path resultFolder = Paths.get(filePath).getParent();
             if (!Files.exists(resultFolder)) {
                 try {
                     // create folder
@@ -119,10 +124,7 @@ public class LPVSFileUtil {
             }
         }
 
-        try (FileWriter fileWriter =
-                        new FileWriter(
-                                localDirectoryPath + File.separator + fileName,
-                                StandardCharsets.UTF_8);
+        try (FileWriter fileWriter = new FileWriter(filePath, StandardCharsets.UTF_8);
                 BufferedWriter writer = new BufferedWriter(fileWriter)) {
             writer.write(content);
         } catch (IOException e) {
@@ -217,31 +219,17 @@ public class LPVSFileUtil {
      * @return The local directory path.
      */
     public static String getLocalDirectoryPath(LPVSQueue webhookConfig) {
-        if (StringUtils.isBlank(webhookConfig.getHeadCommitSHA())) {
-            return System.getProperty("user.home")
-                    + File.separator
-                    + "LPVS"
-                    + File.separator
-                    + "Projects"
-                    + File.separator
-                    + LPVSPayloadUtil.getRepositoryName(webhookConfig)
-                    + File.separator
-                    + webhookConfig.getId()
-                    + "-"
-                    + LPVSPayloadUtil.getPullRequestId(webhookConfig);
-        } else {
-            return System.getProperty("user.home")
-                    + File.separator
-                    + "LPVS"
-                    + File.separator
-                    + "Projects"
-                    + File.separator
-                    + LPVSPayloadUtil.getRepositoryName(webhookConfig)
-                    + File.separator
-                    + webhookConfig.getId()
-                    + "-"
-                    + webhookConfig.getHeadCommitSHA();
-        }
+        String suffix =
+                StringUtils.isBlank(webhookConfig.getHeadCommitSHA())
+                        ? LPVSPayloadUtil.getPullRequestId(webhookConfig)
+                        : webhookConfig.getHeadCommitSHA();
+        return resolvePathInside(
+                getLpvsDirectoryPath("Projects"),
+                LPVSPayloadUtil.getRepositoryName(webhookConfig)
+                        + File.separator
+                        + webhookConfig.getId()
+                        + "-"
+                        + suffix);
     }
 
     /**
@@ -251,27 +239,18 @@ public class LPVSFileUtil {
      * @return The file path for storing scan results in JSON format.
      */
     public static String getScanResultsJsonFilePath(LPVSQueue webhookConfig) {
-        String fileName = null;
-        if (StringUtils.isBlank(webhookConfig.getHeadCommitSHA())) {
-            fileName =
-                    webhookConfig.getId() + "-" + LPVSPayloadUtil.getPullRequestId(webhookConfig);
-        } else {
-            fileName =
-                    webhookConfig.getId()
-                            + "-"
-                            + HtmlUtils.htmlEscape(webhookConfig.getHeadCommitSHA());
-        }
-
-        return System.getProperty("user.home")
-                + File.separator
-                + "LPVS"
-                + File.separator
-                + "Results"
-                + File.separator
-                + LPVSPayloadUtil.getRepositoryName(webhookConfig)
-                + File.separator
-                + fileName
-                + ".json";
+        String suffix =
+                StringUtils.isBlank(webhookConfig.getHeadCommitSHA())
+                        ? LPVSPayloadUtil.getPullRequestId(webhookConfig)
+                        : webhookConfig.getHeadCommitSHA();
+        return resolvePathInside(
+                getLpvsDirectoryPath("Results"),
+                LPVSPayloadUtil.getRepositoryName(webhookConfig)
+                        + File.separator
+                        + webhookConfig.getId()
+                        + "-"
+                        + suffix
+                        + ".json");
     }
 
     /**
@@ -281,13 +260,36 @@ public class LPVSFileUtil {
      * @return The directory path for storing scan results.
      */
     public static String getScanResultsDirectoryPath(LPVSQueue webhookConfig) {
-        return System.getProperty("user.home")
-                + File.separator
-                + "LPVS"
-                + File.separator
-                + "Results"
-                + File.separator
-                + LPVSPayloadUtil.getRepositoryName(webhookConfig);
+        return resolvePathInside(
+                getLpvsDirectoryPath("Results"), LPVSPayloadUtil.getRepositoryName(webhookConfig));
+    }
+
+    /**
+     * Returns the path of the LPVS working directory with the given name in the user home.
+     *
+     * @param name The name of the directory (e.g. "Projects" or "Results").
+     * @return The path of the directory.
+     */
+    private static String getLpvsDirectoryPath(String name) {
+        return System.getProperty("user.home") + File.separator + "LPVS" + File.separator + name;
+    }
+
+    /**
+     * Resolves a relative path against a base directory and checks that the result stays inside it,
+     * to prevent path traversal (e.g. via "../" in values from webhook payloads).
+     *
+     * @param baseDirectory The base directory.
+     * @param relativePath  The path relative to the base directory.
+     * @return The normalized absolute path.
+     * @throws IllegalArgumentException if the resolved path is outside the base directory.
+     */
+    public static String resolvePathInside(String baseDirectory, String relativePath) {
+        Path base = Paths.get(baseDirectory).toAbsolutePath().normalize();
+        Path resolved = base.resolve(relativePath).normalize();
+        if (resolved.equals(base) || !resolved.startsWith(base)) {
+            throw new IllegalArgumentException("Path is outside of the directory " + base);
+        }
+        return resolved.toString();
     }
 
     /**

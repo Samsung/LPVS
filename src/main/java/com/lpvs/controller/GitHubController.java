@@ -209,7 +209,15 @@ public class GitHubController {
                     .headers(LPVSPayloadUtil.generateSecurityHeaders())
                     .body(new LPVSResponseWrapper(SUCCESS));
         } else if (LPVSPayloadUtil.checkPayload(payload)) {
-            LPVSQueue webhookConfig = LPVSPayloadUtil.getGitHubWebhookConfig(payload);
+            LPVSQueue webhookConfig;
+            try {
+                webhookConfig = LPVSPayloadUtil.getGitHubWebhookConfig(payload);
+            } catch (IllegalArgumentException e) {
+                log.error("Invalid webhook payload: " + e.getMessage());
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .headers(LPVSPayloadUtil.generateSecurityHeaders())
+                        .body(new LPVSResponseWrapper(ERROR));
+            }
             webhookConfig.setDate(new Date());
             webhookConfig.setReviewSystemType("github");
             queueRepository.save(webhookConfig);
