@@ -24,7 +24,8 @@ jobs:
           cache: maven
       - name: Code style analysis
         run: |
-          wget https://github.com/google/google-java-format/releases/download/v1.20.0/google-java-format-1.20.0-all-deps.jar
+          wget -q https://github.com/google/google-java-format/releases/download/v1.20.0/google-java-format-1.20.0-all-deps.jar
+          echo "cc57a88cf2e018c0d724e7257af3132e7748fe01a4bc19fd3c7e83a32c848780  google-java-format-1.20.0-all-deps.jar" | sha256sum --check --status
           java -jar google-java-format-1.20.0-all-deps.jar --aosp --skip-javadoc-formatting --skip-reflowing-long-strings --skip-sorting-imports --replace -i $(git ls-files|grep \.java$)
       - name: Print diffs
         run: git --no-pager diff --exit-code
