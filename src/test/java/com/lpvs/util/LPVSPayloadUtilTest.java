@@ -734,6 +734,90 @@ public class LPVSPayloadUtilTest {
         }
     }
 
+    @Nested
+    class TestGetGitHubWebhookConfigValidation {
+        private static final String SHA = "edde69ecb8e8a88dde09fa9789e2c9cab7cf7cf9";
+        private static final String REPOSITORY_URL = "https://github.com/Samsung/LPVS";
+
+        private String payload(String sha, String repositoryUrl) {
+            return "{"
+                    + "\"action\": \"opened\", "
+                    + "\"repository\": {\"html_url\": \""
+                    + repositoryUrl
+                    + "\"}, "
+                    + "\"pull_request\": {"
+                    + "\"html_url\": \"https://github.com/Samsung/LPVS/pull/18\", "
+                    + "\"url\": \"https://api.github.com/repos/Samsung/LPVS/pulls/18\", "
+                    + "\"base\": {\"repo\": {\"owner\": {\"login\": \"Samsung\"}}}, "
+                    + "\"head\": {"
+                    + "\"repo\": {\"fork\": false, \"owner\": {\"login\": \"Samsung\"}}, "
+                    + "\"sha\": \""
+                    + sha
+                    + "\"}"
+                    + "}, "
+                    + "\"sender\": {\"login\": \"user\"}"
+                    + "}";
+        }
+
+        @Test
+        public void testValidPayload() {
+            LPVSQueue webhookConfig =
+                    LPVSPayloadUtil.getGitHubWebhookConfig(payload(SHA, REPOSITORY_URL));
+            assertEquals(SHA, webhookConfig.getHeadCommitSHA());
+            assertEquals(REPOSITORY_URL, webhookConfig.getRepositoryUrl());
+        }
+
+        @Test
+        public void testValidSha256AndUpperCaseSha() {
+            String sha256 = SHA + "0123456789abcdef01234567";
+            assertEquals(
+                    sha256,
+                    LPVSPayloadUtil.getGitHubWebhookConfig(payload(sha256, REPOSITORY_URL))
+                            .getHeadCommitSHA());
+            assertEquals(
+                    SHA.toUpperCase(),
+                    LPVSPayloadUtil.getGitHubWebhookConfig(
+                                    payload(SHA.toUpperCase(), REPOSITORY_URL))
+                            .getHeadCommitSHA());
+        }
+
+        @Test
+        public void testInvalidSha_N() {
+            for (String sha :
+                    new String[] {
+                        "x/../../../../etc/cron.d",
+                        "../" + SHA,
+                        SHA + "/..",
+                        SHA.substring(1),
+                        SHA + "0",
+                        "g" + SHA.substring(1),
+                        ""
+                    }) {
+                assertThrows(
+                        IllegalArgumentException.class,
+                        () -> LPVSPayloadUtil.getGitHubWebhookConfig(payload(sha, REPOSITORY_URL)),
+                        sha);
+            }
+        }
+
+        @Test
+        public void testInvalidRepositoryUrl_N() {
+            for (String repositoryUrl :
+                    new String[] {
+                        "https://github.com/Samsung/..",
+                        "https://github.com/../LPVS",
+                        "https://github.com/Samsung/.",
+                        "https://github.com/Samsung/LP VS",
+                        "LPVS"
+                    }) {
+                assertThrows(
+                        IllegalArgumentException.class,
+                        () -> LPVSPayloadUtil.getGitHubWebhookConfig(payload(SHA, repositoryUrl)),
+                        repositoryUrl);
+            }
+        }
+    }
+
     @Test
     void testConstructorThrowsException_N() {
 

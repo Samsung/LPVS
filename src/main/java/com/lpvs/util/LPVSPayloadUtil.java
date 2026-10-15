@@ -22,6 +22,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * Utility class for processing GitHub webhook payloads and extracting relevant information.
@@ -171,10 +172,22 @@ public class LPVSPayloadUtil {
     }
 
     /**
+     * Pattern for a Git commit SHA: 40 (SHA-1) or 64 (SHA-256) hexadecimal characters.
+     */
+    private static final Pattern COMMIT_SHA_PATTERN =
+            Pattern.compile("^[0-9a-fA-F]{40}([0-9a-fA-F]{24})?$");
+
+    /**
+     * Pattern for the characters allowed in GitHub owner and repository names.
+     */
+    private static final Pattern REPOSITORY_NAME_PATTERN = Pattern.compile("^[A-Za-z0-9_.-]+$");
+
+    /**
      * Parses the GitHub webhook payload and extracts relevant information to create an LPVSQueue object.
      *
      * @param payload The GitHub webhook payload in JSON format.
      * @return LPVSQueue object containing information extracted from the webhook payload.
+     * @throws IllegalArgumentException if the head commit SHA or the repository URL is invalid.
      */
     public static LPVSQueue getGitHubWebhookConfig(String payload) {
         Gson gson = new Gson();
@@ -226,7 +239,39 @@ public class LPVSPayloadUtil {
                         .getAsString());
         webhookConfig.setSender(json.getAsJsonObject("sender").get("login").getAsString());
         webhookConfig.setAttempts(0);
+        validateWebhookConfig(webhookConfig);
         return webhookConfig;
+    }
+
+    /**
+     * Validates the values from the webhook payload that are used to build file system paths.
+     *
+     * @param webhookConfig LPVSQueue configuration created from the webhook payload.
+     * @throws IllegalArgumentException if the head commit SHA or the repository URL is invalid.
+     */
+    private static void validateWebhookConfig(LPVSQueue webhookConfig) {
+        String headCommitSHA = webhookConfig.getHeadCommitSHA();
+        if (!COMMIT_SHA_PATTERN.matcher(headCommitSHA).matches()) {
+            throw new IllegalArgumentException("Invalid head commit SHA in webhook payload");
+        }
+        String[] url = webhookConfig.getRepositoryUrl().split("/");
+        if (url.length < 2
+                || !isValidRepositoryName(url[url.length - 2])
+                || !isValidRepositoryName(url[url.length - 1])) {
+            throw new IllegalArgumentException("Invalid repository URL in webhook payload");
+        }
+    }
+
+    /**
+     * Checks whether the value is a valid GitHub owner or repository name.
+     *
+     * @param name The owner or repository name.
+     * @return true if the name is valid, false otherwise.
+     */
+    private static boolean isValidRepositoryName(String name) {
+        return REPOSITORY_NAME_PATTERN.matcher(name).matches()
+                && !name.equals(".")
+                && !name.equals("..");
     }
 
     /**

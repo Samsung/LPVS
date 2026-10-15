@@ -70,7 +70,12 @@ RUN ldconfig
 # Clean up apt caches and tmp files
 RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-WORKDIR /root/
+# Create unprivileged user for running the application and its working directory
+# (pre-created, so that Docker volumes mounted there are owned by this user)
+RUN useradd --create-home --uid 10001 --shell /usr/sbin/nologin lpvs && \
+    install -d -o lpvs -g lpvs /home/lpvs/LPVS
+
+WORKDIR /home/lpvs/
 
 # Install SCANOSS
 COPY --from=builder /root/requirements.txt ./
@@ -82,5 +87,7 @@ EXPOSE 7896
 # Set workdir for running jar
 COPY --from=builder /root/target/lpvs-*.jar ./lpvs.jar
 
-# Run application in container
+# Run application in container as unprivileged user. SCANOSS and Python are installed
+# as root above, so they can't be modified by the application.
+USER lpvs
 CMD ["java", "-jar", "lpvs.jar"]

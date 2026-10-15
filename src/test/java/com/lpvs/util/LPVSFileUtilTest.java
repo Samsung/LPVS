@@ -332,4 +332,102 @@ public class LPVSFileUtilTest {
                         fileName, sourceDir.getAbsolutePath(), Collections.singletonList(content)));
         deleteDirectory(sourceDir);
     }
+
+    @Test
+    public void resolvePathInsideTest() {
+        String base = Paths.get("/base/dir").toAbsolutePath().toString();
+        assertEquals(
+                Paths.get(base, "repo", "1-sha").toString(),
+                LPVSFileUtil.resolvePathInside(base, "repo/1-sha"));
+        assertEquals(
+                Paths.get(base, "b").toString(), LPVSFileUtil.resolvePathInside(base, "a/../b"));
+    }
+
+    @Test
+    public void resolvePathInsideTest_N() {
+        String base = Paths.get("/base/dir").toAbsolutePath().toString();
+        for (String relativePath :
+                new String[] {"..", "../other", "a/../../other", "/etc/cron.d", "", "."}) {
+            assertThrows(
+                    IllegalArgumentException.class,
+                    () -> LPVSFileUtil.resolvePathInside(base, relativePath),
+                    relativePath);
+        }
+        // Sibling directory with the same name prefix is outside the base directory
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> LPVSFileUtil.resolvePathInside(base, "../dir2/file"));
+    }
+
+    @Test
+    public void testPathTraversalInHeadCommitSHA_N() {
+        webhookConfig.setHeadCommitSHA("x/../../../../../etc/cron.d");
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> LPVSFileUtil.getLocalDirectoryPath(webhookConfig));
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> LPVSFileUtil.getScanResultsJsonFilePath(webhookConfig));
+    }
+
+    @Test
+    public void testPathTraversalInRepositoryName_N() {
+        webhookConfig.setRepositoryUrl("http://test.com/test/..");
+        webhookConfig.setHeadCommitSHA("aaaa");
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> LPVSFileUtil.getLocalDirectoryPath(webhookConfig));
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> LPVSFileUtil.getScanResultsDirectoryPath(webhookConfig));
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> LPVSFileUtil.getScanResultsJsonFilePath(webhookConfig));
+    }
+
+    @Test
+    public void testSaveGithubDiffsPathTraversal_N() throws IOException {
+        String userHome = System.getProperty("user.home");
+        File tempHome = Files.createTempDirectory("home").toFile();
+        File victim = new File(tempHome, "victim");
+        File victimFile = new File(victim, "keep.txt");
+        try {
+            System.setProperty("user.home", tempHome.getAbsolutePath());
+            assertTrue(victim.mkdirs());
+            assertTrue(victimFile.createNewFile());
+            // Resolves to <user.home>/victim without the containment check
+            webhookConfig.setHeadCommitSHA("x/../../../../victim");
+
+            GHPullRequestFileDetail detail = new GHPullRequestFileDetail();
+            ReflectionTestUtils.setField(detail, "filename", "backdoor");
+            ReflectionTestUtils.setField(detail, "patch", "+malicious");
+
+            assertThrows(
+                    IllegalArgumentException.class,
+                    () -> LPVSFileUtil.saveGithubDiffs(List.of(detail), webhookConfig));
+            assertTrue(victimFile.exists());
+            assertFalse(new File(victim, "backdoor").exists());
+        } finally {
+            System.setProperty("user.home", userHome);
+            deleteDirectory(tempHome);
+        }
+    }
+
+    @Test
+    public void saveFileToDiskPathTraversalTest_N() throws IOException {
+        sourceDir = Files.createTempDirectory("source").toFile();
+        File outsideFile = new File(sourceDir.getParentFile(), "outside-" + sourceDir.getName());
+        try {
+            assertThrows(
+                    IOException.class,
+                    () ->
+                            LPVSFileUtil.saveFileToDisk(
+                                    sourceDir.getAbsolutePath(),
+                                    "../" + outsideFile.getName(),
+                                    "content"));
+            assertFalse(outsideFile.exists());
+        } finally {
+            deleteDirectory(sourceDir);
+        }
+    }
 }

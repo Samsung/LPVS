@@ -473,4 +473,28 @@ public class GitHubControllerTest {
         controller.initializeGitHubController();
         verify(mockExitHandler).exit(-1);
     }
+
+    @Test
+    public void webhookWithPathTraversalInShaRejectedTest() throws Exception {
+        String payload =
+                "{"
+                        + "\"action\": \"opened\", "
+                        + "\"repository\": {\"html_url\": \"https://github.com/Samsung/LPVS\"}, "
+                        + "\"pull_request\": {"
+                        + "\"html_url\": \"https://github.com/Samsung/LPVS/pull/18\", "
+                        + "\"url\": \"https://api.github.com/repos/Samsung/LPVS/pulls/18\", "
+                        + "\"base\": {\"repo\": {\"owner\": {\"login\": \"Samsung\"}}}, "
+                        + "\"head\": {"
+                        + "\"repo\": {\"fork\": false, \"owner\": {\"login\": \"Samsung\"}}, "
+                        + "\"sha\": \"x/../../../../../etc/cron.d\"}"
+                        + "}, "
+                        + "\"sender\": {\"login\": \"user\"}"
+                        + "}";
+
+        ResponseEntity<LPVSResponseWrapper> actual =
+                gitHubController.gitHubWebhooks(sign(payload), payload);
+
+        assertEquals(HttpStatus.BAD_REQUEST, actual.getStatusCode());
+        verifyNoInteractions(mocked_queueRepo, mocked_instance_ghServ, mocked_instance_queueServ);
+    }
 }
