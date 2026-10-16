@@ -5,13 +5,22 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+  # Manual run from the Actions tab (Run workflow) on any branch
+  workflow_dispatch:
 
 permissions:
   contents: read
 
+# Only the latest run per branch or pull request matters: a new run (e.g. after the next
+# dependabot pull request is merged to main) cancels the previous one
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   building:
     runs-on: ubuntu-latest
+    timeout-minutes: 60
 
     steps:
     - name: Harden Runner
@@ -21,4 +30,11 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
     - name: Build docker container
-      run: docker image build --no-cache --progress=plain .
+      run: docker image build --no-cache --progress=plain -t lpvs:integration-test .
+    - name: Run integration tests of docker container
+      # Skipped for dependabot pull requests: dependency updates are tested after merge to
+      # main. Re-running the job manually runs the tests, as the actor is then not dependabot.
+      if: github.event_name != 'pull_request' || github.actor != 'dependabot[bot]'
+      run: .github/scripts/docker-integration-test.sh
+      env:
+        IMAGE: lpvs:integration-test
